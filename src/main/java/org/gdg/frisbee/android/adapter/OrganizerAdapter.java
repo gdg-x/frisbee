@@ -22,8 +22,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import com.android.volley.toolbox.NetworkImageView;
 import com.google.api.services.plus.model.Person;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.app.GdgVolley;
 import org.gdg.frisbee.android.view.NetworkedCacheableImageView;
 
 /**
@@ -50,8 +52,8 @@ public class OrganizerAdapter extends ArrayAdapter<Person> {
 
         Person item = (Person) getItem(position);
 
-        NetworkedCacheableImageView picture = (NetworkedCacheableImageView) convertView.findViewById(R.id.icon);
-        picture.loadImage(item.getImage().getUrl(), true);
+        NetworkImageView picture = (NetworkImageView) convertView.findViewById(R.id.icon);
+        picture.setImageUrl(item.getImage().getUrl(), GdgVolley.getInstance().getImageLoader());
 
         TextView title = (TextView) convertView.findViewById(R.id.title);
         title.setText(item.getDisplayName());

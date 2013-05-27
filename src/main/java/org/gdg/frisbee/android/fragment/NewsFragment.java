@@ -33,6 +33,7 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Activity;
 import com.google.api.services.plus.model.ActivityFeed;
+import org.gdg.frisbee.android.api.GapiTransportChooser;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -55,7 +56,7 @@ public class NewsFragment extends GdgListFragment {
 
     private static final String LOG_TAG = "GDG-NewsFragment";
 
-    final HttpTransport mTransport = AndroidHttp.newCompatibleTransport();
+    final HttpTransport mTransport = GapiTransportChooser.newCompatibleTransport();
     final JsonFactory mJsonFactory = new GsonFactory();
 
     private Plus mClient;
@@ -98,7 +99,7 @@ public class NewsFragment extends GdgListFragment {
         super.onActivityCreated(savedInstanceState);
         Log.d(LOG_TAG, "onActivityCreated()");
 
-        mClient = new Plus.Builder(mTransport, mJsonFactory, null).setGoogleClientRequestInitializer(new CommonGoogleJsonClientRequestInitializer(getString(R.string.simple_api_access_key))).build();
+        mClient = new Plus.Builder(mTransport, mJsonFactory, null).setGoogleClientRequestInitializer(new CommonGoogleJsonClientRequestInitializer(getString(R.string.ip_simple_api_access_key))).build();
 
         mAdapter = new NewsAdapter(getActivity(), ((GdgActivity)getActivity()).getPlusClient());
         setListAdapter(mAdapter);
@@ -129,7 +130,7 @@ public class NewsFragment extends GdgListFragment {
                             if (feed == null) {
                                 Plus.Activities.List request = mClient.activities().list(params[0], "public");
                                 request.setMaxResults(10L);
-                                request.setFields("nextPageToken,items(id,url,object/content,verb,object/attachments(fullImage),object(plusoners,replies,resharers))");
+                                request.setFields("nextPageToken,items(id,url,object/content,verb,object/attachments,annotation,object(plusoners,replies,resharers))");
                                 feed = request.execute();
 
                                 App.getInstance().getModelCache().put("news_" + params[0], feed);

@@ -29,6 +29,7 @@ import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.plus.GooglePlusUtil;
 import com.google.android.gms.plus.PlusClient;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
 import org.gdg.frisbee.android.utils.ScopedBus;
 import org.gdg.frisbee.android.utils.Utils;
 
@@ -171,5 +172,11 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
             mPlusClient.connect();
 
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Crouton.cancelAllCroutons();
     }
 }

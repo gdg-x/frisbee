@@ -22,7 +22,11 @@ import android.util.Log;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFragment;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.EventAdapter;
@@ -70,7 +74,7 @@ public class EventFragment extends GdgListFragment {
         super.onActivityCreated(savedInstanceState);
 
         mSelectedMonth = DateTime.now().getMonthOfYear()+1;
-        mClient = new GroupDirectory(getActivity());
+        mClient = new GroupDirectory();
 
         if(getListView() instanceof ListView) {
             ListView listView = (ListView) getListView();
@@ -83,45 +87,23 @@ public class EventFragment extends GdgListFragment {
         mAdapter = new EventAdapter(getActivity());
         setListAdapter(mAdapter);
 
-        new Builder<String, ArrayList>(String.class, ArrayList.class)
-                .addParameter(getArguments().getString("plus_id"))
-                .setOnPreExecuteListener(new CommonAsyncTask.OnPreExecuteListener() {
-                    @Override
-                    public void onPreExecute() {
-                        setIsLoading(true);
-                    }
-                })
-                .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, ArrayList>() {
-                    @Override
-                    public ArrayList<Event> doInBackground(String... params) {
-                        try {
-
-                            DateTime start = getMonthStart(mSelectedMonth);
-                            DateTime end = getMonthStart(mSelectedMonth).plusDays(30);
-                            ArrayList<Event> events = (ArrayList<Event>) App.getInstance().getModelCache().get("events_" + params[0] + "_" + start.getMillis() + "_" + end.getMillis());
-
-                            if (events == null) {
-                                events = mClient.getChapterEventList(start, end, params[0]);
-
-                                App.getInstance().getModelCache().put("events_" + params[0] + "_" + start.getMillis() + "_" + end.getMillis(), events);
-                            }
-
-                            return events;
-                        } catch (ApiException e) {
-                            Log.e(LOG_TAG, "Fetching events failed", e);
-                            e.printStackTrace();
-                        }
-                        return null;
-                    }
-                })
-                .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<ArrayList>() {
-                    @Override
-                    public void onPostExecute(ArrayList activityFeed) {
-                        mAdapter.addAll(activityFeed);
-                        setIsLoading(false);
-                    }
-                })
-                .buildAndExecute();
+        DateTime start = getMonthStart(mSelectedMonth);
+        DateTime end = getMonthStart(mSelectedMonth).plusDays(30);
+        setIsLoading(true);
+        mClient.getChapterEventList(start, end, getArguments().getString("plus_id"), new Response.Listener<ArrayList<Event>>() {
+            @Override
+            public void onResponse(ArrayList<Event> events) {
+                mAdapter.addAll(events);
+                setIsLoading(false);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                setIsLoading(false);
+                Crouton.makeText(getActivity(), getString(R.string.fetch_events_failed), Style.ALERT).show();
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+        }).execute();
     }
 
     @Override

@@ -29,7 +29,7 @@ import java.util.ArrayList;
  * Date: 21.04.13
  * Time: 22:30
  */
-public class Directory implements Response, Parcelable {
+public class Directory implements GdgResponse, Parcelable {
     private ArrayList<Chapter> groups;
 
     public Directory() {

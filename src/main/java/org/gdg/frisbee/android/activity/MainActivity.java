@@ -25,8 +25,15 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import com.actionbarsherlock.app.ActionBar;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
 import com.viewpagerindicator.TitlePageIndicator;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import org.gdg.frisbee.android.adapter.ChapterAdapter;
+import org.gdg.frisbee.android.api.GsonRequest;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.ApiException;
@@ -56,9 +63,10 @@ public class MainActivity extends GdgActivity implements android.app.ActionBar.O
     @InjectView(R.id.titles)
     private TitlePageIndicator mIndicator;
 
-    private CommonAsyncTask<Void,Directory> mFetchChaptersTask;
+    private GroupDirectory.ApiRequest mFetchChaptersTask;
 
     private LocationManager mLocationManager;
+    private GroupDirectory mClient;
 
     /**
      * Called when the activity is first created.
@@ -72,6 +80,7 @@ public class MainActivity extends GdgActivity implements android.app.ActionBar.O
 		Log.i(LOG_TAG, "onCreate");
         setContentView(R.layout.activity_main);
 
+        mClient = new GroupDirectory();
         mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
         //if(!Utils.isEmulator())
@@ -82,39 +91,27 @@ public class MainActivity extends GdgActivity implements android.app.ActionBar.O
         getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         getActionBar().setListNavigationCallbacks(mSpinnerAdapter, MainActivity.this);
 
-        mFetchChaptersTask = new Builder<Void, Directory>(Void.class, Directory.class)
-                .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<Void, Directory>() {
-                    @Override
-                    public Directory doInBackground(Void... params) {
-                        try {
-                            Directory directory = (Directory) App.getInstance().getModelCache().get(24*60, "chapter_list");
+        mFetchChaptersTask = mClient.getDirectory(new Response.Listener<Directory>() {
+            @Override
+            public void onResponse(Directory directory) {
+                getActionBar().setListNavigationCallbacks(mSpinnerAdapter, MainActivity.this);
 
-                            if(directory == null) {
-                                directory = new GroupDirectory(MainActivity.this).getDirectory();
-                                App.getInstance().getModelCache().put("chapter_list", directory);
-                            }
-                            return directory;
-                        } catch (ApiException e) {
-                            e.printStackTrace();
-                        }
-                        return null;
-                    }
-                })
-                .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<Directory>() {
-                    @Override
-                    public void onPostExecute(Directory directory) {
-                        getActionBar().setListNavigationCallbacks(mSpinnerAdapter, MainActivity.this);
+                ArrayList<Chapter> chapters = directory.getGroups();
+                Collections.sort(chapters);
+                mSpinnerAdapter.addAll(chapters);
 
-                        ArrayList<Chapter> chapters = directory.getGroups();
-                        Collections.sort(chapters);
-                        mSpinnerAdapter.addAll(chapters);
+                mViewPagerAdapter.setSelectedChapter(chapters.get(0));
 
-                        mViewPagerAdapter.setSelectedChapter(chapters.get(0));
-
-                        mViewPager.setAdapter(mViewPagerAdapter);
-                        mIndicator.setViewPager(mViewPager);
-                    }
-                }).build();
+                mViewPager.setAdapter(mViewPagerAdapter);
+                mIndicator.setViewPager(mViewPager);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Crouton.makeText(MainActivity.this, getString(R.string.fetch_chapters_failed), Style.ALERT).show();
+                Log.e(LOG_TAG, "Could'nt fetch chapter list", volleyError);
+            }
+        });
 
         if(savedInstanceState == null) {
             Directory directory = (Directory) App.getInstance().getModelCache().get(24*60, "chapter_list");

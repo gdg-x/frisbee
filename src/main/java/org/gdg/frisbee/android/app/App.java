@@ -43,6 +43,7 @@ public class App extends Application {
         super.onCreate();
 
         mInstance = this;
+        GdgVolley.init(this);
     }
 
     public ModelCache getModelCache() {

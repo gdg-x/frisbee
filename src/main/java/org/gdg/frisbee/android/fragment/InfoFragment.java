@@ -39,6 +39,7 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Person;
 import org.gdg.frisbee.android.adapter.OrganizerAdapter;
+import org.gdg.frisbee.android.api.GapiTransportChooser;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -61,7 +62,7 @@ public class InfoFragment extends RoboSherlockFragment {
 
     private static final String LOG_TAG = "GDG-InfoFragment";
 
-    final HttpTransport mTransport = AndroidHttp.newCompatibleTransport();
+    final HttpTransport mTransport = GapiTransportChooser.newCompatibleTransport();
     final JsonFactory mJsonFactory = new GsonFactory();
 
     private Plus mClient;
@@ -90,7 +91,7 @@ public class InfoFragment extends RoboSherlockFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mClient = new Plus.Builder(mTransport, mJsonFactory, null).setGoogleClientRequestInitializer(new CommonGoogleJsonClientRequestInitializer(getString(R.string.simple_api_access_key))).build();
+        mClient = new Plus.Builder(mTransport, mJsonFactory, null).setGoogleClientRequestInitializer(new CommonGoogleJsonClientRequestInitializer(getString(R.string.ip_simple_api_access_key))).setApplicationName("GDG Frisbee").build();
         mOrganizerAdapter = new OrganizerAdapter(getActivity(), 0);
 
         mFetchOrganizerInfo = new Builder<String, Person[]>(String.class, Person[].class)
@@ -172,7 +173,7 @@ public class InfoFragment extends RoboSherlockFragment {
                         for(Person.Urls url: person.getUrls()) {
                             if(url.getValue().contains("plus.google.com/") && !url.getValue().contains("communities")) {
                                 Log.d(LOG_TAG, url.getValue());
-                                mFetchOrganizerInfo.addParameter(url.getValue().replace("plus.google.com/", "").replace("posts","").replace("/","").replace("about","").replace("u1","").replace("u0","").replace("https:","").replace("http:",""));
+                                mFetchOrganizerInfo.addParameter(url.getValue().replace("plus.google.com/", "").replace("posts","").replace("/","").replace("about","").replace("u1","").replace("u0","").replace("https:","").replace("http:","").replace(getArguments().getString("plus_id"), "").replaceAll("[^\\d.]", "").substring(0,21));
                             }
                         }
                         mFetchOrganizerInfo.buildAndExecute();

@@ -17,7 +17,15 @@
 package org.gdg.frisbee.android.app;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.HttpClientStack;
+import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.Volley;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.gdg.frisbee.android.api.GdgStack;
+import uk.co.senab.bitmapcache.CacheableBitmapDrawable;
 
 /**
  * GDG Aachen
@@ -30,21 +38,50 @@ import com.android.volley.RequestQueue;
 public class GdgVolley {
 
     private static GdgVolley mInstance;
-    private static GdgVolley getInstance() {
+    public static GdgVolley getInstance() {
         return mInstance;
     }
 
-    private RequestQueue mRequestQueue;
+    private RequestQueue mRequestQueue, mImageRequestQueue;
+    private ImageLoader mImageLoader;
 
     static void init(Context ctx) {
-        mInstance = new GdgVolley();
-    }
-
-    private GdgVolley() {
-
+        mInstance = new GdgVolley(ctx);
     }
 
     private GdgVolley(Context ctx) {
-        mRequestQueue =
+        mRequestQueue = Volley.newRequestQueue(ctx, new GdgStack());
+        mImageRequestQueue = Volley.newRequestQueue(ctx);
+        mImageLoader = new ImageLoader(mImageRequestQueue, new ImageLoader.ImageCache() {
+            @Override
+            public Bitmap getBitmap(String url) {
+                CacheableBitmapDrawable bitmap = App.getInstance().getBitmapCache().get(url);
+                if(bitmap != null)
+                    return bitmap.getBitmap();
+                else
+                    return null;
+            }
+
+            @Override
+            public void putBitmap(String url, Bitmap bitmap) {
+                App.getInstance().getBitmapCache().put(url, bitmap);
+            }
+        });
+    }
+
+    public RequestQueue getRequestQueue() {
+        if (mRequestQueue != null) {
+            return mRequestQueue;
+        } else {
+            throw new IllegalStateException("RequestQueue not initialized");
+        }
+    }
+
+    public ImageLoader getImageLoader() {
+        if (mImageLoader != null) {
+            return mImageLoader;
+        } else {
+            throw new IllegalStateException("ImageLoader not initialized");
+        }
     }
 }

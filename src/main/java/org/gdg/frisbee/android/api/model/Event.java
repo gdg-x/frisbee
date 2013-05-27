@@ -28,7 +28,7 @@ import java.util.ArrayList;
  * Date: 22.04.13
  * Time: 22:44
  */
-public class Event implements Response {
+public class Event implements GdgResponse {
     private ArrayList<String> className;
     private DateTime start, end;
     private boolean allDay;
