@@ -52,7 +52,7 @@ public class OrganizerAdapter extends ArrayAdapter<Person> {
 
         Person item = (Person) getItem(position);
 
-        NetworkImageView picture = (NetworkImageView) convertView.findViewById(R.id.icon);
+        NetworkedCacheableImageView picture = (NetworkedCacheableImageView) convertView.findViewById(R.id.icon);
         picture.setImageUrl(item.getImage().getUrl(), GdgVolley.getInstance().getImageLoader());
 
         TextView title = (TextView) convertView.findViewById(R.id.title);

@@ -22,29 +22,30 @@ import android.util.Log;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 
-import com.android.volley.toolbox.HttpClientStack;
-import com.android.volley.toolbox.HttpStack;
-import com.android.volley.toolbox.HurlStack;
-import com.android.volley.toolbox.StringRequest;
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
+import com.android.volley.toolbox.*;
+import com.jakewharton.DiskLruCache;
+import org.apache.http.*;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
+import org.apache.http.message.BasicHttpResponse;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.message.BasicStatusLine;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
+import org.gdg.frisbee.android.app.App;
+import uk.co.senab.bitmapcache.CacheableBitmapDrawable;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,14 +68,14 @@ public class GdgStack implements HttpStack {
     private HttpStack mInnerStack;
 
     public GdgStack() {
-        /*if (Build.VERSION.SDK_INT >= 9) {
-            //mInnerStack = new HurlStack();
-            mInnerStack = new OkStack(); // SPDY+HTTP
-        } else {   */
+        if (Build.VERSION.SDK_INT >= 9) {
+            mInnerStack = new HurlStack();
+            //mInnerStack = new OkStack(); // SPDY+HTTP
+        } else {
             // Prior to Gingerbread, HttpUrlConnection was unreliable.
             // See: http://android-developers.blogspot.com/2011/09/androids-http-clients.html
             mInnerStack = new HttpClientStack(AndroidHttpClient.newInstance(USER_AGENT));
-        //}
+        }
     }
 
     private void acquireCsrfToken() {
@@ -112,6 +113,18 @@ public class GdgStack implements HttpStack {
 
             additionalHeaders.put("Cookie", "csrftoken="+ mCsrfToken);
             additionalHeaders.put("X-CSRFToken", mCsrfToken);
+        }
+
+        if(request instanceof ImageRequest) {
+            DiskLruCache.Snapshot cached = App.getInstance().getBitmapCache().getFromDiskCacheRaw(request.getUrl());
+            if(cached != null) {
+                Log.d(LOG_TAG, "Deferred disk cache hit!");
+                StatusLine responseStatus = new BasicStatusLine(new ProtocolVersion("HTTP", 1, 1),
+                        200, "From cache");
+                BasicHttpResponse response = new BasicHttpResponse(responseStatus);
+                response.setEntity(new InputStreamEntity(cached.getInputStream(0), cached.getLength(0)));
+                return response;
+            }
         }
 
         return mInnerStack.performRequest(request, additionalHeaders);

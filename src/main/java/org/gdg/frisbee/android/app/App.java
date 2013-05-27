@@ -17,9 +17,13 @@
 package org.gdg.frisbee.android.app;
 
 import android.app.Application;
+import android.os.Environment;
 import com.github.ignition.support.cache.AbstractCache;
 import org.gdg.frisbee.android.cache.ModelCache;
 import uk.co.senab.bitmapcache.BitmapLruCache;
+import uk.co.senab.bitmapcache.ExtendedBitmapLruCache;
+
+import java.io.File;
 
 /**
  * Created with IntelliJ IDEA.
@@ -35,7 +39,7 @@ public class App extends Application {
         return mInstance;
     }
 
-    private BitmapLruCache mBitmapCache;
+    private ExtendedBitmapLruCache mBitmapCache;
     private ModelCache mModelCache;
 
     @Override
@@ -54,13 +58,27 @@ public class App extends Application {
         return mModelCache;
     }
 
-    public BitmapLruCache getBitmapCache() {
-        if(mBitmapCache == null)
-            mBitmapCache = new BitmapLruCache.Builder(getApplicationContext())
+    public ExtendedBitmapLruCache getBitmapCache() {
+        if(mBitmapCache == null) {
+
+            String rootDir = null;
+            if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+                // SD-card available
+                rootDir = Environment.getExternalStorageDirectory().getAbsolutePath()
+                        + "/Android/data/" + getPackageName() + "/cache";
+            } else {
+                File internalCacheDir = getCacheDir();
+                rootDir = internalCacheDir.getAbsolutePath();
+            }
+
+            mBitmapCache = new ExtendedBitmapLruCache.Builder(getApplicationContext())
                     .setDiskCacheEnabled(true)
                     .setMemoryCacheEnabled(true)
+                    .setMemoryCacheMaxSizeUsingHeapSize()
+                    .setDiskCacheMaxSize(10 * 1024 * 1024)
+                    .setDiskCacheLocation(new File(rootDir))
                     .build();
-
+        }
         return mBitmapCache;
     }
 }

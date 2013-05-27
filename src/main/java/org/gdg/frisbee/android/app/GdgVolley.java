@@ -51,11 +51,12 @@ public class GdgVolley {
 
     private GdgVolley(Context ctx) {
         mRequestQueue = Volley.newRequestQueue(ctx, new GdgStack());
-        mImageRequestQueue = Volley.newRequestQueue(ctx);
+        mImageRequestQueue = Volley.newRequestQueue(ctx, new GdgStack());
         mImageLoader = new ImageLoader(mImageRequestQueue, new ImageLoader.ImageCache() {
             @Override
             public Bitmap getBitmap(String url) {
-                CacheableBitmapDrawable bitmap = App.getInstance().getBitmapCache().get(url);
+                // Check memcache here...disk cache lookup will be done by GdgStack
+                CacheableBitmapDrawable bitmap = App.getInstance().getBitmapCache().getFromMemoryCache(url);
                 if(bitmap != null)
                     return bitmap.getBitmap();
                 else
@@ -63,8 +64,13 @@ public class GdgVolley {
             }
 
             @Override
-            public void putBitmap(String url, Bitmap bitmap) {
-                App.getInstance().getBitmapCache().put(url, bitmap);
+            public void putBitmap(final String url, final Bitmap bitmap) {
+                new Thread() {
+                    @Override
+                    public void run() {
+                        App.getInstance().getBitmapCache().put(url, bitmap);
+                    }
+                }.start();
             }
         });
     }

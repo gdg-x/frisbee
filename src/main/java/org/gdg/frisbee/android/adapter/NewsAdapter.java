@@ -121,7 +121,7 @@ public class NewsAdapter extends BaseAdapter {
         PlusOneButton plusButton = (PlusOneButton) view.findViewById(R.id.plus_one_button);
         plusButton.initialize(mPlusClient, activity.getUrl(), 1);
 
-        NetworkImageView  picture = (NetworkImageView) view.findViewById(R.id.image);
+        NetworkedCacheableImageView  picture = (NetworkedCacheableImageView) view.findViewById(R.id.image);
         //picture.setImageDrawable(null);
 
         if(activity.getVerb().equals("share"))
