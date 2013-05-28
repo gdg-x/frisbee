@@ -18,6 +18,7 @@ package org.gdg.frisbee.android.activity;
 
 import android.content.Context;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -40,12 +41,14 @@ import org.gdg.frisbee.android.api.ApiException;
 import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
+import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.fragment.EventFragment;
 import org.gdg.frisbee.android.fragment.InfoFragment;
 import org.gdg.frisbee.android.fragment.NewsFragment;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.Utils;
+import org.joda.time.DateTime;
 import roboguice.inject.InjectView;
 
 import java.util.ArrayList;
@@ -95,6 +98,7 @@ public class MainActivity extends GdgActivity implements android.app.ActionBar.O
             @Override
             public void onResponse(Directory directory) {
                 getActionBar().setListNavigationCallbacks(mSpinnerAdapter, MainActivity.this);
+                App.getInstance().getModelCache().putAsync("chapter_list", directory, DateTime.now().plusDays(1));
 
                 ArrayList<Chapter> chapters = directory.getGroups();
                 Collections.sort(chapters);
@@ -114,16 +118,39 @@ public class MainActivity extends GdgActivity implements android.app.ActionBar.O
         });
 
         if(savedInstanceState == null) {
-            Directory directory = (Directory) App.getInstance().getModelCache().get(24*60, "chapter_list");
 
-            if(directory != null) {
-                mSpinnerAdapter.addAll(directory.getGroups());
+            if(Utils.isOnline(this)) {
+                App.getInstance().getModelCache().getAsync("chapter_list", new ModelCache.CacheListener() {
+                    @Override
+                    public void onGet(Object item) {
+                        Directory directory = (Directory)item;
+                        if(directory != null) {
+                            mSpinnerAdapter.addAll(directory.getGroups());
 
-                mViewPagerAdapter.setSelectedChapter(directory.getGroups().get(0));
-                mViewPager.setAdapter(mViewPagerAdapter);
-                mIndicator.setViewPager(mViewPager);
+                            mViewPagerAdapter.setSelectedChapter(directory.getGroups().get(0));
+                            mViewPager.setAdapter(mViewPagerAdapter);
+                            mIndicator.setViewPager(mViewPager);
+                        } else {
+                            mFetchChaptersTask.execute();
+                        }
+                    }
+                });
             } else {
-                mFetchChaptersTask.execute();
+
+                App.getInstance().getModelCache().getAsync("chapter_list", false, new ModelCache.CacheListener() {
+                    @Override
+                    public void onGet(Object item) {
+                        Directory directory = (Directory)item;
+                        if(directory != null) {
+                            mSpinnerAdapter.addAll(directory.getGroups());
+                            mViewPagerAdapter.setSelectedChapter(directory.getGroups().get(0));
+                            mViewPager.setAdapter(mViewPagerAdapter);
+                            mIndicator.setViewPager(mViewPager);
+                        } else {
+                            Crouton.makeText(MainActivity.this, getString(R.string.offline_alert), Style.ALERT).show();
+                        }
+                    }
+                });
             }
         } else {
 

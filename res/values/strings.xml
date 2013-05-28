@@ -27,4 +27,7 @@
     <string name="organizers">Organizers</string>
     <string name="fetch_events_failed">Could not fetch upcoming events</string>
     <string name="fetch_chapters_failed">Could not fetch chapter list</string>
+    <string name="bogus_organizer">Could not parse Organizer Id: %1$s</string>
+    <string name="cached_content">You\'re currently offline. Here\'s some cached content.</string>
+    <string name="offline_alert">You\'re currently offline.</string>
 </resources>

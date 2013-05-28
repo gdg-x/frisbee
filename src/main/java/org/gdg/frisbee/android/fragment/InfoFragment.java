@@ -24,27 +24,28 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Person;
-import org.gdg.frisbee.android.adapter.OrganizerAdapter;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import org.gdg.frisbee.android.api.GapiTransportChooser;
 import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.app.GdgVolley;
+import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
+import org.gdg.frisbee.android.utils.Utils;
+import org.gdg.frisbee.android.view.NetworkedCacheableImageView;
+import org.joda.time.DateTime;
 import roboguice.inject.InjectView;
 
 import java.io.IOException;
@@ -75,7 +76,7 @@ public class InfoFragment extends RoboSherlockFragment {
     @InjectView(R.id.organizer_box)
     private LinearLayout mOrganizerBox;
 
-    private ArrayAdapter<Person> mOrganizerAdapter;
+    private LayoutInflater mInflater;
 
     private Builder<String, Person[]> mFetchOrganizerInfo;
 
@@ -91,9 +92,11 @@ public class InfoFragment extends RoboSherlockFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mClient = new Plus.Builder(mTransport, mJsonFactory, null).setGoogleClientRequestInitializer(new CommonGoogleJsonClientRequestInitializer(getString(R.string.ip_simple_api_access_key))).setApplicationName("GDG Frisbee").build();
-        mOrganizerAdapter = new OrganizerAdapter(getActivity(), 0);
+        mInflater = LayoutInflater.from(getActivity());
 
+        mClient = new Plus.Builder(mTransport, mJsonFactory, null).setGoogleClientRequestInitializer(new CommonGoogleJsonClientRequestInitializer(getString(R.string.ip_simple_api_access_key))).setApplicationName("GDG Frisbee").build();
+
+        if(Utils.isOnline(getActivity())) {
         mFetchOrganizerInfo = new Builder<String, Person[]>(String.class, Person[].class)
                 .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person[]>() {
                     @Override
@@ -103,7 +106,7 @@ public class InfoFragment extends RoboSherlockFragment {
                         try {
                             Person[] people = new Person[params.length];
                             for(int i = 0; i < params.length; i++) {
-                                Person person = (Person) App.getInstance().getModelCache().get(24*60, "person_"+params[i]);
+                                Person person = (Person) App.getInstance().getModelCache().get("person_"+params[i]);
 
                                 Log.d(LOG_TAG, "Get Organizer " + params[i]);
                                 if(person == null) {
@@ -111,7 +114,7 @@ public class InfoFragment extends RoboSherlockFragment {
                                     request.setFields("displayName,image,id");
                                     person = request.execute();
 
-                                    App.getInstance().getModelCache().put("person_"+params[i], person);
+                                    App.getInstance().getModelCache().put("person_" + params[i], person, DateTime.now().plusDays(2));
                                 }
                                 people[i] = person;
                             }
@@ -124,17 +127,14 @@ public class InfoFragment extends RoboSherlockFragment {
                 })
                 .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<Person[]>() {
                     @Override
-                    public void onPostExecute(Person[] person) {
-                        if(person != null)
-                            mOrganizerAdapter.addAll(person);
-
+                    public void onPostExecute(final Person[] person) {
                         for(int i = 0; i < person.length; i++) {
-                            View v = mOrganizerAdapter.getView(i, null, null);
+                            View v = getOrganizerView(person[i]);
                             final int myi = i;
                             v.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/"+mOrganizerAdapter.getItem(myi).getId()+"/posts")));
+                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/"+person[myi].getId()+"/posts")));
                                 }
                             });
                             registerForContextMenu(v);
@@ -149,14 +149,14 @@ public class InfoFragment extends RoboSherlockFragment {
                     @Override
                     public Person doInBackground(String... params) {
                         try {
-                            Person person = (Person) App.getInstance().getModelCache().get(24*60, "person_"+params[0]);
+                            Person person = (Person) App.getInstance().getModelCache().get("person_"+params[0]);
 
                             if(person == null) {
                                 Plus.People.Get request = mClient.people().get(params[0]);
                                 request.setFields("aboutMe,circledByCount,cover/coverPhoto/url,currentLocation,displayName,emails/primary,plusOneCount,tagline,urls");
                                 person = request.execute();
 
-                                App.getInstance().getModelCache().put("person_"+params[0], person);
+                                App.getInstance().getModelCache().put("person_" + params[0], person, DateTime.now().plusDays(2));
                             }
                             return person;
                         } catch (IOException e) {
@@ -172,14 +172,73 @@ public class InfoFragment extends RoboSherlockFragment {
 
                         for(Person.Urls url: person.getUrls()) {
                             if(url.getValue().contains("plus.google.com/") && !url.getValue().contains("communities")) {
-                                Log.d(LOG_TAG, url.getValue());
+                                String org = url.getValue();
+                                try {
                                 mFetchOrganizerInfo.addParameter(url.getValue().replace("plus.google.com/", "").replace("posts","").replace("/","").replace("about","").replace("u1","").replace("u0","").replace("https:","").replace("http:","").replace(getArguments().getString("plus_id"), "").replaceAll("[^\\d.]", "").substring(0,21));
+                                } catch(Exception ex) {
+                                    Crouton.makeText(getActivity(), String.format(getString(R.string.bogus_organizer), org), Style.ALERT);
+                                }
                             }
                         }
                         mFetchOrganizerInfo.buildAndExecute();
                     }
                 })
                 .buildAndExecute();
+        } else {
+            App.getInstance().getModelCache().getAsync("person_"+getArguments().getString("plus_id"), false, new ModelCache.CacheListener() {
+                @Override
+                public void onGet(Object item) {
+                    Person person = (Person)item;
+                    if(person != null) {
+                        mAbout.setText(Html.fromHtml(person.getAboutMe()));
+                        Crouton.makeText(getActivity(), getString(R.string.cached_content), Style.INFO).show();
+
+                        for(Person.Urls url: person.getUrls()) {
+                            if(url.getValue().contains("plus.google.com/") && !url.getValue().contains("communities")) {
+                                String org = url.getValue();
+                                try {
+                                    String id = url.getValue().replace("plus.google.com/", "").replace("posts","").replace("/","").replace("about","").replace("u1","").replace("u0","").replace("https:","").replace("http:","").replace(getArguments().getString("plus_id"), "").replaceAll("[^\\d.]", "").substring(0,21);
+
+                                    App.getInstance().getModelCache().getAsync("person_"+ id, false, new ModelCache.CacheListener() {
+                                        @Override
+                                        public void onGet(Object item) {
+                                            final Person person = (Person)item;
+                                            if(person != null) {
+                                                View v = getOrganizerView(person);
+                                                v.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/"+person.getId()+"/posts")));
+                                                    }
+                                                });
+                                                registerForContextMenu(v);
+                                                mOrganizerBox.addView(v);
+                                            }
+                                        }
+                                    });
+                                } catch(Exception ex) {
+                                    Crouton.makeText(getActivity(), String.format(getString(R.string.bogus_organizer), org), Style.ALERT);
+                                }
+                            }
+                        }
+                    } else {
+                        Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
+                    }
+                }
+            });
+        }
+    }
+
+    public View getOrganizerView(Person item) {
+        View convertView = mInflater.inflate(R.layout.list_organizer_item, null);
+
+        NetworkedCacheableImageView picture = (NetworkedCacheableImageView) convertView.findViewById(R.id.icon);
+        picture.setImageUrl(item.getImage().getUrl(), GdgVolley.getInstance().getImageLoader());
+
+        TextView title = (TextView) convertView.findViewById(R.id.title);
+        title.setText(item.getDisplayName());
+
+        return convertView;
     }
 
     @Override

@@ -33,8 +33,10 @@ import org.gdg.frisbee.android.adapter.EventAdapter;
 import org.gdg.frisbee.android.api.ApiException;
 import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.Event;
+import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
+import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
 
@@ -90,20 +92,41 @@ public class EventFragment extends GdgListFragment {
         DateTime start = getMonthStart(mSelectedMonth);
         DateTime end = getMonthStart(mSelectedMonth).plusDays(30);
         setIsLoading(true);
-        mClient.getChapterEventList(start, end, getArguments().getString("plus_id"), new Response.Listener<ArrayList<Event>>() {
-            @Override
-            public void onResponse(ArrayList<Event> events) {
-                mAdapter.addAll(events);
-                setIsLoading(false);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                setIsLoading(false);
-                Crouton.makeText(getActivity(), getString(R.string.fetch_events_failed), Style.ALERT).show();
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-        }).execute();
+
+        GroupDirectory.ApiRequest req = mClient.getChapterEventList(start, end, getArguments().getString("plus_id"), new Response.Listener<ArrayList<Event>>() {
+                @Override
+                public void onResponse(ArrayList<Event> events) {
+                    App.getInstance().getModelCache().putAsync("event_"+ getArguments().getString("plus_id"), events, DateTime.now().plusHours(2));
+
+                    mAdapter.addAll(events);
+                    setIsLoading(false);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    setIsLoading(false);
+                    Crouton.makeText(getActivity(), getString(R.string.fetch_events_failed), Style.ALERT).show();
+                }
+         });
+
+        if(Utils.isOnline(getActivity())) {
+            req.execute();
+        } else {
+            App.getInstance().getModelCache().getAsync("event_"+ getArguments().getString("plus_id"), false, new ModelCache.CacheListener() {
+                @Override
+                public void onGet(Object item) {
+                    ArrayList<Event> events = (ArrayList<Event>)item;
+                    if(events != null) {
+                        mAdapter.addAll(events);
+                        setIsLoading(false);
+                        Crouton.makeText(getActivity(), getString(R.string.cached_content), Style.INFO).show();
+                    } else {
+                        setIsLoading(false);
+                        Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
+                    }
+                }
+            });
+        }
     }
 
     @Override

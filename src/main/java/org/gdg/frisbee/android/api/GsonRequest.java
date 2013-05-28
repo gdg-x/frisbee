@@ -90,4 +90,5 @@ public class GsonRequest<T> extends GdgRequest<T> {
                 .registerTypeAdapter(DateTime.class, new DateTimeDeserializer())
                 .create();
     }
+
 }

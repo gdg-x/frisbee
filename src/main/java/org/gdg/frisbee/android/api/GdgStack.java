@@ -115,18 +115,6 @@ public class GdgStack implements HttpStack {
             additionalHeaders.put("X-CSRFToken", mCsrfToken);
         }
 
-        if(request instanceof ImageRequest) {
-            DiskLruCache.Snapshot cached = App.getInstance().getBitmapCache().getFromDiskCacheRaw(request.getUrl());
-            if(cached != null) {
-                Log.d(LOG_TAG, "Deferred disk cache hit!");
-                StatusLine responseStatus = new BasicStatusLine(new ProtocolVersion("HTTP", 1, 1),
-                        200, "From cache");
-                BasicHttpResponse response = new BasicHttpResponse(responseStatus);
-                response.setEntity(new InputStreamEntity(cached.getInputStream(0), cached.getLength(0)));
-                return response;
-            }
-        }
-
         return mInnerStack.performRequest(request, additionalHeaders);
     }
 }

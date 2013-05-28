@@ -18,10 +18,8 @@ package org.gdg.frisbee.android.app;
 
 import android.app.Application;
 import android.os.Environment;
-import com.github.ignition.support.cache.AbstractCache;
 import org.gdg.frisbee.android.cache.ModelCache;
 import uk.co.senab.bitmapcache.BitmapLruCache;
-import uk.co.senab.bitmapcache.ExtendedBitmapLruCache;
 
 import java.io.File;
 
@@ -39,7 +37,7 @@ public class App extends Application {
         return mInstance;
     }
 
-    private ExtendedBitmapLruCache mBitmapCache;
+    private BitmapLruCache mBitmapCache;
     private ModelCache mModelCache;
 
     @Override
@@ -47,18 +45,36 @@ public class App extends Application {
         super.onCreate();
 
         mInstance = this;
+        getModelCache();
+        getBitmapCache();
         GdgVolley.init(this);
     }
 
     public ModelCache getModelCache() {
         if(mModelCache == null) {
-            mModelCache = new ModelCache(256, 15, 2);
-            mModelCache.enableDiskCache(getApplicationContext(), AbstractCache.DISK_CACHE_SDCARD);
+
+            File rootDir = null;
+            if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+                // SD-card available
+                rootDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+                        + "/Android/data/" + getPackageName() + "/model_cache/");
+            } else {
+                File internalCacheDir = getCacheDir();
+                rootDir = new File(internalCacheDir.getAbsolutePath() + "/model_cache/");
+            }
+
+            rootDir.mkdirs();
+
+            mModelCache = new ModelCache.Builder(getApplicationContext())
+                    .setMemoryCacheEnabled(true)
+                    .setDiskCacheEnabled(true)
+                    .setDiskCacheLocation(rootDir)
+                    .build();
         }
         return mModelCache;
     }
 
-    public ExtendedBitmapLruCache getBitmapCache() {
+    public BitmapLruCache getBitmapCache() {
         if(mBitmapCache == null) {
 
             String rootDir = null;
@@ -71,12 +87,9 @@ public class App extends Application {
                 rootDir = internalCacheDir.getAbsolutePath();
             }
 
-            mBitmapCache = new ExtendedBitmapLruCache.Builder(getApplicationContext())
-                    .setDiskCacheEnabled(true)
+            mBitmapCache = new BitmapLruCache.Builder(getApplicationContext())
                     .setMemoryCacheEnabled(true)
                     .setMemoryCacheMaxSizeUsingHeapSize()
-                    .setDiskCacheMaxSize(10 * 1024 * 1024)
-                    .setDiskCacheLocation(new File(rootDir))
                     .build();
         }
         return mBitmapCache;
