@@ -258,7 +258,8 @@ public class MyView extends AbsListView {
 
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
-            return mBaseAdapter.getView(mItems.get(i), view, viewGroup);
+            View v = mBaseAdapter.getView(mItems.get(i), view, viewGroup);
+            return v;
         }
     }
 

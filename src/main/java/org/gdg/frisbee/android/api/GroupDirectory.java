@@ -17,8 +17,8 @@
 package org.gdg.frisbee.android.api;
 
 import android.content.Context;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
+import com.android.volley.Request;
+import com.android.volley.Response;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -38,7 +38,8 @@ import org.apache.http.protocol.HTTP;
 import org.gdg.frisbee.android.api.deserializer.DateTimeDeserializer;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.Event;
-import org.gdg.frisbee.android.api.model.Response;
+import org.gdg.frisbee.android.api.model.GdgResponse;
+import org.gdg.frisbee.android.app.GdgVolley;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
 
@@ -68,32 +69,22 @@ public class GroupDirectory {
     private static final String SHOWCASE_NEXT_URL = BASE_URL + "/showcase/next";
 
     private static final String LOG_TAG = "GDG-GroupDirectory";
-    private static final String USER_AGENT = "GDG-Android/0.1";
 
-    private HttpClient mHttpClient;
-    private Gson mGson;
-    private static String mCsrfToken = null;
-
-    private Context mContext;
-    private static RequestQueue mRequestQueue;
-
-    public GroupDirectory(Context context) {
-        mRequestQueue = Volley.newRequestQueue(context);
-        mContext = context;
-        mHttpClient = new DefaultHttpClient();
+    public GroupDirectory() {
     }
 
-    public Directory getDirectory() throws ApiException {
-        if(mCsrfToken == null)
-            mCsrfToken = getCsrfToken();
-        Directory dir = (Directory) postRaw(DIRECTORY_URL, "", Directory.class, FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
-
-        return dir;
+    public ApiRequest getDirectory(Response.Listener<Directory> successListener, Response.ErrorListener errorListener) {
+        GsonRequest<Directory> dirReq = new GsonRequest<Directory>(Request.Method.POST,
+                DIRECTORY_URL,
+                Directory.class,
+                successListener,
+                errorListener,
+                GsonRequest.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES));
+        return new ApiRequest(dirReq);
     }
 
-    public ArrayList<Event> getChapterEventList(final DateTime start, final DateTime end, String chapterId) throws ApiException {
-        if(mCsrfToken == null)
-            mCsrfToken = getCsrfToken();
+    public ApiRequest getChapterEventList(final DateTime start, final DateTime end, String chapterId, Response.Listener<ArrayList<Event>> successListener, Response.ErrorListener errorListener) {
+
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new NameValuePair() {
             @Override
@@ -129,112 +120,29 @@ public class GroupDirectory {
             }
         });
         Type type = new TypeToken<ArrayList<Event>>() {}.getType();
-        return (ArrayList<Event>) getRaw(String.format(CHAPTER_CALENDAR_URL,chapterId), params, type, FieldNamingPolicy.IDENTITY);
+
+        String url = String.format(CHAPTER_CALENDAR_URL,chapterId);
+        url += "?"+URLEncodedUtils.format(params, "UTF-8");
+
+        GsonRequest<ArrayList<Event>> eventReq = new GsonRequest<ArrayList<Event>>(Request.Method.GET,
+                url,
+                type,
+                successListener,
+                errorListener,
+                GsonRequest.getGson(FieldNamingPolicy.IDENTITY));
+
+        return new ApiRequest(eventReq);
     }
 
-    private String getCsrfToken() throws ApiException {
-        HttpGet request = new HttpGet(DIRECTORY_URL);
-        request.setHeader(new BasicHeader(HTTP.USER_AGENT,USER_AGENT));
+    public class ApiRequest {
+        private Request mRequest;
 
-        try {
-            HttpResponse response = mHttpClient.execute(request);
-            if(response.getStatusLine().getStatusCode() == 200) {
-                Header csrfCookie = response.getFirstHeader("Set-Cookie");
-                if(csrfCookie != null && csrfCookie.getValue().contains("csrftoken")) {
-                    Pattern pattern = Pattern.compile("csrftoken=([a-z0-9]{32})");
-                    Matcher matcher = pattern.matcher(csrfCookie.getValue());
-                    if(matcher.find()) {
-                        return matcher.group(1);
-                    }
-                }
-                throw new ApiException("Could not acquire CSRF Token");
-            } else {
-                throw new ApiException(response.getStatusLine().getReasonPhrase(), response.getStatusLine().getStatusCode());
-            }
-        } catch (UnsupportedEncodingException e) {
-            throw new ApiException(e);
-        } catch (ClientProtocolException e) {
-            throw new ApiException(e);
-        } catch (IOException e) {
-            throw new ApiException(e);
-        } catch (IllegalStateException e) {
-            throw new ApiException(e);
-        }
-    }
-
-    private Object getRaw(String url, List<NameValuePair> params, Type type, FieldNamingPolicy policy) throws ApiException {
-
-        if(params != null) {
-            url += "?"+URLEncodedUtils.format(params, "UTF-8");
+        public ApiRequest(Request request) {
+            mRequest = request;
         }
 
-        HttpGet request = new HttpGet(url);
-        request.setHeader(new BasicHeader(HTTP.USER_AGENT,USER_AGENT));
-        request.setHeader(new BasicHeader(HTTP.CONTENT_TYPE,"application/json; charset=utf-8"));
-        request.setHeader(new BasicHeader("Referer", "https://developers.google.com/groups/directory"));
-        request.setHeader(new BasicHeader("X-CSRFToken", mCsrfToken));
-
-        try {
-            HttpResponse response = mHttpClient.execute(request);
-            String inp = Utils.inputStreamToString(response.getEntity().getContent());
-
-            if(response.getStatusLine().getStatusCode() == 200) {
-                return getGson(policy).fromJson(inp, type);
-            } else {
-                throw new ApiException(response.getStatusLine().getReasonPhrase(), response.getStatusLine().getStatusCode());
-            }
-        } catch (UnsupportedEncodingException e) {
-            throw new ApiException(e);
-        } catch (ClientProtocolException e) {
-            throw new ApiException(e);
-        } catch (IOException e) {
-            throw new ApiException(e);
-        } catch (IllegalStateException e) {
-            throw new ApiException(e);
+        public void execute() {
+            GdgVolley.getInstance().getRequestQueue().add(mRequest);
         }
-    }
-
-    private Response postRaw(String url, String req, Type type, FieldNamingPolicy policy) throws ApiException {
-        HttpPost request = new HttpPost(url);
-        request.setHeader(new BasicHeader(HTTP.USER_AGENT,USER_AGENT));
-        request.setHeader(new BasicHeader(HTTP.CONTENT_TYPE,"application/json; charset=utf-8"));
-        request.setHeader(new BasicHeader("Referer", "https://developers.google.com/groups/directory"));
-        request.setHeader(new BasicHeader("X-CSRFToken", mCsrfToken));
-
-        StringEntity s;
-        try {
-
-            if(req != null) {
-                s = new StringEntity(req);
-                s.setContentType("application/json; charset=utf-8");
-                s.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "application/json; charset=utf-8"));
-                request.setEntity(s);
-            }
-
-            HttpResponse response = mHttpClient.execute(request);
-            String inp = Utils.inputStreamToString(response.getEntity().getContent());
-
-            if(response.getStatusLine().getStatusCode() == 200) {
-                return getGson(policy).fromJson(inp, type);
-            } else {
-                throw new ApiException(response.getStatusLine().getReasonPhrase(), response.getStatusLine().getStatusCode());
-            }
-        } catch (UnsupportedEncodingException e) {
-            throw new ApiException(e);
-        } catch (ClientProtocolException e) {
-            throw new ApiException(e);
-        } catch (IOException e) {
-            throw new ApiException(e);
-        } catch (IllegalStateException e) {
-            throw new ApiException(e);
-        }
-    }
-
-    private Gson getGson(FieldNamingPolicy policy) {
-        mGson = new GsonBuilder()
-                    .setFieldNamingPolicy(policy)
-                    .registerTypeAdapter(DateTime.class, new DateTimeDeserializer())
-                    .create();
-        return mGson;
     }
 }

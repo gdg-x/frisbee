@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.adapter;
 import android.content.Context;
 import android.net.Uri;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,15 +28,18 @@ import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.android.volley.toolbox.NetworkImageView;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusOneButton;
 import com.google.api.services.plus.model.Activity;
 import com.google.api.services.plus.model.ActivityFeed;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.app.GdgVolley;
 import org.gdg.frisbee.android.view.NetworkedCacheableImageView;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * GDG Aachen
@@ -46,6 +50,8 @@ import java.util.Collection;
  * Time: 02:48
  */
 public class NewsAdapter extends BaseAdapter {
+
+    private static final String LOG_TAG = "GDG-NewsAdapter";
 
     private Context mContext;
     private LayoutInflater mInflater;
@@ -98,17 +104,25 @@ public class NewsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
+
+        Log.d(LOG_TAG, "get news item at "+ i);
         if(view == null)
             view = mInflater.inflate(R.layout.news_item, null);
+
 
         Item item = (Item) getItemInternal(i);
         Activity activity = item.getActivity();
 
+        if(view.getTag() != null && view.getTag().equals(activity.getId())) {
+            //return view;
+        }
+
+        view.setTag(activity.getId());
         PlusOneButton plusButton = (PlusOneButton) view.findViewById(R.id.plus_one_button);
         plusButton.initialize(mPlusClient, activity.getUrl(), 1);
 
-        NetworkedCacheableImageView picture = (NetworkedCacheableImageView) view.findViewById(R.id.image);
-        picture.setImageDrawable(null);
+        NetworkedCacheableImageView  picture = (NetworkedCacheableImageView) view.findViewById(R.id.image);
+        //picture.setImageDrawable(null);
 
         if(activity.getVerb().equals("share"))
             populateShare(activity, view);
@@ -117,8 +131,30 @@ public class NewsAdapter extends BaseAdapter {
 
         if(activity.getObject().getAttachments() != null &&
                 activity.getObject().getAttachments().size() > 0 &&
-                activity.getObject().getAttachments().get(0).getFullImage() != null) {
-            picture.loadImage(activity.getObject().getAttachments().get(0).getFullImage().getUrl(), true);
+                activity.getObject().getAttachments().get(0).getFullImage() != null &&
+                activity.getObject().getAttachments().get(0).getFullImage().getUrl() != null &&
+                activity.getObject().getAttachments().get(0).getFullImage().getUrl().length()>6) {
+            String url = activity.getObject().getAttachments().get(0).getFullImage().getUrl();
+            if(url.startsWith("//")) {
+                url = "http:"+url;
+            }
+
+            Log.d(LOG_TAG, url);
+            picture.setImageUrl(url, GdgVolley.getInstance().getImageLoader());
+        } else if(activity.getObject().getAttachments() != null &&
+                activity.getObject().getAttachments().size() > 0 &&
+                activity.getObject().getAttachments().get(0).getImage() != null &&
+                activity.getObject().getAttachments().get(0).getImage().getUrl() != null &&
+                activity.getObject().getAttachments().get(0).getImage().getUrl().length()>6) {
+            String url = activity.getObject().getAttachments().get(0).getImage().getUrl();
+            if(url.startsWith("//")) {
+                url = "http:"+url;
+            }
+
+            Log.d(LOG_TAG, url);
+            picture.setImageUrl(url, GdgVolley.getInstance().getImageLoader());
+        } else {
+            picture.setImageDrawable(null);
         }
 
         // That item will contain a special property that tells if it was freshly retrieved
@@ -139,7 +175,12 @@ public class NewsAdapter extends BaseAdapter {
 
     public void populateShare(Activity item, View v) {
         TextView content = (TextView) v.findViewById(R.id.content);
-        content.setText(Html.fromHtml(item.getObject().getContent()));
+
+        if(item.getAnnotation() != null) {
+            content.setText(Html.fromHtml(item.getAnnotation() + "<hr/>"+item.getObject().getContent()));
+        } else {
+            content.setText(Html.fromHtml(item.getObject().getContent()));
+        }
     }
 
     public class Item {
