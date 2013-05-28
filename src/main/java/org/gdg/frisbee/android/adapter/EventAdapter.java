@@ -30,6 +30,7 @@ import com.google.android.gms.plus.PlusOneButton;
 import com.google.api.services.plus.model.Activity;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Event;
+import org.gdg.frisbee.android.app.GdgVolley;
 import org.gdg.frisbee.android.view.NetworkedCacheableImageView;
 
 import java.util.ArrayList;
@@ -100,7 +101,7 @@ public class EventAdapter extends BaseAdapter {
         Event event = item.getEvent();
 
         NetworkedCacheableImageView picture = (NetworkedCacheableImageView) view.findViewById(R.id.icon);
-        picture.loadImage("https://developers.google.com"+event.getIconUrl(), true);
+        picture.setImageUrl("https://developers.google.com" + event.getIconUrl(), GdgVolley.getInstance().getImageLoader());
 
         TextView title = (TextView) view.findViewById(R.id.title);
         title.setText(event.getTitle());

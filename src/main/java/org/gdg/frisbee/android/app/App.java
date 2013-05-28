@@ -17,9 +17,11 @@
 package org.gdg.frisbee.android.app;
 
 import android.app.Application;
-import com.github.ignition.support.cache.AbstractCache;
+import android.os.Environment;
 import org.gdg.frisbee.android.cache.ModelCache;
 import uk.co.senab.bitmapcache.BitmapLruCache;
+
+import java.io.File;
 
 /**
  * Created with IntelliJ IDEA.
@@ -43,23 +45,53 @@ public class App extends Application {
         super.onCreate();
 
         mInstance = this;
+        getModelCache();
+        getBitmapCache();
+        GdgVolley.init(this);
     }
 
     public ModelCache getModelCache() {
         if(mModelCache == null) {
-            mModelCache = new ModelCache(256, 15, 2);
-            mModelCache.enableDiskCache(getApplicationContext(), AbstractCache.DISK_CACHE_SDCARD);
+
+            File rootDir = null;
+            if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+                // SD-card available
+                rootDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+                        + "/Android/data/" + getPackageName() + "/model_cache/");
+            } else {
+                File internalCacheDir = getCacheDir();
+                rootDir = new File(internalCacheDir.getAbsolutePath() + "/model_cache/");
+            }
+
+            rootDir.mkdirs();
+
+            mModelCache = new ModelCache.Builder(getApplicationContext())
+                    .setMemoryCacheEnabled(true)
+                    .setDiskCacheEnabled(true)
+                    .setDiskCacheLocation(rootDir)
+                    .build();
         }
         return mModelCache;
     }
 
     public BitmapLruCache getBitmapCache() {
-        if(mBitmapCache == null)
-            mBitmapCache = new BitmapLruCache.Builder(getApplicationContext())
-                    .setDiskCacheEnabled(true)
-                    .setMemoryCacheEnabled(true)
-                    .build();
+        if(mBitmapCache == null) {
 
+            String rootDir = null;
+            if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+                // SD-card available
+                rootDir = Environment.getExternalStorageDirectory().getAbsolutePath()
+                        + "/Android/data/" + getPackageName() + "/cache";
+            } else {
+                File internalCacheDir = getCacheDir();
+                rootDir = internalCacheDir.getAbsolutePath();
+            }
+
+            mBitmapCache = new BitmapLruCache.Builder(getApplicationContext())
+                    .setMemoryCacheEnabled(true)
+                    .setMemoryCacheMaxSizeUsingHeapSize()
+                    .build();
+        }
         return mBitmapCache;
     }
 }

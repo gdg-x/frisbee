@@ -33,13 +33,19 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Activity;
 import com.google.api.services.plus.model.ActivityFeed;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
+import org.gdg.frisbee.android.api.GapiTransportChooser;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.adapter.NewsAdapter;
+import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
+import org.gdg.frisbee.android.utils.Utils;
+import org.joda.time.DateTime;
 
 import java.io.IOException;
 
@@ -55,7 +61,7 @@ public class NewsFragment extends GdgListFragment {
 
     private static final String LOG_TAG = "GDG-NewsFragment";
 
-    final HttpTransport mTransport = AndroidHttp.newCompatibleTransport();
+    final HttpTransport mTransport = GapiTransportChooser.newCompatibleTransport();
     final JsonFactory mJsonFactory = new GsonFactory();
 
     private Plus mClient;
@@ -98,7 +104,7 @@ public class NewsFragment extends GdgListFragment {
         super.onActivityCreated(savedInstanceState);
         Log.d(LOG_TAG, "onActivityCreated()");
 
-        mClient = new Plus.Builder(mTransport, mJsonFactory, null).setGoogleClientRequestInitializer(new CommonGoogleJsonClientRequestInitializer(getString(R.string.simple_api_access_key))).build();
+        mClient = new Plus.Builder(mTransport, mJsonFactory, null).setGoogleClientRequestInitializer(new CommonGoogleJsonClientRequestInitializer(getString(R.string.ip_simple_api_access_key))).build();
 
         mAdapter = new NewsAdapter(getActivity(), ((GdgActivity)getActivity()).getPlusClient());
         setListAdapter(mAdapter);
@@ -111,45 +117,61 @@ public class NewsFragment extends GdgListFragment {
             listView.setDividerHeight(0);
         }
 
-        new Builder<String, ActivityFeed>(String.class, ActivityFeed.class)
-                .addParameter(getArguments().getString("plus_id"))
-                .setOnPreExecuteListener(new CommonAsyncTask.OnPreExecuteListener() {
-                    @Override
-                    public void onPreExecute() {
-                        setIsLoading(true);
-                    }
-                })
-                .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, ActivityFeed>() {
-                    @Override
-                    public ActivityFeed doInBackground(String... params) {
-                        try {
-
-                            ActivityFeed feed = (ActivityFeed) App.getInstance().getModelCache().get("news_" + params[0]);
-
-                            if (feed == null) {
-                                Plus.Activities.List request = mClient.activities().list(params[0], "public");
-                                request.setMaxResults(10L);
-                                request.setFields("nextPageToken,items(id,url,object/content,verb,object/attachments(fullImage),object(plusoners,replies,resharers))");
-                                feed = request.execute();
-
-                                App.getInstance().getModelCache().put("news_" + params[0], feed);
-                            }
-
-                            return feed;
-                        } catch (IOException e) {
-                            e.printStackTrace();
+        if(Utils.isOnline(getActivity())) {
+            new Builder<String, ActivityFeed>(String.class, ActivityFeed.class)
+                    .addParameter(getArguments().getString("plus_id"))
+                    .setOnPreExecuteListener(new CommonAsyncTask.OnPreExecuteListener() {
+                        @Override
+                        public void onPreExecute() {
+                            setIsLoading(true);
                         }
-                        return null;
-                    }
-                })
-                .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<ActivityFeed>() {
-                    @Override
-                    public void onPostExecute(ActivityFeed activityFeed) {
-                        mAdapter.addAll(activityFeed.getItems());
+                    })
+                    .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, ActivityFeed>() {
+                        @Override
+                        public ActivityFeed doInBackground(String... params) {
+                            try {
+
+                                ActivityFeed feed = (ActivityFeed) App.getInstance().getModelCache().get("news_" + params[0]);
+
+                                if (feed == null) {
+                                    Plus.Activities.List request = mClient.activities().list(params[0], "public");
+                                    request.setMaxResults(10L);
+                                    request.setFields("nextPageToken,items(id,url,object/content,verb,object/attachments,annotation,object(plusoners,replies,resharers))");
+                                    feed = request.execute();
+
+                                    App.getInstance().getModelCache().put("news_" + params[0], feed, DateTime.now().plusHours(1));
+                                }
+
+                                return feed;
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            return null;
+                        }
+                    })
+                    .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<ActivityFeed>() {
+                        @Override
+                        public void onPostExecute(ActivityFeed activityFeed) {
+                            mAdapter.addAll(activityFeed.getItems());
+                            setIsLoading(false);
+                        }
+                    })
+                    .buildAndExecute();
+        } else {
+            App.getInstance().getModelCache().getAsync("news_" +getArguments().getString("plus_id"), false, new ModelCache.CacheListener() {
+                @Override
+                public void onGet(Object item) {
+                    ActivityFeed feed = (ActivityFeed)item;
+                    if(feed != null) {
+                        Crouton.makeText(getActivity(), getString(R.string.cached_content), Style.INFO).show();
+                        mAdapter.addAll(feed.getItems());
                         setIsLoading(false);
+                    } else {
+                        Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
                     }
-                })
-                .buildAndExecute();
+                }
+            });
+        }
     }
 
 
