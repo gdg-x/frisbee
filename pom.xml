@@ -137,7 +137,7 @@
         <dependency>
             <groupId>com.google.android</groupId>
             <artifactId>support-v4</artifactId>
-            <version>r12</version>
+            <version>r13</version>
         </dependency>
         <dependency>
             <groupId>com.google.android.gcm</groupId>
