@@ -101,6 +101,10 @@
                     <artifactId>xpp3</artifactId>
                     <groupId>xpp3</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>google-play-services</artifactId>
+                    <groupId>com.google.android.google-play-services</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -158,12 +162,6 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-    <repositories>
-        <repository>
-            <id>ignition-releases</id>
-            <url>http://nexus.qype.com/content/repositories/releases</url>
-        </repository>
-    </repositories>
     <build>
         <plugins>
             <plugin>
