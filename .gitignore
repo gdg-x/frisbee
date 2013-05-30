@@ -23,6 +23,3 @@ default.properties
 *.iml
 gen-external-apklibs
 target
-
-res/values/keys.xml
-res/values/keys.xml.sample
