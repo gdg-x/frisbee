@@ -31,8 +31,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
  */
 public class GapiTransportChooser {
     public static HttpTransport newCompatibleTransport() {
-        //return isGingerbreadOrHigher() ? new GapiOkTransport() : new ApacheHttpTransport();
-        return isGingerbreadOrHigher() ? new NetHttpTransport() : new ApacheHttpTransport();
+        return isGingerbreadOrHigher() ? new GapiOkTransport() : new ApacheHttpTransport();
     }
 
     /** Returns whether the SDK version is Gingerbread (2.3) or higher. */

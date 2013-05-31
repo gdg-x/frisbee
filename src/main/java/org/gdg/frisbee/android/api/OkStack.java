@@ -19,9 +19,11 @@ package org.gdg.frisbee.android.api;
 import com.android.volley.toolbox.HurlStack;
 import com.squareup.okhttp.OkHttpClient;
 
+import javax.net.ssl.SSLContext;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 
 /**
@@ -37,9 +39,14 @@ public class OkStack extends HurlStack {
     @Override
     protected HttpURLConnection createConnection(URL url) throws IOException {
         OkHttpClient client = new OkHttpClient();
-        ArrayList<String> transports = new ArrayList<String>();
-        transports.add("http/1.1");
-        client.setTransports(transports);
+        SSLContext sslContext;
+        try {
+            sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, null, null);
+        } catch (GeneralSecurityException e) {
+            throw new AssertionError(); // The system has no TLS. Just give up.
+        }
+        client.setSslSocketFactory(sslContext.getSocketFactory());
         return client.open(url);
     }
 }
