@@ -30,7 +30,7 @@ public class GapiOkHttpRequest extends LowLevelHttpRequest {
      */
     GapiOkHttpRequest(HttpURLConnection connection) {
         this.connection = connection;
-        connection.setInstanceFollowRedirects(false);
+        connection.setInstanceFollowRedirects(true);
     }
 
     @Override

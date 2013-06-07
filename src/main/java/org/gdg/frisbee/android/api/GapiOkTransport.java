@@ -128,16 +128,7 @@ public class GapiOkTransport extends HttpTransport {
         URLConnection conn = client.open(connUrl);
         HttpURLConnection connection = (HttpURLConnection) conn;
         connection.setRequestMethod(method);
-        // SSL settings
-        if (connection instanceof HttpsURLConnection) {
-            HttpsURLConnection secureConnection = (HttpsURLConnection) connection;
-            if (hostnameVerifier != null) {
-                secureConnection.setHostnameVerifier(hostnameVerifier);
-            }
-            if (sslSocketFactory != null) {
-                secureConnection.setSSLSocketFactory(sslSocketFactory);
-            }
-        }
+
         return new GapiOkHttpRequest(connection);
     }
 
