@@ -168,19 +168,21 @@ public class InfoFragment extends RoboSherlockFragment {
                 .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<Person>() {
                     @Override
                     public void onPostExecute(Person person) {
-                        mAbout.setText(Html.fromHtml(person.getAboutMe()));
+                        if(person != null) {
+                            mAbout.setText(Html.fromHtml(person.getAboutMe()));
 
-                        for(Person.Urls url: person.getUrls()) {
-                            if(url.getValue().contains("plus.google.com/") && !url.getValue().contains("communities")) {
-                                String org = url.getValue();
-                                try {
-                                mFetchOrganizerInfo.addParameter(url.getValue().replace("plus.google.com/", "").replace("posts","").replace("/","").replace("about","").replace("u1","").replace("u0","").replace("https:","").replace("http:","").replace(getArguments().getString("plus_id"), "").replaceAll("[^\\d.]", "").substring(0,21));
-                                } catch(Exception ex) {
-                                    Crouton.makeText(getActivity(), String.format(getString(R.string.bogus_organizer), org), Style.ALERT);
+                            for(Person.Urls url: person.getUrls()) {
+                                if(url.getValue().contains("plus.google.com/") && !url.getValue().contains("communities")) {
+                                    String org = url.getValue();
+                                    try {
+                                    mFetchOrganizerInfo.addParameter(url.getValue().replace("plus.google.com/", "").replace("posts","").replace("/","").replace("about","").replace("u1","").replace("u0","").replace("https:","").replace("http:","").replace(getArguments().getString("plus_id"), "").replaceAll("[^\\d.]", "").substring(0,21));
+                                    } catch(Exception ex) {
+                                        Crouton.makeText(getActivity(), String.format(getString(R.string.bogus_organizer), org), Style.ALERT);
+                                    }
                                 }
                             }
+                            mFetchOrganizerInfo.buildAndExecute();
                         }
-                        mFetchOrganizerInfo.buildAndExecute();
                     }
                 })
                 .buildAndExecute();
