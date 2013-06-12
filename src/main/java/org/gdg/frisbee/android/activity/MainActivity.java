@@ -17,15 +17,20 @@
 package org.gdg.frisbee.android.activity;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.View;
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.MenuItem;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.FieldNamingPolicy;
@@ -48,23 +53,29 @@ import org.gdg.frisbee.android.fragment.NewsFragment;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.Utils;
+import org.gdg.frisbee.android.view.ActionBarDrawerToggleCompat;
 import org.joda.time.DateTime;
 import roboguice.inject.InjectView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class MainActivity extends GdgActivity implements android.app.ActionBar.OnNavigationListener {
+public class MainActivity extends GdgActivity implements ActionBar.OnNavigationListener {
 
     private static String LOG_TAG = "GDG-MainActivity";
     private ChapterAdapter mSpinnerAdapter;
     private MyAdapter mViewPagerAdapter;
+
+    @InjectView(R.id.drawer)
+    private DrawerLayout mDrawerLayout;
 
     @InjectView(R.id.pager)
     private ViewPager mViewPager;
 
     @InjectView(R.id.titles)
     private TitlePageIndicator mIndicator;
+
+    private ActionBarDrawerToggleCompat mDrawerToggle;
 
     private GroupDirectory.ApiRequest mFetchChaptersTask;
 
@@ -92,12 +103,35 @@ public class MainActivity extends GdgActivity implements android.app.ActionBar.O
         mViewPagerAdapter = new MyAdapter(this, getSupportFragmentManager());
         mSpinnerAdapter = new ChapterAdapter(MainActivity.this, android.R.layout.simple_list_item_1);
         getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-        getActionBar().setListNavigationCallbacks(mSpinnerAdapter, MainActivity.this);
+        getSupportActionBar().setListNavigationCallbacks(mSpinnerAdapter, MainActivity.this);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+        mDrawerToggle = new ActionBarDrawerToggleCompat(
+                this,                  /* host Activity */
+                mDrawerLayout,         /* DrawerLayout object */
+                R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
+                R.string.drawer_open,  /* "open drawer" description */
+                R.string.drawer_close  /* "close drawer" description */
+        ) {
+
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                //getActionBar().setTitle(mTitle);
+            }
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                //getActionBar().setTitle(mDrawerTitle);
+            }
+        };
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         mFetchChaptersTask = mClient.getDirectory(new Response.Listener<Directory>() {
             @Override
             public void onResponse(Directory directory) {
-                getActionBar().setListNavigationCallbacks(mSpinnerAdapter, MainActivity.this);
+                getSupportActionBar().setListNavigationCallbacks(mSpinnerAdapter, MainActivity.this);
                 App.getInstance().getModelCache().putAsync("chapter_list", directory, DateTime.now().plusDays(1));
 
                 ArrayList<Chapter> chapters = directory.getGroups();
@@ -172,6 +206,31 @@ public class MainActivity extends GdgActivity implements android.app.ActionBar.O
                 mFetchChaptersTask.execute();
             }
         }
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Pass the event to ActionBarDrawerToggle, if it returns
+        // true, then it has handled the app icon touch event
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        // Handle your other action bar items...
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
