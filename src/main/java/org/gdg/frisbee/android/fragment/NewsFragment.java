@@ -152,8 +152,10 @@ public class NewsFragment extends GdgListFragment {
                     .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<ActivityFeed>() {
                         @Override
                         public void onPostExecute(ActivityFeed activityFeed) {
-                            mAdapter.addAll(activityFeed.getItems());
-                            setIsLoading(false);
+                            if(activityFeed != null) {
+                                mAdapter.addAll(activityFeed.getItems());
+                                setIsLoading(false);
+                            }
                         }
                     })
                     .buildAndExecute();
