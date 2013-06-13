@@ -98,6 +98,11 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-youtube</artifactId>
+            <version>v3-rev56-1.15.0-rc</version>
+        </dependency>
+        <dependency>
             <groupId>com.google.api-client</groupId>
             <artifactId>google-api-client-android</artifactId>
             <version>1.14.1-beta</version>
