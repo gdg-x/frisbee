@@ -36,6 +36,11 @@
             <version>2.4.0</version>
         </dependency>
         <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>youtube-android-player-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
             <groupId>com.squareup.okhttp</groupId>
             <artifactId>okhttp</artifactId>
             <version>1.0.2</version>
@@ -91,6 +96,11 @@
                     <groupId>xpp3</groupId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-youtube</artifactId>
+            <version>v3-rev56-1.15.0-rc</version>
         </dependency>
         <dependency>
             <groupId>com.google.api-client</groupId>
