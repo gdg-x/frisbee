@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" android:background="@color/cloud">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" android:layout_weight="1" android:gravity="center_vertical">
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_marginBottom="25dip" android:padding="5dip"
+                android:layout_marginLeft="10dip">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/welcome"
+                    android:id="@+id/textView" android:singleLine="true"
+                    android:linksClickable="false" android:textSize="36dip" android:textIsSelectable="false"
+                    android:textColor="@color/asbestos"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:text="@string/choose_home_gdg" android:id="@+id/textView1" android:singleLine="true"
+                      android:linksClickable="false" android:textSize="36dip" android:textIsSelectable="false"
+                      android:textColor="@color/asbestos"/>
+        </LinearLayout>
+        <org.gdg.frisbee.android.view.ResizableImageView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView" android:background="@drawable/gdg_world"
+                android:adjustViewBounds="true"/>
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:gravity="center_horizontal">
+            <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/chapter_spinner"/>
+        </LinearLayout>
+    </LinearLayout>
+    <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="15dip"
+            android:id="@+id/imageView1" android:background="@drawable/googly_bar"/>
+</LinearLayout>

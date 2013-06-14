@@ -67,6 +67,7 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
                 GooglePlusUtil.getErrorDialog(errorCode, this, 0).show();
             } else {
                 mPlusClient = new PlusClient.Builder(this, this, this)
+                    .setScopes("https://www.googleapis.com/auth/youtube")
                     .setVisibleActivities("http://schemas.google.com/AddActivity", "http://schemas.google.com/BuyActivity")
                     .build();
             }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="fill_parent" android:background="@color/cloud">
+
+    <ImageView android:layout_width="fill_parent" android:layout_height="15dip" android:id="@+id/imageView"
+               android:background="@drawable/googly_bar"/>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/signin_with_google"
+                android:id="@+id/button" android:layout_gravity="center" android:background="@drawable/btn_g_signin"
+                />
+    </LinearLayout>
+</LinearLayout>

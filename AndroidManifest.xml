@@ -33,6 +33,9 @@
     <application android:icon="@drawable/icon" android:label="@string/app_name" android:theme="@style/Theme.GDG" android:logo="@drawable/ic_logo_wide" android:name=".app.App">
         <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="@string/android_simple_api_access_key"/>
         <activity android:name=".activity.MainActivity" android:launchMode="singleTask">
+
+        </activity>
+        <activity android:name=".activity.FirstStartActivity" android:theme="@style/GDG.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
