@@ -17,6 +17,8 @@
 package org.gdg.frisbee.android.activity;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -25,6 +27,9 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmentActivity;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.plus.PlusClient;
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.ChapterAdapter;
 import org.gdg.frisbee.android.api.model.Chapter;
@@ -40,14 +45,15 @@ import roboguice.inject.InjectView;
  * Date: 29.04.13
  * Time: 14:48
  */
-public class FirstStartActivity extends RoboSherlockFragmentActivity {
+public class FirstStartActivity extends RoboSherlockFragmentActivity implements FirstStartStep1Fragment.Step1Listener, FirstStartStep2Fragment.Step2Listener {
 
     private static String LOG_TAG = "GDG-FirstStartActivity";
 
     @InjectView(R.id.pager)
     private NonSwipeableViewPager mViewPager;
 
-    private ChapterAdapter mSpinnerAdapter;
+    private SharedPreferences mPreferences;
+    private Chapter mSelectedChapter;
     private FirstStartPageAdapter mViewPagerAdapter;
 
     @Override
@@ -56,8 +62,68 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity {
         Log.i(LOG_TAG, "onCreate");
         setContentView(R.layout.activity_first_start);
 
+        mPreferences = getSharedPreferences("gdg", MODE_PRIVATE);
+
         mViewPagerAdapter = new FirstStartPageAdapter(this, getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);
+    }
+
+    @Override
+    public void onConfirmedChapter(Chapter chapter) {
+        mSelectedChapter = chapter;
+        mPreferences.edit()
+                .putString(Const.SETTINGS_HOME_GDG, chapter.getChapterId())
+                .commit();
+        mViewPager.setCurrentItem(1, true);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == FirstStartStep2Fragment.REQUEST_CODE_RESOLVE_ERR && resultCode == RESULT_OK) {
+            FirstStartStep2Fragment fragment = (FirstStartStep2Fragment) mViewPagerAdapter.getItem(mViewPager.getCurrentItem());
+            PlusClient plusClient = new PlusClient.Builder(this, fragment, fragment)
+                    .setScopes("https://www.googleapis.com/auth/youtube", Scopes.PLUS_LOGIN, Scopes.PLUS_PROFILE)
+                    .build();
+            fragment.setPlusClient(plusClient);
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(mViewPager.getCurrentItem() > 0)
+            mViewPager.setCurrentItem(0, true);
+        else
+            super.onBackPressed();
+    }
+
+    @Override
+    public void onSignedIn(String accountName) {
+        mPreferences.edit()
+                .putBoolean(Const.SETTINGS_FIRST_START, false)
+                .putBoolean(Const.SETTINGS_SIGNED_IN, true)
+                .commit();
+
+        finish();
+    }
+
+    @Override
+    public void onSkippedSignIn() {
+        mPreferences.edit()
+                .putBoolean(Const.SETTINGS_FIRST_START, false)
+                .putBoolean(Const.SETTINGS_SIGNED_IN, false)
+                .commit();
+        finish();
+    }
+
+    @Override
+    public void finish() {
+        Intent resultData = new Intent();
+        resultData.putExtra("selected_chapter", mSelectedChapter);
+        setResult(RESULT_OK, resultData);
+        super.finish();
     }
 
     public class FirstStartPageAdapter extends FragmentStatePagerAdapter {
@@ -82,9 +148,9 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity {
         public Fragment getItem(int position) {
             switch(position) {
                 case 0:
-                    return FirstStartStep1Fragment.newInstance();
+                    return FirstStartStep1Fragment.newInstance(FirstStartActivity.this);
                 case 1:
-                    return FirstStartStep2Fragment.newInstance();
+                    return FirstStartStep2Fragment.newInstance(FirstStartActivity.this);
             }
             return null;
         }

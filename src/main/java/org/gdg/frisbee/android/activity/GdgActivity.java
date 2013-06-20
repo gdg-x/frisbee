@@ -67,27 +67,12 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
                 GooglePlusUtil.getErrorDialog(errorCode, this, 0).show();
             } else {
                 mPlusClient = new PlusClient.Builder(this, this, this)
-                    .setScopes("https://www.googleapis.com/auth/youtube")
-                    .setVisibleActivities("http://schemas.google.com/AddActivity", "http://schemas.google.com/BuyActivity")
+                    .setScopes("https://www.googleapis.com/auth/youtube", Scopes.PLUS_LOGIN, Scopes.PLUS_PROFILE)
                     .build();
             }
         }
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-        if(mPlusClient != null && !mPlusClient.isConnected()) {
-            if (mConnectionResult == null) {
-                mPlusClient.connect();
-            } else {
-                try {
-                    mConnectionResult.startResolutionForResult(this, REQUEST_CODE_RESOLVE_ERR);
-                } catch (IntentSender.SendIntentException e) {
-                    // Try connecting again.
-                    mConnectionResult = null;
-                    mPlusClient.connect();
-                }
-            }
-        }
     }
 
     @Override
@@ -168,11 +153,7 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
 
     @Override
     protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
-        if (requestCode == REQUEST_CODE_RESOLVE_ERR && responseCode == RESULT_OK) {
-            mConnectionResult = null;
-            mPlusClient.connect();
-
-        }
+        super.onActivityResult(requestCode, responseCode, intent);
     }
 
     @Override

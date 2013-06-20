@@ -35,6 +35,7 @@ import com.google.api.services.plus.model.Activity;
 import com.google.api.services.plus.model.ActivityFeed;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.app.GdgVolley;
+import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.NetworkedCacheableImageView;
 
 import java.util.ArrayList;
@@ -99,7 +100,12 @@ public class NewsAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int i) {
-        return i;
+        return Utils.stringToLong(getItemInternal(i).getActivity().getId());
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return true;
     }
 
     @Override

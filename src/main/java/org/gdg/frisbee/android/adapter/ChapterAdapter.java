@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.adapter;
 import android.content.Context;
 import android.widget.ArrayAdapter;
 import org.gdg.frisbee.android.api.model.Chapter;
+import org.gdg.frisbee.android.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,5 +48,15 @@ public class ChapterAdapter extends ArrayAdapter<Chapter> {
             chapters.add(getItem(i));
         }
         return chapters;
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return true;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return Utils.stringToLong(getItem(position).getGplusId());
     }
 }

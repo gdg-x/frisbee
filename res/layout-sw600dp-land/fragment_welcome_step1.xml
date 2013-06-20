@@ -30,16 +30,32 @@
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
-            <LinearLayout
-                    android:orientation="vertical"
+            <ViewSwitcher
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" android:gravity="center_horizontal" android:layout_weight="1">
-                <Spinner
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/chapter_spinner" android:minWidth="200dip" android:minHeight="50dip"
-                        android:spinnerMode="dropdown"/>
-            </LinearLayout>
+                    android:layout_height="wrap_content" android:inAnimation="@anim/fade_in" android:outAnimation="@anim/fade_out"
+                    android:id="@+id/viewSwitcher" android:layout_weight="1">
+                <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent" android:gravity="center_horizontal">
+                    <ProgressBar
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/progressBar" android:indeterminate="true" android:indeterminateOnly="true"/>
+                </LinearLayout>
+                <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content" android:gravity="center_horizontal" android:layout_weight="1">
+                    <Spinner
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/chapter_spinner" android:minWidth="200dip" android:minHeight="50dip"
+                            android:spinnerMode="dropdown"/>
+                    <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="@string/confirm" android:id="@+id/confirm"/>
+                </LinearLayout>
+            </ViewSwitcher>
             <org.gdg.frisbee.android.view.ResizableImageView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"

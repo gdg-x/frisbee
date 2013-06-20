@@ -12,7 +12,9 @@
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:layout_marginBottom="25dip" android:padding="5dip">
+                android:layout_height="wrap_content" android:layout_marginBottom="25dip"
+                android:paddingLeft="15dip" android:paddingTop="5dip" android:paddingRight="5dip"
+                android:paddingBottom="5dip">
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -30,15 +32,31 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/imageView" android:background="@drawable/gdg_world"
                 android:adjustViewBounds="true"/>
-        <LinearLayout
-                android:orientation="vertical"
+        <ViewSwitcher
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" android:gravity="center_horizontal">
-            <Spinner
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/chapter_spinner"/>
-        </LinearLayout>
+                android:layout_height="wrap_content"
+                android:id="@+id/viewSwitcher" android:inAnimation="@anim/fade_in" android:outAnimation="@anim/fade_out" android:layout_marginTop="15dip">
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" android:gravity="center_horizontal">
+                <ProgressBar
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/progressBar" android:indeterminate="true" android:indeterminateOnly="true"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" android:gravity="center_horizontal">
+                <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/chapter_spinner"/>
+                <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="@string/confirm" android:id="@+id/confirm"/>
+            </LinearLayout>
+        </ViewSwitcher>
     </LinearLayout>
     <ImageView
             android:layout_width="fill_parent"
