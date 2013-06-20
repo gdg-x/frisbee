@@ -32,4 +32,12 @@
     <string name="bogus_organizer">Could not parse Organizer Id: %1$s</string>
     <string name="cached_content">You\'re currently offline. Here\'s some cached content.</string>
     <string name="offline_alert">You\'re currently offline.</string>
+    <string name="welcome">Welcome.</string>
+    <string name="choose_home_gdg">Choose your home GDG</string>
+    <string name="signin_with_google">Sign-in with Google</string>
+    <string name="confirm">Confirm</string>
+    <string name="signin_description">The GDG App integrates with Google+ and other Google Services. To use these function we need you to be signed into Google.</string>
+    <string name="or">or</string>
+    <string name="no_thanks">no thanks.</string>
+    <string name="skip">Skip Sign-in</string>
 </resources>

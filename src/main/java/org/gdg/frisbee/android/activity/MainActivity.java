@@ -17,7 +17,10 @@
 package org.gdg.frisbee.android.activity;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -38,6 +41,7 @@ import com.google.gson.Gson;
 import com.viewpagerindicator.TitlePageIndicator;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.adapter.ChapterAdapter;
 import org.gdg.frisbee.android.api.GsonRequest;
 import org.gdg.frisbee.android.app.App;
@@ -52,6 +56,7 @@ import org.gdg.frisbee.android.fragment.InfoFragment;
 import org.gdg.frisbee.android.fragment.NewsFragment;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
+import org.gdg.frisbee.android.utils.GingerbreadLastLocationFinder;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ActionBarDrawerToggleCompat;
 import org.joda.time.DateTime;
@@ -59,12 +64,14 @@ import roboguice.inject.InjectView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class MainActivity extends GdgActivity implements ActionBar.OnNavigationListener {
 
     private static String LOG_TAG = "GDG-MainActivity";
-    private ChapterAdapter mSpinnerAdapter;
-    private MyAdapter mViewPagerAdapter;
+
+    public static final int REQUEST_FIRST_START_WIZARD = 100;
 
     @InjectView(R.id.drawer)
     private DrawerLayout mDrawerLayout;
@@ -75,12 +82,41 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
     @InjectView(R.id.titles)
     private TitlePageIndicator mIndicator;
 
+    private ChapterAdapter mSpinnerAdapter;
+    private MyAdapter mViewPagerAdapter;
     private ActionBarDrawerToggleCompat mDrawerToggle;
-
     private GroupDirectory.ApiRequest mFetchChaptersTask;
-
+    private SharedPreferences mPreferences;
     private LocationManager mLocationManager;
     private GroupDirectory mClient;
+    private GingerbreadLastLocationFinder mLocationFinder;
+    private Location mLastLocation;
+
+    private Comparator<Chapter> mLocationComparator = new Comparator<Chapter>() {
+        @Override
+        public int compare(Chapter chapter, Chapter chapter2) {
+            float[] results = new float[1];
+            float[] results2 = new float[1];
+
+            if(mLastLocation == null)
+                return chapter.getName().compareTo(chapter2.getName());
+
+            if(chapter.getGeo() == null)
+                return 1;
+            if(chapter2.getGeo() == null)
+                return -1;
+
+            Location.distanceBetween(mLastLocation.getLatitude(), mLastLocation.getLongitude(), chapter.getGeo().getLat(), chapter.getGeo().getLng(), results);
+            Location.distanceBetween(mLastLocation.getLatitude(), mLastLocation.getLongitude(), chapter2.getGeo().getLat(), chapter2.getGeo().getLng(), results2);
+
+            if(results[0] == results2[0])
+                return 0;
+            else if(results[0] > results2[0])
+                return 1;
+            else
+                return -1;
+        }
+    };
 
     /**
      * Called when the activity is first created.
@@ -94,8 +130,12 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
 		Log.i(LOG_TAG, "onCreate");
         setContentView(R.layout.activity_main);
 
+        mPreferences = getSharedPreferences("gdg", MODE_PRIVATE);
+
         mClient = new GroupDirectory();
-        mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+        mLocationFinder = new GingerbreadLastLocationFinder(this);
+        mLastLocation = mLocationFinder.getLastBestLocation(5000,60*60*1000);
 
         //if(!Utils.isEmulator())
         //    Log.d(LOG_TAG, mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER).toString());
@@ -135,8 +175,7 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
                 App.getInstance().getModelCache().putAsync("chapter_list", directory, DateTime.now().plusDays(1));
 
                 ArrayList<Chapter> chapters = directory.getGroups();
-                Collections.sort(chapters);
-                mSpinnerAdapter.addAll(chapters);
+                addChapters(chapters);
 
                 mViewPagerAdapter.setSelectedChapter(chapters.get(0));
 
@@ -159,8 +198,7 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
                     public void onGet(Object item) {
                         Directory directory = (Directory)item;
                         if(directory != null) {
-                            mSpinnerAdapter.addAll(directory.getGroups());
-
+                            addChapters(directory.getGroups());
                             mViewPagerAdapter.setSelectedChapter(directory.getGroups().get(0));
                             mViewPager.setAdapter(mViewPagerAdapter);
                             mIndicator.setViewPager(mViewPager);
@@ -176,7 +214,7 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
                     public void onGet(Object item) {
                         Directory directory = (Directory)item;
                         if(directory != null) {
-                            mSpinnerAdapter.addAll(directory.getGroups());
+                            addChapters(directory.getGroups());
                             mViewPagerAdapter.setSelectedChapter(directory.getGroups().get(0));
                             mViewPager.setAdapter(mViewPagerAdapter);
                             mIndicator.setViewPager(mViewPager);
@@ -190,6 +228,7 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
 
             if(savedInstanceState.containsKey("chapters")) {
                 ArrayList<Chapter> chapters = savedInstanceState.getParcelableArrayList("chapters");
+                mSpinnerAdapter.clear();
                 mSpinnerAdapter.addAll(chapters);
 
                 if(savedInstanceState.containsKey("selected_chapter")) {
@@ -206,6 +245,22 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
                 mFetchChaptersTask.execute();
             }
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
+        super.onActivityResult(requestCode, responseCode, intent);
+
+        if(requestCode == REQUEST_FIRST_START_WIZARD && responseCode == RESULT_OK) {
+            Chapter homeGdgd = intent.getParcelableExtra("selected_chapter");
+            getSupportActionBar().setSelectedNavigationItem(mSpinnerAdapter.getPosition(homeGdgd));
+            mViewPagerAdapter.setSelectedChapter(homeGdgd);
+        }
+    }
+
+    private void addChapters(List<Chapter> chapterList) {
+        Collections.sort(chapterList, mLocationComparator);
+        mSpinnerAdapter.addAll(chapterList);
     }
 
     @Override
@@ -237,6 +292,10 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
     protected void onStart() {
         super.onStart();
         Log.d(LOG_TAG, "onStart()");
+
+        if(mPreferences.getBoolean(Const.SETTINGS_FIRST_START, Const.SETTINGS_FIRST_START_DEFAULT)) {
+            startActivityForResult(new Intent(this, FirstStartActivity.class), REQUEST_FIRST_START_WIZARD);
+        }
     }
 
     @Override

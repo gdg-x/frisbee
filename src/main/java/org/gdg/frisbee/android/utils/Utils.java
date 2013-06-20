@@ -60,6 +60,14 @@ public class Utils {
         return Build.PRODUCT.equals("google_sdk");
     }
 
+    public static long stringToLong(String str) {
+        long l = 0;
+        for(int i = 0; i < str.length(); i++) {
+            l += str.charAt(i)*Math.pow(10, i);
+        }
+        return l;
+    }
+
     public static String inputStreamToString(InputStream is) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();

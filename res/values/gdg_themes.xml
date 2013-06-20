@@ -19,6 +19,11 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
+  <style name="GDG.NoActionBar" parent="Theme.GDG">
+      <item name="windowActionBar">false</item>
+      <item name="windowNoTitle">true</item>
+  </style>
+
   <style name="Theme.GDG" parent="Theme.Sherlock.Light">
     <item name="vpiTitlePageIndicatorStyle">@style/TitlePageIndicatorGDG</item>
 
