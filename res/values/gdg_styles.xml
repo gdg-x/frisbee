@@ -19,6 +19,13 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <style name="GoogleSignIn" parent="android:style/Widget.Button">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:paddingLeft">65dip</item>
+        <item name="android:paddingRight">25dip</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
   <style name="TitlePageIndicatorGDG">
     <item name="android:background">#444444</item>
     <item name="footerColor">#ffffff</item>

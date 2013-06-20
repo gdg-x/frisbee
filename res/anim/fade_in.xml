@@ -16,11 +16,8 @@
   ~ limitations under the License.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
-    <org.gdg.frisbee.android.view.NonSwipeableViewPager android:id="@+id/pager"
-                                       android:layout_height="match_parent"
-                                       android:layout_width="match_parent"></org.gdg.frisbee.android.view.NonSwipeableViewPager>
-</LinearLayout>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <alpha android:fromAlpha="0.0" android:toAlpha="1.0"
+           android:interpolator="@android:anim/accelerate_interpolator"
+           android:duration="500"/>
+</set>

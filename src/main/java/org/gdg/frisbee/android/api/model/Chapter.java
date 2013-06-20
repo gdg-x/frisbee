@@ -122,6 +122,10 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
 
         if(o instanceof Chapter) {
             Chapter other = (Chapter)o;
+
+            if(chapterId.equals("")) {
+                return other.getGplusId().equals(getGplusId());
+            }
             return other.getChapterId().equals(getChapterId());
         }
 

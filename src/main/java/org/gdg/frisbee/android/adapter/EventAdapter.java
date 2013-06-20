@@ -89,7 +89,12 @@ public class EventAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int i) {
-        return i;
+        return Long.parseLong(mEvents.get(i).getEvent().getId());
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return true;
     }
 
     @Override
