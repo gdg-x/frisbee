@@ -19,6 +19,15 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
+  <style name="GDG.SeeTrough" parent="Theme.GDG">
+      <item name="android:windowIsTranslucent">true</item>
+      <item name="android:windowBackground">@color/semi_transparent</item>
+      <item name="android:windowContentOverlay">@null</item>
+      <item name="android:windowNoTitle">true</item>
+      <item name="android:backgroundDimEnabled">false</item>
+      <item name="windowActionBar">false</item>
+  </style>
+
   <style name="GDG.NoActionBar" parent="Theme.GDG">
       <item name="windowActionBar">false</item>
       <item name="windowNoTitle">true</item>

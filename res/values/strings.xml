@@ -40,4 +40,5 @@
     <string name="or">or</string>
     <string name="no_thanks">no thanks.</string>
     <string name="skip">Skip Sign-in</string>
+    <string name="youtube_init_failed">YouTube Player could not be initialized.</string>
 </resources>

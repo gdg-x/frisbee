@@ -17,7 +17,10 @@
 package org.gdg.frisbee.android.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,18 +29,34 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.android.volley.toolbox.NetworkImageView;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusOneButton;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import com.google.api.services.plus.model.Activity;
 import com.google.api.services.plus.model.ActivityFeed;
+import com.sun.xml.internal.ws.api.message.Attachment;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.activity.MainActivity;
+import org.gdg.frisbee.android.activity.YoutubeActivity;
+import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.GdgVolley;
+import org.gdg.frisbee.android.fragment.YoutubeFragment;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.NetworkedCacheableImageView;
 
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -50,17 +69,17 @@ import java.util.List;
  * Date: 22.04.13
  * Time: 02:48
  */
-public class NewsAdapter extends BaseAdapter {
+public class NewsAdapter extends BaseAdapter implements YouTubePlayer.OnFullscreenListener {
 
     private static final String LOG_TAG = "GDG-NewsAdapter";
 
-    private Context mContext;
+    private FragmentActivity mContext;
     private LayoutInflater mInflater;
     private ArrayList<Item> mActivities;
 
     private PlusClient mPlusClient;
 
-    public NewsAdapter(Context ctx, PlusClient client) {
+    public NewsAdapter(FragmentActivity ctx, PlusClient client) {
         mContext = ctx;
         mPlusClient = client;
         mInflater = LayoutInflater.from(mContext);
@@ -115,52 +134,82 @@ public class NewsAdapter extends BaseAdapter {
         if(view == null)
             view = mInflater.inflate(R.layout.news_item, null);
 
-
         Item item = (Item) getItemInternal(i);
         Activity activity = item.getActivity();
 
-        if(view.getTag() != null && view.getTag().equals(activity.getId())) {
-            //return view;
-        }
+        ViewGroup container = (ViewGroup) view.findViewById(R.id.attachmentContainer);
+        container.requestTransparentRegion(container);
 
         view.setTag(activity.getId());
         PlusOneButton plusButton = (PlusOneButton) view.findViewById(R.id.plus_one_button);
         plusButton.initialize(mPlusClient, activity.getUrl(), 1);
 
         NetworkedCacheableImageView  picture = (NetworkedCacheableImageView) view.findViewById(R.id.image);
-        //picture.setImageDrawable(null);
+        picture.setOnClickListener(null);
 
         if(activity.getVerb().equals("share"))
             populateShare(activity, view);
         else
             populatePost(activity, view);
 
-        if(activity.getObject().getAttachments() != null &&
-                activity.getObject().getAttachments().size() > 0 &&
-                activity.getObject().getAttachments().get(0).getFullImage() != null &&
-                activity.getObject().getAttachments().get(0).getFullImage().getUrl() != null &&
-                activity.getObject().getAttachments().get(0).getFullImage().getUrl().length()>6) {
-            String url = activity.getObject().getAttachments().get(0).getFullImage().getUrl();
-            if(url.startsWith("//")) {
-                url = "http:"+url;
-            }
+        if(activity.getObject().getAttachments() != null && activity.getObject().getAttachments().size() > 0) {
 
-            Log.d(LOG_TAG, url);
-            picture.setImageUrl(url, GdgVolley.getInstance().getImageLoader());
-        } else if(activity.getObject().getAttachments() != null &&
-                activity.getObject().getAttachments().size() > 0 &&
-                activity.getObject().getAttachments().get(0).getImage() != null &&
-                activity.getObject().getAttachments().get(0).getImage().getUrl() != null &&
-                activity.getObject().getAttachments().get(0).getImage().getUrl().length()>6) {
-            String url = activity.getObject().getAttachments().get(0).getImage().getUrl();
-            if(url.startsWith("//")) {
-                url = "http:"+url;
-            }
+            final Activity.PlusObject.Attachments attachment = activity.getObject().getAttachments().get(0);
 
-            Log.d(LOG_TAG, url);
-            picture.setImageUrl(url, GdgVolley.getInstance().getImageLoader());
+            if(attachment.getObjectType().equals("video")) {
+                picture.setVisibility(View.VISIBLE);
+
+                String url = attachment.getImage().getUrl();
+                if(url.startsWith("//")) {
+                    url = "http:"+url;
+                }
+
+                Log.d(LOG_TAG, url);
+                picture.setImageUrl(url, GdgVolley.getInstance().getImageLoader());
+
+                picture.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            Intent playVideoIntent = new Intent(mContext, YoutubeActivity.class);
+                            playVideoIntent.putExtra("video_id", Utils.splitQuery(new URL(attachment.getUrl())).get("v"));
+                            mContext.startActivity(playVideoIntent);
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+            } else {
+                picture.setVisibility(View.VISIBLE);
+
+                if(attachment.getFullImage() != null &&
+                        attachment.getFullImage().getUrl() != null &&
+                        attachment.getFullImage().getUrl().length()>6) {
+                    String url = attachment.getFullImage().getUrl();
+                    if(url.startsWith("//")) {
+                        url = "http:"+url;
+                    }
+
+                    Log.d(LOG_TAG, url);
+                    picture.setImageUrl(url, GdgVolley.getInstance().getImageLoader());
+                } else if(attachment.getImage() != null &&
+                        attachment.getImage().getUrl() != null &&
+                        attachment.getImage().getUrl().length()>6) {
+                    String url = activity.getObject().getAttachments().get(0).getImage().getUrl();
+                    if(url.startsWith("//")) {
+                        url = "http:"+url;
+                    }
+
+                    Log.d(LOG_TAG, url);
+                    picture.setImageUrl(url, GdgVolley.getInstance().getImageLoader());
+                }
+            }
         } else {
             picture.setImageDrawable(null);
+            picture.setVisibility(View.GONE);
         }
 
         // That item will contain a special property that tells if it was freshly retrieved
@@ -187,6 +236,12 @@ public class NewsAdapter extends BaseAdapter {
         } else {
             content.setText(Html.fromHtml(item.getObject().getContent()));
         }
+    }
+
+    @Override
+    public void onFullscreen(boolean isFullscreen) {
+        Log.d(LOG_TAG, "onFullscreen: "+ isFullscreen);
+
     }
 
     public class Item {

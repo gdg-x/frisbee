@@ -140,6 +140,7 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
         //if(!Utils.isEmulator())
         //    Log.d(LOG_TAG, mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER).toString());
 
+
         mViewPagerAdapter = new MyAdapter(this, getSupportFragmentManager());
         mSpinnerAdapter = new ChapterAdapter(MainActivity.this, android.R.layout.simple_list_item_1);
         getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);

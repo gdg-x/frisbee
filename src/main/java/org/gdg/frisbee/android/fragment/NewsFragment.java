@@ -19,12 +19,14 @@ package org.gdg.frisbee.android.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFragment;
 import com.google.android.gms.plus.PlusShare;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
 import com.google.api.client.http.HttpTransport;
@@ -77,6 +79,12 @@ public class NewsFragment extends GdgListFragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        Log.d(LOG_TAG, "onSaveInstanceState()");
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
@@ -97,6 +105,18 @@ public class NewsFragment extends GdgListFragment {
     public void onPause() {
         super.onPause();
         Log.d(LOG_TAG, "onPause()");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        /*FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+        for(YouTubePlayerSupportFragment f : mAdapter.getVideoSlots()){
+            Log.d(LOG_TAG, "removed video frag");
+            ft.remove(f);
+        }
+        ft.commitAllowingStateLoss();*/
+        Log.d(LOG_TAG, "onStop()");
     }
 
     @Override
@@ -214,6 +234,7 @@ public class NewsFragment extends GdgListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "onCreateView()");
         return inflater.inflate(R.layout.fragment_news, null);
     }
 
