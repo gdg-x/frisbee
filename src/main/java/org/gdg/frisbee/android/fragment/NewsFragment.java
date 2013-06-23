@@ -19,15 +19,11 @@ package org.gdg.frisbee.android.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFragment;
 import com.google.android.gms.plus.PlusShare;
-import com.google.android.youtube.player.YouTubePlayerSupportFragment;
-import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -39,7 +35,6 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import org.gdg.frisbee.android.api.GapiTransportChooser;
 import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.adapter.NewsAdapter;
@@ -110,12 +105,6 @@ public class NewsFragment extends GdgListFragment {
     @Override
     public void onStop() {
         super.onStop();
-        /*FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-        for(YouTubePlayerSupportFragment f : mAdapter.getVideoSlots()){
-            Log.d(LOG_TAG, "removed video frag");
-            ft.remove(f);
-        }
-        ft.commitAllowingStateLoss();*/
         Log.d(LOG_TAG, "onStop()");
     }
 

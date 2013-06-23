@@ -18,9 +18,6 @@ package org.gdg.frisbee.android.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,37 +26,21 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
-import com.android.volley.toolbox.NetworkImageView;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusOneButton;
-import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import com.google.api.services.plus.model.Activity;
-import com.google.api.services.plus.model.ActivityFeed;
-import com.sun.xml.internal.ws.api.message.Attachment;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.activity.MainActivity;
 import org.gdg.frisbee.android.activity.YoutubeActivity;
-import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.GdgVolley;
-import org.gdg.frisbee.android.fragment.YoutubeFragment;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.NetworkedCacheableImageView;
-
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * GDG Aachen
@@ -73,13 +54,13 @@ public class NewsAdapter extends BaseAdapter implements YouTubePlayer.OnFullscre
 
     private static final String LOG_TAG = "GDG-NewsAdapter";
 
-    private FragmentActivity mContext;
+    private Context mContext;
     private LayoutInflater mInflater;
     private ArrayList<Item> mActivities;
 
     private PlusClient mPlusClient;
 
-    public NewsAdapter(FragmentActivity ctx, PlusClient client) {
+    public NewsAdapter(Context ctx, PlusClient client) {
         mContext = ctx;
         mPlusClient = client;
         mInflater = LayoutInflater.from(mContext);
