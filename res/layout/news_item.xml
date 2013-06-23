@@ -35,10 +35,15 @@
                 android:id="@+id/content"
                 android:padding="10dip" android:autoLink="email|map|web"/>
     </LinearLayout>
-    <org.gdg.frisbee.android.view.NetworkedCacheableImageView
+    <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/image" android:background="#ffffff" android:scaleType="centerCrop" />
+            android:layout_height="wrap_content" android:id="@+id/attachmentContainer">
+        <org.gdg.frisbee.android.view.NetworkedCacheableImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/image" android:background="#ffffff" android:scaleType="centerCrop" />
+    </LinearLayout>
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"

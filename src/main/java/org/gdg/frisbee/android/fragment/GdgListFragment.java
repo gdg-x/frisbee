@@ -27,6 +27,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.*;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockDialogFragment;
+import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
 import org.gdg.frisbee.android.R;
 import roboguice.inject.InjectView;
 
@@ -38,7 +39,7 @@ import roboguice.inject.InjectView;
  * Date: 23.04.13
  * Time: 19:03
  */
-public class GdgListFragment extends RoboSherlockDialogFragment {
+public class GdgListFragment extends RoboSherlockFragment {
 
     private static final String LOG_TAG = "GDG-ListFragment";
 
