@@ -39,9 +39,10 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" android:id="@+id/attachmentContainer">
-        <org.gdg.frisbee.android.view.NetworkedCacheableImageView
+        <org.gdg.frisbee.android.view.ResizableImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
                 android:id="@+id/image" android:background="#ffffff" android:scaleType="centerCrop" />
     </LinearLayout>
     <LinearLayout

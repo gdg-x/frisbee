@@ -26,16 +26,21 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusOneButton;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.api.services.plus.model.Activity;
+import com.squareup.picasso.Picasso;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.YoutubeActivity;
+import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.GdgVolley;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.NetworkedCacheableImageView;
+import org.gdg.frisbee.android.view.ResizableImageView;
+
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -125,8 +130,9 @@ public class NewsAdapter extends BaseAdapter implements YouTubePlayer.OnFullscre
         PlusOneButton plusButton = (PlusOneButton) view.findViewById(R.id.plus_one_button);
         plusButton.initialize(mPlusClient, activity.getUrl(), 1);
 
-        NetworkedCacheableImageView  picture = (NetworkedCacheableImageView) view.findViewById(R.id.image);
+        ResizableImageView  picture = (ResizableImageView) view.findViewById(R.id.image);
         picture.setOnClickListener(null);
+        picture.setImageDrawable(null);
 
         if(activity.getVerb().equals("share"))
             populateShare(activity, view);
@@ -146,7 +152,12 @@ public class NewsAdapter extends BaseAdapter implements YouTubePlayer.OnFullscre
                 }
 
                 Log.d(LOG_TAG, url);
-                picture.setImageUrl(url, GdgVolley.getInstance().getImageLoader());
+                App.getInstance().getPicasso()
+                        .load(url)
+                        .fit()
+                        .into(picture);
+
+                //picture.setImageUrl(url, GdgVolley.getInstance().getImageLoader());
 
                 picture.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -166,17 +177,7 @@ public class NewsAdapter extends BaseAdapter implements YouTubePlayer.OnFullscre
             } else {
                 picture.setVisibility(View.VISIBLE);
 
-                if(attachment.getFullImage() != null &&
-                        attachment.getFullImage().getUrl() != null &&
-                        attachment.getFullImage().getUrl().length()>6) {
-                    String url = attachment.getFullImage().getUrl();
-                    if(url.startsWith("//")) {
-                        url = "http:"+url;
-                    }
-
-                    Log.d(LOG_TAG, url);
-                    picture.setImageUrl(url, GdgVolley.getInstance().getImageLoader());
-                } else if(attachment.getImage() != null &&
+                if(attachment.getImage() != null &&
                         attachment.getImage().getUrl() != null &&
                         attachment.getImage().getUrl().length()>6) {
                     String url = activity.getObject().getAttachments().get(0).getImage().getUrl();
@@ -185,11 +186,25 @@ public class NewsAdapter extends BaseAdapter implements YouTubePlayer.OnFullscre
                     }
 
                     Log.d(LOG_TAG, url);
-                    picture.setImageUrl(url, GdgVolley.getInstance().getImageLoader());
+                    App.getInstance().getPicasso()
+                            .load(url)
+                            .into(picture);
+                } else if(attachment.getFullImage() != null &&
+                        attachment.getFullImage().getUrl() != null &&
+                        attachment.getFullImage().getUrl().length()>6) {
+                    String url = attachment.getFullImage().getUrl();
+                    if(url.startsWith("//")) {
+                        url = "http:"+url;
+                    }
+
+                    Log.d(LOG_TAG, url);
+                    double factor = picture.getMeasuredWidth() * attachment.getFullImage().getHeight() / attachment.getFullImage().getWidth();
+                    App.getInstance().getPicasso()
+                            .load(url)
+                            .into(picture);
                 }
             }
         } else {
-            picture.setImageDrawable(null);
             picture.setVisibility(View.GONE);
         }
 

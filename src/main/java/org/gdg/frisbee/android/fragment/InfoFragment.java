@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
@@ -234,8 +235,10 @@ public class InfoFragment extends RoboSherlockFragment {
     public View getOrganizerView(Person item) {
         View convertView = mInflater.inflate(R.layout.list_organizer_item, null);
 
-        NetworkedCacheableImageView picture = (NetworkedCacheableImageView) convertView.findViewById(R.id.icon);
-        picture.setImageUrl(item.getImage().getUrl(), GdgVolley.getInstance().getImageLoader());
+        ImageView picture = (ImageView) convertView.findViewById(R.id.icon);
+        App.getInstance().getPicasso()
+                .load(item.getImage().getUrl())
+                .into(picture);
 
         TextView title = (TextView) convertView.findViewById(R.id.title);
         title.setText(item.getDisplayName());
