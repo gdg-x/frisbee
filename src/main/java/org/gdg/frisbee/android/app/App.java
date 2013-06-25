@@ -50,9 +50,6 @@ public class App extends Application {
     private GoogleAnalytics mGaInstance;
     private Tracker mTracker;
 
-    private GoogleAnalytics mGaInstance;
-    private Tracker mTracker;
-
     @Override
     public void onCreate() {
         super.onCreate();
