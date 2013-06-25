@@ -57,7 +57,7 @@ public class App extends Application {
                 .loader(new OkHttpLoader(this))
                 .memoryCache(new LruCache(this))
                 .build();
-        mPicasso.setDebugging(true);
+        mPicasso.setDebugging(false);
     }
 
 

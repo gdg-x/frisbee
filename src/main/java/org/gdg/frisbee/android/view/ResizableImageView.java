@@ -28,7 +28,10 @@ public class ResizableImageView extends ImageView {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
 
-        Drawable d = getDrawable();
+        Drawable d = getBackground();
+
+        if(d == null)
+            d = getDrawable();
 
         if(d!=null){
             int width = MeasureSpec.getSize(widthMeasureSpec);

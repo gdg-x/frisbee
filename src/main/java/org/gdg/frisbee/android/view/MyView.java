@@ -257,6 +257,16 @@ public class MyView extends AbsListView {
         }
 
         @Override
+        public int getViewTypeCount() {
+            return mBaseAdapter.getViewTypeCount();
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return mBaseAdapter.getItemViewType(mItems.get(position));
+        }
+
+        @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             View v = mBaseAdapter.getView(mItems.get(i), view, viewGroup);
             return v;

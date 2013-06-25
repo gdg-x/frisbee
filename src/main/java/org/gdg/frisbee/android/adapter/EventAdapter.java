@@ -30,8 +30,9 @@ import com.google.android.gms.plus.PlusOneButton;
 import com.google.api.services.plus.model.Activity;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Event;
+import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.GdgVolley;
-import org.gdg.frisbee.android.view.NetworkedCacheableImageView;
+import org.gdg.frisbee.android.view.SquaredImageView;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -89,13 +90,9 @@ public class EventAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int i) {
-        return Long.parseLong(mEvents.get(i).getEvent().getId());
+        return i;
     }
 
-    @Override
-    public boolean hasStableIds() {
-        return true;
-    }
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
@@ -105,8 +102,10 @@ public class EventAdapter extends BaseAdapter {
         Item item = (Item) getItemInternal(i);
         Event event = item.getEvent();
 
-        NetworkedCacheableImageView picture = (NetworkedCacheableImageView) view.findViewById(R.id.icon);
-        picture.setImageUrl("https://developers.google.com" + event.getIconUrl(), GdgVolley.getInstance().getImageLoader());
+        SquaredImageView picture = (SquaredImageView) view.findViewById(R.id.icon);
+        App.getInstance().getPicasso()
+                .load("https://developers.google.com" + event.getIconUrl())
+                .into(picture);
 
         TextView title = (TextView) view.findViewById(R.id.title);
         title.setText(event.getTitle());

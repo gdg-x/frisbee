@@ -18,6 +18,7 @@ package org.gdg.frisbee.android.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,15 +31,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusOneButton;
-import com.google.android.youtube.player.YouTubePlayer;
 import com.google.api.services.plus.model.Activity;
-import com.squareup.picasso.Picasso;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.YoutubeActivity;
 import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.app.GdgVolley;
 import org.gdg.frisbee.android.utils.Utils;
-import org.gdg.frisbee.android.view.NetworkedCacheableImageView;
 import org.gdg.frisbee.android.view.ResizableImageView;
 
 import java.io.UnsupportedEncodingException;
@@ -55,7 +52,7 @@ import java.util.Collection;
  * Date: 22.04.13
  * Time: 02:48
  */
-public class NewsAdapter extends BaseAdapter implements YouTubePlayer.OnFullscreenListener {
+public class NewsAdapter extends BaseAdapter {
 
     private static final String LOG_TAG = "GDG-NewsAdapter";
 
@@ -114,25 +111,53 @@ public class NewsAdapter extends BaseAdapter implements YouTubePlayer.OnFullscre
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public int getViewTypeCount() {
+        // nothing, article, video, photo, album, event
+        return 6;
+    }
 
-        Log.d(LOG_TAG, "get news item at "+ i);
+    @Override
+    public int getItemViewType(int position) {
+        Item item = (Item) getItemInternal(position);
+        Activity activity = item.getActivity();
+
+        if(activity.getObject().getAttachments() == null || activity.getObject().getAttachments().isEmpty())
+            return 0;
+        else {
+            Activity.PlusObject.Attachments attachment = activity.getObject().getAttachments().get(0);
+            String objectType = attachment.getObjectType();
+
+            if(objectType.equals("article"))
+                return 1;
+            else if(objectType.equals("video"))
+                return 2;
+            else if(objectType.equals("photo"))
+                return 3;
+            else if(objectType.equals("album"))
+                return 4;
+            else if(objectType.equals("event"))
+                return 5;
+        }
+        return 0;
+    }
+
+    @Override
+    public View getView(int i, View view, ViewGroup viewGroup) {
         if(view == null)
-            view = mInflater.inflate(R.layout.news_item, null);
+            view = mInflater.inflate(R.layout.news_item_base, null);
 
         Item item = (Item) getItemInternal(i);
         Activity activity = item.getActivity();
 
         ViewGroup container = (ViewGroup) view.findViewById(R.id.attachmentContainer);
-        container.requestTransparentRegion(container);
 
         view.setTag(activity.getId());
         PlusOneButton plusButton = (PlusOneButton) view.findViewById(R.id.plus_one_button);
         plusButton.initialize(mPlusClient, activity.getUrl(), 1);
 
-        ResizableImageView  picture = (ResizableImageView) view.findViewById(R.id.image);
+        /*ResizableImageView  picture = (ResizableImageView) view.findViewById(R.id.image);
         picture.setOnClickListener(null);
-        picture.setImageDrawable(null);
+        picture.setImageDrawable(null);*/
 
         if(activity.getVerb().equals("share"))
             populateShare(activity, view);
@@ -143,69 +168,28 @@ public class NewsAdapter extends BaseAdapter implements YouTubePlayer.OnFullscre
 
             final Activity.PlusObject.Attachments attachment = activity.getObject().getAttachments().get(0);
 
-            if(attachment.getObjectType().equals("video")) {
-                picture.setVisibility(View.VISIBLE);
-
-                String url = attachment.getImage().getUrl();
-                if(url.startsWith("//")) {
-                    url = "http:"+url;
-                }
-
-                Log.d(LOG_TAG, url);
-                App.getInstance().getPicasso()
-                        .load(url)
-                        .fit()
-                        .into(picture);
-
-                //picture.setImageUrl(url, GdgVolley.getInstance().getImageLoader());
-
-                picture.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        try {
-                            Intent playVideoIntent = new Intent(mContext, YoutubeActivity.class);
-                            playVideoIntent.putExtra("video_id", Utils.splitQuery(new URL(attachment.getUrl())).get("v"));
-                            mContext.startActivity(playVideoIntent);
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        } catch (MalformedURLException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-            } else {
-                picture.setVisibility(View.VISIBLE);
-
-                if(attachment.getImage() != null &&
-                        attachment.getImage().getUrl() != null &&
-                        attachment.getImage().getUrl().length()>6) {
-                    String url = activity.getObject().getAttachments().get(0).getImage().getUrl();
-                    if(url.startsWith("//")) {
-                        url = "http:"+url;
-                    }
-
-                    Log.d(LOG_TAG, url);
-                    App.getInstance().getPicasso()
-                            .load(url)
-                            .into(picture);
-                } else if(attachment.getFullImage() != null &&
-                        attachment.getFullImage().getUrl() != null &&
-                        attachment.getFullImage().getUrl().length()>6) {
-                    String url = attachment.getFullImage().getUrl();
-                    if(url.startsWith("//")) {
-                        url = "http:"+url;
-                    }
-
-                    Log.d(LOG_TAG, url);
-                    double factor = picture.getMeasuredWidth() * attachment.getFullImage().getHeight() / attachment.getFullImage().getWidth();
-                    App.getInstance().getPicasso()
-                            .load(url)
-                            .into(picture);
-                }
+            switch(getItemViewType(i)) {
+                case 1:
+                    // Article
+                    populateArticle(container, attachment);
+                    break;
+                case 2:
+                    // Video
+                    populateVideo(container, attachment);
+                    break;
+                case 3:
+                    // Photo
+                    populatePhoto(container, attachment);
+                    break;
+                case 4:
+                    // Album
+                    populateAlbum(container, attachment);
+                    break;
+                case 5:
+                    // Album
+                    populateEvent(container, attachment);
+                    break;
             }
-        } else {
-            picture.setVisibility(View.GONE);
         }
 
         // That item will contain a special property that tells if it was freshly retrieved
@@ -217,6 +201,129 @@ public class NewsAdapter extends BaseAdapter implements YouTubePlayer.OnFullscre
         }
 
         return view;
+    }
+
+    private View createAttachmentView(ViewGroup container, int layout) {
+        View attachmentView = null;
+        if(container.getChildCount() == 0) {
+            attachmentView = mInflater.inflate(layout, null);
+            container.addView(attachmentView);
+        } else {
+            attachmentView = container.getChildAt(0);
+        }
+        return attachmentView;
+    }
+
+    private void populateArticle(ViewGroup container, final Activity.PlusObject.Attachments attachment) {
+
+        if(attachment == null)
+            return;
+
+        View attachmentView = createAttachmentView(container, R.layout.news_item_article);
+        ImageView articleImage = (ImageView) attachmentView.findViewById(R.id.image);
+        TextView title =  (TextView)attachmentView.findViewById(R.id.displayName);
+        TextView content =  (TextView)attachmentView.findViewById(R.id.content);
+
+        title.setText(attachment.getDisplayName());
+        try {
+            content.setText(new URL(attachment.getUrl()).getHost());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        if(attachment.getImage() == null && attachment.getFullImage() == null)
+            articleImage.setVisibility(View.GONE);
+        else {
+            String imageUrl = attachment.getImage().getUrl();
+            if(attachment.getFullImage() != null)
+                imageUrl = attachment.getFullImage().getUrl();
+
+            articleImage.setImageDrawable(null);
+            articleImage.setVisibility(View.VISIBLE);
+            App.getInstance().getPicasso()
+                    .load(imageUrl)
+                    .into(articleImage);
+        }
+
+        attachmentView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(attachment.getUrl()));
+                mContext.startActivity(i);
+            }
+        });
+    }
+
+    private void populateVideo(ViewGroup container, final Activity.PlusObject.Attachments attachment) {
+
+        if(attachment == null)
+            return;
+
+        View attachmentView = createAttachmentView(container, R.layout.news_item_video);
+        ResizableImageView poster = (ResizableImageView) attachmentView.findViewById(R.id.videoPoster);
+        App.getInstance().getPicasso()
+                .load(attachment.getImage().getUrl())
+                .into(poster);
+
+        attachmentView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    Intent playVideoIntent = new Intent(mContext, YoutubeActivity.class);
+                    playVideoIntent.putExtra("video_id", Utils.splitQuery(new URL(attachment.getUrl())).get("v"));
+                    mContext.startActivity(playVideoIntent);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void populatePhoto(ViewGroup container, Activity.PlusObject.Attachments attachment) {
+
+        if(attachment == null)
+            return;
+
+        View attachmentView = createAttachmentView(container, R.layout.news_item_photo);
+
+        ResizableImageView photo = (ResizableImageView) attachmentView.findViewById(R.id.photo);
+        App.getInstance().getPicasso()
+                .load(attachment.getImage().getUrl())
+                .into(photo);
+
+    }
+
+    private void populateAlbum(ViewGroup container, Activity.PlusObject.Attachments attachment) {
+
+        if(attachment == null)
+            return;
+
+        View attachmentView = createAttachmentView(container, R.layout.news_item_album);
+
+        ImageView pic1 = (ImageView) attachmentView.findViewById(R.id.pic1);
+        ImageView pic2 = (ImageView) attachmentView.findViewById(R.id.pic2);
+        ImageView pic3 = (ImageView) attachmentView.findViewById(R.id.pic3);
+
+        App.getInstance().getPicasso()
+                .load(attachment.getThumbnails().get(0).getImage().getUrl())
+                .into(pic1);
+
+        if(attachment.getThumbnails().size() > 1)
+            App.getInstance().getPicasso()
+                    .load(attachment.getThumbnails().get(1).getImage().getUrl())
+                    .into(pic2);
+
+        if(attachment.getThumbnails().size() > 2)
+            App.getInstance().getPicasso()
+                    .load(attachment.getThumbnails().get(2).getImage().getUrl())
+                    .into(pic3);
+    }
+
+    private void populateEvent(ViewGroup container, Activity.PlusObject.Attachments attachment) {
+        View attachmentView = createAttachmentView(container, R.layout.news_item_event);
     }
 
     public void populatePost(Activity item, View v) {
@@ -232,12 +339,6 @@ public class NewsAdapter extends BaseAdapter implements YouTubePlayer.OnFullscre
         } else {
             content.setText(Html.fromHtml(item.getObject().getContent()));
         }
-    }
-
-    @Override
-    public void onFullscreen(boolean isFullscreen) {
-        Log.d(LOG_TAG, "onFullscreen: "+ isFullscreen);
-
     }
 
     public class Item {

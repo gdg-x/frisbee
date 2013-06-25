@@ -124,17 +124,19 @@ public class FirstStartStep1Fragment extends RoboSherlockFragment {
                       Log.e(LOG_TAG, "Could'nt fetch chapter list", volleyError);
                   }
               });
+
         App.getInstance().getModelCache().getAsync("chapter_list", new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 Directory directory = (Directory) item;
-                if (directory != null) {
-                    mLoadSwitcher.setDisplayedChild(1);
-                    addChapters(directory.getGroups());
-                    mChapterSpinner.setAdapter(mSpinnerAdapter);
-                } else {
-                    mFetchChaptersTask.execute();
-                }
+                mLoadSwitcher.setDisplayedChild(1);
+                addChapters(directory.getGroups());
+                mChapterSpinner.setAdapter(mSpinnerAdapter);
+            }
+
+            @Override
+            public void onNotFound(String key) {
+                mFetchChaptersTask.execute();
             }
         });
 
@@ -152,6 +154,7 @@ public class FirstStartStep1Fragment extends RoboSherlockFragment {
 
     private void addChapters(List<Chapter> chapterList) {
         Collections.sort(chapterList, mLocationComparator);
+        mSpinnerAdapter.clear();
         mSpinnerAdapter.addAll(chapterList);
     }
 
