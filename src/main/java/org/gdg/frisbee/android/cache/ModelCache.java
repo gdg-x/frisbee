@@ -272,7 +272,10 @@ public class ModelCache {
 
             @Override
             protected void onPostExecute(Object o) {
-                mListener.onGet(o);
+                if(o != null)
+                    mListener.onGet(o);
+                else
+                    mListener.onNotFound(url);
             }
         }.execute();
     }
@@ -602,6 +605,7 @@ public class ModelCache {
 
     public interface CacheListener {
         public void onGet(Object item);
+        public void onNotFound(String key);
     }
 
     static final class DiskCacheFlushRunnable implements Runnable {

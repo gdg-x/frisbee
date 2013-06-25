@@ -38,11 +38,8 @@
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/attachmentContainer">
-        <org.gdg.frisbee.android.view.NetworkedCacheableImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/image" android:background="#ffffff" android:scaleType="centerCrop" />
+            android:layout_height="wrap_content" android:id="@+id/attachmentContainer"
+            android:background="@drawable/news_item_filler">
     </LinearLayout>
     <LinearLayout
             android:orientation="horizontal"

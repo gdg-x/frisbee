@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmentActivity;
@@ -30,6 +31,7 @@ import com.google.android.gms.common.Scopes;
 import com.google.android.gms.plus.GooglePlusUtil;
 import com.google.android.gms.plus.PlusClient;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.utils.ScopedBus;
 import org.gdg.frisbee.android.utils.Utils;
 
@@ -50,6 +52,7 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
 
     private PlusClient mPlusClient;
     private ConnectionResult mConnectionResult;
+    private SharedPreferences mPreferences;
 
     private final ScopedBus scopedBus = new ScopedBus();
 
@@ -72,6 +75,7 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
             }
         }
 
+        mPreferences = getSharedPreferences("gdg",MODE_PRIVATE);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
@@ -79,8 +83,8 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
     protected void onStart() {
         super.onStart();
 
-        /*
-        if(mPlusClient != null && !mPlusClient.isConnected()) {
+
+        if(mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false) && mPlusClient != null && !mPlusClient.isConnected()) {
             if (mConnectionResult == null) {
                 mPlusClient.connect();
             } else {
@@ -92,7 +96,7 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
                     mPlusClient.connect();
                 }
             }
-        }   */
+        }
     }
 
     @Override

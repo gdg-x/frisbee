@@ -116,14 +116,16 @@ public class EventFragment extends GdgListFragment {
                 @Override
                 public void onGet(Object item) {
                     ArrayList<Event> events = (ArrayList<Event>)item;
-                    if(events != null) {
-                        mAdapter.addAll(events);
-                        setIsLoading(false);
-                        Crouton.makeText(getActivity(), getString(R.string.cached_content), Style.INFO).show();
-                    } else {
-                        setIsLoading(false);
-                        Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
-                    }
+
+                    mAdapter.addAll(events);
+                    setIsLoading(false);
+                    Crouton.makeText(getActivity(), getString(R.string.cached_content), Style.INFO).show();
+                }
+
+                @Override
+                public void onNotFound(String key) {
+                    setIsLoading(false);
+                    Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
                 }
             });
         }

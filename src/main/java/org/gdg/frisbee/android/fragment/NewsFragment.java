@@ -173,13 +173,15 @@ public class NewsFragment extends GdgListFragment {
                 @Override
                 public void onGet(Object item) {
                     ActivityFeed feed = (ActivityFeed)item;
-                    if(feed != null) {
-                        Crouton.makeText(getActivity(), getString(R.string.cached_content), Style.INFO).show();
-                        mAdapter.addAll(feed.getItems());
-                        setIsLoading(false);
-                    } else {
-                        Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
-                    }
+
+                    Crouton.makeText(getActivity(), getString(R.string.cached_content), Style.INFO).show();
+                    mAdapter.addAll(feed.getItems());
+                    setIsLoading(false);
+                }
+
+                @Override
+                public void onNotFound(String key) {
+                    Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
                 }
             });
         }
