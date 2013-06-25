@@ -16,6 +16,7 @@ import com.google.android.gms.common.Scopes;
 import com.google.android.gms.plus.GooglePlusUtil;
 import com.google.android.gms.plus.PlusClient;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.app.App;
 import roboguice.inject.InjectView;
 
 /**
@@ -56,6 +57,11 @@ public class FirstStartStep2Fragment extends RoboSherlockFragment implements Goo
         mPlusClient = new PlusClient.Builder(getActivity(), this, this)
                 .setScopes("https://www.googleapis.com/auth/youtube", Scopes.PLUS_LOGIN, Scopes.PLUS_PROFILE)
                 .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     @Override
@@ -143,6 +149,12 @@ public class FirstStartStep2Fragment extends RoboSherlockFragment implements Goo
         }
         // Save the result and resolve the connection failure upon a user click.
         mConnectionResult = connectionResult;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mPlusClient.disconnect();
     }
 
     public Step2Listener getListener() {

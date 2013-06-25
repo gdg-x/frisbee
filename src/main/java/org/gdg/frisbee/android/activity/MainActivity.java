@@ -28,6 +28,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -140,6 +141,23 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
         //if(!Utils.isEmulator())
         //    Log.d(LOG_TAG, mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER).toString());
 
+        mIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i2) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                Log.d(LOG_TAG, "onPageSelected()");
+                trackViewPagerPage(i);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+        });
 
         mViewPagerAdapter = new MyAdapter(this, getSupportFragmentManager());
         mSpinnerAdapter = new ChapterAdapter(MainActivity.this, android.R.layout.simple_list_item_1);
@@ -248,6 +266,24 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
                 mFetchChaptersTask.execute();
             }
         }
+    }
+
+    private void trackViewPagerPage(int position) {
+        Log.d(LOG_TAG, "trackViewPagerPage()");
+        String page = "";
+
+        switch(position) {
+            case 0:
+                page = "News";
+                break;
+            case 1:
+                page = "Info";
+                break;
+            case 2:
+                page = "Events";
+                break;
+        }
+        App.getInstance().getTracker().sendView(String.format("/Main/%s/%s", mViewPagerAdapter.getSelectedChapter().getName().replaceAll(" ","-"), page));
     }
 
     @Override
@@ -388,6 +424,9 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
         }
 
         public void setSelectedChapter(Chapter chapter) {
+            if(mSelectedChapter != null)
+                trackViewPagerPage(mViewPager.getCurrentItem());
+
             this.mSelectedChapter = chapter;
         }
     }
