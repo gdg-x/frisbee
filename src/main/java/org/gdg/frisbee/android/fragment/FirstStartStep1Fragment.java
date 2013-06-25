@@ -152,6 +152,11 @@ public class FirstStartStep1Fragment extends RoboSherlockFragment {
         });
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
     private void addChapters(List<Chapter> chapterList) {
         Collections.sort(chapterList, mLocationComparator);
         mSpinnerAdapter.clear();

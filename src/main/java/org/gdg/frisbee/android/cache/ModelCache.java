@@ -285,6 +285,7 @@ public class ModelCache {
     }
 
     public Object get(String url, boolean checkExpiration) {
+        Log.d(LOG_TAG, String.format("get(%s)", url));
         CacheItem result;
 
         // First try Memory Cache
@@ -387,6 +388,7 @@ public class ModelCache {
     }
 
     public CacheItem put(final String url, final Object obj, DateTime expiresAt) {
+        Log.d(LOG_TAG, String.format("put(%s)", url));
         CacheItem d = new CacheItem(obj, expiresAt);
 
         if (null != mMemoryCache) {

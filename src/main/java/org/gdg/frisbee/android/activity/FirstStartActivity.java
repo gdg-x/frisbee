@@ -33,6 +33,7 @@ import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.ChapterAdapter;
 import org.gdg.frisbee.android.api.model.Chapter;
+import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.fragment.*;
 import org.gdg.frisbee.android.view.NonSwipeableViewPager;
 import roboguice.inject.InjectView;
@@ -66,6 +67,23 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
 
         mViewPagerAdapter = new FirstStartPageAdapter(this, getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);
+
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i2) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                App.getInstance().getTracker().sendView("/FirstStart/Step"+(1+i));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+        });
     }
 
     @Override
@@ -89,6 +107,13 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
             fragment.setPlusClient(plusClient);
             fragment.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        App.getInstance().getTracker().sendView("/FirstStart/Step"+(1+mViewPager.getCurrentItem()));
     }
 
     @Override
@@ -116,6 +141,11 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
                 .putBoolean(Const.SETTINGS_SIGNED_IN, false)
                 .commit();
         finish();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override

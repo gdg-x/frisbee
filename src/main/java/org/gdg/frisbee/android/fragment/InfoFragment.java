@@ -45,7 +45,6 @@ import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.Utils;
-import org.gdg.frisbee.android.view.NetworkedCacheableImageView;
 import org.joda.time.DateTime;
 import roboguice.inject.InjectView;
 
@@ -265,6 +264,11 @@ public class InfoFragment extends RoboSherlockFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     @Override
