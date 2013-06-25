@@ -198,14 +198,15 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
                     @Override
                     public void onGet(Object item) {
                         Directory directory = (Directory)item;
-                        if(directory != null) {
-                            addChapters(directory.getGroups());
-                            mViewPagerAdapter.setSelectedChapter(directory.getGroups().get(0));
-                            mViewPager.setAdapter(mViewPagerAdapter);
-                            mIndicator.setViewPager(mViewPager);
-                        } else {
-                            mFetchChaptersTask.execute();
-                        }
+                        addChapters(directory.getGroups());
+                        mViewPagerAdapter.setSelectedChapter(directory.getGroups().get(0));
+                        mViewPager.setAdapter(mViewPagerAdapter);
+                        mIndicator.setViewPager(mViewPager);
+                    }
+
+                    @Override
+                    public void onNotFound(String key) {
+                        mFetchChaptersTask.execute();
                     }
                 });
             } else {
@@ -214,14 +215,15 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
                     @Override
                     public void onGet(Object item) {
                         Directory directory = (Directory)item;
-                        if(directory != null) {
-                            addChapters(directory.getGroups());
-                            mViewPagerAdapter.setSelectedChapter(directory.getGroups().get(0));
-                            mViewPager.setAdapter(mViewPagerAdapter);
-                            mIndicator.setViewPager(mViewPager);
-                        } else {
-                            Crouton.makeText(MainActivity.this, getString(R.string.offline_alert), Style.ALERT).show();
-                        }
+                        addChapters(directory.getGroups());
+                        mViewPagerAdapter.setSelectedChapter(directory.getGroups().get(0));
+                        mViewPager.setAdapter(mViewPagerAdapter);
+                        mIndicator.setViewPager(mViewPager);
+                    }
+
+                    @Override
+                    public void onNotFound(String key) {
+                        Crouton.makeText(MainActivity.this, getString(R.string.offline_alert), Style.ALERT).show();
                     }
                 });
             }
@@ -261,6 +263,7 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
 
     private void addChapters(List<Chapter> chapterList) {
         Collections.sort(chapterList, mLocationComparator);
+        mSpinnerAdapter.clear();
         mSpinnerAdapter.addAll(chapterList);
     }
 

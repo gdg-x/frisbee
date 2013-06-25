@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
@@ -128,6 +129,11 @@ public class InfoFragment extends RoboSherlockFragment {
                 .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<Person[]>() {
                     @Override
                     public void onPostExecute(final Person[] person) {
+                        if(person == null) {
+                            Log.d(LOG_TAG, "null person");
+                            return;
+                        }
+
                         for(int i = 0; i < person.length; i++) {
                             View v = getOrganizerView(person[i]);
                             final int myi = i;
@@ -191,41 +197,46 @@ public class InfoFragment extends RoboSherlockFragment {
                 @Override
                 public void onGet(Object item) {
                     Person person = (Person)item;
-                    if(person != null) {
-                        mAbout.setText(Html.fromHtml(person.getAboutMe()));
-                        Crouton.makeText(getActivity(), getString(R.string.cached_content), Style.INFO).show();
 
-                        for(Person.Urls url: person.getUrls()) {
-                            if(url.getValue().contains("plus.google.com/") && !url.getValue().contains("communities")) {
-                                String org = url.getValue();
-                                try {
-                                    String id = url.getValue().replace("plus.google.com/", "").replace("posts","").replace("/","").replace("about","").replace("u1","").replace("u0","").replace("https:","").replace("http:","").replace(getArguments().getString("plus_id"), "").replaceAll("[^\\d.]", "").substring(0,21);
+                    mAbout.setText(Html.fromHtml(person.getAboutMe()));
+                    Crouton.makeText(getActivity(), getString(R.string.cached_content), Style.INFO).show();
 
-                                    App.getInstance().getModelCache().getAsync("person_"+ id, false, new ModelCache.CacheListener() {
-                                        @Override
-                                        public void onGet(Object item) {
-                                            final Person person = (Person)item;
-                                            if(person != null) {
-                                                View v = getOrganizerView(person);
-                                                v.setOnClickListener(new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View view) {
-                                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/"+person.getId()+"/posts")));
-                                                    }
-                                                });
-                                                registerForContextMenu(v);
-                                                mOrganizerBox.addView(v);
+                    for(Person.Urls url: person.getUrls()) {
+                        if(url.getValue().contains("plus.google.com/") && !url.getValue().contains("communities")) {
+                            String org = url.getValue();
+                            try {
+                                String id = url.getValue().replace("plus.google.com/", "").replace("posts","").replace("/","").replace("about","").replace("u1","").replace("u0","").replace("https:","").replace("http:","").replace(getArguments().getString("plus_id"), "").replaceAll("[^\\d.]", "").substring(0,21);
+
+                                App.getInstance().getModelCache().getAsync("person_"+ id, false, new ModelCache.CacheListener() {
+                                    @Override
+                                    public void onGet(Object item) {
+                                        final Person person = (Person)item;
+                                        View v = getOrganizerView(person);
+                                        v.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/"+person.getId()+"/posts")));
                                             }
-                                        }
-                                    });
-                                } catch(Exception ex) {
-                                    Crouton.makeText(getActivity(), String.format(getString(R.string.bogus_organizer), org), Style.ALERT);
-                                }
+                                        });
+                                        registerForContextMenu(v);
+                                        mOrganizerBox.addView(v);
+                                    }
+
+                                    @Override
+                                    public void onNotFound(String key) {
+                                        //To change body of implemented methods use File | Settings | File Templates.
+                                    }
+                                });
+                            } catch(Exception ex) {
+                                Crouton.makeText(getActivity(), String.format(getString(R.string.bogus_organizer), org), Style.ALERT);
                             }
                         }
-                    } else {
-                        Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
                     }
+                }
+
+                @Override
+                public void onNotFound(String key) {
+                    Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
                 }
             });
         }
@@ -234,8 +245,10 @@ public class InfoFragment extends RoboSherlockFragment {
     public View getOrganizerView(Person item) {
         View convertView = mInflater.inflate(R.layout.list_organizer_item, null);
 
-        NetworkedCacheableImageView picture = (NetworkedCacheableImageView) convertView.findViewById(R.id.icon);
-        picture.setImageUrl(item.getImage().getUrl(), GdgVolley.getInstance().getImageLoader());
+        ImageView picture = (ImageView) convertView.findViewById(R.id.icon);
+        App.getInstance().getPicasso()
+                .load(item.getImage().getUrl())
+                .into(picture);
 
         TextView title = (TextView) convertView.findViewById(R.id.title);
         title.setText(item.getDisplayName());

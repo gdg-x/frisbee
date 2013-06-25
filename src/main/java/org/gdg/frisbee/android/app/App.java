@@ -18,6 +18,9 @@ package org.gdg.frisbee.android.app;
 
 import android.app.Application;
 import android.os.Environment;
+import com.squareup.picasso.LruCache;
+import com.squareup.picasso.OkHttpLoader;
+import com.squareup.picasso.Picasso;
 import org.gdg.frisbee.android.cache.ModelCache;
 import uk.co.senab.bitmapcache.BitmapLruCache;
 
@@ -39,6 +42,7 @@ public class App extends Application {
 
     private BitmapLruCache mBitmapCache;
     private ModelCache mModelCache;
+    private Picasso mPicasso;
 
     @Override
     public void onCreate() {
@@ -48,6 +52,17 @@ public class App extends Application {
         getModelCache();
         getBitmapCache();
         GdgVolley.init(this);
+
+        mPicasso = new Picasso.Builder(this)
+                .loader(new OkHttpLoader(this))
+                .memoryCache(new LruCache(this))
+                .build();
+        mPicasso.setDebugging(false);
+    }
+
+
+    public Picasso getPicasso() {
+        return mPicasso;
     }
 
     public ModelCache getModelCache() {
