@@ -50,6 +50,9 @@ public class App extends Application {
     private GoogleAnalytics mGaInstance;
     private Tracker mTracker;
 
+    private GoogleAnalytics mGaInstance;
+    private Tracker mTracker;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -71,7 +74,6 @@ public class App extends Application {
         mTracker.setAnonymizeIp(true);
         mGaInstance.setDefaultTracker(mTracker);
     }
-
 
     public Picasso getPicasso() {
         return mPicasso;
