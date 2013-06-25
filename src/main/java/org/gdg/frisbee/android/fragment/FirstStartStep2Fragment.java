@@ -62,7 +62,6 @@ public class FirstStartStep2Fragment extends RoboSherlockFragment implements Goo
     @Override
     public void onStart() {
         super.onStart();
-        App.getInstance().getTracker().sendView("First Start Wizard - Step 2");
     }
 
     @Override
@@ -150,6 +149,12 @@ public class FirstStartStep2Fragment extends RoboSherlockFragment implements Goo
         }
         // Save the result and resolve the connection failure upon a user click.
         mConnectionResult = connectionResult;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mPlusClient.disconnect();
     }
 
     public Step2Listener getListener() {

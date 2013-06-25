@@ -57,7 +57,7 @@ public class YoutubeActivity extends RoboSherlockFragmentActivity implements You
     @Override
     protected void onStart() {
         super.onStart();
-        App.getInstance().getTracker().sendView("Youtube Video");
+        App.getInstance().getTracker().sendView("/YouTube");
     }
 
     @Override

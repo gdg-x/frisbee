@@ -65,7 +65,8 @@ public class App extends Application {
                 .build();
         mPicasso.setDebugging(false);
 
-        mGaInstance = GoogleAnalytics.getInstance(this);
+        mGaInstance = GoogleAnalytics.getInstance(getApplicationContext());
+        mGaInstance.setDebug(true);
         mTracker = mGaInstance.getTracker(getString(R.string.ga_trackingId));
         mTracker.setAppName(getString(R.string.app_name));
         mTracker.setAnonymizeIp(true);

@@ -146,7 +146,7 @@ public class NewsAdapter extends BaseAdapter {
             view = mInflater.inflate(R.layout.news_item_base, null);
 
         Item item = (Item) getItemInternal(i);
-        Activity activity = item.getActivity();
+        final Activity activity = item.getActivity();
 
         ViewGroup container = (ViewGroup) view.findViewById(R.id.attachmentContainer);
 
@@ -289,6 +289,8 @@ public class NewsAdapter extends BaseAdapter {
         View attachmentView = createAttachmentView(container, R.layout.news_item_photo);
 
         ResizableImageView photo = (ResizableImageView) attachmentView.findViewById(R.id.photo);
+        photo.setImageDrawable(null);
+
         App.getInstance().getPicasso()
                 .load(attachment.getImage().getUrl())
                 .into(photo);

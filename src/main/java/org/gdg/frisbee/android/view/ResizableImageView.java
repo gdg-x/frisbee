@@ -44,19 +44,7 @@ public class ResizableImageView extends ImageView {
 
     @Override
     public void setImageDrawable(Drawable drawable) {
-        if(drawable != null)
-            Log.d(LOG_TAG, "setImageDrawable");
-
         super.setImageDrawable(drawable);
-        requestLayout();
-    }
-
-    @Override
-    public void setImageBitmap(Bitmap bm) {
-        if(bm != null)
-            Log.d(LOG_TAG, "setImageBitmap");
-
-        super.setImageBitmap(bm);
-        requestLayout();
+        //requestLayout();
     }
 }
