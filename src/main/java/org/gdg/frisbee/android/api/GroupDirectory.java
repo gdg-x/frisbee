@@ -62,7 +62,7 @@ import java.util.regex.Pattern;
 public class GroupDirectory {
 
     private static final String BASE_URL = "https://developers.google.com";
-    private static final String DIRECTORY_URL = BASE_URL + "/groups/directory/";
+    private static final String DIRECTORY_URL = BASE_URL + "/groups/directorygroups/";
     private static final String ALL_CALENDAR_URL = BASE_URL + "/events/calendar/fc?start=1366581600&end=1367186400&_=1366664352089";
     private static final String GDL_CALENDAR_URL = BASE_URL + "/events/calendar/fc?calendar=gdl&start=1366581600&end=1367186400&_=1366664644691";
     private static final String CHAPTER_CALENDAR_URL = BASE_URL + "/groups/chapter/%s/feed/events/fc";
