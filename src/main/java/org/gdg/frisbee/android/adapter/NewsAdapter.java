@@ -35,7 +35,6 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.YoutubeActivity;
 import org.gdg.frisbee.android.app.GdgVolley;
 import org.gdg.frisbee.android.utils.Utils;
-import org.gdg.frisbee.android.view.NetworkedCacheableImageView;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;

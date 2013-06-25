@@ -18,6 +18,9 @@ package org.gdg.frisbee.android.app;
 
 import android.app.Application;
 import android.os.Environment;
+import com.google.analytics.tracking.android.GoogleAnalytics;
+import com.google.analytics.tracking.android.Tracker;
+import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.cache.ModelCache;
 import uk.co.senab.bitmapcache.BitmapLruCache;
 
@@ -40,6 +43,9 @@ public class App extends Application {
     private BitmapLruCache mBitmapCache;
     private ModelCache mModelCache;
 
+    private GoogleAnalytics mGaInstance;
+    private Tracker mTracker;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -48,6 +54,16 @@ public class App extends Application {
         getModelCache();
         getBitmapCache();
         GdgVolley.init(this);
+
+        mGaInstance = GoogleAnalytics.getInstance(this);
+        mTracker = mGaInstance.getTracker(getString(R.string.ga_trackingId));
+        mTracker.setAppName(getString(R.string.app_name));
+        mTracker.setAnonymizeIp(true);
+        mGaInstance.setDefaultTracker(mTracker);
+    }
+
+    public Tracker getTracker() {
+        return mTracker;
     }
 
     public ModelCache getModelCache() {

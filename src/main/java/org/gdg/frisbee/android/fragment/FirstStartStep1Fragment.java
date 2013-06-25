@@ -150,6 +150,12 @@ public class FirstStartStep1Fragment extends RoboSherlockFragment {
         });
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        App.getInstance().getTracker().sendView("First Start Wizard - Step 1");
+    }
+
     private void addChapters(List<Chapter> chapterList) {
         Collections.sort(chapterList, mLocationComparator);
         mSpinnerAdapter.addAll(chapterList);

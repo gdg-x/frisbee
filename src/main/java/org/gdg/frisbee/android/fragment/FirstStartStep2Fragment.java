@@ -16,6 +16,7 @@ import com.google.android.gms.common.Scopes;
 import com.google.android.gms.plus.GooglePlusUtil;
 import com.google.android.gms.plus.PlusClient;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.app.App;
 import roboguice.inject.InjectView;
 
 /**
@@ -56,6 +57,12 @@ public class FirstStartStep2Fragment extends RoboSherlockFragment implements Goo
         mPlusClient = new PlusClient.Builder(getActivity(), this, this)
                 .setScopes("https://www.googleapis.com/auth/youtube", Scopes.PLUS_LOGIN, Scopes.PLUS_PROFILE)
                 .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        App.getInstance().getTracker().sendView("First Start Wizard - Step 2");
     }
 
     @Override
