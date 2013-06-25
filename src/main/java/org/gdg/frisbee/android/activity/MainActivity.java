@@ -28,6 +28,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -140,6 +141,37 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
         //if(!Utils.isEmulator())
         //    Log.d(LOG_TAG, mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER).toString());
 
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i2) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                Log.d(LOG_TAG, "onPageSelected()");
+                MyAdapter adapter = (MyAdapter) mViewPager.getAdapter();
+                String page = "";
+
+                switch(i) {
+                    case 0:
+                        page = "News";
+                        break;
+                    case 1:
+                        page = "Info";
+                        break;
+                    case 2:
+                        page = "Events";
+                        break;
+                }
+                App.getInstance().getTracker().sendView(String.format("/Main/%s/%s", adapter.getSelectedChapter().getName().replaceAll(" ","-"), page));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+        });
 
         mViewPagerAdapter = new MyAdapter(this, getSupportFragmentManager());
         mSpinnerAdapter = new ChapterAdapter(MainActivity.this, android.R.layout.simple_list_item_1);

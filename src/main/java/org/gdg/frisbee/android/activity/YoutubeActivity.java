@@ -31,6 +31,7 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.app.App;
 import roboguice.inject.InjectView;
 import android.widget.FrameLayout.LayoutParams;
 
@@ -52,6 +53,12 @@ public class YoutubeActivity extends RoboSherlockFragmentActivity implements You
     private static final int PORTRAIT_ORIENTATION = Build.VERSION.SDK_INT < 9
             ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             : ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        App.getInstance().getTracker().sendView("Youtube Video");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

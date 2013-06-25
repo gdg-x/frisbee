@@ -21,6 +21,9 @@ import android.os.Environment;
 import com.squareup.picasso.LruCache;
 import com.squareup.picasso.OkHttpLoader;
 import com.squareup.picasso.Picasso;
+import com.google.analytics.tracking.android.GoogleAnalytics;
+import com.google.analytics.tracking.android.Tracker;
+import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.cache.ModelCache;
 import uk.co.senab.bitmapcache.BitmapLruCache;
 
@@ -44,6 +47,9 @@ public class App extends Application {
     private ModelCache mModelCache;
     private Picasso mPicasso;
 
+    private GoogleAnalytics mGaInstance;
+    private Tracker mTracker;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -58,11 +64,21 @@ public class App extends Application {
                 .memoryCache(new LruCache(this))
                 .build();
         mPicasso.setDebugging(false);
+
+        mGaInstance = GoogleAnalytics.getInstance(this);
+        mTracker = mGaInstance.getTracker(getString(R.string.ga_trackingId));
+        mTracker.setAppName(getString(R.string.app_name));
+        mTracker.setAnonymizeIp(true);
+        mGaInstance.setDefaultTracker(mTracker);
     }
 
 
     public Picasso getPicasso() {
         return mPicasso;
+    }
+
+    public Tracker getTracker() {
+        return mTracker;
     }
 
     public ModelCache getModelCache() {

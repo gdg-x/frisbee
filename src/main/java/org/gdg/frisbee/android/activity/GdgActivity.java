@@ -23,6 +23,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmentActivity;
+import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.ConnectionResult;
@@ -32,6 +33,7 @@ import com.google.android.gms.plus.GooglePlusUtil;
 import com.google.android.gms.plus.PlusClient;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import org.gdg.frisbee.android.Const;
+import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.ScopedBus;
 import org.gdg.frisbee.android.utils.Utils;
 
@@ -82,7 +84,6 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
     @Override
     protected void onStart() {
         super.onStart();
-
 
         if(mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false) && mPlusClient != null && !mPlusClient.isConnected()) {
             if (mConnectionResult == null) {
