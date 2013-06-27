@@ -32,7 +32,13 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
     private Geo geo;
 
     public Chapter() {
+        name = "";
+        gplusId = "";
+    }
 
+    public Chapter(String name, String gplusId) {
+        this.name = name;
+        this.gplusId = gplusId;
     }
 
     public Chapter(Parcel in) {
@@ -123,10 +129,7 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
         if(o instanceof Chapter) {
             Chapter other = (Chapter)o;
 
-            if(chapterId.equals("")) {
-                return other.getGplusId().equals(getGplusId());
-            }
-            return other.getChapterId().equals(getChapterId());
+            return other.getGplusId().equals(getGplusId());
         }
 
         return false;
