@@ -24,4 +24,4 @@ default.properties
 gen-external-apklibs
 target
 
-res/values/keys.xml
+app/res/values/keys.xml
