@@ -166,11 +166,6 @@
             <type>apklib</type>
         </dependency>
         <dependency>
-            <groupId>com.nineoldandroids</groupId>
-            <artifactId>library</artifactId>
-            <version>2.4.0</version>
-        </dependency>
-        <dependency>
             <groupId>com.actionbarsherlock</groupId>
             <artifactId>actionbarsherlock</artifactId>
             <version>4.3.1</version>
