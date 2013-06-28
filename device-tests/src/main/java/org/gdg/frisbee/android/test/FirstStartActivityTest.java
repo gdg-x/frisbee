@@ -1,5 +1,11 @@
 package org.gdg.frisbee.android.test;
 
+import android.content.Context;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
+import android.location.LocationProvider;
+import android.support.v4.view.ViewPager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Spinner;
 import com.jayway.android.robotium.solo.Solo;
@@ -25,6 +31,7 @@ public class FirstStartActivityTest extends ActivityInstrumentationTestCase2<Fir
 
     @Override
     protected void setUp() throws Exception {
+
         solo = new Solo(getInstrumentation(), getActivity());
     }
 
@@ -42,7 +49,19 @@ public class FirstStartActivityTest extends ActivityInstrumentationTestCase2<Fir
 
         solo.pressSpinnerItem(0, 0);
         assertEquals("Blub", true, solo.isSpinnerTextSelected(0, "6th October"));
+    }
 
+    public void testMoveStep2() {
 
+        solo.clickOnButton(0);
+
+        ViewPager vp = (ViewPager) solo.getView(R.id.pager);
+
+        assertTrue("Pager did not move to step2", vp.getCurrentItem() == 1);
+    }
+
+    public void testFinishFirstStart() {
+        solo.clickOnButton(0);
+        solo.clickOnButton(2);
     }
 }
