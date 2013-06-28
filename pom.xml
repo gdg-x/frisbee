@@ -68,14 +68,14 @@
 				<version>${android.version}</version>
 			</dependency>
 			<dependency>
+                <groupId>com.google.android</groupId>
+                <artifactId>android-test</artifactId>
+                <version>${android.version}</version>
+            </dependency>
+			<dependency>
 				<groupId>com.google.android</groupId>
 				<artifactId>support-v4</artifactId>
 				<version>${android-support.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.robolectric</groupId>
-				<artifactId>robolectric</artifactId>
-				<version>${robolectric.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.robolectric</groupId>
@@ -89,7 +89,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.jayway.android.robotium</groupId>
-				<artifactId>robotium</artifactId>
+				<artifactId>robotium-solo</artifactId>
 				<version>${robotium.version}</version>
 			</dependency>
 		</dependencies>
