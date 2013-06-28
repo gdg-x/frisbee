@@ -210,6 +210,12 @@
 			<scope>test</scope>
 		</dependency>
     </dependencies>
+    <repositories>
+        <repository>
+            <id>gdg-x</id>
+            <url>http://gdg-x.hp.af.cm/m2/</url>
+        </repository>
+    </repositories>
     <build>
         <plugins>
             <plugin>

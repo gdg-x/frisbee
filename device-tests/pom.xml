@@ -55,6 +55,7 @@
             <artifactId>frisbee-app</artifactId>
             <version>1.0.0-SNAPSHOT</version>
             <type>apk</type>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -62,7 +63,7 @@
             <groupId>org.gdg</groupId>
             <artifactId>frisbee-app</artifactId>
             <version>1.0.0-SNAPSHOT</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
             <type>jar</type>
         </dependency>
     </dependencies>
