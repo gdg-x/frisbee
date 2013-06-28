@@ -52,7 +52,7 @@
 	
 		<!-- Compilation dependencies -->
 		<android.version>4.1.1.4</android.version>
-		<android-support.version>r7</android-support.version>
+		<android-support.version>r13</android-support.version>
 		
 		<!-- Test dependencies -->
 		<junit.version>4.11</junit.version>
