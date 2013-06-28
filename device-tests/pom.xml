@@ -22,6 +22,7 @@
 		<groupId>org.gdg</groupId>
 		<artifactId>frisbee</artifactId>
 		<relativePath>../pom.xml</relativePath>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	
     <groupId>org.gdg</groupId>
