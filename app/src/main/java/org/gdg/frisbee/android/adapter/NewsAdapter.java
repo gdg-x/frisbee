@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,19 +28,22 @@ import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusOneButton;
 import com.google.api.services.plus.model.Activity;
-import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.activity.YoutubeActivity;
-import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.utils.Utils;
-import org.gdg.frisbee.android.view.ResizableImageView;
+
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.activity.YoutubeActivity;
+import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.utils.Utils;
+import org.gdg.frisbee.android.view.ResizableImageView;
 
 /**
  * GDG Aachen
@@ -325,6 +327,12 @@ public class NewsAdapter extends BaseAdapter {
 
     private void populateEvent(ViewGroup container, Activity.PlusObject.Attachments attachment) {
         View attachmentView = createAttachmentView(container, R.layout.news_item_event);
+
+        ImageView imageView = (ImageView) attachmentView.findViewById(R.id.image);
+        imageView.setImageURI(Uri.parse(attachment.getFullImage().getUrl()));
+
+        TextView content = (TextView) attachmentView.findViewById(R.id.content);
+        content.setText(attachment.getContent());
     }
 
     public void populatePost(Activity item, View v) {
