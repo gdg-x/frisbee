@@ -19,16 +19,19 @@ package org.gdg.frisbee.android.fragment;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.*;
-import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockDialogFragment;
+import android.widget.AdapterView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
+
 import org.gdg.frisbee.android.R;
+
 import roboguice.inject.InjectView;
 
 /**
@@ -182,7 +185,7 @@ public class GdgListFragment extends RoboSherlockFragment {
 
     public void setIsLoading(boolean isLoading) {
 
-        if(isLoading == mLoading)
+        if(isLoading == mLoading || getActivity() == null)
             return;
 
         mLoading = isLoading;
