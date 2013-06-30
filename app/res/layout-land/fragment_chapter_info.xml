@@ -34,7 +34,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/about"
-                    android:id="@+id/textView" android:textStyle="bold"
+                    android:id="@+id/tagline" android:textStyle="bold"
                     android:textAppearance="@android:style/TextAppearance.Medium" android:layout_marginLeft="5dip"
                     />
             <LinearLayout
@@ -64,6 +64,25 @@
                           android:background="@drawable/people_box" android:padding="8dip"
                           android:id="@+id/organizer_box">
             </LinearLayout>
+
+            <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/resources"
+              android:id="@+id/textView"
+              android:textStyle="bold"
+              android:textAppearance="@android:style/TextAppearance.Medium"
+              android:layout_marginLeft="5dip" />
+
+            <LinearLayout
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:layout_gravity="center"
+              android:background="@drawable/people_box"
+              android:padding="8dip"
+              android:id="@+id/resources_box" />
+
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

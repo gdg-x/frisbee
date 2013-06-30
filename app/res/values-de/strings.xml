@@ -27,6 +27,7 @@
     <string name="no_scheduled_events">Keine Events\nin den nächsten 30 Tagen</string>
     <string name="about">Über</string>
     <string name="organizers">Organizers</string>
+    <string name="resources">Links</string>
     <string name="fetch_events_failed">Konnte Events nicht abrufen</string>
     <string name="fetch_chapters_failed">Konnte Chapter Liste nicht abrufen</string>
     <string name="bogus_organizer">Konnte Organizer Id: %1$s nicht parsen</string>
