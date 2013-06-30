@@ -18,29 +18,27 @@ package org.gdg.frisbee.android.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFragment;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
-import org.gdg.frisbee.android.app.App;
+
+import java.util.ArrayList;
+
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.EventAdapter;
-import org.gdg.frisbee.android.api.ApiException;
 import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.Event;
+import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
-import org.gdg.frisbee.android.task.Builder;
-import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
 
-import java.util.ArrayList;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 /**
  * GDG Aachen
@@ -95,7 +93,7 @@ public class EventFragment extends GdgListFragment {
         setListAdapter(mAdapter);
 
         DateTime start = getMonthStart(mSelectedMonth);
-        DateTime end = getMonthStart(mSelectedMonth).plusDays(30);
+        DateTime end = getMonthStart(mSelectedMonth).plusDays(90);
         setIsLoading(true);
 
         GroupDirectory.ApiRequest req = mClient.getChapterEventList(start, end, getArguments().getString("plus_id"), new Response.Listener<ArrayList<Event>>() {
