@@ -93,7 +93,7 @@ public class EventFragment extends GdgListFragment {
         setListAdapter(mAdapter);
 
         DateTime start = getMonthStart(mSelectedMonth);
-        DateTime end = getMonthStart(mSelectedMonth).plusDays(90);
+        DateTime end = getMonthStart(mSelectedMonth).plusDays(30);
         setIsLoading(true);
 
         GroupDirectory.ApiRequest req = mClient.getChapterEventList(start, end, getArguments().getString("plus_id"), new Response.Listener<ArrayList<Event>>() {
