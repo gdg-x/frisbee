@@ -60,7 +60,7 @@
         <dependency>
             <groupId>com.squareup.okhttp</groupId>
             <artifactId>okhttp</artifactId>
-            <version>1.0.2</version>
+            <version>1.1.1</version>
         </dependency>
         <dependency>
             <groupId>com.squareup</groupId>

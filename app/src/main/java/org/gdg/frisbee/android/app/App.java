@@ -18,6 +18,7 @@ package org.gdg.frisbee.android.app;
 
 import android.app.Application;
 import android.os.Environment;
+import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.LruCache;
 import com.squareup.picasso.OkHttpLoader;
 import com.squareup.picasso.Picasso;
@@ -28,6 +29,7 @@ import org.gdg.frisbee.android.cache.ModelCache;
 import uk.co.senab.bitmapcache.BitmapLruCache;
 
 import java.io.File;
+import java.net.URL;
 
 /**
  * Created with IntelliJ IDEA.
@@ -53,6 +55,8 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        URL.setURLStreamHandlerFactory(new OkHttpClient());
 
         mInstance = this;
         getModelCache();
