@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
@@ -35,21 +36,21 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Person;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
+
+import java.io.IOException;
+
+import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.GapiTransportChooser;
 import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.app.GdgVolley;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
-import roboguice.inject.InjectView;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
+import roboguice.inject.InjectView;
 
 /**
  * GDG Aachen
@@ -73,8 +74,14 @@ public class InfoFragment extends RoboSherlockFragment {
     @InjectView(R.id.about)
     private TextView mAbout;
 
+    @InjectView(R.id.tagline)
+    private TextView mTagline;
+
     @InjectView(R.id.organizer_box)
     private LinearLayout mOrganizerBox;
+
+    @InjectView(R.id.resources_box)
+    private LinearLayout mResourcesBox;
 
     private LayoutInflater mInflater;
 
@@ -174,17 +181,28 @@ public class InfoFragment extends RoboSherlockFragment {
                     @Override
                     public void onPostExecute(Person person) {
                         if(person != null) {
+                            mTagline.setText(person.getTagline());
                             mAbout.setText(Html.fromHtml(person.getAboutMe()));
 
+
                             for(Person.Urls url: person.getUrls()) {
-                                if(url.getValue().contains("plus.google.com/") && !url.getValue().contains("communities")) {
-                                    String org = url.getValue();
-                                    try {
-                                    mFetchOrganizerInfo.addParameter(url.getValue().replace("plus.google.com/", "").replace("posts","").replace("/","").replace("about","").replace("u1","").replace("u0","").replace("https:","").replace("http:","").replace(getArguments().getString("plus_id"), "").replaceAll("[^\\d.]", "").substring(0,21));
-                                    } catch(Exception ex) {
-                                        Crouton.makeText(getActivity(), String.format(getString(R.string.bogus_organizer), org), Style.ALERT);
+                                if(url.getValue().contains("plus.google.com/")){
+                                    if(url.getValue().contains("communities")) {
+                                        // TODO
+                                    } else {
+                                        String org = url.getValue();
+                                        try {
+                                        mFetchOrganizerInfo.addParameter(url.getValue().replace("plus.google.com/", "").replace("posts","").replace("/","").replace("about","").replace("u1","").replace("u0","").replace("https:","").replace("http:","").replace(getArguments().getString("plus_id"), "").replaceAll("[^\\d.]", "").substring(0,21));
+                                        } catch(Exception ex) {
+                                            Crouton.makeText(getActivity(), String.format(getString(R.string.bogus_organizer), org), Style.ALERT);
+                                        }
                                     }
+                                } else {
+                                    TextView tv = (TextView) mInflater.inflate(R.layout.list_resource_item, null);
+                                    tv.setText(Html.fromHtml("<a href='" + url.getValue() + "'>" + url.get("label") + "</a>"));
+                                    mResourcesBox.addView(tv);
                                 }
+
                             }
                             mFetchOrganizerInfo.buildAndExecute();
                         }

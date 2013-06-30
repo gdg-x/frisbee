@@ -5,4 +5,16 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
+  <ImageView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/image"/>
+
+  <TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="New Text"
+    android:id="@+id/content"
+    android:padding="10dip"
+    android:autoLink="email|map|web" />
 </LinearLayout>
