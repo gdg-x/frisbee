@@ -328,9 +328,6 @@ public class NewsAdapter extends BaseAdapter {
     private void populateEvent(ViewGroup container, Activity.PlusObject.Attachments attachment) {
         View attachmentView = createAttachmentView(container, R.layout.news_item_event);
 
-        ImageView imageView = (ImageView) attachmentView.findViewById(R.id.image);
-        imageView.setImageURI(Uri.parse(attachment.getFullImage().getUrl()));
-
         TextView content = (TextView) attachmentView.findViewById(R.id.content);
         content.setText(attachment.getContent());
     }
