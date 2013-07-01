@@ -34,7 +34,6 @@ public class FirstStartStep2Fragment extends RoboSherlockFragment implements Goo
 
     private PlusClient mPlusClient;
     private ConnectionResult mConnectionResult;
-    private Step2Listener mListener;
 
     @InjectView(R.id.googleSignin)
     Button mSignInButton;
@@ -42,9 +41,8 @@ public class FirstStartStep2Fragment extends RoboSherlockFragment implements Goo
     @InjectView(R.id.skipSignin)
     Button mSkipSignin;
 
-    public static FirstStartStep2Fragment newInstance(Step2Listener listener) {
+    public static FirstStartStep2Fragment newInstance() {
         FirstStartStep2Fragment fragment = new FirstStartStep2Fragment();
-        fragment.setListener(listener);
         return fragment;
     }
 
@@ -96,8 +94,8 @@ public class FirstStartStep2Fragment extends RoboSherlockFragment implements Goo
         mSkipSignin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mListener != null)
-                    mListener.onSkippedSignIn();
+                if(getActivity() instanceof Step2Listener)
+                    ((Step2Listener)getActivity()).onSkippedSignIn();
             }
         });
     }
@@ -107,8 +105,8 @@ public class FirstStartStep2Fragment extends RoboSherlockFragment implements Goo
         Log.d(LOG_TAG, "onConnected()");
         final String accountName = mPlusClient.getAccountName();
 
-        if(mListener != null)
-            mListener.onSignedIn(accountName);
+        if(getActivity() instanceof Step2Listener)
+            ((Step2Listener)getActivity()).onSignedIn(accountName);
     }
 
     @Override
@@ -155,14 +153,6 @@ public class FirstStartStep2Fragment extends RoboSherlockFragment implements Goo
     public void onStop() {
         super.onStop();
         mPlusClient.disconnect();
-    }
-
-    public Step2Listener getListener() {
-        return mListener;
-    }
-
-    public void setListener(Step2Listener mListener) {
-        this.mListener = mListener;
     }
 
     public interface Step2Listener {

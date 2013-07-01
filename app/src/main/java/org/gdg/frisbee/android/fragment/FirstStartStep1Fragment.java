@@ -49,8 +49,6 @@ public class FirstStartStep1Fragment extends RoboSherlockFragment {
     private GingerbreadLastLocationFinder mLocationFinder;
     private Location mLastLocation;
 
-    private Step1Listener mListener;
-
     @InjectView(R.id.chapter_spinner)
     Spinner mChapterSpinner;
 
@@ -86,16 +84,17 @@ public class FirstStartStep1Fragment extends RoboSherlockFragment {
         }
     };
 
-    public static FirstStartStep1Fragment newInstance(Step1Listener listener) {
+    public static FirstStartStep1Fragment newInstance() {
+        Log.d(LOG_TAG, "newInstance");
         FirstStartStep1Fragment fragment = new FirstStartStep1Fragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
-        fragment.setListener(listener);
         return fragment;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
 
         int errorCode = GooglePlusUtil.checkGooglePlusApp(getActivity());
@@ -146,8 +145,8 @@ public class FirstStartStep1Fragment extends RoboSherlockFragment {
                 Chapter selectedChapter = (Chapter)mChapterSpinner.getSelectedItem();
                 getArguments().putParcelable("selected_chapter", selectedChapter);
 
-                if(mListener != null)
-                    mListener.onConfirmedChapter(selectedChapter);
+                if(getActivity() instanceof Step1Listener)
+                    ((Step1Listener)getActivity()).onConfirmedChapter(selectedChapter);
             }
         });
     }
@@ -172,10 +171,6 @@ public class FirstStartStep1Fragment extends RoboSherlockFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-    }
-
-    public void setListener(Step1Listener mListener) {
-        this.mListener = mListener;
     }
 
     public interface Step1Listener {

@@ -178,9 +178,9 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
         public Fragment getItem(int position) {
             switch(position) {
                 case 0:
-                    return FirstStartStep1Fragment.newInstance(FirstStartActivity.this);
+                    return FirstStartStep1Fragment.newInstance();
                 case 1:
-                    return FirstStartStep2Fragment.newInstance(FirstStartActivity.this);
+                    return FirstStartStep2Fragment.newInstance();
             }
             return null;
         }
