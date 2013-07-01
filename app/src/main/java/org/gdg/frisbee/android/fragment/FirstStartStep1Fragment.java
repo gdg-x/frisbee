@@ -99,7 +99,9 @@ public class FirstStartStep1Fragment extends RoboSherlockFragment {
     public void onSaveInstanceState(Bundle outState) {
         Log.d(LOG_TAG, "onSaveInstanceState");
         super.onSaveInstanceState(outState);
-        outState.putParcelable("selected_chapter", mSpinnerAdapter.getItem(mChapterSpinner.getSelectedItemPosition()));
+
+        if(mSpinnerAdapter != null && mSpinnerAdapter.getCount() > 0)
+            outState.putParcelable("selected_chapter", mSpinnerAdapter.getItem(mChapterSpinner.getSelectedItemPosition()));
 
     }
 
