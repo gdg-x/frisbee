@@ -24,8 +24,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
@@ -82,6 +85,14 @@ public class InfoFragment extends RoboSherlockFragment {
 
     @InjectView(R.id.resources_box)
     private LinearLayout mResourcesBox;
+
+    @InjectView(R.id.loading)
+    private LinearLayout mProgressContainer;
+
+    @InjectView(R.id.container)
+    private ScrollView mContainer;
+
+    private boolean mLoading = true;
 
     private LayoutInflater mInflater;
 
@@ -152,6 +163,7 @@ public class InfoFragment extends RoboSherlockFragment {
                             registerForContextMenu(v);
                             mOrganizerBox.addView(v);
                         }
+                        setIsLoading(false);
                     }
                 });
 
@@ -218,12 +230,14 @@ public class InfoFragment extends RoboSherlockFragment {
                     mAbout.setText(Html.fromHtml(person.getAboutMe()));
                     Crouton.makeText(getActivity(), getString(R.string.cached_content), Style.INFO).show();
 
-                    for(Person.Urls url: person.getUrls()) {
+                    for(int i = 0; i < person.getUrls().size(); i++) {
+                        Person.Urls url = person.getUrls().get(i);
                         if(url.getValue().contains("plus.google.com/") && !url.getValue().contains("communities")) {
                             String org = url.getValue();
                             try {
                                 String id = url.getValue().replace("plus.google.com/", "").replace("posts","").replace("/","").replace("about","").replace("u1","").replace("u0","").replace("https:","").replace("http:","").replace(getArguments().getString("plus_id"), "").replaceAll("[^\\d.]", "").substring(0,21);
 
+                                final int finalI = i;
                                 App.getInstance().getModelCache().getAsync("person_"+ id, false, new ModelCache.CacheListener() {
                                     @Override
                                     public void onGet(Object item) {
@@ -237,6 +251,10 @@ public class InfoFragment extends RoboSherlockFragment {
                                         });
                                         registerForContextMenu(v);
                                         mOrganizerBox.addView(v);
+
+                                        if(finalI == person.getUrls().size()) {
+                                            setIsLoading(false);
+                                        }
                                     }
 
                                     @Override
@@ -256,6 +274,39 @@ public class InfoFragment extends RoboSherlockFragment {
                     Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
                 }
             });
+        }
+    }
+
+    public void setIsLoading(boolean isLoading) {
+
+        if(isLoading == mLoading || getActivity() == null)
+            return;
+
+        mLoading = isLoading;
+
+        if(isLoading) {
+            mContainer.setVisibility(View.GONE);
+            mProgressContainer.startAnimation(AnimationUtils.loadAnimation(
+                    getActivity(), android.R.anim.fade_in));
+            mProgressContainer.setVisibility(View.VISIBLE);
+        } else {
+            Animation fadeOut = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out);
+            fadeOut.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {}
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    mProgressContainer.setVisibility(View.GONE);
+                    mContainer.startAnimation(AnimationUtils.loadAnimation(
+                            getActivity(), android.R.anim.fade_in));
+                    mContainer.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {}
+            });
+            mProgressContainer.startAnimation(fadeOut);
         }
     }
 
