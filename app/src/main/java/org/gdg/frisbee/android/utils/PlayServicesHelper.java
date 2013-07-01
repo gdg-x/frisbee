@@ -486,7 +486,7 @@ public class PlayServicesHelper implements GooglePlayServicesClient.ConnectionCa
     }
 
     void showProgressDialog(boolean signIn) {
-        String message = signIn ? mSigningInMessage : mSigningOutMessage;
+        /*String message = signIn ? mSigningInMessage : mSigningOutMessage;
 
         if (mProgressDialog == null) {
             if (getContext() == null)
@@ -496,13 +496,13 @@ public class PlayServicesHelper implements GooglePlayServicesClient.ConnectionCa
 
         mProgressDialog.setMessage(message == null ? "" : message);
         mProgressDialog.setIndeterminate(true);
-        mProgressDialog.show();
+        mProgressDialog.show();*/
     }
 
     void dismissDialog() {
-        if (mProgressDialog != null)
+        /*if (mProgressDialog != null)
             mProgressDialog.dismiss();
-        mProgressDialog = null;
+        mProgressDialog = null;*/
     }
 
     void connectNextClient() {
