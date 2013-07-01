@@ -24,7 +24,7 @@
                   android:orientation="horizontal"
                   android:layout_width="match_parent" android:layout_height="wrap_content"
                   android:gravity="center_vertical"
-                  android:background="@drawable/event_item" android:padding="10dip">
+                  android:background="@drawable/card_bg" android:padding="10dip">
         <org.gdg.frisbee.android.view.SquaredImageView
                 android:layout_width="32dp"
                 android:layout_height="32dip"
