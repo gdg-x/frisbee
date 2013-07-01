@@ -34,4 +34,11 @@ public class Const {
     public static final String GOOGLE_DEVELOPERS_YT_ID = "UC_x5XG1OV2P6uZZ5FSM9Ttw";
     public static final String ANDROID_DEVELOPERS_YT_ID = "UCVHFbqXqoYvEWM1Ddxl0QDg";
     public static final String YOUTUBE_DEVELOPERS_YT_ID = "UCtVd0c0tGXuTSbU5d8cSBUg";
+
+    // Achievements
+    public static final String ACHIEVEMENT_SIGNIN = "CgkI_eXJ3bUJEAIQAQ";
+    public static final String ACHIEVEMENT_CINEPHILE = "CgkI_eXJ3bUJEAIQAg";
+    public static final String ACHIEVEMENT_MANIAC = "CgkI_eXJ3bUJEAIQAw";
+    public static final String ACHIEVEMENT_RETURN = "CgkI_eXJ3bUJEAIQBA";
+
 }
