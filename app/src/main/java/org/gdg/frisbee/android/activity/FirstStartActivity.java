@@ -101,7 +101,7 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
     public void onConfirmedChapter(Chapter chapter) {
         mSelectedChapter = chapter;
         mPreferences.edit()
-                .putString(Const.SETTINGS_HOME_GDG, chapter.getChapterId())
+                .putString(Const.SETTINGS_HOME_GDG, chapter.getGplusId())
                 .commit();
         mViewPager.setCurrentItem(1, true);
     }
