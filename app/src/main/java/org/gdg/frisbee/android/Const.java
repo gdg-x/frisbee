@@ -27,11 +27,20 @@ public class Const {
     // Settings
     public static final String SETTINGS_FIRST_START = "gdg_first_start";
     public static final String SETTINGS_SIGNED_IN = "gdg_signed_in";
-    public static final String SETTINGS_HOME_GDG= "gdg_home";
+    public static final String SETTINGS_HOME_GDG = "gdg_home";
+    public static final String SETTINGS_APP_STARTS = "gdg_app_starts";
+    public static final String SETTINGS_VIDEOS_PLAYED = "gdg_app_videos_played";
 
     public static final boolean SETTINGS_FIRST_START_DEFAULT = true;
 
     public static final String GOOGLE_DEVELOPERS_YT_ID = "UC_x5XG1OV2P6uZZ5FSM9Ttw";
     public static final String ANDROID_DEVELOPERS_YT_ID = "UCVHFbqXqoYvEWM1Ddxl0QDg";
     public static final String YOUTUBE_DEVELOPERS_YT_ID = "UCtVd0c0tGXuTSbU5d8cSBUg";
+
+    // Achievements
+    public static final String ACHIEVEMENT_SIGNIN = "CgkI_9Ga8sMGEAIQAQ";
+    public static final String ACHIEVEMENT_CINEPHILE = "CgkI_9Ga8sMGEAIQAg";
+    public static final String ACHIEVEMENT_MANIAC = "CgkI_9Ga8sMGEAIQAw";
+    public static final String ACHIEVEMENT_RETURN = "CgkI_9Ga8sMGEAIQBA";
+    public static final String ACHIEVEMENT_KING_OF_THE_HILL = "CgkI_9Ga8sMGEAIQBQ";
 }

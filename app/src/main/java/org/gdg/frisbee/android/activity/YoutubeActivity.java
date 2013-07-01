@@ -16,6 +16,7 @@
 
 package org.gdg.frisbee.android.activity;
 
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -30,6 +31,7 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.app.App;
 import roboguice.inject.InjectView;
@@ -43,12 +45,14 @@ import android.widget.FrameLayout.LayoutParams;
  * Date: 24.06.13
  * Time: 00:14
  */
-public class YoutubeActivity extends RoboSherlockFragmentActivity implements YouTubePlayer.OnInitializedListener {
+public class YoutubeActivity extends GdgActivity implements YouTubePlayer.OnInitializedListener {
 
     @InjectView(R.id.videoContainer)
     private LinearLayout mContainer;
 
+    private SharedPreferences mPreferences;
     private YouTubePlayerSupportFragment mPlayerFragment;
+    private boolean mCounted = false;
 
     private static final int PORTRAIT_ORIENTATION = Build.VERSION.SDK_INT < 9
             ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -61,7 +65,7 @@ public class YoutubeActivity extends RoboSherlockFragmentActivity implements You
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_youtube);
@@ -77,6 +81,8 @@ public class YoutubeActivity extends RoboSherlockFragmentActivity implements You
                 YoutubeActivity.this.finish();
             }
         });
+
+        mPreferences = getSharedPreferences("gdg", MODE_PRIVATE);
     }
 
     @Override
@@ -84,6 +90,48 @@ public class YoutubeActivity extends RoboSherlockFragmentActivity implements You
 
         youTubePlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
         youTubePlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_ALWAYS_FULLSCREEN_IN_LANDSCAPE);
+        youTubePlayer.setPlayerStateChangeListener(new YouTubePlayer.PlayerStateChangeListener() {
+            @Override
+            public void onLoading() {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void onLoaded(String s) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void onAdStarted() {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void onVideoStarted() {
+                if(!mCounted) {
+                    mPreferences.edit().putInt(Const.SETTINGS_VIDEOS_PLAYED, mPreferences.getInt(Const.SETTINGS_VIDEOS_PLAYED,0)+1).commit();
+                }
+
+                if(mPreferences.getInt(Const.SETTINGS_VIDEOS_PLAYED,0) == 10) {
+                    getHandler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            getPlayServicesHelper().getGamesClient().unlockAchievement(Const.ACHIEVEMENT_CINEPHILE);
+                        }
+                    }, 1000);
+                }
+            }
+
+            @Override
+            public void onVideoEnded() {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void onError(YouTubePlayer.ErrorReason errorReason) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+        });
 
         if(!wasRestored)
             youTubePlayer.loadVideo(getIntent().getStringExtra("video_id"));
@@ -93,4 +141,5 @@ public class YoutubeActivity extends RoboSherlockFragmentActivity implements You
     public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
         Toast.makeText(this, getString(R.string.youtube_init_failed), Toast.LENGTH_LONG).show();
     }
+
 }

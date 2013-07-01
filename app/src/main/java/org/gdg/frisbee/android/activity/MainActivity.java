@@ -58,6 +58,7 @@ import org.gdg.frisbee.android.fragment.NewsFragment;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.GingerbreadLastLocationFinder;
+import org.gdg.frisbee.android.utils.PlayServicesHelper;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ActionBarDrawerToggleCompat;
 import org.joda.time.DateTime;
@@ -92,6 +93,8 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
     private GroupDirectory mClient;
     private GingerbreadLastLocationFinder mLocationFinder;
     private Location mLastLocation;
+
+    private boolean mFirstStart = false;
 
     private Comparator<Chapter> mLocationComparator = new Comparator<Chapter>() {
         @Override
@@ -266,6 +269,18 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
                 mFetchChaptersTask.execute();
             }
         }
+
+        if(getIntent().getAction().equals("finish_first_start")) {
+                Log.d(LOG_TAG, "Completed FirstStartWizard");
+
+                if(mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
+                    mFirstStart = true;
+                }
+
+                Chapter homeGdgd = getIntent().getParcelableExtra("selected_chapter");
+                getSupportActionBar().setSelectedNavigationItem(mSpinnerAdapter.getPosition(homeGdgd));
+                mViewPagerAdapter.setSelectedChapter(homeGdgd);
+        }
     }
 
     private void trackViewPagerPage(int position) {
@@ -289,11 +304,47 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
     @Override
     protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
         super.onActivityResult(requestCode, responseCode, intent);
+    }
 
-        if(requestCode == REQUEST_FIRST_START_WIZARD && responseCode == RESULT_OK) {
-            Chapter homeGdgd = intent.getParcelableExtra("selected_chapter");
-            getSupportActionBar().setSelectedNavigationItem(mSpinnerAdapter.getPosition(homeGdgd));
-            mViewPagerAdapter.setSelectedChapter(homeGdgd);
+    @Override
+    public void onSignInFailed() {
+        super.onSignInFailed();    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void onSignInSucceeded() {
+        super.onSignInSucceeded();    //To change body of overridden methods use File | Settings | File Templates.
+
+        checkAchievements();
+    }
+
+    private void checkAchievements() {
+        if(mFirstStart) {
+            mFirstStart = false;
+            getHandler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    getPlayServicesHelper().getGamesClient().unlockAchievement(Const.ACHIEVEMENT_SIGNIN);
+                }
+            }, 1000);
+        }
+
+        if(mPreferences.getInt(Const.SETTINGS_APP_STARTS,0) == 10) {
+            getHandler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    getPlayServicesHelper().getGamesClient().unlockAchievement(Const.ACHIEVEMENT_RETURN);
+                }
+            }, 1000);
+        }
+
+        if(mPreferences.getInt(Const.SETTINGS_APP_STARTS,0) == 50) {
+            getHandler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    getPlayServicesHelper().getGamesClient().unlockAchievement(Const.ACHIEVEMENT_KING_OF_THE_HILL);
+                }
+            }, 1000);
         }
     }
 
