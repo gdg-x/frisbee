@@ -27,11 +27,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
-
 import org.gdg.frisbee.android.R;
-
 import roboguice.inject.InjectView;
 
 /**

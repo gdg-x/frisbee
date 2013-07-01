@@ -16,6 +16,8 @@
 
 package org.gdg.frisbee.android.activity;
 
+import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockPreferenceActivity;
+
 /**
  * GDG Aachen
  * org.gdg.frisbee.android.activity
@@ -24,5 +26,5 @@ package org.gdg.frisbee.android.activity;
  * Date: 25.06.13
  * Time: 21:15
  */
-public class SettingsActivity {
+public class SettingsActivity extends RoboSherlockPreferenceActivity {
 }

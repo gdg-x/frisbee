@@ -16,32 +16,18 @@
 
 package org.gdg.frisbee.android.activity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.Gravity;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmentActivity;
-import com.google.analytics.tracking.android.GoogleAnalytics;
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.common.Scopes;
-import com.google.android.gms.games.GamesClient;
 import com.google.android.gms.plus.GooglePlusUtil;
-import com.google.android.gms.plus.PlusClient;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import org.gdg.frisbee.android.Const;
-import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.PlayServicesHelper;
 import org.gdg.frisbee.android.utils.ScopedBus;
 import org.gdg.frisbee.android.utils.Utils;
-
-import java.io.IOException;
 
 /**
  * GDG Aachen
@@ -54,11 +40,9 @@ import java.io.IOException;
 public abstract class GdgActivity extends RoboSherlockFragmentActivity implements PlayServicesHelper.PlayServicesHelperListener {
 
     private static final String LOG_TAG = "GDG-GdgActivity";
-    private static final int REQUEST_CODE_RESOLVE_ERR = 7;
 
     private PlayServicesHelper mPlayServicesHelper;
 
-    private ConnectionResult mConnectionResult;
     private SharedPreferences mPreferences;
     private Handler mHandler = new Handler();
     private final ScopedBus scopedBus = new ScopedBus();

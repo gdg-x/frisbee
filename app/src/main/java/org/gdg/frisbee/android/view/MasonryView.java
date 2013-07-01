@@ -18,7 +18,6 @@ package org.gdg.frisbee.android.view;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;

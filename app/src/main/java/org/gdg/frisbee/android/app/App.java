@@ -21,7 +21,6 @@ import android.content.SharedPreferences;
 import android.os.Environment;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.LruCache;
-import com.squareup.picasso.OkHttpLoader;
 import com.squareup.picasso.Picasso;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;

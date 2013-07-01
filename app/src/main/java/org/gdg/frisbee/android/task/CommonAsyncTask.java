@@ -17,14 +17,7 @@
 package org.gdg.frisbee.android.task;
 
 import android.os.AsyncTask;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
-import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
-import com.google.api.client.json.GenericJson;
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
 import java.lang.reflect.Array;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**

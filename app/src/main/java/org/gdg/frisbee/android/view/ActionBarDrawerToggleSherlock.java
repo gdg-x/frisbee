@@ -26,7 +26,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.actionbarsherlock.R;
 import com.actionbarsherlock.app.ActionBar;
-
 import java.lang.reflect.Method;
 
 /**

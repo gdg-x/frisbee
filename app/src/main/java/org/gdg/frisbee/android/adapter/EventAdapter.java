@@ -17,7 +17,6 @@
 package org.gdg.frisbee.android.adapter;
 
 import android.content.Context;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,13 +24,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import com.google.android.gms.plus.PlusClient;
-import com.google.android.gms.plus.PlusOneButton;
-import com.google.api.services.plus.model.Activity;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.app.GdgVolley;
 import org.gdg.frisbee.android.view.SquaredImageView;
 
 import java.util.ArrayList;

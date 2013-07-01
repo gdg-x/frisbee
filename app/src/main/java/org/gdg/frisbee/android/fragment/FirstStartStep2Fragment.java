@@ -1,28 +1,13 @@
 package org.gdg.frisbee.android.fragment;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentSender;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.common.Scopes;
-import com.google.android.gms.games.GamesClient;
-import com.google.android.gms.plus.GooglePlusUtil;
-import com.google.android.gms.plus.PlusClient;
-import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.FirstStartActivity;
-import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.utils.PlayServicesHelper;
 import roboguice.inject.InjectView;
 
 /**

@@ -28,17 +28,14 @@ import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusOneButton;
 import com.google.api.services.plus.model.Activity;
-
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.YoutubeActivity;
 import org.gdg.frisbee.android.app.App;

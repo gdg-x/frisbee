@@ -16,40 +16,18 @@
 
 package org.gdg.frisbee.android.api;
 
-import android.content.Context;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import org.apache.http.Header;
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.protocol.HTTP;
-import org.gdg.frisbee.android.api.deserializer.DateTimeDeserializer;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.Event;
-import org.gdg.frisbee.android.api.model.GdgResponse;
 import org.gdg.frisbee.android.app.GdgVolley;
-import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * GDG Aachen

@@ -17,7 +17,6 @@ package org.gdg.frisbee.android.api;
 import com.google.api.client.http.LowLevelHttpRequest;
 import com.google.api.client.http.LowLevelHttpResponse;
 import com.google.api.client.util.Preconditions;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;

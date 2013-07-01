@@ -21,12 +21,9 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
-
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-
 import java.util.ArrayList;
-
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.EventAdapter;
 import org.gdg.frisbee.android.api.GroupDirectory;
@@ -36,7 +33,6 @@ import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
-
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 

@@ -20,7 +20,6 @@ import android.content.Context;
 import android.widget.ArrayAdapter;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.utils.Utils;
-
 import java.util.ArrayList;
 import java.util.List;
 

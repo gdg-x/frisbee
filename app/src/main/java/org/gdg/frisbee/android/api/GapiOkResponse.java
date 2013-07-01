@@ -14,11 +14,8 @@
 
 package org.gdg.frisbee.android.api;
 
-import android.util.Log;
 import com.google.api.client.http.HttpStatusCodes;
 import com.google.api.client.http.LowLevelHttpResponse;
-import org.gdg.frisbee.android.utils.Utils;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;

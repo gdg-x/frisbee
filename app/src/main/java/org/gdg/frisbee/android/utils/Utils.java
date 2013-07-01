@@ -22,7 +22,6 @@ import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-
 import java.io.*;
 import java.net.URL;
 import java.net.URLDecoder;

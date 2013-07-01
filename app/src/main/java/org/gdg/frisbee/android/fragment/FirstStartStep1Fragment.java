@@ -25,8 +25,6 @@ import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.GingerbreadLastLocationFinder;
 import org.joda.time.DateTime;
 import roboguice.inject.InjectView;
-
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;

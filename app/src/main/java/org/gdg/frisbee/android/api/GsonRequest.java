@@ -16,7 +16,6 @@
 
 package org.gdg.frisbee.android.api;
 
-import android.util.Log;
 import com.android.volley.*;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
@@ -25,14 +24,10 @@ import com.google.gson.JsonSyntaxException;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.toolbox.HttpHeaderParser;
-import org.apache.http.protocol.HTTP;
 import org.gdg.frisbee.android.api.deserializer.DateTimeDeserializer;
 import org.joda.time.DateTime;
-
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class GsonRequest<T> extends GdgRequest<T> {

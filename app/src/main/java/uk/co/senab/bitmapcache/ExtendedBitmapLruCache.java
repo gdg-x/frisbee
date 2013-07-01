@@ -17,17 +17,14 @@
 package uk.co.senab.bitmapcache;
 
 import com.jakewharton.DiskLruCache;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Looper;
 import android.os.Process;
 import android.util.Log;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;

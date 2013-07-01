@@ -17,7 +17,6 @@
 package org.gdg.frisbee.android.utils;
 
 import com.squareup.otto.Bus;
-
 import java.util.HashSet;
 import java.util.Set;
 

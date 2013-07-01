@@ -20,11 +20,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.HttpClientStack;
-import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.gdg.frisbee.android.api.GdgStack;
 import uk.co.senab.bitmapcache.CacheableBitmapDrawable;
 
