@@ -48,6 +48,7 @@ public class FirstStartStep1Fragment extends RoboSherlockFragment {
     private GroupDirectory mClient;
     private GingerbreadLastLocationFinder mLocationFinder;
     private Location mLastLocation;
+    private Chapter mSelectedChapter;
 
     @InjectView(R.id.chapter_spinner)
     Spinner mChapterSpinner;
@@ -57,6 +58,8 @@ public class FirstStartStep1Fragment extends RoboSherlockFragment {
 
     @InjectView(R.id.viewSwitcher)
     ViewSwitcher mLoadSwitcher;
+
+
 
     private Comparator<Chapter> mLocationComparator = new Comparator<Chapter>() {
         @Override
@@ -93,6 +96,15 @@ public class FirstStartStep1Fragment extends RoboSherlockFragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        Log.d(LOG_TAG, "onSaveInstanceState");
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("selected_chapter", mSpinnerAdapter.getItem(mChapterSpinner.getSelectedItemPosition()));
+
+    }
+
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
@@ -105,6 +117,10 @@ public class FirstStartStep1Fragment extends RoboSherlockFragment {
         mClient = new GroupDirectory();
         mSpinnerAdapter = new ChapterAdapter(getActivity(), android.R.layout.simple_list_item_1);
 
+        if(savedInstanceState != null) {
+            mSelectedChapter = savedInstanceState.getParcelable("selected_chapter");
+        }
+
         mLocationFinder = new GingerbreadLastLocationFinder(getActivity());
         mLastLocation = mLocationFinder.getLastBestLocation(5000,60*60*1000);
         mFetchChaptersTask = mClient.getDirectory(new Response.Listener<Directory>() {
@@ -113,7 +129,6 @@ public class FirstStartStep1Fragment extends RoboSherlockFragment {
                       App.getInstance().getModelCache().putAsync("chapter_list", directory, DateTime.now().plusDays(4));
 
                       addChapters(directory.getGroups());
-                      mChapterSpinner.setAdapter(mSpinnerAdapter);
                       mLoadSwitcher.setDisplayedChild(1);
                   }
               }, new Response.ErrorListener() {
@@ -130,7 +145,6 @@ public class FirstStartStep1Fragment extends RoboSherlockFragment {
                 Directory directory = (Directory) item;
                 mLoadSwitcher.setDisplayedChild(1);
                 addChapters(directory.getGroups());
-                mChapterSpinner.setAdapter(mSpinnerAdapter);
             }
 
             @Override
@@ -142,11 +156,11 @@ public class FirstStartStep1Fragment extends RoboSherlockFragment {
         mConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Chapter selectedChapter = (Chapter)mChapterSpinner.getSelectedItem();
+                Chapter selectedChapter = (Chapter) mChapterSpinner.getSelectedItem();
                 getArguments().putParcelable("selected_chapter", selectedChapter);
 
-                if(getActivity() instanceof Step1Listener)
-                    ((Step1Listener)getActivity()).onConfirmedChapter(selectedChapter);
+                if (getActivity() instanceof Step1Listener)
+                    ((Step1Listener) getActivity()).onConfirmedChapter(selectedChapter);
             }
         });
     }
@@ -160,6 +174,13 @@ public class FirstStartStep1Fragment extends RoboSherlockFragment {
         Collections.sort(chapterList, mLocationComparator);
         mSpinnerAdapter.clear();
         mSpinnerAdapter.addAll(chapterList);
+
+        mChapterSpinner.setAdapter(mSpinnerAdapter);
+
+        if(mSelectedChapter != null) {
+            int pos = mSpinnerAdapter.getPosition(mSelectedChapter);
+            mChapterSpinner.setSelection(pos);
+        }
     }
 
     @Override
