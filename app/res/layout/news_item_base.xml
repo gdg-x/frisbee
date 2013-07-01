@@ -20,39 +20,44 @@
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent" android:paddingLeft="8dip" android:paddingRight="8dip"
+              android:layout_height="wrap_content" android:paddingLeft="8dip" android:paddingRight="8dip"
               android:paddingTop="8dip">
 
     <LinearLayout
             android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:layout_gravity="left|center_vertical"
-            android:background="@drawable/news_item_top" android:id="@+id/contentContainer">
-        <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="New Text"
-                android:id="@+id/content"
-                android:padding="10dip" android:autoLink="email|map|web"/>
-    </LinearLayout>
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/attachmentContainer"
-            android:background="@drawable/news_item_filler">
-    </LinearLayout>
-    <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" android:background="@drawable/news_item_btm" android:id="@+id/options"
-            android:paddingLeft="10dip" android:paddingTop="10dip" android:paddingBottom="15dip"
-            android:paddingRight="10dip">
-        <com.google.android.gms.plus.PlusOneButton
-                xmlns:plus="http://schemas.android.com/apk/lib/com.google.android.gms.plus"
-                android:id="@+id/plus_one_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                plus:size="standard"
-                plus:annotation="inline" />
+            android:layout_height="fill_parent" android:background="@drawable/card_bg">
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_gravity="left|center_vertical"
+                android:id="@+id/contentContainer">
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="New Text"
+                    android:id="@+id/content"
+                    android:padding="10dip" android:autoLink="email|map|web"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/attachmentContainer"
+                >
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:id="@+id/options"
+                android:paddingLeft="10dip" android:paddingTop="10dip" android:paddingBottom="15dip"
+                android:paddingRight="10dip">
+            <com.google.android.gms.plus.PlusOneButton
+                    xmlns:plus="http://schemas.android.com/apk/lib/com.google.android.gms.plus"
+                    android:id="@+id/plus_one_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    plus:size="standard"
+                    plus:annotation="inline" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

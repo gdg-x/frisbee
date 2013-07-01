@@ -29,4 +29,5 @@
     <color name="concrete">#95A5A6</color>
     <color name="asbestos">#7F8C8D</color>
     <color name="semi_transparent">#96000000</color>
+    <color name="default_bg">#e5e5e5</color>
 </resources>

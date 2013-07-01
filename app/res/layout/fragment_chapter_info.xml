@@ -61,7 +61,7 @@
         <LinearLayout android:orientation="vertical" android:layout_width="fill_parent"
                       android:layout_height="fill_parent" android:layout_gravity="center"
                       android:background="@drawable/people_box" android:padding="8dip"
-                      android:id="@+id/organizer_box">
+                      android:id="@+id/organizer_box" android:layout_marginBottom="10dip">
         </LinearLayout>
 
         <TextView
@@ -78,7 +78,7 @@
           android:layout_width="fill_parent"
           android:layout_height="fill_parent"
           android:layout_gravity="center"
-          android:background="@drawable/people_box"
+          android:background="@drawable/resources_box"
           android:padding="8dip"
           android:id="@+id/resources_box"/>
     </LinearLayout>

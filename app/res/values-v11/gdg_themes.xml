@@ -28,6 +28,8 @@
 
     <item name="android:editTextBackground">@drawable/edit_text_holo_light</item>
 
+    <item name="android:windowBackground">@color/default_bg</item>
+
     <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewGDG</item>
 
     <item name="android:listChoiceIndicatorMultiple">@drawable/btn_check_holo_light</item>

@@ -192,10 +192,9 @@ public class InfoFragment extends RoboSherlockFragment {
                 .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<Person>() {
                     @Override
                     public void onPostExecute(Person person) {
-                        if(person != null) {
+                        if(person != null && person.getUrls() != null) {
                             mTagline.setText(person.getTagline());
                             mAbout.setText(Html.fromHtml(person.getAboutMe()));
-
 
                             for(Person.Urls url: person.getUrls()) {
                                 if(url.getValue().contains("plus.google.com/")){
