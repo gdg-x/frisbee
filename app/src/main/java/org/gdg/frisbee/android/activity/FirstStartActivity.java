@@ -35,6 +35,7 @@ import org.gdg.frisbee.android.adapter.ChapterAdapter;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.fragment.*;
+import org.gdg.frisbee.android.utils.PlayServicesHelper;
 import org.gdg.frisbee.android.view.NonSwipeableViewPager;
 import roboguice.inject.InjectView;
 
@@ -46,9 +47,12 @@ import roboguice.inject.InjectView;
  * Date: 29.04.13
  * Time: 14:48
  */
-public class FirstStartActivity extends RoboSherlockFragmentActivity implements FirstStartStep1Fragment.Step1Listener, FirstStartStep2Fragment.Step2Listener {
+public class FirstStartActivity extends RoboSherlockFragmentActivity implements FirstStartStep1Fragment.Step1Listener, FirstStartStep2Fragment.Step2Listener, PlayServicesHelper.PlayServicesHelperListener {
 
     private static String LOG_TAG = "GDG-FirstStartActivity";
+
+    private PlayServicesHelper mPlayHelper = null;
+    protected int mRequestedClients = PlayServicesHelper.CLIENT_GAMES | PlayServicesHelper.CLIENT_PLUS;
 
     @InjectView(R.id.pager)
     private NonSwipeableViewPager mViewPager;
@@ -68,6 +72,9 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
         mViewPagerAdapter = new FirstStartPageAdapter(this, getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);
 
+        mPlayHelper = new PlayServicesHelper(this);
+        mPlayHelper.setup(this, mRequestedClients);
+
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i2) {
@@ -86,6 +93,10 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
         });
     }
 
+    public PlayServicesHelper getPlayServicesHelper() {
+        return mPlayHelper;
+    }
+
     @Override
     public void onConfirmedChapter(Chapter chapter) {
         mSelectedChapter = chapter;
@@ -98,21 +109,16 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d(LOG_TAG, "onActivityResult");
 
-        if (requestCode == FirstStartStep2Fragment.REQUEST_CODE_RESOLVE_ERR && resultCode == RESULT_OK) {
-            FirstStartStep2Fragment fragment = (FirstStartStep2Fragment) mViewPagerAdapter.getItem(mViewPager.getCurrentItem());
-            PlusClient plusClient = new PlusClient.Builder(this, fragment, fragment)
-                    .setScopes("https://www.googleapis.com/auth/youtube", Scopes.PLUS_LOGIN, Scopes.PLUS_PROFILE)
-                    .build();
-            fragment.setPlusClient(plusClient);
-            fragment.onActivityResult(requestCode, resultCode, data);
-        }
+        mPlayHelper.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
+        mPlayHelper.onStart(this);
         App.getInstance().getTracker().sendView("/FirstStart/Step"+(1+mViewPager.getCurrentItem()));
     }
 
@@ -146,14 +152,26 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
     @Override
     protected void onStop() {
         super.onStop();
+        mPlayHelper.onStop();
     }
 
     @Override
     public void finish() {
-        Intent resultData = new Intent();
+        Intent resultData = new Intent(FirstStartActivity.this, MainActivity.class);
+        resultData.setAction("finish_first_start");
         resultData.putExtra("selected_chapter", mSelectedChapter);
-        setResult(RESULT_OK, resultData);
+        startActivity(resultData);
         super.finish();
+    }
+
+    @Override
+    public void onSignInFailed() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void onSignInSucceeded() {
+        onSignedIn(mPlayHelper.getPlusClient().getAccountName());
     }
 
     public class FirstStartPageAdapter extends FragmentStatePagerAdapter {

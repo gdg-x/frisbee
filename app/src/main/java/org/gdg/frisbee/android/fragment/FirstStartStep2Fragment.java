@@ -1,10 +1,12 @@
 package org.gdg.frisbee.android.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +15,14 @@ import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragmen
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.Scopes;
+import com.google.android.gms.games.GamesClient;
 import com.google.android.gms.plus.GooglePlusUtil;
 import com.google.android.gms.plus.PlusClient;
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.activity.FirstStartActivity;
 import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.utils.PlayServicesHelper;
 import roboguice.inject.InjectView;
 
 /**
@@ -27,13 +33,9 @@ import roboguice.inject.InjectView;
  * Date: 14.06.13
  * Time: 02:52
  */
-public class FirstStartStep2Fragment extends RoboSherlockFragment implements GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
+public class FirstStartStep2Fragment extends RoboSherlockFragment {
 
     private static String LOG_TAG = "GDG-FirstStartStep2Fragment";
-    public static final int REQUEST_CODE_RESOLVE_ERR = 7;
-
-    private PlusClient mPlusClient;
-    private ConnectionResult mConnectionResult;
 
     @InjectView(R.id.googleSignin)
     Button mSignInButton;
@@ -49,13 +51,8 @@ public class FirstStartStep2Fragment extends RoboSherlockFragment implements Goo
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        // .setVisibleActivities("http://schemas.google.com/AddActivity", "http://schemas.google.com/BuyActivity")
-
-        mPlusClient = new PlusClient.Builder(getActivity(), this, this)
-                .setScopes("https://www.googleapis.com/auth/youtube", Scopes.PLUS_LOGIN, Scopes.PLUS_PROFILE)
-                .build();
     }
+
 
     @Override
     public void onStart() {
@@ -75,17 +72,10 @@ public class FirstStartStep2Fragment extends RoboSherlockFragment implements Goo
 
             @Override
             public void onClick(View view) {
-                if(mPlusClient != null && !mPlusClient.isConnected()) {
-                    if (mConnectionResult == null) {
-                        mPlusClient.connect();
-                    } else {
-                        try {
-                            mConnectionResult.startResolutionForResult(getActivity(), REQUEST_CODE_RESOLVE_ERR);
-                        } catch (IntentSender.SendIntentException e) {
-                            // Try connecting again.
-                            mConnectionResult = null;
-                            mPlusClient.connect();
-                        }
+                if(getActivity() instanceof Step2Listener) {
+                    FirstStartActivity activity = (FirstStartActivity)getActivity();
+                    if(!activity.getPlayServicesHelper().isSignedIn()) {
+                        activity.getPlayServicesHelper().beginUserInitiatedSignIn();
                     }
                 }
             }
@@ -100,59 +90,10 @@ public class FirstStartStep2Fragment extends RoboSherlockFragment implements Goo
         });
     }
 
-    @Override
-    public void onConnected() {
-        Log.d(LOG_TAG, "onConnected()");
-        final String accountName = mPlusClient.getAccountName();
-
-        if(getActivity() instanceof Step2Listener)
-            ((Step2Listener)getActivity()).onSignedIn(accountName);
-    }
-
-    @Override
-    public void onDisconnected() {
-        Log.d(LOG_TAG, "onDisconnected()");
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_CODE_RESOLVE_ERR && resultCode == Activity.RESULT_OK) {
-            mConnectionResult = null;
-            mPlusClient.connect();
-        }
-    }
-
-    public void setPlusClient(PlusClient plusClient) {
-        mPlusClient = plusClient;
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.d(LOG_TAG, "onConnectionFailed()");
-        Log.d(LOG_TAG, "Connection failed: "+ connectionResult.getErrorCode());
-
-        if (connectionResult.hasResolution()) {
-            try {
-                Log.v(LOG_TAG, "resolve");
-                connectionResult.startResolutionForResult(getActivity(), REQUEST_CODE_RESOLVE_ERR);
-            } catch (IntentSender.SendIntentException e) {
-                Log.e(LOG_TAG, "send intent",e);
-                mConnectionResult = null;
-                mPlusClient.connect();
-            }
-        } else {
-            Log.d(LOG_TAG, "no resolution!?");
-        }
-        // Save the result and resolve the connection failure upon a user click.
-        mConnectionResult = connectionResult;
-    }
 
     @Override
     public void onStop() {
         super.onStop();
-        mPlusClient.disconnect();
     }
 
     public interface Step2Listener {

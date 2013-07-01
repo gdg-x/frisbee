@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.app;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.os.Environment;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.LruCache;
@@ -24,6 +25,7 @@ import com.squareup.picasso.OkHttpLoader;
 import com.squareup.picasso.Picasso;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.CompatOkHttpLoader;
 import org.gdg.frisbee.android.cache.ModelCache;
@@ -50,7 +52,7 @@ public class App extends Application {
     private BitmapLruCache mBitmapCache;
     private ModelCache mModelCache;
     private Picasso mPicasso;
-
+    private SharedPreferences mPreferences;
     private GoogleAnalytics mGaInstance;
     private Tracker mTracker;
 
@@ -68,6 +70,9 @@ public class App extends Application {
         getModelCache();
         getBitmapCache();
         GdgVolley.init(this);
+
+        mPreferences = getSharedPreferences("gdg", MODE_PRIVATE);
+        mPreferences.edit().putInt(Const.SETTINGS_APP_STARTS, mPreferences.getInt(Const.SETTINGS_APP_STARTS,0)+1).commit();
 
         mPicasso = new Picasso.Builder(this)
                 .loader(new CompatOkHttpLoader(this))

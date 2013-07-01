@@ -3,4 +3,5 @@
     <string name="android_simple_api_access_key"></string>
     <string name="browser_simple_api_access_key"></string>
     <string name="ip_simple_api_access_key"></string>
+    <string name="play_app_id"></string>
 </resources>

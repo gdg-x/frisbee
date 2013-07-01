@@ -115,7 +115,7 @@ public class NewsFragment extends GdgListFragment {
 
         mClient = new Plus.Builder(mTransport, mJsonFactory, null).setGoogleClientRequestInitializer(new CommonGoogleJsonClientRequestInitializer(getString(R.string.ip_simple_api_access_key))).build();
 
-        mAdapter = new NewsAdapter(getActivity(), ((GdgActivity)getActivity()).getPlusClient());
+        mAdapter = new NewsAdapter(getActivity(), ((GdgActivity)getActivity()).getPlayServicesHelper().getPlusClient());
         setListAdapter(mAdapter);
 
         registerForContextMenu(getListView());
