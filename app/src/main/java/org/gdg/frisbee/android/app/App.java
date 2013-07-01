@@ -56,7 +56,9 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
-        URL.setURLStreamHandlerFactory(new OkHttpClient());
+        // Workaround for OkHttp Bug #184. Do it only once
+        if(mInstance == null)
+            URL.setURLStreamHandlerFactory(new OkHttpClient());
 
         mInstance = this;
         getModelCache();
