@@ -28,6 +28,7 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.view.SquaredImageView;
+import org.joda.time.format.DateTimeFormat;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -106,7 +107,7 @@ public class EventAdapter extends BaseAdapter {
         title.setText(event.getTitle());
 
         TextView line2 = (TextView)view.findViewById(R.id.line2);
-        line2.setText(event.getStart().toString());
+        line2.setText(event.getStart().toLocalDateTime().toString(DateTimeFormat.patternForStyle("MM",mContext.getResources().getConfiguration().locale)));
 
         // That item will contain a special property that tells if it was freshly retrieved
         if (!item.isConsumed()) {
