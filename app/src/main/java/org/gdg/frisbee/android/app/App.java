@@ -25,6 +25,7 @@ import com.squareup.picasso.Picasso;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.CompatOkHttpLoader;
 import org.gdg.frisbee.android.cache.ModelCache;
 import uk.co.senab.bitmapcache.BitmapLruCache;
 
@@ -40,6 +41,7 @@ import java.net.URL;
 public class App extends Application {
 
     private static App mInstance = null;
+    private static boolean mFix = false;
 
     public static App getInstance() {
         return mInstance;
@@ -57,8 +59,10 @@ public class App extends Application {
         super.onCreate();
 
         // Workaround for OkHttp Bug #184. Do it only once
-        if(mInstance == null)
+        if(mFix == false) {
             URL.setURLStreamHandlerFactory(new OkHttpClient());
+            mFix = true;
+        }
 
         mInstance = this;
         getModelCache();
@@ -66,7 +70,7 @@ public class App extends Application {
         GdgVolley.init(this);
 
         mPicasso = new Picasso.Builder(this)
-                .loader(new OkHttpLoader(this))
+                .loader(new CompatOkHttpLoader(this))
                 .memoryCache(new LruCache(this))
                 .build();
         mPicasso.setDebugging(false);
