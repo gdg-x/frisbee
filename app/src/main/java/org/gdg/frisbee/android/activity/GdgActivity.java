@@ -89,7 +89,8 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
             }
         }
 
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        if(getSupportActionBar() != null)
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
     protected void initPlayServices() {
