@@ -270,7 +270,8 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
             }
         }
 
-        if(getIntent().getAction().equals("finish_first_start")) {
+        Intent intent = getIntent();
+        if(intent != null && intent.getAction() != null && intent.getAction().equals("finish_first_start")) {
                 Log.d(LOG_TAG, "Completed FirstStartWizard");
 
                 if(mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
