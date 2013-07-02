@@ -94,6 +94,10 @@ public class NewsFragment extends GdgListFragment {
     public void onResume() {
         super.onResume();
         Log.d(LOG_TAG, "onResume()");
+
+        for(int i = 0; i <= mList.getChildCount(); i++) {
+            mAdapter.updatePlusOne(mList.getChildAt(i));
+        }
     }
 
     @Override

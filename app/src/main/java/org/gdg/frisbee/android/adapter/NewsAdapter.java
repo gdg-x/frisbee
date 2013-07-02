@@ -139,6 +139,18 @@ public class NewsAdapter extends BaseAdapter {
         return 0;
     }
 
+    public void updatePlusOne(View v) {
+        if(v != null && v.getTag() != null) {
+            String url = (String) v.getTag();
+            PlusOneButton plusButton = (PlusOneButton) v.findViewById(R.id.plus_one_button);
+
+            if(mPlusClient != null) {
+                plusButton.setVisibility(View.VISIBLE);
+                plusButton.initialize(mPlusClient, url, 1);
+            }
+        }
+    }
+
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         if(view == null)
@@ -147,11 +159,17 @@ public class NewsAdapter extends BaseAdapter {
         Item item = (Item) getItemInternal(i);
         final Activity activity = item.getActivity();
 
+        view.setTag(activity.getUrl());
+
         ViewGroup container = (ViewGroup) view.findViewById(R.id.attachmentContainer);
 
-        view.setTag(activity.getId());
         PlusOneButton plusButton = (PlusOneButton) view.findViewById(R.id.plus_one_button);
-        plusButton.initialize(mPlusClient, activity.getUrl(), 1);
+        if(mPlusClient != null) {
+            plusButton.setVisibility(View.VISIBLE);
+            plusButton.initialize(mPlusClient, activity.getUrl(), 1);
+        } else {
+            plusButton.setVisibility(View.GONE);
+        }
 
         /*ResizableImageView  picture = (ResizableImageView) view.findViewById(R.id.image);
         picture.setOnClickListener(null);
