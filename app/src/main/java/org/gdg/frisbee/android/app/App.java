@@ -18,7 +18,10 @@ package org.gdg.frisbee.android.app;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Environment;
+import android.widget.Toast;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.LruCache;
 import com.squareup.picasso.Picasso;
@@ -73,6 +76,16 @@ public class App extends Application {
         mPreferences = getSharedPreferences("gdg", MODE_PRIVATE);
         mPreferences.edit().putInt(Const.SETTINGS_APP_STARTS, mPreferences.getInt(Const.SETTINGS_APP_STARTS,0)+1).commit();
 
+        try {
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+
+            if(mPreferences.getInt(Const.SETTINGS_VERSION_CODE, pInfo.versionCode) < pInfo.versionCode)
+                migrate(mPreferences.getInt(Const.SETTINGS_VERSION_CODE, pInfo.versionCode), pInfo.versionCode);
+
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
         mPicasso = new Picasso.Builder(this)
                 .loader(new CompatOkHttpLoader(this))
                 .memoryCache(new LruCache(this))
@@ -85,6 +98,26 @@ public class App extends Application {
         mTracker.setAppName(getString(R.string.app_name));
         mTracker.setAnonymizeIp(true);
         mGaInstance.setDefaultTracker(mTracker);
+    }
+
+    public void migrate(int oldVersion, int newVersion) {
+
+        mPreferences.edit().clear().commit();
+
+        String rootDir = null;
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            // SD-card available
+            rootDir = Environment.getExternalStorageDirectory().getAbsolutePath()
+                    + "/Android/data/" + getPackageName() + "/cache";
+        } else {
+            File internalCacheDir = getCacheDir();
+            rootDir = internalCacheDir.getAbsolutePath();
+        }
+        deleteDirectory(new File(rootDir));
+
+        Toast.makeText(getApplicationContext(), "Alpha version always resets Preferences on update.", Toast.LENGTH_LONG).show();
+
+        mPreferences.edit().putInt(Const.SETTINGS_VERSION_CODE, newVersion).commit();
     }
 
     public Picasso getPicasso() {
@@ -138,5 +171,13 @@ public class App extends Application {
                     .build();
         }
         return mBitmapCache;
+    }
+
+    private void deleteDirectory(File dir) {
+        if (dir.isDirectory())
+            for (File child : dir.listFiles())
+                deleteDirectory(child);
+
+        dir.delete();
     }
 }

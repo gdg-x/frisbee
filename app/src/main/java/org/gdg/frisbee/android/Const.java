@@ -27,6 +27,7 @@ public class Const {
     // Settings
     public static final String SETTINGS_FIRST_START = "gdg_first_start";
     public static final String SETTINGS_SIGNED_IN = "gdg_signed_in";
+    public static final String SETTINGS_VERSION_CODE = "gdg_version_code";
     public static final String SETTINGS_HOME_GDG = "gdg_home";
     public static final String SETTINGS_APP_STARTS = "gdg_app_starts";
     public static final String SETTINGS_VIDEOS_PLAYED = "gdg_app_videos_played";
