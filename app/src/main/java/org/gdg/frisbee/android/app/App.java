@@ -70,6 +70,8 @@ public class App extends Application {
 
         mInstance = this;
 
+        mPreferences = getSharedPreferences("gdg", MODE_PRIVATE);
+
         try {
             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
 
@@ -84,7 +86,6 @@ public class App extends Application {
         getBitmapCache();
         GdgVolley.init(this);
 
-        mPreferences = getSharedPreferences("gdg", MODE_PRIVATE);
         mPreferences.edit().putInt(Const.SETTINGS_APP_STARTS, mPreferences.getInt(Const.SETTINGS_APP_STARTS,0)+1).commit();
 
         mPicasso = new Picasso.Builder(this)

@@ -16,6 +16,7 @@
 
 package org.gdg.frisbee.android.activity;
 
+import android.app.backup.BackupManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -153,11 +154,19 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
 
     @Override
     public void finish() {
+
+        requestBackup();
+
         Intent resultData = new Intent(FirstStartActivity.this, MainActivity.class);
         resultData.setAction("finish_first_start");
         resultData.putExtra("selected_chapter", mSelectedChapter);
         startActivity(resultData);
         super.finish();
+    }
+
+    public void requestBackup() {
+        BackupManager bm = new BackupManager(this);
+        bm.dataChanged();
     }
 
     @Override
