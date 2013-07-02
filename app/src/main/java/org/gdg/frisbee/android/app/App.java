@@ -79,7 +79,7 @@ public class App extends Application {
         try {
             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
 
-            if(mPreferences.getInt(Const.SETTINGS_VERSION_CODE, pInfo.versionCode) < pInfo.versionCode)
+            if(mPreferences.getInt(Const.SETTINGS_VERSION_CODE, 0) < pInfo.versionCode)
                 migrate(mPreferences.getInt(Const.SETTINGS_VERSION_CODE, pInfo.versionCode), pInfo.versionCode);
 
         } catch (PackageManager.NameNotFoundException e) {
