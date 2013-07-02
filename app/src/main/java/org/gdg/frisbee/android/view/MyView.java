@@ -87,6 +87,7 @@ public class MyView extends AbsListView {
             list.setDividerHeight(0);
             list.setScrollBarSize(0);
             list.setScrollIndicators(null, null);
+            list.setVerticalScrollBarEnabled(false);
             mColumns.add(list);
             LinearLayout.LayoutParams l = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
