@@ -69,12 +69,6 @@ public class App extends Application {
         }
 
         mInstance = this;
-        getModelCache();
-        getBitmapCache();
-        GdgVolley.init(this);
-
-        mPreferences = getSharedPreferences("gdg", MODE_PRIVATE);
-        mPreferences.edit().putInt(Const.SETTINGS_APP_STARTS, mPreferences.getInt(Const.SETTINGS_APP_STARTS,0)+1).commit();
 
         try {
             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -85,6 +79,13 @@ public class App extends Application {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+
+        getModelCache();
+        getBitmapCache();
+        GdgVolley.init(this);
+
+        mPreferences = getSharedPreferences("gdg", MODE_PRIVATE);
+        mPreferences.edit().putInt(Const.SETTINGS_APP_STARTS, mPreferences.getInt(Const.SETTINGS_APP_STARTS,0)+1).commit();
 
         mPicasso = new Picasso.Builder(this)
                 .loader(new CompatOkHttpLoader(this))
@@ -103,7 +104,7 @@ public class App extends Application {
     public void migrate(int oldVersion, int newVersion) {
 
         mPreferences.edit().clear().commit();
-
+        mPreferences.edit().putBoolean(Const.SETTINGS_FIRST_START, true);
         String rootDir = null;
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             // SD-card available
