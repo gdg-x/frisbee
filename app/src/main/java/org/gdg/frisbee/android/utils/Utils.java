@@ -17,11 +17,17 @@
 package org.gdg.frisbee.android.utils;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import org.gdg.frisbee.android.R;
+import org.joda.time.DateTime;
+import org.joda.time.Period;
+import org.joda.time.format.DateTimeFormat;
+
 import java.io.*;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -52,6 +58,25 @@ public class Utils {
             query_pairs.put(URLDecoder.decode(pair.substring(0, idx), "UTF-8"), URLDecoder.decode(pair.substring(idx + 1), "UTF-8"));
         }
         return query_pairs;
+    }
+
+    public static String toHumanTimePeriod(Context ctx, DateTime start, DateTime end) {
+        String result = "";
+        Resources res = ctx.getResources();
+        Period p = new Period(start, end);
+
+        if(p.getYears() == 0 && p.getMonths() == 0 && p.getDays() == 0 && p.getHours() == 0 && p.getMinutes() == 0) {
+            result = res.getQuantityString(R.plurals.seconds_ago, p.getSeconds(), p.getSeconds());
+        } else if(p.getYears() == 0 && p.getMonths() == 0 && p.getDays() == 0 && p.getHours() == 0) {
+            result = res.getQuantityString(R.plurals.minutes_ago, p.getMinutes(), p.getMinutes());
+        } else if(p.getYears() == 0 && p.getMonths() == 0 && p.getDays() == 0) {
+            result = res.getQuantityString(R.plurals.hours_ago, p.getHours(), p.getHours());
+        } else if(p.getYears() == 0 && p.getMonths() == 0 && p.getWeeks() == 0){
+            result = res.getQuantityString(R.plurals.days_ago, p.getDays(), p.getDays());
+        } else {
+            result = start.toLocalDateTime().toString(DateTimeFormat.patternForStyle("M-", res.getConfiguration().locale));
+        }
+        return result;
     }
 
     public static boolean isOnline(Context context) {

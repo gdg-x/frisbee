@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,9 @@ import org.gdg.frisbee.android.activity.YoutubeActivity;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ResizableImageView;
+import org.joda.time.DateTime;
+import org.joda.time.Period;
+import org.joda.time.format.DateTimeFormat;
 
 /**
  * GDG Aachen
@@ -174,6 +178,15 @@ public class NewsAdapter extends BaseAdapter {
         /*ResizableImageView  picture = (ResizableImageView) view.findViewById(R.id.image);
         picture.setOnClickListener(null);
         picture.setImageDrawable(null);*/
+
+        TextView timeStamp = (TextView) view.findViewById(R.id.timestamp);
+
+        if(activity.getPublished() != null) {
+            timeStamp.setVisibility(View.VISIBLE);
+            timeStamp.setText(Utils.toHumanTimePeriod(mContext,new DateTime(activity.getPublished().getValue()), DateTime.now()));
+        } else {
+            timeStamp.setVisibility(View.GONE);
+        }
 
         if(activity.getVerb().equals("share"))
             populateShare(activity, view);

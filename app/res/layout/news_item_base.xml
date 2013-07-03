@@ -58,6 +58,12 @@
                     android:layout_height="wrap_content"
                     plus:size="standard"
                     plus:annotation="inline" />
+            <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="New Text"
+                    android:id="@+id/timestamp" android:gravity="right" android:textColor="@color/asbestos"
+                    android:paddingTop="2dip"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

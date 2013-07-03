@@ -42,4 +42,24 @@
     <string name="no_thanks">Nein, danke.</string>
     <string name="skip">Überspringen</string>
     <string name="youtube_init_failed">YouTube konnte nicht initialisiert werden.</string>
+    <plurals name="seconds_ago">
+        <item quantity="zero">gerade</item>
+        <item quantity="one">vor einer Sekunde</item>
+        <item quantity="other">vor %d Sekunden</item>
+    </plurals>
+    <plurals name="minutes_ago">
+        <item quantity="zero">gerade</item>
+        <item quantity="one">vor einer Minute</item>
+        <item quantity="other">vor %d Minuten</item>
+    </plurals>
+    <plurals name="hours_ago">
+        <item quantity="zero">gerade</item>
+        <item quantity="one">vor einer Stunde</item>
+        <item quantity="other">vor %d Tagen</item>
+    </plurals>
+    <plurals name="days_ago">
+        <item quantity="zero">gerade</item>
+        <item quantity="one">vor einem Tag</item>
+        <item quantity="other">vor %d Tagen</item>
+    </plurals>
 </resources>

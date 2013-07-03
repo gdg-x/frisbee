@@ -42,4 +42,25 @@
     <string name="no_thanks">no thanks.</string>
     <string name="skip">Skip Sign-in</string>
     <string name="youtube_init_failed">YouTube Player could not be initialized.</string>
+    <string name="bogus_organizer">Could not parse Organizer Id: %1$s</string>
+    <plurals name="seconds_ago">
+        <item quantity="zero">now</item>
+        <item quantity="one">just now</item>
+        <item quantity="other">%d seconds ago</item>
+    </plurals>
+    <plurals name="minutes_ago">
+        <item quantity="zero">now</item>
+        <item quantity="one">1 minute ago</item>
+        <item quantity="other">%d minutes ago</item>
+    </plurals>
+    <plurals name="hours_ago">
+        <item quantity="zero">now</item>
+        <item quantity="one">1 hour ago</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
+    <plurals name="days_ago">
+        <item quantity="zero">now</item>
+        <item quantity="one">1 day ago</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
 </resources>
