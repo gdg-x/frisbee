@@ -42,6 +42,10 @@
     <string name="no_thanks">Nein, danke.</string>
     <string name="skip">Überspringen</string>
     <string name="youtube_init_failed">YouTube konnte nicht initialisiert werden.</string>
+    <string name="achievements">Achievements</string>
+    <string name="settings">Einstellungen</string>
+    <string name="about">Über Frisbee</string>
+    <string name="gdl">Google Developers Live</string>
     <plurals name="seconds_ago">
         <item quantity="zero">gerade</item>
         <item quantity="one">vor einer Sekunde</item>

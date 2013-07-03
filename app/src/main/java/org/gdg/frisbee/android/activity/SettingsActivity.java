@@ -16,7 +16,9 @@
 
 package org.gdg.frisbee.android.activity;
 
+import android.os.Bundle;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockPreferenceActivity;
+import org.gdg.frisbee.android.R;
 
 /**
  * GDG Aachen
@@ -27,4 +29,14 @@ import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockPrefere
  * Time: 21:15
  */
 public class SettingsActivity extends RoboSherlockPreferenceActivity {
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if(getSupportActionBar() != null)
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        addPreferencesFromResource(R.xml.settings);
+    }
 }

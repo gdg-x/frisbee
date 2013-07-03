@@ -30,6 +30,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
 import com.android.volley.Response;
@@ -39,6 +41,7 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.adapter.ChapterAdapter;
+import org.gdg.frisbee.android.adapter.DrawerAdapter;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.GroupDirectory;
@@ -68,12 +71,16 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
     @InjectView(R.id.drawer)
     private DrawerLayout mDrawerLayout;
 
+    @InjectView(R.id.left_drawer)
+    private ListView mDrawerContent;
+
     @InjectView(R.id.pager)
     private ViewPager mViewPager;
 
     @InjectView(R.id.titles)
     private TitlePageIndicator mIndicator;
 
+    private DrawerAdapter mDrawerAdapter;
     private ChapterAdapter mSpinnerAdapter;
     private MyAdapter mViewPagerAdapter;
     private ActionBarDrawerToggleCompat mDrawerToggle;
@@ -149,6 +156,27 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
             @Override
             public void onPageScrollStateChanged(int i) {
                 //To change body of implemented methods use File | Settings | File Templates.
+            }
+        });
+
+        mDrawerAdapter = new DrawerAdapter(this);
+        mDrawerContent.setAdapter(mDrawerAdapter);
+        mDrawerContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                DrawerAdapter.DrawerItem item = (DrawerAdapter.DrawerItem) mDrawerAdapter.getItem(i);
+
+                switch(item.getTitle()) {
+                    case R.string.achievements:
+                        startActivityForResult(getPlayServicesHelper().getGamesClient().getAchievementsIntent(), 0);
+                        break;
+                    case R.string.about:
+                        startActivity(new Intent(MainActivity.this, AboutActivity.class));
+                        break;
+                    case R.string.settings:
+                        startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                        break;
+                }
             }
         });
 

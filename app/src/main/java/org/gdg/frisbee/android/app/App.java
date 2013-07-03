@@ -22,6 +22,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.widget.Toast;
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.GAServiceManager;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.LruCache;
 import com.squareup.picasso.Picasso;
@@ -95,8 +97,8 @@ public class App extends Application {
         mPicasso.setDebugging(false);
 
         mGaInstance = GoogleAnalytics.getInstance(getApplicationContext());
-        mGaInstance.setDebug(true);
         mTracker = mGaInstance.getTracker(getString(R.string.ga_trackingId));
+        GAServiceManager.getInstance().setDispatchPeriod(0);
         mTracker.setAppName(getString(R.string.app_name));
         mTracker.setAnonymizeIp(true);
         mGaInstance.setDefaultTracker(mTracker);

@@ -43,6 +43,10 @@
     <string name="skip">Skip Sign-in</string>
     <string name="youtube_init_failed">YouTube Player could not be initialized.</string>
     <string name="bogus_organizer">Could not parse Organizer Id: %1$s</string>
+    <string name="achievements">Achievements</string>
+    <string name="settings">Settings</string>
+    <string name="about">About</string>
+    <string name="gdl">Google Developers Live</string>
     <plurals name="seconds_ago">
         <item quantity="zero">now</item>
         <item quantity="one">just now</item>
