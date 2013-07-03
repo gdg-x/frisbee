@@ -6,6 +6,8 @@ import android.os.StatFs;
 import com.squareup.okhttp.HttpResponseCache;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Loader;
+import org.gdg.frisbee.android.app.App;
+
 import javax.net.ssl.SSLContext;
 import java.io.File;
 import java.io.IOException;
@@ -92,8 +94,13 @@ public class CompatOkHttpLoader implements Loader {
             connection.setRequestProperty("Cache-Control", "only-if-cached");
         }
 
-        boolean fromCache = parseResponseSourceHeader(connection.getHeaderField(RESPONSE_SOURCE));
-
+        boolean fromCache = false;
+        try {
+            fromCache = parseResponseSourceHeader(connection.getHeaderField(RESPONSE_SOURCE));
+        } catch(Exception e) {
+            App.getInstance().getTracker().sendException("Picasso", e, false);
+            throw new IOException(e);
+        }
         return new Response(connection.getInputStream(), fromCache);
     }
 
