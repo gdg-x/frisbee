@@ -36,6 +36,7 @@ import com.google.android.gms.games.GamesClient;
 import com.google.android.gms.games.OnSignOutCompleteListener;
 import com.google.android.gms.games.multiplayer.Invitation;
 import com.google.android.gms.plus.PlusClient;
+import org.gdg.frisbee.android.R;
 
 public class PlayServicesHelper implements GooglePlayServicesClient.ConnectionCallbacks,
         GooglePlayServicesClient.OnConnectionFailedListener, OnSignOutCompleteListener {
@@ -194,7 +195,7 @@ public class PlayServicesHelper implements GooglePlayServicesClient.ConnectionCa
         mRequestedClients = clientsToUse;
 
         Vector<String> scopesVector = new Vector<String>();
-        if (0 != (clientsToUse & CLIENT_GAMES)) {
+        if (0 != (clientsToUse & CLIENT_GAMES) && mActivity.getString(R.string.play_app_id) != "") {
             scopesVector.add(Scopes.GAMES);
         }
         if (0 != (clientsToUse & CLIENT_PLUS)) {
