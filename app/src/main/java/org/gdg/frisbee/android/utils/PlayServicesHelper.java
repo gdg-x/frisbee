@@ -192,10 +192,15 @@ public class PlayServicesHelper implements GooglePlayServicesClient.ConnectionCa
      */
     public void setup(PlayServicesHelperListener listener, int clientsToUse) {
         mListener = listener;
+
+        if(0 != (clientsToUse & CLIENT_GAMES) && mActivity.getString(R.string.play_app_id).equals("")) {
+            clientsToUse |= ~ CLIENT_GAMES;
+        }
+
         mRequestedClients = clientsToUse;
 
         Vector<String> scopesVector = new Vector<String>();
-        if (0 != (clientsToUse & CLIENT_GAMES) && mActivity.getString(R.string.play_app_id) != "") {
+        if (0 != (clientsToUse & CLIENT_GAMES)) {
             scopesVector.add(Scopes.GAMES);
         }
         if (0 != (clientsToUse & CLIENT_PLUS)) {
