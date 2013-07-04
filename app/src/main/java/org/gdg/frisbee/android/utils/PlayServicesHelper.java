@@ -246,7 +246,7 @@ public class PlayServicesHelper implements GooglePlayServicesClient.ConnectionCa
             listener.onGotGamesClient(mGamesClient);
     }
 
-    public class OnGotGamesClientListener {
+    public interface OnGotGamesClientListener {
         void onGotGamesClient(GamesClient c);
     }
 
