@@ -194,7 +194,7 @@ public class PlayServicesHelper implements GooglePlayServicesClient.ConnectionCa
         mListener = listener;
 
         if(0 != (clientsToUse & CLIENT_GAMES) && mActivity.getString(R.string.play_app_id).equals("")) {
-            clientsToUse |= ~ CLIENT_GAMES;
+            clientsToUse &= ~ CLIENT_GAMES;
         }
 
         mRequestedClients = clientsToUse;
