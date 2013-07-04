@@ -36,6 +36,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.android.gms.games.GamesClient;
 import com.viewpagerindicator.TitlePageIndicator;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -52,6 +53,7 @@ import org.gdg.frisbee.android.fragment.EventFragment;
 import org.gdg.frisbee.android.fragment.InfoFragment;
 import org.gdg.frisbee.android.fragment.NewsFragment;
 import org.gdg.frisbee.android.utils.GingerbreadLastLocationFinder;
+import org.gdg.frisbee.android.utils.PlayServicesHelper;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ActionBarDrawerToggleCompat;
 import org.joda.time.DateTime;
@@ -168,7 +170,12 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
 
                 switch(item.getTitle()) {
                     case R.string.achievements:
-                        startActivityForResult(getPlayServicesHelper().getGamesClient().getAchievementsIntent(), 0);
+                        getPlayServicesHelper().getGamesClient(new PlayServicesHelper.OnGotGamesClientListener() {
+                            @Override
+                            public void onGotGamesClient(GamesClient c) {
+                                startActivityForResult(c.getAchievementsIntent(), 0);
+                            }
+                        });
                         break;
                     case R.string.about:
                         startActivity(new Intent(MainActivity.this, AboutActivity.class));
@@ -343,7 +350,12 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
             getHandler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    getPlayServicesHelper().getGamesClient().unlockAchievement(Const.ACHIEVEMENT_SIGNIN);
+                    getPlayServicesHelper().getGamesClient(new PlayServicesHelper.OnGotGamesClientListener() {
+                        @Override
+                        public void onGotGamesClient(GamesClient c) {
+                            c.unlockAchievement(Const.ACHIEVEMENT_SIGNIN);
+                        }
+                    });
                 }
             }, 1000);
         }
@@ -352,7 +364,12 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
             getHandler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    getPlayServicesHelper().getGamesClient().unlockAchievement(Const.ACHIEVEMENT_RETURN);
+                    getPlayServicesHelper().getGamesClient(new PlayServicesHelper.OnGotGamesClientListener() {
+                        @Override
+                        public void onGotGamesClient(GamesClient c) {
+                            c.unlockAchievement(Const.ACHIEVEMENT_RETURN);
+                        }
+                    });
                 }
             }, 1000);
         }
@@ -361,7 +378,12 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
             getHandler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    getPlayServicesHelper().getGamesClient().unlockAchievement(Const.ACHIEVEMENT_KING_OF_THE_HILL);
+                    getPlayServicesHelper().getGamesClient(new PlayServicesHelper.OnGotGamesClientListener() {
+                        @Override
+                        public void onGotGamesClient(GamesClient c) {
+                            c.unlockAchievement(Const.ACHIEVEMENT_KING_OF_THE_HILL);
+                        }
+                    });
                 }
             }, 1000);
         }

@@ -241,6 +241,15 @@ public class PlayServicesHelper implements GooglePlayServicesClient.ConnectionCa
         return mGamesClient;
     }
 
+    public void getGamesClient(OnGotGamesClientListener listener) {
+        if(mGamesClient != null)
+            listener.onGotGamesClient(mGamesClient);
+    }
+
+    public class OnGotGamesClientListener {
+        void onGotGamesClient(GamesClient c);
+    }
+
     /**
      * Returns the AppStateClient object. In order to call this method, you must have
      * called @link{#setup} with a set of clients that includes CLIENT_APPSTATE.
