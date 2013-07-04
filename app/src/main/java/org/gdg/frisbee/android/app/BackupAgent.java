@@ -17,7 +17,12 @@
 package org.gdg.frisbee.android.app;
 
 import android.app.backup.BackupAgentHelper;
+import android.app.backup.BackupDataInput;
 import android.app.backup.SharedPreferencesBackupHelper;
+import android.os.ParcelFileDescriptor;
+import android.util.Log;
+
+import java.io.IOException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,6 +32,7 @@ import android.app.backup.SharedPreferencesBackupHelper;
  */
 public class BackupAgent extends BackupAgentHelper {
 
+    private static final String LOG_TAG = "GDG-BackupAgent";
     private static final String PREFS_BACKUP_KEY = "gdg_prefs";
 
     @Override
@@ -34,5 +40,12 @@ public class BackupAgent extends BackupAgentHelper {
         SharedPreferencesBackupHelper helper =
                 new SharedPreferencesBackupHelper(this, "gdg");
         addHelper(PREFS_BACKUP_KEY, helper);
+    }
+
+    @Override
+    public void onRestore(BackupDataInput data, int appVersionCode, ParcelFileDescriptor newState) throws IOException {
+        super.onRestore(data, appVersionCode, newState);
+        Log.d(LOG_TAG, String.format("Restoring from backup (was saved using version %d)", appVersionCode));
+        App.getInstance().getTracker().sendEvent("backup","restore","",(long)0);
     }
 }
