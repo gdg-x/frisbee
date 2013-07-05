@@ -98,8 +98,9 @@ public class CompatOkHttpLoader implements Loader {
         try {
             fromCache = parseResponseSourceHeader(connection.getHeaderField(RESPONSE_SOURCE));
         } catch(Exception e) {
-            App.getInstance().getTracker().sendException("Picasso", e, false);
-            throw new IOException(e);
+            IllegalStateException ex = new IllegalStateException("Fail uri "+ uri.toString(), e);
+            App.getInstance().getTracker().sendException("Picasso", ex, false);
+            throw new IOException(ex);
         }
         return new Response(connection.getInputStream(), fromCache);
     }
