@@ -26,6 +26,7 @@ import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.EventAdapter;
+import org.gdg.frisbee.android.api.ApiRequest;
 import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.app.App;
@@ -92,7 +93,7 @@ public class EventFragment extends GdgListFragment {
         DateTime end = getMonthStart(mSelectedMonth).plusDays(30);
         setIsLoading(true);
 
-        GroupDirectory.ApiRequest req = mClient.getChapterEventList(start, end, getArguments().getString("plus_id"), new Response.Listener<ArrayList<Event>>() {
+        ApiRequest req = mClient.getChapterEventList(start, end, getArguments().getString("plus_id"), new Response.Listener<ArrayList<Event>>() {
                 @Override
                 public void onResponse(ArrayList<Event> events) {
                     App.getInstance().getModelCache().putAsync("event_"+ getArguments().getString("plus_id"), events, DateTime.now().plusHours(2));

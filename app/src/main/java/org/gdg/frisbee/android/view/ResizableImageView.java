@@ -1,9 +1,12 @@
 package org.gdg.frisbee.android.view;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 /**
  * GDG Aachen
@@ -19,6 +22,7 @@ public class ResizableImageView extends ImageView {
 
     public ResizableImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setAdjustViewBounds(true);
     }
 
 
@@ -30,18 +34,12 @@ public class ResizableImageView extends ImageView {
         if(d == null)
             d = getDrawable();
 
-        if(d!=null){
+        if(d != null && d.getIntrinsicWidth() != -1){
             int width = MeasureSpec.getSize(widthMeasureSpec);
             int height = width * d.getIntrinsicHeight() / d.getIntrinsicWidth();
             setMeasuredDimension(width, height);
         }else{
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         }
-    }
-
-    @Override
-    public void setImageDrawable(Drawable drawable) {
-        super.setImageDrawable(drawable);
-        //requestLayout();
     }
 }

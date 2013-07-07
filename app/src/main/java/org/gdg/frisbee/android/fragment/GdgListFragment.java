@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.fragment;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +55,7 @@ public class GdgListFragment extends RoboSherlockFragment {
     final private AdapterView.OnItemClickListener mOnClickListener
             = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-            onListItemClick((ListView)parent, v, position, id);
+            onListItemClick(null, v, position, id);
         }
     };
 
