@@ -184,6 +184,9 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
                     case R.string.about:
                         startActivity(new Intent(MainActivity.this, AboutActivity.class));
                         break;
+                    case R.string.gdl:
+                        startActivity(new Intent(MainActivity.this, GdlActivity.class));
+                        break;
                     case R.string.settings:
                         startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                         break;
@@ -311,19 +314,6 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
                 getSupportActionBar().setSelectedNavigationItem(mSpinnerAdapter.getPosition(homeGdgd));
                 mViewPagerAdapter.setSelectedChapter(homeGdgd);
         }
-
-        GoogleDevelopersLive gdl = new GoogleDevelopersLive();
-        gdl.getRecordedShows("", new Response.Listener<GdlShowList>() {
-                    @Override
-                    public void onResponse(GdlShowList gdlShow) {
-                        //To change body of implemented methods use File | Settings | File Templates.
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                    }
-                }
-        ).execute();
     }
 
     private void trackViewPagerPage(int position) {

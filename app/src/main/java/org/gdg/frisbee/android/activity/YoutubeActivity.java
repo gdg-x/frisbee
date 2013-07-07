@@ -49,6 +49,7 @@ public class YoutubeActivity extends GdgActivity implements YouTubePlayer.OnInit
     private SharedPreferences mPreferences;
     private YouTubePlayerSupportFragment mPlayerFragment;
     private boolean mCounted = false;
+    private boolean mGdl = false;
 
     private static final int PORTRAIT_ORIENTATION = Build.VERSION.SDK_INT < 9
             ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -104,8 +105,20 @@ public class YoutubeActivity extends GdgActivity implements YouTubePlayer.OnInit
 
             @Override
             public void onVideoStarted() {
+
+            }
+
+            @Override
+            public void onVideoEnded() {
                 if(!mCounted) {
-                    mPreferences.edit().putInt(Const.SETTINGS_VIDEOS_PLAYED, mPreferences.getInt(Const.SETTINGS_VIDEOS_PLAYED,0)+1).commit();
+                    SharedPreferences.Editor editor = mPreferences.edit();
+
+                    editor.putInt(Const.SETTINGS_VIDEOS_PLAYED, mPreferences.getInt(Const.SETTINGS_VIDEOS_PLAYED,0)+1);
+
+                    if(getIntent().hasExtra("gdl"))
+                        editor.putInt(Const.SETTINGS_VIDEOS_PLAYED, mPreferences.getInt(Const.SETTINGS_VIDEOS_PLAYED,0)+1);
+
+                    editor.commit();
                 }
 
                 if(mPreferences.getInt(Const.SETTINGS_VIDEOS_PLAYED,0) == 10) {
@@ -121,11 +134,20 @@ public class YoutubeActivity extends GdgActivity implements YouTubePlayer.OnInit
                         }
                     }, 1000);
                 }
-            }
 
-            @Override
-            public void onVideoEnded() {
-                //To change body of implemented methods use File | Settings | File Templates.
+                if(mPreferences.getInt(Const.SETTINGS_GDL_VIDEOS_PLAYED,0) == 5) {
+                    getHandler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            getPlayServicesHelper().getGamesClient(new PlayServicesHelper.OnGotGamesClientListener() {
+                                @Override
+                                public void onGotGamesClient(GamesClient c) {
+                                    c.unlockAchievement(Const.ACHIEVEMENT_GDL_ADDICT);
+                                }
+                            });
+                        }
+                    }, 1000);
+                }
             }
 
             @Override

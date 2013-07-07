@@ -16,7 +16,7 @@ public class GdlShow {
     public GdlShow() {
     }
 
-    public String gemUrl() {
+    public String getUrl() {
         return mUrl;
     }
 
@@ -58,5 +58,9 @@ public class GdlShow {
 
     public String getHighQualityThumbnail() {
         return String.format("http://img.youtube.com/vi/%s/hqdefault.jpg", getYoutubeId());
+    }
+
+    public String getYoutubeUrl() {
+        return String.format("http://www.youtube.com/watch?v=%s", getYoutubeId());
     }
 }

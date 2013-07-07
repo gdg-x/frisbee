@@ -78,7 +78,14 @@ public class GoogleDevelopersLive {
                     @Override
                     public GdlShowList parse(Document doc) {
 
-                        GdlShowList showList = new GdlShowList(doc.select("div.paging-cursor").first().attr("data-cursor"));
+                        Element nextToken = doc.select("div.paging-cursor").first();
+
+                        GdlShowList showList;
+
+                        if(nextToken != null)
+                            showList = new GdlShowList(nextToken.attr("data-cursor"));
+                        else
+                            showList = new GdlShowList(null);
 
                         Elements shows = doc.select("li");
                         Pattern p = Pattern.compile(".*i\\.ytimg\\.com/vi/([^/]+).*");
@@ -92,12 +99,12 @@ public class GoogleDevelopersLive {
                             if(showLink != null)  {
                                 gdlShow.setTitle(showLink.text());
 
-                                String dateTime = show.text()
+                                /*String dateTime = show.text()
                                         .replace(showLink.text(), "")
                                         .replace("a.m.", "")
                                         .replace("p.m.", "")
                                         .trim();
-                                gdlShow.setDateTime(fmt.parseDateTime(dateTime).toDateTime(DateTimeZone.getDefault()));
+                                gdlShow.setDateTime(fmt.parseDateTime(dateTime).toDateTime(DateTimeZone.getDefault()));*/
                                 gdlShow.setUrl(showLink.attr("href"));
                                 String thumbLink = showLink.select("img.video-thumbnail").first().attr("src");
                                 Matcher matcher = p.matcher(thumbLink);
