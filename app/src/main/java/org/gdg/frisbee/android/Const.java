@@ -31,6 +31,7 @@ public class Const {
     public static final String SETTINGS_HOME_GDG = "gdg_home";
     public static final String SETTINGS_APP_STARTS = "gdg_app_starts";
     public static final String SETTINGS_VIDEOS_PLAYED = "gdg_app_videos_played";
+    public static final String SETTINGS_GDL_VIDEOS_PLAYED = "gdg_app_gdl_video_played";
 
     public static final boolean SETTINGS_FIRST_START_DEFAULT = true;
 
@@ -44,4 +45,5 @@ public class Const {
     public static final String ACHIEVEMENT_MANIAC = "CgkI_9Ga8sMGEAIQAw";
     public static final String ACHIEVEMENT_RETURN = "CgkI_9Ga8sMGEAIQBA";
     public static final String ACHIEVEMENT_KING_OF_THE_HILL = "CgkI_9Ga8sMGEAIQBQ";
+    public static final String ACHIEVEMENT_GDL_ADDICT = "CgkI_9Ga8sMGEAIQDg";
 }

@@ -37,6 +37,8 @@
         <meta-data android:name="com.google.android.backup.api_key" android:value="@string/android_backup_key" />
         <activity android:name=".activity.MainActivity">
         </activity>
+        <activity android:name=".activity.GdlActivity">
+        </activity>
         <activity android:name=".activity.FirstStartActivity" android:theme="@style/GDG.NoActionBar">
         </activity>
         <activity android:name=".activity.YoutubeActivity" android:theme="@style/GDG.SeeTrough" android:screenOrientation="sensor"
