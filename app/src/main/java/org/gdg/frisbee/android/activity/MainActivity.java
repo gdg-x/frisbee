@@ -43,6 +43,10 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.adapter.ChapterAdapter;
 import org.gdg.frisbee.android.adapter.DrawerAdapter;
+import org.gdg.frisbee.android.api.ApiRequest;
+import org.gdg.frisbee.android.api.GoogleDevelopersLive;
+import org.gdg.frisbee.android.api.model.GdlShow;
+import org.gdg.frisbee.android.api.model.GdlShowList;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.GroupDirectory;
@@ -86,7 +90,7 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
     private ChapterAdapter mSpinnerAdapter;
     private MyAdapter mViewPagerAdapter;
     private ActionBarDrawerToggleCompat mDrawerToggle;
-    private GroupDirectory.ApiRequest mFetchChaptersTask;
+    private ApiRequest mFetchChaptersTask;
     private SharedPreferences mPreferences;
     private LocationManager mLocationManager;
     private GroupDirectory mClient;
@@ -307,6 +311,19 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
                 getSupportActionBar().setSelectedNavigationItem(mSpinnerAdapter.getPosition(homeGdgd));
                 mViewPagerAdapter.setSelectedChapter(homeGdgd);
         }
+
+        GoogleDevelopersLive gdl = new GoogleDevelopersLive();
+        gdl.getRecordedShows("", new Response.Listener<GdlShowList>() {
+                    @Override
+                    public void onResponse(GdlShowList gdlShow) {
+                        //To change body of implemented methods use File | Settings | File Templates.
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                    }
+                }
+        ).execute();
     }
 
     private void trackViewPagerPage(int position) {

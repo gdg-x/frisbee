@@ -33,6 +33,11 @@
     <packaging>apk</packaging>
 
     <dependencies>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.7.2</version>
+        </dependency>
 	    <dependency>
             <groupId>com.google.android</groupId>
             <artifactId>android</artifactId>

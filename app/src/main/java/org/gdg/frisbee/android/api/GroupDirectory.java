@@ -111,16 +111,4 @@ public class GroupDirectory {
 
         return new ApiRequest(eventReq);
     }
-
-    public class ApiRequest {
-        private Request mRequest;
-
-        public ApiRequest(Request request) {
-            mRequest = request;
-        }
-
-        public void execute() {
-            GdgVolley.getInstance().getRequestQueue().add(mRequest);
-        }
-    }
 }
