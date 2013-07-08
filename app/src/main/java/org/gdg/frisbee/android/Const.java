@@ -35,6 +35,9 @@ public class Const {
 
     public static final boolean SETTINGS_FIRST_START_DEFAULT = true;
 
+    public static final String GITHUB_ORGA = "gdg-x";
+    public static final String GITHUB_REPO = "frisbee";
+
     public static final String GOOGLE_DEVELOPERS_YT_ID = "UC_x5XG1OV2P6uZZ5FSM9Ttw";
     public static final String ANDROID_DEVELOPERS_YT_ID = "UCVHFbqXqoYvEWM1Ddxl0QDg";
     public static final String YOUTUBE_DEVELOPERS_YT_ID = "UCtVd0c0tGXuTSbU5d8cSBUg";
