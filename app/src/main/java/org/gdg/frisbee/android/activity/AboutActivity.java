@@ -23,6 +23,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
 import com.viewpagerindicator.TitlePageIndicator;
 import org.gdg.frisbee.android.R;
@@ -56,6 +57,10 @@ public class AboutActivity extends GdgActivity {
         setContentView(R.layout.activity_about);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setTitle(R.string.about);
+
 
         mIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

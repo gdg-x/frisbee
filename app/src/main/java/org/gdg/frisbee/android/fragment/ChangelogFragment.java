@@ -16,7 +16,19 @@
 
 package org.gdg.frisbee.android.fragment;
 
+import android.os.Bundle;
+import android.text.Html;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
+import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.utils.Utils;
+import roboguice.inject.InjectView;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,4 +38,31 @@ import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragmen
  * To change this template use File | Settings | File Templates.
  */
 public class ChangelogFragment extends RoboSherlockFragment {
+
+    @InjectView(R.id.changelog)
+    private TextView mChangelog;
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_changelog, null);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);    //To change body of overridden methods use File | Settings | File Templates.
+
+        InputStream is = null;
+        try {
+            is = getResources().getAssets().open("changelog.html");
+            mChangelog.setText(Html.fromHtml(Utils.inputStreamToString(is)));
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+    }
 }
