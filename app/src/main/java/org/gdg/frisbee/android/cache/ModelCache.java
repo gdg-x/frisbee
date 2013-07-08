@@ -372,17 +372,25 @@ public class ModelCache {
         return put(url, obj, new DateTime(0));
     }
 
-    public void putAsync(final String url, final Object obj) {
-        putAsync(url, obj, new DateTime(0));
+    public void putAsync(final String url, final Object obj, final CachePutListener onDoneListener) {
+        putAsync(url, obj, new DateTime(0), onDoneListener);
     }
 
-    public void putAsync(final String url, final Object obj, final DateTime expiresAt) {
+    public void putAsync(final String url, final Object obj, final DateTime expiresAt, final CachePutListener onDoneListener) {
         new AsyncTask<Void,Void,Void>() {
 
             @Override
             protected Void doInBackground(Void... voids) {
                 put(url, obj, expiresAt);
                 return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                if(onDoneListener != null) {
+                    onDoneListener.onPutIntoCache();
+                }
             }
         }.execute();
     }
@@ -603,6 +611,10 @@ public class ModelCache {
             this.mValue = mValue;
         }
 
+    }
+
+    public interface CachePutListener {
+        public void onPutIntoCache();
     }
 
     public interface CacheListener {

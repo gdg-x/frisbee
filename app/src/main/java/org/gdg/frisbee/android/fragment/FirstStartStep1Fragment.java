@@ -126,11 +126,15 @@ public class FirstStartStep1Fragment extends RoboSherlockFragment {
         mLastLocation = mLocationFinder.getLastBestLocation(5000,60*60*1000);
         mFetchChaptersTask = mClient.getDirectory(new Response.Listener<Directory>() {
                   @Override
-                  public void onResponse(Directory directory) {
-                      App.getInstance().getModelCache().putAsync("chapter_list", directory, DateTime.now().plusDays(4));
+                  public void onResponse(final Directory directory) {
+                      App.getInstance().getModelCache().putAsync("chapter_list", directory, DateTime.now().plusDays(4), new ModelCache.CachePutListener() {
+                          @Override
+                          public void onPutIntoCache() {
+                              addChapters(directory.getGroups());
+                              mLoadSwitcher.setDisplayedChild(1);
+                          }
+                      });
 
-                      addChapters(directory.getGroups());
-                      mLoadSwitcher.setDisplayedChild(1);
                   }
               }, new Response.ErrorListener() {
                   @Override

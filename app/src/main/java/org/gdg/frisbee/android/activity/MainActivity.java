@@ -113,6 +113,14 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
             if(chapter2.getGeo() == null)
                 return -1;
 
+            if(chapter.getGplusId().equals(mPreferences.getString(Const.SETTINGS_HOME_GDG,""))) {
+                return -1;
+            }
+
+            if(chapter2.getGplusId().equals(mPreferences.getString(Const.SETTINGS_HOME_GDG,""))) {
+                return 1;
+            }
+
             Location.distanceBetween(mLastLocation.getLatitude(), mLastLocation.getLongitude(), chapter.getGeo().getLat(), chapter.getGeo().getLng(), results);
             Location.distanceBetween(mLastLocation.getLatitude(), mLastLocation.getLongitude(), chapter2.getGeo().getLat(), chapter2.getGeo().getLng(), results2);
 
@@ -224,17 +232,20 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
 
         mFetchChaptersTask = mClient.getDirectory(new Response.Listener<Directory>() {
             @Override
-            public void onResponse(Directory directory) {
+            public void onResponse(final Directory directory) {
                 getSupportActionBar().setListNavigationCallbacks(mSpinnerAdapter, MainActivity.this);
-                App.getInstance().getModelCache().putAsync("chapter_list", directory, DateTime.now().plusDays(1));
+                App.getInstance().getModelCache().putAsync("chapter_list", directory, DateTime.now().plusDays(1), new ModelCache.CachePutListener() {
+                    @Override
+                    public void onPutIntoCache() {
+                        ArrayList<Chapter> chapters = directory.getGroups();
+                        addChapters(chapters);
 
-                ArrayList<Chapter> chapters = directory.getGroups();
-                addChapters(chapters);
+                        mViewPagerAdapter.setSelectedChapter(chapters.get(0));
 
-                mViewPagerAdapter.setSelectedChapter(chapters.get(0));
-
-                mViewPager.setAdapter(mViewPagerAdapter);
-                mIndicator.setViewPager(mViewPager);
+                        mViewPager.setAdapter(mViewPagerAdapter);
+                        mIndicator.setViewPager(mViewPager);
+                    }
+                });
             }
         }, new Response.ErrorListener() {
             @Override
@@ -251,6 +262,7 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
                     @Override
                     public void onGet(Object item) {
                         Directory directory = (Directory)item;
+
                         addChapters(directory.getGroups());
                         mViewPagerAdapter.setSelectedChapter(directory.getGroups().get(0));
                         mViewPager.setAdapter(mViewPagerAdapter);

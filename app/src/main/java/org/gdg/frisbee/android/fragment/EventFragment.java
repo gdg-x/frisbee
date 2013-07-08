@@ -95,11 +95,15 @@ public class EventFragment extends GdgListFragment {
 
         ApiRequest req = mClient.getChapterEventList(start, end, getArguments().getString("plus_id"), new Response.Listener<ArrayList<Event>>() {
                 @Override
-                public void onResponse(ArrayList<Event> events) {
-                    App.getInstance().getModelCache().putAsync("event_"+ getArguments().getString("plus_id"), events, DateTime.now().plusHours(2));
+                public void onResponse(final ArrayList<Event> events) {
+                    App.getInstance().getModelCache().putAsync("event_"+ getArguments().getString("plus_id"), events, DateTime.now().plusHours(2), new ModelCache.CachePutListener() {
+                        @Override
+                        public void onPutIntoCache() {
+                            mAdapter.addAll(events);
+                            setIsLoading(false);
+                        }
+                    });
 
-                    mAdapter.addAll(events);
-                    setIsLoading(false);
                 }
             }, new Response.ErrorListener() {
                 @Override

@@ -86,9 +86,13 @@ public class ContributorsFragment extends GdgListFragment {
         mFetchContent = mClient.getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO,
                 new Response.Listener<ArrayList<Contributor>>() {
                     @Override
-                    public void onResponse(ArrayList<Contributor> contributors) {
-                        App.getInstance().getModelCache().putAsync("frisbee_contributors", contributors, DateTime.now().plusDays(1));
-                        mAdapter.addAll(contributors);
+                    public void onResponse(final ArrayList<Contributor> contributors) {
+                        App.getInstance().getModelCache().putAsync("frisbee_contributors", contributors, DateTime.now().plusDays(1), new ModelCache.CachePutListener() {
+                            @Override
+                            public void onPutIntoCache() {
+                                mAdapter.addAll(contributors);
+                            }
+                        });
                     }
                 },
                 new Response.ErrorListener() {

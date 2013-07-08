@@ -28,7 +28,7 @@ import android.os.Parcelable;
  * Time: 22:27
  */
 public class Chapter implements Comparable<Chapter>, Parcelable {
-    private String status, city, name, gplusId, chapterId, state, country;
+    private String status, city, name, gplusId, state, country;
     private Geo geo;
 
     public Chapter() {
@@ -46,7 +46,6 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
         status = in.readString();
         city = in.readString();
         gplusId = in.readString();
-        chapterId = in.readString();
         state = in.readString();
         country = in.readString();
         geo = in.readParcelable(Geo.class.getClassLoader());
@@ -66,10 +65,6 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
 
     public String getGplusId() {
         return gplusId;
-    }
-
-    public String getChapterId() {
-        return chapterId;
     }
 
     public String getState() {
@@ -105,7 +100,6 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
         parcel.writeString(status);
         parcel.writeString(city);
         parcel.writeString(gplusId);
-        parcel.writeString(chapterId);
         parcel.writeString(state);
         parcel.writeString(country);
         parcel.writeParcelable(geo,0);

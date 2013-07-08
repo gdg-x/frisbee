@@ -93,10 +93,14 @@ public class GdlListFragment extends GdgListFragment {
         mFetchContent = mClient.getRecordedShows(getArguments().getString("category"),
                 new Response.Listener<GdlShowList>() {
                     @Override
-                    public void onResponse(GdlShowList gdlShows) {
-                        App.getInstance().getModelCache().putAsync("gdl_shows_"+ getArguments().get("category"), gdlShows, DateTime.now().plusHours(3));
-                        mAdapter.addAll(gdlShows);
-                        setIsLoading(false);
+                    public void onResponse(final GdlShowList gdlShows) {
+                        App.getInstance().getModelCache().putAsync("gdl_shows_"+ getArguments().get("category"), gdlShows, DateTime.now().plusHours(3), new ModelCache.CachePutListener() {
+                            @Override
+                            public void onPutIntoCache() {
+                                mAdapter.addAll(gdlShows);
+                                setIsLoading(false);
+                            }
+                        });
                     }
                 },
                 new Response.ErrorListener() {
