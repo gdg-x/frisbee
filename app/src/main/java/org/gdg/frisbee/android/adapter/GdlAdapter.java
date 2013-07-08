@@ -114,7 +114,7 @@ public class GdlAdapter extends BaseAdapter {
                 mContext.startActivity(playVideoIntent);
             }
         };
-
+        thumbnailView.setImageDrawable(null);
         thumbnailView.setBackgroundResource(R.drawable.gdl_video_dummy);
         App.getInstance().getPicasso()
                 .load(show.getHighQualityThumbnail())
