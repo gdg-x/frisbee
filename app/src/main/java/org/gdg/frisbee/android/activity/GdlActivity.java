@@ -91,6 +91,8 @@ public class GdlActivity extends GdgActivity {
     protected void onResume() {
         super.onResume();
         Log.d(LOG_TAG, "onResume()");
+
+        trackViewPagerPage(mViewPager.getCurrentItem());
     }
 
     @Override

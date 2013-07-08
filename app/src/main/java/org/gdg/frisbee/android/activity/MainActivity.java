@@ -329,6 +329,9 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
     }
 
     private void trackViewPagerPage(int position) {
+        if(mViewPager == null || mViewPagerAdapter.getSelectedChapter() == null)
+            return;
+
         Log.d(LOG_TAG, "trackViewPagerPage()");
         String page = "";
 
@@ -453,6 +456,8 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
     protected void onResume() {
         super.onResume();
         Log.d(LOG_TAG, "onResume()");
+
+        trackViewPagerPage(mViewPager.getCurrentItem());
     }
 
     @Override
