@@ -18,6 +18,7 @@ package org.gdg.frisbee.android.app;
 
 import android.app.backup.BackupAgentHelper;
 import android.app.backup.BackupDataInput;
+import android.app.backup.BackupDataOutput;
 import android.app.backup.SharedPreferencesBackupHelper;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
@@ -47,5 +48,11 @@ public class BackupAgent extends BackupAgentHelper {
         super.onRestore(data, appVersionCode, newState);
         Log.d(LOG_TAG, String.format("Restoring from backup (was saved using version %d)", appVersionCode));
         App.getInstance().getTracker().sendEvent("backup","restore","",(long)0);
+    }
+
+    @Override
+    public void onBackup(ParcelFileDescriptor oldState, BackupDataOutput data, ParcelFileDescriptor newState) throws IOException {
+        super.onBackup(oldState, data, newState);    //To change body of overridden methods use File | Settings | File Templates.
+        App.getInstance().getTracker().sendEvent("backup","backup","",(long)0);
     }
 }
