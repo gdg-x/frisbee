@@ -500,9 +500,14 @@ public class ModelCache {
                 className = className+"<"+d.get(0).getClass().getCanonicalName()+">";
         }
 
-        String json = mGson.toJson(o);
         out.write(className+"\n");
-        out.write(json);
+
+        if(className.contains("google")) {
+            mJsonFactory.createJsonGenerator(out).serialize(o);
+        } else {
+            String json = mGson.toJson(o);
+            out.write(json);
+        }
 
         out.close();
     }
@@ -553,7 +558,7 @@ public class ModelCache {
             } else
                 return mGson.fromJson(content, clazz);
         } catch(IllegalArgumentException e) {
-            Log.e(LOG_TAG, "Deserializing from disk failed");
+            Log.e(LOG_TAG, "Deserializing from disk failed", e);
             return null;
         } catch(ClassNotFoundException e) {
             throw new IOException(e.getMessage());
