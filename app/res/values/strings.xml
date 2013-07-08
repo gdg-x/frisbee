@@ -97,4 +97,15 @@
         <item>tv</item>
         <item>primetime</item>
     </string-array>
+    <string-array name="about_tabs">
+        <item>About</item>
+        <item>Contributors</item>
+        <item>Changelog</item>
+        <item>Get Involved</item>
+        <item>3rd Party Libraries</item>
+    </string-array>
+    <string name="contributors">The GDG app is a community effort and open sourced. The following people contributed to the app:</string>
+    <string name="get_involved">Get Involved!</string>
+    <string name="get_involved_text">The GDG app is a community effort and open sourced. Everyone is welcome to participate and improve this app.\n\nJust head over to GitHub and checkout our code.</string>
+    <string name="about_license">(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof the Apache 2.0 License</string>
 </resources>

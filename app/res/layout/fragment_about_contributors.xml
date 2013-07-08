@@ -20,11 +20,26 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-    <com.viewpagerindicator.TitlePageIndicator
-            android:id="@+id/titles"
+
+    <TextView
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_width="fill_parent" />
-    <android.support.v4.view.ViewPager android:id="@+id/pager"
-                                       android:layout_height="wrap_content"
-                                       android:layout_width="fill_parent"></android.support.v4.view.ViewPager>
+            android:text="@string/contributors"
+            android:id="@+id/textView" android:padding="10dip"/>
+    <GridView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:numColumns="auto_fit"
+            android:id="@+id/list" android:stretchMode="columnWidth"
+            android:gravity="top"/>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" android:id="@+id/loading" android:gravity="center_vertical|center_horizontal">
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" android:id="@+id/empty">
+    </LinearLayout>
 </LinearLayout>
