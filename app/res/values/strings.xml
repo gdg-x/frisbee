@@ -97,4 +97,12 @@
         <item>tv</item>
         <item>primetime</item>
     </string-array>
+    <string-array name="about_tabs">
+        <item>About</item>
+        <item>Contributors</item>
+        <item>Changelog</item>
+        <item>Get Involved</item>
+        <item>3rd Party Libraries</item>
+    </string-array>
+    <string name="contributors">The GDG app is a community effort and open sourced. The following people contributed to the app:</string>
 </resources>
