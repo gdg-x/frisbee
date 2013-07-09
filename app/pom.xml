@@ -217,6 +217,9 @@
     </dependencies>
     <repositories>
         <repository>
+            <id>central</id>
+        </repository>
+        <repository>
             <id>gdg-x</id>
             <url>http://gdg-x.hp.af.cm/m2/</url>
         </repository>
