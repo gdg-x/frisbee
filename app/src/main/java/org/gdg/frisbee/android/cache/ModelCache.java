@@ -280,6 +280,27 @@ public class ModelCache {
         }.execute();
     }
 
+    public void getAsync(final String url, final boolean checkExpiration, final boolean forceFetch, final CacheListener mListener) {
+        new AsyncTask<Void,Void,Object>() {
+
+            @Override
+            protected Object doInBackground(Void... voids) {
+                if(!forceFetch)
+                    return ModelCache.this.get(url, checkExpiration);
+                else
+                    return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                if(o != null)
+                    mListener.onGet(o);
+                else
+                    mListener.onNotFound(url);
+            }
+        }.execute();
+    }
+
     public Object get(String url) {
         return get(url, true);
     }
@@ -335,6 +356,7 @@ public class ModelCache {
                     }
                 }
             } catch (IOException e) {
+                Log.e(LOG_TAG, "getFromDiskCache failed.", e);
                 e.printStackTrace();
             }
         }

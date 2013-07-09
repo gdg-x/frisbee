@@ -9,13 +9,23 @@ import java.util.ArrayList;
  * Time: 20:36
  * To change this template use File | Settings | File Templates.
  */
-public class GdlShowList extends ArrayList<GdlShow> {
+public class GdlShowList {
 
     private String mPagingCursor = null;
+    private ArrayList<GdlShow> mShows;
 
     public GdlShowList(String pagingCursor) {
         super();
+        mShows = new ArrayList<GdlShow>();
         mPagingCursor = pagingCursor;
+    }
+
+    public ArrayList<GdlShow> getShows() {
+        return mShows;
+    }
+
+    public void setShows(ArrayList<GdlShow> shows) {
+        mShows = shows;
     }
 
     public String getPagingCursor() {

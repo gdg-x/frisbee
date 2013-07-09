@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.activity;
 
 import android.os.Bundle;
+import com.actionbarsherlock.view.MenuItem;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockPreferenceActivity;
 import org.gdg.frisbee.android.R;
 
@@ -36,7 +37,19 @@ public class SettingsActivity extends RoboSherlockPreferenceActivity {
 
         if(getSupportActionBar() != null)
             getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         addPreferencesFromResource(R.xml.settings);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);    //To change body of overridden methods use File | Settings | File Templates.
     }
 }

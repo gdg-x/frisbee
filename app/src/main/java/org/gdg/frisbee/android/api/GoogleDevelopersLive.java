@@ -112,7 +112,7 @@ public class GoogleDevelopersLive {
                                     gdlShow.setYoutubeId(matcher.group(1));
                                 }
                             }
-                            showList.add(gdlShow);
+                            showList.getShows().add(gdlShow);
                         }
 
                         return showList;  //To change body of implemented methods use File | Settings | File Templates.

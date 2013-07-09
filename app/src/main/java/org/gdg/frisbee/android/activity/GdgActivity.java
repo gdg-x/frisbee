@@ -25,9 +25,12 @@ import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmen
 import com.google.android.gms.plus.GooglePlusUtil;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import org.gdg.frisbee.android.Const;
+import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.utils.PlayServicesHelper;
+import org.gdg.frisbee.android.utils.PullToRefreshTransformer;
 import org.gdg.frisbee.android.utils.ScopedBus;
 import org.gdg.frisbee.android.utils.Utils;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 
 /**
  * GDG Aachen
@@ -42,6 +45,7 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
     private static final String LOG_TAG = "GDG-GdgActivity";
 
     private PlayServicesHelper mPlayServicesHelper;
+    private PullToRefreshAttacher mPullToRefreshHelper;
 
     private SharedPreferences mPreferences;
     private Handler mHandler = new Handler();
@@ -60,6 +64,15 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
         super.onCreate(savedInstanceState);
 
         mPreferences = getSharedPreferences("gdg",MODE_PRIVATE);
+
+        if(getSupportActionBar() != null) {
+            PullToRefreshAttacher.Options d = new PullToRefreshAttacher.Options();
+            d.headerInAnimation = R.anim.fade_in;
+            d.headerOutAnimation = R.anim.fade_out;
+            d.headerLayout = R.layout.pull_to_refresh;
+            d.headerTransformer = new PullToRefreshTransformer();
+            mPullToRefreshHelper = new PullToRefreshAttacher(this, d);
+        }
 
         if(!Utils.isEmulator()) {
             int errorCode = GooglePlusUtil.checkGooglePlusApp(this);
@@ -98,6 +111,10 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
         if(mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
             mPlayServicesHelper.onStop();
         }
+    }
+
+    public PullToRefreshAttacher getPullToRefreshHelper() {
+        return mPullToRefreshHelper;
     }
 
     public PlayServicesHelper getPlayServicesHelper() {

@@ -78,6 +78,25 @@ public class NewsAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void replaceAll(Collection<Activity> items, int start) {
+        for(Activity a : items) {
+
+            if(start < mActivities.size()) {
+                if(a.getId().equals(mActivities.get(start).getActivity().getId())) {
+                    mActivities.set(start, new Item(a));
+                } else {
+                    mActivities.add(start, new Item(a));
+                    start++;
+                }
+            } else {
+                mActivities.add(new Item(a));
+            }
+
+            start++;
+        }
+        notifyDataSetChanged();
+    }
+
     public void add(Activity item) {
         mActivities.add(new Item(item));
         notifyDataSetChanged();

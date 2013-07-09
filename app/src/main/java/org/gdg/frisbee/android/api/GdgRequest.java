@@ -37,11 +37,19 @@ public abstract class GdgRequest<T> extends Request<T> {
     private static final String USER_AGENT = "GDG-Frisbee/0.1 (Android)";
     public static String mCsrfToken = null;
 
-    protected final Response.Listener<T> mListener;
+    protected Response.Listener<T> mListener;
 
     public GdgRequest(int method, String url, Response.Listener<T> listener, Response.ErrorListener errorListener) {
         super(method, url, errorListener);
         this.mListener = listener;
+    }
+
+    public void setResponseListener(Response.Listener<T> listener) {
+        mListener = listener;
+    }
+
+    public Response.Listener<T> getResponseListener() {
+        return mListener;
     }
 
     @Override
@@ -58,6 +66,7 @@ public abstract class GdgRequest<T> extends Request<T> {
         additionalHeaders.put("DNT", "1");
         return additionalHeaders;
     }
+
 
     @Override
     public byte[] getBody() throws AuthFailureError {

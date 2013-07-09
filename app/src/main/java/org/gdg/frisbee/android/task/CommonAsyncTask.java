@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.task;
 import android.os.AsyncTask;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * GDG Aachen
@@ -135,6 +136,13 @@ public class CommonAsyncTask<Params, Result> extends AsyncTask<Params, Void, Res
 
     public CommonAsyncTask<Params, Result> execute() {
         super.execute(mParams);
+        return this;
+    }
+
+    public CommonAsyncTask<Params, Result> executeWithAdditionalParams(Params[] p) {
+        Params[] result = Arrays.copyOf(mParams, mParams.length + p.length);
+        System.arraycopy(p, 0, result, mParams.length, p.length);
+        super.execute(result);
         return this;
     }
 }

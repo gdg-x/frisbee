@@ -65,7 +65,7 @@ public class GdlAdapter extends BaseAdapter {
     }
 
     public void clear() {
-        mShows.clear();
+        mShows.getShows().clear();
     }
 
     public void addAll(GdlShowList list) {
@@ -80,17 +80,17 @@ public class GdlAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int i) {
-        return Utils.stringToLong(mShows.get(i).getUrl());
+        return Utils.stringToLong(mShows.getShows().get(i).getUrl());
     }
 
     @Override
     public Object getItem(int i) {
-        return mShows.get(i);
+        return mShows.getShows().get(i);
     }
 
     @Override
     public int getCount() {
-        return mShows.size();
+        return mShows.getShows().size();
     }
 
 

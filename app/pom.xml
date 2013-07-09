@@ -78,6 +78,11 @@
             <version>2.2</version>
         </dependency>
         <dependency>
+            <groupId>com.github.chrisbanes.actionbarpulltorefresh</groupId>
+            <artifactId>extra-abs</artifactId>
+            <version>0.5</version>
+        </dependency>
+        <dependency>
             <groupId>de.keyboardsurfer.android.widget</groupId>
             <artifactId>crouton</artifactId>
             <version>1.8.1</version>

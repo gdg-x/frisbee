@@ -63,6 +63,7 @@ public class Builder<Params, Result> {
     }
 
     public CommonAsyncTask<Params, Result> build() {
+        mTask.setParameters((Params[])mParams.toArray());
         return mTask;
     }
 

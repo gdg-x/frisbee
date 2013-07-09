@@ -43,6 +43,7 @@ import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 
 import java.io.IOException;
 
@@ -54,7 +55,7 @@ import java.io.IOException;
  * Date: 20.04.13
  * Time: 12:22
  */
-public class NewsFragment extends GdgListFragment {
+public class NewsFragment extends GdgListFragment implements PullToRefreshAttacher.OnRefreshListener {
 
     private static final String LOG_TAG = "GDG-NewsFragment";
 
@@ -123,6 +124,8 @@ public class NewsFragment extends GdgListFragment {
         setListAdapter(mAdapter);
 
         registerForContextMenu(getListView());
+
+        ((GdgActivity)getActivity()).getPullToRefreshHelper().setRefreshableView(getListView(), this);
 
         if(getListView() instanceof ListView) {
             ListView listView = (ListView) getListView();
@@ -237,5 +240,49 @@ public class NewsFragment extends GdgListFragment {
     public void onDestroy() {
         super.onDestroy();
         Log.d(LOG_TAG, "onDestroy()");
+    }
+
+    @Override
+    public void onRefreshStarted(View view) {
+        if(Utils.isOnline(getActivity())) {
+            new Builder<String, ActivityFeed>(String.class, ActivityFeed.class)
+                    .addParameter(getArguments().getString("plus_id"))
+                    .setOnPreExecuteListener(new CommonAsyncTask.OnPreExecuteListener() {
+                        @Override
+                        public void onPreExecute() {
+                            setIsLoading(true);
+                        }
+                    })
+                    .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, ActivityFeed>() {
+                        @Override
+                        public ActivityFeed doInBackground(String... params) {
+                            try {
+
+                                    Plus.Activities.List request = mClient.activities().list(params[0], "public");
+                                    request.setMaxResults(10L);
+                                    request.setFields("nextPageToken,items(id,published,url,object/content,verb,object/attachments,annotation,object(plusoners,replies,resharers))");
+                                    ActivityFeed feed = request.execute();
+
+                                    App.getInstance().getModelCache().put("news_" + params[0], feed, DateTime.now().plusHours(1));
+
+                                return feed;
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            return null;
+                        }
+                    })
+                    .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<ActivityFeed>() {
+                        @Override
+                        public void onPostExecute(ActivityFeed activityFeed) {
+                            if(activityFeed != null) {
+                                mAdapter.replaceAll(activityFeed.getItems(), 0);
+                                setIsLoading(false);
+                                ((GdgActivity)getActivity()).getPullToRefreshHelper().setRefreshComplete();
+                            }
+                        }
+                    })
+                    .buildAndExecute();
+        }
     }
 }

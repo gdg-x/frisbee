@@ -22,13 +22,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.ListView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.inject.Inject;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgActivity;
+import org.gdg.frisbee.android.activity.GdlActivity;
 import org.gdg.frisbee.android.activity.YoutubeActivity;
 import org.gdg.frisbee.android.adapter.GdlAdapter;
 import org.gdg.frisbee.android.api.ApiRequest;
@@ -39,6 +42,9 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
+import roboguice.inject.InjectView;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
+import uk.co.senab.actionbarpulltorefresh.library.viewdelegates.AbsListViewDelegate;
 
 /**
  * Created with IntelliJ IDEA.
@@ -47,18 +53,21 @@ import org.joda.time.DateTime;
  * Time: 21:32
  * To change this template use File | Settings | File Templates.
  */
-public class GdlListFragment extends GdgListFragment {
+public class GdlListFragment extends GdgListFragment implements PullToRefreshAttacher.OnRefreshListener, GdlActivity.Listener {
 
     private static final String LOG_TAG = "GDG-GdlListFragment";
     private GoogleDevelopersLive mClient;
-    private ApiRequest mFetchContent;
+
+    @InjectView(R.id.list)
+    GridView mGrid;
 
     private GdlAdapter mAdapter;
 
-    public static GdlListFragment newInstance(String cat) {
+    public static GdlListFragment newInstance(String cat, boolean active) {
         GdlListFragment fragment = new GdlListFragment();
         Bundle arguments = new Bundle();
         arguments.putString("category", cat);
+        arguments.putBoolean("active", active);
         fragment.setArguments(arguments);
         return fragment;
     }
@@ -90,45 +99,58 @@ public class GdlListFragment extends GdgListFragment {
 
         setIsLoading(true);
 
-        mFetchContent = mClient.getRecordedShows(getArguments().getString("category"),
+        fetchContent(false);
+
+        if(getArguments().getBoolean("active")) {
+            onPageSelected();
+        }
+    }
+
+    private void setContent(final GdlShowList gdlShows, final boolean wasForced) {
+        App.getInstance().getModelCache().putAsync("gdl_shows_"+ getArguments().get("category"), gdlShows, DateTime.now().plusHours(3), new ModelCache.CachePutListener() {
+            @Override
+            public void onPutIntoCache() {
+                mAdapter.clear();
+                mAdapter.addAll(gdlShows);
+                setIsLoading(false);
+
+                if(wasForced)
+                    ((GdgActivity)getActivity()).getPullToRefreshHelper().setRefreshComplete();
+            }
+        });
+    }
+
+    private void fetchContent(final boolean force) {
+        setIsLoading(true);
+        final ApiRequest mRequest = mClient.getRecordedShows(getArguments().getString("category"),
                 new Response.Listener<GdlShowList>() {
                     @Override
                     public void onResponse(final GdlShowList gdlShows) {
-                        App.getInstance().getModelCache().putAsync("gdl_shows_"+ getArguments().get("category"), gdlShows, DateTime.now().plusHours(3), new ModelCache.CachePutListener() {
-                            @Override
-                            public void onPutIntoCache() {
-                                mAdapter.addAll(gdlShows);
-                                setIsLoading(false);
-                            }
-                        });
+                        setContent(gdlShows, force);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        //To change body of implemented methods use File | Settings | File Templates.
+                        Crouton.makeText(getActivity(), "Fetchi failed", Style.ALERT).show();
                     }
                 });
 
-        if(Utils.isOnline(getActivity())) {
-            mFetchContent.execute();
-        } else {
-            App.getInstance().getModelCache().getAsync("gdl_shows_"+ getArguments().get("category"), false, new ModelCache.CacheListener() {
-                @Override
-                public void onGet(Object item) {
-                    GdlShowList feed = (GdlShowList)item;
-
-                    Crouton.makeText(getActivity(), getString(R.string.cached_content), Style.INFO).show();
-                    mAdapter.addAll(feed);
-                    setIsLoading(false);
+        App.getInstance().getModelCache().getAsync("gdl_shows_"+ getArguments().get("category"), true, force, new ModelCache.CacheListener() {
+            @Override
+            public void onGet(Object item) {
+                if(!force) {
+                    Log.d(LOG_TAG, "from Cache.");
                 }
 
-                @Override
-                public void onNotFound(String key) {
-                    Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
-                }
-            });
-        }
+                setContent((GdlShowList) item, force);
+            }
+
+            @Override
+            public void onNotFound(String key) {
+                mRequest.execute();
+            }
+        });
     }
 
     @Override
@@ -151,5 +173,19 @@ public class GdlListFragment extends GdgListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
 
+    }
+
+    @Override
+    public void onRefreshStarted(View view) {
+        if(Utils.isOnline(getActivity())) {
+            fetchContent(true);
+        } else {
+            Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
+        }
+    }
+
+    @Override
+    public void onPageSelected() {
+        ((GdgActivity)getActivity()).getPullToRefreshHelper().setRefreshableView(getListView(), this);
     }
 }

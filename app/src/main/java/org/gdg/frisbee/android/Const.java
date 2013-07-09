@@ -49,4 +49,13 @@ public class Const {
     public static final String ACHIEVEMENT_RETURN = "CgkI_9Ga8sMGEAIQBA";
     public static final String ACHIEVEMENT_KING_OF_THE_HILL = "CgkI_9Ga8sMGEAIQBQ";
     public static final String ACHIEVEMENT_GDL_ADDICT = "CgkI_9Ga8sMGEAIQDg";
+
+    public static final class LogLevel {
+        public static final int NONE    = 0;
+        public static final int ERROR   = 1;
+        public static final int INFO    = 2;
+        public static final int DEBUG   = 3;
+    }
+
+    public static final int LOG_LEVEL = LogLevel.DEBUG;
 }
