@@ -81,6 +81,7 @@
             <groupId>com.github.chrisbanes.actionbarpulltorefresh</groupId>
             <artifactId>extra-abs</artifactId>
             <version>0.5</version>
+            <type>apklib</type>
         </dependency>
         <dependency>
             <groupId>de.keyboardsurfer.android.widget</groupId>
@@ -216,10 +217,6 @@
 		</dependency>
     </dependencies>
     <repositories>
-        <repository>
-            <id>central</id>
-            <url>http://repo1.maven.org/maven2</url>
-        </repository>
         <repository>
             <id>gdg-x</id>
             <url>http://gdg-x.hp.af.cm/m2/</url>
