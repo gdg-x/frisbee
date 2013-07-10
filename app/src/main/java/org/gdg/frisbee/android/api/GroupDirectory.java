@@ -22,12 +22,21 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.reflect.TypeToken;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
-import org.gdg.frisbee.android.api.model.Directory;
-import org.gdg.frisbee.android.api.model.Event;
+import org.gdg.frisbee.android.api.model.*;
 import org.gdg.frisbee.android.app.GdgVolley;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * GDG Aachen
@@ -44,6 +53,7 @@ public class GroupDirectory {
     private static final String ALL_CALENDAR_URL = BASE_URL + "/events/calendar/fc?start=1366581600&end=1367186400&_=1366664352089";
     private static final String GDL_CALENDAR_URL = BASE_URL + "/events/calendar/fc?calendar=gdl&start=1366581600&end=1367186400&_=1366664644691";
     private static final String CHAPTER_CALENDAR_URL = BASE_URL + "/groups/chapter/%s/feed/events/fc";
+    private static final String EVENT_DETAIL_URL = BASE_URL + "/events/%s/";
     private static final String SHOWCASE_NEXT_URL = BASE_URL + "/showcase/next";
 
     private static final String LOG_TAG = "GDG-GroupDirectory";
@@ -110,5 +120,26 @@ public class GroupDirectory {
                 GsonRequest.getGson(FieldNamingPolicy.IDENTITY));
 
         return new ApiRequest(eventReq);
+    }
+
+    public ApiRequest getEventDetail(String id, Response.Listener<EventDetail> successListener, Response.ErrorListener errorListener) {
+
+        JsoupRequest<EventDetail> dirReq = new JsoupRequest<EventDetail>(Request.Method.GET,
+                String.format(EVENT_DETAIL_URL, id),
+                new JsoupRequest.ParseListener<EventDetail>() {
+                    @Override
+                    public EventDetail parse(Document doc) {
+
+                        EventDetail event = new EventDetail();
+
+                        event.setTitle(doc.select("h1 a span").first().text());
+                        event.setGplusEventUrl(doc.select("section#event-details-beta a").first().attr("href"));
+
+                        return event;  //To change body of implemented methods use File | Settings | File Templates.
+                    }
+                },
+                successListener,
+                errorListener);
+        return new ApiRequest(dirReq);
     }
 }

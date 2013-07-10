@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.fragment;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.AdapterView;
@@ -29,6 +30,7 @@ import org.gdg.frisbee.android.adapter.EventAdapter;
 import org.gdg.frisbee.android.api.ApiRequest;
 import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.Event;
+import org.gdg.frisbee.android.api.model.EventDetail;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.Utils;
@@ -52,6 +54,13 @@ public class EventFragment extends GdgListFragment {
 
     private int mSelectedMonth;
     private EventAdapter mAdapter;
+
+    private ArrayList<Event> mEvents;
+    private ApiRequest mFetchEvents;
+    private int mRetries = 5;
+    private Response.Listener<ArrayList<Event>> mListener;
+    private Response.ErrorListener mErrorListener;
+    private DateTime mStart, mEnd;
 
     public static EventFragment newInstance(String plusId) {
         EventFragment fragment = new EventFragment();
@@ -89,32 +98,45 @@ public class EventFragment extends GdgListFragment {
         mAdapter = new EventAdapter(getActivity());
         setListAdapter(mAdapter);
 
-        DateTime start = getMonthStart(mSelectedMonth);
-        DateTime end = getMonthStart(mSelectedMonth).plusDays(30);
+        mStart = new DateTime().dayOfMonth().withMinimumValue();
+        mEnd = new DateTime().dayOfMonth().withMaximumValue();
         setIsLoading(true);
 
-        ApiRequest req = mClient.getChapterEventList(start, end, getArguments().getString("plus_id"), new Response.Listener<ArrayList<Event>>() {
-                @Override
-                public void onResponse(final ArrayList<Event> events) {
-                    App.getInstance().getModelCache().putAsync("event_"+ getArguments().getString("plus_id"), events, DateTime.now().plusHours(2), new ModelCache.CachePutListener() {
+        mEvents = new ArrayList<Event>();
+        mListener = new Response.Listener<ArrayList<Event>>() {
+            @Override
+            public void onResponse(final ArrayList<Event> events) {
+                mEvents.addAll(events);
+
+                if(mEvents.size() == 0 && mRetries > 0) {
+                    mRetries--;
+                    mStart = mStart.minusMonths(1).dayOfMonth().withMinimumValue();
+                    mEnd = mEnd.minusMonths(1).dayOfMonth().withMaximumValue();
+                    mFetchEvents = mClient.getChapterEventList(mStart, mEnd, getArguments().getString("plus_id"), mListener , mErrorListener);
+                    mFetchEvents.execute();
+                } else {
+                    mRetries = 5;
+                    App.getInstance().getModelCache().putAsync("event_"+ getArguments().getString("plus_id"), mEvents, DateTime.now().plusHours(2), new ModelCache.CachePutListener() {
                         @Override
                         public void onPutIntoCache() {
-                            mAdapter.addAll(events);
+                            mAdapter.addAll(mEvents);
                             setIsLoading(false);
                         }
                     });
-
                 }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError volleyError) {
-                    setIsLoading(false);
-                    Crouton.makeText(getActivity(), getString(R.string.fetch_events_failed), Style.ALERT).show();
-                }
-         });
+            }
+        };
+        mErrorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                setIsLoading(false);
+                Crouton.makeText(getActivity(), getString(R.string.fetch_events_failed), Style.ALERT).show();
+            }
+        };
+        mFetchEvents = mClient.getChapterEventList(mStart, mEnd, getArguments().getString("plus_id"), mListener , mErrorListener);
 
         if(Utils.isOnline(getActivity())) {
-            req.execute();
+            mFetchEvents.execute();
         } else {
             App.getInstance().getModelCache().getAsync("event_"+ getArguments().getString("plus_id"), false, new ModelCache.CacheListener() {
                 @Override
@@ -156,6 +178,47 @@ public class EventFragment extends GdgListFragment {
             default:
                 return super.onContextItemSelected(item);
         }
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        final Event event = (Event) mAdapter.getItem(position);
+
+        App.getInstance().getModelCache().getAsync("event_detail_"+event.getId(), new ModelCache.CacheListener() {
+            @Override
+            public void onGet(Object item) {
+                EventDetail eventDetail = (EventDetail) item;
+                openEventInGPlus(eventDetail.getGplusEventUrl());
+            }
+
+            @Override
+            public void onNotFound(String key) {
+                mClient.getEventDetail(event.getId(), new Response.Listener<EventDetail>() {
+                            @Override
+                            public void onResponse(final EventDetail eventDetail) {
+                                App.getInstance().getModelCache().putAsync("event_detail_"+event.getId(), eventDetail, new ModelCache.CachePutListener() {
+                                    @Override
+                                    public void onPutIntoCache() {
+                                        openEventInGPlus(eventDetail.getGplusEventUrl());
+                                    }
+                                });
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError volleyError) {
+                                //To change body of implemented methods use File | Settings | File Templates.
+                            }
+                        }).execute();
+            }
+        });
+    }
+
+    public void openEventInGPlus(String uri) {
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(uri));
+        startActivity(i);
     }
 
     public void addEventToCalendar(Event event) {
