@@ -70,7 +70,7 @@
         <dependency>
             <groupId>com.squareup</groupId>
             <artifactId>otto</artifactId>
-            <version>1.3.3</version>
+            <version>1.3.4</version>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>
@@ -106,7 +106,7 @@
         <dependency>
             <groupId>com.google.http-client</groupId>
             <artifactId>google-http-client-gson</artifactId>
-            <version>1.14.1-beta</version>
+            <version>1.15.0-rc</version>
             <exclusions>
                 <exclusion>
                     <artifactId>xpp3</artifactId>
@@ -117,7 +117,7 @@
         <dependency>
             <groupId>com.google.apis</groupId>
             <artifactId>google-api-services-plus</artifactId>
-            <version>v1-rev66-1.14.1-beta</version>
+            <version>v1-rev81-1.15.0-rc</version>
             <exclusions>
                 <exclusion>
                     <artifactId>xpp3</artifactId>
@@ -143,7 +143,7 @@
         <dependency>
             <groupId>com.google.api-client</groupId>
             <artifactId>google-api-client-android</artifactId>
-            <version>1.14.1-beta</version>
+            <version>1.15.0-rc</version>
             <exclusions>
                 <exclusion>
                     <artifactId>xpp3</artifactId>
@@ -158,7 +158,7 @@
         <dependency>
             <groupId>ch.acra</groupId>
             <artifactId>acra</artifactId>
-            <version>4.4.0</version>
+            <version>4.5.0</version>
         </dependency>
         <dependency>
             <groupId>com.github.rtyley</groupId>
