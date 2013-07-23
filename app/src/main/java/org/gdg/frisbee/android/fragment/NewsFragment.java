@@ -278,7 +278,9 @@ public class NewsFragment extends GdgListFragment implements PullToRefreshAttach
                             if(activityFeed != null) {
                                 mAdapter.replaceAll(activityFeed.getItems(), 0);
                                 setIsLoading(false);
-                                ((GdgActivity)getActivity()).getPullToRefreshHelper().setRefreshComplete();
+
+                                if(getActivity() != null)
+                                    ((GdgActivity)getActivity()).getPullToRefreshHelper().setRefreshComplete();
                             }
                         }
                     })
