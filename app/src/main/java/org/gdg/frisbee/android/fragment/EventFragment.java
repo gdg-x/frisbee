@@ -58,6 +58,7 @@ public class EventFragment extends GdgListFragment {
     private ArrayList<Event> mEvents;
     private ApiRequest mFetchEvents;
     private int mRetries = 5;
+    private int mFetchFuture = 1;
     private Response.Listener<ArrayList<Event>> mListener;
     private Response.ErrorListener mErrorListener;
     private DateTime mStart, mEnd;
@@ -98,8 +99,8 @@ public class EventFragment extends GdgListFragment {
         mAdapter = new EventAdapter(getActivity());
         setListAdapter(mAdapter);
 
-        mStart = new DateTime().dayOfMonth().withMinimumValue();
-        mEnd = new DateTime().dayOfMonth().withMaximumValue();
+        mStart = new DateTime().plusMonths(mFetchFuture).dayOfMonth().withMinimumValue();
+        mEnd = new DateTime().plusMonths(mFetchFuture).dayOfMonth().withMaximumValue();
         setIsLoading(true);
 
         mEvents = new ArrayList<Event>();
@@ -108,14 +109,20 @@ public class EventFragment extends GdgListFragment {
             public void onResponse(final ArrayList<Event> events) {
                 mEvents.addAll(events);
 
-                if(mEvents.size() == 0 && mRetries > 0) {
-                    mRetries--;
+                if(mFetchFuture > 0 || (mEvents.size() == 0 && mRetries > 0)) {
+                    if(mFetchFuture > 0) {
+                        mFetchFuture--;
+                    } else {
+                        mRetries--;
+                    }
+
                     mStart = mStart.minusMonths(1).dayOfMonth().withMinimumValue();
                     mEnd = mEnd.minusMonths(1).dayOfMonth().withMaximumValue();
                     mFetchEvents = mClient.getChapterEventList(mStart, mEnd, getArguments().getString("plus_id"), mListener , mErrorListener);
                     mFetchEvents.execute();
                 } else {
                     mRetries = 5;
+                    mFetchFuture = 1;
                     App.getInstance().getModelCache().putAsync("event_"+ getArguments().getString("plus_id"), mEvents, DateTime.now().plusHours(2), new ModelCache.CachePutListener() {
                         @Override
                         public void onPutIntoCache() {
