@@ -128,6 +128,15 @@ public class MyView extends AbsListView {
         Log.d(LOG_TAG, "setAdapter()");
     }
 
+    @Override
+    public View getChildAt(int index) {
+        if(mRoot == null)
+            return super.getChildAt(index);
+
+        ViewGroup vg = (ViewGroup) mRoot.getChildAt(0);
+        return vg.getChildAt(index);
+    }
+
     private void applyAdapterUpdate() {
         for(WrapAdapter a : mAdapters) {
             a.clear();
@@ -154,6 +163,18 @@ public class MyView extends AbsListView {
             }
         }
         return a;
+    }
+
+    @Override
+    public int getFirstVisiblePosition() {
+        int val = 0;
+        for(int i = 0; i < mColumnCount; i++) {
+            ListView lv = (ListView) mRoot.getChildAt(i);
+            if(lv.getFirstVisiblePosition() > val)
+                val = lv.getFirstVisiblePosition();
+        }
+        Log.d(LOG_TAG, "Visible: "+ val);
+        return val;
     }
 
     @Override
@@ -200,6 +221,11 @@ public class MyView extends AbsListView {
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         //return super.onInterceptTouchEvent(ev);
         return true;
+    }
+
+    @Override
+    public int getCount() {
+        return mAdapter.getCount();
     }
 
     public class WrapAdapter extends BaseAdapter {

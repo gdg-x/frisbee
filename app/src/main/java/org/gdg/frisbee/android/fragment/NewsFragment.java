@@ -21,6 +21,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.*;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import com.google.android.gms.plus.PlusShare;
@@ -125,7 +126,19 @@ public class NewsFragment extends GdgListFragment implements PullToRefreshAttach
 
         registerForContextMenu(getListView());
 
-        ((GdgActivity)getActivity()).getPullToRefreshHelper().setRefreshableView(getListView(), this);
+        ((GdgActivity)getActivity()).getPullToRefreshHelper().setRefreshableView(getListView(), new PullToRefreshAttacher.ViewDelegate() {
+            @Override
+            public boolean isScrolledToTop(View view) {
+                AbsListView absListView = (AbsListView) view;
+                if (absListView.getCount() == 0) {
+                    return true;
+                } else if (absListView.getFirstVisiblePosition() == 0) {
+                    final View firstVisibleChild = absListView.getChildAt(0);
+                    return firstVisibleChild != null && firstVisibleChild.getTop() >= 0;
+                }
+                return false;
+            }
+        }, this, true);
 
         if(getListView() instanceof ListView) {
             ListView listView = (ListView) getListView();
