@@ -13,15 +13,16 @@
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent" android:padding="10dip">
-            <view android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  class="org.gdg.frisbee.android.view.ResizableImageView" android:id="@+id/view"
-                  android:src="@drawable/gdg_world"/>
             <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/about_license"
-                    android:id="@+id/textView" android:layout_marginTop="10dip"/>
+                    android:id="@+id/textView" android:layout_marginTop="10dip" android:gravity="center_horizontal"/>
+            <view android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  class="org.gdg.frisbee.android.view.ResizableImageView" android:id="@+id/view"
+                  android:src="@drawable/gdg_world" android:layout_marginLeft="200dip"
+                  android:layout_marginRight="200dip"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
