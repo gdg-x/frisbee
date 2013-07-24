@@ -29,6 +29,9 @@ import com.squareup.picasso.LruCache;
 import com.squareup.picasso.Picasso;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
+import org.acra.ACRA;
+import org.acra.annotation.ReportsCrashes;
+import org.acra.sender.HttpSender;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.CompatOkHttpLoader;
@@ -44,6 +47,8 @@ import java.net.URL;
  * Date: 20.04.13
  * Time: 12:09
  */
+
+@ReportsCrashes(httpMethod = HttpSender.Method.POST, reportType = HttpSender.Type.JSON, formUri = "https://gdg-x.hp.af.cm/api/v1/bug/report", formKey = "", disableSSLCertValidation = true)
 public class App extends Application {
 
     private static App mInstance = null;
@@ -63,6 +68,9 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        // Initialize ACRA Bugreporting (reports get send to GDG[x] Hub)
+        ACRA.init(this);
 
         // Workaround for OkHttp Bug #184. Do it only once
         if(mFix == false) {
