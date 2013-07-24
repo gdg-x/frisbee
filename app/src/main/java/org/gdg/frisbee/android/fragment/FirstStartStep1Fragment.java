@@ -1,5 +1,7 @@
 package org.gdg.frisbee.android.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +25,7 @@ import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.utils.ChapterComparator;
 import org.gdg.frisbee.android.utils.GingerbreadLastLocationFinder;
 import org.joda.time.DateTime;
 import roboguice.inject.InjectView;
@@ -45,8 +48,7 @@ public class FirstStartStep1Fragment extends RoboSherlockFragment {
     private ApiRequest mFetchChaptersTask;
     private ChapterAdapter mSpinnerAdapter;
     private GroupDirectory mClient;
-    private GingerbreadLastLocationFinder mLocationFinder;
-    private Location mLastLocation;
+
     private Chapter mSelectedChapter;
 
     @InjectView(R.id.chapter_spinner)
@@ -58,33 +60,8 @@ public class FirstStartStep1Fragment extends RoboSherlockFragment {
     @InjectView(R.id.viewSwitcher)
     ViewSwitcher mLoadSwitcher;
 
-
-
-    private Comparator<Chapter> mLocationComparator = new Comparator<Chapter>() {
-        @Override
-        public int compare(Chapter chapter, Chapter chapter2) {
-            float[] results = new float[1];
-            float[] results2 = new float[1];
-
-            if(mLastLocation == null)
-                return chapter.getName().compareTo(chapter2.getName());
-
-            if(chapter.getGeo() == null)
-                return 1;
-            if(chapter2.getGeo() == null)
-                return -1;
-
-            Location.distanceBetween(mLastLocation.getLatitude(), mLastLocation.getLongitude(), chapter.getGeo().getLat(), chapter.getGeo().getLng(), results);
-            Location.distanceBetween(mLastLocation.getLatitude(), mLastLocation.getLongitude(), chapter2.getGeo().getLat(), chapter2.getGeo().getLng(), results2);
-
-            if(results[0] == results2[0])
-                return 0;
-            else if(results[0] > results2[0])
-                return 1;
-            else
-                return -1;
-        }
-    };
+    private SharedPreferences mPreferences;
+    private ChapterComparator mLocationComparator;
 
     public static FirstStartStep1Fragment newInstance() {
         Log.d(LOG_TAG, "newInstance");
@@ -108,12 +85,16 @@ public class FirstStartStep1Fragment extends RoboSherlockFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onActivityCreated()");
+
         super.onActivityCreated(savedInstanceState);
 
         int errorCode = GooglePlusUtil.checkGooglePlusApp(getActivity());
         if (errorCode != GooglePlusUtil.SUCCESS) {
             GooglePlusUtil.getErrorDialog(errorCode, getActivity(), 0).show();
         }
+
+        mPreferences = getActivity().getSharedPreferences("gdg", Context.MODE_PRIVATE);
+        mLocationComparator = new ChapterComparator(mPreferences);
 
         mClient = new GroupDirectory();
         mSpinnerAdapter = new ChapterAdapter(getActivity(), android.R.layout.simple_list_item_1);
@@ -122,8 +103,6 @@ public class FirstStartStep1Fragment extends RoboSherlockFragment {
             mSelectedChapter = savedInstanceState.getParcelable("selected_chapter");
         }
 
-        mLocationFinder = new GingerbreadLastLocationFinder(getActivity());
-        mLastLocation = mLocationFinder.getLastBestLocation(5000,60*60*1000);
         mFetchChaptersTask = mClient.getDirectory(new Response.Listener<Directory>() {
                   @Override
                   public void onResponse(final Directory directory) {

@@ -20,6 +20,9 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.os.Bundle;
 import android.os.Environment;
 import android.widget.Toast;
 import com.google.analytics.tracking.android.EasyTracker;
@@ -36,6 +39,7 @@ import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.CompatOkHttpLoader;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.utils.GingerbreadLastLocationFinder;
 import uk.co.senab.bitmapcache.BitmapLruCache;
 
 import java.io.File;
@@ -49,7 +53,7 @@ import java.net.URL;
  */
 
 @ReportsCrashes(httpMethod = HttpSender.Method.POST, reportType = HttpSender.Type.JSON, formUri = "https://gdg-x.hp.af.cm/api/v1/bug/report", formKey = "", disableSSLCertValidation = true)
-public class App extends Application {
+public class App extends Application implements LocationListener {
 
     private static App mInstance = null;
     private static boolean mFix = false;
@@ -64,6 +68,8 @@ public class App extends Application {
     private SharedPreferences mPreferences;
     private GoogleAnalytics mGaInstance;
     private Tracker mTracker;
+    private GingerbreadLastLocationFinder mLocationFinder;
+    private Location mLastLocation;
 
     @Override
     public void onCreate() {
@@ -92,24 +98,32 @@ public class App extends Application {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
+        // Initialize ModelCache and Volley
         getModelCache();
         getBitmapCache();
         GdgVolley.init(this);
 
         mPreferences.edit().putInt(Const.SETTINGS_APP_STARTS, mPreferences.getInt(Const.SETTINGS_APP_STARTS,0)+1).commit();
 
+        // Initialize Picasso
         mPicasso = new Picasso.Builder(this)
                 .loader(new CompatOkHttpLoader(this))
                 .memoryCache(new LruCache(this))
                 .build();
         mPicasso.setDebugging(false);
 
+        // Initialize GA
         mGaInstance = GoogleAnalytics.getInstance(getApplicationContext());
         mTracker = mGaInstance.getTracker(getString(R.string.ga_trackingId));
         GAServiceManager.getInstance().setDispatchPeriod(0);
         mTracker.setAppName(getString(R.string.app_name));
         mTracker.setAnonymizeIp(true);
         mGaInstance.setDefaultTracker(mTracker);
+
+        // Init LastLocationFinder
+        mLocationFinder = new GingerbreadLastLocationFinder(this);
+        mLocationFinder.setChangedLocationListener(this);
+        updateLastLocation();
     }
 
     public void migrate(int oldVersion, int newVersion) {
@@ -130,6 +144,17 @@ public class App extends Application {
         Toast.makeText(getApplicationContext(), "Alpha version always resets Preferences on update.", Toast.LENGTH_LONG).show();
 
         mPreferences.edit().putInt(Const.SETTINGS_VERSION_CODE, newVersion).commit();
+    }
+
+    public void updateLastLocation() {
+        Location loc = mLocationFinder.getLastBestLocation(5000,60*60*1000);
+
+        if(loc != null)
+            mLastLocation = loc;
+    }
+
+    public Location getLastLocation() {
+        return mLastLocation;
     }
 
     public Picasso getPicasso() {
@@ -191,5 +216,22 @@ public class App extends Application {
                 deleteDirectory(child);
 
         dir.delete();
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mLastLocation = location;
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
     }
 }

@@ -56,6 +56,7 @@ import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.fragment.EventFragment;
 import org.gdg.frisbee.android.fragment.InfoFragment;
 import org.gdg.frisbee.android.fragment.NewsFragment;
+import org.gdg.frisbee.android.utils.ChapterComparator;
 import org.gdg.frisbee.android.utils.GingerbreadLastLocationFinder;
 import org.gdg.frisbee.android.utils.PlayServicesHelper;
 import org.gdg.frisbee.android.utils.Utils;
@@ -94,44 +95,11 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
     private SharedPreferences mPreferences;
     private LocationManager mLocationManager;
     private GroupDirectory mClient;
-    private GingerbreadLastLocationFinder mLocationFinder;
-    private Location mLastLocation;
 
     private boolean mFirstStart = false;
 
-    private Comparator<Chapter> mLocationComparator = new Comparator<Chapter>() {
-        @Override
-        public int compare(Chapter chapter, Chapter chapter2) {
-            float[] results = new float[1];
-            float[] results2 = new float[1];
+    private ChapterComparator mLocationComparator;
 
-            if(mLastLocation == null)
-                return chapter.getName().compareTo(chapter2.getName());
-
-            if(chapter.getGeo() == null)
-                return 1;
-            if(chapter2.getGeo() == null)
-                return -1;
-
-            if(chapter.getGplusId().equals(mPreferences.getString(Const.SETTINGS_HOME_GDG,""))) {
-                return -1;
-            }
-
-            if(chapter2.getGplusId().equals(mPreferences.getString(Const.SETTINGS_HOME_GDG,""))) {
-                return 1;
-            }
-
-            Location.distanceBetween(mLastLocation.getLatitude(), mLastLocation.getLongitude(), chapter.getGeo().getLat(), chapter.getGeo().getLng(), results);
-            Location.distanceBetween(mLastLocation.getLatitude(), mLastLocation.getLongitude(), chapter2.getGeo().getLat(), chapter2.getGeo().getLng(), results2);
-
-            if(results[0] == results2[0])
-                return 0;
-            else if(results[0] > results2[0])
-                return 1;
-            else
-                return -1;
-        }
-    };
 
     /**
      * Called when the activity is first created.
@@ -149,8 +117,7 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
 
         mClient = new GroupDirectory();
 
-        mLocationFinder = new GingerbreadLastLocationFinder(this);
-        mLastLocation = mLocationFinder.getLastBestLocation(5000,60*60*1000);
+        mLocationComparator = new ChapterComparator(mPreferences);
 
         //if(!Utils.isEmulator())
         //    Log.d(LOG_TAG, mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER).toString());
@@ -172,6 +139,8 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
                 //To change body of implemented methods use File | Settings | File Templates.
             }
         });
+
+
 
         mDrawerAdapter = new DrawerAdapter(this);
         mDrawerContent.setAdapter(mDrawerAdapter);
