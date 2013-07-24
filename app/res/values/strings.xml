@@ -60,7 +60,7 @@
     <plurals name="hours_ago">
         <item quantity="zero">now</item>
         <item quantity="one">1 hour ago</item>
-        <item quantity="other">%d days ago</item>
+        <item quantity="other">%d hours ago</item>
     </plurals>
     <plurals name="days_ago">
         <item quantity="zero">now</item>

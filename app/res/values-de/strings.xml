@@ -59,7 +59,7 @@
     <plurals name="hours_ago">
         <item quantity="zero">gerade</item>
         <item quantity="one">vor einer Stunde</item>
-        <item quantity="other">vor %d Tagen</item>
+        <item quantity="other">vor %d Stunden</item>
     </plurals>
     <plurals name="days_ago">
         <item quantity="zero">gerade</item>

@@ -65,11 +65,11 @@ public class Utils {
         Resources res = ctx.getResources();
         Period p = new Period(start, end);
 
-        if(p.getYears() == 0 && p.getMonths() == 0 && p.getDays() == 0 && p.getHours() == 0 && p.getMinutes() == 0) {
+        if(p.getYears() == 0 && p.getMonths() == 0 && p.getWeeks() == 0 && p.getDays() == 0 && p.getHours() == 0 && p.getMinutes() == 0) {
             result = res.getQuantityString(R.plurals.seconds_ago, p.getSeconds(), p.getSeconds());
-        } else if(p.getYears() == 0 && p.getMonths() == 0 && p.getDays() == 0 && p.getHours() == 0) {
+        } else if(p.getYears() == 0 && p.getMonths() == 0 && p.getWeeks() == 0 && p.getDays() == 0 && p.getHours() == 0) {
             result = res.getQuantityString(R.plurals.minutes_ago, p.getMinutes(), p.getMinutes());
-        } else if(p.getYears() == 0 && p.getMonths() == 0 && p.getDays() == 0) {
+        } else if(p.getYears() == 0 && p.getMonths() == 0 && p.getWeeks() == 0 && p.getDays() == 0) {
             result = res.getQuantityString(R.plurals.hours_ago, p.getHours(), p.getHours());
         } else if(p.getYears() == 0 && p.getMonths() == 0 && p.getWeeks() == 0){
             result = res.getQuantityString(R.plurals.days_ago, p.getDays(), p.getDays());
