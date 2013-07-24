@@ -28,7 +28,7 @@
 	
 	<groupId>org.gdg</groupId>
     <artifactId>frisbee-app</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>0.7-ALPHA</version>
 	<name>GDG[X] Frisbee - App</name>
     <packaging>apk</packaging>
 

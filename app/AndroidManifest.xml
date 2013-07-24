@@ -16,7 +16,7 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="org.gdg.frisbee.android" android:versionCode="8" android:versionName="0.6-ALPHA">
+  package="org.gdg.frisbee.android" android:versionCode="9" android:versionName="0.7-ALPHA">
     <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="16" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
