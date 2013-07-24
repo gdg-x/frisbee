@@ -119,9 +119,6 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
 
         mLocationComparator = new ChapterComparator(mPreferences);
 
-        //if(!Utils.isEmulator())
-        //    Log.d(LOG_TAG, mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER).toString());
-
         mIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i2) {

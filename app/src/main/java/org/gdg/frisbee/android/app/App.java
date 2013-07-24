@@ -40,6 +40,7 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.CompatOkHttpLoader;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.GingerbreadLastLocationFinder;
+import org.gdg.frisbee.android.utils.Utils;
 import uk.co.senab.bitmapcache.BitmapLruCache;
 
 import java.io.File;
@@ -147,6 +148,9 @@ public class App extends Application implements LocationListener {
     }
 
     public void updateLastLocation() {
+        if(Utils.isEmulator())
+            return;
+
         Location loc = mLocationFinder.getLastBestLocation(5000,60*60*1000);
 
         if(loc != null)
