@@ -173,7 +173,7 @@ public class InfoFragment extends RoboSherlockFragment {
 
                             if(person == null) {
                                 Plus.People.Get request = mClient.people().get(params[0]);
-                                request.setFields("aboutMe,circledByCount,cover/coverPhoto/url,currentLocation,displayName,emails/primary,plusOneCount,tagline,urls");
+                                request.setFields("aboutMe,circledByCount,cover/coverPhoto/url,currentLocation,displayName,plusOneCount,tagline,urls");
                                 person = request.execute();
 
                                 App.getInstance().getModelCache().put("person_" + params[0], person, DateTime.now().plusDays(2));
