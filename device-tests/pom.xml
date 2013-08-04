@@ -53,7 +53,7 @@
             phase. -->
             <groupId>org.gdg</groupId>
             <artifactId>frisbee-app</artifactId>
-            <version>0.7-ALPHA</version>
+            <version>0.8-ALPHA</version>
             <type>apk</type>
             <scope>provided</scope>
         </dependency>
@@ -62,7 +62,7 @@
             <!-- optional: compile time dependency, in this case so that we can read from the R.java for example. -->
             <groupId>org.gdg</groupId>
             <artifactId>frisbee-app</artifactId>
-            <version>0.7-ALPHA</version>
+            <version>0.8-ALPHA</version>
             <scope>provided</scope>
             <type>jar</type>
         </dependency>

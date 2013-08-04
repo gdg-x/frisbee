@@ -22,13 +22,13 @@
 	<parent>
 		<groupId>org.gdg</groupId>
 		<artifactId>frisbee</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>0.8-ALPHA</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	
 	<groupId>org.gdg</groupId>
     <artifactId>frisbee-app</artifactId>
-    <version>0.7-ALPHA</version>
+    <version>0.8-ALPHA</version>
 	<name>GDG[X] Frisbee - App</name>
     <packaging>apk</packaging>
 
