@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2013 The GDG Frisbee Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ 	http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="news">Nieuws</string>
+    <string name="drawer_open">Open Drawer</string>
+    <string name="drawer_close">Sluit Drawer</string>
+    <string name="info">Info</string>
+    <string name="events">Events</string>
+    <string name="app_name">GDG</string>
+    <string name="add_to_calendar">Aan de kalender toevoegen</string>
+    <string name="share_with_googleplus">Met Google+ delen</string>
+    <string name="no_scheduled_events">Geen events binnen de folgende 30 dagen</string>
+    <string name="about">Over</string>
+    <string name="organizers">Organisatoren</string>
+    <string name="resources">Links</string>
+    <string name="fetch_events_failed">Kan geen aanstande events ophalen</string>
+    <string name="fetch_chapters_failed">Kan de chapter lijst niet ophalen</string>
+    <string name="bogus_organizer">Organisatoren Id: %1$s kan niet geparset worden</string>
+    <string name="cached_content">Jij bent momenteel offline. Hier is een beetje opgeslagen inhoud.</string>
+    <string name="offline_alert">Jij bent momenteel offline.</string>
+    <string name="welcome">Welkom.</string>
+    <string name="choose_home_gdg">Kies je lokale GDG</string>
+    <string name="signin_with_google">Inloggen met Google</string>
+    <string name="confirm">Bevestigen</string>
+    <string name="signin_description">De GDG App integreert met Google+ en andere Google-services. Om deze functies te gebruiken moet je jezelf aanmelden met Google.</string>
+    <string name="or">of</string>
+    <string name="no_thanks">Nee, bedankt.</string>
+    <string name="skip">Sign-in overslaan</string>
+    <string name="youtube_init_failed">YouTube Player kan niet geïnitialiseerd worden.</string>
+    <string name="bogus_organizer">Organisatoren Id: %1$s kan niet geparset worden</string>
+    <string name="achievements">Successen</string>
+    <string name="settings">Instellingen</string>
+    <string name="about">About</string>
+    <string name="gdl">Google Developers Live</string>
+    <plurals name="seconds_ago">
+        <item quantity="zero">nu</item>
+        <item quantity="one">zo net</item>
+        <item quantity="other">%d seconden geleden</item>
+    </plurals>
+    <plurals name="minutes_ago">
+        <item quantity="zero">nu</item>
+        <item quantity="one">1 minuut geleden</item>
+        <item quantity="other">%d minuten geleden</item>
+    </plurals>
+    <plurals name="hours_ago">
+        <item quantity="zero">nu</item>
+        <item quantity="one">1 uur geleden</item>
+        <item quantity="other">%d uur geleden</item>
+    </plurals>
+    <plurals name="days_ago">
+        <item quantity="zero">vandaag</item>
+        <item quantity="one">1 dag geleden</item>
+        <item quantity="other">%d dagen geleden</item>
+    </plurals>
+    <string-array name="gdl_catgories">
+        <item>Android</item>
+        <item>Google+</item>
+        <item>Chrome</item>
+        <item>Cloud</item>
+        <item>Maps</item>
+        <item>YouTube</item>
+        <item>Drive</item>
+        <item>Google I/O</item>
+        <item>Ads</item>
+        <item>Analytics</item>
+        <item>Commerce</item>
+        <item>Google TV</item>
+        <item>Primetime</item>
+    </string-array>
+    <string-array name="gdl_catgories_url">
+        <item>android</item>
+        <item>+</item>
+        <item>chrome</item>
+        <item>cloud</item>
+        <item>maps</item>
+        <item>youtube</item>
+        <item>drive</item>
+        <item>io</item>
+        <item>ads</item>
+        <item>analytics</item>
+        <item>commerce</item>
+        <item>tv</item>
+        <item>primetime</item>
+    </string-array>
+    <string-array name="about_tabs">
+        <item>Over</item>
+        <item>Bijdragers</item>
+        <item>Changelog</item>
+        <item>Meedoen</item>
+        <item>3rd Party Bibliotheken</item>
+    </string-array>
+    <string name="contributors">The GDG app is a community effort and open sourced. The following people contributed to the app:</string>
+    <string name="get_involved">Get Involved!</string>
+    <string name="get_involved_text">The GDG app is a community effort and open sourced. Everyone is welcome to participate and improve this app.\n\nJust head over to GitHub and checkout our code.</string>
+    <string name="about_license">(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof the Apache 2.0 License</string>
+    <string name="past_event">PAST</string>
+</resources>
