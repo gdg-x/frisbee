@@ -104,9 +104,9 @@
         <item>Meedoen</item>
         <item>3rd Party Bibliotheken</item>
     </string-array>
-    <string name="contributors">The GDG app is a community effort and open sourced. The following people contributed to the app:</string>
-    <string name="get_involved">Get Involved!</string>
-    <string name="get_involved_text">The GDG app is a community effort and open sourced. Everyone is welcome to participate and improve this app.\n\nJust head over to GitHub and checkout our code.</string>
+    <string name="contributors">De GDG app is een community moeite en open sourced. De volgende personen hebben eraan meegewerkt:</string>
+    <string name="get_involved">Meedoen!</string>
+    <string name="get_involved_text">De GDG app is een community moeite en open sourced. Iedereen is uitgenodigd om eraan meetewerken en deze app te verbeteren.\n\nGa naar GitHub en checkout onze code.</string>
     <string name="about_license">(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof the Apache 2.0 License</string>
-    <string name="past_event">PAST</string>
+    <string name="past_event">Verleden</string>
 </resources>
