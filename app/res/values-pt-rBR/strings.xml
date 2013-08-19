@@ -1,0 +1,109 @@
+<!--
+  ~ Copyright 2013 The GDG Frisbee Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ 	http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  --><resources>
+    <string name="news">"Notícias"</string>
+    <string name="drawer_open">"Abrir Gaveta"</string>
+    <string name="drawer_close">"Fechar Gaveta"</string>
+    <string name="info">"Info"</string>
+    <string name="events">"Eventos"</string>
+    <string name="app_name">"GDG"</string>
+    <string name="add_to_calendar">"Adicionar ao calendário"</string>
+    <string name="share_with_googleplus">"Compartilhar no Google+"</string>
+    <string name="no_scheduled_events">"Não há eventos programados\nnos próximos 30 dias"</string>
+    <string name="about">"Sobre"</string>
+    <string name="organizers">"Organizadores"</string>
+    <string name="resources">"Links"</string>
+    <string name="fetch_events_failed">"Não foi possível buscar eventos"</string>
+    <string name="fetch_chapters_failed">"Não foi possível buscar lista de grupos"</string>
+    <string name="bogus_organizer">"Não foi possível analisar o Id do organizador: %1$s"</string>
+    <string name="cached_content">"Você está atualmente offline. Segue o conteúdo disponível em cache."</string>
+    <string name="offline_alert">"Você está offline."</string>
+    <string name="welcome">"Bem-vindo."</string>
+    <string name="choose_home_gdg">"Escolha o seu GDG de origem"</string>
+    <string name="signin_with_google">"Faça sign-in com o Google"</string>
+    <string name="confirm">"Confirme"</string>
+    <string name="signin_description">"O App GDG possui integração com o Google+ e outros serviços do Google. Para usar estas funções, é necessário que você possua uma conta Google."</string>
+    <string name="or">"ou"</string>
+    <string name="no_thanks">"Não, obrigado"</string>
+    <string name="skip">"Pular Sign-in"</string>
+    <string name="youtube_init_failed">"O player do YouTube não pôde ser inicializado."</string>
+    <string name="bogus_organizer">"Não foi possível analisar o Id Organizador: %1$s"</string>
+    <string name="achievements">"Conquistas"</string>
+    <string name="settings">"Configurações"</string>
+    <string name="about">"Sobre"</string>
+    <string name="gdl">"Google Developers Live"</string>
+    <plurals name="seconds_ago">
+        <item quantity="zero">"agora"</item>
+        <item quantity="one">"há pouco tempo"</item>
+        <item quantity="other">"%d segundos atrás"</item>
+    </plurals>
+    <plurals name="minutes_ago">
+        <item quantity="zero">"agora"</item>
+        <item quantity="one">"1 minuto atrás"</item>
+        <item quantity="other">"%d minutos atrás"</item>
+    </plurals>
+    <plurals name="hours_ago">
+        <item quantity="zero">"agora"</item>
+        <item quantity="one">"1 hora atrás"</item>
+        <item quantity="other">"%d horas atrás"</item>
+    </plurals>
+    <plurals name="days_ago">
+        <item quantity="zero">"agora"</item>
+        <item quantity="one">"1 dia atrás"</item>
+        <item quantity="other">"%d dias atrás"</item>
+    </plurals>
+    <string-array name="gdl_catgories">
+        <item>"Android"</item>
+        <item>"Google+"</item>
+        <item>"Chrome"</item>
+        <item>"Cloud"</item>
+        <item>"Maps"</item>
+        <item>"YouTube"</item>
+        <item>"Drive"</item>
+        <item>"Google I/O"</item>
+        <item>"Ads"</item>
+        <item>"Analytics"</item>
+        <item>"Commerce"</item>
+        <item>"Google TV"</item>
+        <item>"Primetime"</item>
+    </string-array>
+    <string-array name="gdl_catgories_url">
+        <item>"android"</item>
+        <item>"+"</item>
+        <item>"chrome"</item>
+        <item>"cloud"</item>
+        <item>"maps"</item>
+        <item>"youtube"</item>
+        <item>"drive"</item>
+        <item>"io"</item>
+        <item>"ads"</item>
+        <item>"analytics"</item>
+        <item>"commerce"</item>
+        <item>"tv"</item>
+        <item>"primetime"</item>
+    </string-array>
+    <string-array name="about_tabs">
+        <item>"Sobre"</item>
+        <item>"Colaboradores"</item>
+        <item>"Changelog"</item>
+        <item>"Participe"</item>
+        <item>"Bibliotecas de Terceiros"</item>
+    </string-array>
+    <string name="contributors">"O app GDG é um esforço da comunidade e possui código aberto. As seguintes pessoas contribuíram para o app:"</string>
+    <string name="get_involved">"Envolva-se"</string>
+    <string name="get_involved_text">"O app GDG é um esforço da comunidade e possui código aberto. Todos estão convidados a participar e melhorar este app. \n\nVisite o GitHub e faça e verifique nosso código."</string>
+    <string name="about_license">"(C) 2013 The GDG Frisbee Project\nTodos os direitos reservados.\n\nLicensed nos termos\nda Licença Apache 2.0"</string>
+    <string name="past_event">"PASSADO"</string>
+</resources>
