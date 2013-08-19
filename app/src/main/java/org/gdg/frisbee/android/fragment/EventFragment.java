@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -57,8 +58,6 @@ public class EventFragment extends GdgListFragment {
 
     private ArrayList<Event> mEvents;
     private ApiRequest mFetchEvents;
-    private int mRetries = 5;
-    private int mFetchFuture = 1;
     private Response.Listener<ArrayList<Event>> mListener;
     private Response.ErrorListener mErrorListener;
     private DateTime mStart, mEnd;
@@ -99,8 +98,7 @@ public class EventFragment extends GdgListFragment {
         mAdapter = new EventAdapter(getActivity());
         setListAdapter(mAdapter);
 
-        mStart = new DateTime().plusMonths(mFetchFuture).dayOfMonth().withMinimumValue();
-        mEnd = new DateTime().plusMonths(mFetchFuture).dayOfMonth().withMaximumValue();
+        mStart = new DateTime().minusMonths(2).dayOfMonth().withMinimumValue();
         setIsLoading(true);
 
         mEvents = new ArrayList<Event>();
@@ -109,28 +107,13 @@ public class EventFragment extends GdgListFragment {
             public void onResponse(final ArrayList<Event> events) {
                 mEvents.addAll(events);
 
-                if(mFetchFuture > 0 || (mEvents.size() == 0 && mRetries > 0)) {
-                    if(mFetchFuture > 0) {
-                        mFetchFuture--;
-                    } else {
-                        mRetries--;
+                App.getInstance().getModelCache().putAsync("event_"+ getArguments().getString("plus_id"), mEvents, DateTime.now().plusHours(2), new ModelCache.CachePutListener() {
+                    @Override
+                    public void onPutIntoCache() {
+                        mAdapter.addAll(mEvents);
+                        setIsLoading(false);
                     }
-
-                    mStart = mStart.minusMonths(1).dayOfMonth().withMinimumValue();
-                    mEnd = mEnd.minusMonths(1).dayOfMonth().withMaximumValue();
-                    mFetchEvents = mClient.getChapterEventList(mStart, mEnd, getArguments().getString("plus_id"), mListener , mErrorListener);
-                    mFetchEvents.execute();
-                } else {
-                    mRetries = 5;
-                    mFetchFuture = 1;
-                    App.getInstance().getModelCache().putAsync("event_"+ getArguments().getString("plus_id"), mEvents, DateTime.now().plusHours(2), new ModelCache.CachePutListener() {
-                        @Override
-                        public void onPutIntoCache() {
-                            mAdapter.addAll(mEvents);
-                            setIsLoading(false);
-                        }
-                    });
-                }
+                });
             }
         };
         mErrorListener = new Response.ErrorListener() {
@@ -140,7 +123,7 @@ public class EventFragment extends GdgListFragment {
                 Crouton.makeText(getActivity(), getString(R.string.fetch_events_failed), Style.ALERT).show();
             }
         };
-        mFetchEvents = mClient.getChapterEventList(mStart, mEnd, getArguments().getString("plus_id"), mListener , mErrorListener);
+        mFetchEvents = mClient.getChapterEventList(mStart, null, getArguments().getString("plus_id"), mListener , mErrorListener);
 
         if(Utils.isOnline(getActivity())) {
             mFetchEvents.execute();
@@ -193,33 +176,9 @@ public class EventFragment extends GdgListFragment {
 
         final Event event = (Event) mAdapter.getItem(position);
 
-        App.getInstance().getModelCache().getAsync("event_detail_"+event.getId(), new ModelCache.CacheListener() {
-            @Override
-            public void onGet(Object item) {
-                EventDetail eventDetail = (EventDetail) item;
-                openEventInGPlus(eventDetail.getGplusEventUrl());
-            }
-
-            @Override
-            public void onNotFound(String key) {
-                mClient.getEventDetail(event.getId(), new Response.Listener<EventDetail>() {
-                            @Override
-                            public void onResponse(final EventDetail eventDetail) {
-                                App.getInstance().getModelCache().putAsync("event_detail_"+event.getId(), eventDetail, new ModelCache.CachePutListener() {
-                                    @Override
-                                    public void onPutIntoCache() {
-                                        openEventInGPlus(eventDetail.getGplusEventUrl());
-                                    }
-                                });
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError volleyError) {
-                                //To change body of implemented methods use File | Settings | File Templates.
-                            }
-                        }).execute();
-            }
-        });
+        if(event.getGPlusEventLink() != null) {
+            openEventInGPlus(event.getGPlusEventLink());
+        }
     }
 
     public void openEventInGPlus(String uri) {
@@ -234,7 +193,6 @@ public class EventFragment extends GdgListFragment {
 
         intent.putExtra("beginTime", event.getStart().getMillis());
         intent.putExtra("endTime", event.getStart().getMillis());
-        intent.putExtra("allDay", event.isAllDay());
         intent.putExtra("title", event.getTitle());
         intent.putExtra("eventLocation", event.getLocation());
         startActivity(intent);

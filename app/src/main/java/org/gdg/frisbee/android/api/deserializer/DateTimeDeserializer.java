@@ -36,8 +36,11 @@ import java.lang.reflect.Type;
 public class DateTimeDeserializer implements JsonDeserializer<DateTime> {
     @Override
     public DateTime deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ssZZ");
+        //DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ssZZ");
         //2013-05-15T16:30:00+02:00
+
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("dd MMM YYYY HH:mm Z");
+        // 04 Jul 2013 23:00 +0200
         return fmt.parseDateTime(jsonElement.getAsJsonPrimitive().getAsString());
     }
 }

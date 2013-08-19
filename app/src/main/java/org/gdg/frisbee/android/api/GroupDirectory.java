@@ -52,7 +52,7 @@ public class GroupDirectory {
     private static final String DIRECTORY_URL = BASE_URL + "/groups/directorygroups/";
     private static final String ALL_CALENDAR_URL = BASE_URL + "/events/calendar/fc?start=1366581600&end=1367186400&_=1366664352089";
     private static final String GDL_CALENDAR_URL = BASE_URL + "/events/calendar/fc?calendar=gdl&start=1366581600&end=1367186400&_=1366664644691";
-    private static final String CHAPTER_CALENDAR_URL = BASE_URL + "/groups/chapter/%s/feed/events/fc";
+    private static final String CHAPTER_CALENDAR_URL = BASE_URL + "/events/feed/json";
     private static final String EVENT_DETAIL_URL = BASE_URL + "/events/%s/";
     private static final String SHOWCASE_NEXT_URL = BASE_URL + "/showcase/next";
 
@@ -71,9 +71,21 @@ public class GroupDirectory {
         return new ApiRequest(dirReq);
     }
 
-    public ApiRequest getChapterEventList(final DateTime start, final DateTime end, String chapterId, Response.Listener<ArrayList<Event>> successListener, Response.ErrorListener errorListener) {
+    public ApiRequest getChapterEventList(final DateTime start, final DateTime end, final String chapterId, Response.Listener<ArrayList<Event>> successListener, Response.ErrorListener errorListener) {
 
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new NameValuePair() {
+            @Override
+            public String getName() {
+                return "group";
+            }
+
+            @Override
+            public String getValue() {
+                return chapterId;
+            }
+        });
+
         params.add(new NameValuePair() {
             @Override
             public String getName() {
@@ -85,17 +97,20 @@ public class GroupDirectory {
                 return ""+(int)(start.getMillis()/1000);
             }
         });
-        params.add(new NameValuePair() {
-            @Override
-            public String getName() {
-                return "end";
-            }
 
-            @Override
-            public String getValue() {
-                return ""+(int)(end.getMillis()/1000);
-            }
-        });
+        if(end != null) {
+            params.add(new NameValuePair() {
+                @Override
+                public String getName() {
+                    return "end";
+                }
+
+                @Override
+                public String getValue() {
+                    return ""+(int)(end.getMillis()/1000);
+                }
+            });
+        }
         params.add(new NameValuePair() {
             @Override
             public String getName() {
@@ -109,7 +124,7 @@ public class GroupDirectory {
         });
         Type type = new TypeToken<ArrayList<Event>>() {}.getType();
 
-        String url = String.format(CHAPTER_CALENDAR_URL,chapterId);
+        String url = CHAPTER_CALENDAR_URL;
         url += "?"+URLEncodedUtils.format(params, "UTF-8");
 
         GsonRequest<ArrayList<Event>> eventReq = new GsonRequest<ArrayList<Event>>(Request.Method.GET,
@@ -120,26 +135,5 @@ public class GroupDirectory {
                 GsonRequest.getGson(FieldNamingPolicy.IDENTITY));
 
         return new ApiRequest(eventReq);
-    }
-
-    public ApiRequest getEventDetail(String id, Response.Listener<EventDetail> successListener, Response.ErrorListener errorListener) {
-
-        JsoupRequest<EventDetail> dirReq = new JsoupRequest<EventDetail>(Request.Method.GET,
-                String.format(EVENT_DETAIL_URL, id),
-                new JsoupRequest.ParseListener<EventDetail>() {
-                    @Override
-                    public EventDetail parse(Document doc) {
-
-                        EventDetail event = new EventDetail();
-
-                        event.setTitle(doc.select("h1 a span").first().text());
-                        event.setGplusEventUrl(doc.select("section#event-details-beta a").first().attr("href"));
-
-                        return event;  //To change body of implemented methods use File | Settings | File Templates.
-                    }
-                },
-                successListener,
-                errorListener);
-        return new ApiRequest(dirReq);
     }
 }

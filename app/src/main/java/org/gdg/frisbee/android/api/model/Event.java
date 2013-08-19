@@ -31,8 +31,8 @@ import java.util.ArrayList;
 public class Event implements GdgResponse {
     private ArrayList<String> className;
     private DateTime start, end;
-    private boolean allDay;
-    private String location, title, url, iconUrl, id;
+    private int participantsCount;
+    private String timezoneName, description, location, title, link, iconUrl, id, gPlusEventLink;
 
     public Event() {
         className = new ArrayList<String>();
@@ -50,10 +50,6 @@ public class Event implements GdgResponse {
         return end;
     }
 
-    public boolean isAllDay() {
-        return allDay;
-    }
-
     public String getLocation() {
         return location;
     }
@@ -62,15 +58,27 @@ public class Event implements GdgResponse {
         return title;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
     public String getIconUrl() {
         return iconUrl;
     }
 
     public String getId() {
         return id;
+    }
+
+    public String getGPlusEventLink() {
+        return gPlusEventLink;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getParticipantsCount() {
+        return participantsCount;
+    }
+
+    public String getLink() {
+        return link;
     }
 }
