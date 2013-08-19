@@ -17,7 +17,7 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="org.gdg.frisbee.android" android:versionCode="10" android:versionName="0.8-ALPHA">
-    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="16" />
+    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="17" />
     <supports-screens android:normalScreens="true" android:smallScreens="true" android:largeScreens="true" android:xlargeScreens="true"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -55,6 +55,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name=".widget.UpcomingEventWidgetProvider" android:label="">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/upcoming_event_appwidget_info"></meta-data>
+        </receiver>
+        <service android:name=".widget.UpcomingEventWidgetProvider$UpdateService"></service>
     </application>
 </manifest>
 
