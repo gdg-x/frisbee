@@ -109,4 +109,5 @@
     <string name="get_involved_text">The GDG app is a community effort and open sourced. Everyone is welcome to participate and improve this app.\n\nJust head over to GitHub and checkout our code.</string>
     <string name="about_license">(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof the Apache 2.0 License</string>
     <string name="past_event">PAST</string>
+    <string name="upcoming_widget">GDG - Upcoming Event</string>
 </resources>
