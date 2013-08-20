@@ -161,6 +161,9 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
                     case R.string.gdl:
                         startActivity(new Intent(MainActivity.this, GdlActivity.class));
                         break;
+                    case R.string.pulse:
+                        startActivity(new Intent(MainActivity.this, PulseActivity.class));
+                        break;
                     case R.string.settings:
                         startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                         break;

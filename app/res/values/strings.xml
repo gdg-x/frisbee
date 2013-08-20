@@ -110,4 +110,9 @@
     <string name="about_license">(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof the Apache 2.0 License</string>
     <string name="past_event">PAST</string>
     <string name="upcoming_widget">GDG - Upcoming Event</string>
+    <string name="global">Global</string>
+    <string name="pulse">GDG Pulse</string>
+    <string name="pulse_events">Events</string>
+    <string name="pulse_attendees">Attendees</string>
+    <string name="pulse_circlers">Chapter Circlers</string>
 </resources>

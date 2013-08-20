@@ -418,6 +418,10 @@ public class ModelCache {
     }
 
     public CacheItem put(final String url, final Object obj, DateTime expiresAt) {
+
+        if(obj == null)
+            return null;
+
         Log.d(LOG_TAG, String.format("put(%s)", url));
         CacheItem d = new CacheItem(obj, expiresAt);
 
