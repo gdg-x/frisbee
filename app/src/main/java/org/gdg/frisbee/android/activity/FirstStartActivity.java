@@ -44,7 +44,7 @@ import roboguice.inject.InjectView;
  * Date: 29.04.13
  * Time: 14:48
  */
-public class FirstStartActivity extends RoboSherlockFragmentActivity implements FirstStartStep1Fragment.Step1Listener, FirstStartStep2Fragment.Step2Listener, PlayServicesHelper.PlayServicesHelperListener {
+public class FirstStartActivity extends RoboSherlockFragmentActivity implements FirstStartStep1Fragment.Step1Listener, FirstStartStep2Fragment.Step2Listener, FirstStartStep3Fragment.Step3Listener, PlayServicesHelper.PlayServicesHelperListener {
 
     private static String LOG_TAG = "GDG-FirstStartActivity";
 
@@ -64,6 +64,7 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
         Log.i(LOG_TAG, "onCreate");
         setContentView(R.layout.activity_first_start);
 
+        App.getInstance().updateLastLocation();
         mPreferences = getSharedPreferences("gdg", MODE_PRIVATE);
 
         mViewPagerAdapter = new FirstStartPageAdapter(this, getSupportFragmentManager());
@@ -134,7 +135,7 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
                 .putBoolean(Const.SETTINGS_SIGNED_IN, true)
                 .commit();
 
-        finish();
+        mViewPager.setCurrentItem(2, true);
     }
 
     @Override
@@ -143,7 +144,7 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
                 .putBoolean(Const.SETTINGS_FIRST_START, false)
                 .putBoolean(Const.SETTINGS_SIGNED_IN, false)
                 .commit();
-        finish();
+        mViewPager.setCurrentItem(2, true);
     }
 
     @Override
@@ -179,6 +180,16 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
         onSignedIn(mPlayHelper.getPlusClient().getAccountName());
     }
 
+    @Override
+    public void onComplete(boolean enableAnalytics, boolean enableGcm) {
+        mPreferences.edit()
+                .putBoolean("gcm", enableGcm)
+                .putBoolean("analytics", enableAnalytics)
+                .commit();
+
+        finish();
+    }
+
     public class FirstStartPageAdapter extends FragmentStatePagerAdapter {
         private Context mContext;
 
@@ -194,7 +205,7 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
 
         @Override
         public int getCount() {
-            return 2;
+            return 3;
         }
 
         @Override
@@ -204,6 +215,8 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
                     return FirstStartStep1Fragment.newInstance();
                 case 1:
                     return FirstStartStep2Fragment.newInstance();
+                case 2:
+                    return FirstStartStep3Fragment.newInstance();
             }
             return null;
         }
