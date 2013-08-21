@@ -137,8 +137,6 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
             }
         });
 
-
-
         mDrawerAdapter = new DrawerAdapter(this);
         mDrawerContent.setAdapter(mDrawerAdapter);
         mDrawerContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -160,6 +158,9 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
                         break;
                     case R.string.gdl:
                         startActivity(new Intent(MainActivity.this, GdlActivity.class));
+                        break;
+                    case R.string.pulse:
+                        startActivity(new Intent(MainActivity.this, PulseActivity.class));
                         break;
                     case R.string.settings:
                         startActivity(new Intent(MainActivity.this, SettingsActivity.class));
@@ -204,12 +205,8 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
                     @Override
                     public void onPutIntoCache() {
                         ArrayList<Chapter> chapters = directory.getGroups();
-                        addChapters(chapters);
 
-                        mViewPagerAdapter.setSelectedChapter(chapters.get(0));
-
-                        mViewPager.setAdapter(mViewPagerAdapter);
-                        mIndicator.setViewPager(mViewPager);
+                        initChapters(chapters);
                     }
                 });
             }
@@ -228,11 +225,7 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
                     @Override
                     public void onGet(Object item) {
                         Directory directory = (Directory)item;
-
-                        addChapters(directory.getGroups());
-                        mViewPagerAdapter.setSelectedChapter(directory.getGroups().get(0));
-                        mViewPager.setAdapter(mViewPagerAdapter);
-                        mIndicator.setViewPager(mViewPager);
+                        initChapters(directory.getGroups());
                     }
 
                     @Override
@@ -246,10 +239,7 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
                     @Override
                     public void onGet(Object item) {
                         Directory directory = (Directory)item;
-                        addChapters(directory.getGroups());
-                        mViewPagerAdapter.setSelectedChapter(directory.getGroups().get(0));
-                        mViewPager.setAdapter(mViewPagerAdapter);
-                        mIndicator.setViewPager(mViewPager);
+                        initChapters(directory.getGroups());
                     }
 
                     @Override
@@ -292,6 +282,29 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
                 getSupportActionBar().setSelectedNavigationItem(mSpinnerAdapter.getPosition(homeGdgd));
                 mViewPagerAdapter.setSelectedChapter(homeGdgd);
         }
+    }
+
+    private void initChapters(ArrayList<Chapter> chapters) {
+        addChapters(chapters);
+        Chapter chapter = null;
+
+        if(getIntent().hasExtra("org.gdg.frisbee.CHAPTER")) {
+            String chapterId = getIntent().getStringExtra("org.gdg.frisbee.CHAPTER");
+            for(Chapter c : chapters) {
+                if(c.getGplusId().equals(chapterId)) {
+                    chapter = c;
+                    break;
+                }
+            }
+            if(chapter == null)
+                chapter = chapters.get(0);
+        } else {
+            chapter = chapters.get(0);
+        }
+
+        getSupportActionBar().setSelectedNavigationItem(mSpinnerAdapter.getPosition(chapter));
+        mViewPager.setAdapter(mViewPagerAdapter);
+        mIndicator.setViewPager(mViewPager);
     }
 
     private void trackViewPagerPage(int position) {
@@ -446,7 +459,7 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
     public boolean onNavigationItemSelected(int position, long l) {
         Chapter previous = mViewPagerAdapter.getSelectedChapter();
         mViewPagerAdapter.setSelectedChapter(mSpinnerAdapter.getItem(position));
-        if(!previous.equals(mSpinnerAdapter.getItem(position))) {
+        if(previous == null || !previous.equals(mSpinnerAdapter.getItem(position))) {
             Log.d(LOG_TAG, "Switching chapter!");
             mViewPagerAdapter.notifyDataSetChanged();
         }
