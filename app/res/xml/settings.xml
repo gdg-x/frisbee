@@ -1,5 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <ListPreference
+        android:key="gdg_home"
+        android:title="@string/home_gdg"
+        android:summary="@string/home_gdg_summary"
+        android:icon="@drawable/ic_home_gdg">
+    </ListPreference>
+    <CheckBoxPreference
+            android:key="gdg_signed_in"
+            android:title="@string/google_signed_in"
+            android:summaryOn="@string/google_signed_in_on"
+            android:summaryOff="@string/google_signed_in_off"
+            android:icon="@drawable/ic_google">
+    </CheckBoxPreference>
+    <CheckBoxPreference
+            android:key="gcm"
+            android:title="@string/gcm"
+            android:summaryOn="@string/gcm_summary_on"
+            android:summaryOff="@string/gcm_summary_off"
+            android:icon="@drawable/ic_gcm"
+            android:defaultValue="true">
+    </CheckBoxPreference>
+    <CheckBoxPreference
+        android:key="analytics"
+        android:title="@string/analytics"
+        android:summaryOn="@string/analytics_summary_on"
+        android:summaryOff="@string/analytics_summary_off"
+        android:icon="@drawable/ic_analytics"
+        android:defaultValue="true">
+    </CheckBoxPreference>
 </PreferenceScreen>

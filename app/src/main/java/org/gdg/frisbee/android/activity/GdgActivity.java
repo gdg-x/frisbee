@@ -79,12 +79,9 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
             if (errorCode != GooglePlusUtil.SUCCESS) {
                 GooglePlusUtil.getErrorDialog(errorCode, this, 0).show();
             } else {
-
-                if(mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
                     initPlayServices();
                 }
             }
-        }
 
         if(getSupportActionBar() != null)
             getSupportActionBar().setDisplayShowTitleEnabled(false);

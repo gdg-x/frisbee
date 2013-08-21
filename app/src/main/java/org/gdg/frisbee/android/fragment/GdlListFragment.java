@@ -26,6 +26,7 @@ import android.widget.GridView;
 import android.widget.ListView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.android.gms.plus.PlusClient;
 import com.google.inject.Inject;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -94,7 +95,13 @@ public class GdlListFragment extends GdgListFragment implements PullToRefreshAtt
         Log.d(LOG_TAG, "onActivityCreated()");
 
         mClient = new GoogleDevelopersLive();
-        mAdapter = new GdlAdapter(getActivity(), ((GdgActivity)getActivity()).getPlayServicesHelper().getPlusClient());
+
+        PlusClient plusClient = null;
+        if(((GdgActivity)getActivity()).getPlayServicesHelper() != null) {
+            plusClient = ((GdgActivity)getActivity()).getPlayServicesHelper().getPlusClient();
+        }
+
+        mAdapter = new GdlAdapter(getActivity(), plusClient);
         setListAdapter(mAdapter);
 
         setIsLoading(true);
