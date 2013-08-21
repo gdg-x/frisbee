@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2013 The GDG Frisbee Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ 	http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<resources>
+  <string name="news">Actualité</string>
+  <string name="drawer_open">Ouvriez navigation drawer</string>
+  <string name="drawer_close">Fermez navigation drawer</string>
+  <string name="info">Détails</string>
+  <string name="events">Évents</string>
+  <string name="app_name">GDG</string>
+  <string name="add_to_calendar">Ajouter au calendrier</string>
+  <string name="share_with_googleplus">partager sur Google+</string>
+  <string name="no_scheduled_events">Pas de évents prévue\ndans les 30 prochains jours</string>
+  <string name="about">À propos</string>
+  <string name="organizers">Organisateurs</string>
+  <string name="resources">Liens</string>
+  <string name="fetch_events_failed">Impossible de récupérer les évents à venir</string>
+  <string name="fetch_chapters_failed">Impossible de récupérer la liste des chaptires</string>
+  <string name="bogus_organizer">Impossible de analyser id d'organisateur: %1$s</string>
+  <string name="cached_content">Vous êtes actuellement déconnecté. Voilà une partie du contenu caché.</string>
+  <string name="offline_alert">Vous êtes actuellement déconnecté.</string>
+  <string name="welcome">Bon jour.</string>
+  <string name="choose_home_gdg">Choisissez votre GDG</string>
+  <string name="signin_with_google">Connectez-vous avec Google</string>
+  <string name="confirm">Confirmiez</string>
+  <string name="signin_description">L'application GDG s'intègre avec Google et d'autres services Google. Pour utiliser ces
+    fonctions il faut que vous soyez connecté avec Google.
+  </string>
+  <string name="or">ou</string>
+  <string name="no_thanks">Non, merci</string>
+  <string name="skip">Passer à connecter</string>
+  <string name="youtube_init_failed">Impossible de initaliser le joueur YouTube.</string>
+  <string name="achievements">Réusittes</string>
+  <string name="settings">Paramètres</string>
+  <string name="gdl">Google Developers Live</string>
+  <plurals name="seconds_ago">
+    <item quantity="zero">à présent</item>
+    <item quantity="one">à l'instant</item>
+    <item quantity="other">il y a %d secondes</item>
+  </plurals>
+  <plurals name="minutes_ago">
+    <item quantity="zero">à présent</item>
+    <item quantity="one">il y a 1 minute</item>
+    <item quantity="other">il y a %d minutes</item>
+  </plurals>
+  <plurals name="hours_ago">
+    <item quantity="zero">à présent</item>
+    <item quantity="one">il y a une heure</item>
+    <item quantity="other">il y a %d heures</item>
+  </plurals>
+  <plurals name="days_ago">
+    <item quantity="zero">à présent</item>
+    <item quantity="one">il y a un jour</item>
+    <item quantity="other">il y a %d jours</item>
+  </plurals>
+  <string-array name="gdl_catgories">
+    <item>Android</item>
+    <item>Google+</item>
+    <item>Chrome</item>
+    <item>Cloud</item>
+    <item>Maps</item>
+    <item>YouTube</item>
+    <item>Drive</item>
+    <item>Google I/O</item>
+    <item>Ads</item>
+    <item>Analytics</item>
+    <item>Commerce</item>
+    <item>Google TV</item>
+    <item>Primetime</item>
+  </string-array>
+  <string-array name="gdl_catgories_url">
+    <item>android</item>
+    <item>+</item>
+    <item>chrome</item>
+    <item>cloud</item>
+    <item>maps</item>
+    <item>youtube</item>
+    <item>drive</item>
+    <item>io</item>
+    <item>ads</item>
+    <item>analytics</item>
+    <item>commerce</item>
+    <item>tv</item>
+    <item>primetime</item>
+  </string-array>
+  <string-array name="about_tabs">
+    <item>À propos</item>
+    <item>Contributeurs</item>
+    <item>Modifications</item>
+    <item>Contribuer</item>
+    <item>Bibliothèques utilisées</item>
+  </string-array>
+  <string name="contributors">L'application GDG est un effort communautaire et open source. Les personnes suivantes ont
+    contribué à l'application:
+  </string>
+  <string name="get_involved">Contribuez-vous!</string>
+  <string name="get_involved_text">L'application GDG est un effort communautaire et open source. Tout le monde est le
+    bienvenu à
+    participer et améliorer cette application.\n\nVisitez GitHub a github.com/gdg-x et explorez notre code.
+  </string>
+  <string name="about_license">(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof
+    the Apache 2.0 License
+  </string>
+  <string name="past_event">PASSÉ</string>
+  <string name="upcoming_widget">GDG - Évents à venir</string>
+</resources>
