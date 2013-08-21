@@ -16,13 +16,17 @@
 
 package org.gdg.frisbee.android.fragment;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
 import org.gdg.frisbee.android.R;
+import roboguice.inject.InjectView;
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,8 +37,29 @@ import org.gdg.frisbee.android.R;
  */
 public class AboutFragment extends RoboSherlockFragment {
 
+    @InjectView(R.id.version)
+    TextView mVersion;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_about, null);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        PackageInfo pInfo = null;
+        try {
+            pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
+            mVersion.setText(pInfo.versionName);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
     }
 }
