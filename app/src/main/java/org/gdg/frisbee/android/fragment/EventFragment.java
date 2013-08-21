@@ -192,7 +192,7 @@ public class EventFragment extends GdgListFragment {
         intent.setType("vnd.android.cursor.item/event");
 
         intent.putExtra("beginTime", event.getStart().getMillis());
-        intent.putExtra("endTime", event.getStart().getMillis());
+        intent.putExtra("endTime", event.getEnd().getMillis());
         intent.putExtra("title", event.getTitle());
         intent.putExtra("eventLocation", event.getLocation());
         startActivity(intent);

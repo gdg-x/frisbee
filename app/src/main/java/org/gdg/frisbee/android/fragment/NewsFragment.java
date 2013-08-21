@@ -24,6 +24,7 @@ import android.view.*;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusShare;
 import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
 import com.google.api.client.http.HttpTransport;
@@ -121,7 +122,11 @@ public class NewsFragment extends GdgListFragment implements PullToRefreshAttach
 
         mClient = new Plus.Builder(mTransport, mJsonFactory, null).setGoogleClientRequestInitializer(new CommonGoogleJsonClientRequestInitializer(getString(R.string.ip_simple_api_access_key))).build();
 
-        mAdapter = new NewsAdapter(getActivity(), ((GdgActivity)getActivity()).getPlayServicesHelper().getPlusClient());
+        PlusClient plusClient = null;
+        if(((GdgActivity)getActivity()).getPlayServicesHelper() != null) {
+            plusClient = ((GdgActivity)getActivity()).getPlayServicesHelper().getPlusClient();
+        }
+        mAdapter = new NewsAdapter(getActivity(), plusClient);
         setListAdapter(mAdapter);
 
         registerForContextMenu(getListView());
