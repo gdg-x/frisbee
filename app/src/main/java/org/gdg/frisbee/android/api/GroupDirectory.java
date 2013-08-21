@@ -55,6 +55,8 @@ public class GroupDirectory {
     private static final String CHAPTER_CALENDAR_URL = BASE_URL + "/events/feed/json";
     private static final String EVENT_DETAIL_URL = BASE_URL + "/events/%s/";
     private static final String SHOWCASE_NEXT_URL = BASE_URL + "/showcase/next";
+    private static final String PULSE_URL = BASE_URL + "/devreldash/gdg/pulse_stats/";
+    private static final String COUNTRY_PULSE_URL = BASE_URL + "/devreldash/gdg/pulse_stats/%s/";
 
     private static final String LOG_TAG = "GDG-GroupDirectory";
 
@@ -69,6 +71,26 @@ public class GroupDirectory {
                 errorListener,
                 GsonRequest.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES));
         return new ApiRequest(dirReq);
+    }
+
+    public ApiRequest getPulse(Response.Listener<Pulse> successListener, Response.ErrorListener errorListener) {
+        GsonRequest<Pulse> pulseReq = new GsonRequest<Pulse>(Request.Method.GET,
+                PULSE_URL,
+                Pulse.class,
+                successListener,
+                errorListener,
+                GsonRequest.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES));
+        return new ApiRequest(pulseReq);
+    }
+
+    public ApiRequest getCountryPulse(String country, Response.Listener<Pulse> successListener, Response.ErrorListener errorListener) {
+        GsonRequest<Pulse> pulseReq = new GsonRequest<Pulse>(Request.Method.GET,
+                String.format(COUNTRY_PULSE_URL, country.replaceAll(" ","-")),
+                Pulse.class,
+                successListener,
+                errorListener,
+                GsonRequest.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES));
+        return new ApiRequest(pulseReq);
     }
 
     public ApiRequest getChapterEventList(final DateTime start, final DateTime end, final String chapterId, Response.Listener<ArrayList<Event>> successListener, Response.ErrorListener errorListener) {
