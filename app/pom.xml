@@ -219,7 +219,7 @@
     <repositories>
         <repository>
             <id>gdg-x</id>
-            <url>https://gdg-x.aws.hp.cm/m2/</url>
+            <url>https://gdg-x.hp.af.cm/m2/</url>
         </repository>
     </repositories>
     <build>
