@@ -16,6 +16,7 @@
 
 package org.gdg.frisbee.android.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,11 +28,13 @@ import com.android.volley.VolleyError;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.activity.MainActivity;
 import org.gdg.frisbee.android.activity.PulseActivity;
 import org.gdg.frisbee.android.adapter.PulseAdapter;
 import org.gdg.frisbee.android.api.ApiRequest;
 import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.Pulse;
+import org.gdg.frisbee.android.api.model.PulseEntry;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.joda.time.DateTime;
@@ -147,13 +150,17 @@ public class PulseFragment extends GdgListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        if(mTarget.equals("Global")) {
-            Map.Entry<String, Pulse> pulse = (Map.Entry<String, Pulse>) mAdapter.getItem(position);
+        Map.Entry<String, PulseEntry> pulse = (Map.Entry<String, PulseEntry>) mAdapter.getItem(position);
 
+        if(mTarget.equals("Global")) {
             if(getActivity() instanceof PulseActivity) {
                 PulseActivity activity = (PulseActivity) getActivity();
                 activity.onNavigationItemSelected(activity.getPulseTargets().indexOf(pulse.getKey()),0);
             }
+        } else {
+            Intent chapterIntent = new Intent(getActivity(), MainActivity.class);
+            chapterIntent.putExtra("org.gdg.frisbee.CHAPTER", pulse.getValue().getId());
+            startActivity(chapterIntent);
         }
     }
 }
