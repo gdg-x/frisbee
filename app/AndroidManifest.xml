@@ -20,6 +20,7 @@
     <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="17" />
     <supports-screens android:normalScreens="true" android:smallScreens="true" android:largeScreens="true" android:xlargeScreens="true"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
