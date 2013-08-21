@@ -403,6 +403,14 @@ public class PlayServicesHelper implements GooglePlayServicesClient.ConnectionCa
 
         if (mPlusClient != null && mPlusClient.isConnected()) {
             mPlusClient.clearDefaultAccount();
+
+            mPlusClient.revokeAccessAndDisconnect(new PlusClient.OnAccessRevokedListener() {
+                @Override
+                public void onAccessRevoked(ConnectionResult status) {
+                    // mPlusClient is now disconnected and access has been revoked.
+                    // Trigger app logic to comply with the developer policies
+                }
+            });
         }
         if (mGamesClient != null && mGamesClient.isConnected()) {
             showProgressDialog(false);
