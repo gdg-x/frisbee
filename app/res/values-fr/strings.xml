@@ -29,14 +29,14 @@
   <string name="resources">Liens</string>
   <string name="fetch_events_failed">Impossible de récupérer les évents à venir</string>
   <string name="fetch_chapters_failed">Impossible de récupérer la liste des chaptires</string>
-  <string name="bogus_organizer">Impossible de analyser id d'organisateur: %1$s</string>
+  <string name="bogus_organizer">Impossible de analyser id d\'organisateur: %1$s</string>
   <string name="cached_content">Vous êtes actuellement déconnecté. Voilà une partie du contenu caché.</string>
   <string name="offline_alert">Vous êtes actuellement déconnecté.</string>
   <string name="welcome">Bon jour.</string>
   <string name="choose_home_gdg">Choisissez votre GDG</string>
   <string name="signin_with_google">Connectez-vous avec Google</string>
   <string name="confirm">Confirmiez</string>
-  <string name="signin_description">L'application GDG s'intègre avec Google et d'autres services Google. Pour utiliser ces
+  <string name="signin_description">L\'application GDG s\'intègre avec Google et d\'autres services Google. Pour utiliser ces
     fonctions il faut que vous soyez connecté avec Google.
   </string>
   <string name="or">ou</string>
@@ -48,7 +48,7 @@
   <string name="gdl">Google Developers Live</string>
   <plurals name="seconds_ago">
     <item quantity="zero">à présent</item>
-    <item quantity="one">à l'instant</item>
+    <item quantity="one">à l\'instant</item>
     <item quantity="other">il y a %d secondes</item>
   </plurals>
   <plurals name="minutes_ago">
@@ -103,11 +103,11 @@
     <item>Contribuer</item>
     <item>Bibliothèques utilisées</item>
   </string-array>
-  <string name="contributors">L'application GDG est un effort communautaire et open source. Les personnes suivantes ont
-    contribué à l'application:
+  <string name="contributors">L\'application GDG est un effort communautaire et open source. Les personnes suivantes ont
+    contribué à l\'application:
   </string>
   <string name="get_involved">Contribuez-vous!</string>
-  <string name="get_involved_text">L'application GDG est un effort communautaire et open source. Tout le monde est le
+  <string name="get_involved_text">L\'application GDG est un effort communautaire et open source. Tout le monde est le
     bienvenu à
     participer et améliorer cette application.\n\nVisitez GitHub a github.com/gdg-x et explorez notre code.
   </string>
