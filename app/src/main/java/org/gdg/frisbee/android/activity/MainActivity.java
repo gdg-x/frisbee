@@ -32,6 +32,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
 import com.android.volley.Response;
@@ -146,12 +147,16 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
 
                 switch(item.getTitle()) {
                     case R.string.achievements:
-                        getPlayServicesHelper().getGamesClient(new PlayServicesHelper.OnGotGamesClientListener() {
-                            @Override
-                            public void onGotGamesClient(GamesClient c) {
-                                startActivityForResult(c.getAchievementsIntent(), 0);
-                            }
-                        });
+                        if(mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
+                            getPlayServicesHelper().getGamesClient(new PlayServicesHelper.OnGotGamesClientListener() {
+                                @Override
+                                public void onGotGamesClient(GamesClient c) {
+                                    startActivityForResult(c.getAchievementsIntent(), 0);
+                                }
+                            });
+                        } else {
+                            Toast.makeText(MainActivity.this, getString(R.string.achievements_need_signin), Toast.LENGTH_LONG).show();
+                        }
                         break;
                     case R.string.about:
                         startActivity(new Intent(MainActivity.this, AboutActivity.class));
