@@ -24,6 +24,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.widget.Toast;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.GAServiceManager;
@@ -76,6 +77,16 @@ public class App extends Application implements LocationListener {
     public void onCreate() {
         super.onCreate();
 
+        if (Const.DEVELOPER_MODE) {
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                    .detectDiskReads()
+                    .detectDiskWrites()
+                    .detectNetwork()
+                    .penaltyLog()
+                    .penaltyFlashScreen()
+                    .build());
+        }
+
         // Initialize ACRA Bugreporting (reports get send to GDG[x] Hub)
         ACRA.init(this);
 
@@ -111,7 +122,7 @@ public class App extends Application implements LocationListener {
                 .loader(new CompatOkHttpLoader(this))
                 .memoryCache(new LruCache(this))
                 .build();
-        mPicasso.setDebugging(false);
+        mPicasso.setDebugging(Const.DEVELOPER_MODE);
 
         // Initialize GA
         mGaInstance = GoogleAnalytics.getInstance(getApplicationContext());
