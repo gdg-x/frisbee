@@ -38,7 +38,7 @@ public class ParseDeepLinkActivity extends Activity {
         if (parts.length == 3 && EVENTS.equals(parts[1])) {
             route.setClass(getApplicationContext(), MainActivity.class);
             route.putExtra(MainActivity.EXTRA_GROUP_ID, parts[0]);
-            route.putExtra(MainActivity.EXTRA_GROUP_ID, MainActivity.SECTION_EVENTS);
+            route.putExtra(MainActivity.EXTRA_SECTION, MainActivity.SECTION_EVENTS);
         } else {
             // Fallback to the MainActivity in your app.
             route.setClass(getApplicationContext(), MainActivity.class);

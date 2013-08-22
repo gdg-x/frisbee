@@ -251,7 +251,7 @@ public class EventFragment extends GdgListFragment implements View.OnClickListen
         if (errorCode == GooglePlusUtil.SUCCESS) {
             PlusShare.Builder builder = new PlusShare.Builder(this.getActivity(), mPlusClient);
 
-            Uri eventUri = Uri.parse("https://developers.google.com/events/" + event.getId());
+            Uri eventUri = Uri.parse("https://developers.google.com/events/" + event.getId() + "/");
             String eventDeepLinkId = getArguments().getString("plus_id") + "/events/" + event.getId();
             // Set call-to-action metadata.
             builder.addCallToAction(
