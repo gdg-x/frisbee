@@ -116,11 +116,19 @@ public class EventAdapter extends BaseAdapter {
         TextView line2 = (TextView)view.findViewById(R.id.line2);
         line2.setText(event.getStart().toLocalDateTime().toString(DateTimeFormat.patternForStyle("MM",mContext.getResources().getConfiguration().locale)));
 
+
+        Button shareButton = (Button) view.findViewById(R.id.share_button);
+        shareButton.setOnClickListener(shareClickListener);
+        shareButton.setTag(event);
+
         TextView past = (TextView) view.findViewById(R.id.past);
+
         if(event.getStart().isBefore(DateTime.now())) {
             past.setVisibility(View.VISIBLE);
+            shareButton.setVisibility(View.GONE);
         } else {
             past.setVisibility(View.GONE);
+            shareButton.setVisibility(View.VISIBLE);
         }
 
         // That item will contain a special property that tells if it was freshly retrieved
@@ -131,9 +139,7 @@ public class EventAdapter extends BaseAdapter {
             view.startAnimation(animation);
         }
 
-        Button shareButton = (Button) view.findViewById(R.id.share_button);
-        shareButton.setOnClickListener(shareClickListener);
-        shareButton.setTag(event);
+
         return view;
     }
 

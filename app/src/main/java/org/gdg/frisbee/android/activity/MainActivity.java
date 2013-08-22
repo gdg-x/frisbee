@@ -72,6 +72,8 @@ import java.util.List;
 
 public class MainActivity extends GdgActivity implements ActionBar.OnNavigationListener {
 
+    public static final String EXTRA_GROUP_ID = "groupId";
+    public static final String SECTION_EVENTS = "events";
     private static String LOG_TAG = "GDG-MainActivity";
 
     public static final int REQUEST_FIRST_START_WIZARD = 100;

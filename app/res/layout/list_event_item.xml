@@ -33,10 +33,10 @@
 
   <Button
       android:id="@+id/share_button"
-      android:layout_width="32dp"
-      android:layout_height="32dp"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
       android:text="@string/share_on_gplus"
-      android:enabled="false"
+      android:enabled="true"
     android:layout_alignParentRight="true"
     android:layout_marginLeft="8dp" />
 

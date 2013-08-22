@@ -260,17 +260,10 @@ public class EventFragment extends GdgListFragment implements View.OnClickListen
                     eventDeepLinkId +"/join" /** call to action deep-link ID (for mobile use), 512 characters or fewer */);
 
             // Set the content url (for desktop use).
-            Uri contentUri;
-            if (!TextUtils.isEmpty(event.getGPlusEventLink())){
-                contentUri = Uri.parse(event.getGPlusEventLink());
-            } else {
-                contentUri = eventUri;
-            }
-            builder.setContentUrl(contentUri);
+            builder.setContentUrl(eventUri);
 
             // Set the target deep-link ID (for mobile use).
-            builder.setContentDeepLinkId(eventDeepLinkId,
-                    null, null, null);
+            builder.setContentDeepLinkId(eventDeepLinkId);
 
             // Set the share text.
             builder.setText(getString(R.string.join_me));
