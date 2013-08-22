@@ -247,9 +247,9 @@ public class EventFragment extends GdgListFragment implements View.OnClickListen
     }
 
     private void shareOnGplus(Event event) {
-        final int errorCode = GooglePlusUtil.checkGooglePlusApp(this);
+        final int errorCode = GooglePlusUtil.checkGooglePlusApp(this.getActivity());
         if (errorCode == GooglePlusUtil.SUCCESS) {
-            PlusShare.Builder builder = new PlusShare.Builder(this, mPlusClient);
+            PlusShare.Builder builder = new PlusShare.Builder(this.getActivity(), mPlusClient);
 
             Uri eventUri = Uri.parse("https://developers.google.com/events/" + event.getId());
             String eventDeepLinkId = getArguments().getString("plus_id") + "/events/" + event.getId();

@@ -16,51 +16,58 @@
   ~ limitations under the License.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content" android:padding="8dip">
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:orientation="horizontal"
-                  android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:gravity="center_vertical"
-                  android:background="@drawable/card_bg" android:padding="10dip">
-        <org.gdg.frisbee.android.view.SquaredImageView
-                android:layout_width="32dp"
-                android:layout_height="32dip"
-                android:id="@+id/icon"
-                android:layout_marginRight="8dip"/>
-        <LinearLayout
-                android:orientation="vertical"
+              android:layout_height="wrap_content"
+              android:layout_margin="10dp"
+              android:padding="8dip"
+              android:background="@drawable/card_bg">
+
+  <org.gdg.frisbee.android.view.SquaredImageView
+          android:layout_width="32dp"
+          android:layout_height="32dip"
+          android:id="@+id/icon"
+          android:layout_marginRight="8dip"
+    android:layout_alignParentLeft="true" />
+
+  <Button
+      android:id="@+id/share_button"
+      android:layout_width="32dp"
+      android:layout_height="32dp"
+      android:text="@string/share_on_gplus"
+      android:enabled="false"
+    android:layout_alignParentRight="true"
+    android:layout_marginLeft="8dp" />
+
+  <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+    android:layout_toRightOf="@+id/icon"
+    android:id="@+id/linearLayout"
+    android:layout_toLeftOf="@+id/share_button">
+        <TextView
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/title" android:textStyle="bold"/>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent">
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="New Text"
+                    android:id="@+id/line2" android:textColor="@color/line_2" android:layout_weight="1"/>
             <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="New Text"
-                    android:id="@+id/title" android:textStyle="bold"/>
-            <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
-                <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="New Text"
-                        android:id="@+id/line2" android:textColor="@color/line_2" android:layout_weight="1"/>
-                <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/past_event"
-                        android:id="@+id/past" android:layout_weight="3" android:textStyle="bold"
-                        android:gravity="right" android:visibility="visible"/>
-            </LinearLayout>
+                    android:text="@string/past_event"
+                    android:id="@+id/past" android:layout_weight="3" android:textStyle="bold"
+                    android:gravity="right" android:visibility="visible"/>
         </LinearLayout>
-        <Button
-          android:id="@+id/share_button"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/share_on_gplus"
-          android:enabled="false"/>
     </LinearLayout>
-</LinearLayout>
+
+</RelativeLayout>
