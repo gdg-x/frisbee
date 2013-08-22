@@ -23,16 +23,20 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
+
+import com.google.android.gms.plus.PlusClient;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.view.SquaredImageView;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * GDG Aachen
@@ -44,14 +48,16 @@ import java.util.Collection;
  */
 public class EventAdapter extends BaseAdapter {
 
+    private final View.OnClickListener shareClickListener;
     private Context mContext;
     private LayoutInflater mInflater;
     private ArrayList<Item> mEvents;
 
-    public EventAdapter(Context ctx) {
+    public EventAdapter(Context ctx, View.OnClickListener shareClickListener) {
         mContext = ctx;
         mInflater = LayoutInflater.from(mContext);
         mEvents = new ArrayList<Item>();
+        this.shareClickListener = shareClickListener;
     }
 
     public void addAll(Collection<Event> items) {
@@ -125,6 +131,9 @@ public class EventAdapter extends BaseAdapter {
             view.startAnimation(animation);
         }
 
+        Button shareButton = (Button) view.findViewById(R.id.share_button);
+        shareButton.setOnClickListener(shareClickListener);
+        shareButton.setTag(event);
         return view;
     }
 

@@ -19,24 +19,31 @@ package org.gdg.frisbee.android.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.CalendarContract;
+import android.text.TextUtils;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.android.gms.plus.GooglePlusUtil;
+import com.google.android.gms.plus.PlusClient;
+import com.google.android.gms.plus.PlusShare;
+
 import java.util.ArrayList;
+
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.adapter.EventAdapter;
 import org.gdg.frisbee.android.api.ApiRequest;
 import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.Event;
-import org.gdg.frisbee.android.api.model.EventDetail;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
+
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
@@ -48,7 +55,7 @@ import de.keyboardsurfer.android.widget.crouton.Style;
  * Date: 22.04.13
  * Time: 23:10
  */
-public class EventFragment extends GdgListFragment {
+public class EventFragment extends GdgListFragment implements View.OnClickListener {
 
     private static final String LOG_TAG = "GDG-EventFragment";
     private GroupDirectory mClient;
@@ -61,6 +68,7 @@ public class EventFragment extends GdgListFragment {
     private Response.Listener<ArrayList<Event>> mListener;
     private Response.ErrorListener mErrorListener;
     private DateTime mStart, mEnd;
+    private PlusClient mPlusClient;
 
     public static EventFragment newInstance(String plusId) {
         EventFragment fragment = new EventFragment();
@@ -75,6 +83,7 @@ public class EventFragment extends GdgListFragment {
         super.onCreate(savedInstanceState);
     }
 
+
     @Override
     public void onStart() {
         super.onStart();
@@ -87,6 +96,11 @@ public class EventFragment extends GdgListFragment {
         mSelectedMonth = DateTime.now().getMonthOfYear()+1;
         mClient = new GroupDirectory();
 
+        mPlusClient = null;
+        if (((GdgActivity) getActivity()).getPlayServicesHelper() != null) {
+            mPlusClient = ((GdgActivity) getActivity()).getPlayServicesHelper().getPlusClient();
+        }
+
         if(getListView() instanceof ListView) {
             ListView listView = (ListView) getListView();
             listView.setDivider(null);
@@ -95,7 +109,8 @@ public class EventFragment extends GdgListFragment {
 
         registerForContextMenu(getListView());
 
-        mAdapter = new EventAdapter(getActivity());
+
+        mAdapter = new EventAdapter(getActivity(), this);
         setListAdapter(mAdapter);
 
         mStart = new DateTime().minusMonths(2).dayOfMonth().withMinimumValue();
@@ -223,5 +238,48 @@ public class EventFragment extends GdgListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_events, null);
+    }
+
+    @Override
+    public void onClick(View view) {
+        Event event = (Event) view.getTag();
+        shareOnGplus(event);
+    }
+
+    private void shareOnGplus(Event event) {
+        final int errorCode = GooglePlusUtil.checkGooglePlusApp(this);
+        if (errorCode == GooglePlusUtil.SUCCESS) {
+            PlusShare.Builder builder = new PlusShare.Builder(this, mPlusClient);
+
+            Uri eventUri = Uri.parse("https://developers.google.com/events/" + event.getId());
+            String eventDeepLinkId = getArguments().getString("plus_id") + "/events/" + event.getId();
+            // Set call-to-action metadata.
+            builder.addCallToAction(
+                    "JOIN", /** call-to-action button label */
+                    eventUri, /** call-to-action url (for desktop use) */
+                    eventDeepLinkId +"/join" /** call to action deep-link ID (for mobile use), 512 characters or fewer */);
+
+            // Set the content url (for desktop use).
+            Uri contentUri;
+            if (!TextUtils.isEmpty(event.getGPlusEventLink())){
+                contentUri = Uri.parse(event.getGPlusEventLink());
+            } else {
+                contentUri = eventUri;
+            }
+            builder.setContentUrl(contentUri);
+
+            // Set the target deep-link ID (for mobile use).
+            builder.setContentDeepLinkId(eventDeepLinkId,
+                    null, null, null);
+
+            // Set the share text.
+            builder.setText(getString(R.string.join_me));
+
+            startActivityForResult(builder.getIntent(), 0);
+        } else {
+            // Prompt the user to install the Google+ app.
+            GooglePlusUtil.getErrorDialog(errorCode, this.getActivity(), 0).show();
+        }
+
     }
 }

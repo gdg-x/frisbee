@@ -56,5 +56,11 @@
                         android:gravity="right" android:visibility="visible"/>
             </LinearLayout>
         </LinearLayout>
+        <Button
+          android:id="@+id/share_button"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/share_on_gplus"
+          android:enabled="false"/>
     </LinearLayout>
 </LinearLayout>

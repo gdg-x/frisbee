@@ -131,4 +131,7 @@
     <string name="allow_analytics">Allow us to collect anonymous usage data which helps us to improve the app</string>
     <string name="enable_gcm">Enable GDG Cloud Notifications (get notified about new Events)</string>
     <string name="step3_text">One more thing before we start...</string>
+
+    <string name="share_on_gplus">Invite Friends</string>
+    <string name="join_me">Join me at this event!</string>
 </resources>
