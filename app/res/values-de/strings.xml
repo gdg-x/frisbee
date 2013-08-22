@@ -25,7 +25,6 @@
     <string name="add_to_calendar">Zum Kalender hinzufügen</string>
     <string name="share_with_googleplus">Mit Google+ teilen</string>
     <string name="no_scheduled_events">Keine Events\nin den nächsten 30 Tagen</string>
-    <string name="about">Über</string>
     <string name="organizers">Organizers</string>
     <string name="resources">Links</string>
     <string name="fetch_events_failed">Konnte Events nicht abrufen</string>

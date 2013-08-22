@@ -78,10 +78,22 @@
             <version>2.2</version>
         </dependency>
         <dependency>
+            <groupId>com.actionbarsherlock</groupId>
+            <artifactId>actionbarsherlock</artifactId>
+            <version>4.4.0</version>
+            <type>apklib</type>
+        </dependency>
+        <dependency>
             <groupId>com.github.chrisbanes.actionbarpulltorefresh</groupId>
             <artifactId>extra-abs</artifactId>
-            <version>0.5</version>
+            <version>0.6</version>
             <type>apklib</type>
+            <exclusions>
+                <exclusion>
+                    <artifactId>actionbarsherlock</artifactId>
+                    <groupId>com.actionbarsherlock</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>de.keyboardsurfer.android.widget</groupId>
@@ -174,12 +186,6 @@
             <groupId>com.viewpagerindicator</groupId>
             <artifactId>library</artifactId>
             <version>2.4.1</version>
-            <type>apklib</type>
-        </dependency>
-        <dependency>
-            <groupId>com.actionbarsherlock</groupId>
-            <artifactId>actionbarsherlock</artifactId>
-            <version>4.4.0</version>
             <type>apklib</type>
         </dependency>
         <dependency>
