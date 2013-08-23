@@ -131,7 +131,7 @@ public class NewsFragment extends GdgListFragment implements PullToRefreshAttach
 
         registerForContextMenu(getListView());
 
-        ((GdgActivity)getActivity()).getPullToRefreshHelper().setRefreshableView(getListView(), new PullToRefreshAttacher.ViewDelegate() {
+        ((GdgActivity)getActivity()).getPullToRefreshHelper().addRefreshableView(getListView(), new PullToRefreshAttacher.ViewDelegate() {
             @Override
             public boolean isScrolledToTop(View view) {
                 AbsListView absListView = (AbsListView) view;
@@ -143,7 +143,7 @@ public class NewsFragment extends GdgListFragment implements PullToRefreshAttach
                 }
                 return false;
             }
-        }, this, true);
+        }, this);
 
         if(getListView() instanceof ListView) {
             ListView listView = (ListView) getListView();

@@ -71,7 +71,7 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
             d.headerOutAnimation = R.anim.fade_out;
             d.headerLayout = R.layout.pull_to_refresh;
             d.headerTransformer = new PullToRefreshTransformer();
-            mPullToRefreshHelper = new PullToRefreshAttacher(this, d);
+            mPullToRefreshHelper = PullToRefreshAttacher.get(this, d);
         }
 
         if(!Utils.isEmulator()) {
