@@ -16,15 +16,20 @@
 
 package org.gdg.frisbee.android.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.FirstStartActivity;
+import org.gdg.frisbee.android.utils.Log;
 import roboguice.inject.InjectView;
 
 public class FirstStartStep3Fragment extends RoboSherlockFragment {
@@ -34,11 +39,18 @@ public class FirstStartStep3Fragment extends RoboSherlockFragment {
     @InjectView(R.id.complete)
     Button mCompleteButton;
 
+    @InjectView(R.id.gcmContainer)
+    LinearLayout mGcmContainer;
+
     @InjectView(R.id.enable_gcm)
     CheckBox mEnableGcm;
 
     @InjectView(R.id.enable_analytics)
     CheckBox mEnableAnalytics;
+
+    private SharedPreferences mPreferences;
+
+    private boolean mIsSignedIn = false;
 
     public static FirstStartStep3Fragment newInstance() {
         FirstStartStep3Fragment fragment = new FirstStartStep3Fragment();
@@ -48,6 +60,8 @@ public class FirstStartStep3Fragment extends RoboSherlockFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        mPreferences = getActivity().getSharedPreferences("gdg", Context.MODE_PRIVATE);
     }
 
     @Override
@@ -68,11 +82,35 @@ public class FirstStartStep3Fragment extends RoboSherlockFragment {
     @Override
     public void onStart() {
         super.onStart();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(LOG_TAG, "onResume()");
+
+        FirstStartActivity activity = (FirstStartActivity)getActivity();
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_welcome_step3, null);
+    }
+
+    public boolean isSignedIn() {
+        return mIsSignedIn;
+    }
+
+    public void setSignedIn(boolean mIsSignedIn) {
+        this.mIsSignedIn = mIsSignedIn;
+
+        if(!mIsSignedIn) {
+            mGcmContainer.setVisibility(View.GONE);
+        } else {
+            mGcmContainer.setVisibility(View.VISIBLE);
+        }
     }
 
     public interface Step3Listener {

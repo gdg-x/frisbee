@@ -17,12 +17,16 @@
 package org.gdg.frisbee.android.utils;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
@@ -47,6 +51,20 @@ import java.util.Map;
 public class Utils {
     public static <T> List<T> createListOfType(Class<T> type) {
         return new ArrayList<T>();
+    }
+
+    /**
+     * @return Application's version code from the {@code PackageManager}.
+     */
+    public static int getAppVersion(Context context) {
+        try {
+            PackageInfo packageInfo = context.getPackageManager()
+                    .getPackageInfo(context.getPackageName(), 0);
+            return packageInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            // should never happen
+            throw new RuntimeException("Could not get package name: " + e);
+        }
     }
 
     public static Map<String, String> splitQuery(URL url) throws UnsupportedEncodingException {
