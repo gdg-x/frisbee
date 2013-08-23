@@ -134,4 +134,5 @@
 
     <string name="share_on_gplus">Invite Friends</string>
     <string name="join_me">Join me at this event!</string>
+    <string name="name_not_known">Name not known</string>
 </resources>

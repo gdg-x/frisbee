@@ -220,13 +220,13 @@ public class InfoFragment extends RoboSherlockFragment {
             App.getInstance().getModelCache().getAsync("person_"+getArguments().getString("plus_id"), false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
-                    Person person = (Person)item;
+                    final Person chachedChapter = (Person)item;
 
-                    mAbout.setText(Html.fromHtml(person.getAboutMe()));
+                    mAbout.setText(Html.fromHtml(chachedChapter.getAboutMe()));
                     Crouton.makeText(getActivity(), getString(R.string.cached_content), Style.INFO).show();
 
-                    for(int i = 0; i < person.getUrls().size(); i++) {
-                        Person.Urls url = person.getUrls().get(i);
+                    for(int i = 0; i < chachedChapter.getUrls().size(); i++) {
+                        Person.Urls url = chachedChapter.getUrls().get(i);
                         if(url.getValue().contains("plus.google.com/") && !url.getValue().contains("communities")) {
                             String org = url.getValue();
                             try {
@@ -247,14 +247,18 @@ public class InfoFragment extends RoboSherlockFragment {
                                         registerForContextMenu(v);
                                         mOrganizerBox.addView(v);
 
-                                        if(finalI == person.getUrls().size()) {
+                                        if( finalI == chachedChapter.getUrls().size()) {
                                             setIsLoading(false);
                                         }
                                     }
 
                                     @Override
                                     public void onNotFound(String key) {
-                                        //To change body of implemented methods use File | Settings | File Templates.
+                                        View v = getUnknownOrganizerView();
+                                        mOrganizerBox.addView(v);
+                                        if (finalI == chachedChapter.getUrls().size()) {
+                                            setIsLoading(false);
+                                        }
                                     }
                                 });
                             } catch(Exception ex) {
@@ -271,6 +275,7 @@ public class InfoFragment extends RoboSherlockFragment {
             });
         }
     }
+
 
     public void setIsLoading(boolean isLoading) {
 
@@ -316,6 +321,16 @@ public class InfoFragment extends RoboSherlockFragment {
         TextView title = (TextView) convertView.findViewById(R.id.title);
         title.setText(item.getDisplayName());
 
+        return convertView;
+    }
+
+    private View getUnknownOrganizerView() {
+        View convertView = mInflater.inflate(R.layout.list_organizer_item, null);
+
+        ImageView picture = (ImageView) convertView.findViewById(R.id.icon);
+        picture.setImageResource(R.drawable.unknown_person);
+        TextView title = (TextView) convertView.findViewById(R.id.title);
+        title.setText(R.string.name_not_known);
         return convertView;
     }
 
