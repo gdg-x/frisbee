@@ -247,8 +247,7 @@ public class EventFragment extends GdgListFragment implements View.OnClickListen
     }
 
     private void shareOnGplus(Event event) {
-        final int errorCode = GooglePlusUtil.checkGooglePlusApp(this.getActivity());
-        if (errorCode == GooglePlusUtil.SUCCESS) {
+        if (mPlusClient != null) {
             PlusShare.Builder builder = new PlusShare.Builder(this.getActivity(), mPlusClient);
 
             Uri eventUri = Uri.parse("https://developers.google.com/events/" + event.getId() + "/");
@@ -269,10 +268,6 @@ public class EventFragment extends GdgListFragment implements View.OnClickListen
             builder.setText(getString(R.string.join_me));
 
             startActivityForResult(builder.getIntent(), 0);
-        } else {
-            // Prompt the user to install the Google+ app.
-            GooglePlusUtil.getErrorDialog(errorCode, this.getActivity(), 0).show();
         }
-
     }
 }

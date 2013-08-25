@@ -23,6 +23,7 @@ import android.content.res.Configuration;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -74,7 +75,8 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
 
     public static final String EXTRA_GROUP_ID = "org.gdg.frisbee.CHAPTER";
     public static final String SECTION_EVENTS = "events";
-    public static final String EXTRA_SECTION = "section";
+    public static final String EXTRA_SECTION = "org.gdg.frisbee.SECTION";
+
     private static String LOG_TAG = "GDG-MainActivity";
 
     public static final int REQUEST_FIRST_START_WIZARD = 100;
@@ -91,6 +93,8 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
     @InjectView(R.id.titles)
     private TitlePageIndicator mIndicator;
 
+    private Handler mHandler = new Handler();
+
     private DrawerAdapter mDrawerAdapter;
     private ChapterAdapter mSpinnerAdapter;
     private MyAdapter mViewPagerAdapter;
@@ -103,7 +107,6 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
     private boolean mFirstStart = false;
 
     private ChapterComparator mLocationComparator;
-
 
     /**
      * Called when the activity is first created.
@@ -319,7 +322,12 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
         mIndicator.setViewPager(mViewPager);
 
         if (SECTION_EVENTS.equals(getIntent().getStringExtra(EXTRA_SECTION))) {
-            mViewPager.setCurrentItem(2, true);
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mViewPager.setCurrentItem(2, true);
+                }
+            },500);
         }
     }
 

@@ -24,6 +24,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.gms.plus.PlusClient;
@@ -115,11 +116,7 @@ public class EventAdapter extends BaseAdapter {
 
         TextView line2 = (TextView)view.findViewById(R.id.line2);
         line2.setText(event.getStart().toLocalDateTime().toString(DateTimeFormat.patternForStyle("MM",mContext.getResources().getConfiguration().locale)));
-
-
-        Button shareButton = (Button) view.findViewById(R.id.share_button);
-        shareButton.setOnClickListener(shareClickListener);
-        shareButton.setTag(event);
+        ImageButton shareButton = (ImageButton) view.findViewById(R.id.share_button);
 
         TextView past = (TextView) view.findViewById(R.id.past);
 
@@ -127,6 +124,8 @@ public class EventAdapter extends BaseAdapter {
             past.setVisibility(View.VISIBLE);
             shareButton.setVisibility(View.GONE);
         } else {
+            shareButton.setOnClickListener(shareClickListener);
+            shareButton.setTag(event);
             past.setVisibility(View.GONE);
             shareButton.setVisibility(View.VISIBLE);
         }
