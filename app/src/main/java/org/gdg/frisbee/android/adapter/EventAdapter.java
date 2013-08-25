@@ -23,16 +23,21 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.google.android.gms.plus.PlusClient;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.view.SquaredImageView;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * GDG Aachen
@@ -44,14 +49,16 @@ import java.util.Collection;
  */
 public class EventAdapter extends BaseAdapter {
 
+    private final View.OnClickListener shareClickListener;
     private Context mContext;
     private LayoutInflater mInflater;
     private ArrayList<Item> mEvents;
 
-    public EventAdapter(Context ctx) {
+    public EventAdapter(Context ctx, View.OnClickListener shareClickListener) {
         mContext = ctx;
         mInflater = LayoutInflater.from(mContext);
         mEvents = new ArrayList<Item>();
+        this.shareClickListener = shareClickListener;
     }
 
     public void addAll(Collection<Event> items) {
@@ -109,12 +116,18 @@ public class EventAdapter extends BaseAdapter {
 
         TextView line2 = (TextView)view.findViewById(R.id.line2);
         line2.setText(event.getStart().toLocalDateTime().toString(DateTimeFormat.patternForStyle("MM",mContext.getResources().getConfiguration().locale)));
+        ImageButton shareButton = (ImageButton) view.findViewById(R.id.share_button);
 
         TextView past = (TextView) view.findViewById(R.id.past);
+
         if(event.getStart().isBefore(DateTime.now())) {
             past.setVisibility(View.VISIBLE);
+            shareButton.setVisibility(View.GONE);
         } else {
+            shareButton.setOnClickListener(shareClickListener);
+            shareButton.setTag(event);
             past.setVisibility(View.GONE);
+            shareButton.setVisibility(View.VISIBLE);
         }
 
         // That item will contain a special property that tells if it was freshly retrieved
@@ -124,6 +137,7 @@ public class EventAdapter extends BaseAdapter {
             Animation animation = AnimationUtils.makeInChildBottomAnimation(mContext);
             view.startAnimation(animation);
         }
+
 
         return view;
     }
