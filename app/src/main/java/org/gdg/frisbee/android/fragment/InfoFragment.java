@@ -316,6 +316,7 @@ public class InfoFragment extends RoboSherlockFragment {
         ImageView picture = (ImageView) convertView.findViewById(R.id.icon);
         App.getInstance().getPicasso()
                 .load(item.getImage().getUrl())
+                .placeholder(R.drawable.ic_no_avatar)
                 .into(picture);
 
         TextView title = (TextView) convertView.findViewById(R.id.title);
@@ -328,7 +329,7 @@ public class InfoFragment extends RoboSherlockFragment {
         View convertView = mInflater.inflate(R.layout.list_organizer_item, null);
 
         ImageView picture = (ImageView) convertView.findViewById(R.id.icon);
-        picture.setImageResource(R.drawable.unknown_person);
+        picture.setImageResource(R.drawable.ic_no_avatar);
         TextView title = (TextView) convertView.findViewById(R.id.title);
         title.setText(R.string.name_not_known);
         return convertView;
