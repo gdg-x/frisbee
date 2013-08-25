@@ -3,21 +3,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content" android:padding="8dip">
+              android:layout_height="wrap_content">
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1."
-            android:id="@+id/position" android:layout_gravity="center_horizontal|top" android:textStyle="bold"/>
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="GDG Sampletown"
-            android:id="@+id/key" android:layout_gravity="center_horizontal|top" android:layout_marginLeft="5dip"/>
-    <TextView
+    <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="(00)"
-            android:id="@+id/value" android:layout_gravity="center_horizontal|top" android:gravity="right"/>
+            android:layout_height="fill_parent" android:padding="8dip" android:background="@drawable/card_bg"
+            android:layout_marginLeft="10dip" android:layout_marginTop="10dip" android:layout_marginRight="10dip">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1."
+                android:id="@+id/position" android:layout_gravity="center_horizontal|top" android:textStyle="bold"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GDG Sampletown"
+                android:id="@+id/key" android:layout_gravity="center_horizontal|top" android:layout_marginLeft="5dip"/>
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="(00)"
+                android:id="@+id/value" android:layout_gravity="center_horizontal|top" android:gravity="right"/>
+    </LinearLayout>
 </LinearLayout>
