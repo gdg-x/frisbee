@@ -23,6 +23,7 @@ import android.content.res.Configuration;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -72,6 +73,10 @@ import java.util.List;
 
 public class MainActivity extends GdgActivity implements ActionBar.OnNavigationListener {
 
+    public static final String EXTRA_GROUP_ID = "org.gdg.frisbee.CHAPTER";
+    public static final String SECTION_EVENTS = "events";
+    public static final String EXTRA_SECTION = "org.gdg.frisbee.SECTION";
+
     private static String LOG_TAG = "GDG-MainActivity";
 
     public static final int REQUEST_FIRST_START_WIZARD = 100;
@@ -88,6 +93,8 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
     @InjectView(R.id.titles)
     private TitlePageIndicator mIndicator;
 
+    private Handler mHandler = new Handler();
+
     private DrawerAdapter mDrawerAdapter;
     private ChapterAdapter mSpinnerAdapter;
     private MyAdapter mViewPagerAdapter;
@@ -100,7 +107,6 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
     private boolean mFirstStart = false;
 
     private ChapterComparator mLocationComparator;
-
 
     /**
      * Called when the activity is first created.
@@ -262,8 +268,7 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
 
                 if(savedInstanceState.containsKey("selected_chapter")) {
                     Chapter selectedChapter = savedInstanceState.getParcelable("selected_chapter");
-                    mViewPagerAdapter.setSelectedChapter(selectedChapter);
-                    getSupportActionBar().setSelectedNavigationItem(mSpinnerAdapter.getPosition(selectedChapter));
+                    selectChapter(selectedChapter);
                 } else {
                     mViewPagerAdapter.setSelectedChapter(chapters.get(0));
                 }
@@ -289,12 +294,17 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
         }
     }
 
+    private void selectChapter(Chapter chapter) {
+        mViewPagerAdapter.setSelectedChapter(chapter);
+        getSupportActionBar().setSelectedNavigationItem(mSpinnerAdapter.getPosition(chapter));
+    }
+
     private void initChapters(ArrayList<Chapter> chapters) {
         addChapters(chapters);
         Chapter chapter = null;
 
-        if(getIntent().hasExtra("org.gdg.frisbee.CHAPTER")) {
-            String chapterId = getIntent().getStringExtra("org.gdg.frisbee.CHAPTER");
+        if(getIntent().hasExtra(EXTRA_GROUP_ID)) {
+            String chapterId = getIntent().getStringExtra(EXTRA_GROUP_ID);
             for(Chapter c : chapters) {
                 if(c.getGplusId().equals(chapterId)) {
                     chapter = c;
@@ -310,6 +320,15 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
         getSupportActionBar().setSelectedNavigationItem(mSpinnerAdapter.getPosition(chapter));
         mViewPager.setAdapter(mViewPagerAdapter);
         mIndicator.setViewPager(mViewPager);
+
+        if (SECTION_EVENTS.equals(getIntent().getStringExtra(EXTRA_SECTION))) {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mViewPager.setCurrentItem(2, true);
+                }
+            },500);
+        }
     }
 
     private void trackViewPagerPage(int position) {
@@ -330,7 +349,7 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
                 page = "Events";
                 break;
         }
-        App.getInstance().getTracker().sendView(String.format("/Main/%s/%s", mViewPagerAdapter.getSelectedChapter().getName().replaceAll(" ","-"), page));
+        App.getInstance().getTracker().sendView(String.format("/Main/%s/%s", mViewPagerAdapter.getSelectedChapter().getName().replaceAll(" ", "-"), page));
     }
 
     @Override
@@ -440,9 +459,9 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
     protected void onResume() {
         super.onResume();
         Log.d(LOG_TAG, "onResume()");
-
         trackViewPagerPage(mViewPager.getCurrentItem());
     }
+
 
     @Override
     protected void onPause() {
