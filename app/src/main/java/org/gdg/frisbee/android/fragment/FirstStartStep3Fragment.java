@@ -91,7 +91,11 @@ public class FirstStartStep3Fragment extends RoboSherlockFragment {
         Log.d(LOG_TAG, "onResume()");
 
         FirstStartActivity activity = (FirstStartActivity)getActivity();
-
+        if(!mIsSignedIn) {
+            mGcmContainer.setVisibility(View.GONE);
+        } else {
+            mGcmContainer.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -106,10 +110,12 @@ public class FirstStartStep3Fragment extends RoboSherlockFragment {
     public void setSignedIn(boolean mIsSignedIn) {
         this.mIsSignedIn = mIsSignedIn;
 
-        if(!mIsSignedIn) {
-            mGcmContainer.setVisibility(View.GONE);
-        } else {
-            mGcmContainer.setVisibility(View.VISIBLE);
+        if(mGcmContainer != null) {
+            if(!mIsSignedIn) {
+                mGcmContainer.setVisibility(View.GONE);
+            } else {
+                mGcmContainer.setVisibility(View.VISIBLE);
+            }
         }
     }
 

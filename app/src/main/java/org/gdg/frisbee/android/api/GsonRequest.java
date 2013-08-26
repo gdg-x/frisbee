@@ -85,7 +85,8 @@ public class GsonRequest<Input, Output> extends GdgRequest<Output> {
 
     @Override
     protected void deliverResponse(Output response) {
-        mListener.onResponse(response);
+        if(mListener != null)
+            mListener.onResponse(response);
     }
 
     @Override

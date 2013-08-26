@@ -144,6 +144,9 @@ public class InfoFragment extends RoboSherlockFragment {
                     public void onPostExecute(final Person[] person) {
                         if(person == null) {
                             Log.d(LOG_TAG, "null person");
+                            View v = getUnknownOrganizerView();
+                            mOrganizerBox.addView(v);
+                            setIsLoading(false);
                             return;
                         }
 
