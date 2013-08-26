@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusOneButton;
@@ -95,15 +96,20 @@ public class GdlAdapter extends BaseAdapter {
 
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        if(view == null)
-            view = mInflater.inflate(R.layout.gdl_item, null);
-
+    public View getView(int i, View convertView, ViewGroup viewGroup) {
+        View rowView = convertView;
+        if(rowView == null) {
+            rowView = mInflater.inflate(R.layout.gdl_item, null);
+            ViewHolder viewHolder = new ViewHolder();
+            viewHolder.thumbnailView = (ResizableImageView) rowView.findViewById(R.id.thumb);
+            viewHolder.titleView = (TextView) rowView.findViewById(R.id.title);
+            viewHolder.plusButton = (PlusOneButton) rowView.findViewById(R.id.plus_one_button);
+            rowView.setTag(viewHolder);
+        }
+        ViewHolder holder = (ViewHolder) rowView.getTag();
         final GdlShow show = (GdlShow) getItem(i);
-        ResizableImageView thumbnailView = (ResizableImageView) view.findViewById(R.id.thumb);
-        TextView titleView = (TextView) view.findViewById(R.id.title);
 
-        view.setTag(show.getYoutubeUrl());
+        holder.ytUrl = show.getYoutubeUrl();
 
         View.OnClickListener mShowVideo = new View.OnClickListener() {
             @Override
@@ -114,44 +120,49 @@ public class GdlAdapter extends BaseAdapter {
                 mContext.startActivity(playVideoIntent);
             }
         };
-        thumbnailView.setImageDrawable(null);
-        thumbnailView.setBackgroundResource(R.drawable.gdl_video_dummy);
+        holder.thumbnailView.setImageDrawable(null);
+        holder.thumbnailView.setBackgroundResource(R.drawable.gdl_video_dummy);
         App.getInstance().getPicasso()
                 .load(show.getHighQualityThumbnail())
-                .into(thumbnailView);
+                .into(holder.thumbnailView);
 
-        titleView.setText(show.getTitle());
+        holder.titleView.setText(show.getTitle());
 
-        thumbnailView.setOnClickListener(mShowVideo);
-        titleView.setOnClickListener(mShowVideo);
+        holder.thumbnailView.setOnClickListener(mShowVideo);
+        holder.titleView.setOnClickListener(mShowVideo);
 
-        PlusOneButton plusButton = (PlusOneButton) view.findViewById(R.id.plus_one_button);
         if(mPlusClient != null) {
-            plusButton.setVisibility(View.VISIBLE);
-            plusButton.initialize(mPlusClient, show.getYoutubeUrl(), 1);
+            holder.plusButton.setVisibility(View.VISIBLE);
+            holder.plusButton.initialize(mPlusClient, show.getYoutubeUrl(), 1);
         } else {
-            plusButton.setVisibility(View.GONE);
+            holder.plusButton.setVisibility(View.GONE);
         }
 
         if (!mConsumedMap.containsKey(i)) {
             mConsumedMap.put(i, null);
             // In which case we magically instantiate our effect and launch it directly on the view
             Animation animation = AnimationUtils.makeInChildBottomAnimation(mContext);
-            view.startAnimation(animation);
+            rowView.startAnimation(animation);
         }
 
-        return view;
+        return rowView;
     }
 
     public void updatePlusOne(View v) {
         if(v != null && v.getTag() != null) {
-            String url = (String) v.getTag();
-            PlusOneButton plusButton = (PlusOneButton) v.findViewById(R.id.plus_one_button);
+            ViewHolder holder = (ViewHolder) v.getTag();
 
-            if(mPlusClient != null) {
-                plusButton.setVisibility(View.VISIBLE);
-                plusButton.initialize(mPlusClient, url, 1);
+            if(mPlusClient != null && mPlusClient.isConnected()) {
+                holder.plusButton.setVisibility(View.VISIBLE);
+                holder.plusButton.initialize(mPlusClient, holder.ytUrl, 1);
             }
         }
+    }
+
+    static class ViewHolder {
+        public TextView titleView;
+        public ResizableImageView thumbnailView;
+        public PlusOneButton plusButton;
+        public String ytUrl;
     }
 }
