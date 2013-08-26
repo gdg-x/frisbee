@@ -118,7 +118,7 @@ public class YoutubeActivity extends GdgActivity implements YouTubePlayer.OnInit
                     if(getIntent().hasExtra("gdl"))
                         editor.putInt(Const.SETTINGS_VIDEOS_PLAYED, mPreferences.getInt(Const.SETTINGS_VIDEOS_PLAYED,0)+1);
 
-                    editor.commit();
+                    editor.apply();
                 }
 
                 if(mPreferences.getInt(Const.SETTINGS_VIDEOS_PLAYED,0) == 10) {

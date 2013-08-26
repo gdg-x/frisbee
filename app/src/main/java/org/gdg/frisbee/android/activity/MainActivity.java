@@ -320,6 +320,7 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
 
         getSupportActionBar().setSelectedNavigationItem(mSpinnerAdapter.getPosition(chapter));
         mViewPager.setAdapter(mViewPagerAdapter);
+        mViewPager.setOffscreenPageLimit(2);
         mIndicator.setViewPager(mViewPager);
 
         if (SECTION_EVENTS.equals(getIntent().getStringExtra(EXTRA_SECTION))) {

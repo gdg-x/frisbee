@@ -23,12 +23,12 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmentActivity;
@@ -36,20 +36,23 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.ApiRequest;
 import org.gdg.frisbee.android.api.GdgX;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.GcmRegistrationResponse;
-import org.gdg.frisbee.android.api.model.MessageResponse;
 import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.fragment.*;
+import org.gdg.frisbee.android.fragment.FirstStartStep1Fragment;
+import org.gdg.frisbee.android.fragment.FirstStartStep2Fragment;
+import org.gdg.frisbee.android.fragment.FirstStartStep3Fragment;
 import org.gdg.frisbee.android.utils.PlayServicesHelper;
 import org.gdg.frisbee.android.view.NonSwipeableViewPager;
-import roboguice.inject.InjectView;
 
 import java.io.IOException;
+
+import roboguice.inject.InjectView;
 
 /**
  * GDG Aachen
@@ -120,7 +123,7 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
         mSelectedChapter = chapter;
         mPreferences.edit()
                 .putString(Const.SETTINGS_HOME_GDG, chapter.getGplusId())
-                .commit();
+                .apply();
         mViewPager.setCurrentItem(1, true);
     }
 
@@ -152,7 +155,7 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
     public void onSignedIn(String accountName) {
         mPreferences.edit()
                 .putBoolean(Const.SETTINGS_SIGNED_IN, true)
-                .commit();
+                .apply();
 
         if(mViewPager.getCurrentItem() >= 1)
             mViewPager.setCurrentItem(2, true);
@@ -162,7 +165,7 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
     public void onSkippedSignIn() {
         mPreferences.edit()
                 .putBoolean(Const.SETTINGS_SIGNED_IN, false)
-                .commit();
+                .apply();
         FirstStartStep3Fragment step3 = (FirstStartStep3Fragment) mViewPagerAdapter.getItem(2);
         step3.setSignedIn(false);
 
@@ -229,7 +232,7 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
                                         .putString(Const.SETTINGS_GCM_REG_ID, regid)
                                         .putBoolean(Const.SETTINGS_FIRST_START, false)
                                         .putString(Const.SETTINGS_GCM_NOTIFICATION_KEY, messageResponse.getNotificationKey())
-                                        .commit();
+                                        .apply();
 
                                 finish();
                             }
@@ -252,8 +255,8 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
                     mPreferences.edit()
                             .putBoolean("gcm", enableGcm)
                             .putBoolean("analytics", enableAnalytics)
-                            .putBoolean(Const.SETTINGS_FIRST_START, false)
-                            .commit();
+                            .putBoolean(Const.SETTINGS_FIRST_START, false
+                            .apply();
 
                     finish();
                 }
