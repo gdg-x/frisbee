@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,22 +28,23 @@ import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusOneButton;
 import com.google.api.services.plus.model.Activity;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
+
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.YoutubeActivity;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ResizableImageView;
 import org.joda.time.DateTime;
-import org.joda.time.Period;
-import org.joda.time.format.DateTimeFormat;
+
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * GDG Aachen
@@ -61,8 +61,8 @@ public class NewsAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater mInflater;
     private ArrayList<Item> mActivities;
-
     private PlusClient mPlusClient;
+    private ViewHolder mViewHolder;
 
     public NewsAdapter(Context ctx, PlusClient client) {
         mContext = ctx;
@@ -139,7 +139,7 @@ public class NewsAdapter extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        Item item = (Item) getItemInternal(position);
+        Item item = getItemInternal(position);
         Activity activity = item.getActivity();
 
         if(activity.getObject().getAttachments() == null || activity.getObject().getAttachments().isEmpty())
@@ -164,53 +164,54 @@ public class NewsAdapter extends BaseAdapter {
 
     public void updatePlusOne(View v) {
         if(v != null && v.getTag() != null) {
-            String url = (String) v.getTag();
-            PlusOneButton plusButton = (PlusOneButton) v.findViewById(R.id.plus_one_button);
+            ViewHolder viewHolder = (ViewHolder) v.getTag();
 
             if(mPlusClient != null) {
-                plusButton.setVisibility(View.VISIBLE);
-                plusButton.initialize(mPlusClient, url, 1);
+                viewHolder.plusButton.setVisibility(View.VISIBLE);
+                viewHolder.plusButton.initialize(mPlusClient, viewHolder.url, 1);
             }
         }
     }
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        if(view == null)
+        if (view == null) {
             view = mInflater.inflate(R.layout.news_item_base, null);
 
-        Item item = (Item) getItemInternal(i);
+            mViewHolder = new ViewHolder();
+            mViewHolder.plusButton = (PlusOneButton) view.findViewById(R.id.plus_one_button);
+            mViewHolder.container = (ViewGroup) view.findViewById(R.id.attachmentContainer);
+            mViewHolder.timeStamp = (TextView) view.findViewById(R.id.timestamp);
+            mViewHolder.content =  (TextView) view.findViewById(R.id.content);
+
+            view.setTag(mViewHolder);
+        } else {
+            mViewHolder = (ViewHolder) view.getTag();
+        }
+
+        Item item = getItemInternal(i);
         final Activity activity = item.getActivity();
 
-        view.setTag(activity.getUrl());
+        mViewHolder.url = activity.getUrl();
 
-        ViewGroup container = (ViewGroup) view.findViewById(R.id.attachmentContainer);
-
-        PlusOneButton plusButton = (PlusOneButton) view.findViewById(R.id.plus_one_button);
         if(mPlusClient != null) {
-            plusButton.setVisibility(View.VISIBLE);
-            plusButton.initialize(mPlusClient, activity.getUrl(), 1);
+            mViewHolder.plusButton.setVisibility(View.VISIBLE);
+            mViewHolder.plusButton.initialize(mPlusClient, activity.getUrl(), 1);
         } else {
-            plusButton.setVisibility(View.GONE);
+            mViewHolder.plusButton.setVisibility(View.GONE);
         }
-
-        /*ResizableImageView  picture = (ResizableImageView) view.findViewById(R.id.image);
-        picture.setOnClickListener(null);
-        picture.setImageDrawable(null);*/
-
-        TextView timeStamp = (TextView) view.findViewById(R.id.timestamp);
 
         if(activity.getPublished() != null) {
-            timeStamp.setVisibility(View.VISIBLE);
-            timeStamp.setText(Utils.toHumanTimePeriod(mContext,new DateTime(activity.getPublished().getValue()), DateTime.now()));
+            mViewHolder.timeStamp.setVisibility(View.VISIBLE);
+            mViewHolder.timeStamp.setText(Utils.toHumanTimePeriod(mContext,new DateTime(activity.getPublished().getValue()), DateTime.now()));
         } else {
-            timeStamp.setVisibility(View.GONE);
+            mViewHolder.timeStamp.setVisibility(View.GONE);
         }
 
-        if(activity.getVerb().equals("share"))
-            populateShare(activity, view);
+        if (activity.getVerb().equals("share"))
+            populateShare(activity, mViewHolder.content);
         else
-            populatePost(activity, view);
+            populatePost(activity, mViewHolder.content);
 
         if(activity.getObject().getAttachments() != null && activity.getObject().getAttachments().size() > 0) {
 
@@ -219,23 +220,23 @@ public class NewsAdapter extends BaseAdapter {
             switch(getItemViewType(i)) {
                 case 1:
                     // Article
-                    populateArticle(container, attachment);
+                    populateArticle(mViewHolder.container, attachment);
                     break;
                 case 2:
                     // Video
-                    populateVideo(container, attachment);
+                    populateVideo(mViewHolder.container, attachment);
                     break;
                 case 3:
                     // Photo
-                    populatePhoto(container, attachment);
+                    populatePhoto(mViewHolder.container, attachment);
                     break;
                 case 4:
                     // Album
-                    populateAlbum(container, attachment);
+                    populateAlbum(mViewHolder.container, attachment);
                     break;
                 case 5:
                     // Album
-                    populateEvent(container, attachment);
+                    populateEvent(mViewHolder.container, attachment);
                     break;
             }
         }
@@ -251,46 +252,71 @@ public class NewsAdapter extends BaseAdapter {
         return view;
     }
 
-    private View createAttachmentView(ViewGroup container, int layout) {
-        View attachmentView = null;
-        if(container.getChildCount() == 0) {
+    private View createAttachmentView(ViewGroup container, int layout, int type) {
+        View attachmentView;
+
+        if (container.getChildCount() == 0) {
             attachmentView = mInflater.inflate(layout, null);
             container.addView(attachmentView);
+
+            switch(type) {
+                case 1:
+                    // Article
+                    mViewHolder.articleImage = (ImageView) attachmentView.findViewById(R.id.image);
+                    mViewHolder.title =  (TextView) attachmentView.findViewById(R.id.displayName);
+                    mViewHolder.attachmentContent =  (TextView) attachmentView.findViewById(R.id.content);
+                    break;
+                case 2:
+                    // Video
+                    mViewHolder.poster = (ResizableImageView) attachmentView.findViewById(R.id.videoPoster);
+                    break;
+                case 3:
+                    // Photo
+                    mViewHolder.photo = (ResizableImageView) attachmentView.findViewById(R.id.photo);
+                    break;
+                case 4:
+                    // Album
+                    mViewHolder.pic1 = (ImageView) attachmentView.findViewById(R.id.pic1);
+                    mViewHolder.pic2 = (ImageView) attachmentView.findViewById(R.id.pic2);
+                    mViewHolder.pic3 = (ImageView) attachmentView.findViewById(R.id.pic3);
+                    break;
+                case 5:
+                    // Album
+                    mViewHolder.attachmentContent =  (TextView) attachmentView.findViewById(R.id.content);
+                    break;
+            }
         } else {
             attachmentView = container.getChildAt(0);
         }
+
         return attachmentView;
     }
 
     private void populateArticle(ViewGroup container, final Activity.PlusObject.Attachments attachment) {
-
         if(attachment == null)
             return;
 
-        View attachmentView = createAttachmentView(container, R.layout.news_item_article);
-        ImageView articleImage = (ImageView) attachmentView.findViewById(R.id.image);
-        TextView title =  (TextView)attachmentView.findViewById(R.id.displayName);
-        TextView content =  (TextView)attachmentView.findViewById(R.id.content);
+        View attachmentView = createAttachmentView(container, R.layout.news_item_article, 1);
 
-        title.setText(attachment.getDisplayName());
+        mViewHolder.title.setText(attachment.getDisplayName());
         try {
-            content.setText(new URL(attachment.getUrl()).getHost());
+            mViewHolder.attachmentContent.setText(new URL(attachment.getUrl()).getHost());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
 
         if(attachment.getImage() == null && attachment.getFullImage() == null)
-            articleImage.setVisibility(View.GONE);
+            mViewHolder.articleImage.setVisibility(View.GONE);
         else {
             String imageUrl = attachment.getImage().getUrl();
             if(attachment.getFullImage() != null)
                 imageUrl = attachment.getFullImage().getUrl();
 
-            articleImage.setImageDrawable(null);
-            articleImage.setVisibility(View.VISIBLE);
+            mViewHolder.articleImage.setImageDrawable(null);
+            mViewHolder.articleImage.setVisibility(View.VISIBLE);
             App.getInstance().getPicasso()
                     .load(imageUrl)
-                    .into(articleImage);
+                    .into(mViewHolder.articleImage);
         }
 
         attachmentView.setOnClickListener(new View.OnClickListener() {
@@ -304,15 +330,13 @@ public class NewsAdapter extends BaseAdapter {
     }
 
     private void populateVideo(ViewGroup container, final Activity.PlusObject.Attachments attachment) {
-
         if(attachment == null)
             return;
 
-        View attachmentView = createAttachmentView(container, R.layout.news_item_video);
-        ResizableImageView poster = (ResizableImageView) attachmentView.findViewById(R.id.videoPoster);
+        View attachmentView = createAttachmentView(container, R.layout.news_item_video, 2);
         App.getInstance().getPicasso()
                 .load(attachment.getImage().getUrl())
-                .into(poster);
+                .into(mViewHolder.poster);
 
         attachmentView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -331,63 +355,51 @@ public class NewsAdapter extends BaseAdapter {
     }
 
     private void populatePhoto(ViewGroup container, Activity.PlusObject.Attachments attachment) {
-
         if(attachment == null)
             return;
 
-        View attachmentView = createAttachmentView(container, R.layout.news_item_photo);
+        createAttachmentView(container, R.layout.news_item_photo, 3);
 
-        ResizableImageView photo = (ResizableImageView) attachmentView.findViewById(R.id.photo);
-        photo.setImageDrawable(null);
+        mViewHolder.photo.setImageDrawable(null);
 
         App.getInstance().getPicasso()
                 .load(attachment.getImage().getUrl())
-                .into(photo);
+                .into(mViewHolder.photo);
 
     }
 
     private void populateAlbum(ViewGroup container, Activity.PlusObject.Attachments attachment) {
-
         if(attachment == null)
             return;
 
-        View attachmentView = createAttachmentView(container, R.layout.news_item_album);
-
-        ImageView pic1 = (ImageView) attachmentView.findViewById(R.id.pic1);
-        ImageView pic2 = (ImageView) attachmentView.findViewById(R.id.pic2);
-        ImageView pic3 = (ImageView) attachmentView.findViewById(R.id.pic3);
+        createAttachmentView(container, R.layout.news_item_album, 4);
 
         App.getInstance().getPicasso()
                 .load(attachment.getThumbnails().get(0).getImage().getUrl())
-                .into(pic1);
+                .into(mViewHolder.pic1);
 
         if(attachment.getThumbnails().size() > 1)
             App.getInstance().getPicasso()
                     .load(attachment.getThumbnails().get(1).getImage().getUrl())
-                    .into(pic2);
+                    .into(mViewHolder.pic2);
 
         if(attachment.getThumbnails().size() > 2)
             App.getInstance().getPicasso()
                     .load(attachment.getThumbnails().get(2).getImage().getUrl())
-                    .into(pic3);
+                    .into(mViewHolder.pic3);
     }
 
     private void populateEvent(ViewGroup container, Activity.PlusObject.Attachments attachment) {
-        View attachmentView = createAttachmentView(container, R.layout.news_item_event);
-
-        TextView content = (TextView) attachmentView.findViewById(R.id.content);
-        content.setText(attachment.getContent());
+        createAttachmentView(container, R.layout.news_item_event, 5);
+        mViewHolder.attachmentContent.setText(attachment.getContent());
     }
 
-    public void populatePost(Activity item, View v) {
-        TextView content = (TextView) v.findViewById(R.id.content);
+    private void populatePost(Activity item, TextView content) {
         content.setText(Html.fromHtml(item.getObject().getContent()));
     }
 
-    public void populateShare(Activity item, View v) {
-        TextView content = (TextView) v.findViewById(R.id.content);
-
-        if(item.getAnnotation() != null) {
+    private void populateShare(Activity item, TextView content) {
+        if (item.getAnnotation() != null) {
             content.setText(Html.fromHtml(item.getAnnotation() + "<hr/>"+item.getObject().getContent()));
         } else {
             content.setText(Html.fromHtml(item.getObject().getContent()));
@@ -418,5 +430,21 @@ public class NewsAdapter extends BaseAdapter {
         public void setConsumed(boolean mConsumed) {
             this.mConsumed = mConsumed;
         }
+    }
+
+    private class ViewHolder {
+        PlusOneButton plusButton;
+        ViewGroup container;
+        TextView timeStamp;
+        ImageView articleImage;
+        TextView title;
+        ResizableImageView poster;
+        ResizableImageView photo;
+        TextView attachmentContent;
+        TextView content;
+        ImageView pic1;
+        ImageView pic2;
+        ImageView pic3;
+        String url;
     }
 }
