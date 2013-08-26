@@ -187,7 +187,7 @@ public class NewsAdapter extends BaseAdapter {
         ViewGroup container = (ViewGroup) view.findViewById(R.id.attachmentContainer);
 
         PlusOneButton plusButton = (PlusOneButton) view.findViewById(R.id.plus_one_button);
-        if(mPlusClient != null) {
+        if(mPlusClient != null && mPlusClient.isConnected()) {
             plusButton.setVisibility(View.VISIBLE);
             plusButton.initialize(mPlusClient, activity.getUrl(), 1);
         } else {
