@@ -99,35 +99,38 @@ public class EventAdapter extends BaseAdapter {
 
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        if(view == null)
-            view = mInflater.inflate(R.layout.list_event_item, null);
-
+    public View getView(int i, View convertView, ViewGroup viewGroup) {
+        View rowView = convertView;
+        if (rowView == null) {
+            rowView = mInflater.inflate(R.layout.list_event_item, null);
+            ViewHolder viewHolder = new ViewHolder();
+            viewHolder.title = (TextView) convertView.findViewById(R.id.title);
+            viewHolder.line2 = (TextView)convertView.findViewById(R.id.line2);
+            viewHolder.shareButton = (ImageButton) convertView.findViewById(R.id.share_button);
+            viewHolder.past = (TextView) convertView.findViewById(R.id.past);
+            viewHolder.icon = (SquaredImageView) convertView.findViewById(R.id.icon);
+            rowView.setTag(viewHolder);
+        }
+        ViewHolder holder = (ViewHolder) rowView.getTag();
         Item item = (Item) getItemInternal(i);
         Event event = item.getEvent();
 
-        SquaredImageView picture = (SquaredImageView) view.findViewById(R.id.icon);
         App.getInstance().getPicasso()
                 .load("https://developers.google.com" + event.getIconUrl())
-                .into(picture);
+                .into(holder.icon);
 
-        TextView title = (TextView) view.findViewById(R.id.title);
-        title.setText(event.getTitle());
+        holder.title.setText(event.getTitle());
 
-        TextView line2 = (TextView)view.findViewById(R.id.line2);
-        line2.setText(event.getStart().toLocalDateTime().toString(DateTimeFormat.patternForStyle("MM",mContext.getResources().getConfiguration().locale)));
-        ImageButton shareButton = (ImageButton) view.findViewById(R.id.share_button);
-
-        TextView past = (TextView) view.findViewById(R.id.past);
+        holder.line2.setText(event.getStart().toLocalDateTime().toString(DateTimeFormat.patternForStyle("MM",mContext.getResources().getConfiguration().locale)));
 
         if(event.getStart().isBefore(DateTime.now())) {
-            past.setVisibility(View.VISIBLE);
-            shareButton.setVisibility(View.GONE);
+            holder.past.setVisibility(View.VISIBLE);
+            holder.shareButton.setVisibility(View.GONE);
         } else {
-            shareButton.setOnClickListener(shareClickListener);
-            shareButton.setTag(event);
-            past.setVisibility(View.GONE);
-            shareButton.setVisibility(View.VISIBLE);
+            holder.shareButton.setOnClickListener(shareClickListener);
+            holder.shareButton.setTag(event);
+            holder.past.setVisibility(View.GONE);
+            holder.shareButton.setVisibility(View.VISIBLE);
         }
 
         // That item will contain a special property that tells if it was freshly retrieved
@@ -135,11 +138,11 @@ public class EventAdapter extends BaseAdapter {
             item.setConsumed(true);
             // In which case we magically instantiate our effect and launch it directly on the view
             Animation animation = AnimationUtils.makeInChildBottomAnimation(mContext);
-            view.startAnimation(animation);
+            rowView.startAnimation(animation);
         }
 
 
-        return view;
+        return rowView;
     }
 
     public class Item {
@@ -166,5 +169,11 @@ public class EventAdapter extends BaseAdapter {
         public void setEvent(Event mEvent) {
             this.mEvent = mEvent;
         }
+    }
+
+    static class ViewHolder {
+        public TextView title, line2, past;
+        public ImageButton shareButton;
+        public SquaredImageView icon;
     }
 }
