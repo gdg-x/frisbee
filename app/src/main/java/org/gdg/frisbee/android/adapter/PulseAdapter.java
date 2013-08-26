@@ -22,9 +22,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import com.google.android.gms.plus.PlusOneButton;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Pulse;
 import org.gdg.frisbee.android.api.model.PulseEntry;
+import org.gdg.frisbee.android.view.ResizableImageView;
 
 import java.util.*;
 
@@ -59,16 +61,19 @@ public class PulseAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        if(view == null)
-            view = mInflater.inflate(R.layout.list_pulse_item, null);
+    public View getView(int i, View convertView, ViewGroup viewGroup) {
+        View rowView = convertView;
+        if (rowView == null) {
+            rowView = mInflater.inflate(R.layout.list_pulse_item, null);
+            ViewHolder viewHolder = new ViewHolder();
+            viewHolder.position = (TextView) rowView.findViewById(R.id.position);
+            viewHolder.key = (TextView) rowView.findViewById(R.id.key);
+            viewHolder.value = (TextView) rowView.findViewById(R.id.value);
+            rowView.setTag(viewHolder);
+        }
 
+        ViewHolder holder = (ViewHolder) rowView.getTag();
         Map.Entry<String, PulseEntry> entry = (Map.Entry<String, PulseEntry>) getItem(i);
-
-        TextView position, key, value;
-        position = (TextView) view.findViewById(R.id.position);
-        key = (TextView) view.findViewById(R.id.key);
-        value = (TextView) view.findViewById(R.id.value);
 
         if(i > 0) {
             Map.Entry<String, PulseEntry> prevEntry = (Map.Entry<String, PulseEntry>) getItem(i-1);
@@ -84,28 +89,28 @@ public class PulseAdapter extends BaseAdapter {
                 mPosition[i] = (mPosition[i-1]+1);
 
             }
-            position.setText(mPosition[i]+".");
+            holder.position.setText(mPosition[i]+".");
 
         } else {
             mPosition[i] = 1;
-            position.setText("1.");
+            holder.position.setText("1.");
         }
 
-        key.setText(entry.getKey());
+        holder.key.setText(entry.getKey());
 
         switch(mMode) {
             case 0:
-                value.setText("("+entry.getValue().getMeetings()+")");
+                holder.value.setText("("+entry.getValue().getMeetings()+")");
                 break;
             case 1:
-                value.setText("("+entry.getValue().getAttendees()+")");
+                holder.value.setText("("+entry.getValue().getAttendees()+")");
                 break;
             case 2:
-                value.setText("("+entry.getValue().getPlusMembers()+")");
+                holder.value.setText("("+entry.getValue().getPlusMembers()+")");
                 break;
         }
 
-        return view;
+        return rowView;
     }
 
     public void setPulse(final int mode, Pulse pulse) {
@@ -131,5 +136,9 @@ public class PulseAdapter extends BaseAdapter {
                 return 0;
             }
         });
+    }
+
+    static class ViewHolder {
+        public TextView position, key, value;
     }
 }
