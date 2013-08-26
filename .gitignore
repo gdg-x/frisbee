@@ -15,7 +15,7 @@ gen/
 # Local configuration file (sdk path, etc)
 local.properties
 
-# Eclipse project files
+# Eclipse/IntelliJ project files
 .classpath
 .project
 default.properties
@@ -23,5 +23,10 @@ default.properties
 *.iml
 gen-external-apklibs
 target
+
+#Misc output folder
+out/**
+
+.DS_Store
 
 app/res/values/keys.xml
