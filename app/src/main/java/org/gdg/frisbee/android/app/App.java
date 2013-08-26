@@ -26,13 +26,14 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.widget.Toast;
-import com.google.analytics.tracking.android.EasyTracker;
+
 import com.google.analytics.tracking.android.GAServiceManager;
+import com.google.analytics.tracking.android.GoogleAnalytics;
+import com.google.analytics.tracking.android.Tracker;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.LruCache;
 import com.squareup.picasso.Picasso;
-import com.google.analytics.tracking.android.GoogleAnalytics;
-import com.google.analytics.tracking.android.Tracker;
+
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 import org.acra.sender.HttpSender;
@@ -42,10 +43,11 @@ import org.gdg.frisbee.android.api.CompatOkHttpLoader;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.GingerbreadLastLocationFinder;
 import org.gdg.frisbee.android.utils.Utils;
-import uk.co.senab.bitmapcache.BitmapLruCache;
 
 import java.io.File;
 import java.net.URL;
+
+import uk.co.senab.bitmapcache.BitmapLruCache;
 
 /**
  * Created with IntelliJ IDEA.
@@ -115,7 +117,7 @@ public class App extends Application implements LocationListener {
         getBitmapCache();
         GdgVolley.init(this);
 
-        mPreferences.edit().putInt(Const.SETTINGS_APP_STARTS, mPreferences.getInt(Const.SETTINGS_APP_STARTS,0)+1).commit();
+        mPreferences.edit().putInt(Const.SETTINGS_APP_STARTS, mPreferences.getInt(Const.SETTINGS_APP_STARTS,0)+1).apply();
 
         // Initialize Picasso
         mPicasso = new Picasso.Builder(this)
@@ -142,9 +144,9 @@ public class App extends Application implements LocationListener {
 
     public void migrate(int oldVersion, int newVersion) {
 
-        mPreferences.edit().remove(Const.SETTINGS_GCM_REG_ID).commit();
+        mPreferences.edit().remove(Const.SETTINGS_GCM_REG_ID).apply();
 
-        mPreferences.edit().clear().commit();
+        mPreferences.edit().clear().apply();
         mPreferences.edit().putBoolean(Const.SETTINGS_FIRST_START, true);
         String rootDir = null;
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
@@ -159,7 +161,7 @@ public class App extends Application implements LocationListener {
 
         Toast.makeText(getApplicationContext(), "Alpha version always resets Preferences on update.", Toast.LENGTH_LONG).show();
 
-        mPreferences.edit().putInt(Const.SETTINGS_VERSION_CODE, newVersion).commit();
+        mPreferences.edit().putInt(Const.SETTINGS_VERSION_CODE, newVersion).apply();
     }
 
     public void updateLastLocation() {

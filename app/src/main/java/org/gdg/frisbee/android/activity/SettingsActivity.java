@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
+
 import com.actionbarsherlock.view.MenuItem;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -39,6 +40,7 @@ import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.plus.GooglePlusUtil;
+
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.ApiRequest;
@@ -49,7 +51,6 @@ import org.gdg.frisbee.android.api.model.GcmRegistrationResponse;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.PlayServicesHelper;
-import roboguice.inject.InjectView;
 
 import java.io.IOException;
 
@@ -188,7 +189,7 @@ public class SettingsActivity extends RoboSherlockPreferenceActivity implements 
                                                             mPreferences.edit()
                                                                     .putBoolean(Const.SETTINGS_GCM, false)
                                                                     .remove(Const.SETTINGS_GCM_REG_ID)
-                                                                    .commit();
+                                                                    .apply();
                                                         }
                                                     }, new Response.ErrorListener() {
                                                         @Override
@@ -207,7 +208,7 @@ public class SettingsActivity extends RoboSherlockPreferenceActivity implements 
                                                                     .putBoolean(Const.SETTINGS_GCM, true)
                                                                     .putString(Const.SETTINGS_GCM_REG_ID, regid)
                                                                     .putString(Const.SETTINGS_GCM_NOTIFICATION_KEY, messageResponse.getNotificationKey())
-                                                                    .commit();
+                                                                    .apply();
                                                         }
                                                     }, new Response.ErrorListener() {
                                                         @Override
@@ -334,7 +335,7 @@ public class SettingsActivity extends RoboSherlockPreferenceActivity implements 
     @Override
     public void onSignInFailed() {
         Log.d(LOG_TAG, "onSignInFailed");
-        mPreferences.edit().putBoolean(Const.SETTINGS_SIGNED_IN, false).commit();
+        mPreferences.edit().putBoolean(Const.SETTINGS_SIGNED_IN, false).apply();
         CheckBoxPreference prefGoogleSignIn = (CheckBoxPreference)findPreference("gdg_signed_in");
         if(prefGoogleSignIn != null) {
             prefGoogleSignIn.setChecked(false);
