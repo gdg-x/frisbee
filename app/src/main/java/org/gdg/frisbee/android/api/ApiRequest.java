@@ -19,6 +19,8 @@ package org.gdg.frisbee.android.api;
 import com.android.volley.Request;
 import org.gdg.frisbee.android.app.GdgVolley;
 
+import java.util.ArrayList;
+
 /**
  * Created with IntelliJ IDEA.
  * User: maui

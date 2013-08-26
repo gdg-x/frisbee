@@ -64,7 +64,7 @@ public class GroupDirectory {
     }
 
     public ApiRequest getDirectory(Response.Listener<Directory> successListener, Response.ErrorListener errorListener) {
-        GsonRequest<Directory> dirReq = new GsonRequest<Directory>(Request.Method.POST,
+        GsonRequest<Void, Directory> dirReq = new GsonRequest<Void, Directory>(Request.Method.POST,
                 DIRECTORY_URL,
                 Directory.class,
                 successListener,
@@ -74,7 +74,7 @@ public class GroupDirectory {
     }
 
     public ApiRequest getPulse(Response.Listener<Pulse> successListener, Response.ErrorListener errorListener) {
-        GsonRequest<Pulse> pulseReq = new GsonRequest<Pulse>(Request.Method.GET,
+        GsonRequest<Void, Pulse> pulseReq = new GsonRequest<Void, Pulse>(Request.Method.GET,
                 PULSE_URL,
                 Pulse.class,
                 successListener,
@@ -84,7 +84,7 @@ public class GroupDirectory {
     }
 
     public ApiRequest getCountryPulse(String country, Response.Listener<Pulse> successListener, Response.ErrorListener errorListener) {
-        GsonRequest<Pulse> pulseReq = new GsonRequest<Pulse>(Request.Method.GET,
+        GsonRequest<Void, Pulse> pulseReq = new GsonRequest<Void, Pulse>(Request.Method.GET,
                 String.format(COUNTRY_PULSE_URL, country.replaceAll(" ","-")),
                 Pulse.class,
                 successListener,
@@ -149,7 +149,7 @@ public class GroupDirectory {
         String url = CHAPTER_CALENDAR_URL;
         url += "?"+URLEncodedUtils.format(params, "UTF-8");
 
-        GsonRequest<ArrayList<Event>> eventReq = new GsonRequest<ArrayList<Event>>(Request.Method.GET,
+        GsonRequest<Void, ArrayList<Event>> eventReq = new GsonRequest<Void, ArrayList<Event>>(Request.Method.GET,
                 url,
                 type,
                 successListener,

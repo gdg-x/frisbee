@@ -32,7 +32,7 @@
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content" android:id="@+id/analyticsContainer">
             <CheckBox
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
@@ -41,7 +41,7 @@
                     android:checked="true"/>
         </LinearLayout>
         <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content"
-                      android:layout_height="wrap_content" android:id="@+id/linearLayout"
+                      android:layout_height="wrap_content" android:id="@+id/gcmContainer"
                       android:layout_marginTop="10dip">
             <CheckBox android:layout_width="wrap_content" android:layout_height="fill_parent"
                       android:text="@string/enable_gcm" android:id="@+id/enable_gcm" android:textColor="@color/asbestos"

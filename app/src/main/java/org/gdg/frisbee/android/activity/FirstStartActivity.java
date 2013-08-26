@@ -20,21 +20,36 @@ import android.app.backup.BackupManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmentActivity;
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.ApiRequest;
+import org.gdg.frisbee.android.api.GdgX;
 import org.gdg.frisbee.android.api.model.Chapter;
+import org.gdg.frisbee.android.api.model.GcmRegistrationResponse;
+import org.gdg.frisbee.android.api.model.MessageResponse;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.fragment.*;
 import org.gdg.frisbee.android.utils.PlayServicesHelper;
 import org.gdg.frisbee.android.view.NonSwipeableViewPager;
 import roboguice.inject.InjectView;
+
+import java.io.IOException;
 
 /**
  * GDG Aachen
@@ -49,6 +64,7 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
     private static String LOG_TAG = "GDG-FirstStartActivity";
 
     private PlayServicesHelper mPlayHelper = null;
+    private GoogleCloudMessaging mGcm;
     protected int mRequestedClients = PlayServicesHelper.CLIENT_GAMES | PlayServicesHelper.CLIENT_PLUS;
 
     @InjectView(R.id.pager)
@@ -57,6 +73,8 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
     private SharedPreferences mPreferences;
     private Chapter mSelectedChapter;
     private FirstStartPageAdapter mViewPagerAdapter;
+
+    private Handler mHandler = new Handler();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,6 +87,8 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
 
         mViewPagerAdapter = new FirstStartPageAdapter(this, getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);
+
+        mGcm = GoogleCloudMessaging.getInstance(this);
 
         mPlayHelper = new PlayServicesHelper(this);
         mPlayHelper.setup(this, mRequestedClients);
@@ -123,7 +143,7 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
     @Override
     public void onBackPressed() {
         if(mViewPager.getCurrentItem() > 0)
-            mViewPager.setCurrentItem(0, true);
+            mViewPager.setCurrentItem(mViewPager.getCurrentItem()-1, true);
         else
             super.onBackPressed();
     }
@@ -144,6 +164,9 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
                 .putBoolean(Const.SETTINGS_FIRST_START, false)
                 .putBoolean(Const.SETTINGS_SIGNED_IN, false)
                 .commit();
+        FirstStartStep3Fragment step3 = (FirstStartStep3Fragment) mViewPagerAdapter.getItem(2);
+        step3.setSignedIn(false);
+
         mViewPager.setCurrentItem(2, true);
     }
 
@@ -172,30 +195,83 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
 
     @Override
     public void onSignInFailed() {
-        //To change body of implemented methods use File | Settings | File Templates.
+        Log.e(LOG_TAG, "SignIn failed");
     }
 
     @Override
     public void onSignInSucceeded() {
+        Log.d(LOG_TAG, "Signed in.");
+        FirstStartStep3Fragment step3 = (FirstStartStep3Fragment) mViewPagerAdapter.getItem(2);
+        step3.setSignedIn(true);
+
         onSignedIn(mPlayHelper.getPlusClient().getAccountName());
     }
 
     @Override
-    public void onComplete(boolean enableAnalytics, boolean enableGcm) {
-        mPreferences.edit()
-                .putBoolean("gcm", enableGcm)
-                .putBoolean("analytics", enableAnalytics)
-                .commit();
+    public void onComplete(final boolean enableAnalytics, final boolean enableGcm) {
 
-        finish();
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+
+                if(enableGcm && mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
+                    try {
+                        String token = GoogleAuthUtil.getToken(FirstStartActivity.this, mPlayHelper.getPlusClient().getAccountName(), "oauth2: "+ Scopes.PLUS_LOGIN);
+                        final String regid = mGcm.register(getString(R.string.gcm_sender_id));
+
+                        GdgX client = new GdgX(token);
+
+                        ApiRequest req = client.registerGcm(regid, new Response.Listener<GcmRegistrationResponse>() {
+                            @Override
+                            public void onResponse(GcmRegistrationResponse messageResponse) {
+                                mPreferences.edit()
+                                        .putBoolean(Const.SETTINGS_GCM, enableGcm)
+                                        .putBoolean(Const.SETTINGS_ANALYTICS, enableAnalytics)
+                                        .putString(Const.SETTINGS_GCM_REG_ID, regid)
+                                        .putString(Const.SETTINGS_GCM_NOTIFICATION_KEY, messageResponse.getNotificationKey())
+                                        .commit();
+
+                                finish();
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError volleyError) {
+                                  Log.e(LOG_TAG, "Fail", volleyError);
+                            }
+                        });
+                        req.execute();
+
+                        client.setHomeGdg(mPreferences.getString(Const.SETTINGS_HOME_GDG, ""), null ,null).execute();
+
+                    } catch (IOException e) {
+                        Log.e(LOG_TAG, "Token fail.", e);
+                    } catch (GoogleAuthException e) {
+                        Log.e(LOG_TAG, "Auth fail.", e);
+                    }
+                } else {
+                    mPreferences.edit()
+                            .putBoolean("gcm", enableGcm)
+                            .putBoolean("analytics", enableAnalytics)
+                            .commit();
+
+                    finish();
+                }
+
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+        }.execute(null, null, null);
     }
 
     public class FirstStartPageAdapter extends FragmentStatePagerAdapter {
         private Context mContext;
+        private Fragment[] mFragments;
 
         public FirstStartPageAdapter(Context ctx, FragmentManager fm) {
             super(fm);
             mContext = ctx;
+            mFragments = new Fragment[] {
+                FirstStartStep1Fragment.newInstance(), FirstStartStep2Fragment.newInstance(), FirstStartStep3Fragment.newInstance()
+            };
         }
 
         @Override
@@ -210,15 +286,7 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
 
         @Override
         public Fragment getItem(int position) {
-            switch(position) {
-                case 0:
-                    return FirstStartStep1Fragment.newInstance();
-                case 1:
-                    return FirstStartStep2Fragment.newInstance();
-                case 2:
-                    return FirstStartStep3Fragment.newInstance();
-            }
-            return null;
+            return mFragments[position];
         }
 
         @Override
