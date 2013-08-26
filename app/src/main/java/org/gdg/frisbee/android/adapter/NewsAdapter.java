@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -287,6 +288,7 @@ public class NewsAdapter extends BaseAdapter {
                 case 5:
                     // Album
                     mViewHolder.attachmentContent =  (TextView) attachmentView.findViewById(R.id.content);
+                    mViewHolder.attachmentTitle = (TextView) attachmentView.findViewById(R.id.title);
                     break;
             }
         } else {
@@ -393,9 +395,34 @@ public class NewsAdapter extends BaseAdapter {
                     .into(mViewHolder.pic3);
     }
 
-    private void populateEvent(ViewGroup container, Activity.PlusObject.Attachments attachment) {
+    private void populateEvent(ViewGroup container, final Activity.PlusObject.Attachments attachment) {
         createAttachmentView(container, R.layout.news_item_event, 5);
-        mViewHolder.attachmentContent.setText(attachment.getContent());
+
+
+        TextView title = mViewHolder.attachmentTitle;
+        String name = attachment.getDisplayName();
+        if (TextUtils.isEmpty(name)){
+            title.setVisibility(View.GONE);
+        } else {
+            title.setText(name);
+            title.setClickable(true);
+            title.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    openEventInGPlus(attachment.getUrl());
+                }
+            });
+        }
+
+        TextView content = mViewHolder.attachmentContent;
+        content.setText(attachment.getContent());
+    }
+
+
+    public void openEventInGPlus(String uri) {
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(uri));
+        mContext.startActivity(i);
     }
 
     private void populatePost(Activity item, TextView content) {
@@ -450,5 +477,6 @@ public class NewsAdapter extends BaseAdapter {
         ImageView pic2;
         ImageView pic3;
         String url;
+        public TextView attachmentTitle;
     }
 }
