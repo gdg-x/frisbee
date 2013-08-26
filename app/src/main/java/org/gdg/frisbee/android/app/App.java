@@ -132,6 +132,8 @@ public class App extends Application implements LocationListener {
         mTracker.setAnonymizeIp(true);
         mGaInstance.setDefaultTracker(mTracker);
 
+        GoogleAnalytics.getInstance(this).setAppOptOut(mPreferences.getBoolean("analytics",false));
+
         // Init LastLocationFinder
         mLocationFinder = new GingerbreadLastLocationFinder(this);
         mLocationFinder.setChangedLocationListener(this);

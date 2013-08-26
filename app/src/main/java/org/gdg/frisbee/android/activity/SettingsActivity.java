@@ -18,22 +18,40 @@ package org.gdg.frisbee.android.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 import com.actionbarsherlock.view.MenuItem;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockPreferenceActivity;
+import com.google.analytics.tracking.android.GoogleAnalytics;
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.plus.GooglePlusUtil;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.ApiRequest;
+import org.gdg.frisbee.android.api.GdgX;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
+import org.gdg.frisbee.android.api.model.GcmRegistrationResponse;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.PlayServicesHelper;
+import roboguice.inject.InjectView;
+
+import java.io.IOException;
 
 /**
  * GDG Aachen
@@ -49,6 +67,10 @@ public class SettingsActivity extends RoboSherlockPreferenceActivity implements 
     private SharedPreferences mPreferences;
     private PreferenceManager mPreferenceManager;
     private PlayServicesHelper mPlayServicesHelper;
+    private GdgX mXClient;
+    private GoogleCloudMessaging mGcm;
+
+    private LinearLayout mLoading;
 
     protected void initPlayServices() {
         int errorCode = GooglePlusUtil.checkGooglePlusApp(this);
@@ -86,6 +108,13 @@ public class SettingsActivity extends RoboSherlockPreferenceActivity implements 
         mPreferenceManager = getPreferenceManager();
         mPreferenceManager.setSharedPreferencesName("gdg");
 
+        mXClient = new GdgX();
+        mGcm = GoogleCloudMessaging.getInstance(this);
+
+        setContentView(R.layout.activity_settings);
+
+        mLoading = (LinearLayout) findViewById(R.id.loading);
+
         mPreferences = mPreferenceManager.getSharedPreferences();
 
         initPlayServices();
@@ -96,7 +125,7 @@ public class SettingsActivity extends RoboSherlockPreferenceActivity implements 
     }
 
     private void initPreferences() {
-        final ListPreference prefHomeGdgList = (ListPreference)findPreference("gdg_home");
+        final ListPreference prefHomeGdgList = (ListPreference)findPreference(Const.SETTINGS_HOME_GDG);
         if(prefHomeGdgList != null) {
             App.getInstance().getModelCache().getAsync("chapter_list", false, new ModelCache.CacheListener() {
                 @Override
@@ -119,6 +148,110 @@ public class SettingsActivity extends RoboSherlockPreferenceActivity implements 
                 @Override
                 public void onNotFound(String key) {
 
+                }
+            });
+            prefHomeGdgList.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object o) {
+                   final String homeGdg = (String) o;
+
+                    if (mPlayServicesHelper.isSignedIn() &&  mPreferences.getBoolean("gcm", true)) {
+                        setHomeGdg(homeGdg);
+                    }
+                   return true;
+                }
+            });
+        }
+
+        CheckBoxPreference prefGcm = (CheckBoxPreference)findPreference(Const.SETTINGS_GCM);
+        if(prefGcm != null) {
+            prefGcm.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object o) {
+                    final boolean enableGcm = (Boolean) o;
+
+                    if (mPlayServicesHelper.isSignedIn()) {
+                        mLoading.setVisibility(View.VISIBLE);
+                        mLoading.startAnimation(AnimationUtils.loadAnimation(SettingsActivity.this, R.anim.fade_in));
+
+                            new AsyncTask<Void, Void, Void>() {
+                                @Override
+                                protected Void doInBackground(Void... voids) {
+                                    try {
+                                        String token = GoogleAuthUtil.getToken(SettingsActivity.this, mPlayServicesHelper.getPlusClient().getAccountName(), "oauth2: " + Scopes.PLUS_LOGIN);
+                                        mXClient.setToken(token);
+
+                                        if(!enableGcm) {
+                                            ApiRequest req = mXClient.unregisterGcm(mPreferences.getString(Const.SETTINGS_GCM_REG_ID,""), new Response.Listener<GcmRegistrationResponse>() {
+                                                        @Override
+                                                        public void onResponse(GcmRegistrationResponse messageResponse) {
+                                                            mPreferences.edit()
+                                                                    .putBoolean(Const.SETTINGS_GCM, false)
+                                                                    .remove(Const.SETTINGS_GCM_REG_ID)
+                                                                    .commit();
+                                                        }
+                                                    }, new Response.ErrorListener() {
+                                                        @Override
+                                                        public void onErrorResponse(VolleyError volleyError) {
+                                                            Log.e(LOG_TAG, "Fail", volleyError);
+                                                        }
+                                                    }
+                                            );
+                                            req.execute();
+                                        } else {
+                                            final String regid = mGcm.register(getString(R.string.gcm_sender_id));
+                                            ApiRequest req = mXClient.registerGcm(regid, new Response.Listener<GcmRegistrationResponse>() {
+                                                        @Override
+                                                        public void onResponse(GcmRegistrationResponse messageResponse) {
+                                                            mPreferences.edit()
+                                                                    .putBoolean(Const.SETTINGS_GCM, true)
+                                                                    .putString(Const.SETTINGS_GCM_REG_ID, regid)
+                                                                    .putString(Const.SETTINGS_GCM_NOTIFICATION_KEY, messageResponse.getNotificationKey())
+                                                                    .commit();
+                                                        }
+                                                    }, new Response.ErrorListener() {
+                                                        @Override
+                                                        public void onErrorResponse(VolleyError volleyError) {
+                                                            Log.e(LOG_TAG, "Fail", volleyError);
+                                                        }
+                                                    }
+                                            );
+                                            req.execute();
+
+                                            setHomeGdg(mPreferences.getString(Const.SETTINGS_HOME_GDG, ""));
+                                        }
+                                    } catch (IOException e) {
+                                        Log.e(LOG_TAG, "(Un)Register GCM gailed (IO)", e);
+                                        e.printStackTrace();
+                                    } catch (GoogleAuthException e) {
+                                        Log.e(LOG_TAG, "(Un)Register GCM gailed (Auth)", e);
+                                        e.printStackTrace();
+                                    }
+                                    return null;
+                                }
+
+                                @Override
+                                protected void onPostExecute(Void o) {
+                                    super.onPostExecute(o);
+
+                                    Animation fadeOut = AnimationUtils.loadAnimation(SettingsActivity.this, R.anim.fade_out);
+                                    fadeOut.setAnimationListener(new Animation.AnimationListener() {
+                                        @Override
+                                        public void onAnimationStart(Animation animation) {}
+
+                                        @Override
+                                        public void onAnimationEnd(Animation animation) {
+                                            mLoading.setVisibility(View.GONE);
+                                        }
+
+                                        @Override
+                                        public void onAnimationRepeat(Animation animation) {}
+                                    });
+                                    mLoading.startAnimation(fadeOut);
+                                }
+                            }.execute();
+                    }
+                    return true;
                 }
             });
         }
@@ -144,6 +277,40 @@ public class SettingsActivity extends RoboSherlockPreferenceActivity implements 
                 }
             });
         }
+
+        CheckBoxPreference prefAnalytics = (CheckBoxPreference)findPreference("analytics");
+        if(prefAnalytics != null) {
+            prefAnalytics.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object o) {
+                    boolean analytics = (Boolean) o;
+                    GoogleAnalytics.getInstance(SettingsActivity.this).setAppOptOut(!analytics);
+                    return true;
+                }
+            });
+        }
+    }
+
+    private void setHomeGdg(final String homeGdg) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+
+                String token = null;
+                try {
+                    token = GoogleAuthUtil.getToken(SettingsActivity.this, mPlayServicesHelper.getPlusClient().getAccountName(), "oauth2: " + Scopes.PLUS_LOGIN);
+                    mXClient.setToken(token);
+
+                    mXClient.setHomeGdg(homeGdg, null ,null).execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (GoogleAuthException e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+        }.execute();
     }
 
     @Override

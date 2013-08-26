@@ -210,58 +210,56 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
     @Override
     public void onComplete(final boolean enableAnalytics, final boolean enableGcm) {
 
-            new AsyncTask() {
-                @Override
-                protected Object doInBackground(Object... objects) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
 
-                    if(enableGcm && mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
-                        try {
-                            String token = GoogleAuthUtil.getToken(FirstStartActivity.this, mPlayHelper.getPlusClient().getAccountName(), "oauth2: "+ Scopes.PLUS_LOGIN);
-                            String regid = mGcm.register(getString(R.string.gcm_sender_id));
+                if(enableGcm && mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
+                    try {
+                        String token = GoogleAuthUtil.getToken(FirstStartActivity.this, mPlayHelper.getPlusClient().getAccountName(), "oauth2: "+ Scopes.PLUS_LOGIN);
+                        final String regid = mGcm.register(getString(R.string.gcm_sender_id));
 
-                            GdgX client = new GdgX();
+                        GdgX client = new GdgX(token);
 
-                            ApiRequest req = client.registerGcm(token, regid, new Response.Listener<GcmRegistrationResponse>() {
-                                @Override
-                                public void onResponse(GcmRegistrationResponse messageResponse) {
-                                    mPreferences.edit()
-                                            .putBoolean(Const.SETTINGS_GCM, enableGcm)
-                                            .putBoolean(Const.SETTINGS_ANALYTICS, enableAnalytics)
-                                            .putString(Const.SETTINGS_GCM_REG_ID, regid)
-                                            .putString(Const.SETTINGS_GCM_NOTIFICATION_KEY, messageResponse.getNotificationKey())
-                                            .commit();
+                        ApiRequest req = client.registerGcm(regid, new Response.Listener<GcmRegistrationResponse>() {
+                            @Override
+                            public void onResponse(GcmRegistrationResponse messageResponse) {
+                                mPreferences.edit()
+                                        .putBoolean(Const.SETTINGS_GCM, enableGcm)
+                                        .putBoolean(Const.SETTINGS_ANALYTICS, enableAnalytics)
+                                        .putString(Const.SETTINGS_GCM_REG_ID, regid)
+                                        .putString(Const.SETTINGS_GCM_NOTIFICATION_KEY, messageResponse.getNotificationKey())
+                                        .commit();
 
-                                    finish();
-                                }
-                            }, new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError volleyError) {
-                                      Log.e(LOG_TAG, "Fail", volleyError);
-                                }
-                            });
-                            req.execute();
+                                finish();
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError volleyError) {
+                                  Log.e(LOG_TAG, "Fail", volleyError);
+                            }
+                        });
+                        req.execute();
 
-                        } catch (IOException e) {
-                            Log.e(LOG_TAG, "Token fail.", e);
-                        } catch (GoogleAuthException e) {
-                            Log.e(LOG_TAG, "Auth fail.", e);
-                        }
-                    } else {
-                        mPreferences.edit()
-                                .putBoolean("gcm", enableGcm)
-                                .putBoolean("analytics", enableAnalytics)
-                                .commit();
+                        client.setHomeGdg(mPreferences.getString(Const.SETTINGS_HOME_GDG, ""), null ,null).execute();
 
-                        finish();
+                    } catch (IOException e) {
+                        Log.e(LOG_TAG, "Token fail.", e);
+                    } catch (GoogleAuthException e) {
+                        Log.e(LOG_TAG, "Auth fail.", e);
                     }
+                } else {
+                    mPreferences.edit()
+                            .putBoolean("gcm", enableGcm)
+                            .putBoolean("analytics", enableAnalytics)
+                            .commit();
 
-                    return null;  //To change body of implemented methods use File | Settings | File Templates.
+                    finish();
                 }
 
-                @Override
-                protected void onPostExecute(Object o) {
-                }
-            }.execute(null, null, null);
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+        }.execute(null, null, null);
     }
 
     public class FirstStartPageAdapter extends FragmentStatePagerAdapter {

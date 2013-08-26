@@ -27,7 +27,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/get_involved_text"
-                        android:id="@+id/textView1" android:layout_marginTop="10dip"/>
+                        android:id="@+id/textView1" android:layout_marginTop="10dip" android:autoLink="all"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

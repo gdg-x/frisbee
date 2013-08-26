@@ -116,6 +116,10 @@ public class GsonRequest<Input, Output> extends GdgRequest<Output> {
 
     @Override
     protected Response<Output> parseNetworkResponse(NetworkResponse response) {
+        if(mClazz.equals(Void.class)) {
+            return Response.success(null,
+                    HttpHeaderParser.parseCacheHeaders(response));
+        }
         try {
             String json = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
             return (Response<Output>)Response.success(mGson.fromJson(json, mClazz),
