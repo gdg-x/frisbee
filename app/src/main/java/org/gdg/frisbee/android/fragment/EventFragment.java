@@ -111,7 +111,10 @@ public class EventFragment extends GdgListFragment implements View.OnClickListen
         mAdapter = new EventAdapter(getActivity(), this);
         setListAdapter(mAdapter);
 
-        mStart = new DateTime().minusMonths(2).dayOfMonth().withMinimumValue();
+        DateTime now = new DateTime();
+        mStart = now.minusMonths(2).dayOfMonth().withMinimumValue();
+        mEnd = now.plusYears(1).dayOfMonth().withMaximumValue();
+
         setIsLoading(true);
 
         mEvents = new ArrayList<Event>();
@@ -136,7 +139,7 @@ public class EventFragment extends GdgListFragment implements View.OnClickListen
                 Crouton.makeText(getActivity(), getString(R.string.fetch_events_failed), Style.ALERT).show();
             }
         };
-        mFetchEvents = mClient.getChapterEventList(mStart, null, getArguments().getString("plus_id"), mListener , mErrorListener);
+        mFetchEvents = mClient.getChapterEventList(mStart, mEnd, getArguments().getString("plus_id"), mListener , mErrorListener);
 
         if(Utils.isOnline(getActivity())) {
             mFetchEvents.execute();
