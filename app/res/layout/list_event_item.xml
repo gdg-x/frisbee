@@ -17,8 +17,8 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="wrap_content"
-              android:layout_width="fill_parent" android:paddingLeft="10dip" android:paddingTop="10dip"
-              android:paddingRight="10dip">
+              android:layout_width="fill_parent" android:paddingLeft="10dip" android:paddingTop="5dip"
+              android:paddingRight="10dip" android:paddingBottom="5dip">
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:orientation="horizontal"
                   android:layout_width="fill_parent"
