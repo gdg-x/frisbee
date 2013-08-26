@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,22 +28,23 @@ import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusOneButton;
 import com.google.api.services.plus.model.Activity;
+
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.YoutubeActivity;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ResizableImageView;
 import org.joda.time.DateTime;
-import org.joda.time.Period;
-import org.joda.time.format.DateTimeFormat;
 
 /**
  * GDG Aachen
@@ -167,7 +167,7 @@ public class NewsAdapter extends BaseAdapter {
             String url = (String) v.getTag();
             PlusOneButton plusButton = (PlusOneButton) v.findViewById(R.id.plus_one_button);
 
-            if(mPlusClient != null) {
+            if(mPlusClient != null && mPlusClient.isConnected()) {
                 plusButton.setVisibility(View.VISIBLE);
                 plusButton.initialize(mPlusClient, url, 1);
             }
