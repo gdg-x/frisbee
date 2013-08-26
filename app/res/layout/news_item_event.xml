@@ -13,6 +13,13 @@
   <TextView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:textStyle="bold"
+    android:id="@+id/title"
+    android:padding="10dip" />
+
+  <TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:text="New Text"
     android:id="@+id/content"
     android:padding="10dip"

@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -372,11 +373,34 @@ public class NewsAdapter extends BaseAdapter {
                     .into(pic3);
     }
 
-    private void populateEvent(ViewGroup container, Activity.PlusObject.Attachments attachment) {
+    private void populateEvent(ViewGroup container, final Activity.PlusObject.Attachments attachment) {
         View attachmentView = createAttachmentView(container, R.layout.news_item_event);
+
+        TextView title = (TextView) attachmentView.findViewById(R.id.title);
+        String name = attachment.getDisplayName();
+        if (TextUtils.isEmpty(name)){
+            title.setVisibility(View.GONE);
+        } else {
+            title.setText(name);
+            title.setClickable(true);
+            title.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    openEventInGPlus(attachment.getUrl());
+                }
+            });
+        }
+
 
         TextView content = (TextView) attachmentView.findViewById(R.id.content);
         content.setText(attachment.getContent());
+    }
+
+
+    public void openEventInGPlus(String uri) {
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(uri));
+        mContext.startActivity(i);
     }
 
     public void populatePost(Activity item, View v) {
