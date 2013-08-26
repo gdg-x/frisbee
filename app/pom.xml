@@ -65,7 +65,7 @@
         <dependency>
             <groupId>com.squareup.okhttp</groupId>
             <artifactId>okhttp</artifactId>
-            <version>1.1.1</version>
+            <version>1.2.1</version>
         </dependency>
         <dependency>
             <groupId>com.squareup</groupId>
@@ -78,9 +78,15 @@
             <version>2.2</version>
         </dependency>
         <dependency>
+            <groupId>com.actionbarsherlock</groupId>
+            <artifactId>actionbarsherlock</artifactId>
+            <version>4.3.1</version>
+            <type>apklib</type>
+        </dependency>
+        <dependency>
             <groupId>com.github.chrisbanes.actionbarpulltorefresh</groupId>
             <artifactId>extra-abs</artifactId>
-            <version>0.5</version>
+            <version>0.6</version>
             <type>apklib</type>
         </dependency>
         <dependency>
@@ -177,12 +183,6 @@
             <type>apklib</type>
         </dependency>
         <dependency>
-            <groupId>com.actionbarsherlock</groupId>
-            <artifactId>actionbarsherlock</artifactId>
-            <version>4.4.0</version>
-            <type>apklib</type>
-        </dependency>
-        <dependency>
             <groupId>com.google.android.gcm</groupId>
             <artifactId>gcm-client</artifactId>
             <version>3</version>
@@ -219,7 +219,7 @@
     <repositories>
         <repository>
             <id>gdg-x</id>
-            <url>https://gdg-x.hp.af.cm/m2/</url>
+            <url>http://gdg-x.hp.af.cm/m2/</url>
         </repository>
     </repositories>
     <build>

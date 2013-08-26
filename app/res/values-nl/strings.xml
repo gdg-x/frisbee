@@ -42,10 +42,8 @@
     <string name="no_thanks">Nee, bedankt.</string>
     <string name="skip">Sign-in overslaan</string>
     <string name="youtube_init_failed">YouTube Player kan niet geïnitialiseerd worden.</string>
-    <string name="bogus_organizer">Organisatoren Id: %1$s kan niet geparset worden</string>
     <string name="achievements">Successen</string>
     <string name="settings">Instellingen</string>
-    <string name="about">About</string>
     <string name="gdl">Google Developers Live</string>
     <plurals name="seconds_ago">
         <item quantity="zero">nu</item>

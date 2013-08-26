@@ -193,6 +193,6 @@ public class GdlListFragment extends GdgListFragment implements PullToRefreshAtt
 
     @Override
     public void onPageSelected() {
-        ((GdgActivity)getActivity()).getPullToRefreshHelper().setRefreshableView(getListView(), this);
+        ((GdgActivity)getActivity()).getPullToRefreshHelper().addRefreshableView(getListView(), this);
     }
 }

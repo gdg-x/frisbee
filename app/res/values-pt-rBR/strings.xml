@@ -39,10 +39,8 @@
     <string name="no_thanks">"Não, obrigado"</string>
     <string name="skip">"Pular Sign-in"</string>
     <string name="youtube_init_failed">"O player do YouTube não pôde ser inicializado."</string>
-    <string name="bogus_organizer">"Não foi possível analisar o Id Organizador: %1$s"</string>
     <string name="achievements">"Conquistas"</string>
     <string name="settings">"Configurações"</string>
-    <string name="about">"Sobre"</string>
     <string name="gdl">"Google Developers Live"</string>
     <plurals name="seconds_ago">
         <item quantity="zero">"agora"</item>

@@ -25,7 +25,6 @@
     <string name="add_to_calendar">Add to calendar</string>
     <string name="share_with_googleplus">Share with Google+</string>
     <string name="no_scheduled_events">No events scheduled\nwithin the next 30 days</string>
-    <string name="about">About</string>
     <string name="organizers">Organizers</string>
     <string name="resources">Links</string>
     <string name="fetch_events_failed">Could not fetch upcoming events</string>
@@ -42,7 +41,6 @@
     <string name="no_thanks">no thanks.</string>
     <string name="skip">Skip Sign-in</string>
     <string name="youtube_init_failed">YouTube Player could not be initialized.</string>
-    <string name="bogus_organizer">Could not parse Organizer Id: %1$s</string>
     <string name="achievements">Achievements</string>
     <string name="settings">Settings</string>
     <string name="about">About</string>
@@ -131,4 +129,8 @@
     <string name="allow_analytics">Allow us to collect anonymous usage data which helps us to improve the app</string>
     <string name="enable_gcm">Enable GDG Cloud Notifications (get notified about new Events)</string>
     <string name="step3_text">One more thing before we start...</string>
+
+    <string name="share_on_gplus">Invite Friends</string>
+    <string name="join_me">Join me at this event!</string>
+    <string name="name_not_known">Name not known</string>
 </resources>

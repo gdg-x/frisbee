@@ -91,6 +91,11 @@ public class PullToRefreshTransformer extends PullToRefreshAttacher.HeaderTransf
         }
     }
 
+    @Override
+    public void onRefreshMinimized() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
     /**
      * Set Text to show to prompt the user is pull (or keep pulling).
      * @param pullText - Text to display.
