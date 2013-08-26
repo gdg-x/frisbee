@@ -20,7 +20,8 @@
             android:summaryOn="@string/gcm_summary_on"
             android:summaryOff="@string/gcm_summary_off"
             android:icon="@drawable/ic_gcm"
-            android:defaultValue="true">
+            android:defaultValue="true"
+            android:dependency="gdg_signed_in">
     </CheckBoxPreference>
     <CheckBoxPreference
         android:key="analytics"

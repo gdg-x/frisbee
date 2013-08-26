@@ -28,17 +28,44 @@ import org.gdg.frisbee.android.api.deserializer.DateTimeDeserializer;
 import org.joda.time.DateTime;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.util.Map;
 
 
-public class GsonRequest<T> extends GdgRequest<T> {
+public class GsonRequest<Input, Output> extends GdgRequest<Output> {
     private final Gson mGson;
     private final Type mClazz;
+    private Input mInput = null;
+    private String mToken = null;
 
+    public GsonRequest(int method,
+                       String url,
+                       Input input,
+                       Type clazz,
+                       Listener<Output> listener,
+                       ErrorListener errorListener) {
+        super(method, url, listener, errorListener);
+        this.mClazz = clazz;
+        mInput = input;
+        mGson = new Gson();
+    }
+
+    public GsonRequest(int method,
+                       String url,
+                       Input input,
+                       Type clazz,
+                       Listener<Output> listener,
+                       ErrorListener errorListener,
+                       Gson gson) {
+        super(method, url, listener, errorListener);
+        this.mClazz = clazz;
+        mInput = input;
+        mGson = gson;
+    }
 
     public GsonRequest(int method,
                        String url,
                        Type clazz,
-                       Listener<T> listener,
+                       Listener<Output> listener,
                        ErrorListener errorListener) {
         super(method, url, listener, errorListener);
         this.mClazz = clazz;
@@ -48,7 +75,7 @@ public class GsonRequest<T> extends GdgRequest<T> {
     public GsonRequest(int method,
                        String url,
                        Type clazz,
-                       Listener<T> listener,
+                       Listener<Output> listener,
                        ErrorListener errorListener,
                        Gson gson) {
         super(method, url, listener, errorListener);
@@ -57,15 +84,45 @@ public class GsonRequest<T> extends GdgRequest<T> {
     }
 
     @Override
-    protected void deliverResponse(T response) {
+    protected void deliverResponse(Output response) {
         mListener.onResponse(response);
     }
 
     @Override
-    protected Response<T> parseNetworkResponse(NetworkResponse response) {
+    public String getBodyContentType() {
+        if(mInput != null)
+            return "application/json";
+        else
+            return super.getBodyContentType();
+    }
+
+    @Override
+    public byte[] getBody() throws AuthFailureError {
+        if(mInput != null)
+            return mGson.toJson(mInput).getBytes();
+        else
+            return super.getBody();
+    }
+
+    @Override
+    public Map<String, String> getHeaders() throws AuthFailureError {
+        Map<String, String> headers = super.getHeaders();
+
+        if(mToken != null)
+            headers.put("Authorization","Bearer "+ mToken);
+
+        return headers;
+    }
+
+    @Override
+    protected Response<Output> parseNetworkResponse(NetworkResponse response) {
+        if(mClazz.equals(Void.class)) {
+            return Response.success(null,
+                    HttpHeaderParser.parseCacheHeaders(response));
+        }
         try {
             String json = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-            return (Response<T>)Response.success(mGson.fromJson(json, mClazz),
+            return (Response<Output>)Response.success(mGson.fromJson(json, mClazz),
                     HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {
             return Response.error(new ParseError(e));
@@ -87,4 +144,11 @@ public class GsonRequest<T> extends GdgRequest<T> {
                 .create();
     }
 
+    public String getToken() {
+        return mToken;
+    }
+
+    public void setToken(String token) {
+        this.mToken = token;
+    }
 }

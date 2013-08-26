@@ -18,11 +18,17 @@ package org.gdg.frisbee.android.api;
 
 import com.android.volley.toolbox.HurlStack;
 import com.squareup.okhttp.OkHttpClient;
+import org.gdg.frisbee.android.app.App;
+
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.GeneralSecurityException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 
 /**
  * GDG Aachen
@@ -39,8 +45,10 @@ public class OkStack extends HurlStack {
         OkHttpClient client = new OkHttpClient();
         SSLContext sslContext;
         try {
+            TrustManager[] trustAllCerts = new TrustManager[] { new GdgTrustManager(App.getInstance().getApplicationContext()) };
+
             sslContext = SSLContext.getInstance("TLS");
-            sslContext.init(null, null, null);
+            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
         } catch (GeneralSecurityException e) {
             throw new AssertionError(); // The system has no TLS. Just give up.
         }

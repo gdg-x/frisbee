@@ -61,6 +61,8 @@ public class FirstStartStep2Fragment extends RoboSherlockFragment {
                     FirstStartActivity activity = (FirstStartActivity)getActivity();
                     if(!activity.getPlayServicesHelper().isSignedIn()) {
                         activity.getPlayServicesHelper().beginUserInitiatedSignIn();
+                    } else {
+                        activity.onSignInSucceeded();
                     }
                 }
             }
