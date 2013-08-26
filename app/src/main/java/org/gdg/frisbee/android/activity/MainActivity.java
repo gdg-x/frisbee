@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,46 +29,45 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.android.gms.games.GamesClient;
 import com.viewpagerindicator.TitlePageIndicator;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.gdg.frisbee.android.Const;
+import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.ChapterAdapter;
 import org.gdg.frisbee.android.adapter.DrawerAdapter;
 import org.gdg.frisbee.android.api.ApiRequest;
-import org.gdg.frisbee.android.api.GoogleDevelopersLive;
-import org.gdg.frisbee.android.api.model.GdlShow;
-import org.gdg.frisbee.android.api.model.GdlShowList;
-import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
+import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.fragment.EventFragment;
 import org.gdg.frisbee.android.fragment.InfoFragment;
 import org.gdg.frisbee.android.fragment.NewsFragment;
 import org.gdg.frisbee.android.utils.ChapterComparator;
-import org.gdg.frisbee.android.utils.GingerbreadLastLocationFinder;
 import org.gdg.frisbee.android.utils.PlayServicesHelper;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ActionBarDrawerToggleCompat;
 import org.joda.time.DateTime;
-import roboguice.inject.InjectView;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
+import roboguice.inject.InjectView;
 
 public class MainActivity extends GdgActivity implements ActionBar.OnNavigationListener {
 
@@ -199,6 +197,9 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 //getActionBar().setTitle(mTitle);
+                if (mPreferences.getBoolean(Const.SETTINGS_OPEN_DRAWER_ON_START, Const.SETTINGS_OPEN_DRAWER_ON_START_DEFAULT)) {
+                    mPreferences.edit().putBoolean(Const.SETTINGS_OPEN_DRAWER_ON_START, !Const.SETTINGS_OPEN_DRAWER_ON_START_DEFAULT).apply();
+                }
             }
 
             /** Called when a drawer has settled in a completely open state. */
@@ -460,6 +461,9 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
         super.onResume();
         Log.d(LOG_TAG, "onResume()");
         trackViewPagerPage(mViewPager.getCurrentItem());
+        if (mPreferences.getBoolean(Const.SETTINGS_OPEN_DRAWER_ON_START, Const.SETTINGS_OPEN_DRAWER_ON_START_DEFAULT)){
+            mDrawerLayout.openDrawer(Gravity.LEFT);
+        }
     }
 
 

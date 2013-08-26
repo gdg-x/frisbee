@@ -39,6 +39,9 @@ public class Const {
 
     public static final boolean SETTINGS_FIRST_START_DEFAULT = true;
 
+    public static final String SETTINGS_OPEN_DRAWER_ON_START = "open_drawer_on_start";
+    public static final boolean SETTINGS_OPEN_DRAWER_ON_START_DEFAULT = true;
+
     public static final String GITHUB_ORGA = "gdg-x";
     public static final String GITHUB_REPO = "frisbee";
 
