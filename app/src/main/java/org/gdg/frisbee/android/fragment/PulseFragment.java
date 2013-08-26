@@ -66,7 +66,7 @@ public class PulseFragment extends GdgListFragment {
 
         mClient = new GroupDirectory();
 
-        mTarget = getArguments().getString("target").replace(" ","-");
+        mTarget = getArguments().getString("target");
         mMode = getArguments().getInt("mode");
 
         if(getListView() instanceof ListView) {
@@ -103,7 +103,7 @@ public class PulseFragment extends GdgListFragment {
             mFetchPulseTask = mClient.getCountryPulse(mTarget, new Response.Listener<Pulse>() {
                         @Override
                         public void onResponse(final Pulse pulse) {
-                            App.getInstance().getModelCache().putAsync("pulse_" + mTarget.toLowerCase(), pulse, DateTime.now().plusDays(1), new ModelCache.CachePutListener() {
+                            App.getInstance().getModelCache().putAsync("pulse_" + mTarget.toLowerCase().replace(" ","-"), pulse, DateTime.now().plusDays(1), new ModelCache.CachePutListener() {
                                 @Override
                                 public void onPutIntoCache() {
                                     initAdapter(pulse);
@@ -120,7 +120,7 @@ public class PulseFragment extends GdgListFragment {
             );
         }
 
-        App.getInstance().getModelCache().getAsync("pulse_"+mTarget.toLowerCase(), true, new ModelCache.CacheListener() {
+        App.getInstance().getModelCache().getAsync("pulse_"+mTarget.toLowerCase().replace(" ","-"), true, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 Log.d(LOG_TAG, "Cache hit.");

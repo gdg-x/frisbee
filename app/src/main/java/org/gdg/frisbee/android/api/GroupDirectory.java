@@ -16,6 +16,7 @@
 
 package org.gdg.frisbee.android.api;
 
+import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.google.gson.FieldNamingPolicy;
@@ -32,7 +33,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
@@ -84,12 +87,18 @@ public class GroupDirectory {
     }
 
     public ApiRequest getCountryPulse(String country, Response.Listener<Pulse> successListener, Response.ErrorListener errorListener) {
-        GsonRequest<Void, Pulse> pulseReq = new GsonRequest<Void, Pulse>(Request.Method.GET,
-                String.format(COUNTRY_PULSE_URL, country.replaceAll(" ","-")),
-                Pulse.class,
-                successListener,
-                errorListener,
-                GsonRequest.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES));
+        GsonRequest<Void, Pulse> pulseReq = null;
+        try {
+            Log.d(LOG_TAG, String.format(COUNTRY_PULSE_URL, URLEncoder.encode(country, "utf-8")));
+            pulseReq = new GsonRequest<Void, Pulse>(Request.Method.GET,
+                    String.format(COUNTRY_PULSE_URL, country.replaceAll(" ","%20")),
+                    Pulse.class,
+                    successListener,
+                    errorListener,
+                    GsonRequest.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
         return new ApiRequest(pulseReq);
     }
 

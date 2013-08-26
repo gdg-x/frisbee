@@ -151,17 +151,16 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
     @Override
     public void onSignedIn(String accountName) {
         mPreferences.edit()
-                .putBoolean(Const.SETTINGS_FIRST_START, false)
                 .putBoolean(Const.SETTINGS_SIGNED_IN, true)
                 .commit();
 
-        mViewPager.setCurrentItem(2, true);
+        if(mViewPager.getCurrentItem() >= 1)
+            mViewPager.setCurrentItem(2, true);
     }
 
     @Override
     public void onSkippedSignIn() {
         mPreferences.edit()
-                .putBoolean(Const.SETTINGS_FIRST_START, false)
                 .putBoolean(Const.SETTINGS_SIGNED_IN, false)
                 .commit();
         FirstStartStep3Fragment step3 = (FirstStartStep3Fragment) mViewPagerAdapter.getItem(2);
@@ -228,6 +227,7 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
                                         .putBoolean(Const.SETTINGS_GCM, enableGcm)
                                         .putBoolean(Const.SETTINGS_ANALYTICS, enableAnalytics)
                                         .putString(Const.SETTINGS_GCM_REG_ID, regid)
+                                        .putBoolean(Const.SETTINGS_FIRST_START, false)
                                         .putString(Const.SETTINGS_GCM_NOTIFICATION_KEY, messageResponse.getNotificationKey())
                                         .commit();
 
@@ -252,6 +252,7 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
                     mPreferences.edit()
                             .putBoolean("gcm", enableGcm)
                             .putBoolean("analytics", enableAnalytics)
+                            .putBoolean(Const.SETTINGS_FIRST_START, false)
                             .commit();
 
                     finish();
