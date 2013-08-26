@@ -24,32 +24,29 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.viewpagerindicator.TitlePageIndicator;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
-import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.adapter.ChapterAdapter;
-import org.gdg.frisbee.android.api.ApiRequest;
-import org.gdg.frisbee.android.api.GroupDirectory;
-import org.gdg.frisbee.android.api.model.Chapter;
-import org.gdg.frisbee.android.api.model.Directory;
-import org.gdg.frisbee.android.api.model.Pulse;
-import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.cache.ModelCache;
-import org.gdg.frisbee.android.fragment.EventFragment;
-import org.gdg.frisbee.android.fragment.InfoFragment;
-import org.gdg.frisbee.android.fragment.NewsFragment;
-import org.gdg.frisbee.android.fragment.PulseFragment;
-import org.joda.time.DateTime;
-import roboguice.inject.InjectView;
 
 import java.util.ArrayList;
 
-public class PulseActivity extends GdgActivity implements ActionBar.OnNavigationListener {
+import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.ApiRequest;
+import org.gdg.frisbee.android.api.GroupDirectory;
+import org.gdg.frisbee.android.api.model.Pulse;
+import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.fragment.PulseFragment;
+import org.joda.time.DateTime;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
+import roboguice.inject.InjectView;
+
+public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnNavigationListener {
 
     private static String LOG_TAG = "GDG-PulseActivity";
     private GroupDirectory mClient;

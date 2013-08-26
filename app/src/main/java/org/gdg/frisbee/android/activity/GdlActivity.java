@@ -3,25 +3,23 @@ package org.gdg.frisbee.android.activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.util.SparseArray;
+
 import com.actionbarsherlock.view.MenuItem;
 import com.viewpagerindicator.TitlePageIndicator;
-import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.model.Chapter;
-import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.fragment.EventFragment;
-import org.gdg.frisbee.android.fragment.GdlListFragment;
-import org.gdg.frisbee.android.fragment.InfoFragment;
-import org.gdg.frisbee.android.fragment.NewsFragment;
-import roboguice.inject.InjectView;
 
 import java.lang.ref.WeakReference;
+
+import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.fragment.GdlListFragment;
+
+import roboguice.inject.InjectView;
 
 /**
  * Created with IntelliJ IDEA.
@@ -30,7 +28,7 @@ import java.lang.ref.WeakReference;
  * Time: 20:02
  * To change this template use File | Settings | File Templates.
  */
-public class GdlActivity extends GdgActivity {
+public class GdlActivity extends GdgNavDrawerActivity {
 
     private static String LOG_TAG = "GDG-GdlActivity";
 

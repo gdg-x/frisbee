@@ -7,8 +7,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import org.gdg.frisbee.android.R;
+
 import java.util.ArrayList;
+
+import org.gdg.frisbee.android.R;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,6 +25,7 @@ public class DrawerAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
 
     private ArrayList<DrawerItem> mItems = new ArrayList<DrawerItem>() {{
+        add(new DrawerItem(R.drawable.ic_home_gdg, R.string.home_gdg));
         add(new DrawerItem(R.drawable.drw_ic_achievements, R.string.achievements));
         add(new DrawerItem(R.drawable.drw_ic_gdl, R.string.gdl));
         add(new DrawerItem(R.drawable.drw_ic_pulse, R.string.pulse));
