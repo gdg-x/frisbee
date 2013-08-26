@@ -19,7 +19,6 @@ package org.gdg.frisbee.android.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,16 +26,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.MenuItem;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.android.gms.games.GamesClient;
@@ -49,7 +41,6 @@ import java.util.List;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.ChapterAdapter;
-import org.gdg.frisbee.android.adapter.DrawerAdapter;
 import org.gdg.frisbee.android.api.ApiRequest;
 import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.Chapter;
@@ -62,14 +53,13 @@ import org.gdg.frisbee.android.fragment.NewsFragment;
 import org.gdg.frisbee.android.utils.ChapterComparator;
 import org.gdg.frisbee.android.utils.PlayServicesHelper;
 import org.gdg.frisbee.android.utils.Utils;
-import org.gdg.frisbee.android.view.ActionBarDrawerToggleCompat;
 import org.joda.time.DateTime;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import roboguice.inject.InjectView;
 
-public class MainActivity extends GdgActivity implements ActionBar.OnNavigationListener {
+public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNavigationListener{
 
     public static final String EXTRA_GROUP_ID = "org.gdg.frisbee.CHAPTER";
     public static final String SECTION_EVENTS = "events";
@@ -79,24 +69,16 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
 
     public static final int REQUEST_FIRST_START_WIZARD = 100;
 
-    @InjectView(R.id.drawer)
-    private DrawerLayout mDrawerLayout;
-
-    @InjectView(R.id.left_drawer)
-    private ListView mDrawerContent;
-
     @InjectView(R.id.pager)
     private ViewPager mViewPager;
 
     @InjectView(R.id.titles)
-    private TitlePageIndicator mIndicator;
+    protected TitlePageIndicator mIndicator;
 
     private Handler mHandler = new Handler();
 
-    private DrawerAdapter mDrawerAdapter;
     private ChapterAdapter mSpinnerAdapter;
     private MyAdapter mViewPagerAdapter;
-    private ActionBarDrawerToggleCompat mDrawerToggle;
     private ApiRequest mFetchChaptersTask;
     private SharedPreferences mPreferences;
     private LocationManager mLocationManager;
@@ -117,8 +99,6 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
         super.onCreate(savedInstanceState);
 		Log.i(LOG_TAG, "onCreate");
         setContentView(R.layout.activity_main);
-
-        mPreferences = getSharedPreferences("gdg", MODE_PRIVATE);
 
         mClient = new GroupDirectory();
 
@@ -142,41 +122,7 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
             }
         });
 
-        mDrawerAdapter = new DrawerAdapter(this);
-        mDrawerContent.setAdapter(mDrawerAdapter);
-        mDrawerContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                DrawerAdapter.DrawerItem item = (DrawerAdapter.DrawerItem) mDrawerAdapter.getItem(i);
 
-                switch(item.getTitle()) {
-                    case R.string.achievements:
-                        if(mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
-                            getPlayServicesHelper().getGamesClient(new PlayServicesHelper.OnGotGamesClientListener() {
-                                @Override
-                                public void onGotGamesClient(GamesClient c) {
-                                    startActivityForResult(c.getAchievementsIntent(), 0);
-                                }
-                            });
-                        } else {
-                            Toast.makeText(MainActivity.this, getString(R.string.achievements_need_signin), Toast.LENGTH_LONG).show();
-                        }
-                        break;
-                    case R.string.about:
-                        startActivity(new Intent(MainActivity.this, AboutActivity.class));
-                        break;
-                    case R.string.gdl:
-                        startActivity(new Intent(MainActivity.this, GdlActivity.class));
-                        break;
-                    case R.string.pulse:
-                        startActivity(new Intent(MainActivity.this, PulseActivity.class));
-                        break;
-                    case R.string.settings:
-                        startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-                        break;
-                }
-            }
-        });
 
         mViewPagerAdapter = new MyAdapter(this, getSupportFragmentManager());
         mSpinnerAdapter = new ChapterAdapter(MainActivity.this, android.R.layout.simple_list_item_1);
@@ -186,28 +132,7 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        mDrawerToggle = new ActionBarDrawerToggleCompat(
-                this,                  /* host Activity */
-                mDrawerLayout,         /* DrawerLayout object */
-                R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
-                R.string.drawer_open,  /* "open drawer" description */
-                R.string.drawer_close  /* "close drawer" description */
-        ) {
 
-            /** Called when a drawer has settled in a completely closed state. */
-            public void onDrawerClosed(View view) {
-                //getActionBar().setTitle(mTitle);
-                if (mPreferences.getBoolean(Const.SETTINGS_OPEN_DRAWER_ON_START, Const.SETTINGS_OPEN_DRAWER_ON_START_DEFAULT)) {
-                    mPreferences.edit().putBoolean(Const.SETTINGS_OPEN_DRAWER_ON_START, !Const.SETTINGS_OPEN_DRAWER_ON_START_DEFAULT).apply();
-                }
-            }
-
-            /** Called when a drawer has settled in a completely open state. */
-            public void onDrawerOpened(View drawerView) {
-                //getActionBar().setTitle(mDrawerTitle);
-            }
-        };
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         mFetchChaptersTask = mClient.getDirectory(new Response.Listener<Directory>() {
             @Override
@@ -372,7 +297,7 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
     }
 
     private void checkAchievements() {
-        if(mFirstStart) {
+        if (mFirstStart) {
             mFirstStart = false;
             getHandler().postDelayed(new Runnable() {
                 @Override
@@ -387,7 +312,7 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
             }, 1000);
         }
 
-        if(mPreferences.getInt(Const.SETTINGS_APP_STARTS,0) == 10) {
+        if (mPreferences.getInt(Const.SETTINGS_APP_STARTS, 0) == 10) {
             getHandler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -401,7 +326,7 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
             }, 1000);
         }
 
-        if(mPreferences.getInt(Const.SETTINGS_APP_STARTS,0) == 50) {
+        if (mPreferences.getInt(Const.SETTINGS_APP_STARTS, 0) == 50) {
             getHandler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -416,36 +341,13 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
         }
     }
 
+
     private void addChapters(List<Chapter> chapterList) {
         Collections.sort(chapterList, mLocationComparator);
         mSpinnerAdapter.clear();
         mSpinnerAdapter.addAll(chapterList);
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        mDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Pass the event to ActionBarDrawerToggle, if it returns
-        // true, then it has handled the app icon touch event
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        // Handle your other action bar items...
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     protected void onStart() {
@@ -462,9 +364,6 @@ public class MainActivity extends GdgActivity implements ActionBar.OnNavigationL
         super.onResume();
         Log.d(LOG_TAG, "onResume()");
         trackViewPagerPage(mViewPager.getCurrentItem());
-        if (mPreferences.getBoolean(Const.SETTINGS_OPEN_DRAWER_ON_START, Const.SETTINGS_OPEN_DRAWER_ON_START_DEFAULT)){
-            mDrawerLayout.openDrawer(Gravity.LEFT);
-        }
     }
 
 
