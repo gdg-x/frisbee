@@ -19,14 +19,12 @@ package org.gdg.frisbee.android.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.google.android.gms.plus.GooglePlusUtil;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusShare;
 
@@ -247,7 +245,7 @@ public class EventFragment extends GdgListFragment implements View.OnClickListen
     }
 
     private void shareOnGplus(Event event) {
-        if (mPlusClient != null) {
+        if (mPlusClient != null && mPlusClient.isConnected()) {
             PlusShare.Builder builder = new PlusShare.Builder(this.getActivity(), mPlusClient);
 
             Uri eventUri = Uri.parse("https://developers.google.com/events/" + event.getId() + "/");
@@ -268,6 +266,8 @@ public class EventFragment extends GdgListFragment implements View.OnClickListen
             builder.setText(getString(R.string.join_me));
 
             startActivityForResult(builder.getIntent(), 0);
+        } else {
+            Crouton.makeText(getActivity(), R.string.signin_first, Style.INFO).show();
         }
     }
 }
