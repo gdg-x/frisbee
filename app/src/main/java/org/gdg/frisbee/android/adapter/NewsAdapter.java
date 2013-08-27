@@ -423,7 +423,9 @@ public class NewsAdapter extends BaseAdapter {
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(uri));
         mContext.startActivity(i);
+
     }
+
 
     private void populatePost(Activity item, TextView content) {
         content.setText(Html.fromHtml(item.getObject().getContent()));
