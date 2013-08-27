@@ -21,15 +21,18 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmentActivity;
 import com.google.android.gms.plus.GooglePlusUtil;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
+
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.utils.PlayServicesHelper;
 import org.gdg.frisbee.android.utils.PullToRefreshTransformer;
 import org.gdg.frisbee.android.utils.ScopedBus;
 import org.gdg.frisbee.android.utils.Utils;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 
 /**
@@ -44,10 +47,11 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
 
     private static final String LOG_TAG = "GDG-GdgActivity";
 
+
     private PlayServicesHelper mPlayServicesHelper;
     private PullToRefreshAttacher mPullToRefreshHelper;
 
-    private SharedPreferences mPreferences;
+    SharedPreferences mPreferences;
     private Handler mHandler = new Handler();
     private final ScopedBus scopedBus = new ScopedBus();
 
@@ -85,7 +89,10 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
 
         if(getSupportActionBar() != null)
             getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+
     }
+
 
     protected void initPlayServices() {
         mPlayServicesHelper = new PlayServicesHelper(this);
