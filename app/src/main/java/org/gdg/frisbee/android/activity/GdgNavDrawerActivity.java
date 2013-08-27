@@ -14,6 +14,8 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.gms.games.GamesClient;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.DrawerAdapter;
@@ -65,7 +67,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                                 }
                             });
                         } else {
-                            Toast.makeText(GdgNavDrawerActivity.this, getString(R.string.achievements_need_signin), Toast.LENGTH_LONG).show();
+                            Crouton.makeText(GdgNavDrawerActivity.this, getString(R.string.achievements_need_signin), Style.INFO, mDrawerContent).show();
                         }
                         break;
                     case R.string.home_gdg:
