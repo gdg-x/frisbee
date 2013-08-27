@@ -170,7 +170,7 @@ public class NewsFragment extends GdgListFragment implements PullToRefreshAttach
                                 if (feed == null) {
                                     Plus.Activities.List request = mClient.activities().list(params[0], "public");
                                     request.setMaxResults(10L);
-                                    request.setFields("nextPageToken,items(id,published,url,object/content,verb,object/attachments,annotation,object(plusoners,replies,resharers))");
+                                    request.setFields("nextPageToken,items(id,published,url,object/content,verb,object/attachments,object/actor,annotation,object(plusoners,replies,resharers))");
                                     feed = request.execute();
 
                                     App.getInstance().getModelCache().put("news_" + params[0], feed, DateTime.now().plusHours(1));

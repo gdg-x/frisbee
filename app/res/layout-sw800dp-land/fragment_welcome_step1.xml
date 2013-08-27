@@ -10,52 +10,57 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" android:layout_weight="1" android:gravity="center_vertical">
         <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:layout_marginBottom="25dip" android:padding="5dip"
-                android:layout_marginLeft="10dip" android:layout_marginTop="10dip">
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/welcome"
-                    android:id="@+id/textView" android:singleLine="true"
-                    android:linksClickable="false" android:textSize="36dip" android:textIsSelectable="false"
-                    android:textColor="@color/asbestos"/>
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                      android:text="@string/choose_home_gdg" android:id="@+id/textView1" android:singleLine="true"
-                      android:linksClickable="false" android:textSize="36dip" android:textIsSelectable="false"
-                      android:textColor="@color/asbestos"/>
-        </LinearLayout>
-        <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
-            <ViewSwitcher
+                android:layout_height="wrap_content" android:gravity="center_vertical">
+            <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" android:inAnimation="@anim/fade_in" android:outAnimation="@anim/fade_out"
-                    android:id="@+id/viewSwitcher" android:layout_weight="1">
+                    android:layout_height="wrap_content" android:layout_weight="1">
                 <LinearLayout
                         android:orientation="vertical"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent" android:gravity="center_horizontal">
-                    <ProgressBar
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:layout_marginBottom="25dip" android:padding="5dip"
+                        android:layout_marginLeft="10dip" android:layout_marginTop="10dip">
+                    <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/progressBar" android:indeterminate="true" android:indeterminateOnly="true"/>
+                            android:text="@string/welcome"
+                            android:id="@+id/textView" android:singleLine="true"
+                            android:linksClickable="false" android:textSize="36dip" android:textIsSelectable="false"
+                            android:textColor="@color/asbestos"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                              android:text="@string/choose_home_gdg" android:id="@+id/textView1" android:singleLine="true"
+                              android:linksClickable="false" android:textSize="36dip" android:textIsSelectable="false"
+                              android:textColor="@color/asbestos"/>
                 </LinearLayout>
-                <LinearLayout
-                        android:orientation="vertical"
+                <ViewSwitcher
                         android:layout_width="fill_parent"
-                        android:layout_height="wrap_content" android:gravity="center_horizontal" android:layout_weight="1">
-                    <Spinner
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/chapter_spinner" android:minWidth="200dip" android:minHeight="50dip"
-                            android:spinnerMode="dropdown"/>
-                    <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:text="@string/confirm" android:id="@+id/confirm"/>
-                </LinearLayout>
-            </ViewSwitcher>
+                        android:layout_height="wrap_content" android:inAnimation="@anim/fade_in" android:outAnimation="@anim/fade_out"
+                        android:id="@+id/viewSwitcher" android:layout_weight="1">
+                    <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent" android:gravity="center_horizontal">
+                        <ProgressBar
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/progressBar" android:indeterminate="true" android:indeterminateOnly="true"/>
+                    </LinearLayout>
+                    <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content" android:gravity="center_horizontal" android:layout_weight="1">
+                        <Spinner
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/chapter_spinner" android:minWidth="200dip" android:minHeight="50dip"
+                                android:spinnerMode="dropdown"/>
+                        <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="@string/confirm" android:id="@+id/confirm"/>
+                    </LinearLayout>
+                </ViewSwitcher>
+            </LinearLayout>
             <org.gdg.frisbee.android.view.ResizableImageView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"

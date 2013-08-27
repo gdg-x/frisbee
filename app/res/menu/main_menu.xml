@@ -4,11 +4,11 @@
   <item
     android:id="@+id/settings"
     android:title="@string/settings"
-    android:icon="@android:drawable/ic_menu_preferences"
-    android:showAsAction="ifRoom"/>
+    android:showAsAction="collapseActionView"
+    android:menuCategory="secondary"/>
   <item
     android:id="@+id/about"
     android:title="@string/about"
-    android:icon="@android:drawable/ic_menu_info_details"
-    android:showAsAction="ifRoom"/>
+    android:showAsAction="collapseActionView"
+    android:menuCategory="secondary"/>
 </menu>

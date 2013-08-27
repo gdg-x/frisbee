@@ -67,7 +67,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                                 }
                             });
                         } else {
-                            Crouton.makeText(GdgNavDrawerActivity.this, getString(R.string.achievements_need_signin), Style.INFO, mDrawerContent).show();
+                            Crouton.makeText(GdgNavDrawerActivity.this, getString(R.string.achievements_need_signin), Style.INFO).show();
                         }
                         break;
                     case R.string.home_gdg:

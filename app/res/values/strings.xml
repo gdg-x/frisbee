@@ -134,4 +134,5 @@
     <string name="join_me">Join me at this event!</string>
     <string name="name_not_known">Name not known</string>
     <string name="signin_first">You have to sign-in with G+ to use this feature</string>
+    <string name="originally_shared">originally shared:</string>
 </resources>

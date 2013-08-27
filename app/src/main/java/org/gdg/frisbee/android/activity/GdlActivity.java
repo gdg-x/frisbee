@@ -48,6 +48,7 @@ public class GdlActivity extends GdgNavDrawerActivity {
         setContentView(R.layout.activity_gdl);
 
         getSupportActionBar().setLogo(R.drawable.ic_gdl_logo_wide);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mViewPagerAdapter = new GdlCategoryAdapter(this, getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);
@@ -57,17 +58,6 @@ public class GdlActivity extends GdgNavDrawerActivity {
     private void trackViewPagerPage(int position) {
         Log.d(LOG_TAG, "trackViewPagerPage()");
         App.getInstance().getTracker().sendView(String.format("/GDL/%s", getResources().getStringArray(R.array.gdl_catgories)[position]));
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        if(item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);    //To change body of overridden methods use File | Settings | File Templates.
     }
 
     @Override

@@ -98,6 +98,9 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
         getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         getSupportActionBar().setListNavigationCallbacks(mSpinnerAdapter, PulseActivity.this);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
         mFetchGlobalPulseTask = mClient.getPulse(new Response.Listener<Pulse>() {
                 @Override
                 public void onResponse(final Pulse pulse) {
@@ -181,17 +184,6 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
             mViewPagerAdapter.notifyDataSetChanged();
         }
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        if(item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);    //To change body of overridden methods use File | Settings | File Templates.
     }
 
     public ArrayAdapter<String> getSpinnerAdapter() {

@@ -3,25 +3,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
-
-  <ImageView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/image"/>
-
-  <TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:textStyle="bold"
-    android:id="@+id/title"
-    android:padding="10dip" />
-
-  <TextView
+              android:layout_height="wrap_content">
+    <View android:layout_width="fill_parent"
+          android:layout_height="1dip" android:background="@color/cloud" android:layout_marginBottom="5dip"
+          android:layout_marginLeft="5dip" android:layout_marginRight="5dip"></View>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+        <ImageView
+          android:layout_width="40dip"
+          android:layout_height="40dip"
+          android:id="@+id/image" android:src="@drawable/no_events" android:paddingLeft="10dip"/>
+        <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:id="@+id/title"
+        android:padding="10dip" />
+    </LinearLayout>
+    <TextView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:text="New Text"
     android:id="@+id/content"
     android:padding="10dip"
     android:autoLink="email|map|web" />
+
 </LinearLayout>

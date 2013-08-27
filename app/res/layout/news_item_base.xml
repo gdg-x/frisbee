@@ -37,7 +37,21 @@
                     android:layout_height="wrap_content"
                     android:text="New Text"
                     android:id="@+id/content"
-                    android:padding="10dip" android:autoLink="email|map|web"/>
+                    android:padding="10dip" android:autoLink="email|map|web" android:linksClickable="true"/>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" android:id="@+id/shareContainer" android:visibility="gone">
+                <View android:layout_width="fill_parent"
+                      android:layout_height="1dip" android:background="@color/cloud" android:layout_marginBottom="5dip"
+                      android:layout_marginLeft="5dip" android:layout_marginRight="5dip"></View>
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="New Text"
+                        android:id="@+id/shareContent"
+                        android:padding="10dip" android:autoLink="all" android:linksClickable="true"/>
+            </LinearLayout>
         </LinearLayout>
         <LinearLayout
                 android:orientation="vertical"

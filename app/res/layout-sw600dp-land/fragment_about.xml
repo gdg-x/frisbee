@@ -18,6 +18,9 @@
                     android:layout_height="wrap_content"
                     android:text="@string/about_license"
                     android:id="@+id/textView" android:layout_marginTop="10dip" android:gravity="center_horizontal"/>
+            <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="1.0"
+                      android:id="@+id/textView1" android:gravity="center_horizontal" android:layout_marginTop="15dip"
+                      android:textStyle="bold"/>
             <view android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   class="org.gdg.frisbee.android.view.ResizableImageView" android:id="@+id/view"

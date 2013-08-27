@@ -21,6 +21,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.text.Html;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -187,7 +189,8 @@ public class NewsAdapter extends BaseAdapter {
             mViewHolder.container = (ViewGroup) view.findViewById(R.id.attachmentContainer);
             mViewHolder.timeStamp = (TextView) view.findViewById(R.id.timestamp);
             mViewHolder.content =  (TextView) view.findViewById(R.id.content);
-
+            mViewHolder.shareContent =  (TextView) view.findViewById(R.id.shareContent);
+            mViewHolder.shareContainer =  (ViewGroup) view.findViewById(R.id.shareContainer);
             view.setTag(mViewHolder);
         } else {
             mViewHolder = (ViewHolder) view.getTag();
@@ -214,9 +217,11 @@ public class NewsAdapter extends BaseAdapter {
         }
 
         if (activity.getVerb().equals("share"))
-            populateShare(activity, mViewHolder.content);
-        else
+            populateShare(activity, mViewHolder);
+        else {
+            mViewHolder.shareContainer.setVisibility(View.GONE);
             populatePost(activity, mViewHolder.content);
+        }
 
         if(activity.getObject().getAttachments() != null && activity.getObject().getAttachments().size() > 0) {
 
@@ -240,7 +245,7 @@ public class NewsAdapter extends BaseAdapter {
                     populateAlbum(mViewHolder.container, attachment);
                     break;
                 case 5:
-                    // Album
+                    // Event
                     populateEvent(mViewHolder.container, attachment);
                     break;
             }
@@ -286,9 +291,10 @@ public class NewsAdapter extends BaseAdapter {
                     mViewHolder.pic3 = (ImageView) attachmentView.findViewById(R.id.pic3);
                     break;
                 case 5:
-                    // Album
+                    // Event
                     mViewHolder.attachmentContent =  (TextView) attachmentView.findViewById(R.id.content);
                     mViewHolder.attachmentTitle = (TextView) attachmentView.findViewById(R.id.title);
+                    mViewHolder.articleImage = (ImageView) attachmentView.findViewById(R.id.image);
                     break;
             }
         } else {
@@ -398,7 +404,6 @@ public class NewsAdapter extends BaseAdapter {
     private void populateEvent(ViewGroup container, final Activity.PlusObject.Attachments attachment) {
         createAttachmentView(container, R.layout.news_item_event, 5);
 
-
         TextView title = mViewHolder.attachmentTitle;
         String name = attachment.getDisplayName();
         if (TextUtils.isEmpty(name)){
@@ -406,18 +411,20 @@ public class NewsAdapter extends BaseAdapter {
         } else {
             title.setText(name);
             title.setClickable(true);
-            title.setOnClickListener(new View.OnClickListener() {
+            View.OnClickListener mClickEvent = new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     openEventInGPlus(attachment.getUrl());
                 }
-            });
+            };
+
+            mViewHolder.articleImage.setOnClickListener(mClickEvent);
+            title.setOnClickListener(mClickEvent);
         }
 
         TextView content = mViewHolder.attachmentContent;
         content.setText(attachment.getContent());
     }
-
 
     public void openEventInGPlus(String uri) {
         Intent i = new Intent(Intent.ACTION_VIEW);
@@ -426,16 +433,19 @@ public class NewsAdapter extends BaseAdapter {
 
     }
 
-
     private void populatePost(Activity item, TextView content) {
         content.setText(Html.fromHtml(item.getObject().getContent()));
     }
 
-    private void populateShare(Activity item, TextView content) {
+    private void populateShare(Activity item, ViewHolder holder) {
+        String originallyShared = "<b><a href=\""+item.getObject().getActor().getUrl()+"\">"+ item.getObject().getActor().getDisplayName() +"</a></b> "+ mContext.getString(R.string.originally_shared)+"<br/><br/>";
         if (item.getAnnotation() != null) {
-            content.setText(Html.fromHtml(item.getAnnotation() + "<hr/>"+item.getObject().getContent()));
+            holder.content.setText(Html.fromHtml(item.getAnnotation()));
+            holder.shareContent.setText(Html.fromHtml(originallyShared +item.getObject().getContent()));
+            holder.shareContainer.setVisibility(View.VISIBLE);
         } else {
-            content.setText(Html.fromHtml(item.getObject().getContent()));
+            holder.shareContainer.setVisibility(View.GONE);
+            holder.content.setText(Html.fromHtml(originallyShared+item.getObject().getContent()));
         }
     }
 
@@ -468,6 +478,7 @@ public class NewsAdapter extends BaseAdapter {
     private class ViewHolder {
         PlusOneButton plusButton;
         ViewGroup container;
+        ViewGroup shareContainer;
         TextView timeStamp;
         ImageView articleImage;
         TextView title;
@@ -475,6 +486,7 @@ public class NewsAdapter extends BaseAdapter {
         ResizableImageView photo;
         TextView attachmentContent;
         TextView content;
+        TextView shareContent;
         ImageView pic1;
         ImageView pic2;
         ImageView pic3;

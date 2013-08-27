@@ -56,7 +56,7 @@ import uk.co.senab.bitmapcache.BitmapLruCache;
  * Time: 12:09
  */
 
-@ReportsCrashes(httpMethod = HttpSender.Method.POST, reportType = HttpSender.Type.JSON, formUri = "https://gdg-x.hp.af.cm/api/v1/bug/report", formKey = "", disableSSLCertValidation = true)
+@ReportsCrashes(httpMethod = HttpSender.Method.POST, reportType = HttpSender.Type.JSON, formUri = "https://gdg-x.hp.af.cm/api/v1/crashreport", formKey = "", disableSSLCertValidation = true)
 public class App extends Application implements LocationListener {
 
     private static App mInstance = null;

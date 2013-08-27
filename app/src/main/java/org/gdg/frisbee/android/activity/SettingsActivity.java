@@ -114,6 +114,8 @@ public class SettingsActivity extends RoboSherlockPreferenceActivity implements 
 
         setContentView(R.layout.activity_settings);
 
+        App.getInstance().getTracker().sendView("/Settings");
+
         mLoading = (LinearLayout) findViewById(R.id.loading);
 
         mPreferences = mPreferenceManager.getSharedPreferences();
