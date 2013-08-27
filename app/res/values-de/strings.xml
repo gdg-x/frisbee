@@ -65,4 +65,74 @@
         <item quantity="one">vor einem Tag</item>
         <item quantity="other">vor %d Tagen</item>
     </plurals>
+    <string-array name="gdl_catgories">
+        <item>Android</item>
+        <item>Google+</item>
+        <item>Chrome</item>
+        <item>Cloud</item>
+        <item>Maps</item>
+        <item>YouTube</item>
+        <item>Drive</item>
+        <item>Google I/O</item>
+        <item>Ads</item>
+        <item>Analytics</item>
+        <item>Commerce</item>
+        <item>Google TV</item>
+        <item>Primetime</item>
+    </string-array>
+    <string-array name="gdl_catgories_url">
+        <item>android</item>
+        <item>+</item>
+        <item>chrome</item>
+        <item>cloud</item>
+        <item>maps</item>
+        <item>youtube</item>
+        <item>drive</item>
+        <item>io</item>
+        <item>ads</item>
+        <item>analytics</item>
+        <item>commerce</item>
+        <item>tv</item>
+        <item>primetime</item>
+    </string-array>
+    <string-array name="about_tabs">
+        <item>Über</item>
+        <item>Entwickler</item>
+        <item>Änderungen</item>
+        <item>Mach mit</item>
+        <item>Drittlizenzen</item>
+    </string-array>
+    <string name="contributors">Die GDG App ist Open Source. Folgende Personen sind an der Entwicklung beteiligt:</string>
+    <string name="get_involved">Mach mit!</string>
+    <string name="get_involved_text">Die GDG App ist Open Source. Wir freuen uns über jeden der uns bei der Entwicklung unterstützen möchte.\n\nGehe zu GitHub uns sehe dir unseren Code an.\n\nhttps://github.com/gdg-x</string>
+    <string name="about_license">(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLizensiert unter der\nApache 2.0 Lizenz</string>
+    <string name="past_event">VORBEI</string>
+    <string name="upcoming_widget">GDG - Event</string>
+    <string name="global">Global</string>
+    <string name="pulse">GDG Pulse</string>
+    <string name="pulse_events">Events</string>
+    <string name="pulse_attendees">Teilnehmer</string>
+    <string name="pulse_circlers">Circlers</string>
+    <string name="home_gdg">Home GDG</string>
+    <string name="home_gdg_summary">Wähle deine primäre GDG</string>
+    <string name="analytics">Analytics</string>
+    <string name="analytics_summary_on">Derzeit werden anonyme Nutzungsdaten gesammelt</string>
+    <string name="analytics_summary_off">Derzeit werden keine anonymen Nutzungsdaten gesendet</string>
+    <string name="gcm">Cloud Benachrichtigungen</string>
+    <string name="gcm_summary_on">The app currently receives and processes GDG Cloud Notification</string>
+    <string name="gcm_summary_off">The app currently does not receive GDG Cloud Notification</string>
+    <string name="google_signed_in">Angemeldet mit Google+</string>
+    <string name="google_signed_in_on">Du bist derzeit mit Google+ angemeldet</string>
+    <string name="google_signed_in_off">Du bist nicht angemeldet</string>
+    <string name="achievements_need_signin">Du must eingeloggt sein um Achievements zu erhalten</string>
+    <string name="done">Fertig</string>
+    <string name="allow_analytics">Erlaube uns anonyme Nutzungsdaten zur Verbesserung der App zu sammeln</string>
+    <string name="enable_gcm">Aktiviere GDG Cloud Benachrichtigungen (werde über neue Events benachrichtigt)</string>
+    <string name="step3_text">Eine Sache noch...</string>
+
+    <string name="share_on_gplus">Freunde einladen</string>
+    <string name="join_me">Begleitet mich zu diesem Event!</string>
+    <string name="name_not_known">Unbekannt</string>
+    <string name="signin_first">Du musst mit Google+ angemeldet sein um dieses Feature zu nutzen.</string>
+    <string name="originally_shared">hat Folgendes ursprünglich geteilt:</string>
 </resources>

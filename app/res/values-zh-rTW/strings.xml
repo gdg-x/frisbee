@@ -103,4 +103,5 @@
     <string name="join_me">跟我一同參加本次活動！</string>
     <string name="name_not_known">未知的名稱</string>
     <string name="signin_first">您需要登入 Google+ 方能使用這個功能</string>
+    <string name="originally_shared">最先分享這則訊息:</string>
 </resources>

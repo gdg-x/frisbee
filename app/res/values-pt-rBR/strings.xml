@@ -104,4 +104,5 @@
     <string name="get_involved_text">"O app GDG é um esforço da comunidade e possui código aberto. Todos estão convidados a participar e melhorar este app. \n\nVisite o GitHub e faça e verifique nosso código."</string>
     <string name="about_license">"(C) 2013 The GDG Frisbee Project\nTodos os direitos reservados.\n\nLicensed nos termos\nda Licença Apache 2.0"</string>
     <string name="past_event">"PASSADO"</string>
+    <string name="originally_shared">compartilhou originalmente:</string>
 </resources>
