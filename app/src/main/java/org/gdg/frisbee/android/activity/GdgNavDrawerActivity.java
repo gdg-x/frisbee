@@ -7,10 +7,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.gms.games.GamesClient;
 
@@ -35,7 +35,15 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
 
+    @Override
+    public void setContentView(int layoutResId) {
+        super.setContentView(layoutResId);
+        initNavigationDrawer();
+    }
+
+    private void initNavigationDrawer() {
         mDrawerAdapter = new DrawerAdapter(this);
         mDrawerContent.setAdapter(mDrawerAdapter);
         mDrawerContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -57,19 +65,13 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                         }
                         break;
                     case R.string.home_gdg:
-                        startActivity(new Intent(GdgNavDrawerActivity.this, MainActivity.class));
-                        break;
-                    case R.string.about:
-                        startActivity(new Intent(GdgNavDrawerActivity.this, AboutActivity.class));
+                        navigateTo(MainActivity.class);
                         break;
                     case R.string.gdl:
-                        startActivity(new Intent(GdgNavDrawerActivity.this, GdlActivity.class));
+                        navigateTo(GdlActivity.class);
                         break;
                     case R.string.pulse:
-                        startActivity(new Intent(GdgNavDrawerActivity.this, PulseActivity.class));
-                        break;
-                    case R.string.settings:
-                        startActivity(new Intent(GdgNavDrawerActivity.this, SettingsActivity.class));
+                        navigateTo(PulseActivity.class);
                         break;
                 }
             }
@@ -101,14 +103,14 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+
     }
 
-    @Override
-    public void setContentView(int layoutResId) {
-        super.setContentView(R.layout.abstract_activity_navigation_drawer);
-        FrameLayout view = (FrameLayout) findViewById(R.id.content_container);
-        View content = getLayoutInflater().inflate(layoutResId, null);
-        view.addView(content);
+    private void navigateTo(Class<? extends GdgActivity> activityClass) {
+        Intent i = new Intent(GdgNavDrawerActivity.this, activityClass);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(i);
+
     }
 
     @Override
@@ -125,6 +127,14 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        com.actionbarsherlock.view.MenuInflater inflater = getSupportMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Pass the event to ActionBarDrawerToggle, if it returns
         // true, then it has handled the app icon touch event
@@ -133,7 +143,17 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         }
         // Handle your other action bar items...
 
-        return super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case R.id.settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
+            case R.id.about:
+                startActivity(new Intent(this, AboutActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
     }
 
     @Override

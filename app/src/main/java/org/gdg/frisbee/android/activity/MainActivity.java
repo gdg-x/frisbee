@@ -80,7 +80,6 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
     private ChapterAdapter mSpinnerAdapter;
     private MyAdapter mViewPagerAdapter;
     private ApiRequest mFetchChaptersTask;
-    private SharedPreferences mPreferences;
     private LocationManager mLocationManager;
     private GroupDirectory mClient;
 

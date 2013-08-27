@@ -25,12 +25,10 @@ public class DrawerAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
 
     private ArrayList<DrawerItem> mItems = new ArrayList<DrawerItem>() {{
-        add(new DrawerItem(R.drawable.ic_home_gdg, R.string.home_gdg));
-        add(new DrawerItem(R.drawable.drw_ic_achievements, R.string.achievements));
+        add(new DrawerItem(R.drawable.drw_ic_home_gdg, R.string.home_gdg));
         add(new DrawerItem(R.drawable.drw_ic_gdl, R.string.gdl));
         add(new DrawerItem(R.drawable.drw_ic_pulse, R.string.pulse));
-        add(new DrawerItem(R.drawable.drw_ic_settings, R.string.settings));
-        add(new DrawerItem(R.drawable.drw_ic_about, R.string.about));
+        add(new DrawerItem(R.drawable.drw_ic_achievements, R.string.achievements));
     }};
 
     public DrawerAdapter(Context ctx) {
