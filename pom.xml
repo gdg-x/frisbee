@@ -20,7 +20,7 @@
 	
 	<groupId>org.gdg</groupId>
 	<artifactId>frisbee</artifactId>
-    <version>0.8-ALPHA</version>
+    <version>1.0</version>
 	<packaging>pom</packaging>
     <name>GDG[X] Frisbee</name>
 
