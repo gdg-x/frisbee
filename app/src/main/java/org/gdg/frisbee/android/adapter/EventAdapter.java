@@ -105,7 +105,7 @@ public class EventAdapter extends BaseAdapter {
             rowView = mInflater.inflate(R.layout.list_event_item, null);
             ViewHolder viewHolder = new ViewHolder();
             viewHolder.title = (TextView) rowView.findViewById(R.id.title);
-            viewHolder.line2 = (TextView)rowView.findViewById(R.id.line2);
+            viewHolder.line2 = (TextView) rowView.findViewById(R.id.line2);
             viewHolder.shareButton = (ImageButton) rowView.findViewById(R.id.share_button);
             viewHolder.past = (TextView) rowView.findViewById(R.id.past);
             viewHolder.icon = (SquaredImageView) rowView.findViewById(R.id.icon);
