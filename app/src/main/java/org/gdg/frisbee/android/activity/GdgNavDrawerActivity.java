@@ -40,7 +40,11 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     @Override
     public void setContentView(int layoutResId) {
         super.setContentView(layoutResId);
+
         initNavigationDrawer();
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
     }
 
     private void initNavigationDrawer() {

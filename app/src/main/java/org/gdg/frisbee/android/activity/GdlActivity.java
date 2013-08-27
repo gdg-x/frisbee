@@ -48,7 +48,6 @@ public class GdlActivity extends GdgNavDrawerActivity {
         setContentView(R.layout.activity_gdl);
 
         getSupportActionBar().setLogo(R.drawable.ic_gdl_logo_wide);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mViewPagerAdapter = new GdlCategoryAdapter(this, getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);

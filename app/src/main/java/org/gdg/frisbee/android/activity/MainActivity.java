@@ -128,9 +128,6 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         getSupportActionBar().setListNavigationCallbacks(mSpinnerAdapter, MainActivity.this);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-
 
 
         mFetchChaptersTask = mClient.getDirectory(new Response.Listener<Directory>() {

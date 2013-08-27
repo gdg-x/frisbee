@@ -98,9 +98,6 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
         getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         getSupportActionBar().setListNavigationCallbacks(mSpinnerAdapter, PulseActivity.this);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-
         mFetchGlobalPulseTask = mClient.getPulse(new Response.Listener<Pulse>() {
                 @Override
                 public void onResponse(final Pulse pulse) {
