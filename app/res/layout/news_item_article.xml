@@ -25,13 +25,13 @@
                     android:layout_height="wrap_content"
                     android:text="New Text"
                     android:id="@+id/displayName"
-                    android:layout_marginBottom="10dip"/>
+                    android:layout_marginBottom="10dip" android:autoLink="email|map|web"/>
             <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="New Text"
                     android:id="@+id/content" android:textColor="@color/asbestos"
-                    android:textAppearance="@android:style/TextAppearance.Small"/>
+                    android:textAppearance="@android:style/TextAppearance.Small" android:autoLink="email|map|web"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -19,10 +19,12 @@ package org.gdg.frisbee.android.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.text.Html;
-import android.text.TextUtils;
+import android.text.*;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.URLSpan;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -191,6 +193,8 @@ public class NewsAdapter extends BaseAdapter {
             mViewHolder.content =  (TextView) view.findViewById(R.id.content);
             mViewHolder.shareContent =  (TextView) view.findViewById(R.id.shareContent);
             mViewHolder.shareContainer =  (ViewGroup) view.findViewById(R.id.shareContainer);
+            mViewHolder.content.setMovementMethod(LinkMovementMethod.getInstance());
+            mViewHolder.shareContent.setMovementMethod(LinkMovementMethod.getInstance());
             view.setTag(mViewHolder);
         } else {
             mViewHolder = (ViewHolder) view.getTag();
@@ -434,19 +438,47 @@ public class NewsAdapter extends BaseAdapter {
     }
 
     private void populatePost(Activity item, TextView content) {
-        content.setText(Html.fromHtml(item.getObject().getContent()));
+        content.setText(fromHtml(item.getObject().getContent()));
     }
 
     private void populateShare(Activity item, ViewHolder holder) {
         String originallyShared = "<b><a href=\""+item.getObject().getActor().getUrl()+"\">"+ item.getObject().getActor().getDisplayName() +"</a></b> "+ mContext.getString(R.string.originally_shared)+"<br/><br/>";
         if (item.getAnnotation() != null) {
-            holder.content.setText(Html.fromHtml(item.getAnnotation()));
-            holder.shareContent.setText(Html.fromHtml(originallyShared +item.getObject().getContent()));
+            holder.content.setText(fromHtml(item.getAnnotation()));
+            holder.shareContent.setText(fromHtml(originallyShared + item.getObject().getContent()));
             holder.shareContainer.setVisibility(View.VISIBLE);
         } else {
             holder.shareContainer.setVisibility(View.GONE);
-            holder.content.setText(Html.fromHtml(originallyShared+item.getObject().getContent()));
+            holder.content.setText(fromHtml(originallyShared + item.getObject().getContent()));
         }
+    }
+
+    private Spanned fromHtml(String html) {
+        Spanned spanned = Html.fromHtml(html);
+
+        if(spanned instanceof SpannableStringBuilder) {
+            SpannableStringBuilder ssb = (SpannableStringBuilder) spanned;
+
+            URLSpan[] urlspans = ssb.getSpans(0, ssb.length()-1, URLSpan.class);
+            for(int i = 0; i < urlspans.length; i++) {
+                URLSpan span = urlspans[i];
+                int start = ssb.getSpanStart(span);
+                int end = ssb.getSpanEnd(span);
+                final String url = span.getURL();
+
+                ssb.removeSpan(span);
+
+                ssb.setSpan(new ClickableSpan() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(url));
+                        mContext.startActivity(i);
+                    }
+                }, start, end, 33);
+            }
+        }
+        return spanned;
     }
 
     public class Item {
