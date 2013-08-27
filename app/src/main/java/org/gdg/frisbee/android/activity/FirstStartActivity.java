@@ -255,7 +255,7 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
                     mPreferences.edit()
                             .putBoolean("gcm", enableGcm)
                             .putBoolean("analytics", enableAnalytics)
-                            .putBoolean(Const.SETTINGS_FIRST_START, false
+                            .putBoolean(Const.SETTINGS_FIRST_START, false)
                             .apply();
 
                     finish();
