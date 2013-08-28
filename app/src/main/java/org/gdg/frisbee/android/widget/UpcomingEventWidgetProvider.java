@@ -111,7 +111,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                                         if(events.size() > 0) {
                                             views.setTextViewText(R.id.title, events.get(0).getTitle());
                                             views.setTextViewText(R.id.location, events.get(0).getLocation());
-                                            views.setTextViewText(R.id.startDate, events.get(0).getStart().toLocalDateTime().toString(DateTimeFormat.patternForStyle("MM", res.getConfiguration().locale)));
+                                            views.setTextViewText(R.id.startDate, events.get(0).getStart().toLocalDateTime().toString(DateTimeFormat.patternForStyle("MS", res.getConfiguration().locale)));
                                             views.setDisplayedChild(R.id.viewFlipper, 1);
 
                                             if(events.get(0).getGPlusEventLink() != null) {
