@@ -17,6 +17,8 @@
 package org.gdg.frisbee.android.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +37,7 @@ import java.util.Collection;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.fragment.EventFragment;
 import org.gdg.frisbee.android.view.SquaredImageView;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -113,7 +116,7 @@ public class EventAdapter extends BaseAdapter {
         }
         ViewHolder holder = (ViewHolder) rowView.getTag();
         Item item = (Item) getItemInternal(i);
-        Event event = item.getEvent();
+        final Event event = item.getEvent();
 
         App.getInstance().getPicasso()
                 .load("https://developers.google.com" + event.getIconUrl())
@@ -121,7 +124,7 @@ public class EventAdapter extends BaseAdapter {
 
         holder.title.setText(event.getTitle());
 
-        holder.line2.setText(event.getStart().toLocalDateTime().toString(DateTimeFormat.patternForStyle("MM",mContext.getResources().getConfiguration().locale)));
+        holder.line2.setText(event.getStart().toLocalDateTime().toString(DateTimeFormat.patternForStyle("MS",mContext.getResources().getConfiguration().locale)));
 
         if(event.getStart().isBefore(DateTime.now())) {
             holder.past.setVisibility(View.VISIBLE);
@@ -133,6 +136,28 @@ public class EventAdapter extends BaseAdapter {
             holder.shareButton.setVisibility(View.VISIBLE);
         }
 
+        rowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String link = event.getGPlusEventLink();
+                if (link != null){
+                    if (!link.startsWith("http")){
+                        link = "https://" + link;
+                    }
+                    openEventInGPlus(link);
+                }
+            }
+        });
+
+        rowView.setLongClickable(true);
+        rowView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                view.showContextMenu();
+                return true;
+            }
+        });
+
         // That item will contain a special property that tells if it was freshly retrieved
         if (!item.isConsumed()) {
             item.setConsumed(true);
@@ -143,6 +168,12 @@ public class EventAdapter extends BaseAdapter {
 
 
         return rowView;
+    }
+
+    public void openEventInGPlus(String uri) {
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(uri));
+        mContext.startActivity(i);
     }
 
     public class Item {

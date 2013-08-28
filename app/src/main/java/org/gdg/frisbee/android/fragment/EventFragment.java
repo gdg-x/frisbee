@@ -186,22 +186,6 @@ public class EventFragment extends GdgListFragment implements View.OnClickListen
         }
     }
 
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-
-        final Event event = (Event) mAdapter.getItem(position);
-
-        if(event.getGPlusEventLink() != null) {
-            openEventInGPlus(event.getGPlusEventLink());
-        }
-    }
-
-    public void openEventInGPlus(String uri) {
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse(uri));
-        startActivity(i);
-    }
 
     public void addEventToCalendar(Event event) {
         Intent intent = new Intent(Intent.ACTION_EDIT);
