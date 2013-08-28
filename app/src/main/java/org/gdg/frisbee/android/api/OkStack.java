@@ -17,24 +17,24 @@
 package org.gdg.frisbee.android.api;
 
 import android.net.TrafficStats;
+import android.os.Build;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.toolbox.HurlStack;
 import com.squareup.okhttp.OkHttpClient;
-import org.apache.http.HttpResponse;
-import org.gdg.frisbee.android.Const;
-import org.gdg.frisbee.android.app.App;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.GeneralSecurityException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.Map;
+
+import org.apache.http.HttpResponse;
+import org.gdg.frisbee.android.Const;
+import org.gdg.frisbee.android.app.App;
 
 /**
  * GDG Aachen
@@ -64,7 +64,7 @@ public class OkStack extends HurlStack {
 
     @Override
     public HttpResponse performRequest(Request<?> request, Map<String, String> additionalHeaders) throws IOException, AuthFailureError {
-        if(Const.DEVELOPER_MODE) {
+        if(Const.DEVELOPER_MODE && Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             TrafficStats.setThreadStatsTag(0xF00D);
             try {
                 HttpResponse res = super.performRequest(request, additionalHeaders);
