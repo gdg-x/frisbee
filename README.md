@@ -15,6 +15,6 @@ Frisbee is a community effort and we appreciate the help of everyone who wants t
 
 Check http://github.com/gdg-x for more information.
 
-####The GDG App, GDG[x] are not endorsed and/or supported by Google, the corporation.
+######The GDG App, GDG[x] are not endorsed and/or supported by Google, the corporation.
 
-&copy 2013 GDG[x]
+&copy; 2013 GDG[x]
