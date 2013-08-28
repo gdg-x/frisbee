@@ -23,7 +23,7 @@
   <string name="app_name">GDG</string>
   <string name="add_to_calendar">Ajouter au calendrier</string>
   <string name="share_with_googleplus">partager sur Google+</string>
-  <string name="no_scheduled_events">Pas d'event prévue\ndans les 30 prochains jours</string>
+  <string name="no_scheduled_events">Pas d\'event prévue\ndans les 30 prochains jours</string>
   <string name="about">À propos</string>
   <string name="organizers">Organisateurs</string>
   <string name="resources">Liens</string>
