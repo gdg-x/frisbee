@@ -24,6 +24,7 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import java.lang.reflect.Type;
+import java.util.Locale;
 
 /**
  * GDG Aachen
@@ -39,7 +40,7 @@ public class DateTimeDeserializer implements JsonDeserializer<DateTime> {
         //DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ssZZ");
         //2013-05-15T16:30:00+02:00
 
-        DateTimeFormatter fmt = DateTimeFormat.forPattern("dd MMM YYYY HH:mm Z");
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("dd MMM YYYY HH:mm Z").withLocale(Locale.ENGLISH);
         // 04 Jul 2013 23:00 +0200
         return fmt.parseDateTime(jsonElement.getAsJsonPrimitive().getAsString());
     }
