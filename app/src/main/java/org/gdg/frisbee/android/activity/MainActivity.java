@@ -301,7 +301,10 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
                     getPlayServicesHelper().getGamesClient(new PlayServicesHelper.OnGotGamesClientListener() {
                         @Override
                         public void onGotGamesClient(GamesClient c) {
-                            c.unlockAchievement(Const.ACHIEVEMENT_SIGNIN);
+                            if (c.isConnected()){
+                                c.unlockAchievement(Const.ACHIEVEMENT_SIGNIN);
+                            }
+                            // TODO remember to unlock later
                         }
                     });
                 }
@@ -315,7 +318,10 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
                     getPlayServicesHelper().getGamesClient(new PlayServicesHelper.OnGotGamesClientListener() {
                         @Override
                         public void onGotGamesClient(GamesClient c) {
-                            c.unlockAchievement(Const.ACHIEVEMENT_RETURN);
+                            if (c.isConnected()) {
+                                c.unlockAchievement(Const.ACHIEVEMENT_RETURN);
+                            }
+                            // TODO remember to unlock later
                         }
                     });
                 }
@@ -329,7 +335,10 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
                     getPlayServicesHelper().getGamesClient(new PlayServicesHelper.OnGotGamesClientListener() {
                         @Override
                         public void onGotGamesClient(GamesClient c) {
-                            c.unlockAchievement(Const.ACHIEVEMENT_KING_OF_THE_HILL);
+                            if (c.isConnected()){
+                                c.unlockAchievement(Const.ACHIEVEMENT_KING_OF_THE_HILL);
+                            }
+                            // TODO remember to unlock later
                         }
                     });
                 }
