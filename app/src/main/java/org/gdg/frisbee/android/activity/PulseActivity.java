@@ -32,6 +32,7 @@ import com.android.volley.VolleyError;
 import com.viewpagerindicator.TitlePageIndicator;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.ApiRequest;
@@ -91,7 +92,6 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
         });
 
         mPulseTargets = new ArrayList<String>();
-        mPulseTargets.add("Global");
 
         mViewPagerAdapter = new MyAdapter(this, getSupportFragmentManager());
         mSpinnerAdapter = new ArrayAdapter<String>(PulseActivity.this, android.R.layout.simple_list_item_1);
@@ -159,6 +159,8 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
     }
 
     private void initSpinner() {
+        Collections.sort(mPulseTargets);
+        mPulseTargets.add(0,"Global");
         mViewPagerAdapter.setSelectedPulseTarget(mPulseTargets.get(0));
         mSpinnerAdapter.clear();
         mSpinnerAdapter.addAll(mPulseTargets);
