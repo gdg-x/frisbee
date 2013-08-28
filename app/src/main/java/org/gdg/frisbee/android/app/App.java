@@ -22,6 +22,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
@@ -34,6 +35,9 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.LruCache;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.net.URL;
+
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 import org.acra.sender.HttpSender;
@@ -43,9 +47,6 @@ import org.gdg.frisbee.android.api.CompatOkHttpLoader;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.GingerbreadLastLocationFinder;
 import org.gdg.frisbee.android.utils.Utils;
-
-import java.io.File;
-import java.net.URL;
 
 import uk.co.senab.bitmapcache.BitmapLruCache;
 
@@ -80,13 +81,16 @@ public class App extends Application implements LocationListener {
         super.onCreate();
 
         if (Const.DEVELOPER_MODE) {
-            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+            StrictMode.ThreadPolicy.Builder b = new StrictMode.ThreadPolicy.Builder()
                     .detectDiskReads()
                     .detectDiskWrites()
                     .detectNetwork()
-                    .penaltyLog()
-                    .penaltyFlashScreen()
-                    .build());
+                    .penaltyLog();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
+                    b.penaltyFlashScreen();
+            }
+            StrictMode.setThreadPolicy(b.build());
+
         }
 
         // Initialize ACRA Bugreporting (reports get send to GDG[x] Hub)

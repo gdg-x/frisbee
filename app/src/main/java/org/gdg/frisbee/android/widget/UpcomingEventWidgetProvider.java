@@ -26,12 +26,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.Build;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+
+import java.util.ArrayList;
+
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.GroupDirectory;
@@ -42,8 +47,6 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
-
-import java.util.ArrayList;
 
 public class UpcomingEventWidgetProvider extends AppWidgetProvider {
 
@@ -98,49 +101,57 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
 
                     if(homeGdg == null) {
                         Log.d(LOG_TAG, "Got no Home GDG");
-                        views.setDisplayedChild(R.id.viewFlipper, 0);
+                        showChild(views, 0);
                     } else {
                         Log.d(LOG_TAG, "Fetching events");
                         String groupName = homeGdg.getName().replaceAll("GDG ","");
                         views.setTextViewText(R.id.groupName, groupName);
                         views.setTextViewText(R.id.groupName2, groupName);
                         mDirectory.getChapterEventList(new DateTime(), new DateTime().plusMonths(1), homeGdg.getGplusId(), new Response.Listener<ArrayList<Event>>() {
-                                    @Override
-                                    public void onResponse(ArrayList<Event> events) {
-                                        Log.d(LOG_TAG, "Got events");
-                                        if(events.size() > 0) {
-                                            views.setTextViewText(R.id.title, events.get(0).getTitle());
-                                            views.setTextViewText(R.id.location, events.get(0).getLocation());
-                                            views.setTextViewText(R.id.startDate, events.get(0).getStart().toLocalDateTime().toString(DateTimeFormat.patternForStyle("MM", res.getConfiguration().locale)));
-                                            views.setDisplayedChild(R.id.viewFlipper, 1);
+                            @Override
+                            public void onResponse(ArrayList<Event> events) {
+                                Log.d(LOG_TAG, "Got events");
+                                if (events.size() > 0) {
+                                    views.setTextViewText(R.id.title, events.get(0).getTitle());
+                                    views.setTextViewText(R.id.location, events.get(0).getLocation());
+                                    views.setTextViewText(R.id.startDate, events.get(0).getStart().toLocalDateTime().toString(DateTimeFormat.patternForStyle("MS", res.getConfiguration().locale)));
+                                    showChild(views, 1);
 
-                                            if(events.get(0).getGPlusEventLink() != null) {
+                                    if (events.get(0).getGPlusEventLink() != null) {
 
-                                                String url = events.get(0).getGPlusEventLink();
+                                        String url = events.get(0).getGPlusEventLink();
 
-                                                if(!url.startsWith("http")) {
-                                                    url = "https://"+url;
-                                                }
-
-                                                Intent i = new Intent(Intent.ACTION_VIEW);
-                                                i.setData(Uri.parse(url));
-                                                views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(context, 0, i, 0));
-                                            }
-                                        } else {
-                                            views.setDisplayedChild(R.id.viewFlipper, 0);
+                                        if (!url.startsWith("http")) {
+                                            url = "https://" + url;
                                         }
-                                        manager.updateAppWidget(thisWidget, views);
+
+                                        Intent i = new Intent(Intent.ACTION_VIEW);
+                                        i.setData(Uri.parse(url));
+                                        views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(context, 0, i, 0));
                                     }
-                                }, new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError volleyError) {
-                                        Log.e(LOG_TAG, "Error updating Widget", volleyError);
-                                        views.setDisplayedChild(R.id.viewFlipper, 0);
-                                        manager.updateAppWidget(thisWidget, views);
-                                    }
-                                }).execute();
+                                } else {
+                                    showChild(views, 0);
+                                }
+                                manager.updateAppWidget(thisWidget, views);
+                            }
+                        }
+
+                            ,new Response.ErrorListener()
+
+                            {
+                                @Override
+                                public void onErrorResponse (VolleyError volleyError){
+                                Log.e(LOG_TAG, "Error updating Widget", volleyError);
+                                showChild(views, 0);
+                                manager.updateAppWidget(thisWidget, views);
+                            }
+                            }
+
+                            ).
+
+                            execute();
+                        }
                     }
-                }
 
                 @Override
                 public void onNotFound(String key) {
@@ -148,6 +159,24 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                 }
             });
 
+        }
+
+        private void showChild(RemoteViews views, int i) {
+            if (i == 1){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
+                    views.setDisplayedChild(R.id.viewFlipper, 1);
+                } else {
+                    views.setViewVisibility(R.id.noEventContainer, View.GONE);
+                    views.setViewVisibility(R.id.eventContainer, View.VISIBLE);
+                }
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
+                    views.setDisplayedChild(R.id.viewFlipper, 0);
+                } else {
+                    views.setViewVisibility(R.id.noEventContainer, View.VISIBLE);
+                    views.setViewVisibility(R.id.eventContainer, View.GONE);
+                }
+            }
         }
     }
 

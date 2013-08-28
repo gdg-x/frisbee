@@ -29,6 +29,10 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmentActivity;
@@ -37,6 +41,8 @@ import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.ApiRequest;
@@ -72,6 +78,9 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
 
     @InjectView(R.id.pager)
     private NonSwipeableViewPager mViewPager;
+
+    @InjectView(R.id.loading)
+    private LinearLayout mLoading;
 
     private SharedPreferences mPreferences;
     private Chapter mSelectedChapter;
@@ -116,6 +125,48 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
 
     public PlayServicesHelper getPlayServicesHelper() {
         return mPlayHelper;
+    }
+
+    private void setLoadingScreen(boolean show) {
+        Animation fadeAnim;
+        if(show) {
+            fadeAnim = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+            fadeAnim.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    mLoading.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    //To change body of implemented methods use File | Settings | File Templates.
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                    //To change body of implemented methods use File | Settings | File Templates.
+                }
+            });
+        } else {
+            fadeAnim = AnimationUtils.loadAnimation(this, R.anim.fade_out);
+            fadeAnim.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    mLoading.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                    //To change body of implemented methods use File | Settings | File Templates.
+                }
+            });
+        }
+
+        mLoading.startAnimation(fadeAnim);
     }
 
     @Override
@@ -217,6 +268,7 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
             protected Void doInBackground(Void... voids) {
 
                 if(enableGcm && mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
+                    setLoadingScreen(true);
                     try {
                         String token = GoogleAuthUtil.getToken(FirstStartActivity.this, mPlayHelper.getPlusClient().getAccountName(), "oauth2: "+ Scopes.PLUS_LOGIN);
                         final String regid = mGcm.register(getString(R.string.gcm_sender_id));
@@ -239,7 +291,9 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
                         }, new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError volleyError) {
-                                  Log.e(LOG_TAG, "Fail", volleyError);
+                                setLoadingScreen(false);
+                                Crouton.showText(FirstStartActivity.this, getString(R.string.server_error), Style.ALERT);
+                                Log.e(LOG_TAG, "Fail", volleyError);
                             }
                         });
                         req.execute();

@@ -45,8 +45,8 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
         initNavigationDrawer();
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
     }
 
     private void initNavigationDrawer() {
