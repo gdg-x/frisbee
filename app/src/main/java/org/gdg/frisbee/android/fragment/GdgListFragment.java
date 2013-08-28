@@ -165,7 +165,7 @@ public class GdgListFragment extends RoboSherlockFragment {
     }
 
     private void updateEmpty() {
-        if(!mLoading) {
+        if(!mLoading && getActivity() != null) {
             if(mAdapter == null || mAdapter.getCount() == 0) {
                 setListShown(false, true);
                 mEmptyView.startAnimation(AnimationUtils.loadAnimation(
