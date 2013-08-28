@@ -442,7 +442,11 @@ public class NewsAdapter extends BaseAdapter {
     }
 
     private void populateShare(Activity item, ViewHolder holder) {
-        String originallyShared = "<b><a href=\""+item.getObject().getActor().getUrl()+"\">"+ item.getObject().getActor().getDisplayName() +"</a></b> "+ mContext.getString(R.string.originally_shared)+"<br/><br/>";
+        String originallyShared = "";
+
+        if(item.getObject().getActor() != null && mContext != null)
+            originallyShared = "<b><a href=\""+item.getObject().getActor().getUrl()+"\">"+ item.getObject().getActor().getDisplayName() +"</a></b> "+ mContext.getString(R.string.originally_shared)+"<br/><br/>";
+
         if (item.getAnnotation() != null) {
             holder.content.setText(fromHtml(item.getAnnotation()));
             holder.shareContent.setText(fromHtml(originallyShared + item.getObject().getContent()));
