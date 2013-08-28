@@ -15,35 +15,35 @@
   ~ limitations under the License.
   -->
 <resources>
-  <string name="news">Actualité</string>
-  <string name="drawer_open">Ouvriez navigation drawer</string>
-  <string name="drawer_close">Fermez navigation drawer</string>
+  <string name="news">Actualités</string>
+  <string name="drawer_open">Ouvrez le menu de navigation</string>
+  <string name="drawer_close">Fermez le menu de navigation</string>
   <string name="info">Détails</string>
-  <string name="events">Évents</string>
+  <string name="events">Events</string>
   <string name="app_name">GDG</string>
   <string name="add_to_calendar">Ajouter au calendrier</string>
   <string name="share_with_googleplus">partager sur Google+</string>
-  <string name="no_scheduled_events">Pas de évents prévue\ndans les 30 prochains jours</string>
+  <string name="no_scheduled_events">Pas d'event prévue\ndans les 30 prochains jours</string>
   <string name="about">À propos</string>
   <string name="organizers">Organisateurs</string>
   <string name="resources">Liens</string>
-  <string name="fetch_events_failed">Impossible de récupérer les évents à venir</string>
-  <string name="fetch_chapters_failed">Impossible de récupérer la liste des chaptires</string>
-  <string name="bogus_organizer">Impossible de analyser id d\'organisateur: %1$s</string>
+  <string name="fetch_events_failed">Impossible de récupérer les events à venir</string>
+  <string name="fetch_chapters_failed">Impossible de récupérer la liste des GDGs</string>
+  <string name="bogus_organizer">Impossible d\'analyser id d\'organisateur: %1$s</string>
   <string name="cached_content">Vous êtes actuellement déconnecté. Voilà une partie du contenu caché.</string>
   <string name="offline_alert">Vous êtes actuellement déconnecté.</string>
-  <string name="welcome">Bon jour.</string>
+  <string name="welcome">Bonjour.</string>
   <string name="choose_home_gdg">Choisissez votre GDG</string>
   <string name="signin_with_google">Connectez-vous avec Google</string>
-  <string name="confirm">Confirmiez</string>
+  <string name="confirm">Confirmez</string>
   <string name="signin_description">L\'application GDG s\'intègre avec Google et d\'autres services Google. Pour utiliser ces
     fonctions il faut que vous soyez connecté avec Google.
   </string>
   <string name="or">ou</string>
   <string name="no_thanks">Non, merci</string>
-  <string name="skip">Passer à connecter</string>
-  <string name="youtube_init_failed">Impossible de initaliser le joueur YouTube.</string>
-  <string name="achievements">Réusittes</string>
+  <string name="skip">Passer la connexion</string>
+  <string name="youtube_init_failed">Impossible d\'initaliser le lecteur YouTube.</string>
+  <string name="achievements">Réussites</string>
   <string name="settings">Paramètres</string>
   <string name="gdl">Google Developers Live</string>
   <plurals name="seconds_ago">
@@ -106,7 +106,7 @@
   <string name="contributors">L\'application GDG est un effort communautaire et open source. Les personnes suivantes ont
     contribué à l\'application:
   </string>
-  <string name="get_involved">Contribuez-vous!</string>
+  <string name="get_involved">Contribuez!</string>
   <string name="get_involved_text">L\'application GDG est un effort communautaire et open source. Tout le monde est le
     bienvenu à
     participer et améliorer cette application.\n\nVisitez GitHub a github.com/gdg-x et explorez notre code.
@@ -115,6 +115,6 @@
     the Apache 2.0 License
   </string>
   <string name="past_event">PASSÉ</string>
-  <string name="upcoming_widget">GDG - Évents à venir</string>
+  <string name="upcoming_widget">GDG - Events à venir</string>
   <string name="originally_shared">a initialement partagé:</string>
 </resources>
