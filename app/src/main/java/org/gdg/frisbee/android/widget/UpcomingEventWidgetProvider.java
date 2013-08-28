@@ -29,6 +29,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.android.volley.Response;
@@ -100,7 +101,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
 
                     if(homeGdg == null) {
                         Log.d(LOG_TAG, "Got no Home GDG");
-                        views.setDisplayedChild(R.id.viewFlipper, 0);
+                        showChild(views, 0);
                     } else {
                         Log.d(LOG_TAG, "Fetching events");
                         String groupName = homeGdg.getName().replaceAll("GDG ","");
@@ -114,11 +115,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                                     views.setTextViewText(R.id.title, events.get(0).getTitle());
                                     views.setTextViewText(R.id.location, events.get(0).getLocation());
                                     views.setTextViewText(R.id.startDate, events.get(0).getStart().toLocalDateTime().toString(DateTimeFormat.patternForStyle("MS", res.getConfiguration().locale)));
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
-                                        views.setDisplayedChild(R.id.viewFlipper, 1);
-                                    } else {
-                                        views.showNext(R.id.viewFlipper);
-                                    }
+                                    showChild(views, 1);
 
                                     if (events.get(0).getGPlusEventLink() != null) {
 
@@ -133,9 +130,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                                         views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(context, 0, i, 0));
                                     }
                                 } else {
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
-                                        views.setDisplayedChild(R.id.viewFlipper, 0);
-                                    }
+                                    showChild(views, 0);
                                 }
                                 manager.updateAppWidget(thisWidget, views);
                             }
@@ -147,9 +142,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                                 @Override
                                 public void onErrorResponse (VolleyError volleyError){
                                 Log.e(LOG_TAG, "Error updating Widget", volleyError);
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
-                                    views.setDisplayedChild(R.id.viewFlipper, 0);
-                                }
+                                showChild(views, 0);
                                 manager.updateAppWidget(thisWidget, views);
                             }
                             }
@@ -166,6 +159,24 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                 }
             });
 
+        }
+
+        private void showChild(RemoteViews views, int i) {
+            if (i == 1){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
+                    views.setDisplayedChild(R.id.viewFlipper, 1);
+                } else {
+                    views.setViewVisibility(R.id.noEventContainer, View.GONE);
+                    views.setViewVisibility(R.id.eventContainer, View.VISIBLE);
+                }
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
+                    views.setDisplayedChild(R.id.viewFlipper, 0);
+                } else {
+                    views.setViewVisibility(R.id.noEventContainer, View.VISIBLE);
+                    views.setViewVisibility(R.id.eventContainer, View.GONE);
+                }
+            }
         }
     }
 

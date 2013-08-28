@@ -14,7 +14,8 @@
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="fill_parent"
+                android:id="@+id/noEventContainer">
             <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent"
                           android:layout_height="wrap_content" android:id="@+id/linearLayout">
                 <ImageView android:layout_width="40dip" android:layout_height="20dip" android:id="@+id/imageView1"
