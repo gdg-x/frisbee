@@ -18,6 +18,7 @@ package org.gdg.frisbee.android.view;
 
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -85,9 +86,12 @@ public class MyView extends AbsListView {
             ListView list = new InnerListView(getContext());
             list.setDivider(null);
             list.setDividerHeight(0);
-            list.setScrollBarSize(0);
             list.setScrollIndicators(null, null);
             list.setVerticalScrollBarEnabled(false);
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+                list.setScrollBarSize(0);
+
             mColumns.add(list);
             LinearLayout.LayoutParams l = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,

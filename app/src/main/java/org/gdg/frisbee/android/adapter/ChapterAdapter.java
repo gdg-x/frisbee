@@ -17,6 +17,9 @@
 package org.gdg.frisbee.android.adapter;
 
 import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.utils.Utils;
@@ -33,12 +36,22 @@ import java.util.List;
  */
 public class ChapterAdapter extends ArrayAdapter<Chapter> {
 
+    private LayoutInflater mInflater;
+
     public ChapterAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
+        mInflater = LayoutInflater.from(context);
     }
 
     public ChapterAdapter(Context context, int textViewResourceId, List<Chapter> objects) {
         super(context, textViewResourceId, objects);
+        mInflater = LayoutInflater.from(context);
+    }
+
+    public void addAll(List<Chapter> chapters) {
+        for(Chapter c : chapters) {
+            add(c);
+        }
     }
 
     public ArrayList<Chapter> getAll() {
