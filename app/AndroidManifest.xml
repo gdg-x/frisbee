@@ -16,7 +16,7 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="org.gdg.frisbee.android" android:versionCode="15" android:versionName="1.0">
+  package="org.gdg.frisbee.android" android:versionCode="16" android:versionName="1.0.1">
     <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="17" />
     <supports-screens android:normalScreens="true" android:smallScreens="true" android:largeScreens="true" android:xlargeScreens="true"/>
     <uses-permission android:name="android.permission.INTERNET"/>
