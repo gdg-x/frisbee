@@ -139,7 +139,8 @@ public class GdlListFragment extends GdgListFragment implements PullToRefreshAtt
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        Crouton.makeText(getActivity(), "Fetchi failed", Style.ALERT).show();
+                        if(getActivity() != null)
+                            Crouton.makeText(getActivity(), "Fetch failed", Style.ALERT).show();
                     }
                 });
 

@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.activity;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -26,7 +27,6 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.MenuItem;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.viewpagerindicator.TitlePageIndicator;
@@ -163,7 +163,14 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
         mPulseTargets.add(0,"Global");
         mViewPagerAdapter.setSelectedPulseTarget(mPulseTargets.get(0));
         mSpinnerAdapter.clear();
-        mSpinnerAdapter.addAll(mPulseTargets);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            mSpinnerAdapter.addAll(mPulseTargets);
+        } else {
+            for (String item : mPulseTargets) {
+                mSpinnerAdapter.add(item);
+            }
+        }
         mViewPager.setAdapter(mViewPagerAdapter);
         mIndicator.setViewPager(mViewPager);
     }
