@@ -199,7 +199,7 @@ public class FirstStartActivity extends RoboSherlockFragmentActivity implements 
         if(mViewPager.getCurrentItem() > 0)
             mViewPager.setCurrentItem(mViewPager.getCurrentItem()-1, true);
         else
-            super.onBackPressed();
+            super.finish();
     }
 
     @Override
