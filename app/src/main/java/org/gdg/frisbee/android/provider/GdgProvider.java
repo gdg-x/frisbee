@@ -18,7 +18,6 @@ package org.gdg.frisbee.android.provider;
 
 import android.app.SearchManager;
 import android.content.ContentProvider;
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -26,9 +25,7 @@ import android.database.MatrixCursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.util.Log;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
-import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.activity.SearchActivity;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
@@ -83,7 +80,7 @@ public class GdgProvider extends ContentProvider {
 
         for(Chapter chapter : mDirectory.getGroups()) {
             if(chapter.getName().toLowerCase().contains(query.toLowerCase())) {
-                cursor.addRow(new Object[] { chapter.getGplusId(), chapter.getName(), chapter.getCity()+", "+chapter.getCountry(), "",chapter.getGplusId() });
+                cursor.addRow(new Object[] { chapter.getGplusId(), chapter.getName(), chapter.getCity()+", "+chapter.getCountry(), SearchActivity.ACTION_FOUND, chapter.getGplusId() });
             }
         }
         return cursor;

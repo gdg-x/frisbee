@@ -24,6 +24,7 @@ import org.gdg.frisbee.android.R;
 
 public class SearchActivity extends GdgNavDrawerActivity {
 
+    public static final String ACTION_FOUND = "org.gdg.frisbee.android.FOUND";
     public static final String LOG_TAG = "GDG-SearchActivity";
 
     @Override
@@ -37,9 +38,17 @@ public class SearchActivity extends GdgNavDrawerActivity {
     }
 
     private void handleIntent(Intent intent) {
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+        String action = intent.getAction();
+        Log.d(LOG_TAG, intent.getDataString());
+        if (Intent.ACTION_SEARCH.equals(action)) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             doSearch(query);
+        } else if(ACTION_FOUND.equals(action)) {
+            String id = intent.getDataString();
+            Intent chapterIntent = new Intent(this, MainActivity.class);
+            chapterIntent.putExtra("org.gdg.frisbee.CHAPTER", id.replace("item/",""));
+            startActivity(chapterIntent);
+            finish();
         }
     }
 
