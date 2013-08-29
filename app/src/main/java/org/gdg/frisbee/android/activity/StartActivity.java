@@ -21,14 +21,13 @@ public class StartActivity extends RoboSherlockActivity {
 
         SharedPreferences mPreferences = getSharedPreferences("gdg", MODE_PRIVATE);
 
-        if(mPreferences.getBoolean(Const.SETTINGS_FIRST_START, true)) {
-            Intent firstStartIntent = new Intent(StartActivity.this, FirstStartActivity.class);
-            startActivity(firstStartIntent);
-        } else {
-            Intent mainIntent = new Intent(StartActivity.this, MainActivity.class);
-            startActivity(mainIntent);
-        }
+        Intent intentForStart = null;
+        if(mPreferences.getBoolean(Const.SETTINGS_FIRST_START, true))
+            intentForStart = new Intent(StartActivity.this, FirstStartActivity.class);
+        else
+            intentForStart = new Intent(StartActivity.this, MainActivity.class);
 
+        startActivity(intentForStart);
         finish();
     }
 }
