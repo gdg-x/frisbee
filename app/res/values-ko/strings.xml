@@ -20,16 +20,16 @@
     <string name="drawer_open">"서랍 열기"</string>
     <string name="drawer_close">"서랍 닫기"</string>
     <string name="info">"정보"</string>
-    <string name="events">"행사"</string>
+    <string name="events">"이벤트"</string>
     <string name="app_name">"GDG"</string>
     <string name="add_to_calendar">"일정에 추가"</string>
     <string name="share_with_googleplus">"Google+에 공유"</string>
-    <string name="no_scheduled_events">"30일 안에 예정된\n행사가 없습니다."</string>
+    <string name="no_scheduled_events">"30일 안에 예정된\n이벤트가 없습니다."</string>
     <string name="organizers">"운영자"</string>
     <string name="resources">"링크"</string>
     <string name="fetch_events_failed">"예정된 이벤트를 가져올 수 없습니다"</string>
     <string name="fetch_chapters_failed">"Chapter 목록을 가져올 수 없습니다"</string>
-    <string name="bogus_organizer">"운영자 Id를 분석 할 수 없습니다: %1$s"</string>
+    <string name="bogus_organizer">"운영자 Id를 분석할 수 없습니다: %1$s"</string>
     <string name="cached_content">"현재 오프라인 상태입니다. 이전에 가져왔던 정보가 보여집니다."</string>
     <string name="offline_alert">"현재 오프라인 상태입니다."</string>
     <string name="welcome">"반갑습니다."</string>
@@ -40,7 +40,7 @@
     <string name="or">"또는"</string>
     <string name="no_thanks">"괜찮습니다."</string>
     <string name="skip">"로그인 건너 뛰기"</string>
-    <string name="youtube_init_failed">"유튜브 플레이어를 초기화 할 수 없습니다."</string>
+    <string name="youtube_init_failed">"유튜브 플레이어를 초기화할 수 없습니다."</string>
     <string name="achievements">"업적"</string>
     <string name="settings">"설정"</string>
     <string name="about">"정보"</string>
@@ -81,7 +81,7 @@
         <item>"Primetime"</item>
     </string-array>
     <string-array name="gdl_catgories_url">
-        <item>"Android"</item>
+        <item>"android"</item>
         <item>"+"</item>
         <item>"chrome"</item>
         <item>"cloud"</item>
@@ -104,13 +104,13 @@
     </string-array>
     <string name="contributors">"GDG 앱은 커뮤니티의 노력으로 만들어졌으면 오픈소스로 공개되어 있습니다. 아래의 분들이 앱에 기여해 주셨습니다."</string>
     <string name="get_involved">"참여하기!"</string>
-    <string name="get_involved_text">"GDG 앱은 커뮤니티의 노력으로 만들어졌으면 오픈소스로 공개되어 있습니다.  이 앱의 개발과 개선에는 누구나 참여할 수 있습니다.\n\n소스코드는 Github에서 체크 아웃 할 수 있습니다.\n\nhttps://github.com/gdg-x"</string>
+    <string name="get_involved_text">"GDG 앱은 커뮤니티의 노력으로 만들어졌으면 오픈소스로 공개되어 있습니다.  이 앱의 개발과 개선에는 누구나 참여할 수 있습니다.\n\n소스코드는 Github에서 체크 아웃할 수 있습니다.\n\nhttps://github.com/gdg-x"</string>
     <string name="about_license">"(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nApache 2.0 라이센스에 따라 \n사용이 허가됩니다."</string>
-    <string name="past_event">"지남"</string>
-    <string name="upcoming_widget">"GDG - 예정된 행사"</string>
+    <string name="past_event">"종료"</string>
+    <string name="upcoming_widget">"GDG - 예정된 이벤트"</string>
     <string name="global">"전세계"</string>
     <string name="pulse">"GDG Pulse"</string>
-    <string name="pulse_events">"행사"</string>
+    <string name="pulse_events">"이벤트"</string>
     <string name="pulse_attendees">"참석자"</string>
     <string name="pulse_circlers">"Chapter를 서클에 추가"</string>
     <string name="home_gdg">"기본 GDG"</string>
