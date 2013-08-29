@@ -201,7 +201,8 @@ public class GdgListFragment extends RoboSherlockFragment {
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
-                    mProgressContainer.setVisibility(View.GONE);
+                    if(mProgressContainer != null)
+                        mProgressContainer.setVisibility(View.GONE);
                     updateEmpty();
                 }
 

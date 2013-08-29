@@ -136,7 +136,7 @@ public class EventFragment extends GdgListFragment implements View.OnClickListen
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 setIsLoading(false);
-                Crouton.makeText(getActivity(), getString(R.string.fetch_events_failed), Style.ALERT).show();
+                Crouton.makeText(getActivity(), getActivity().getString(R.string.fetch_events_failed), Style.ALERT).show();
             }
         };
         mFetchEvents = mClient.getChapterEventList(mStart, mEnd, getArguments().getString("plus_id"), mListener , mErrorListener);
