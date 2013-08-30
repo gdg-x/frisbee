@@ -86,11 +86,12 @@ public class MyView extends AbsListView {
             ListView list = new InnerListView(getContext());
             list.setDivider(null);
             list.setDividerHeight(0);
-            list.setScrollIndicators(null, null);
             list.setVerticalScrollBarEnabled(false);
 
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 list.setScrollBarSize(0);
+                //list.setScrollIndicators(null, null);
+            }
 
             mColumns.add(list);
             LinearLayout.LayoutParams l = new LinearLayout.LayoutParams(
@@ -132,14 +133,39 @@ public class MyView extends AbsListView {
         Log.d(LOG_TAG, "setAdapter()");
     }
 
+    /*
+    @Override
+    public int getChildCount() {
+        if(mRoot == null)
+            return 0;
+
+        int children = 0;
+        return mColumns.size();
+    }
+
     @Override
     public View getChildAt(int index) {
-        if(mRoot == null)
-            return super.getChildAt(index);
+        View v = null;
+        ViewGroup vg = null;
 
-        ViewGroup vg = (ViewGroup) mRoot.getChildAt(0);
-        return vg.getChildAt(index);
+        if(mRoot == null) {
+            return null;
+        } else {
+            vg = (ViewGroup) mRoot.getChildAt(0);
+            v = vg.getChildAt(index);
+
+            if(v == null) {
+                vg = (ViewGroup) mRoot.getChildAt(1);
+                v = vg.getChildAt(index);
+            }
+        }
+
+        if(v == null) {
+            Log.d(LOG_TAG, "Not so good..."+index);
+        }
+        return v;
     }
+*/
 
     private void applyAdapterUpdate() {
         for(WrapAdapter a : mAdapters) {
