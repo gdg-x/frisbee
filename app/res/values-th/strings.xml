@@ -132,7 +132,7 @@
     <string name="share_on_gplus">เชิญเพื่อนเข้าใช้งาน</string>
     <string name="join_me">เข้าร่วมกิจกรรมนี้กับฉัน</string>
     <string name="name_not_known">ไม่ทราบชื่อ</string>
-    <string name="signin_first">คุณต้องลงชื่อเข้าใช้งานด้วยบัญชี Google+ เพื่อใช้ฟังก์ชันนี้/string>
+    <string name="signin_first">คุณต้องลงชื่อเข้าใช้งานด้วยบัญชี Google+ เพื่อใช้ฟังก์ชันนี้</string>
     <string name="originally_shared">แบ่งปันเป็นคนแรกโดย:</string>
     <string name="server_error">เกิดข้อผิดพลาดกับระบบ โปรดลองอีกครั้ง</string>
     <string name="search_hint">ค้นหา GDG Chapter</string>
