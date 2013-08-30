@@ -5,11 +5,8 @@ import com.jayway.android.robotium.solo.Solo;
 import org.gdg.frisbee.android.activity.MainActivity;
 
 /**
- * Created with IntelliJ IDEA.
- * User: maui
- * Date: 28.06.13
- * Time: 15:48
- * To change this template use File | Settings | File Templates.
+ * @author maui
+ * @since 2013-06-28 15:48
  */
 public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
