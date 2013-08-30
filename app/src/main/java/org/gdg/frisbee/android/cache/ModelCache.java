@@ -183,7 +183,8 @@ public class ModelCache {
                 if (null == mDiskCacheLocation) {
                     return false;
                 } else if (!mDiskCacheLocation.canWrite()) {
-                    throw new IllegalArgumentException("Disk Cache Location is not write-able");
+                    Log.i(LOG_TAG, "Disk Cache Location is not write-able, disabling disk caching.");
+                    return false;
                 }
 
                 return true;
