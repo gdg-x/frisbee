@@ -136,4 +136,5 @@
     <string name="originally_shared">originally shared:</string>
     <string name="server_error">An error occurred. Try again.</string>
     <string name="search_hint">Search GDG Chapter</string>
+    <string name="dashclock_description">Display information about the next upcoming event at your Home GDG</string>
 </resources>
