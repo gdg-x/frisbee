@@ -1,52 +1,34 @@
 package org.gdg.frisbee.android.utils;
 
-import android.content.SharedPreferences;
 import android.location.Location;
-import org.gdg.frisbee.android.Const;
-import org.gdg.frisbee.android.api.model.Chapter;
-import org.gdg.frisbee.android.app.App;
 
 import java.util.Comparator;
 
-/**
- * Created with IntelliJ IDEA.
- * User: maui
- * Date: 24.07.13
- * Time: 16:00
- * To change this template use File | Settings | File Templates.
- */
-public class EventComparator implements Comparator<Chapter> {
+import org.gdg.frisbee.android.api.model.TaggedEvent;
+import org.gdg.frisbee.android.app.App;
 
-    private SharedPreferences mPreferences;
+public class EventComparator implements Comparator<TaggedEvent> {
 
-    public EventComparator(SharedPreferences prefs) {
-        mPreferences = prefs;
+    public EventComparator() {
     }
 
     @Override
-    public int compare(Chapter chapter, Chapter chapter2) {
+    public int compare(TaggedEvent event1, TaggedEvent event2) {
         float[] results = new float[1];
         float[] results2 = new float[1];
 
-        if(chapter.getGplusId().equals(mPreferences.getString(Const.SETTINGS_HOME_GDG,""))) {
-            return -1;
-        }
-
-        if(chapter2.getGplusId().equals(mPreferences.getString(Const.SETTINGS_HOME_GDG,""))) {
-            return 1;
-        }
 
         Location lastLocation = App.getInstance().getLastLocation();
         if(lastLocation == null)
-            return chapter.getName().compareTo(chapter2.getName());
+            return event1.getStart().compareTo(event2.getStart());
 
-        if(chapter.getGeo() == null)
+        if(event1.getLatLng() == null)
             return 1;
-        if(chapter2.getGeo() == null)
+        if(event2.getLatLng() == null)
             return -1;
 
-        Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(), chapter.getGeo().getLat(), chapter.getGeo().getLng(), results);
-        Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(), chapter2.getGeo().getLat(), chapter2.getGeo().getLng(), results2);
+        Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(), event1.getLatLng().getLat(), event1.getLatLng().getLng(), results);
+        Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(), event2.getLatLng().getLat(), event2.getLatLng().getLng(), results2);
 
         if(results[0] == results2[0])
             return 0;
