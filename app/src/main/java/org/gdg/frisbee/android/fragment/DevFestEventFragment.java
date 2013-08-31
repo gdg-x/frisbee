@@ -3,6 +3,8 @@ package org.gdg.frisbee.android.fragment;
 import com.android.volley.Response;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import org.gdg.frisbee.android.api.ApiRequest;
 import org.gdg.frisbee.android.api.model.Event;
@@ -10,6 +12,7 @@ import org.gdg.frisbee.android.api.model.SimpleEvent;
 import org.gdg.frisbee.android.api.model.TaggedEvent;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.utils.EventComparator;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
 
@@ -20,6 +23,7 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class DevFestEventFragment extends EventFragment {
     private static final String CACHE_KEY = "devfest2013";
+    private Comparator<? super TaggedEvent> mLocationComparator = new EventComparator();
 
     @Override
     void fetchEvents() {
@@ -31,6 +35,7 @@ public class DevFestEventFragment extends EventFragment {
         Response.Listener<ArrayList<TaggedEvent>> listener = new Response.Listener<ArrayList<TaggedEvent>>() {
             @Override
             public void onResponse(final ArrayList<TaggedEvent> events) {
+                Collections.sort(events, mLocationComparator);
                 mEvents.addAll(events);
 
                 App.getInstance().getModelCache().putAsync(CACHE_KEY, mEvents, DateTime.now().plusHours(2), new ModelCache.CachePutListener() {
