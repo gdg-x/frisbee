@@ -96,43 +96,43 @@
         <item>primetime</item>
     </string-array>
     <string-array name="about_tabs">
-        <item>About</item>
-        <item>Contributors</item>
-        <item>Changelog</item>
-        <item>Get Involved</item>
-        <item>3rd Party Libraries</item>
+        <item>एप्प के बारे में</item>
+        <item>सहयोगी</item>
+        <item>परिवर्तन दैनिकी</item>
+        <item>शामिल होँ</item>
+        <item>मुक्त स्रोत  Libraries</item>
     </string-array>
-    <string name="contributors">The GDG app is a community effort and open sourced. The following people contributed to the app:</string>
-    <string name="get_involved">Get Involved!</string>
-    <string name="get_involved_text">The GDG app is a community effort and open sourced. Everyone is welcome to participate and improve this app.\n\nJust head over to GitHub and checkout our code.\n\nhttps://github.com/gdg-x</string>
-    <string name="about_license">(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof the Apache 2.0 License</string>
-    <string name="past_event">PAST</string>
-    <string name="upcoming_widget">GDG - Upcoming Event</string>
-    <string name="global">Global</string>
+    <string name="contributors">यह जी डी जी एप्प सामुदायिक प्रयास है और इसका स्रोत मुक्त रूप से उपलब्ध है। निम्न लोगों ने इस एप्प में अपना सहयोग प्रदान किया है :</string>
+    <string name="get_involved">शामिल होँ!</string>
+    <string name="get_involved_text">यह जी डी जी एप्प सामुदायिक प्रयास है और इसका स्रोत मुक्त रूप से उपलब्ध है। आप सभी आमंत्रित हैं इस एप्प को बेहतर बनाने में। \n\nबस GitHub पर जाएँ और एप्प के स्रोत को हासिल करें।\n\nhttps://github.com/gdg-x</string>
+    <string name="about_license">(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\n\Apache 2.0 अनुज्ञप्ति की शर्तों और अनुबंधों के अनुसार </string>
+    <string name="past_event">पुराना</string>
+    <string name="upcoming_widget">जी डी जी - आने वाले कार्यक्रम</string>
+    <string name="global">विश्वस्तर </string>
     <string name="pulse">GDG Pulse</string>
-    <string name="pulse_events">Events</string>
-    <string name="pulse_attendees">Attendees</string>
-    <string name="pulse_circlers">Chapter Circlers</string>
-    <string name="home_gdg">Home GDG</string>
-    <string name="home_gdg_summary">Select your primary GDG</string>
+    <string name="pulse_events">कार्यक्रम</string>
+    <string name="pulse_attendees">प्रतिभागी</string>
+    <string name="pulse_circlers">चैप्टर सर्किल करने वाले</string>
+    <string name="home_gdg">आपका  जी डी जी</string>
+    <string name="home_gdg_summary">अपना मुख्य जी डी जी चयन करें</string>
     <string name="analytics">Analytics</string>
-    <string name="analytics_summary_on">The app currently transmits anonymous usage data which allows us to improve the app</string>
-    <string name="analytics_summary_off">The app currently does not transmit any anonymous usage data</string>
-    <string name="gcm">Cloud Notifications</string>
-    <string name="gcm_summary_on">The app currently receives and processes GDG Cloud Notification</string>
-    <string name="gcm_summary_off">The app currently does not receive GDG Cloud Notification</string>
-    <string name="google_signed_in">Signed into Google+</string>
-    <string name="google_signed_in_on">You are currently signed in with Google+</string>
-    <string name="google_signed_in_off">You are not signed in</string>
-    <string name="achievements_need_signin">You need to be logged in to unlock achievements</string>
-    <string name="done">Done</string>
-    <string name="allow_analytics">Allow us to collect anonymous usage data which helps us to improve the app</string>
-    <string name="enable_gcm">Enable GDG Cloud Notifications (get notified about new Events)</string>
-    <string name="step3_text">One more thing before we start...</string>
-    <string name="share_on_gplus">Invite Friends</string>
-    <string name="join_me">Join me at this event!</string>
-    <string name="name_not_known">Name not known</string>
-    <string name="signin_first">You have to sign-in with G+ to use this feature</string>
-    <string name="originally_shared">originally shared:</string>
-    <string name="server_error">An error occurred. Try again.</string>
+    <string name="analytics_summary_on">यह एप्प इस समय गुमनाम रूप से प्रयोग की जानकारी एकत्र करती है, जिससे हमें यह एप्प सुधरने में सहायता हो।  </string>
+    <string name="analytics_summary_off">यह एप्प इस समय गुमनाम रूप से कोई जानकारी एकत्र नहीं कर रही है। </string>
+    <string name="gcm">Cloud सूचनाएँ </string>
+    <string name="gcm_summary_on">यह अप्प इस समय जी डी जी Cloud सूचनाएँ प्राप्त और उपयोग करती है</string>
+    <string name="gcm_summary_off">यह अप्प इस समय जी डी जी Cloud सूचनाएँ प्राप्त नहीं करती है</string>
+    <string name="google_signed_in">गूगल+ जुड़ा हुआ है</string>
+    <string name="google_signed_in_on">आप इस समय गूगल+ से जुड़े हुए हैं </string>
+    <string name="google_signed_in_off">आप जुड़े हुए नहीं हैं </string>
+    <string name="achievements_need_signin">उपलब्धियां खोलने के लिए आपको किसी अकाउंट से जुड़ना होगा</string>
+    <string name="done">कर लिया गया</string>
+    <string name="allow_analytics">हमें गुमनाम रूप से प्रयोग की जानकारी एकत्र करने की अनुमति दें</string>
+    <string name="enable_gcm">जी डी जी Cloud सूचनाएँ शुरू करें  (नए कार्यक्रमों के बारे में जानें)</string>
+    <string name="step3_text">शुरू करने से पहले...</string>
+    <string name="share_on_gplus">दोस्तों को आमंत्रित करें</string>
+    <string name="join_me">मेरे साथ इस कार्यक्रम में शामिल होँ!</string>
+    <string name="name_not_known">अज्ञात नाम</string>
+    <string name="signin_first">यह सुविधा इस्तेमाल करने के लिए आपको किसी अकाउंट के साथ जुड़ना होगा</string>
+    <string name="originally_shared">पहला शेयर :</string>
+    <string name="server_error">कुछ समस्या प्रकट हुई। दोबारा प्रयत्न करें।</string>
 </resources>
