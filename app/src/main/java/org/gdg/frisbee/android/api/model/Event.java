@@ -16,9 +16,9 @@
 
 package org.gdg.frisbee.android.api.model;
 
-import org.joda.time.DateTime;
-
 import java.util.ArrayList;
+
+import org.joda.time.DateTime;
 
 /**
  * GDG Aachen
@@ -28,7 +28,7 @@ import java.util.ArrayList;
  * Date: 22.04.13
  * Time: 22:44
  */
-public class Event implements GdgResponse {
+public class Event implements GdgResponse, SimpleEvent {
     private ArrayList<String> className;
     private DateTime start, end;
     private int participantsCount;
@@ -42,10 +42,12 @@ public class Event implements GdgResponse {
         return className;
     }
 
+    @Override
     public DateTime getStart() {
         return start;
     }
 
+    @Override
     public DateTime getEnd() {
         return end;
     }
@@ -54,18 +56,22 @@ public class Event implements GdgResponse {
         return location;
     }
 
+    @Override
     public String getTitle() {
         return title;
     }
 
+    @Override
     public String getIconUrl() {
         return iconUrl;
     }
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public String getGPlusEventLink() {
         return gPlusEventLink;
     }
@@ -78,6 +84,7 @@ public class Event implements GdgResponse {
         return participantsCount;
     }
 
+    @Override
     public String getLink() {
         return link;
     }
