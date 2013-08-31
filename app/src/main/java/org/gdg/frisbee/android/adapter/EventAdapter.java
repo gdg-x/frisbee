@@ -115,9 +115,14 @@ public class EventAdapter extends BaseAdapter {
         Item item = (Item) getItemInternal(i);
         final SimpleEvent event = item.getEvent();
 
-        App.getInstance().getPicasso()
+        if (event.getIconUrl() != null){
+            holder.icon.setVisibility(View.VISIBLE);
+            App.getInstance().getPicasso()
                 .load("https://developers.google.com" + event.getIconUrl())
                 .into(holder.icon);
+        } else {
+            holder.icon.setVisibility(View.GONE);
+        }
 
         holder.title.setText(event.getTitle());
 
@@ -141,7 +146,15 @@ public class EventAdapter extends BaseAdapter {
                     if (!link.startsWith("http")){
                         link = "https://" + link;
                     }
-                    openEventInGPlus(link);
+                    openEventInExternalApp(link);
+                } else {
+                    link = event.getLink();
+                    if (link != null) {
+                        if (!link.startsWith("http")) {
+                            link = "https://developers.google.com" + link;
+                        }
+                        openEventInExternalApp(link);
+                    }
                 }
             }
         });
@@ -167,7 +180,7 @@ public class EventAdapter extends BaseAdapter {
         return rowView;
     }
 
-    public void openEventInGPlus(String uri) {
+    public void openEventInExternalApp(String uri) {
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(uri));
         mContext.startActivity(i);
