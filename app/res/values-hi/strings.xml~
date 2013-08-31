@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2013 The GDG Frisbee Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ 	http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="news">ख़बरें</string>
+    <string name="drawer_open">ड्रावर खोलें </string>
+    <string name="drawer_close">ड्रावर बंद करें</string>
+    <string name="info">सूचना</string>
+    <string name="events">कार्यक्रम</string>
+    <string name="app_name">जीडीजी </string>
+    <string name="add_to_calendar">कैलेंडर में दर्ज करें </string>
+    <string name="share_with_googleplus">गूगल+ पर शेयर करें </string>
+    <string name="no_scheduled_events">अगले ३० दिनो में \n कोई कार्यक्रम आयोजित नहीं है </string>
+    <string name="organizers">आयोजक </string>
+    <string name="resources">लिंक </string>
+    <string name="fetch_events_failed">आने वाले कार्यक्रम लाये नहीं जा सके </string>
+    <string name="fetch_chapters_failed">चैप्टर सूची लायी नहीं जा सकी </string>
+    <string name="bogus_organizer">आयोजक संख्या %1$s समझी नहीं जा सकी </string>
+    <string name="cached_content">इस समय आप ऑफलाइन हैं ।  पहले से राखी हुई कुछ सूचना इस प्रकार है :</string>
+    <string name="offline_alert">इस समय आप ऑफलाइन हैं ।</string>
+    <string name="welcome">स्वागत है !</string>
+    <string name="choose_home_gdg">अपना जी डी जी चयन करें</string>
+    <string name="signin_with_google">अपने गूगल अकाउंट के साथ जुड़ें</string>
+    <string name="confirm">पुष्टि करें</string>
+    <string name="signin_description">The GDG App integrates with Google+ and other Google Services. To use these function we need you to be signed into Google.</string>
+    <string name="or">या</string>
+    <string name="no_thanks">नहीं, धन्यवाद्</string>
+    <string name="skip">Skip Sign-in</string>
+    <string name="youtube_init_failed">यूटूब शुरू नहीं किया जा सका। </string>
+    <string name="achievements">उपलब्धियां</string>
+    <string name="settings">Settings</string>
+    <string name="about">About</string>
+    <string name="gdl">Google Developers Live</string>
+    <plurals name="seconds_ago">
+        <item quantity="zero">now</item>
+        <item quantity="one">just now</item>
+        <item quantity="other">%d seconds ago</item>
+    </plurals>
+    <plurals name="minutes_ago">
+        <item quantity="zero">now</item>
+        <item quantity="one">1 minute ago</item>
+        <item quantity="other">%d minutes ago</item>
+    </plurals>
+    <plurals name="hours_ago">
+        <item quantity="zero">now</item>
+        <item quantity="one">1 hour ago</item>
+        <item quantity="other">%d hours ago</item>
+    </plurals>
+    <plurals name="days_ago">
+        <item quantity="zero">now</item>
+        <item quantity="one">1 day ago</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
+    <string-array name="gdl_catgories">
+        <item>Android</item>
+        <item>Google+</item>
+        <item>Chrome</item>
+        <item>Cloud</item>
+        <item>Maps</item>
+        <item>YouTube</item>
+        <item>Drive</item>
+        <item>Google I/O</item>
+        <item>Ads</item>
+        <item>Analytics</item>
+        <item>Commerce</item>
+        <item>Google TV</item>
+        <item>Primetime</item>
+    </string-array>
+    <string-array name="gdl_catgories_url">
+        <item>android</item>
+        <item>+</item>
+        <item>chrome</item>
+        <item>cloud</item>
+        <item>maps</item>
+        <item>youtube</item>
+        <item>drive</item>
+        <item>io</item>
+        <item>ads</item>
+        <item>analytics</item>
+        <item>commerce</item>
+        <item>tv</item>
+        <item>primetime</item>
+    </string-array>
+    <string-array name="about_tabs">
+        <item>About</item>
+        <item>Contributors</item>
+        <item>Changelog</item>
+        <item>Get Involved</item>
+        <item>3rd Party Libraries</item>
+    </string-array>
+    <string name="contributors">The GDG app is a community effort and open sourced. The following people contributed to the app:</string>
+    <string name="get_involved">Get Involved!</string>
+    <string name="get_involved_text">The GDG app is a community effort and open sourced. Everyone is welcome to participate and improve this app.\n\nJust head over to GitHub and checkout our code.\n\nhttps://github.com/gdg-x</string>
+    <string name="about_license">(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof the Apache 2.0 License</string>
+    <string name="past_event">PAST</string>
+    <string name="upcoming_widget">GDG - Upcoming Event</string>
+    <string name="global">Global</string>
+    <string name="pulse">GDG Pulse</string>
+    <string name="pulse_events">Events</string>
+    <string name="pulse_attendees">Attendees</string>
+    <string name="pulse_circlers">Chapter Circlers</string>
+    <string name="home_gdg">Home GDG</string>
+    <string name="home_gdg_summary">Select your primary GDG</string>
+    <string name="analytics">Analytics</string>
+    <string name="analytics_summary_on">The app currently transmits anonymous usage data which allows us to improve the app</string>
+    <string name="analytics_summary_off">The app currently does not transmit any anonymous usage data</string>
+    <string name="gcm">Cloud Notifications</string>
+    <string name="gcm_summary_on">The app currently receives and processes GDG Cloud Notification</string>
+    <string name="gcm_summary_off">The app currently does not receive GDG Cloud Notification</string>
+    <string name="google_signed_in">Signed into Google+</string>
+    <string name="google_signed_in_on">You are currently signed in with Google+</string>
+    <string name="google_signed_in_off">You are not signed in</string>
+    <string name="achievements_need_signin">You need to be logged in to unlock achievements</string>
+    <string name="done">Done</string>
+    <string name="allow_analytics">Allow us to collect anonymous usage data which helps us to improve the app</string>
+    <string name="enable_gcm">Enable GDG Cloud Notifications (get notified about new Events)</string>
+    <string name="step3_text">One more thing before we start...</string>
+    <string name="share_on_gplus">Invite Friends</string>
+    <string name="join_me">Join me at this event!</string>
+    <string name="name_not_known">Name not known</string>
+    <string name="signin_first">You have to sign-in with G+ to use this feature</string>
+    <string name="originally_shared">originally shared:</string>
+    <string name="server_error">An error occurred. Try again.</string>
+</resources>
