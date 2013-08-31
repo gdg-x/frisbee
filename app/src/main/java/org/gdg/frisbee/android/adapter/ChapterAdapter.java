@@ -24,6 +24,7 @@ import android.widget.ArrayAdapter;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.utils.Utils;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -48,7 +49,8 @@ public class ChapterAdapter extends ArrayAdapter<Chapter> {
         mInflater = LayoutInflater.from(context);
     }
 
-    public void addAll(List<Chapter> chapters) {
+    @Override
+    public void addAll(Collection<? extends Chapter> chapters) {
         for(Chapter c : chapters) {
             add(c);
         }
