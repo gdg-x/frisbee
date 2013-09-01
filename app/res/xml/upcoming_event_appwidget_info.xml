@@ -5,7 +5,5 @@
                     android:minResizeHeight="40dp"
                     android:minResizeWidth="250dp"
                     android:updatePeriodMillis="86400000"
-
-                    android:initialLayout="@layout/widget_upcoming_event"
-                    android:resizeMode="horizontal|vertical">
+                    android:initialLayout="@layout/widget_upcoming_event">
 </appwidget-provider>
