@@ -17,29 +17,21 @@
 package org.gdg.frisbee.android.api;
 
 import android.util.Log;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.reflect.TypeToken;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.gdg.frisbee.android.api.model.*;
-import org.gdg.frisbee.android.app.GdgVolley;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.TimeZone;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.gdg.frisbee.android.api.model.*;
+import org.joda.time.DateTime;
 
 /**
  * GDG Aachen
@@ -56,6 +48,7 @@ public class GroupDirectory {
     private static final String ALL_CALENDAR_URL = BASE_URL + "/events/calendar/fc?start=1366581600&end=1367186400&_=1366664352089";
     private static final String GDL_CALENDAR_URL = BASE_URL + "/events/calendar/fc?calendar=gdl&start=1366581600&end=1367186400&_=1366664644691";
     private static final String CHAPTER_CALENDAR_URL = BASE_URL + "/events/feed/json";
+    private static final String TAGGED_EVENTS_URL = BASE_URL + "/events/event-markers.json";
     private static final String EVENT_DETAIL_URL = BASE_URL + "/events/%s/";
     private static final String SHOWCASE_NEXT_URL = BASE_URL + "/showcase/next";
     private static final String PULSE_URL = BASE_URL + "/devreldash/gdg/pulse_stats/";
@@ -166,5 +159,73 @@ public class GroupDirectory {
                 GsonRequest.getGson(FieldNamingPolicy.IDENTITY));
 
         return new ApiRequest(eventReq);
+    }
+
+    public ApiRequest getTaggedEventList(final DateTime start, final DateTime end, final String tag, Response.Listener<ArrayList<TaggedEvent>> successListener, Response.ErrorListener errorListener) {
+
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new NameValuePair() {
+            @Override
+            public String getName() {
+                return "tag";
+            }
+
+            @Override
+            public String getValue() {
+                return tag;
+            }
+        });
+
+        params.add(new NameValuePair() {
+            @Override
+            public String getName() {
+                return "start";
+            }
+
+            @Override
+            public String getValue() {
+                return "" + (int) (start.getMillis() / 1000);
+            }
+        });
+
+        if (end != null) {
+            params.add(new NameValuePair() {
+                @Override
+                public String getName() {
+                    return "end";
+                }
+
+                @Override
+                public String getValue() {
+                    return "" + (int) (end.getMillis() / 1000);
+                }
+            });
+        }
+        params.add(new NameValuePair() {
+            @Override
+            public String getName() {
+                return "_";
+            }
+
+            @Override
+            public String getValue() {
+                return "" + (int) (new DateTime().getMillis() / 1000);
+            }
+        });
+        Type type = new TypeToken<ArrayList<TaggedEvent>>() {
+        }.getType();
+
+        String url = TAGGED_EVENTS_URL;
+        url += "?" + URLEncodedUtils.format(params, "UTF-8");
+
+         GsonRequest<Void, ArrayList<TaggedEvent>> eventReq = new GsonRequest<Void, ArrayList<TaggedEvent>>(Request.Method.GET,
+                url,
+                type,
+                successListener,
+                errorListener,
+                GsonRequest.getGson(FieldNamingPolicy.IDENTITY));
+
+        return new ApiRequest(eventReq);
+
     }
 }

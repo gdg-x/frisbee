@@ -76,6 +76,9 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                     case R.string.gdl:
                         navigateTo(GdlActivity.class);
                         break;
+                    case R.string.devfest:
+                        navigateTo(DevFestActivity.class);
+                        break;
                     case R.string.pulse:
                         navigateTo(PulseActivity.class);
                         break;
@@ -116,6 +119,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         Intent i = new Intent(GdgNavDrawerActivity.this, activityClass);
         i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(i);
+        finish();
 
     }
 

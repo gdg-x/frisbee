@@ -36,9 +36,7 @@ import org.gdg.frisbee.android.adapter.EventAdapter;
 import org.gdg.frisbee.android.api.ApiRequest;
 import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.Event;
-import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.cache.ModelCache;
-import org.gdg.frisbee.android.utils.Utils;
+import org.gdg.frisbee.android.api.model.SimpleEvent;
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
 
@@ -53,23 +51,30 @@ import de.keyboardsurfer.android.widget.crouton.Style;
  * Date: 22.04.13
  * Time: 23:10
  */
-public class EventFragment extends GdgListFragment implements View.OnClickListener {
+public abstract class EventFragment extends GdgListFragment implements View.OnClickListener {
 
     private static final String LOG_TAG = "GDG-EventFragment";
-    private GroupDirectory mClient;
+    protected GroupDirectory mClient;
 
     private int mSelectedMonth;
-    private EventAdapter mAdapter;
+    protected EventAdapter mAdapter;
 
-    private ArrayList<Event> mEvents;
+    protected ArrayList<SimpleEvent> mEvents;
     private ApiRequest mFetchEvents;
-    private Response.Listener<ArrayList<Event>> mListener;
-    private Response.ErrorListener mErrorListener;
-    private DateTime mStart, mEnd;
+    protected DateTime mStart;
+    protected DateTime mEnd;
     private PlusClient mPlusClient;
 
+    Response.ErrorListener mErrorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError volleyError) {
+            setIsLoading(false);
+            Crouton.makeText(getActivity(), getString(R.string.fetch_events_failed), Style.ALERT).show();
+        }
+    };
+
     public static EventFragment newInstance(String plusId) {
-        EventFragment fragment = new EventFragment();
+        EventFragment fragment = new GdgEventFragment();
         Bundle arguments = new Bundle();
         arguments.putString("plus_id", plusId);
         fragment.setArguments(arguments);
@@ -110,58 +115,12 @@ public class EventFragment extends GdgListFragment implements View.OnClickListen
 
         mAdapter = new EventAdapter(getActivity(), this);
         setListAdapter(mAdapter);
+        mEvents = new ArrayList<SimpleEvent>();
 
-        DateTime now = new DateTime();
-        mStart = now.minusMonths(2).dayOfMonth().withMinimumValue();
-        mEnd = now.plusYears(1).dayOfMonth().withMaximumValue();
-
-        setIsLoading(true);
-
-        mEvents = new ArrayList<Event>();
-        mListener = new Response.Listener<ArrayList<Event>>() {
-            @Override
-            public void onResponse(final ArrayList<Event> events) {
-                mEvents.addAll(events);
-
-                App.getInstance().getModelCache().putAsync("event_"+ getArguments().getString("plus_id"), mEvents, DateTime.now().plusHours(2), new ModelCache.CachePutListener() {
-                    @Override
-                    public void onPutIntoCache() {
-                        mAdapter.addAll(mEvents);
-                        setIsLoading(false);
-                    }
-                });
-            }
-        };
-        mErrorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                setIsLoading(false);
-                Crouton.makeText(getActivity(), getActivity().getString(R.string.fetch_events_failed), Style.ALERT).show();
-            }
-        };
-        mFetchEvents = mClient.getChapterEventList(mStart, mEnd, getArguments().getString("plus_id"), mListener , mErrorListener);
-
-        if(Utils.isOnline(getActivity())) {
-            mFetchEvents.execute();
-        } else {
-            App.getInstance().getModelCache().getAsync("event_"+ getArguments().getString("plus_id"), false, new ModelCache.CacheListener() {
-                @Override
-                public void onGet(Object item) {
-                    ArrayList<Event> events = (ArrayList<Event>)item;
-
-                    mAdapter.addAll(events);
-                    setIsLoading(false);
-                    Crouton.makeText(getActivity(), getString(R.string.cached_content), Style.INFO).show();
-                }
-
-                @Override
-                public void onNotFound(String key) {
-                    setIsLoading(false);
-                    Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
-                }
-            });
-        }
+        fetchEvents();
     }
+
+    abstract void fetchEvents();
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {

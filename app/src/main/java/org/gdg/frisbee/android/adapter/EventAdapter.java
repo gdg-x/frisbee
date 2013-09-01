@@ -19,25 +19,23 @@ package org.gdg.frisbee.android.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
-import com.google.android.gms.plus.PlusClient;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Event;
+import org.gdg.frisbee.android.api.model.SimpleEvent;
 import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.fragment.EventFragment;
 import org.gdg.frisbee.android.view.SquaredImageView;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -64,14 +62,14 @@ public class EventAdapter extends BaseAdapter {
         this.shareClickListener = shareClickListener;
     }
 
-    public void addAll(Collection<Event> items) {
-        for(Event a : items) {
+    public void addAll(Collection<? extends SimpleEvent> items) {
+        for(SimpleEvent a : items) {
             mEvents.add(new Item(a));
         }
         notifyDataSetChanged();
     }
 
-    public void add(Event item) {
+    public void add(SimpleEvent item) {
         mEvents.add(new Item(item));
         notifyDataSetChanged();
     }
@@ -116,11 +114,16 @@ public class EventAdapter extends BaseAdapter {
         }
         ViewHolder holder = (ViewHolder) rowView.getTag();
         Item item = (Item) getItemInternal(i);
-        final Event event = item.getEvent();
+        final SimpleEvent event = item.getEvent();
 
-        App.getInstance().getPicasso()
+        if (event.getIconUrl() != null){
+            holder.icon.setVisibility(View.VISIBLE);
+            App.getInstance().getPicasso()
                 .load("https://developers.google.com" + event.getIconUrl())
                 .into(holder.icon);
+        } else {
+            holder.icon.setVisibility(View.GONE);
+        }
 
         holder.title.setText(event.getTitle());
 
@@ -140,11 +143,19 @@ public class EventAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 String link = event.getGPlusEventLink();
-                if (link != null){
+                if (!TextUtils.isEmpty(link)){
                     if (!link.startsWith("http")){
                         link = "https://" + link;
                     }
-                    openEventInGPlus(link);
+                    openEventInExternalApp(link);
+                } else {
+                    link = event.getLink();
+                    if (!TextUtils.isEmpty(link)) {
+                        if (!link.startsWith("http")) {
+                            link = "https://developers.google.com" + link;
+                        }
+                        openEventInExternalApp(link);
+                    }
                 }
             }
         });
@@ -170,17 +181,17 @@ public class EventAdapter extends BaseAdapter {
         return rowView;
     }
 
-    public void openEventInGPlus(String uri) {
+    public void openEventInExternalApp(String uri) {
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(uri));
         mContext.startActivity(i);
     }
 
     public class Item {
-        private Event mEvent;
+        private SimpleEvent mEvent;
         private boolean mConsumed = false;
 
-        public Item(Event a) {
+        public Item(SimpleEvent a) {
             mEvent = a;
             mConsumed = false;
         }
@@ -193,7 +204,7 @@ public class EventAdapter extends BaseAdapter {
             this.mConsumed = mConsumed;
         }
 
-        public Event getEvent() {
+        public SimpleEvent getEvent() {
             return mEvent;
         }
 
