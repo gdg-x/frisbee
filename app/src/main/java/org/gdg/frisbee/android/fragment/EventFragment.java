@@ -227,27 +227,36 @@ public class EventFragment extends GdgListFragment implements View.OnClickListen
 
     @Override
     public void onClick(View view) {
-        Event event = (Event) view.getTag();
+        SimpleEvent event = (SimpleEvent) view.getTag();
         shareOnGplus(event);
     }
 
-    private void shareOnGplus(Event event) {
+    private void shareOnGplus(SimpleEvent event) {
         if (mPlusClient != null && mPlusClient.isConnected()) {
             PlusShare.Builder builder = new PlusShare.Builder(this.getActivity(), mPlusClient);
 
             Uri eventUri = Uri.parse("https://developers.google.com/events/" + event.getId() + "/");
-            String eventDeepLinkId = getArguments().getString("plus_id") + "/events/" + event.getId();
-            // Set call-to-action metadata.
-            builder.addCallToAction(
-                    "JOIN", /** call-to-action button label */
-                    eventUri, /** call-to-action url (for desktop use) */
-                    eventDeepLinkId +"/join" /** call to action deep-link ID (for mobile use), 512 characters or fewer */);
 
+            if(getArguments().containsKey("plus_id")) {
+                String eventDeepLinkId = getArguments().getString("plus_id") + "/events/" + event.getId();
+
+                // Set call-to-action metadata.
+                builder.addCallToAction(
+                        "JOIN", /** call-to-action button label */
+                        eventUri, /** call-to-action url (for desktop use) */
+                        eventDeepLinkId +"/join" /** call to action deep-link ID (for mobile use), 512 characters or fewer */);
+
+                // Set the target deep-link ID (for mobile use).
+                builder.setContentDeepLinkId(eventDeepLinkId);
+            } else {
+                // Set call-to-action metadata.
+                builder.addCallToAction(
+                        "JOIN", /** call-to-action button label */
+                        eventUri, /** call-to-action url (for desktop use) */
+                        eventUri +"/join" /** call to action deep-link ID (for mobile use), 512 characters or fewer */);
+            }
             // Set the content url (for desktop use).
             builder.setContentUrl(eventUri);
-
-            // Set the target deep-link ID (for mobile use).
-            builder.setContentDeepLinkId(eventDeepLinkId);
 
             // Set the share text.
             builder.setText(getString(R.string.join_me));
