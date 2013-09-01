@@ -51,6 +51,7 @@ import org.gdg.frisbee.android.api.model.GcmRegistrationResponse;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.PlayServicesHelper;
+import org.gdg.frisbee.android.widget.UpcomingEventWidgetProvider;
 
 import java.io.IOException;
 
@@ -156,12 +157,16 @@ public class SettingsActivity extends RoboSherlockPreferenceActivity implements 
             prefHomeGdgList.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object o) {
-                   final String homeGdg = (String) o;
+                    final String homeGdg = (String) o;
 
                     if (mPlayServicesHelper.isSignedIn() &&  mPreferences.getBoolean("gcm", true)) {
                         setHomeGdg(homeGdg);
                     }
-                   return true;
+                    // Update widgets to show newest chosen GdgHome events
+                    // TODO: Make it into class which broadcasts update need to all interested entities like MainActivity and Widgets
+                    App.getInstance().startService(new Intent(App.getInstance(), UpcomingEventWidgetProvider.UpdateService.class));
+
+                    return true;
                 }
             });
         }
