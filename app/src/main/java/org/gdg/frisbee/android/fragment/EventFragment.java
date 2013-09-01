@@ -126,7 +126,7 @@ public abstract class EventFragment extends GdgListFragment implements View.OnCl
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        Event event = (Event) mAdapter.getItem(info.position);
+        SimpleEvent event = (SimpleEvent) mAdapter.getItem(info.position);
         menu.setHeaderTitle(event.getTitle());
         getActivity().getMenuInflater().inflate(R.menu.event_context, menu);
     }
@@ -146,14 +146,17 @@ public abstract class EventFragment extends GdgListFragment implements View.OnCl
     }
 
 
-    public void addEventToCalendar(Event event) {
+    public void addEventToCalendar(SimpleEvent event) {
         Intent intent = new Intent(Intent.ACTION_EDIT);
         intent.setType("vnd.android.cursor.item/event");
 
         intent.putExtra("beginTime", event.getStart().getMillis());
         intent.putExtra("endTime", event.getEnd().getMillis());
         intent.putExtra("title", event.getTitle());
-        intent.putExtra("eventLocation", event.getLocation());
+
+        if(event instanceof Event)
+            intent.putExtra("eventLocation", ((Event)event).getLocation());
+
         startActivity(intent);
     }
 
