@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2013 The GDG Frisbee Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="news">Новини</string>
+    <string name="drawer_open">Відкрити меню</string>
+    <string name="drawer_close">Закрити меню</string>
+    <string name="info">Про групу</string>
+    <string name="events">Події</string>
+    <string name="app_name">GDG</string>
+    <string name="add_to_calendar">Додати в календар</string>
+    <string name="share_with_googleplus">Розповісти в Google+</string>
+    <string name="no_scheduled_events">Ніяких запланованих подій\nна найближчі 30 днів</string>
+    <string name="organizers">Організатори</string>
+    <string name="resources">Посилання</string>
+    <string name="fetch_events_failed">Не вдалося отримати майбутні події</string>
+    <string name="fetch_chapters_failed">Не вдалося отримати список груп</string>
+    <string name="bogus_organizer">Не вдалося проаналізувати Organizer Id: %1$s</string>
+    <string name="cached_content">На даний момент ви не в мережі. Використовуються дані з кешу.
+    </string>
+    <string name="offline_alert">На даний момент ви не в мережі.</string>
+    <string name="welcome">Ласкаво просимо.</string>
+    <string name="choose_home_gdg">Виберіть GDG поряд з вами</string>
+    <string name="signin_with_google">Вхід з Google</string>
+    <string name="confirm">Підтвердити</string>
+    <string name="signin_description">Додаток GDG інтегрується з Google+ та іншими службами Google.
+        Щоб використовувати ці функції, необхідно авторизуватися в Google.
+    </string>
+    <string name="or">або</string>
+    <string name="no_thanks">ні, дякую.</string>
+    <string name="skip">Пропустити вхід</string>
+    <string name="youtube_init_failed">Не вдалося ініціалізувати програвач YouTube.</string>
+    <string name="achievements">Досягнення</string>
+    <string name="settings">Налаштування</string>
+    <string name="about">Про...</string>
+    <string name="gdl">Google Developers Live</string>
+    <plurals name="seconds_ago">
+        <item quantity="zero">зараз</item>
+        <item quantity="one">щойно</item>
+        <item quantity="other">%d секунд тому</item>
+    </plurals>
+    <plurals name="minutes_ago">
+        <item quantity="zero">зараз</item>
+        <item quantity="one">1 хвилина тому</item>
+        <item quantity="other">%d хвилин тому</item>
+    </plurals>
+    <plurals name="hours_ago">
+        <item quantity="zero">зараз</item>
+        <item quantity="one">1 година тому</item>
+        <item quantity="other">%d годин тому</item>
+    </plurals>
+    <plurals name="days_ago">
+        <item quantity="zero">зараз</item>
+        <item quantity="one">1 день тому</item>
+        <item quantity="other">%d днів тому</item>
+    </plurals>
+    <string-array name="gdl_catgories">
+        <item>Android</item>
+        <item>Google+</item>
+        <item>Chrome</item>
+        <item>Cloud</item>
+        <item>Maps</item>
+        <item>YouTube</item>
+        <item>Drive</item>
+        <item>Google I/O</item>
+        <item>Ads</item>
+        <item>Analytics</item>
+        <item>Commerce</item>
+        <item>Google TV</item>
+        <item>Primetime</item>
+    </string-array>
+    <string-array name="gdl_catgories_url">
+        <item>android</item>
+        <item>+</item>
+        <item>chrome</item>
+        <item>cloud</item>
+        <item>maps</item>
+        <item>youtube</item>
+        <item>drive</item>
+        <item>io</item>
+        <item>ads</item>
+        <item>analytics</item>
+        <item>commerce</item>
+        <item>tv</item>
+        <item>primetime</item>
+    </string-array>
+    <string-array name="about_tabs">
+        <item>Про програму</item>
+        <item>Розробники</item>
+        <item>Зміни</item>
+        <item>Долучитися</item>
+        <item>Сторонні бібліотеки</item>
+    </string-array>
+    <string name="contributors">GDG додаток є результатом колективної роботи з відкритим кодом.
+        Наступні люди внесли свій внесок у програму:
+    </string>
+    <string name="get_involved">Долучитися!</string>
+    <string name="get_involved_text">GDG додаток є результатом колективної роботи з відкритим
+        вихідним кодом. Всі бажаючі можуть взяти участь у розвитку додатку.\n\nФоркайте нас на
+        GitHub.\n\nhttps://github.com/gdg-x
+    </string>
+    <string name="about_license">(c) 2013 Проект GDG Frisbee\nВсі права захищені.\n\nПоширюється під
+        ліцензією Apache 2.0
+    </string>
+    <string name="past_event">ВІДБУЛАСЬ</string>
+    <string name="upcoming_widget">GDG - Майбутні події</string>
+    <string name="global">Весь світ</string>
+    <string name="pulse">Пульс GDG</string>
+    <string name="pulse_events">Події</string>
+    <string name="pulse_attendees">Учасники</string>
+    <string name="pulse_circlers">В колах Google+</string>
+    <string name="home_gdg">Головна GDG</string>
+    <string name="home_gdg_summary">Виберіть GDG поряд з вами</string>
+    <string name="devfest">DevFest 2013</string>
+    <string name="analytics">Аналітика</string>
+    <string name="analytics_summary_on">На даний час, програма передає анонімні дані про
+        використання, що дозволяє нам покращити додаток
+    </string>
+    <string name="analytics_summary_off">На даний час, програма не передає анонімні дані про
+        використання
+    </string>
+    <string name="gcm">Сповіщення</string>
+    <string name="gcm_summary_on">На даний час, програма отримує сповіщення GDG</string>
+    <string name="gcm_summary_off">На даний час, програма не отримує сповіщення GDG</string>
+    <string name="google_signed_in">Авторизація в Google+</string>
+    <string name="google_signed_in_on">На даний час, ви авторизовані в Google+</string>
+    <string name="google_signed_in_off">Ви не ввійшли</string>
+    <string name="achievements_need_signin">Ви повинні бути авторизовані, щоб розблокувати
+        досягнення
+    </string>
+    <string name="done">Готово</string>
+    <string name="allow_analytics">Дозвольте збирати анонімні дані про використання додатку, щоб
+        допомогти покращити його
+    </string>
+    <string name="enable_gcm">Включити сповіщення GDG (отримувати сповіщення про нові події)
+    </string>
+    <string name="step3_text">Ще одна річ, перш ніж ми почнемо...</string>
+    <string name="share_on_gplus">Запросити друзів</string>
+    <string name="join_me">Приєднуйтесь до мене на цій події!</string>
+    <string name="name_not_known">Невідоме ім\'я</string>
+    <string name="signin_first">Ви повинні ввійти за допомогою G+, щоб використовувати цю функцію
+    </string>
+    <string name="originally_shared">спочатку поділився:</string>
+    <string name="server_error">Виникла помилка. Спробуйте ще раз.</string>
+    <string name="search_hint">Пошук GDG групи</string>
+    <string name="dashclock_description">Відображати інформацію про майбутні події на Головній GDG
+    </string>
+    <string name="devfest_description"><b>DevFest</b> - це щорічна подія, організована силами
+        ком\'юніті Google Developers Group. Основна мета — зустріч всіх, хто цікавиться технологіями
+        Google для обміну досвідом, знайомств і навчання. Зазвичай в програму DevFest\'у входять
+        конференції, хакатони, techtalk\'и, демо шоу та багато іншого.\n\nЗнайдіть унікальний GDG DevFest поряд з
+        вами!
+    </string>
+</resources>
