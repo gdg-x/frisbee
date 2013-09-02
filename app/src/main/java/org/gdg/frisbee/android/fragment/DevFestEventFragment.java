@@ -1,5 +1,7 @@
 package org.gdg.frisbee.android.fragment;
 
+import android.os.Bundle;
+
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -27,6 +29,12 @@ public class DevFestEventFragment extends EventFragment {
     private Comparator<EventAdapter.Item> mLocationComparator = new TaggedEventDistanceComparator();
     private Comparator<EventAdapter.Item> mDateComparator = new EventDateComparator();
     private Comparator<EventAdapter.Item> mCurrentComparator = mLocationComparator;
+
+
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Override
     void fetchEvents() {
@@ -100,13 +108,31 @@ public class DevFestEventFragment extends EventFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.order_by_date) {
             mCurrentComparator = mDateComparator;
+            setIsLoading(true);
             sortEvents();
+            setIsLoading(false);
+            getSherlockActivity().invalidateOptionsMenu();
+            scrollToSoonestEvent();
             return true;
         } else if (item.getItemId() == R.id.order_by_distance) {
             mCurrentComparator = mLocationComparator;
+            setIsLoading(true);
             sortEvents();
+            setIsLoading(false);
+            getSherlockActivity().invalidateOptionsMenu();
+            getListView().setSelection(0);
             return true;
         }
-        return false;
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void scrollToSoonestEvent() {
+        long now = System.currentTimeMillis();
+        for (int i = 0; i < mAdapter.getCount(); i++){
+            if (mAdapter.getItem(i).getStart().getMillis() > now){
+                getListView().setSelection(i);
+                return;
+            }
+        }
     }
 }
