@@ -31,6 +31,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Event;
@@ -85,7 +87,7 @@ public class EventAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int i) {
+    public SimpleEvent getItem(int i) {
         return mEvents.get(i).getEvent();
     }
 
@@ -185,6 +187,11 @@ public class EventAdapter extends BaseAdapter {
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(uri));
         mContext.startActivity(i);
+    }
+
+    public void sort(Comparator<Item> eventComparator){
+        Collections.sort(mEvents, eventComparator);
+        notifyDataSetChanged();
     }
 
     public class Item {
