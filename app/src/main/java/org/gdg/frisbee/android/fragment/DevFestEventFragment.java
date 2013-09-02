@@ -1,29 +1,32 @@
 package org.gdg.frisbee.android.fragment;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.android.volley.Response;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
+import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.adapter.EventAdapter;
 import org.gdg.frisbee.android.api.ApiRequest;
-import org.gdg.frisbee.android.api.model.Event;
-import org.gdg.frisbee.android.api.model.SimpleEvent;
 import org.gdg.frisbee.android.api.model.TaggedEvent;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
-import org.gdg.frisbee.android.utils.EventComparator;
+import org.gdg.frisbee.android.utils.EventDateComparator;
+import org.gdg.frisbee.android.utils.TaggedEventDistanceComparator;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
-
-import org.gdg.frisbee.android.R;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class DevFestEventFragment extends EventFragment {
     private static final String CACHE_KEY = "devfest2013";
-    private Comparator<? super TaggedEvent> mLocationComparator = new EventComparator();
+    private Comparator<EventAdapter.Item> mLocationComparator = new TaggedEventDistanceComparator();
+    private Comparator<EventAdapter.Item> mDateComparator = new EventDateComparator();
+    private Comparator<EventAdapter.Item> mCurrentComparator = mLocationComparator;
 
     @Override
     void fetchEvents() {
@@ -35,13 +38,13 @@ public class DevFestEventFragment extends EventFragment {
         Response.Listener<ArrayList<TaggedEvent>> listener = new Response.Listener<ArrayList<TaggedEvent>>() {
             @Override
             public void onResponse(final ArrayList<TaggedEvent> events) {
-                Collections.sort(events, mLocationComparator);
                 mEvents.addAll(events);
 
                 App.getInstance().getModelCache().putAsync(CACHE_KEY, mEvents, DateTime.now().plusHours(2), new ModelCache.CachePutListener() {
                     @Override
                     public void onPutIntoCache() {
                         mAdapter.addAll(mEvents);
+                        sortEvents();
                         setIsLoading(false);
                     }
                 });
@@ -72,4 +75,38 @@ public class DevFestEventFragment extends EventFragment {
         }
     }
 
+    private void sortEvents() {
+        mAdapter.sort(mCurrentComparator);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.devfest_menu, menu);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        if (mCurrentComparator == mLocationComparator){
+            menu.findItem(R.id.order_by_date).setVisible(true);
+            menu.findItem(R.id.order_by_distance).setVisible(false);
+        } else {
+            menu.findItem(R.id.order_by_distance).setVisible(true);
+            menu.findItem(R.id.order_by_date).setVisible(false);
+        }
+        super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.order_by_date) {
+            mCurrentComparator = mDateComparator;
+            sortEvents();
+            return true;
+        } else if (item.getItemId() == R.id.order_by_distance) {
+            mCurrentComparator = mLocationComparator;
+            sortEvents();
+            return true;
+        }
+        return false;
+    }
 }

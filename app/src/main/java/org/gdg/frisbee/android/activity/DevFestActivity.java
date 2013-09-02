@@ -15,4 +15,5 @@ public class DevFestActivity extends GdgNavDrawerActivity {
         getSupportActionBar().setLogo(R.drawable.ic_logo_devfest);
         App.getInstance().getTracker().sendView("/DevFest");
     }
+
 }
