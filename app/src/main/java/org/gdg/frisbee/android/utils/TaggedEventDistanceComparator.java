@@ -4,19 +4,23 @@ import android.location.Location;
 
 import java.util.Comparator;
 
+import org.gdg.frisbee.android.adapter.EventAdapter;
 import org.gdg.frisbee.android.api.model.TaggedEvent;
 import org.gdg.frisbee.android.app.App;
 
-public class EventComparator implements Comparator<TaggedEvent> {
+public class TaggedEventDistanceComparator implements Comparator<EventAdapter.Item> {
 
-    public EventComparator() {
+    public TaggedEventDistanceComparator() {
     }
 
     @Override
-    public int compare(TaggedEvent event1, TaggedEvent event2) {
+    public int compare(EventAdapter.Item eventItem1, EventAdapter.Item eventItem2) {
         float[] results = new float[1];
         float[] results2 = new float[1];
 
+
+        TaggedEvent event1 = (TaggedEvent) eventItem1.getEvent();
+        TaggedEvent event2 = (TaggedEvent) eventItem2.getEvent();
 
         Location lastLocation = App.getInstance().getLastLocation();
         if(lastLocation == null)

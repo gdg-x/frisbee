@@ -139,4 +139,6 @@
     <string name="search_hint">Search GDG Chapter</string>
     <string name="dashclock_description">Display information about the next upcoming event at your Home GDG</string>
     <string name="devfest_description">GDG DevFests are large, community-run events that can offer speaker sessions across multiple product areas, all-day hack-a-thons, code labs, and more.\n\nEach GDG DevFest will be inspired by and uniquely tailored to the needs of the developer community that hosts it. While no two events will be exactly alike, each GDG DevFest will, at its core, be powered by a shared belief that when developers come together to exchange ideas, amazing things can happen.</string>
+  <string name="order_by_date">Sort by date</string>
+  <string name="order_by_distance">Sort by distance</string>
 </resources>
