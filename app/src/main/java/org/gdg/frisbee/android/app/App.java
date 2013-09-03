@@ -125,7 +125,7 @@ public class App extends Application implements LocationListener {
 
         // Initialize Picasso
         mPicasso = new Picasso.Builder(this)
-                .loader(new CompatOkHttpLoader(this))
+                .downloader(new CompatOkHttpLoader(this))
                 .memoryCache(new LruCache(this))
                 .build();
         mPicasso.setDebugging(Const.DEVELOPER_MODE);
