@@ -84,6 +84,7 @@
     <string name="pulse_circlers">分會圈選人</string>
     <string name="home_gdg">所在地 GDG</string>
     <string name="home_gdg_summary">設定您主要的 GDG</string>
+    <string name="devfest">DevFest 2013</string>
     <string name="analytics">分析</string>
     <string name="analytics_summary_on">應用程式目前會傳送匿名使用資料作為改善參考</string>
     <string name="analytics_summary_off">應用程式目前不會傳送任何匿名使用資料</string>
@@ -98,10 +99,13 @@
     <string name="allow_analytics">允許我們收集匿名使用資料以改進應用程式</string>
     <string name="enable_gcm">啟用 GDG 雲端通知 (當有新活動時會通知)</string>
     <string name="step3_text">開始之前還有一件事…</string>
-
     <string name="share_on_gplus">邀請朋友</string>
     <string name="join_me">跟我一同參加本次活動！</string>
     <string name="name_not_known">未知的名稱</string>
     <string name="signin_first">您需要登入 Google+ 方能使用這個功能</string>
     <string name="originally_shared">最先分享這則訊息:</string>
+    <string name="server_error">發生錯誤，請重試</string>
+    <string name="search_hint">搜尋 GDG 分會</string>
+    <string name="dashclock_description">顯示所在地 GDG 即將到來的活動資訊</string>
+    <string name="devfest_description">GDG DevFest 為社群發起的大型聚會，提供多種產品的演講議程、一整天的黑客松、程式開發教學…等活動\n\n每個 GDG DevFest 皆由主辦的開發者社群依據需求量身訂做，雖然每場活動內容都不一樣，但每個 GDG DevFest 都是為了一個共同的信念而生，那就是當開發者們同聚一堂交換彼此的想法時，總是可以激盪出令人驚嘆的火花</string>
 </resources>

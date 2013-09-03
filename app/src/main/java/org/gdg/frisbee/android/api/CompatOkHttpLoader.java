@@ -5,7 +5,7 @@ import android.net.Uri;
 import android.os.StatFs;
 import com.squareup.okhttp.HttpResponseCache;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.picasso.Loader;
+import com.squareup.picasso.Downloader;
 import org.gdg.frisbee.android.app.App;
 
 import javax.net.ssl.SSLContext;
@@ -22,7 +22,7 @@ import java.security.GeneralSecurityException;
  * Time: 03:31
  * To change this template use File | Settings | File Templates.
  */
-public class CompatOkHttpLoader implements Loader {
+public class CompatOkHttpLoader implements Downloader {
 
     static final String RESPONSE_SOURCE = "X-Android-Response-Source";
 

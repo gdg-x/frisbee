@@ -44,6 +44,10 @@ public class TaggedEvent implements SimpleEvent {
         return defaultEventUrl;
     }
 
+    public String getLocation(){
+        return location;
+    }
+
     public LatLng getLatLng() {
         return latlng;
     }

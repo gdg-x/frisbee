@@ -23,6 +23,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.os.Build;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +66,13 @@ public class Utils {
             // should never happen
             throw new RuntimeException("Could not get package name: " + e);
         }
+    }
+
+    public static float convertPixelsToDp(float px, Context context){
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float dp = px / (metrics.densityDpi / 160f);
+        return dp;
     }
 
     public static Map<String, String> splitQuery(URL url) throws UnsupportedEncodingException {

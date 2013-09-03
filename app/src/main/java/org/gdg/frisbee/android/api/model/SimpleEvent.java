@@ -17,4 +17,6 @@ public interface SimpleEvent {
     String getGPlusEventLink();
 
     String getLink();
+
+    String getLocation();
 }

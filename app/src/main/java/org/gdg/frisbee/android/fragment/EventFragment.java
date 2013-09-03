@@ -154,8 +154,10 @@ public abstract class EventFragment extends GdgListFragment implements View.OnCl
         intent.putExtra("endTime", event.getEnd().getMillis());
         intent.putExtra("title", event.getTitle());
 
-        if(event instanceof Event)
-            intent.putExtra("eventLocation", ((Event)event).getLocation());
+        String location = event.getLocation();
+        if (location != null){
+            intent.putExtra("eventLocation", location);
+        }
 
         startActivity(intent);
     }
@@ -199,7 +201,7 @@ public abstract class EventFragment extends GdgListFragment implements View.OnCl
 
             Uri eventUri = Uri.parse("https://developers.google.com/events/" + event.getId() + "/");
 
-            if(getArguments().containsKey("plus_id")) {
+            if(getArguments() != null && getArguments().containsKey("plus_id")) {
                 String eventDeepLinkId = getArguments().getString("plus_id") + "/events/" + event.getId();
 
                 // Set call-to-action metadata.

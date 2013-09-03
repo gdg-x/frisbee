@@ -18,7 +18,6 @@ package org.gdg.frisbee.android.fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,13 +25,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
 import com.google.android.gms.plus.GooglePlusUtil;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
+
+import java.util.Collections;
+import java.util.List;
+
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.ChapterAdapter;
 import org.gdg.frisbee.android.api.ApiRequest;
@@ -42,12 +45,11 @@ import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.ChapterComparator;
-import org.gdg.frisbee.android.utils.GingerbreadLastLocationFinder;
 import org.joda.time.DateTime;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import roboguice.inject.InjectView;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 public class FirstStartStep1Fragment extends RoboSherlockFragment {
 
@@ -126,7 +128,11 @@ public class FirstStartStep1Fragment extends RoboSherlockFragment {
               }, new Response.ErrorListener() {
                   @Override
                   public void onErrorResponse(VolleyError volleyError) {
-                      Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
+                      if (isDetached()){
+                          Toast.makeText(getActivity(), R.string.fetch_chapters_failed, Toast.LENGTH_SHORT).show();
+                      } else {
+                          Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
+                      }
                       Log.e(LOG_TAG, "Could'nt fetch chapter list", volleyError);
                   }
               });
