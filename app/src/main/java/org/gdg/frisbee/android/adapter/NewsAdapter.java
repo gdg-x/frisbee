@@ -30,9 +30,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.*;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusOneButton;
 import com.google.api.services.plus.model.Activity;
@@ -70,7 +68,6 @@ public class NewsAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private ArrayList<Item> mActivities;
     private PlusClient mPlusClient;
-    private ViewHolder mViewHolder;
 
     public NewsAdapter(Context ctx, PlusClient client) {
         mContext = ctx;
@@ -183,6 +180,7 @@ public class NewsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
+        ViewHolder mViewHolder;
         if (view == null) {
             view = mInflater.inflate(R.layout.news_item_base, null);
 
@@ -234,23 +232,23 @@ public class NewsAdapter extends BaseAdapter {
             switch(getItemViewType(i)) {
                 case 1:
                     // Article
-                    populateArticle(mViewHolder.container, attachment);
+                    populateArticle(mViewHolder, mViewHolder.container, attachment);
                     break;
                 case 2:
                     // Video
-                    populateVideo(mViewHolder.container, attachment);
+                    populateVideo(mViewHolder, mViewHolder.container, attachment);
                     break;
                 case 3:
                     // Photo
-                    populatePhoto(mViewHolder.container, attachment);
+                    populatePhoto(mViewHolder, mViewHolder.container, attachment);
                     break;
                 case 4:
                     // Album
-                    populateAlbum(mViewHolder.container, attachment);
+                    populateAlbum(mViewHolder, mViewHolder.container, attachment);
                     break;
                 case 5:
                     // Event
-                    populateEvent(mViewHolder.container, attachment);
+                    populateEvent(mViewHolder, mViewHolder.container, attachment);
                     break;
             }
         }
@@ -266,7 +264,7 @@ public class NewsAdapter extends BaseAdapter {
         return view;
     }
 
-    private View createAttachmentView(ViewGroup container, int layout, int type) {
+    private View createAttachmentView(ViewHolder mViewHolder, ViewGroup container, int layout, int type) {
         View attachmentView;
 
         if (container.getChildCount() == 0) {
@@ -308,11 +306,11 @@ public class NewsAdapter extends BaseAdapter {
         return attachmentView;
     }
 
-    private void populateArticle(ViewGroup container, final Activity.PlusObject.Attachments attachment) {
+    private void populateArticle(ViewHolder mViewHolder, ViewGroup container, final Activity.PlusObject.Attachments attachment) {
         if(attachment == null)
             return;
 
-        View attachmentView = createAttachmentView(container, R.layout.news_item_article, 1);
+        View attachmentView = createAttachmentView(mViewHolder, container, R.layout.news_item_article, 1);
 
         mViewHolder.title.setText(attachment.getDisplayName());
         try {
@@ -345,11 +343,16 @@ public class NewsAdapter extends BaseAdapter {
         });
     }
 
-    private void populateVideo(ViewGroup container, final Activity.PlusObject.Attachments attachment) {
+    private void populateVideo(ViewHolder mViewHolder, ViewGroup container, final Activity.PlusObject.Attachments attachment) {
         if(attachment == null)
             return;
 
-        View attachmentView = createAttachmentView(container, R.layout.news_item_video, 2);
+        View attachmentView = createAttachmentView(mViewHolder, container, R.layout.news_item_video, 2);
+
+        // Precalc Image Size
+        mViewHolder.poster.setDimensions(attachment.getImage().getWidth(), attachment.getImage().getHeight(), attachment.getImage().getUrl());
+        mViewHolder.poster.setImageDrawable(null);
+
         App.getInstance().getPicasso()
                 .load(attachment.getImage().getUrl())
                 .into(mViewHolder.poster);
@@ -370,12 +373,14 @@ public class NewsAdapter extends BaseAdapter {
         });
     }
 
-    private void populatePhoto(ViewGroup container, Activity.PlusObject.Attachments attachment) {
+    private void populatePhoto(ViewHolder mViewHolder, ViewGroup container, Activity.PlusObject.Attachments attachment) {
         if(attachment == null)
             return;
 
-        createAttachmentView(container, R.layout.news_item_photo, 3);
+        createAttachmentView(mViewHolder, container, R.layout.news_item_photo, 3);
 
+        // Precalc Image Size
+        mViewHolder.photo.setDimensions(attachment.getImage().getWidth(), attachment.getImage().getHeight(), attachment.getImage().getUrl());
         mViewHolder.photo.setImageDrawable(null);
 
         App.getInstance().getPicasso()
@@ -384,11 +389,11 @@ public class NewsAdapter extends BaseAdapter {
 
     }
 
-    private void populateAlbum(ViewGroup container, Activity.PlusObject.Attachments attachment) {
+    private void populateAlbum(ViewHolder mViewHolder, ViewGroup container, Activity.PlusObject.Attachments attachment) {
         if(attachment == null)
             return;
 
-        createAttachmentView(container, R.layout.news_item_album, 4);
+        createAttachmentView(mViewHolder, container, R.layout.news_item_album, 4);
 
         App.getInstance().getPicasso()
                 .load(attachment.getThumbnails().get(0).getImage().getUrl())
@@ -405,8 +410,8 @@ public class NewsAdapter extends BaseAdapter {
                     .into(mViewHolder.pic3);
     }
 
-    private void populateEvent(ViewGroup container, final Activity.PlusObject.Attachments attachment) {
-        createAttachmentView(container, R.layout.news_item_event, 5);
+    private void populateEvent(ViewHolder mViewHolder, ViewGroup container, final Activity.PlusObject.Attachments attachment) {
+        createAttachmentView(mViewHolder, container, R.layout.news_item_event, 5);
 
         TextView title = mViewHolder.attachmentTitle;
         String name = attachment.getDisplayName();
