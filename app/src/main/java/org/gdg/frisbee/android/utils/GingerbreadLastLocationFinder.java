@@ -113,10 +113,17 @@ public class GingerbreadLastLocationFinder implements ILastLocationFinder {
         // location updates every [minTime] and [minDistance].
         if (locationListener != null && (bestTime < minTime || bestAccuracy > minDistance)) {
             List<String> providers = locationManager.getProviders(criteria, true);
-            if (providers != null && providers.size() > 0){
-                IntentFilter locIntentFilter = new IntentFilter(SINGLE_LOCATION_UPDATE_ACTION);
-                context.registerReceiver(singleUpdateReceiver, locIntentFilter);
-                locationManager.requestSingleUpdate(criteria, singleUpatePI);
+            try {
+                if (providers != null && providers.size() > 0){
+
+                        IntentFilter locIntentFilter = new IntentFilter(SINGLE_LOCATION_UPDATE_ACTION);
+                        context.registerReceiver(singleUpdateReceiver, locIntentFilter);
+                        locationManager.requestSingleUpdate(criteria, singleUpatePI);
+                }
+            } catch (SecurityException ex) {
+                Log.e(TAG, "fail to request location update, ignore", ex);
+            } catch (IllegalArgumentException ex) {
+                Log.d(TAG, "provider does not exist " + ex.getMessage());
             }
         }
 
