@@ -139,7 +139,7 @@ public class GdlListFragment extends GdgListFragment implements PullToRefreshAtt
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        if(getActivity() != null)
+                        if(getActivity() != null &&isAdded())
                             Crouton.makeText(getActivity(), "Fetch failed", Style.ALERT).show();
                     }
                 });
@@ -188,7 +188,8 @@ public class GdlListFragment extends GdgListFragment implements PullToRefreshAtt
         if(Utils.isOnline(getActivity())) {
             fetchContent(true);
         } else {
-            Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
+            if(isAdded())
+                Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
         }
     }
 

@@ -71,13 +71,15 @@ public class DevFestEventFragment extends EventFragment {
 
                     mAdapter.addAll(events);
                     setIsLoading(false);
-                    Crouton.makeText(getActivity(), getString(R.string.cached_content), Style.INFO).show();
+                    if(isAdded())
+                        Crouton.makeText(getActivity(), getString(R.string.cached_content), Style.INFO).show();
                 }
 
                 @Override
                 public void onNotFound(String key) {
                     setIsLoading(false);
-                    Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
+                    if(isAdded())
+                        Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
                 }
             });
         }

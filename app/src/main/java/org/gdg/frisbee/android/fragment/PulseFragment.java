@@ -94,7 +94,8 @@ public class PulseFragment extends GdgListFragment {
                  }, new Response.ErrorListener() {
                      @Override
                      public void onErrorResponse(VolleyError volleyError) {
-                         Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
+                         if(isAdded())
+                            Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
                          Log.e(LOG_TAG, "Could'nt fetch pulse", volleyError);
                      }
                  }
@@ -113,7 +114,8 @@ public class PulseFragment extends GdgListFragment {
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
-                            Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
+                            if(isAdded())
+                                Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
                             Log.e(LOG_TAG, "Could'nt fetch pulse", volleyError);
                         }
                     }
@@ -123,14 +125,12 @@ public class PulseFragment extends GdgListFragment {
         App.getInstance().getModelCache().getAsync("pulse_"+mTarget.toLowerCase().replace(" ","-"), true, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
-                Log.d(LOG_TAG, "Cache hit.");
                 Pulse pulse = (Pulse)item;
                 initAdapter(pulse);
             }
 
             @Override
             public void onNotFound(String key) {
-                Log.d(LOG_TAG, "Cache miss.");
                 mFetchPulseTask.execute();
             }
         });
