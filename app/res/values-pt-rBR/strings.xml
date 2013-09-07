@@ -12,7 +12,9 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  --><resources>
+  -->
+
+<resources>
     <string name="news">"Notícias"</string>
     <string name="drawer_open">"Abrir Gaveta"</string>
     <string name="drawer_close">"Fechar Gaveta"</string>
@@ -102,7 +104,7 @@
     <string name="contributors">"O app GDG é um esforço da comunidade e possui código aberto. As seguintes pessoas contribuíram para o app:"</string>
     <string name="get_involved">"Envolva-se"</string>
     <string name="get_involved_text">"O app GDG é um esforço da comunidade e possui código aberto. Todos estão convidados a participar e melhorar este app. \n\nVisite o GitHub e faça e verifique nosso código."</string>
-    <string name="about_license">"(C) 2013 The GDG Frisbee Project\nTodos os direitos reservados.\n\nLicensed nos termos\nda Licença Apache 2.0"</string>
+    <string name="about_license">"(C) 2013 The GDG Frisbee Project\nTodos os direitos reservados.\n\nLicenciado nos termos\nda Licença Apache 2.0"</string>
     <string name="past_event">"PASSADO"</string>
     <string name="originally_shared">compartilhou originalmente:</string>
 </resources>
