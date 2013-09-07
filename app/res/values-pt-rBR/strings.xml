@@ -14,8 +14,8 @@
   ~ limitations under the License.
   --><resources>
     <string name="news">"Notícias"</string>
-    <string name="drawer_open">"Abrir Gaveta"</string>
-    <string name="drawer_close">"Fechar Gaveta"</string>
+    <string name="drawer_open">"Abrir menu"</string>
+    <string name="drawer_close">"Fechar menu"</string>
     <string name="info">"Info"</string>
     <string name="events">"Eventos"</string>
     <string name="app_name">"GDG"</string>
