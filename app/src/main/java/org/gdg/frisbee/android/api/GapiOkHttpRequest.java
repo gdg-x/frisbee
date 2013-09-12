@@ -17,6 +17,8 @@ package org.gdg.frisbee.android.api;
 import com.google.api.client.http.LowLevelHttpRequest;
 import com.google.api.client.http.LowLevelHttpResponse;
 import com.google.api.client.util.Preconditions;
+import org.gdg.frisbee.android.app.App;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -46,6 +48,7 @@ public class GapiOkHttpRequest extends LowLevelHttpRequest {
     @Override
     public LowLevelHttpResponse execute() throws IOException {
         HttpURLConnection connection = this.connection;
+        long startTime = System.currentTimeMillis();
         // write content
         if (getStreamingContent() != null) {
             String contentType = getContentType();
@@ -88,6 +91,7 @@ public class GapiOkHttpRequest extends LowLevelHttpRequest {
             connection.connect();
             GapiOkResponse response = new GapiOkResponse(connection);
             successfulConnection = true;
+            App.getInstance().getTracker().sendTiming("net",System.currentTimeMillis()-startTime, "gapi", null);
             return response;
         } finally {
             if (!successfulConnection) {

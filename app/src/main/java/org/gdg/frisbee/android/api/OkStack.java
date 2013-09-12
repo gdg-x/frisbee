@@ -64,16 +64,20 @@ public class OkStack extends HurlStack {
 
     @Override
     public HttpResponse performRequest(Request<?> request, Map<String, String> additionalHeaders) throws IOException, AuthFailureError {
+        long startTime = System.currentTimeMillis();
         if(Const.DEVELOPER_MODE && Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             TrafficStats.setThreadStatsTag(0xF00D);
             try {
                 HttpResponse res = super.performRequest(request, additionalHeaders);
+                App.getInstance().getTracker().sendTiming("net",System.currentTimeMillis()-startTime, "volley", null);
                 return res;
             } finally {
                 TrafficStats.clearThreadStatsTag();
             }
         } else {
-            return super.performRequest(request, additionalHeaders);
+            HttpResponse response = super.performRequest(request, additionalHeaders);
+            App.getInstance().getTracker().sendTiming("net",System.currentTimeMillis()-startTime, "gapi", null);
+            return response;
         }
     }
 }

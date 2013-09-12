@@ -24,7 +24,7 @@
     <string name="app_name">GDG</string>
     <string name="add_to_calendar">Додати в календар</string>
     <string name="share_with_googleplus">Розповісти в Google+</string>
-    <string name="no_scheduled_events">Ніяких запланованих подій\nна найближчі 30 днів</string>
+    <string name="no_scheduled_events">На найближчих 30 днів подій немає</string>
     <string name="organizers">Організатори</string>
     <string name="resources">Посилання</string>
     <string name="fetch_events_failed">Не вдалося отримати майбутні події</string>
