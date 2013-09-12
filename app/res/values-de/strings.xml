@@ -129,10 +129,16 @@
     <string name="allow_analytics">Erlaube uns anonyme Nutzungsdaten zur Verbesserung der App zu sammeln</string>
     <string name="enable_gcm">Aktiviere GDG Cloud Benachrichtigungen (werde über neue Events benachrichtigt)</string>
     <string name="step3_text">Eine Sache noch...</string>
-
     <string name="share_on_gplus">Freunde einladen</string>
     <string name="join_me">Begleitet mich zu diesem Event!</string>
     <string name="name_not_known">Unbekannt</string>
     <string name="signin_first">Du musst mit Google+ angemeldet sein um dieses Feature zu nutzen.</string>
     <string name="originally_shared">hat Folgendes ursprünglich geteilt:</string>
+    <string name="server_error">Ein Fehler ist aufgetreten. Versuch es noch einmal.</string>
+    <string name="search_hint">Suche nach GDGs</string>
+    <string name="dashclock_description">Zeige das nächste GDG Event</string>
+    <string name="devfest_description">GDG DevFests sind große, von der Community organisierte Events bestehend aus Sessions über mehrere Produktbereiche, Hackathons, Code Labs und mehr.\n\nJedes GDG DevFest ist einzigartig und auf die Bedürfnisse der lokalen Community welche das DevFest veranstaltet zugeschnitten. Auch wenn jedes DevFest anders ist, sind sie im Kern angetrieben durch die Idee das tolle Dinge enstehen wenn sich Entwickler treffen und Ideen austauschen.</string>
+    <string name="order_by_date">Nach Datum sortieren</string>
+    <string name="order_by_distance">Nach Entfernung sortieren</string>
+    <string name="gcm_event_ticker">Deine GDG hat ein neues Event angekündigt.</string>
 </resources>
