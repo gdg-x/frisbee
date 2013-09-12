@@ -28,6 +28,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <permission android:name="org.gdg.frisbee.android.permission.MAPS_RECEIVE" android:protectionLevel="signature"/>
     <permission android:name="org.gdg.frisbee.android.permission.C2D_MESSAGE" android:protectionLevel="signature" />
     <uses-permission android:name="org.gdg.frisbee.android.permission.MAPS_RECEIVE"/>
@@ -99,6 +100,7 @@
                 <category android:name="org.gdg.frisbee.android" />
             </intent-filter>
         </receiver>
+        <service android:name=".service.GcmIntentService" />
         <service android:name=".widget.UpcomingEventWidgetProvider$UpdateService"></service>
         <service android:name=".widget.GdgDashClockExtension"
                  android:icon="@drawable/ic_dashclock"

@@ -64,6 +64,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
     public static final String EXTRA_GROUP_ID = "org.gdg.frisbee.CHAPTER";
     public static final String SECTION_EVENTS = "events";
     public static final String EXTRA_SECTION = "org.gdg.frisbee.SECTION";
+    public static final String EXTRA_EVENT_ID = "org.gdg.frisbee.EVENT";
 
     private static String LOG_TAG = "GDG-MainActivity";
 
