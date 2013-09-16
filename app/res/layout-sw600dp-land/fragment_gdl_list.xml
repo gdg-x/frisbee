@@ -25,7 +25,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:numColumns="3"
-            android:id="@+id/list" android:stretchMode="columnWidth"
+            android:id="@android:id/list" android:stretchMode="columnWidth"
             android:gravity="top"/>
     <LinearLayout
             android:orientation="vertical"

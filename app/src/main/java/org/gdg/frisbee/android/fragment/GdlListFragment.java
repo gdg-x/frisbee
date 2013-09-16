@@ -59,7 +59,7 @@ public class GdlListFragment extends GdgListFragment implements PullToRefreshAtt
     private static final String LOG_TAG = "GDG-GdlListFragment";
     private GoogleDevelopersLive mClient;
 
-    @InjectView(R.id.list)
+    @InjectView(android.R.id.list)
     GridView mGrid;
 
     private GdlAdapter mAdapter;

@@ -331,7 +331,7 @@ public class GdgListFragment extends RoboSherlockFragment {
             throw new IllegalStateException("Content view not yet created");
         }
 
-        View rawList = root.findViewById(R.id.list);
+        View rawList = root.findViewById(android.R.id.list);
 
         if (mEmptyView == null) {
             throw new RuntimeException(
@@ -349,12 +349,12 @@ public class GdgListFragment extends RoboSherlockFragment {
         if (rawList == null) {
             throw new RuntimeException(
                     "Your content must have a ListView whose id attribute is " +
-                            "'R.id.list'");
+                            "'android.R.id.list'");
         }
 
         if (!(rawList instanceof AdapterView)) {
             throw new RuntimeException(
-                    "Content has view with id attribute 'R.id.list' "
+                    "Content has view with id attribute 'android.R.id.list' "
                             + "that is not a ListView class");
         }
 
