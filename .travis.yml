@@ -6,12 +6,18 @@ branches:
     - release
 
 before_install:
+  - sudo apt-get update -qq
+  - if [ `uname -m` = x86_64 ]; then sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch; fi
   # download the latest android sdk and unzip
-  - wget http://dl.google.com/android/android-sdk_r21.0.1-linux.tgz
-  - tar -zxf android-sdk_r21.0.1-linux.tgz
+  - wget http://dl.google.com/android/android-sdk_r22-linux.tgz
+  - tar -zxf android-sdk_r22-linux.tgz
   - export ANDROID_HOME=`pwd`/android-sdk-linux
-  - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
+  - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/build-tools/$ANDROID_BUILD_TOOLS_VERSION
   - TOOLS=$(android list sdk --no-ui | grep "Android SDK Platform-tools" | cut -d"-" -f1)
   - android update sdk --filter "$TOOLS" --no-ui --force
   - SDK=$(android list sdk --no-ui | grep ", API 16," | cut -d"-" -f1)
   - android update sdk --filter "$SDK" --no-ui --force
+
+  # PROVISIONAL: changed SDKr22 build-tools path. create symbolic link
+  - if [ ! -e ${ANDROID_HOME}/platform-tools/aapt ]; then ln -s ${ANDROID_HOME}/build-tools/$ANDROID_BUILD_TOOLS_VERSION/aapt ${ANDROID_HOME}/platform-tools/aapt; fi
+  - if [ ! -e ${ANDROID_HOME}/platform-tools/aidl ]; then ln -s ${ANDROID_HOME}/build-tools/$ANDROID_BUILD_TOOLS_VERSION/aidl ${ANDROID_HOME}/platform-tools/aidl; fi
