@@ -1,5 +1,5 @@
 language: java
-jdk:      openjdk7
+jdk: oraclejdk7
 
 branches:
   only:
@@ -10,12 +10,8 @@ before_install:
   - sudo apt-get update -qq
   - if [ `uname -m` = x86_64 ]; then sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch; fi
   # download the latest android sdk and unzip
-  - wget http://dl.google.com/android/android-sdk_r22.0.5-linux.tgz
-  - tar xzf android-sdk_r22.0.5-linux.tgz
+  - wget http://dl.google.com/android/android-sdk_r21.0.1-linux.tgz
+  - tar xzf android-sdk_r21.0.1-linux.tgz
   - export ANDROID_HOME=`pwd`/android-sdk-linux
-  - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/build-tools/$ANDROID_BUILD_TOOLS_VERSION
-  - echo y | android update sdk --filter platform-tools,build-tools-18.0.1,android-16,extra-android-support --no-ui --force > /dev/null
-
-  # PROVISIONAL: changed SDKr22 build-tools path. create symbolic link
-  - if [ ! -e ${ANDROID_HOME}/platform-tools/aapt ]; then ln -s ${ANDROID_HOME}/build-tools/18.0.1/aapt ${ANDROID_HOME}/platform-tools/aapt; fi
-  - if [ ! -e ${ANDROID_HOME}/platform-tools/aidl ]; then ln -s ${ANDROID_HOME}/build-tools/18.0.1/aidl ${ANDROID_HOME}/platform-tools/aidl; fi
+  - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
+  - android update sdk --filter platform-tools,android-16,extra-android-support --no-ui --force
