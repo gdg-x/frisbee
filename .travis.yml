@@ -1,8 +1,5 @@
 language: java
-jdk: oraclejdk6
-env:
-    matrix:
-    - ANDROID_TARGET=android-16 ANDROID_SDKS=android-16,build-tools-18.0.1,sysimg-16 ANDROID_BUILD_TOOLS_VERSION=18.0.1 ANDROID_ABI=armeabi-v7a
+jdk:      openjdk7
 
 branches:
   only:
@@ -17,12 +14,8 @@ before_install:
   - tar xzf android-sdk_r22.0.5-linux.tgz
   - export ANDROID_HOME=`pwd`/android-sdk-linux
   - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/build-tools/$ANDROID_BUILD_TOOLS_VERSION
-  # Install required Android components.
-  - android list sdk --extended
-  # Do you accept the license 'android-sdk-license-bcbbd656' [y/n]:
-  - echo -e "y\n" > accept.txt
-  - android update sdk --filter platform-tools,extra-android-support,$ANDROID_SDKS --no-ui --force < accept.txt
+  - echo y | android update sdk --filter platform-tools,build-tools-18.0.1,android-16,extra-android-support --no-ui --force > /dev/null
 
   # PROVISIONAL: changed SDKr22 build-tools path. create symbolic link
-  - if [ ! -e ${ANDROID_HOME}/platform-tools/aapt ]; then ln -s ${ANDROID_HOME}/build-tools/$ANDROID_BUILD_TOOLS_VERSION/aapt ${ANDROID_HOME}/platform-tools/aapt; fi
-  - if [ ! -e ${ANDROID_HOME}/platform-tools/aidl ]; then ln -s ${ANDROID_HOME}/build-tools/$ANDROID_BUILD_TOOLS_VERSION/aidl ${ANDROID_HOME}/platform-tools/aidl; fi
+  - if [ ! -e ${ANDROID_HOME}/platform-tools/aapt ]; then ln -s ${ANDROID_HOME}/build-tools/18.0.1/aapt ${ANDROID_HOME}/platform-tools/aapt; fi
+  - if [ ! -e ${ANDROID_HOME}/platform-tools/aidl ]; then ln -s ${ANDROID_HOME}/build-tools/18.0.1/aidl ${ANDROID_HOME}/platform-tools/aidl; fi
