@@ -27,7 +27,6 @@ import android.widget.ListView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.android.gms.plus.PlusClient;
-import com.google.inject.Inject;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import org.gdg.frisbee.android.R;
@@ -45,7 +44,6 @@ import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
 import roboguice.inject.InjectView;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
-import uk.co.senab.actionbarpulltorefresh.library.viewdelegates.AbsListViewDelegate;
 
 /**
  * Created with IntelliJ IDEA.
@@ -162,25 +160,18 @@ public class GdlListFragment extends GdgListFragment implements PullToRefreshAtt
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onCreateView()");
         return inflater.inflate(R.layout.fragment_gdl_list, null);
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        Log.d(LOG_TAG, "onStart()");
-    }
-
-    @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-
+        final GdlShow show = (GdlShow) getListView().getItemAtPosition(position);
+        Intent playVideoIntent = new Intent(getActivity(), YoutubeActivity.class);
+        playVideoIntent.putExtra("gdl", true);
+        playVideoIntent.putExtra("video_id", show.getYoutubeId());
+        getActivity().startActivityFromFragment(this, playVideoIntent, 0);
     }
 
     @Override

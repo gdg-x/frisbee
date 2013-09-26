@@ -111,15 +111,6 @@ public class GdlAdapter extends BaseAdapter {
 
         holder.ytUrl = show.getYoutubeUrl();
 
-        View.OnClickListener mShowVideo = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent playVideoIntent = new Intent(mContext, YoutubeActivity.class);
-                playVideoIntent.putExtra("gdl", true);
-                playVideoIntent.putExtra("video_id", show.getYoutubeId());
-                mContext.startActivity(playVideoIntent);
-            }
-        };
         holder.thumbnailView.setImageDrawable(null);
         holder.thumbnailView.setBackgroundResource(R.drawable.gdl_video_dummy);
         App.getInstance().getPicasso()
@@ -128,8 +119,8 @@ public class GdlAdapter extends BaseAdapter {
 
         holder.titleView.setText(show.getTitle());
 
-        holder.thumbnailView.setOnClickListener(mShowVideo);
-        holder.titleView.setOnClickListener(mShowVideo);
+        //holder.thumbnailView.setOnClickListener(mShowVideo);
+        //holder.titleView.setOnClickListener(mShowVideo);
 
         if(mPlusClient != null) {
             holder.plusButton.setVisibility(View.VISIBLE);

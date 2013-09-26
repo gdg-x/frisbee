@@ -349,12 +349,12 @@ public class GdgListFragment extends RoboSherlockFragment {
         if (rawList == null) {
             throw new RuntimeException(
                     "Your content must have a ListView whose id attribute is " +
-                            "'android.R.id.list'");
+                            "'R.id.list'");
         }
 
         if (!(rawList instanceof AdapterView)) {
             throw new RuntimeException(
-                    "Content has view with id attribute 'android.R.id.list' "
+                    "Content has view with id attribute 'R.id.list' "
                             + "that is not a ListView class");
         }
 

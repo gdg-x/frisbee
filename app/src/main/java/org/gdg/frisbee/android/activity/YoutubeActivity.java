@@ -20,7 +20,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.google.android.gms.games.GamesClient;
@@ -49,7 +48,6 @@ public class YoutubeActivity extends GdgActivity implements YouTubePlayer.OnInit
     private SharedPreferences mPreferences;
     private YouTubePlayerSupportFragment mPlayerFragment;
     private boolean mCounted = false;
-    private boolean mGdl = false;
 
     private static final int PORTRAIT_ORIENTATION = Build.VERSION.SDK_INT < 9
             ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -72,12 +70,6 @@ public class YoutubeActivity extends GdgActivity implements YouTubePlayer.OnInit
         mPlayerFragment.initialize(getString(R.string.android_simple_api_access_key), this);
 
         setRequestedOrientation(PORTRAIT_ORIENTATION);
-        mContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                YoutubeActivity.this.finish();
-            }
-        });
 
         mPreferences = getSharedPreferences("gdg", MODE_PRIVATE);
     }
@@ -89,24 +81,16 @@ public class YoutubeActivity extends GdgActivity implements YouTubePlayer.OnInit
         youTubePlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_ALWAYS_FULLSCREEN_IN_LANDSCAPE);
         youTubePlayer.setPlayerStateChangeListener(new YouTubePlayer.PlayerStateChangeListener() {
             @Override
-            public void onLoading() {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
+            public void onLoading() {}
 
             @Override
-            public void onLoaded(String s) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
+            public void onLoaded(String s) {}
 
             @Override
-            public void onAdStarted() {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
+            public void onAdStarted() {}
 
             @Override
-            public void onVideoStarted() {
-
-            }
+            public void onVideoStarted() {}
 
             @Override
             public void onVideoEnded() {
@@ -151,9 +135,7 @@ public class YoutubeActivity extends GdgActivity implements YouTubePlayer.OnInit
             }
 
             @Override
-            public void onError(YouTubePlayer.ErrorReason errorReason) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
+            public void onError(YouTubePlayer.ErrorReason errorReason) {}
         });
 
         if(!wasRestored)
