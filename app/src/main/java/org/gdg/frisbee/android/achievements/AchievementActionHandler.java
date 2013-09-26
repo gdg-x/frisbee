@@ -60,27 +60,27 @@ public class AchievementActionHandler {
     }
 
     public void handleVideoViewed() {
-        SharedPreferences.Editor editor = mPreferences.edit();
-        int videoPlayed = mPreferences.getInt(Const.SETTINGS_VIDEOS_PLAYED, 0);
-        videoPlayed++;
-
-        editor.putInt(Const.SETTINGS_VIDEOS_PLAYED, videoPlayed);
-        editor.apply();
+        int videoPlayed = updateVideoViewedCounter(Const.SETTINGS_VIDEOS_PLAYED);
 
         if(videoPlayed >= 10)
             postAchievementUnlockedEvent(Achievements.ACHIEVEMENT_CINEPHILE);
     }
 
     public void handleGDLVideoViewed() {
-        SharedPreferences.Editor editor = mPreferences.edit();
-        int videoPlayed = mPreferences.getInt(Const.SETTINGS_GDL_VIDEOS_PLAYED, 0);
-        videoPlayed++;
-
-        editor.putInt(Const.SETTINGS_GDL_VIDEOS_PLAYED, videoPlayed);
-        editor.apply();
+        int videoPlayed = updateVideoViewedCounter(Const.SETTINGS_GDL_VIDEOS_PLAYED);
 
         if(videoPlayed >= 5)
             postAchievementUnlockedEvent(Achievements.ACHIEVEMENT_GDL_ADDICT);
+    }
+
+    private int updateVideoViewedCounter(String videoCategoryName) {
+        SharedPreferences.Editor editor = mPreferences.edit();
+        int videoPlayed = mPreferences.getInt(videoCategoryName, 0);
+        videoPlayed++;
+
+        editor.putInt(videoCategoryName, videoPlayed);
+        editor.apply();
+        return videoPlayed;
     }
 
     private void postAchievementUnlockedEvent(final String achievementName) {
