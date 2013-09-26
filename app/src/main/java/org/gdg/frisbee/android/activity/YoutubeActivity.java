@@ -16,21 +16,15 @@
 
 package org.gdg.frisbee.android.activity;
 
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.widget.LinearLayout;
 import android.widget.Toast;
-import com.google.android.gms.games.GamesClient;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
-import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.utils.PlayServicesHelper;
-import roboguice.inject.InjectView;
 
 /**
  * GDG Aachen
@@ -41,13 +35,7 @@ import roboguice.inject.InjectView;
  * Time: 00:14
  */
 public class YoutubeActivity extends GdgActivity implements YouTubePlayer.OnInitializedListener {
-
-    @InjectView(R.id.videoContainer)
-    private LinearLayout mContainer;
-
-    private SharedPreferences mPreferences;
     private YouTubePlayerSupportFragment mPlayerFragment;
-    private boolean mCounted = false;
 
     private static final int PORTRAIT_ORIENTATION = Build.VERSION.SDK_INT < 9
             ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -70,8 +58,6 @@ public class YoutubeActivity extends GdgActivity implements YouTubePlayer.OnInit
         mPlayerFragment.initialize(getString(R.string.android_simple_api_access_key), this);
 
         setRequestedOrientation(PORTRAIT_ORIENTATION);
-
-        mPreferences = getSharedPreferences("gdg", MODE_PRIVATE);
     }
 
     @Override
@@ -94,44 +80,8 @@ public class YoutubeActivity extends GdgActivity implements YouTubePlayer.OnInit
 
             @Override
             public void onVideoEnded() {
-                if(!mCounted) {
-                    SharedPreferences.Editor editor = mPreferences.edit();
-
-                    editor.putInt(Const.SETTINGS_VIDEOS_PLAYED, mPreferences.getInt(Const.SETTINGS_VIDEOS_PLAYED,0)+1);
-
-                    if(getIntent().hasExtra("gdl"))
-                        editor.putInt(Const.SETTINGS_VIDEOS_PLAYED, mPreferences.getInt(Const.SETTINGS_VIDEOS_PLAYED,0)+1);
-
-                    editor.apply();
-                }
-
-                if(mPreferences.getInt(Const.SETTINGS_VIDEOS_PLAYED,0) == 10) {
-                    getHandler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            getPlayServicesHelper().getGamesClient(new PlayServicesHelper.OnGotGamesClientListener() {
-                                @Override
-                                public void onGotGamesClient(GamesClient c) {
-                                    c.unlockAchievement(Const.ACHIEVEMENT_CINEPHILE);
-                                }
-                            });
-                        }
-                    }, 1000);
-                }
-
-                if(mPreferences.getInt(Const.SETTINGS_GDL_VIDEOS_PLAYED,0) == 5) {
-                    getHandler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            getPlayServicesHelper().getGamesClient(new PlayServicesHelper.OnGotGamesClientListener() {
-                                @Override
-                                public void onGotGamesClient(GamesClient c) {
-                                    c.unlockAchievement(Const.ACHIEVEMENT_GDL_ADDICT);
-                                }
-                            });
-                        }
-                    }, 1000);
-                }
+                getAchievementActionHandler().handleVideoViewed();
+                getAchievementActionHandler().handleGDLVideoViewed();
             }
 
             @Override

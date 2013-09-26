@@ -294,57 +294,9 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
     }
 
     private void checkAchievements() {
-        if (mFirstStart) {
-            mFirstStart = false;
-            getHandler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    getPlayServicesHelper().getGamesClient(new PlayServicesHelper.OnGotGamesClientListener() {
-                        @Override
-                        public void onGotGamesClient(GamesClient c) {
-                            if (c.isConnected()){
-                                c.unlockAchievement(Const.ACHIEVEMENT_SIGNIN);
-                            }
-                            // TODO remember to unlock later
-                        }
-                    });
-                }
-            }, 1000);
-        }
-
-        if (mPreferences.getInt(Const.SETTINGS_APP_STARTS, 0) == 10) {
-            getHandler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    getPlayServicesHelper().getGamesClient(new PlayServicesHelper.OnGotGamesClientListener() {
-                        @Override
-                        public void onGotGamesClient(GamesClient c) {
-                            if (c.isConnected()) {
-                                c.unlockAchievement(Const.ACHIEVEMENT_RETURN);
-                            }
-                            // TODO remember to unlock later
-                        }
-                    });
-                }
-            }, 1000);
-        }
-
-        if (mPreferences.getInt(Const.SETTINGS_APP_STARTS, 0) == 50) {
-            getHandler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    getPlayServicesHelper().getGamesClient(new PlayServicesHelper.OnGotGamesClientListener() {
-                        @Override
-                        public void onGotGamesClient(GamesClient c) {
-                            if (c.isConnected()){
-                                c.unlockAchievement(Const.ACHIEVEMENT_KING_OF_THE_HILL);
-                            }
-                            // TODO remember to unlock later
-                        }
-                    });
-                }
-            }, 1000);
-        }
+        if (mFirstStart)
+            getAchievementActionHandler().handleSignIn();
+        getAchievementActionHandler().handleAppStarted();
     }
 
 
