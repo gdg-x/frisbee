@@ -171,7 +171,7 @@ public class GdlListFragment extends GdgListFragment implements PullToRefreshAtt
         Intent playVideoIntent = new Intent(getActivity(), YoutubeActivity.class);
         playVideoIntent.putExtra("gdl", true);
         playVideoIntent.putExtra("video_id", show.getYoutubeId());
-        getActivity().startActivityFromFragment(this, playVideoIntent, 0);
+        startActivity(playVideoIntent);
     }
 
     @Override

@@ -29,6 +29,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
     <permission android:name="org.gdg.frisbee.android.permission.MAPS_RECEIVE" android:protectionLevel="signature"/>
     <permission android:name="org.gdg.frisbee.android.permission.C2D_MESSAGE" android:protectionLevel="signature" />
     <uses-permission android:name="org.gdg.frisbee.android.permission.MAPS_RECEIVE"/>
