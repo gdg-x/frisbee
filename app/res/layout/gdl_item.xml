@@ -27,6 +27,7 @@
                         android:id="@+id/plus_one_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:descendantFocusability="blocksDescendants"
                         plus:size="standard"
                         plus:annotation="none" />
             </LinearLayout>

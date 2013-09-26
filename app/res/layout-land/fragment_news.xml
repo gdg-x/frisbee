@@ -25,7 +25,7 @@
     <org.gdg.frisbee.android.view.MyView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/list" staggered:numColumns="2"/>
+            android:id="@android:id/list" staggered:numColumns="2"/>
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"

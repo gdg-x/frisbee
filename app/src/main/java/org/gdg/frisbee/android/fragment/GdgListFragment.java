@@ -331,7 +331,7 @@ public class GdgListFragment extends RoboSherlockFragment {
             throw new IllegalStateException("Content view not yet created");
         }
 
-        View rawList = root.findViewById(R.id.list);
+        View rawList = root.findViewById(android.R.id.list);
 
         if (mEmptyView == null) {
             throw new RuntimeException(

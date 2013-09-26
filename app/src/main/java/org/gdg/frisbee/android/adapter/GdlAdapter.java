@@ -17,26 +17,22 @@
 package org.gdg.frisbee.android.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusOneButton;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.activity.YoutubeActivity;
 import org.gdg.frisbee.android.api.model.GdlShow;
 import org.gdg.frisbee.android.api.model.GdlShowList;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ResizableImageView;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -111,15 +107,6 @@ public class GdlAdapter extends BaseAdapter {
 
         holder.ytUrl = show.getYoutubeUrl();
 
-        View.OnClickListener mShowVideo = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent playVideoIntent = new Intent(mContext, YoutubeActivity.class);
-                playVideoIntent.putExtra("gdl", true);
-                playVideoIntent.putExtra("video_id", show.getYoutubeId());
-                mContext.startActivity(playVideoIntent);
-            }
-        };
         holder.thumbnailView.setImageDrawable(null);
         holder.thumbnailView.setBackgroundResource(R.drawable.gdl_video_dummy);
         App.getInstance().getPicasso()
@@ -127,9 +114,6 @@ public class GdlAdapter extends BaseAdapter {
                 .into(holder.thumbnailView);
 
         holder.titleView.setText(show.getTitle());
-
-        holder.thumbnailView.setOnClickListener(mShowVideo);
-        holder.titleView.setOnClickListener(mShowVideo);
 
         if(mPlusClient != null) {
             holder.plusButton.setVisibility(View.VISIBLE);
