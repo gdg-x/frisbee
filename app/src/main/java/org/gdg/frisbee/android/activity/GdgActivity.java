@@ -16,6 +16,7 @@
 
 package org.gdg.frisbee.android.activity;
 
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -31,6 +32,8 @@ import org.gdg.frisbee.android.utils.PlayServicesHelper;
 import org.gdg.frisbee.android.utils.PullToRefreshTransformer;
 import org.gdg.frisbee.android.utils.ScopedBus;
 import org.gdg.frisbee.android.utils.Utils;
+
+import java.util.List;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
@@ -137,7 +140,6 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
         getBus().resumed();
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
         super.onActivityResult(requestCode, responseCode, intent);
@@ -161,5 +163,24 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
     @Override
     public void onSignInSucceeded() {
         Log.d(LOG_TAG, "onSignInSucceeded");
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (!isLastActivityOnStack())
+            overridePendingTransition(0, 0);
+    }
+
+    private boolean isLastActivityOnStack() {
+        ActivityManager mngr = (ActivityManager) getSystemService( ACTIVITY_SERVICE );
+
+        List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
+
+        if(taskList.get(0).numActivities == 1 &&
+           taskList.get(0).topActivity.getClassName().equals(this.getClass().getName())) {
+            return true;
+        }
+        return false;
     }
 }

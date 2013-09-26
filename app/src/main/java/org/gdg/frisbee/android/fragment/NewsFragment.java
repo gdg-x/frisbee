@@ -98,8 +98,8 @@ public class NewsFragment extends GdgListFragment implements PullToRefreshAttach
         super.onResume();
         Log.d(LOG_TAG, "onResume()");
 
-        for(int i = 0; i <= mList.getChildCount(); i++) {
-            mAdapter.updatePlusOne(mList.getChildAt(i));
+        for(int i = 0; i <= getListView().getChildCount(); i++) {
+            mAdapter.updatePlusOne(getListView().getChildAt(i));
         }
     }
 

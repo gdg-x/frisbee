@@ -117,8 +117,9 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
     private void navigateTo(Class<? extends GdgActivity> activityClass) {
         Intent i = new Intent(GdgNavDrawerActivity.this, activityClass);
-        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(i);
+        mDrawerLayout.closeDrawers();
     }
 
     @Override
