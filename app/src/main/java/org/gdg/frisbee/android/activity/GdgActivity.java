@@ -72,8 +72,6 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
         super.onCreate(savedInstanceState);
 
         mPreferences = getSharedPreferences("gdg",MODE_PRIVATE);
-        mAchievementActionHandler =
-                new AchievementActionHandler(getHandler(), mPlayServicesHelper, mPreferences);
 
         if(getSupportActionBar() != null) {
             PullToRefreshAttacher.Options d = new PullToRefreshAttacher.Options();
@@ -92,6 +90,9 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
                     initPlayServices();
                 }
             }
+
+        mAchievementActionHandler =
+                new AchievementActionHandler(getHandler(), mPlayServicesHelper, mPreferences);
 
         if(getSupportActionBar() != null)
             getSupportActionBar().setDisplayShowTitleEnabled(false);
