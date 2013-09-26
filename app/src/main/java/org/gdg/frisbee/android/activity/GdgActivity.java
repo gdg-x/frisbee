@@ -28,6 +28,7 @@ import com.google.android.gms.plus.GooglePlusUtil;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.achievements.AchievementActionHandler;
 import org.gdg.frisbee.android.utils.PlayServicesHelper;
 import org.gdg.frisbee.android.utils.PullToRefreshTransformer;
 import org.gdg.frisbee.android.utils.ScopedBus;
@@ -50,9 +51,9 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
 
     private static final String LOG_TAG = "GDG-GdgActivity";
 
-
     private PlayServicesHelper mPlayServicesHelper;
     private PullToRefreshAttacher mPullToRefreshHelper;
+    private AchievementActionHandler mAchievementActionHandler;
 
     SharedPreferences mPreferences;
     private Handler mHandler = new Handler();
@@ -90,10 +91,11 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
                 }
             }
 
+        mAchievementActionHandler =
+                new AchievementActionHandler(getHandler(), mPlayServicesHelper, mPreferences);
+
         if(getSupportActionBar() != null)
             getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-
     }
 
 
@@ -126,6 +128,10 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
 
     public PlayServicesHelper getPlayServicesHelper() {
         return mPlayServicesHelper;
+    }
+
+    public AchievementActionHandler getAchievementActionHandler() {
+        return mAchievementActionHandler;
     }
 
     @Override
