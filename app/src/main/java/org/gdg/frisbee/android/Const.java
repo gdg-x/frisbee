@@ -53,14 +53,6 @@ public class Const {
     public static final String ANDROID_DEVELOPERS_YT_ID = "UCVHFbqXqoYvEWM1Ddxl0QDg";
     public static final String YOUTUBE_DEVELOPERS_YT_ID = "UCtVd0c0tGXuTSbU5d8cSBUg";
 
-    // Achievements
-    public static final String ACHIEVEMENT_SIGNIN = "CgkI_9Ga8sMGEAIQAQ";
-    public static final String ACHIEVEMENT_CINEPHILE = "CgkI_9Ga8sMGEAIQAg";
-    public static final String ACHIEVEMENT_MANIAC = "CgkI_9Ga8sMGEAIQAw";
-    public static final String ACHIEVEMENT_RETURN = "CgkI_9Ga8sMGEAIQBA";
-    public static final String ACHIEVEMENT_KING_OF_THE_HILL = "CgkI_9Ga8sMGEAIQBQ";
-    public static final String ACHIEVEMENT_GDL_ADDICT = "CgkI_9Ga8sMGEAIQDg";
-
     public static final class LogLevel {
         public static final int NONE    = 0;
         public static final int ERROR   = 1;
