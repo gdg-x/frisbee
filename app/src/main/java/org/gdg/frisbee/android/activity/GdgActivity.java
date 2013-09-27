@@ -47,7 +47,7 @@ import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
  * Date: 21.04.13
  * Time: 21:56
  */
-public abstract class GdgActivity extends RoboSherlockFragmentActivity implements PlayServicesHelper.PlayServicesHelperListener {
+public abstract class GdgActivity extends TrackableActivity implements PlayServicesHelper.PlayServicesHelperListener {
 
     private static final String LOG_TAG = "GDG-GdgActivity";
 

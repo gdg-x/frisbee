@@ -62,32 +62,15 @@ public class AboutActivity extends GdgActivity {
         getSupportActionBar().setTitle(R.string.about);
 
 
-        mIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int i, float v, int i2) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-
-            @Override
-            public void onPageSelected(int i) {
-                Log.d(LOG_TAG, "onPageSelected()");
-                trackViewPagerPage(i);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-        });
+        mIndicator.setOnPageChangeListener(this);
 
         mViewPagerAdapter = new AboutPagerAdapter(this, getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);
         mIndicator.setViewPager(mViewPager);
     }
 
-    private void trackViewPagerPage(int position) {
-        Log.d(LOG_TAG, "trackViewPagerPage()");
-        App.getInstance().getTracker().sendView(String.format("/About/%s", getResources().getStringArray(R.array.about_tabs)[position]));
+    protected String getTrackedViewName() {
+        return "About/"+getResources().getStringArray(R.array.about_tabs)[getCurrentPage()];
     }
 
     @Override

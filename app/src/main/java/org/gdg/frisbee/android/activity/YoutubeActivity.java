@@ -24,15 +24,9 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.app.App;
 
 /**
- * GDG Aachen
- * org.gdg.frisbee.android.activity
- * <p/>
- * User: maui
- * Date: 24.06.13
- * Time: 00:14
+ * @author maui
  */
 public class YoutubeActivity extends GdgActivity implements YouTubePlayer.OnInitializedListener {
     private YouTubePlayerSupportFragment mPlayerFragment;
@@ -41,10 +35,8 @@ public class YoutubeActivity extends GdgActivity implements YouTubePlayer.OnInit
             ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             : ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        App.getInstance().getTracker().sendView("/YouTube");
+    protected String getTrackedViewName() {
+        return "YouTube";
     }
 
     @Override
