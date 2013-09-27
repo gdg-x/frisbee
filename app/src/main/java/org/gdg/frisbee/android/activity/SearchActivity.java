@@ -37,6 +37,10 @@ public class SearchActivity extends GdgNavDrawerActivity {
         handleIntent(getIntent());
     }
 
+    protected String getTrackedViewName() {
+        return "Search";
+    }
+
     private void handleIntent(Intent intent) {
         String action = intent.getAction();
         Log.d(LOG_TAG, intent.getDataString());

@@ -104,25 +104,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
 
         mLocationComparator = new ChapterComparator(mPreferences);
 
-        mIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int i, float v, int i2) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-
-            @Override
-            public void onPageSelected(int i) {
-                Log.d(LOG_TAG, "onPageSelected()");
-                trackViewPagerPage(i);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-        });
-
-
+        mIndicator.setOnPageChangeListener(this);
 
         mViewPagerAdapter = new MyAdapter(this, getSupportFragmentManager());
         mSpinnerAdapter = new ChapterAdapter(MainActivity.this, android.R.layout.simple_list_item_1);
@@ -255,25 +237,18 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         }
     }
 
-    private void trackViewPagerPage(int position) {
+    protected String getTrackedViewName() {
         if(mViewPager == null || mViewPagerAdapter.getSelectedChapter() == null)
-            return;
-
-        Log.d(LOG_TAG, "trackViewPagerPage()");
-        String page = "";
-
-        switch(position) {
-            case 0:
-                page = "News";
-                break;
-            case 1:
-                page = "Info";
-                break;
-            case 2:
-                page = "Events";
-                break;
+            return "Main";
+        final String[] pagesNames = {"News", "Info", "Events"};
+        String pageName;
+        try {
+            pageName = pagesNames[getCurrentPage()];
+        } catch (IndexOutOfBoundsException e) {
+            pageName = "";
         }
-        App.getInstance().getTracker().sendView(String.format("/Main/%s/%s", mViewPagerAdapter.getSelectedChapter().getName().replaceAll(" ", "-"), page));
+        return "Main/" + mViewPagerAdapter.getSelectedChapter().getName().replaceAll(" ", "-")+
+                "/" + pageName;
     }
 
     @Override
@@ -316,14 +291,6 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
             startActivityForResult(new Intent(this, FirstStartActivity.class), REQUEST_FIRST_START_WIZARD);
         }
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(LOG_TAG, "onResume()");
-        trackViewPagerPage(mViewPager.getCurrentItem());
-    }
-
 
     @Override
     protected void onPause() {
@@ -406,7 +373,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
 
         public void setSelectedChapter(Chapter chapter) {
             if(mSelectedChapter != null)
-                trackViewPagerPage(mViewPager.getCurrentItem());
+                trackView();
 
             this.mSelectedChapter = chapter;
         }
