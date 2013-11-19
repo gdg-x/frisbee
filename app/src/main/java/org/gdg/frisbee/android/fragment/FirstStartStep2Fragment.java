@@ -5,10 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
+import butterknife.InjectView;
+import butterknife.Views;
+import com.actionbarsherlock.app.SherlockFragment;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.FirstStartActivity;
-import roboguice.inject.InjectView;
 
 /**
  * GDG Aachen
@@ -18,7 +19,7 @@ import roboguice.inject.InjectView;
  * Date: 14.06.13
  * Time: 02:52
  */
-public class FirstStartStep2Fragment extends RoboSherlockFragment {
+public class FirstStartStep2Fragment extends SherlockFragment {
 
     private static String LOG_TAG = "GDG-FirstStartStep2Fragment";
 
@@ -46,7 +47,9 @@ public class FirstStartStep2Fragment extends RoboSherlockFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_welcome_step2, null);
+        View v = inflater.inflate(R.layout.fragment_welcome_step2, null);
+        Views.inject(this, v);
+        return v;
     }
 
     @Override

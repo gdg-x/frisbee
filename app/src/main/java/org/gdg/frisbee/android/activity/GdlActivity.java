@@ -24,16 +24,11 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.util.SparseArray;
-
+import butterknife.InjectView;
 import com.viewpagerindicator.TitlePageIndicator;
-
 import java.lang.ref.WeakReference;
-
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.fragment.GdlListFragment;
-
-import roboguice.inject.InjectView;
-
 /**
  * @author maui
  */
@@ -42,10 +37,10 @@ public class GdlActivity extends GdgNavDrawerActivity {
     private static String LOG_TAG = "GDG-GdlActivity";
 
     @InjectView(R.id.pager)
-    private ViewPager mViewPager;
+    ViewPager mViewPager;
 
     @InjectView(R.id.titles)
-    private TitlePageIndicator mIndicator;
+    TitlePageIndicator mIndicator;
 
     private GdlCategoryAdapter mViewPagerAdapter;
 

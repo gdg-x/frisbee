@@ -22,11 +22,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
+import butterknife.InjectView;
+import butterknife.Views;
+import com.actionbarsherlock.app.SherlockFragment;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.utils.Utils;
-import roboguice.inject.InjectView;
-
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -37,9 +37,10 @@ import java.io.InputStream;
  * Time: 01:49
  * To change this template use File | Settings | File Templates.
  */
-public class ExtLibrariesFragment extends RoboSherlockFragment {
+public class ExtLibrariesFragment extends SherlockFragment {
+
     @InjectView(R.id.external)
-    private TextView mExternal;
+    TextView mExternal;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -48,7 +49,9 @@ public class ExtLibrariesFragment extends RoboSherlockFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_external_libraries, null);
+        View v = inflater.inflate(R.layout.fragment_external_libraries, null);
+        Views.inject(this, v);
+        return v;
     }
 
     @Override

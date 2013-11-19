@@ -24,6 +24,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ListView;
+import butterknife.InjectView;
+import butterknife.Views;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.android.gms.plus.PlusClient;
@@ -42,7 +44,6 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
-import roboguice.inject.InjectView;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 
 /**
@@ -162,7 +163,9 @@ public class GdlListFragment extends GdgListFragment implements PullToRefreshAtt
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onCreateView()");
-        return inflater.inflate(R.layout.fragment_gdl_list, null);
+        View v = inflater.inflate(R.layout.fragment_gdl_list, null);
+        Views.inject(this, v);
+        return v;
     }
 
     @Override

@@ -16,7 +16,7 @@
 
 package org.gdg.frisbee.android.fragment;
 
-import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockDialogFragment;
+import com.actionbarsherlock.app.SherlockDialogFragment;
 
 /**
  * GDG Aachen
@@ -26,5 +26,5 @@ import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockDialogF
  * Date: 22.04.13
  * Time: 04:35
  */
-public class FullImageDialogFragment extends RoboSherlockDialogFragment {
+public class FullImageDialogFragment extends SherlockDialogFragment {
 }

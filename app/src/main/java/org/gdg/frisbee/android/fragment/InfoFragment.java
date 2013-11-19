@@ -30,7 +30,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
+import butterknife.InjectView;
+import butterknife.Views;
+import com.actionbarsherlock.app.SherlockFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
 import com.google.api.client.http.HttpTransport;
@@ -49,7 +51,6 @@ import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
-import roboguice.inject.InjectView;
 
 /**
  * GDG Aachen
@@ -59,7 +60,7 @@ import roboguice.inject.InjectView;
  * Date: 22.04.13
  * Time: 04:57
  */
-public class InfoFragment extends RoboSherlockFragment {
+public class InfoFragment extends SherlockFragment {
 
     private static final String LOG_TAG = "GDG-InfoFragment";
 
@@ -71,22 +72,22 @@ public class InfoFragment extends RoboSherlockFragment {
     private GoogleMap mMap;
 
     @InjectView(R.id.about)
-    private TextView mAbout;
+    TextView mAbout;
 
     @InjectView(R.id.tagline)
-    private TextView mTagline;
+    TextView mTagline;
 
     @InjectView(R.id.organizer_box)
-    private LinearLayout mOrganizerBox;
+    LinearLayout mOrganizerBox;
 
     @InjectView(R.id.resources_box)
-    private LinearLayout mResourcesBox;
+    LinearLayout mResourcesBox;
 
     @InjectView(R.id.loading)
-    private LinearLayout mProgressContainer;
+    LinearLayout mProgressContainer;
 
     @InjectView(R.id.container)
-    private ScrollView mContainer;
+    ScrollView mContainer;
 
     private boolean mLoading = true;
 
@@ -341,7 +342,9 @@ public class InfoFragment extends RoboSherlockFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_chapter_info, null);
+        View v = inflater.inflate(R.layout.fragment_chapter_info, null);
+        Views.inject(this, v);
+        return v;
     }
 
     @Override

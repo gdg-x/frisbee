@@ -20,7 +20,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
+import butterknife.Views;
+import com.actionbarsherlock.app.SherlockFragment;
 import org.gdg.frisbee.android.R;
 
 /**
@@ -30,10 +31,12 @@ import org.gdg.frisbee.android.R;
  * Time: 01:49
  * To change this template use File | Settings | File Templates.
  */
-public class GetInvolvedFragment extends RoboSherlockFragment {
+public class GetInvolvedFragment extends SherlockFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_get_involved, null);
+        View v = inflater.inflate(R.layout.fragment_get_involved, null);
+        Views.inject(this, v);
+        return v;
     }
 }
