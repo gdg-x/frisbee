@@ -60,7 +60,7 @@ public class GroupDirectory {
     }
 
     public ApiRequest getDirectory(Response.Listener<Directory> successListener, Response.ErrorListener errorListener) {
-        GsonRequest<Void, Directory> dirReq = new GsonRequest<Void, Directory>(Request.Method.POST,
+        GsonRequest<Void, Directory> dirReq = new GsonRequest<Void, Directory>(Request.Method.GET,
                 DIRECTORY_URL,
                 Directory.class,
                 successListener,
