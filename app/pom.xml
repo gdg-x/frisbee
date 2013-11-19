@@ -28,7 +28,7 @@
 	
 	<groupId>org.gdg</groupId>
     <artifactId>frisbee-app</artifactId>
-    <version>1.0</version>
+    <version>1.0.8</version>
 	<name>GDG[X] Frisbee - App</name>
     <packaging>apk</packaging>
 
@@ -55,7 +55,7 @@
         <dependency>
             <groupId>com.squareup.picasso</groupId>
             <artifactId>picasso</artifactId>
-            <version>2.0.0</version>
+            <version>2.1.1</version>
         </dependency>
         <dependency>
             <groupId>com.google.android</groupId>
@@ -81,6 +81,11 @@
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
             <version>2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.jakewharton</groupId>
+            <artifactId>butterknife</artifactId>
+            <version>3.0.1</version>
         </dependency>
         <dependency>
             <groupId>com.actionbarsherlock</groupId>
@@ -122,6 +127,10 @@
                 <exclusion>
                     <artifactId>xpp3</artifactId>
                     <groupId>xpp3</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>httpclient</artifactId>
+                    <groupId>org.apache.httpcomponents</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -170,16 +179,6 @@
             <groupId>ch.acra</groupId>
             <artifactId>acra</artifactId>
             <version>4.5.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.rtyley</groupId>
-            <artifactId>roboguice-sherlock</artifactId>
-            <version>1.5</version>
-        </dependency>
-        <dependency>
-            <groupId>org.roboguice</groupId>
-            <artifactId>roboguice</artifactId>
-            <version>2.0</version>
         </dependency>
         <dependency>
             <groupId>com.viewpagerindicator</groupId>

@@ -25,15 +25,13 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.widget.ArrayAdapter;
-
+import butterknife.InjectView;
 import com.actionbarsherlock.app.ActionBar;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.viewpagerindicator.TitlePageIndicator;
-
 import java.util.ArrayList;
 import java.util.Collections;
-
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.ApiRequest;
 import org.gdg.frisbee.android.api.GroupDirectory;
@@ -42,10 +40,8 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.fragment.PulseFragment;
 import org.joda.time.DateTime;
-
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
-import roboguice.inject.InjectView;
 
 public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnNavigationListener {
 
@@ -55,10 +51,10 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
     private ArrayAdapter<String> mSpinnerAdapter;
 
     @InjectView(R.id.pager)
-    private ViewPager mViewPager;
+    ViewPager mViewPager;
 
     @InjectView(R.id.titles)
-    private TitlePageIndicator mIndicator;
+    TitlePageIndicator mIndicator;
 
     private MyAdapter mViewPagerAdapter;
     private ArrayList<String> mPulseTargets;
@@ -75,21 +71,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
 
         mClient = new GroupDirectory();
 
-        mIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int i, float v, int i2) {
-            }
-
-            @Override
-            public void onPageSelected(int i) {
-                Log.d(LOG_TAG, "onPageSelected()");
-                trackViewPagerPage(i);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
-            }
-        });
+        mIndicator.setOnPageChangeListener(this);
 
         mPulseTargets = new ArrayList<String>();
 
@@ -137,25 +119,20 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
         });
     }
 
-    private void trackViewPagerPage(int position) {
-        if(mViewPager == null || mViewPagerAdapter.getSelectedPulseTarget() == null)
-            return;
+    protected String getTrackedViewName() {
+        if (mViewPager == null || mViewPagerAdapter.getSelectedPulseTarget() == null)
+            return "Pulse";
 
-        Log.d(LOG_TAG, "trackViewPagerPage()");
-        String page = "";
-
-        switch(position) {
-            case 0:
-                page = "EventStats";
-                break;
-            case 1:
-                page = "AtendeeStats";
-                break;
-            case 2:
-                page = "CircleStats";
-                break;
+        final String[] pagesNames = {"EventStats", "AtendeeStats", "CircleStats"};
+        String pageName;
+        try {
+            pageName = pagesNames[getCurrentPage()];
+        } catch (IndexOutOfBoundsException e) {
+            pageName = "";
         }
-        App.getInstance().getTracker().sendView(String.format("/Pulse/%s/%s", mViewPagerAdapter.getSelectedPulseTarget().replaceAll(" ", "-"), page));
+
+        return "Pulse/"+mViewPagerAdapter.getSelectedPulseTarget().replaceAll(" ", "-") +
+                "/" + pageName;
     }
 
     private void initSpinner() {
@@ -173,14 +150,6 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
         }
         mViewPager.setAdapter(mViewPagerAdapter);
         mIndicator.setViewPager(mViewPager);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(LOG_TAG, "onResume()");
-
-        trackViewPagerPage(mViewPager.getCurrentItem());
     }
 
     @Override
@@ -257,7 +226,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
 
         public void setSelectedPulseTarget(String pulseTarget) {
             if(mSelectedPulseTarget != null)
-                trackViewPagerPage(mViewPager.getCurrentItem());
+                trackView();
 
             this.mSelectedPulseTarget = pulseTarget;
         }

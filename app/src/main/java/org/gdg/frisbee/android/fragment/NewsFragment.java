@@ -24,6 +24,7 @@ import android.view.*;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import butterknife.Views;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusShare;
 import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
@@ -98,8 +99,8 @@ public class NewsFragment extends GdgListFragment implements PullToRefreshAttach
         super.onResume();
         Log.d(LOG_TAG, "onResume()");
 
-        for(int i = 0; i <= mList.getChildCount(); i++) {
-            mAdapter.updatePlusOne(mList.getChildAt(i));
+        for(int i = 0; i <= getListView().getChildCount(); i++) {
+            mAdapter.updatePlusOne(getListView().getChildAt(i));
         }
     }
 
@@ -254,7 +255,9 @@ public class NewsFragment extends GdgListFragment implements PullToRefreshAttach
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onCreateView()");
-        return inflater.inflate(R.layout.fragment_news, null);
+        View v = inflater.inflate(R.layout.fragment_news, null);
+        Views.inject(this, v);
+        return v;
     }
 
     @Override

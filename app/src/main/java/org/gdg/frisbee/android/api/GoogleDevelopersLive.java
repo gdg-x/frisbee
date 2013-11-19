@@ -47,7 +47,7 @@ public class GoogleDevelopersLive {
     private static final String RECORDED_SHOWS = "/live%s/browse";
 
     public ApiRequest getShow(String showPath, Response.Listener<GdlShow> successListener, Response.ErrorListener errorListener) {
-        JsoupRequest<GdlShow> dirReq = new JsoupRequest<GdlShow>(Request.Method.POST,
+        JsoupRequest<GdlShow> dirReq = new JsoupRequest<GdlShow>(Request.Method.GET,
                 BASE_URL+showPath,
                 new JsoupRequest.ParseListener<GdlShow>() {
                     @Override
@@ -72,7 +72,7 @@ public class GoogleDevelopersLive {
         } else {
             category = "/"+category;
         }
-        JsoupRequest<GdlShowList> dirReq = new JsoupRequest<GdlShowList>(Request.Method.POST,
+        JsoupRequest<GdlShowList> dirReq = new JsoupRequest<GdlShowList>(Request.Method.GET,
                 BASE_URL+String.format(RECORDED_SHOWS, category),
                 new JsoupRequest.ParseListener<GdlShowList>() {
                     @Override

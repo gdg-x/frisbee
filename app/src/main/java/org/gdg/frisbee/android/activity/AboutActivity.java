@@ -22,14 +22,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
-import com.actionbarsherlock.app.ActionBar;
+import butterknife.InjectView;
 import com.actionbarsherlock.view.MenuItem;
 import com.viewpagerindicator.TitlePageIndicator;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.fragment.*;
-import roboguice.inject.InjectView;
 
 /**
  * GDG Aachen
@@ -43,10 +40,10 @@ public class AboutActivity extends GdgActivity {
     private static String LOG_TAG = "GDG-AboutActivity";
 
     @InjectView(R.id.pager)
-    private ViewPager mViewPager;
+    ViewPager mViewPager;
 
     @InjectView(R.id.titles)
-    private TitlePageIndicator mIndicator;
+    TitlePageIndicator mIndicator;
 
     private AboutPagerAdapter mViewPagerAdapter;
 
@@ -62,32 +59,15 @@ public class AboutActivity extends GdgActivity {
         getSupportActionBar().setTitle(R.string.about);
 
 
-        mIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int i, float v, int i2) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-
-            @Override
-            public void onPageSelected(int i) {
-                Log.d(LOG_TAG, "onPageSelected()");
-                trackViewPagerPage(i);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-        });
+        mIndicator.setOnPageChangeListener(this);
 
         mViewPagerAdapter = new AboutPagerAdapter(this, getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);
         mIndicator.setViewPager(mViewPager);
     }
 
-    private void trackViewPagerPage(int position) {
-        Log.d(LOG_TAG, "trackViewPagerPage()");
-        App.getInstance().getTracker().sendView(String.format("/About/%s", getResources().getStringArray(R.array.about_tabs)[position]));
+    protected String getTrackedViewName() {
+        return "About/"+getResources().getStringArray(R.array.about_tabs)[getCurrentPage()];
     }
 
     @Override

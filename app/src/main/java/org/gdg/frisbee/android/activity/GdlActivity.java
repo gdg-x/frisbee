@@ -1,7 +1,22 @@
+/*
+ * Copyright 2013 The GDG Frisbee Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.gdg.frisbee.android.activity;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,41 +24,29 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.util.SparseArray;
-
-import com.actionbarsherlock.view.MenuItem;
+import butterknife.InjectView;
 import com.viewpagerindicator.TitlePageIndicator;
-
 import java.lang.ref.WeakReference;
-
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.fragment.GdlListFragment;
-
-import roboguice.inject.InjectView;
-
 /**
- * Created with IntelliJ IDEA.
- * User: maui
- * Date: 07.07.13
- * Time: 20:02
- * To change this template use File | Settings | File Templates.
+ * @author maui
  */
 public class GdlActivity extends GdgNavDrawerActivity {
 
     private static String LOG_TAG = "GDG-GdlActivity";
 
     @InjectView(R.id.pager)
-    private ViewPager mViewPager;
+    ViewPager mViewPager;
 
     @InjectView(R.id.titles)
-    private TitlePageIndicator mIndicator;
+    TitlePageIndicator mIndicator;
 
-    private SharedPreferences mPreferences;
     private GdlCategoryAdapter mViewPagerAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);    //To change body of overridden methods use File | Settings | File Templates.
+        super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_gdl);
 
@@ -55,9 +58,8 @@ public class GdlActivity extends GdgNavDrawerActivity {
         mIndicator.setViewPager(mViewPager);
     }
 
-    private void trackViewPagerPage(int position) {
-        Log.d(LOG_TAG, "trackViewPagerPage()");
-        App.getInstance().getTracker().sendView(String.format("/GDL/%s", getResources().getStringArray(R.array.gdl_catgories)[position]));
+    protected String getTrackedViewName() {
+        return "GDL/" + getResources().getStringArray(R.array.gdl_catgories)[getCurrentPage()];
     }
 
     @Override
@@ -65,26 +67,7 @@ public class GdlActivity extends GdgNavDrawerActivity {
         super.onResume();
         Log.d(LOG_TAG, "onResume()");
 
-        mIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int i, float v, int i2) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-
-            @Override
-            public void onPageSelected(int i) {
-                Log.d(LOG_TAG, "onPageSelected()");
-                mViewPagerAdapter.onPageSelected(i);
-                trackViewPagerPage(i);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-        });
-
-        trackViewPagerPage(mViewPager.getCurrentItem());
+        mIndicator.setOnPageChangeListener(this);
     }
 
     @Override

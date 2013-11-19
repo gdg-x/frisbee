@@ -16,22 +16,22 @@
 
 package org.gdg.frisbee.android.activity;
 
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-
-import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmentActivity;
+import butterknife.Views;
 import com.google.android.gms.plus.GooglePlusUtil;
-
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.achievements.AchievementActionHandler;
 import org.gdg.frisbee.android.utils.PlayServicesHelper;
 import org.gdg.frisbee.android.utils.PullToRefreshTransformer;
 import org.gdg.frisbee.android.utils.ScopedBus;
 import org.gdg.frisbee.android.utils.Utils;
-
+import java.util.List;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 
@@ -43,13 +43,13 @@ import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
  * Date: 21.04.13
  * Time: 21:56
  */
-public abstract class GdgActivity extends RoboSherlockFragmentActivity implements PlayServicesHelper.PlayServicesHelperListener {
+public abstract class GdgActivity extends TrackableActivity implements PlayServicesHelper.PlayServicesHelperListener {
 
     private static final String LOG_TAG = "GDG-GdgActivity";
 
-
     private PlayServicesHelper mPlayServicesHelper;
     private PullToRefreshAttacher mPullToRefreshHelper;
+    private AchievementActionHandler mAchievementActionHandler;
 
     SharedPreferences mPreferences;
     private Handler mHandler = new Handler();
@@ -61,6 +61,12 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
 
     public Handler getHandler() {
         return mHandler;
+    }
+
+    @Override
+    public void setContentView(int layoutResId) {
+        super.setContentView(layoutResId);
+        Views.inject(this);
     }
 
     @Override
@@ -87,10 +93,11 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
                 }
             }
 
+        mAchievementActionHandler =
+                new AchievementActionHandler(getHandler(), mPlayServicesHelper, mPreferences);
+
         if(getSupportActionBar() != null)
             getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-
     }
 
 
@@ -125,6 +132,10 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
         return mPlayServicesHelper;
     }
 
+    public AchievementActionHandler getAchievementActionHandler() {
+        return mAchievementActionHandler;
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -136,7 +147,6 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
         super.onResume();
         getBus().resumed();
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
@@ -161,5 +171,24 @@ public abstract class GdgActivity extends RoboSherlockFragmentActivity implement
     @Override
     public void onSignInSucceeded() {
         Log.d(LOG_TAG, "onSignInSucceeded");
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (!isLastActivityOnStack())
+            overridePendingTransition(0, 0);
+    }
+
+    private boolean isLastActivityOnStack() {
+        ActivityManager mngr = (ActivityManager) getSystemService( ACTIVITY_SERVICE );
+
+        List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
+
+        if(taskList.get(0).numActivities == 1 &&
+           taskList.get(0).topActivity.getClassName().equals(this.getClass().getName())) {
+            return true;
+        }
+        return false;
     }
 }

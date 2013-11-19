@@ -28,9 +28,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
+import butterknife.InjectView;
+import butterknife.Views;
+import com.actionbarsherlock.app.SherlockFragment;
 import org.gdg.frisbee.android.R;
-import roboguice.inject.InjectView;
 
 /**
  * GDG Aachen
@@ -40,7 +41,7 @@ import roboguice.inject.InjectView;
  * Date: 23.04.13
  * Time: 19:03
  */
-public class GdgListFragment extends RoboSherlockFragment {
+public class GdgListFragment extends SherlockFragment {
 
     private static final String LOG_TAG = "GDG-ListFragment";
 
@@ -93,7 +94,9 @@ public class GdgListFragment extends RoboSherlockFragment {
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_list, container, false);
+        View v = inflater.inflate(R.layout.fragment_list, null);
+        Views.inject(this, v);
+        return v;
     }
 
     /**
@@ -331,7 +334,7 @@ public class GdgListFragment extends RoboSherlockFragment {
             throw new IllegalStateException("Content view not yet created");
         }
 
-        View rawList = root.findViewById(R.id.list);
+        View rawList = root.findViewById(android.R.id.list);
 
         if (mEmptyView == null) {
             throw new RuntimeException(

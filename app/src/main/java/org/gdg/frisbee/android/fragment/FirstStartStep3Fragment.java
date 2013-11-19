@@ -25,14 +25,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
-import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
-import org.gdg.frisbee.android.Const;
+import butterknife.InjectView;
+import butterknife.Views;
+import com.actionbarsherlock.app.SherlockFragment;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.FirstStartActivity;
 import org.gdg.frisbee.android.utils.Log;
-import roboguice.inject.InjectView;
 
-public class FirstStartStep3Fragment extends RoboSherlockFragment {
+public class FirstStartStep3Fragment extends SherlockFragment {
 
     private static String LOG_TAG = "GDG-FirstStartStep3Fragment";
 
@@ -100,7 +100,9 @@ public class FirstStartStep3Fragment extends RoboSherlockFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_welcome_step3, null);
+        View v = inflater.inflate(R.layout.fragment_welcome_step3, null);
+        Views.inject(this, v);
+        return v;
     }
 
     public boolean isSignedIn() {

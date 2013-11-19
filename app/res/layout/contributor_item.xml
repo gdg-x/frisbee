@@ -10,10 +10,11 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" android:background="@drawable/card_bg" android:padding="5dip"
             android:gravity="center_vertical">
-        <ImageView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
+        <ImageView android:layout_width="45dip"
+              android:layout_height="45dip"
               android:id="@+id/contributorIcon"
-              android:minHeight="45dip" android:minWidth="45dip"/>
+              android:minHeight="45dip" android:minWidth="45dip" android:scaleType="centerCrop"
+                />
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

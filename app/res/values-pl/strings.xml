@@ -53,11 +53,13 @@
     <plurals name="minutes_ago">
         <item quantity="zero">ostatnio</item>
         <item quantity="one">1 minutę wcześniej</item>
+        <item quantity="few">%d minuty wcześniej</item>
         <item quantity="other">%d minut wcześniej</item>
     </plurals>
     <plurals name="hours_ago">
         <item quantity="zero">ostatnio</item>
         <item quantity="one">1 godzina wcześniej</item>
+        <item quantity="few">%d godziny wcześniej</item>
         <item quantity="other">%d godziny wcześniej</item>
     </plurals>
     <plurals name="days_ago">
@@ -135,4 +137,9 @@
     <string name="signin_first">Musisz zalogować się przez G+ aby użyć tej funkcjonalności</string>
     <string name="originally_shared">oryginalnie udostępniony:</string>
     <string name="server_error">Wystąpił błąd. Spróbuj ponownie.</string>
+    <string name="search_hint">Wyszukaj oddziału GDG</string>
+    <string name="dashclock_description">Wyświetla informacja dotyczące nadchodzących wydażeń w Twoim GDG.</string>
+    <string name="order_by_date">Sortuj według daty</string>
+    <string name="order_by_distance">Sortuj względem odległości</string>
+    <string name="gcm_event_ticker">Nowe zdarzenie w Twoim GDG zostało zaplanowane.</string>
 </resources>

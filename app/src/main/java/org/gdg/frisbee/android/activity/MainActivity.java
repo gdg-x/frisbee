@@ -18,7 +18,6 @@ package org.gdg.frisbee.android.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,17 +26,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-
+import butterknife.InjectView;
 import com.actionbarsherlock.app.ActionBar;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.google.android.gms.games.GamesClient;
 import com.viewpagerindicator.TitlePageIndicator;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.ChapterAdapter;
@@ -51,13 +47,10 @@ import org.gdg.frisbee.android.fragment.EventFragment;
 import org.gdg.frisbee.android.fragment.InfoFragment;
 import org.gdg.frisbee.android.fragment.NewsFragment;
 import org.gdg.frisbee.android.utils.ChapterComparator;
-import org.gdg.frisbee.android.utils.PlayServicesHelper;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
-
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
-import roboguice.inject.InjectView;
 
 public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNavigationListener{
 
@@ -71,10 +64,10 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
     public static final int REQUEST_FIRST_START_WIZARD = 100;
 
     @InjectView(R.id.pager)
-    private ViewPager mViewPager;
+    ViewPager mViewPager;
 
     @InjectView(R.id.titles)
-    protected TitlePageIndicator mIndicator;
+    TitlePageIndicator mIndicator;
 
     private Handler mHandler = new Handler();
 
@@ -104,25 +97,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
 
         mLocationComparator = new ChapterComparator(mPreferences);
 
-        mIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int i, float v, int i2) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-
-            @Override
-            public void onPageSelected(int i) {
-                Log.d(LOG_TAG, "onPageSelected()");
-                trackViewPagerPage(i);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-        });
-
-
+        mIndicator.setOnPageChangeListener(this);
 
         mViewPagerAdapter = new MyAdapter(this, getSupportFragmentManager());
         mSpinnerAdapter = new ChapterAdapter(MainActivity.this, android.R.layout.simple_list_item_1);
@@ -255,25 +230,18 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         }
     }
 
-    private void trackViewPagerPage(int position) {
+    protected String getTrackedViewName() {
         if(mViewPager == null || mViewPagerAdapter.getSelectedChapter() == null)
-            return;
-
-        Log.d(LOG_TAG, "trackViewPagerPage()");
-        String page = "";
-
-        switch(position) {
-            case 0:
-                page = "News";
-                break;
-            case 1:
-                page = "Info";
-                break;
-            case 2:
-                page = "Events";
-                break;
+            return "Main";
+        final String[] pagesNames = {"News", "Info", "Events"};
+        String pageName;
+        try {
+            pageName = pagesNames[getCurrentPage()];
+        } catch (IndexOutOfBoundsException e) {
+            pageName = "";
         }
-        App.getInstance().getTracker().sendView(String.format("/Main/%s/%s", mViewPagerAdapter.getSelectedChapter().getName().replaceAll(" ", "-"), page));
+        return "Main/" + mViewPagerAdapter.getSelectedChapter().getName().replaceAll(" ", "-")+
+                "/" + pageName;
     }
 
     @Override
@@ -294,57 +262,9 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
     }
 
     private void checkAchievements() {
-        if (mFirstStart) {
-            mFirstStart = false;
-            getHandler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    getPlayServicesHelper().getGamesClient(new PlayServicesHelper.OnGotGamesClientListener() {
-                        @Override
-                        public void onGotGamesClient(GamesClient c) {
-                            if (c.isConnected()){
-                                c.unlockAchievement(Const.ACHIEVEMENT_SIGNIN);
-                            }
-                            // TODO remember to unlock later
-                        }
-                    });
-                }
-            }, 1000);
-        }
-
-        if (mPreferences.getInt(Const.SETTINGS_APP_STARTS, 0) == 10) {
-            getHandler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    getPlayServicesHelper().getGamesClient(new PlayServicesHelper.OnGotGamesClientListener() {
-                        @Override
-                        public void onGotGamesClient(GamesClient c) {
-                            if (c.isConnected()) {
-                                c.unlockAchievement(Const.ACHIEVEMENT_RETURN);
-                            }
-                            // TODO remember to unlock later
-                        }
-                    });
-                }
-            }, 1000);
-        }
-
-        if (mPreferences.getInt(Const.SETTINGS_APP_STARTS, 0) == 50) {
-            getHandler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    getPlayServicesHelper().getGamesClient(new PlayServicesHelper.OnGotGamesClientListener() {
-                        @Override
-                        public void onGotGamesClient(GamesClient c) {
-                            if (c.isConnected()){
-                                c.unlockAchievement(Const.ACHIEVEMENT_KING_OF_THE_HILL);
-                            }
-                            // TODO remember to unlock later
-                        }
-                    });
-                }
-            }, 1000);
-        }
+        if (mFirstStart)
+            getAchievementActionHandler().handleSignIn();
+        getAchievementActionHandler().handleAppStarted();
     }
 
 
@@ -364,14 +284,6 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
             startActivityForResult(new Intent(this, FirstStartActivity.class), REQUEST_FIRST_START_WIZARD);
         }
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(LOG_TAG, "onResume()");
-        trackViewPagerPage(mViewPager.getCurrentItem());
-    }
-
 
     @Override
     protected void onPause() {
@@ -454,7 +366,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
 
         public void setSelectedChapter(Chapter chapter) {
             if(mSelectedChapter != null)
-                trackViewPagerPage(mViewPager.getCurrentItem());
+                trackView();
 
             this.mSelectedChapter = chapter;
         }

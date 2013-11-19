@@ -138,7 +138,8 @@
     <string name="server_error">Se ha producido un error. Inténtelo de nuevo.</string>
     <string name="search_hint">Buscar en el GDG</string>
     <string name="dashclock_description">Mostrar información sobre el próximo evento de su GDG principal</string>
-    <string name="devfest_description">Los GDG DevFests son grandes eventos, dirigidos por la comunidad que pueden ofrecer sesiones con oradores en múltiples áreas y diferentes productos, hackathones de todo el día, laboratorios de programacion, etc. \ N \ nCada GDG DevFest será inspirado y único, y a la medida de las necesidades de la comunidad de desarrolladores que lo organiza. Aunque no habrá dos eventos exactamente iguales, cada GDG DevFest será, en su esencia, alimentado por la creencia compartida de que cuando los desarrolladores se reúnen para intercambiar ideas, cosas increíbles pueden suceder.</string>
-  <string name="order_by_date">Ordenar por fecha</string>
-  <string name="order_by_distance">Ordenar por distancia</string>
+    <string name="devfest_description">Los GDG DevFests son grandes eventos, dirigidos por la comunidad que pueden ofrecer sesiones con oradores en múltiples áreas y diferentes productos, hackathones de todo el día, laboratorios de programacion, etc. \n\nCada GDG DevFest será inspirado y único, y a la medida de las necesidades de la comunidad de desarrolladores que lo organiza. Aunque no habrá dos eventos exactamente iguales, cada GDG DevFest será, en su esencia, alimentado por la creencia compartida de que cuando los desarrolladores se reúnen para intercambiar ideas, cosas increíbles pueden suceder.</string>
+    <string name="order_by_date">Ordenar por fecha</string>
+    <string name="order_by_distance">Ordenar por distancia</string>
+    <string name="gcm_event_ticker">Un nuevo evento de su GDG principal ha sido agendado</string>
 </resources>
