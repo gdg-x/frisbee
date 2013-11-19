@@ -24,10 +24,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import butterknife.Views;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
-import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFragment;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import org.gdg.frisbee.android.Const;
@@ -130,7 +129,9 @@ public class ContributorsFragment extends GdgListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onCreateView()");
-        return inflater.inflate(R.layout.fragment_gdl_list, null);
+        View v = inflater.inflate(R.layout.fragment_gdl_list, null);
+        Views.inject(this, v);
+        return v;
     }
 
     @Override

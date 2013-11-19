@@ -27,15 +27,14 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
-
+import butterknife.InjectView;
+import butterknife.Views;
+import com.actionbarsherlock.app.SherlockFragment;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
 import com.google.android.gms.plus.GooglePlusUtil;
-
 import java.util.Collections;
 import java.util.List;
-
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.ChapterAdapter;
 import org.gdg.frisbee.android.api.ApiRequest;
@@ -46,12 +45,10 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.ChapterComparator;
 import org.joda.time.DateTime;
-
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
-import roboguice.inject.InjectView;
 
-public class FirstStartStep1Fragment extends RoboSherlockFragment {
+public class FirstStartStep1Fragment extends SherlockFragment {
 
     private static String LOG_TAG = "GDG-FirstStartStep1Fragment";
 
@@ -183,7 +180,9 @@ public class FirstStartStep1Fragment extends RoboSherlockFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_welcome_step1, null);
+        View v = inflater.inflate(R.layout.fragment_welcome_step1, null);
+        Views.inject(this, v);
+        return v;
     }
 
     @Override

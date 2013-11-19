@@ -3,7 +3,7 @@ package org.gdg.frisbee.android.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockActivity;
+import com.actionbarsherlock.app.SherlockActivity;
 import org.gdg.frisbee.android.Const;
 
 /**
@@ -13,7 +13,7 @@ import org.gdg.frisbee.android.Const;
  * Time: 00:03
  * To change this template use File | Settings | File Templates.
  */
-public class StartActivity extends RoboSherlockActivity {
+public class StartActivity extends SherlockActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

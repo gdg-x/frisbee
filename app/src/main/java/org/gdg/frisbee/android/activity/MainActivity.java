@@ -18,7 +18,6 @@ package org.gdg.frisbee.android.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,17 +26,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-
+import butterknife.InjectView;
 import com.actionbarsherlock.app.ActionBar;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.google.android.gms.games.GamesClient;
 import com.viewpagerindicator.TitlePageIndicator;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.ChapterAdapter;
@@ -51,13 +47,10 @@ import org.gdg.frisbee.android.fragment.EventFragment;
 import org.gdg.frisbee.android.fragment.InfoFragment;
 import org.gdg.frisbee.android.fragment.NewsFragment;
 import org.gdg.frisbee.android.utils.ChapterComparator;
-import org.gdg.frisbee.android.utils.PlayServicesHelper;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
-
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
-import roboguice.inject.InjectView;
 
 public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNavigationListener{
 
@@ -71,10 +64,10 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
     public static final int REQUEST_FIRST_START_WIZARD = 100;
 
     @InjectView(R.id.pager)
-    private ViewPager mViewPager;
+    ViewPager mViewPager;
 
     @InjectView(R.id.titles)
-    protected TitlePageIndicator mIndicator;
+    TitlePageIndicator mIndicator;
 
     private Handler mHandler = new Handler();
 

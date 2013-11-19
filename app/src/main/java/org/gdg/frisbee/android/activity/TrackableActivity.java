@@ -18,9 +18,7 @@ package org.gdg.frisbee.android.activity;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-
-import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmentActivity;
-
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import org.gdg.frisbee.android.app.App;
 
 /**
@@ -34,7 +32,7 @@ import org.gdg.frisbee.android.app.App;
  *
  * @author Bartosz Przybylski <bart.p.pl@gmail.com>
  */
-public abstract class TrackableActivity extends RoboSherlockFragmentActivity implements ViewPager.OnPageChangeListener {
+public abstract class TrackableActivity extends SherlockFragmentActivity implements ViewPager.OnPageChangeListener {
 
     private int mCurrentPage = 0;
 

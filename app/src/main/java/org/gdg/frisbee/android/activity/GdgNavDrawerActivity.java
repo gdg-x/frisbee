@@ -8,12 +8,14 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
-
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.gms.games.GamesClient;
-
+import butterknife.InjectView;
+import butterknife.Views;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.google.android.gms.games.GamesClient;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import org.gdg.frisbee.android.Const;
@@ -22,14 +24,14 @@ import org.gdg.frisbee.android.adapter.DrawerAdapter;
 import org.gdg.frisbee.android.utils.PlayServicesHelper;
 import org.gdg.frisbee.android.view.ActionBarDrawerToggleCompat;
 
-import roboguice.inject.InjectView;
-
 public abstract class GdgNavDrawerActivity extends GdgActivity {
 
     @InjectView(R.id.drawer)
-    protected DrawerLayout mDrawerLayout;
+    DrawerLayout mDrawerLayout;
+
     @InjectView(R.id.left_drawer)
-    protected ListView mDrawerContent;
+    ListView mDrawerContent;
+
     protected DrawerAdapter mDrawerAdapter;
 
     protected ActionBarDrawerToggleCompat mDrawerToggle;

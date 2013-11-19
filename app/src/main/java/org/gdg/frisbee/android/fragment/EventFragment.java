@@ -22,14 +22,12 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
-
+import butterknife.Views;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusShare;
-
 import java.util.ArrayList;
-
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.adapter.EventAdapter;
@@ -39,7 +37,6 @@ import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.api.model.SimpleEvent;
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
-
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
@@ -187,7 +184,9 @@ public abstract class EventFragment extends GdgListFragment implements View.OnCl
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_events, null);
+        View v = inflater.inflate(R.layout.fragment_events, null);
+        Views.inject(this, v);
+        return v;
     }
 
     @Override
