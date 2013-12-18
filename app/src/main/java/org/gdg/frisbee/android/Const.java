@@ -36,6 +36,7 @@ public class Const {
     public static final String SETTINGS_ANALYTICS = "analytics";
     public static final String SETTINGS_GCM = "gcm";
     public static final String SETTINGS_GCM_NOTIFICATION_KEY = "gcm_notification_key";
+    public static final String SETTINGS_SEASONS_GREETINGS = "seasons_greetings";
 
     public static final boolean SETTINGS_FIRST_START_DEFAULT = true;
 

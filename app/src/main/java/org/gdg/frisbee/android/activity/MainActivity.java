@@ -25,9 +25,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.format.Time;
 import android.util.Log;
 import butterknife.InjectView;
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.viewpagerindicator.TitlePageIndicator;
@@ -46,6 +48,7 @@ import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.fragment.EventFragment;
 import org.gdg.frisbee.android.fragment.InfoFragment;
 import org.gdg.frisbee.android.fragment.NewsFragment;
+import org.gdg.frisbee.android.fragment.SeasonsGreetingsFragment;
 import org.gdg.frisbee.android.utils.ChapterComparator;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
@@ -189,6 +192,13 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
                 Chapter homeGdgd = getIntent().getParcelableExtra("selected_chapter");
                 getSupportActionBar().setSelectedNavigationItem(mSpinnerAdapter.getPosition(homeGdgd));
                 mViewPagerAdapter.setSelectedChapter(homeGdgd);
+        }
+
+        Time now = new Time();
+        if((mPreferences.getInt(Const.SETTINGS_SEASONS_GREETINGS, now.year-1) < now.year) && (now.yearDay >= 354 || now.yearDay <= 366)) {
+            mPreferences.edit().putInt(Const.SETTINGS_SEASONS_GREETINGS, now.year).commit();
+            SherlockDialogFragment seasonsGreetings = new SeasonsGreetingsFragment();
+            seasonsGreetings.show(getSupportFragmentManager(), "dialog");
         }
     }
 
