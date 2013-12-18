@@ -380,7 +380,9 @@ public class NewsAdapter extends BaseAdapter {
         createAttachmentView(mViewHolder, container, R.layout.news_item_photo, 3);
 
         // Precalc Image Size
-        mViewHolder.photo.setDimensions(attachment.getImage().getWidth(), attachment.getImage().getHeight(), attachment.getImage().getUrl());
+        if(attachment.getImage() != null && attachment.getImage().getUrl() != null && attachment.getImage().getWidth() != null)
+            mViewHolder.photo.setDimensions(attachment.getImage().getWidth(), attachment.getImage().getHeight(), attachment.getImage().getUrl());
+
         mViewHolder.photo.setImageDrawable(null);
 
         App.getInstance().getPicasso()
