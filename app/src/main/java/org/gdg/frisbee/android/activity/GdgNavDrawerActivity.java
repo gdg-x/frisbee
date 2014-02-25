@@ -23,6 +23,7 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.DrawerAdapter;
 import org.gdg.frisbee.android.utils.PlayServicesHelper;
 import org.gdg.frisbee.android.view.ActionBarDrawerToggleCompat;
+import org.joda.time.DateTime;
 
 public abstract class GdgNavDrawerActivity extends GdgActivity {
 
@@ -59,8 +60,8 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 DrawerAdapter.DrawerItem item = (DrawerAdapter.DrawerItem) mDrawerAdapter.getItem(i);
 
-                switch (item.getTitle()) {
-                    case R.string.achievements:
+                switch (item.getId()) {
+                    case Const.DRAWER_ACHIEVEMENTS:
                         if (mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
                             getPlayServicesHelper().getGamesClient(new PlayServicesHelper.OnGotGamesClientListener() {
                                 @Override
@@ -72,17 +73,24 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                             Crouton.makeText(GdgNavDrawerActivity.this, getString(R.string.achievements_need_signin), Style.INFO).show();
                         }
                         break;
-                    case R.string.home_gdg:
-                        navigateTo(MainActivity.class);
+                    case Const.DRAWER_HOME:
+                        navigateTo(MainActivity.class, null);
                         break;
-                    case R.string.gdl:
-                        navigateTo(GdlActivity.class);
+                    case Const.DRAWER_GDL:
+                        navigateTo(GdlActivity.class, null);
                         break;
-                    case R.string.devfest:
-                        navigateTo(DevFestActivity.class);
+                    case Const.DRAWER_SPECIAL:
+                        Bundle special = new Bundle();
+                        special.putInt(Const.SPECIAL_EVENT_LOGO_EXTRA, R.drawable.flightschool);
+                        special.putString(Const.SPECIAL_EVENT_VIEWTAG_EXTRA, "dartflightschool");
+                        special.putString(Const.SPECIAL_EVENT_CACHEKEY_EXTRA, "dartflightschool");
+                        special.putLong(Const.SPECIAL_EVENT_START_EXTRA, DateTime.now().getMillis());
+                        special.putLong(Const.SPECIAL_EVENT_END_EXTRA, 1419984000000L);
+                        special.putInt(Const.SPECIAL_EVENT_DESCRIPTION_EXTRA, R.string.flightschool_description);
+                        navigateTo(SpecialEventActivity.class, special);
                         break;
-                    case R.string.pulse:
-                        navigateTo(PulseActivity.class);
+                    case Const.DRAWER_PULSE:
+                        navigateTo(PulseActivity.class, null);
                         break;
                 }
             }
@@ -117,9 +125,13 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
     }
 
-    private void navigateTo(Class<? extends GdgActivity> activityClass) {
+    private void navigateTo(Class<? extends GdgActivity> activityClass, Bundle additional) {
         Intent i = new Intent(GdgNavDrawerActivity.this, activityClass);
         i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+        if(additional != null)
+            i.putExtras(additional);
+
         startActivity(i);
         mDrawerLayout.closeDrawers();
     }

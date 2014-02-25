@@ -46,6 +46,22 @@ public class Const {
     public static final String GITHUB_ORGA = "gdg-x";
     public static final String GITHUB_REPO = "frisbee";
 
+    public static final String SPECIAL_EVENT_TITLE_EXTRA = "org.gdg.frisbee.SPECIAL_EVENT_TITLE";
+    public static final String SPECIAL_EVENT_LAYOUT_EXTRA = "org.gdg.frisbee.SPECIAL_EVENT_LAYOUT";
+    public static final String SPECIAL_EVENT_FRAGMENT_LAYOUT_EXTRA = "org.gdg.frisbee.SPECIAL_EVENT_FRAGMENT_LAYOUT";
+    public static final String SPECIAL_EVENT_LOGO_EXTRA = "org.gdg.frisbee.SPECIAL_EVENT_LOGO";
+    public static final String SPECIAL_EVENT_VIEWTAG_EXTRA = "org.gdg.frisbee.SPECIAL_EVENT_VIEWTAG";
+    public static final String SPECIAL_EVENT_CACHEKEY_EXTRA = "org.gdg.frisbee.SPECIAL_EVENT_CACHEKEY";
+    public static final String SPECIAL_EVENT_DESCRIPTION_EXTRA = "org.gdg.frisbee.SPECIAL_EVENT_DESCRIPTION";
+    public static final String SPECIAL_EVENT_START_EXTRA = "org.gdg.frisbee.SPECIAL_EVENT_START";
+    public static final String SPECIAL_EVENT_END_EXTRA = "org.gdg.frisbee.SPECIAL_EVENT_END";
+
+    public static final int DRAWER_HOME = 0;
+    public static final int DRAWER_GDL = 1;
+    public static final int DRAWER_PULSE = 2;
+    public static final int DRAWER_SPECIAL = 3;
+    public static final int DRAWER_ACHIEVEMENTS = 4;
+
     // Location
     public static int MAX_DISTANCE = 50000; // 50KM
     public static int MAX_TIME = 5*60*60;
