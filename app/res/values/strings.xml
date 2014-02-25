@@ -115,7 +115,7 @@
     <string name="pulse_circlers">Chapter Circlers</string>
     <string name="home_gdg">Home GDG</string>
     <string name="home_gdg_summary">Select your primary GDG</string>
-    <string name="devfest">DevFest 2013</string>
+    <string name="special_event">Dart Flight School</string>
     <string name="analytics">Analytics</string>
     <string name="analytics_summary_on">The app currently transmits anonymous usage data which allows us to improve the app</string>
     <string name="analytics_summary_off">The app currently does not transmit any anonymous usage data</string>
@@ -138,8 +138,10 @@
     <string name="server_error">An error occurred. Try again.</string>
     <string name="search_hint">Search GDG Chapter</string>
     <string name="dashclock_description">Display information about the next upcoming event at your Home GDG</string>
-    <string name="devfest_description">GDG DevFests are large, community-run events that can offer speaker sessions across multiple product areas, all-day hack-a-thons, code labs, and more.\n\nEach GDG DevFest will be inspired by and uniquely tailored to the needs of the developer community that hosts it. While no two events will be exactly alike, each GDG DevFest will, at its core, be powered by a shared belief that when developers come together to exchange ideas, amazing things can happen.</string>
+    <string name="special_description">GDG DevFests are large, community-run events that can offer speaker sessions across multiple product areas, all-day hack-a-thons, code labs, and more.\n\nEach GDG DevFest will be inspired by and uniquely tailored to the needs of the developer community that hosts it. While no two events will be exactly alike, each GDG DevFest will, at its core, be powered by a shared belief that when developers come together to exchange ideas, amazing things can happen.</string>
     <string name="order_by_date">Sort by date</string>
     <string name="order_by_distance">Sort by distance</string>
     <string name="gcm_event_ticker">A new event at your home GDG has been scheduled.</string>
+    <string name="flightschool">Dart Flight School</string>
+    <string name="flightschool_description">Dart hit 1.0 and is now Flight Ready! Developer communities around the world are hosting Dart Flight School events during the month of February 2014. Get your web development wings with Dart and Angular!</string>
 </resources>
