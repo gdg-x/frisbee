@@ -22,8 +22,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import butterknife.Views;
-import com.google.android.gms.plus.GooglePlusUtil;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.achievements.AchievementActionHandler;
@@ -32,6 +30,8 @@ import org.gdg.frisbee.android.utils.PullToRefreshTransformer;
 import org.gdg.frisbee.android.utils.ScopedBus;
 import org.gdg.frisbee.android.utils.Utils;
 import java.util.List;
+
+import butterknife.ButterKnife;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 
@@ -66,7 +66,7 @@ public abstract class GdgActivity extends TrackableActivity implements PlayServi
     @Override
     public void setContentView(int layoutResId) {
         super.setContentView(layoutResId);
-        Views.inject(this);
+        ButterKnife.inject(this);
     }
 
     @Override
@@ -76,22 +76,17 @@ public abstract class GdgActivity extends TrackableActivity implements PlayServi
         mPreferences = getSharedPreferences("gdg",MODE_PRIVATE);
 
         if(getSupportActionBar() != null) {
-            PullToRefreshAttacher.Options d = new PullToRefreshAttacher.Options();
+           /* PullToRefreshAttacher.Options d = new PullToRefreshAttacher.Options();
             d.headerInAnimation = R.anim.fade_in;
             d.headerOutAnimation = R.anim.fade_out;
             d.headerLayout = R.layout.pull_to_refresh;
             d.headerTransformer = new PullToRefreshTransformer();
-            mPullToRefreshHelper = PullToRefreshAttacher.get(this, d);
+            mPullToRefreshHelper = PullToRefreshAttacher.get(this, d);*/
         }
 
         if(!Utils.isEmulator()) {
-            int errorCode = GooglePlusUtil.checkGooglePlusApp(this);
-            if (errorCode != GooglePlusUtil.SUCCESS) {
-                GooglePlusUtil.getErrorDialog(errorCode, this, 0).show();
-            } else {
-                    initPlayServices();
-                }
-            }
+            initPlayServices();
+        }
 
         mAchievementActionHandler =
                 new AchievementActionHandler(getHandler(), mPlayServicesHelper, mPreferences);

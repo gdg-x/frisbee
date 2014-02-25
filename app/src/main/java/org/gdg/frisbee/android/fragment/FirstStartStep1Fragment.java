@@ -27,12 +27,12 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
+
+import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.Views;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.google.android.gms.plus.GooglePlusUtil;
 import java.util.Collections;
 import java.util.List;
 import org.gdg.frisbee.android.R;
@@ -95,10 +95,6 @@ public class FirstStartStep1Fragment extends SherlockFragment {
 
         super.onActivityCreated(savedInstanceState);
 
-        int errorCode = GooglePlusUtil.checkGooglePlusApp(getActivity());
-        if (errorCode != GooglePlusUtil.SUCCESS) {
-            GooglePlusUtil.getErrorDialog(errorCode, getActivity(), 0).show();
-        }
 
         mPreferences = getActivity().getSharedPreferences("gdg", Context.MODE_PRIVATE);
         mLocationComparator = new ChapterComparator(mPreferences);
@@ -181,7 +177,7 @@ public class FirstStartStep1Fragment extends SherlockFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_welcome_step1, null);
-        Views.inject(this, v);
+        ButterKnife.inject(this, v);
         return v;
     }
 

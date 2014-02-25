@@ -22,8 +22,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.Views;
 import com.actionbarsherlock.app.SherlockFragment;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.utils.Utils;
@@ -50,7 +51,7 @@ public class ChangelogFragment extends SherlockFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_changelog, null);
-        Views.inject(this, v);
+        ButterKnife.inject(this, v);
         return v;
     }
 

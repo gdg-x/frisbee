@@ -24,9 +24,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import butterknife.Views;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+
+import butterknife.ButterKnife;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import org.gdg.frisbee.android.Const;
@@ -130,7 +131,7 @@ public class ContributorsFragment extends GdgListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onCreateView()");
         View v = inflater.inflate(R.layout.fragment_gdl_list, null);
-        Views.inject(this, v);
+        ButterKnife.inject(this, v);
         return v;
     }
 

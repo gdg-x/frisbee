@@ -117,7 +117,7 @@ public class GdlAdapter extends BaseAdapter {
 
         if(mPlusClient != null) {
             holder.plusButton.setVisibility(View.VISIBLE);
-            holder.plusButton.initialize(mPlusClient, show.getYoutubeUrl(), 1);
+            holder.plusButton.initialize(show.getYoutubeUrl(), 1);
         } else {
             holder.plusButton.setVisibility(View.GONE);
         }
@@ -138,7 +138,7 @@ public class GdlAdapter extends BaseAdapter {
 
             if(mPlusClient != null && mPlusClient.isConnected()) {
                 holder.plusButton.setVisibility(View.VISIBLE);
-                holder.plusButton.initialize(mPlusClient, holder.ytUrl, 1);
+                holder.plusButton.initialize(holder.ytUrl, 1);
             }
         }
     }

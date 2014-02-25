@@ -173,7 +173,7 @@ public class NewsAdapter extends BaseAdapter {
 
             if(mPlusClient != null && mPlusClient.isConnected()) {
                 viewHolder.plusButton.setVisibility(View.VISIBLE);
-                viewHolder.plusButton.initialize(mPlusClient, viewHolder.url, 1);
+                viewHolder.plusButton.initialize(viewHolder.url, 1);
             }
         }
     }
@@ -206,7 +206,7 @@ public class NewsAdapter extends BaseAdapter {
         PlusOneButton plusButton = (PlusOneButton) view.findViewById(R.id.plus_one_button);
         if(mPlusClient != null && mPlusClient.isConnected()) {
             mViewHolder.plusButton.setVisibility(View.VISIBLE);
-            mViewHolder.plusButton.initialize(mPlusClient, activity.getUrl(), 1);
+            mViewHolder.plusButton.initialize(activity.getUrl(), 1);
         } else {
             mViewHolder.plusButton.setVisibility(View.GONE);
         }

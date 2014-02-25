@@ -28,7 +28,7 @@ import com.google.gson.Gson;
 import android.os.Process;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.jakewharton.DiskLruCache;
+import com.jakewharton.disklrucache.DiskLruCache;
 import org.gdg.frisbee.android.api.deserializer.DateTimeDeserializer;
 import org.gdg.frisbee.android.api.deserializer.DateTimeSerializer;
 import org.gdg.frisbee.android.utils.Utils;

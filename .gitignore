@@ -1,3 +1,8 @@
+.gradle
+/local.properties
+/.idea/workspace.xml
+.DS_Store
+
 # built application files
 *.apk
 *.ap_
@@ -27,6 +32,5 @@ target
 #Misc output folder
 out/**
 
-.DS_Store
 
 app/res/values/keys.xml

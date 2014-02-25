@@ -23,9 +23,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import butterknife.Views;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+
+import butterknife.ButterKnife;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import org.gdg.frisbee.android.R;
@@ -147,7 +148,7 @@ public class PulseFragment extends GdgListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_pulse, null);
-        Views.inject(this, v);
+        ButterKnife.inject(this, v);
         return v;
     }
 

@@ -28,8 +28,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+
+import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.Views;
 import com.actionbarsherlock.app.SherlockFragment;
 import org.gdg.frisbee.android.R;
 
@@ -95,7 +96,7 @@ public class GdgListFragment extends SherlockFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_list, null);
-        Views.inject(this, v);
+        ButterKnife.inject(this, v);
         return v;
     }
 

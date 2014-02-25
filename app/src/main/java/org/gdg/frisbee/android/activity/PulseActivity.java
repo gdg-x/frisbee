@@ -29,7 +29,6 @@ import butterknife.InjectView;
 import com.actionbarsherlock.app.ActionBar;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.viewpagerindicator.TitlePageIndicator;
 import java.util.ArrayList;
 import java.util.Collections;
 import org.gdg.frisbee.android.R;
@@ -53,8 +52,8 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
     @InjectView(R.id.pager)
     ViewPager mViewPager;
 
-    @InjectView(R.id.titles)
-    TitlePageIndicator mIndicator;
+    /*@InjectView(R.id.titles)
+    TitlePageIndicator mIndicator;*/
 
     private MyAdapter mViewPagerAdapter;
     private ArrayList<String> mPulseTargets;
@@ -71,7 +70,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
 
         mClient = new GroupDirectory();
 
-        mIndicator.setOnPageChangeListener(this);
+       // mIndicator.setOnPageChangeListener(this);
 
         mPulseTargets = new ArrayList<String>();
 
@@ -149,7 +148,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
             }
         }
         mViewPager.setAdapter(mViewPagerAdapter);
-        mIndicator.setViewPager(mViewPager);
+        //mIndicator.setViewPager(mViewPager);
     }
 
     @Override

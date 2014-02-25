@@ -32,7 +32,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.viewpagerindicator.TitlePageIndicator;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -69,8 +69,6 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
     @InjectView(R.id.pager)
     ViewPager mViewPager;
 
-    @InjectView(R.id.titles)
-    TitlePageIndicator mIndicator;
 
     private Handler mHandler = new Handler();
 
@@ -100,12 +98,14 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
 
         mLocationComparator = new ChapterComparator(mPreferences);
 
-        mIndicator.setOnPageChangeListener(this);
+       //mIndicator.setOnPageChangeListener(this);
 
         mViewPagerAdapter = new MyAdapter(this, getSupportFragmentManager());
         mSpinnerAdapter = new ChapterAdapter(MainActivity.this, android.R.layout.simple_list_item_1);
         getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         getSupportActionBar().setListNavigationCallbacks(mSpinnerAdapter, MainActivity.this);
+
+
 
         mFetchChaptersTask = mClient.getDirectory(new Response.Listener<Directory>() {
             @Override
@@ -173,7 +173,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
                 }
 
                 mViewPager.setAdapter(mViewPagerAdapter);
-                mIndicator.setViewPager(mViewPager);
+               // mIndicator.setViewPager(mViewPager);
             } else {
                 mFetchChaptersTask.execute();
             }
@@ -193,7 +193,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         }
 
         Time now = new Time();
-        if((mPreferences.getInt(Const.SETTINGS_SEASONS_GREETINGS, now.year-1) < now.year) && (now.yearDay >= 354 && now.yearDay <= 366)) {
+        if((mPreferences.getInt(Const.SETTINGS_SEASONS_GREETINGS, now.year-1) < now.year) && (now.yearDay >= 354 || now.yearDay <= 366)) {
             mPreferences.edit().putInt(Const.SETTINGS_SEASONS_GREETINGS, now.year).commit();
             SherlockDialogFragment seasonsGreetings = new SeasonsGreetingsFragment();
             seasonsGreetings.show(getSupportFragmentManager(), "dialog");
@@ -226,7 +226,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         getSupportActionBar().setSelectedNavigationItem(mSpinnerAdapter.getPosition(chapter));
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.setOffscreenPageLimit(2);
-        mIndicator.setViewPager(mViewPager);
+       // mIndicator.setViewPager(mViewPager);
 
         if (SECTION_EVENTS.equals(getIntent().getStringExtra(EXTRA_SECTION))) {
             mHandler.postDelayed(new Runnable() {

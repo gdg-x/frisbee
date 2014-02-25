@@ -24,7 +24,6 @@ import android.view.*;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import butterknife.Views;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusShare;
 import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
@@ -34,6 +33,8 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Activity;
 import com.google.api.services.plus.model.ActivityFeed;
+
+import butterknife.ButterKnife;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import org.gdg.frisbee.android.api.GapiTransportChooser;
@@ -58,7 +59,7 @@ import java.io.IOException;
  * Date: 20.04.13
  * Time: 12:22
  */
-public class NewsFragment extends GdgListFragment implements PullToRefreshAttacher.OnRefreshListener {
+public class NewsFragment extends GdgListFragment  { // TODO: implements PullToRefreshAttacher.OnRefreshListener
 
     private static final String LOG_TAG = "GDG-NewsFragment";
 
@@ -132,7 +133,7 @@ public class NewsFragment extends GdgListFragment implements PullToRefreshAttach
 
         registerForContextMenu(getListView());
 
-        ((GdgActivity)getActivity()).getPullToRefreshHelper().addRefreshableView(getListView(), new PullToRefreshAttacher.ViewDelegate() {
+        /*((GdgActivity)getActivity()).getPullToRefreshHelper().addRefreshableView(getListView(), new PullToRefreshAttacher.ViewDelegate() {
             @Override
             public boolean isScrolledToTop(View view) {
                 AbsListView absListView = (AbsListView) view;
@@ -144,7 +145,7 @@ public class NewsFragment extends GdgListFragment implements PullToRefreshAttach
                 }
                 return false;
             }
-        }, this);
+        }, this);*/
 
         if(getListView() instanceof ListView) {
             ListView listView = (ListView) getListView();
@@ -256,7 +257,7 @@ public class NewsFragment extends GdgListFragment implements PullToRefreshAttach
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onCreateView()");
         View v = inflater.inflate(R.layout.fragment_news, null);
-        Views.inject(this, v);
+        ButterKnife.inject(this, v);
         return v;
     }
 
@@ -266,7 +267,7 @@ public class NewsFragment extends GdgListFragment implements PullToRefreshAttach
         Log.d(LOG_TAG, "onDestroy()");
     }
 
-    @Override
+    //@Override
     public void onRefreshStarted(View view) {
         if(Utils.isOnline(getActivity())) {
             new Builder<String, ActivityFeed>(String.class, ActivityFeed.class)
@@ -282,12 +283,12 @@ public class NewsFragment extends GdgListFragment implements PullToRefreshAttach
                         public ActivityFeed doInBackground(String... params) {
                             try {
 
-                                    Plus.Activities.List request = mClient.activities().list(params[0], "public");
-                                    request.setMaxResults(10L);
-                                    request.setFields("nextPageToken,items(id,published,url,object/content,verb,object/attachments,annotation,object(plusoners,replies,resharers))");
-                                    ActivityFeed feed = request.execute();
+                                Plus.Activities.List request = mClient.activities().list(params[0], "public");
+                                request.setMaxResults(10L);
+                                request.setFields("nextPageToken,items(id,published,url,object/content,verb,object/attachments,annotation,object(plusoners,replies,resharers))");
+                                ActivityFeed feed = request.execute();
 
-                                    App.getInstance().getModelCache().put("news_" + params[0], feed, DateTime.now().plusHours(1));
+                                App.getInstance().getModelCache().put("news_" + params[0], feed, DateTime.now().plusHours(1));
 
                                 return feed;
                             } catch (IOException e) {
@@ -299,12 +300,12 @@ public class NewsFragment extends GdgListFragment implements PullToRefreshAttach
                     .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<ActivityFeed>() {
                         @Override
                         public void onPostExecute(ActivityFeed activityFeed) {
-                            if(activityFeed != null) {
+                            if (activityFeed != null) {
                                 mAdapter.replaceAll(activityFeed.getItems(), 0);
                                 setIsLoading(false);
 
-                                if(getActivity() != null)
-                                    ((GdgActivity)getActivity()).getPullToRefreshHelper().setRefreshComplete();
+                                /*if(getActivity() != null)
+                                    ((GdgActivity)getActivity()).getPullToRefreshHelper().setRefreshComplete();*/
                             }
                         }
                     })

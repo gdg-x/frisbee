@@ -32,8 +32,9 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
+
+import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.Views;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -94,7 +95,7 @@ public class FirstStartActivity extends SherlockFragmentActivity implements Firs
         App.getInstance().updateLastLocation();
         mPreferences = getSharedPreferences("gdg", MODE_PRIVATE);
 
-        Views.inject(this);
+        ButterKnife.inject(this);
 
         mViewPagerAdapter = new FirstStartPageAdapter(this, getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);

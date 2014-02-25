@@ -25,8 +25,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+
+import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.Views;
 import com.actionbarsherlock.app.SherlockFragment;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.FirstStartActivity;
@@ -101,7 +102,7 @@ public class FirstStartStep3Fragment extends SherlockFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_welcome_step3, null);
-        Views.inject(this, v);
+        ButterKnife.inject(this, v);
         return v;
     }
 

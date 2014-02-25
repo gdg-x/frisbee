@@ -30,8 +30,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.Views;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
@@ -343,7 +344,7 @@ public class InfoFragment extends SherlockFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_chapter_info, null);
-        Views.inject(this, v);
+        ButterKnife.inject(this, v);
         return v;
     }
 

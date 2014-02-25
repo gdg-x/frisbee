@@ -38,7 +38,6 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.plus.GooglePlusUtil;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.ApiRequest;
@@ -188,13 +187,8 @@ public class SettingsActivity extends SherlockPreferenceActivity implements Play
     };
 
     protected void initPlayServices() {
-        int errorCode = GooglePlusUtil.checkGooglePlusApp(this);
-        if (errorCode != GooglePlusUtil.SUCCESS) {
-            GooglePlusUtil.getErrorDialog(errorCode, this, 0).show();
-        } else {
-            mPlayServicesHelper = new PlayServicesHelper(this);
-            mPlayServicesHelper.setup(this, PlayServicesHelper.CLIENT_PLUS | PlayServicesHelper.CLIENT_GAMES);
-        }
+        mPlayServicesHelper = new PlayServicesHelper(this);
+        mPlayServicesHelper.setup(this, PlayServicesHelper.CLIENT_PLUS | PlayServicesHelper.CLIENT_GAMES);
     }
 
     @Override

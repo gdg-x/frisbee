@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2013 The GDG Frisbee Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ 	http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="news">Naujienos</string>
+    <string name="drawer_open">Atidaryti navigaciją</string>
+    <string name="drawer_close">Uždaryti navigaciją</string>
+    <string name="info">Informacija</string>
+    <string name="events">Renginiai</string>
+    <string name="app_name">GDG</string>
+    <string name="add_to_calendar">Pridėti į kalendorių</string>
+    <string name="share_with_googleplus">Dalintis per Google+</string>
+    <string name="no_scheduled_events">Nėra numatyta renginių\nper ateinančias 30 dienų</string>
+    <string name="organizers">Organizatoriai</string>
+    <string name="resources">Nuorodos</string>
+    <string name="fetch_events_failed">Nepavyko parsiųsti artėjančių renginių</string>
+    <string name="fetch_chapters_failed">Nepavyko parsiųsti grupių sąrašo</string>
+    <string name="bogus_organizer">Nepavyko paimti Organizatoriaus Id iš: %1$s</string>
+    <string name="cached_content">Nėra ryšio. Rodomas ankstesnė informacija.</string>
+    <string name="offline_alert">Nėra ryšio.</string>
+    <string name="welcome">labàdienà</string>
+    <string name="choose_home_gdg">Pasirink artimiausią GDG</string>
+    <string name="signin_with_google">Prisijungti su Google</string>
+    <string name="confirm">Gerai</string>
+    <string name="signin_description">GDG programėlė naudojasi Google+ ir kitais Google Servisais. Šiai funkcijai reikia prisijungimo su Google paskyra.</string>
+    <string name="or">ar</string>
+    <string name="no_thanks">ne ačiū.</string>
+    <string name="skip">Praleisti prisijungimą</string>
+    <string name="youtube_init_failed">YouTube Grotuvas negalėjo būti inicijuotas.</string>
+    <string name="achievements">Pasiekimai</string>
+    <string name="settings">Nustatymai</string>
+    <string name="about">Apie</string>
+    <string name="gdl">Google Developers Live</string>
+    <plurals name="seconds_ago">
+        <item quantity="zero">dabar</item>
+        <item quantity="one">ką tik</item>
+        <item quantity="other">prieš %d sekundes</item>
+    </plurals>
+    <plurals name="minutes_ago">
+        <item quantity="zero">dabar</item>
+        <item quantity="one">prieš minutę</item>
+        <item quantity="other">prieš %d minutes</item>
+    </plurals>
+    <plurals name="hours_ago">
+        <item quantity="zero">dabar</item>
+        <item quantity="one">prieš valandą</item>
+        <item quantity="other">prieš %d valandas</item>
+    </plurals>
+    <plurals name="days_ago">
+        <item quantity="zero">dabar</item>
+        <item quantity="one">prieš dieną</item>
+        <item quantity="other">prieš %d dienas</item>
+    </plurals>
+    <string-array name="gdl_catgories">
+        <item>Android</item>
+        <item>Google+</item>
+        <item>Chrome</item>
+        <item>Cloud</item>
+        <item>Maps</item>
+        <item>YouTube</item>
+        <item>Drive</item>
+        <item>Google I/O</item>
+        <item>Ads</item>
+        <item>Analytics</item>
+        <item>Commerce</item>
+        <item>Google TV</item>
+        <item>Primetime</item>
+    </string-array>
+    <string-array name="gdl_catgories_url">
+        <item>android</item>
+        <item>+</item>
+        <item>chrome</item>
+        <item>cloud</item>
+        <item>maps</item>
+        <item>youtube</item>
+        <item>drive</item>
+        <item>io</item>
+        <item>ads</item>
+        <item>analytics</item>
+        <item>commerce</item>
+        <item>tv</item>
+        <item>primetime</item>
+    </string-array>
+    <string-array name="about_tabs">
+        <item>Apie</item>
+        <item>Dalyviai</item>
+        <item>Pakeitimų žurnalas</item>
+        <item>Prisijunk</item>
+        <item>Trečios šalies bibliotekos</item>
+    </string-array>
+    <string name="contributors">GDG programėlė yra atvirojo kodo. Štai šie žmonės prisidėjo:</string>
+    <string name="get_involved">Prisijunk ir Tu!</string>
+    <string name="get_involved_text">GDG programėlė yra atvirojo kodo. Visi yra kviečiami prisijungti ir patobulinti šią programėlę.\n\nTiesiog atsidarykite GitHub ir parsisiųskite kodą.\n\nhttps://github.com/gdg-x</string>
+    <string name="about_license">(c) 2013 GDG Frisbee Projektas\nVisos teisės saugomos.\n\nApache 2.0 Licenzija</string>
+    <string name="past_event">PRAĖJĘ</string>
+    <string name="upcoming_widget">GDG - Artėjantys renginiai</string>
+    <string name="global">Globalus</string>
+    <string name="pulse">GDG Pulsas</string>
+    <string name="pulse_events">Renginiai</string>
+    <string name="pulse_attendees">Dalyviai</string>
+    <string name="pulse_circlers">Skyriaus ratai</string>
+    <string name="home_gdg">Artimiausias GDG</string>
+    <string name="home_gdg_summary">Pasirink savo pagrindinį GDG</string>
+    <string name="analytics">Analizės</string>
+    <string name="analytics_summary_on">Programėlė šiuo metu siunčia anonimizuotą naudojimosi informaciją programėlės tobulinimui.</string>
+    <string name="analytics_summary_off">Programėlė šiuo metu nesiunčia anonimizuotos naudojimosi informacijos.</string>
+    <string name="gcm">Debesies pranešimai</string>
+    <string name="gcm_summary_on">Programėlė šiuo metu gauna ir apdoroja GDG Debesies pranešimus</string>
+    <string name="gcm_summary_off">Programėlė šiuo metu negauna GDG Debesies pranešimus</string>
+    <string name="google_signed_in">Prisijungti į Google+</string>
+    <string name="google_signed_in_on">Esi prisijungęs su Google+</string>
+    <string name="google_signed_in_off">Esi neprisijungęs</string>
+    <string name="achievements_need_signin">Turi prisijungti pasiekimų išsaugojimui</string>
+    <string name="done">Gerai</string>
+    <string name="allow_analytics">Leisti rinkti anonimizuotą naudojamumo informaciją programėlės tobulinimui</string>
+    <string name="enable_gcm">Leisti GDG Debesies pranešimus (gauti pranešimus apie naujus renginius)</string>
+    <string name="step3_text">Dar prieš pradedant...</string>
+
+    <string name="share_on_gplus">Pakviesti draugus</string>
+    <string name="join_me">Prisijunkite prie šio renginio!</string>
+    <string name="name_not_known">Nežinomas vardas</string>
+    <string name="signin_first">Šiai funkcijai reikia prisijungti su G+</string>
+    <string name="originally_shared">pirmas pasidalijo:</string>
+</resources>

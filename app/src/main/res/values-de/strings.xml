@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2013 The GDG Frisbee Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ 	http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="news">News</string>
+    <string name="drawer_open">Open Drawer</string>
+    <string name="drawer_close">Close Drawer</string>
+    <string name="info">Info</string>
+    <string name="events">Events</string>
+    <string name="app_name">GDG</string>
+    <string name="add_to_calendar">Zum Kalender hinzufügen</string>
+    <string name="share_with_googleplus">Mit Google+ teilen</string>
+    <string name="no_scheduled_events">Keine Events\nin den nächsten 30 Tagen</string>
+    <string name="organizers">Organizers</string>
+    <string name="resources">Links</string>
+    <string name="fetch_events_failed">Konnte Events nicht abrufen</string>
+    <string name="fetch_chapters_failed">Konnte Chapter Liste nicht abrufen</string>
+    <string name="bogus_organizer">Konnte Organizer Id: %1$s nicht parsen</string>
+    <string name="cached_content">Du bist gerade offline. Hier ist eine ältere Version.</string>
+    <string name="offline_alert">Du bist gerade offline.</string>
+    <string name="welcome">Willkommen.</string>
+    <string name="choose_home_gdg">Wähle deine Heimat-GDG</string>
+    <string name="signin_with_google">Mit Google anmelden</string>
+    <string name="confirm">Bestätigen</string>
+    <string name="signin_description">Die GDG App nutzt Google+ und andere Google Services. Um diese Funktionalitäten zu nutzen musst du bei Google eingeloggt sein.</string>
+    <string name="or">oder</string>
+    <string name="no_thanks">Nein, danke.</string>
+    <string name="skip">Überspringen</string>
+    <string name="youtube_init_failed">YouTube konnte nicht initialisiert werden.</string>
+    <string name="achievements">Achievements</string>
+    <string name="settings">Einstellungen</string>
+    <string name="about">Über Frisbee</string>
+    <string name="gdl">Google Developers Live</string>
+    <plurals name="seconds_ago">
+        <item quantity="zero">gerade</item>
+        <item quantity="one">vor einer Sekunde</item>
+        <item quantity="other">vor %d Sekunden</item>
+    </plurals>
+    <plurals name="minutes_ago">
+        <item quantity="zero">gerade</item>
+        <item quantity="one">vor einer Minute</item>
+        <item quantity="other">vor %d Minuten</item>
+    </plurals>
+    <plurals name="hours_ago">
+        <item quantity="zero">gerade</item>
+        <item quantity="one">vor einer Stunde</item>
+        <item quantity="other">vor %d Stunden</item>
+    </plurals>
+    <plurals name="days_ago">
+        <item quantity="zero">gerade</item>
+        <item quantity="one">vor einem Tag</item>
+        <item quantity="other">vor %d Tagen</item>
+    </plurals>
+    <string-array name="gdl_catgories">
+        <item>Android</item>
+        <item>Google+</item>
+        <item>Chrome</item>
+        <item>Cloud</item>
+        <item>Maps</item>
+        <item>YouTube</item>
+        <item>Drive</item>
+        <item>Google I/O</item>
+        <item>Ads</item>
+        <item>Analytics</item>
+        <item>Commerce</item>
+        <item>Google TV</item>
+        <item>Primetime</item>
+    </string-array>
+    <string-array name="gdl_catgories_url">
+        <item>android</item>
+        <item>+</item>
+        <item>chrome</item>
+        <item>cloud</item>
+        <item>maps</item>
+        <item>youtube</item>
+        <item>drive</item>
+        <item>io</item>
+        <item>ads</item>
+        <item>analytics</item>
+        <item>commerce</item>
+        <item>tv</item>
+        <item>primetime</item>
+    </string-array>
+    <string-array name="about_tabs">
+        <item>Über</item>
+        <item>Entwickler</item>
+        <item>Änderungen</item>
+        <item>Mach mit</item>
+        <item>Drittlizenzen</item>
+    </string-array>
+    <string name="contributors">Die GDG App ist Open Source. Folgende Personen sind an der Entwicklung beteiligt:</string>
+    <string name="get_involved">Mach mit!</string>
+    <string name="get_involved_text">Die GDG App ist Open Source. Wir freuen uns über jeden der uns bei der Entwicklung unterstützen möchte.\n\nGehe zu GitHub uns sehe dir unseren Code an.\n\nhttps://github.com/gdg-x</string>
+    <string name="about_license">(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLizensiert unter der\nApache 2.0 Lizenz</string>
+    <string name="past_event">VORBEI</string>
+    <string name="upcoming_widget">GDG - Event</string>
+    <string name="global">Global</string>
+    <string name="pulse">GDG Pulse</string>
+    <string name="pulse_events">Events</string>
+    <string name="pulse_attendees">Teilnehmer</string>
+    <string name="pulse_circlers">Circlers</string>
+    <string name="home_gdg">Home GDG</string>
+    <string name="home_gdg_summary">Wähle deine primäre GDG</string>
+    <string name="analytics">Analytics</string>
+    <string name="analytics_summary_on">Derzeit werden anonyme Nutzungsdaten gesammelt</string>
+    <string name="analytics_summary_off">Derzeit werden keine anonymen Nutzungsdaten gesendet</string>
+    <string name="gcm">Cloud Benachrichtigungen</string>
+    <string name="gcm_summary_on">The app currently receives and processes GDG Cloud Notification</string>
+    <string name="gcm_summary_off">The app currently does not receive GDG Cloud Notification</string>
+    <string name="google_signed_in">Angemeldet mit Google+</string>
+    <string name="google_signed_in_on">Du bist derzeit mit Google+ angemeldet</string>
+    <string name="google_signed_in_off">Du bist nicht angemeldet</string>
+    <string name="achievements_need_signin">Du must eingeloggt sein um Achievements zu erhalten</string>
+    <string name="done">Fertig</string>
+    <string name="allow_analytics">Erlaube uns anonyme Nutzungsdaten zur Verbesserung der App zu sammeln</string>
+    <string name="enable_gcm">Aktiviere GDG Cloud Benachrichtigungen (werde über neue Events benachrichtigt)</string>
+    <string name="step3_text">Eine Sache noch...</string>
+    <string name="share_on_gplus">Freunde einladen</string>
+    <string name="join_me">Begleitet mich zu diesem Event!</string>
+    <string name="name_not_known">Unbekannt</string>
+    <string name="signin_first">Du musst mit Google+ angemeldet sein um dieses Feature zu nutzen.</string>
+    <string name="originally_shared">hat Folgendes ursprünglich geteilt:</string>
+    <string name="server_error">Ein Fehler ist aufgetreten. Versuch es noch einmal.</string>
+    <string name="search_hint">Suche nach GDGs</string>
+    <string name="dashclock_description">Zeige das nächste GDG Event</string>
+    <string name="devfest_description">GDG DevFests sind große, von der Community organisierte Events bestehend aus Sessions über mehrere Produktbereiche, Hackathons, Code Labs und mehr.\n\nJedes GDG DevFest ist einzigartig und auf die Bedürfnisse der lokalen Community welche das DevFest veranstaltet zugeschnitten. Auch wenn jedes DevFest anders ist, sind sie im Kern angetrieben durch die Idee das tolle Dinge enstehen wenn sich Entwickler treffen und Ideen austauschen.</string>
+    <string name="order_by_date">Nach Datum sortieren</string>
+    <string name="order_by_distance">Nach Entfernung sortieren</string>
+    <string name="gcm_event_ticker">Deine GDG hat ein neues Event angekündigt.</string>
+</resources>

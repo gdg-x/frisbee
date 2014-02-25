@@ -5,8 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.Views;
 import com.actionbarsherlock.app.SherlockFragment;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.FirstStartActivity;
@@ -48,7 +49,7 @@ public class FirstStartStep2Fragment extends SherlockFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_welcome_step2, null);
-        Views.inject(this, v);
+        ButterKnife.inject(this, v);
         return v;
     }
 

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2013 The GDG Frisbee Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ 	http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="news">Novinky</string>
+    <string name="drawer_open">Otvoriť zásuvku</string>
+    <string name="drawer_close">Zatvoriť zásuvku</string>
+    <string name="info">Info</string>
+    <string name="events">Udalosti</string>
+    <string name="app_name">GDG</string>
+    <string name="add_to_calendar">Pridať do kalendára</string>
+    <string name="share_with_googleplus">Zdieľať na Google+</string>
+    <string name="no_scheduled_events">Žiadne udalosti\najbližších 30 dní</string>
+    <string name="organizers">Organizátori</string>
+    <string name="resources">Odkazy</string>
+    <string name="fetch_events_failed">Nebolo možné načítať nadchádzajúce eventy</string>
+    <string name="fetch_chapters_failed">Nebolo možné načítať zoznam skupín</string>
+    <string name="bogus_organizer">Nebolo možné načítať organizátora Id: %1$s</string>
+    <string name="cached_content">Ste offline, zobrazuje sa nacachovaný obsah.</string>
+    <string name="offline_alert">Ste offline.</string>
+    <string name="welcome">Vitajte.</string>
+    <string name="choose_home_gdg">Vyberte svoje domáce GDG</string>
+    <string name="signin_with_google">Prihláste sa na Google účet</string>
+    <string name="confirm">Potvrdiť</string>
+    <string name="signin_description">GDG aplikácia využíva Google+ a iné služby Google. Pre ich používanie sa musíte prihlásiť do svojho účtu.</string>
+    <string name="or">alebo</string>
+    <string name="no_thanks">nie ďakujem</string>
+    <string name="skip">Preskočiť prihlásenie</string>
+    <string name="youtube_init_failed">YouTube Player nemohol byť načítaný.</string>
+    <string name="achievements">Achievementy</string>
+    <string name="settings">Nastavenia</string>
+    <string name="about">O nás</string>
+    <string name="gdl">Google Developers Live</string>
+    <plurals name="seconds_ago">
+        <item quantity="zero">teraz</item>
+        <item quantity="one">nedávno</item>
+        <item quantity="other">pred %d sekundami</item>
+    </plurals>
+    <plurals name="minutes_ago">
+        <item quantity="zero">teraz</item>
+        <item quantity="one">pred 1 minútou</item>
+        <item quantity="other">pred %d minútami</item>
+    </plurals>
+    <plurals name="hours_ago">
+        <item quantity="zero">teraz</item>
+        <item quantity="one">pred 1 hodinou</item>
+        <item quantity="other">pred %d hodinami</item>
+    </plurals>
+    <plurals name="days_ago">
+        <item quantity="zero">teraz</item>
+        <item quantity="one">pred 1 dňom</item>
+        <item quantity="other">pred %d dňami</item>
+    </plurals>
+    <string-array name="gdl_catgories">
+        <item>Android</item>
+        <item>Google+</item>
+        <item>Chrome</item>
+        <item>Cloud</item>
+        <item>Maps</item>
+        <item>YouTube</item>
+        <item>Drive</item>
+        <item>Google I/O</item>
+        <item>Ads</item>
+        <item>Analytics</item>
+        <item>Commerce</item>
+        <item>Google TV</item>
+        <item>Primetime</item>
+    </string-array>
+    <string-array name="gdl_catgories_url">
+        <item>android</item>
+        <item>+</item>
+        <item>chrome</item>
+        <item>cloud</item>
+        <item>maps</item>
+        <item>youtube</item>
+        <item>drive</item>
+        <item>io</item>
+        <item>ads</item>
+        <item>analytics</item>
+        <item>commerce</item>
+        <item>tv</item>
+        <item>primetime</item>
+    </string-array>
+    <string-array name="about_tabs">
+        <item>O aplikácii</item>
+        <item>Autori</item>
+        <item>Zoznam zmien</item>
+        <item>Zapoj sa</item>
+        <item>Knižnice tretích strán</item>
+    </string-array>
+    <string name="contributors">GDG aplikácia je komunitný projekt a je open source. Tímto ľudom vďačíme za jej funkčnosť:</string>
+    <string name="get_involved">Zapoj sa!</string>
+    <string name="get_involved_text">GDG aplikácia je komunitný projekt a je open source. Každý môže prispieť do jej vývoja. \n\nChoď na GitHub a sťahuj kód. \n\nhttps://github.com/gdg-x</string>
+    <string name="about_license">(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicencované pod\n Apache 2.0 License</string>
+    <string name="past_event">UPLYNULÝ</string>
+    <string name="upcoming_widget">GDG - nadchadzajúce udalosti</string>
+    <string name="global">Globálne</string>
+    <string name="pulse">GDG Pulse</string>
+    <string name="pulse_events">Udalosti</string>
+    <string name="pulse_attendees">Účastníci</string>
+    <string name="pulse_circlers">Circlers</string>
+    <string name="home_gdg">Domáca GDG</string>
+    <string name="home_gdg_summary">Vyberte svoju domácu GDG</string>
+    <string name="analytics">Analytics</string>
+    <string name="analytics_summary_on">Aplikácia posiela anonymné dáta pre zlepšenie jej vývoja</string>
+    <string name="analytics_summary_off">Aplikácia neposiela žiadne anonymné dáta.</string>
+    <string name="gcm">Cloudové notifikácie</string>
+    <string name="gcm_summary_on">Aplikácia prijíma GDG Cloudové notifikácie</string>
+    <string name="gcm_summary_off">Aplikácia neprijíma GDG Cloudové notifikácie</string>
+    <string name="google_signed_in">Prihlásený cez Google+ účet</string>
+    <string name="google_signed_in_on">Aktuálne ste prihlásený cez Google+ účet</string>
+    <string name="google_signed_in_off">Nieste prihlásený</string>
+    <string name="achievements_need_signin">Musíte sa prihlásiť na používanie achievmentov.</string>
+    <string name="done">Hotovo</string>
+    <string name="allow_analytics">Povoľe aplikácii zasielať anonýmmne dáta používania pre zlepšienie aplikácie</string>
+    <string name="enable_gcm">Zapnite GDG cloudové notifikácie (dostávajte notifikácie o nových udalostiach)</string>
+    <string name="step3_text">Jedna vec pred tým než začneme...</string>
+
+    <string name="share_on_gplus">Pozvite priateľov</string>
+    <string name="join_me">Pridajte sa na tento event</string>
+    <string name="name_not_known">Meno neznáme</string>
+    <string name="signin_first">Musíte sa prihlásiť na používanie tejto funkcie</string>
+    <string name="originally_shared">originálne zdieľané:</string>
+</resources>
