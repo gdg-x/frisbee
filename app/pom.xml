@@ -223,7 +223,7 @@
     <repositories>
         <repository>
             <id>gdg-x</id>
-            <url>http://gdg-x.hp.af.cm/m2/</url>
+            <url>http://m2-gdgx.cloud.gdgx.io/m2/</url>
         </repository>
     </repositories>
     <build>
