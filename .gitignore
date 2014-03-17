@@ -24,9 +24,10 @@ default.properties
 gen-external-apklibs
 target
 
-#Misc output folder
+# Output folder
 out/**
 
+# Misc
 .DS_Store
-
 app/res/values/keys.xml
+*.diff
