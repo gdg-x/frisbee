@@ -203,9 +203,10 @@ public class InfoFragment extends SherlockFragment {
                                     } else {
                                         try {
                                             mFetchOrganizerInfo.addParameter(getUrlFromPersonUrl(url));
-                                            if(isAdded());
                                         } catch(Exception ex) {
+                                            if(isAdded()) {
                                                 Crouton.makeText(getActivity(), String.format(getString(R.string.bogus_organizer), url.getValue()), Style.ALERT);
+                                            }
                                         }
                                     }
                                 } else {
