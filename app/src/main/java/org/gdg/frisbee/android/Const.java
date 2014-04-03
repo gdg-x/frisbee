@@ -61,6 +61,7 @@ public class Const {
     public static final int DRAWER_PULSE = 2;
     public static final int DRAWER_SPECIAL = 3;
     public static final int DRAWER_ACHIEVEMENTS = 4;
+    public static final int DRAWER_ARROW = 99;
 
     // Location
     public static int MAX_DISTANCE = 50000; // 50KM
@@ -69,6 +70,12 @@ public class Const {
     public static final String GOOGLE_DEVELOPERS_YT_ID = "UC_x5XG1OV2P6uZZ5FSM9Ttw";
     public static final String ANDROID_DEVELOPERS_YT_ID = "UCVHFbqXqoYvEWM1Ddxl0QDg";
     public static final String YOUTUBE_DEVELOPERS_YT_ID = "UCtVd0c0tGXuTSbU5d8cSBUg";
+
+    public static final String ARROW_MIME = "application/vnd.org.gdgx.frisbee.arrow";
+    public static final String ARROW_LB = "CgkI_9Ga8sMGEAIQEA";
+    public static final int ARROW_STATE_KEY = 1;
+
+    public static final int ARROW_DONE_STATE_KEY = 2;
 
     public static final class LogLevel {
         public static final int NONE    = 0;

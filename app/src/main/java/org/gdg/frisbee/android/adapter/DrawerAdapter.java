@@ -31,6 +31,7 @@ public class DrawerAdapter extends BaseAdapter {
         add(new DrawerItem(Const.DRAWER_PULSE, R.drawable.drw_ic_pulse, R.string.pulse));
         add(new DrawerItem(Const.DRAWER_SPECIAL, R.drawable.drw_ic_dart, R.string.flightschool));
         add(new DrawerItem(Const.DRAWER_ACHIEVEMENTS, R.drawable.drw_ic_achievements, R.string.achievements));
+        add(new DrawerItem(Const.DRAWER_ARROW, R.drawable.drw_ic_arrow, R.string.arrow));
     }};
 
     public DrawerAdapter(Context ctx) {

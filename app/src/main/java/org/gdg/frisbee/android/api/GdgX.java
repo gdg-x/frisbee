@@ -60,6 +60,16 @@ public class GdgX {
         return new ApiRequest(gcmReq);
     }
 
+    public ApiRequest checkOrganizer(String gplusId, Response.Listener<OrganizerCheckResponse> successListener, Response.ErrorListener errorListener) {
+        GsonRequest<Void, OrganizerCheckResponse> organizerReq = new GsonRequest<Void, OrganizerCheckResponse>(Request.Method.GET,
+                "http://hub.gdgx.io/api/v1/organizer/"+gplusId,
+                OrganizerCheckResponse.class,
+                successListener,
+                errorListener,
+                GsonRequest.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES));
+        return new ApiRequest(organizerReq);
+    }
+
     public ApiRequest unregisterGcm(String regId, Response.Listener<GcmRegistrationResponse> successListener, Response.ErrorListener errorListener) {
         GcmRegistrationRequest request =  new GcmRegistrationRequest();
         request.setRegistrationId(regId);

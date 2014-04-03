@@ -18,6 +18,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="org.gdg.frisbee.android" android:versionCode="27" android:versionName="1.0.10" android:installLocation="auto">
     <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="19" />
+    <uses-feature android:name="android.hardware.nfc" android:required="false" />
     <supports-screens android:normalScreens="true" android:smallScreens="true" android:largeScreens="true" android:xlargeScreens="true"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
@@ -29,6 +30,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.NFC" />
     <permission android:name="org.gdg.frisbee.android.permission.MAPS_RECEIVE" android:protectionLevel="signature"/>
     <permission android:name="org.gdg.frisbee.android.permission.C2D_MESSAGE" android:protectionLevel="signature" />
     <uses-permission android:name="org.gdg.frisbee.android.permission.MAPS_RECEIVE"/>
@@ -52,6 +54,11 @@
         <activity android:name=".activity.AboutActivity">
         </activity>
         <activity android:name=".activity.SettingsActivity">
+        </activity>
+        <activity android:name=".activity.ArrowActivity" android:screenOrientation="portrait">
+            <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <data android:mimeType="application/vnd.org.gdgx.frisbee.arrow" />
         </activity>
         <activity android:name=".activity.FirstStartActivity" android:theme="@style/GDG.NoActionBar">
         </activity>
