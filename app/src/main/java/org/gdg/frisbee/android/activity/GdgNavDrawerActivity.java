@@ -8,22 +8,21 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.android.gms.games.GamesClient;
-import butterknife.InjectView;
-import butterknife.Views;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-import com.google.android.gms.games.GamesClient;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
+
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.DrawerAdapter;
 import org.gdg.frisbee.android.utils.PlayServicesHelper;
 import org.gdg.frisbee.android.view.ActionBarDrawerToggleCompat;
 import org.joda.time.DateTime;
+
+import butterknife.InjectView;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public abstract class GdgNavDrawerActivity extends GdgActivity {
 
@@ -81,12 +80,12 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                         break;
                     case Const.DRAWER_SPECIAL:
                         Bundle special = new Bundle();
-                        special.putInt(Const.SPECIAL_EVENT_LOGO_EXTRA, R.drawable.flightschool);
-                        special.putString(Const.SPECIAL_EVENT_VIEWTAG_EXTRA, "dartflightschool");
-                        special.putString(Const.SPECIAL_EVENT_CACHEKEY_EXTRA, "dartflightschool");
+                        special.putInt(Const.SPECIAL_EVENT_LOGO_EXTRA, R.drawable.ioextended);
+                        special.putString(Const.SPECIAL_EVENT_VIEWTAG_EXTRA, "i-oextended");
+                        special.putString(Const.SPECIAL_EVENT_CACHEKEY_EXTRA, "i-oextended");
                         special.putLong(Const.SPECIAL_EVENT_START_EXTRA, DateTime.now().getMillis());
                         special.putLong(Const.SPECIAL_EVENT_END_EXTRA, 1419984000000L);
-                        special.putInt(Const.SPECIAL_EVENT_DESCRIPTION_EXTRA, R.string.flightschool_description);
+                        special.putInt(Const.SPECIAL_EVENT_DESCRIPTION_EXTRA, R.string.ioextended_description);
                         navigateTo(SpecialEventActivity.class, special);
                         break;
                     case Const.DRAWER_PULSE:
