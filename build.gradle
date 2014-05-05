@@ -8,12 +8,15 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.8.+'
+        classpath 'com.android.tools.build:gradle:0.9.+'
     }
 }
 
 allprojects {
     repositories {
+        maven {
+            url "http://dl.bintray.com/populov/maven"
+        }
         mavenCentral()
         maven {
             url "http://gdg-x.hp.af.cm/m2/"

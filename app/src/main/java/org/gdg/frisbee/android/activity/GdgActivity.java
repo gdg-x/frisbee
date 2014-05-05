@@ -33,6 +33,8 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.Options;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 
 /**
@@ -48,7 +50,6 @@ public abstract class GdgActivity extends TrackableActivity implements PlayServi
     private static final String LOG_TAG = "GDG-GdgActivity";
 
     private PlayServicesHelper mPlayServicesHelper;
-    private PullToRefreshAttacher mPullToRefreshHelper;
     private AchievementActionHandler mAchievementActionHandler;
 
     SharedPreferences mPreferences;
@@ -74,15 +75,6 @@ public abstract class GdgActivity extends TrackableActivity implements PlayServi
         super.onCreate(savedInstanceState);
 
         mPreferences = getSharedPreferences("gdg",MODE_PRIVATE);
-
-        if(getSupportActionBar() != null) {
-           /* PullToRefreshAttacher.Options d = new PullToRefreshAttacher.Options();
-            d.headerInAnimation = R.anim.fade_in;
-            d.headerOutAnimation = R.anim.fade_out;
-            d.headerLayout = R.layout.pull_to_refresh;
-            d.headerTransformer = new PullToRefreshTransformer();
-            mPullToRefreshHelper = PullToRefreshAttacher.get(this, d);*/
-        }
 
         if(!Utils.isEmulator()) {
             initPlayServices();
@@ -117,10 +109,6 @@ public abstract class GdgActivity extends TrackableActivity implements PlayServi
         if(mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
             mPlayServicesHelper.onStop();
         }
-    }
-
-    public PullToRefreshAttacher getPullToRefreshHelper() {
-        return mPullToRefreshHelper;
     }
 
     public PlayServicesHelper getPlayServicesHelper() {

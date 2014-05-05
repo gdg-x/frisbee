@@ -24,6 +24,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import butterknife.InjectView;
 import com.actionbarsherlock.view.MenuItem;
+import com.viewpagerindicator.TitlePageIndicator;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.fragment.*;
@@ -42,6 +43,8 @@ public class AboutActivity extends GdgActivity {
     @InjectView(R.id.pager)
     ViewPager mViewPager;
 
+    @InjectView(R.id.titles)
+    TitlePageIndicator mIndicator;
 
     private AboutPagerAdapter mViewPagerAdapter;
 
@@ -57,11 +60,11 @@ public class AboutActivity extends GdgActivity {
         getSupportActionBar().setTitle(R.string.about);
 
 
-        //mIndicator.setOnPageChangeListener(this);
+        mIndicator.setOnPageChangeListener(this);
 
         mViewPagerAdapter = new AboutPagerAdapter(this, getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);
-        //mIndicator.setViewPager(mViewPager);
+        mIndicator.setViewPager(mViewPager);
     }
 
     protected String getTrackedViewName() {

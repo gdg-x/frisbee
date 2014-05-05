@@ -33,8 +33,8 @@ android {
         }
         debug {
             debuggable true
-            packageNameSuffix '.dev'
-            versionNameSuffix '-dev'
+            //packageNameSuffix '.dev'
+            //versionNameSuffix '-dev'
         }
     }
 
@@ -56,14 +56,16 @@ android {
 
 dependencies {
     compile 'com.android.support:support-v4:19.0.+'
+    compile 'com.viewpagerindicator:library:2.4.1@aar'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'org.jsoup:jsoup:1.7.3'
     compile 'joda-time:joda-time:2.3'
     compile 'ch.acra:acra:4.5.0'
-    compile ('com.github.chrisbanes.actionbarpulltorefresh:extra-abs:0.9.3') {
+    compile 'com.mcxiaoke.actionbarpulltorefresh:library:0.9.5'
+    compile ('com.mcxiaoke.actionbarpulltorefresh:extra-abs:0.9.5') {
         exclude module: 'support-v4'
     }
-    compile ('de.keyboardsurfer.android.widget:crouton:1.8.3') {
+    compile ('de.keyboardsurfer.android.widget:crouton:1.8.4') {
         exclude module: 'support-v4'
     }
     compile ('com.github.chrisbanes.bitmapcache:library:2.3'){

@@ -25,7 +25,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.util.SparseArray;
 import butterknife.InjectView;
-//import com.viewpagerindicator.TitlePageIndicator;
+import com.viewpagerindicator.TitlePageIndicator;
 import java.lang.ref.WeakReference;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.fragment.GdlListFragment;
@@ -39,8 +39,8 @@ public class GdlActivity extends GdgNavDrawerActivity {
     @InjectView(R.id.pager)
     ViewPager mViewPager;
 
-    /*@InjectView(R.id.titles)
-    TitlePageIndicator mIndicator;*/
+    @InjectView(R.id.titles)
+    TitlePageIndicator mIndicator;
 
     private GdlCategoryAdapter mViewPagerAdapter;
 
@@ -55,7 +55,7 @@ public class GdlActivity extends GdgNavDrawerActivity {
 
         mViewPagerAdapter = new GdlCategoryAdapter(this, getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);
-        //mIndicator.setViewPager(mViewPager);
+        mIndicator.setViewPager(mViewPager);
     }
 
     protected String getTrackedViewName() {

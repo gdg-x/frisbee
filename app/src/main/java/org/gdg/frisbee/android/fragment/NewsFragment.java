@@ -24,6 +24,8 @@ import android.view.*;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusShare;
 import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
@@ -45,9 +47,15 @@ import org.gdg.frisbee.android.adapter.NewsAdapter;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
+import org.gdg.frisbee.android.utils.PullToRefreshTransformer;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
+
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.Options;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
 import java.io.IOException;
 
@@ -59,12 +67,14 @@ import java.io.IOException;
  * Date: 20.04.13
  * Time: 12:22
  */
-public class NewsFragment extends GdgListFragment  { // TODO: implements PullToRefreshAttacher.OnRefreshListener
+public class NewsFragment extends GdgListFragment implements OnRefreshListener {
 
     private static final String LOG_TAG = "GDG-NewsFragment";
 
     final HttpTransport mTransport = GapiTransportChooser.newCompatibleTransport();
     final JsonFactory mJsonFactory = new GsonFactory();
+
+    private PullToRefreshLayout mPullToRefreshLayout;
 
     private Plus mClient;
 
@@ -133,6 +143,19 @@ public class NewsFragment extends GdgListFragment  { // TODO: implements PullToR
 
         registerForContextMenu(getListView());
 
+        if(((SherlockFragmentActivity)getActivity()).getSupportActionBar() != null) {
+            mPullToRefreshLayout = new PullToRefreshLayout(getActivity());
+
+            ActionBarPullToRefresh.from(getActivity())
+                    .options(Options.create()
+                            .headerTransformer(new PullToRefreshTransformer())
+                            .headerLayout(R.layout.pull_to_refresh)
+                            .build())
+                    .theseChildrenArePullable(android.R.id.list, android.R.id.empty)
+                    .insertLayoutInto((ViewGroup)getView())
+                    .listener(this)
+                    .setup(mPullToRefreshLayout);
+        }
         /*((GdgActivity)getActivity()).getPullToRefreshHelper().addRefreshableView(getListView(), new PullToRefreshAttacher.ViewDelegate() {
             @Override
             public boolean isScrolledToTop(View view) {
@@ -267,7 +290,7 @@ public class NewsFragment extends GdgListFragment  { // TODO: implements PullToR
         Log.d(LOG_TAG, "onDestroy()");
     }
 
-    //@Override
+    @Override
     public void onRefreshStarted(View view) {
         if(Utils.isOnline(getActivity())) {
             new Builder<String, ActivityFeed>(String.class, ActivityFeed.class)
@@ -304,8 +327,8 @@ public class NewsFragment extends GdgListFragment  { // TODO: implements PullToR
                                 mAdapter.replaceAll(activityFeed.getItems(), 0);
                                 setIsLoading(false);
 
-                                /*if(getActivity() != null)
-                                    ((GdgActivity)getActivity()).getPullToRefreshHelper().setRefreshComplete();*/
+                                if(getActivity() != null)
+                                    mPullToRefreshLayout.setRefreshComplete();
                             }
                         }
                     })

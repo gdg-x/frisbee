@@ -32,6 +32,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.viewpagerindicator.TitlePageIndicator;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,6 +70,8 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
     @InjectView(R.id.pager)
     ViewPager mViewPager;
 
+    @InjectView(R.id.titles)
+    TitlePageIndicator mIndicator;
 
     private Handler mHandler = new Handler();
 
@@ -98,7 +101,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
 
         mLocationComparator = new ChapterComparator(mPreferences);
 
-       //mIndicator.setOnPageChangeListener(this);
+        mIndicator.setOnPageChangeListener(this);
 
         mViewPagerAdapter = new MyAdapter(this, getSupportFragmentManager());
         mSpinnerAdapter = new ChapterAdapter(MainActivity.this, android.R.layout.simple_list_item_1);
@@ -173,7 +176,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
                 }
 
                 mViewPager.setAdapter(mViewPagerAdapter);
-               // mIndicator.setViewPager(mViewPager);
+                mIndicator.setViewPager(mViewPager);
             } else {
                 mFetchChaptersTask.execute();
             }
@@ -226,7 +229,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         getSupportActionBar().setSelectedNavigationItem(mSpinnerAdapter.getPosition(chapter));
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.setOffscreenPageLimit(2);
-       // mIndicator.setViewPager(mViewPager);
+        mIndicator.setViewPager(mViewPager);
 
         if (SECTION_EVENTS.equals(getIntent().getStringExtra(EXTRA_SECTION))) {
             mHandler.postDelayed(new Runnable() {

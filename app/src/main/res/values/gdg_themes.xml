@@ -34,7 +34,7 @@
   </style>
 
   <style name="Theme.GDG" parent="Theme.Sherlock.Light">
-
+    <item name="vpiTitlePageIndicatorStyle">@style/TitlePageIndicatorGDG</item>
     <item name="android:windowBackground">@color/default_bg</item>
     <item name="actionBarStyle">@style/ActionBarGDG</item>
     <item name="android:actionBarStyle">@style/ActionBarGDG</item>
