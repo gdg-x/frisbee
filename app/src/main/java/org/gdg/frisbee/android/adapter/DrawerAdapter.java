@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 
 /**
@@ -25,11 +26,11 @@ public class DrawerAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
 
     private ArrayList<DrawerItem> mItems = new ArrayList<DrawerItem>() {{
-        add(new DrawerItem(R.drawable.drw_ic_home_gdg, R.string.home_gdg));
-        add(new DrawerItem(R.drawable.drw_ic_gdl, R.string.gdl));
-        add(new DrawerItem(R.drawable.drw_ic_pulse, R.string.pulse));
-        //add(new DrawerItem(R.drawable.drw_ic_devfest, R.string.devfest));
-        add(new DrawerItem(R.drawable.drw_ic_achievements, R.string.achievements));
+        add(new DrawerItem(Const.DRAWER_HOME, R.drawable.drw_ic_home_gdg, R.string.home_gdg));
+        add(new DrawerItem(Const.DRAWER_GDL, R.drawable.drw_ic_gdl, R.string.gdl));
+        add(new DrawerItem(Const.DRAWER_PULSE, R.drawable.drw_ic_pulse, R.string.pulse));
+        add(new DrawerItem(Const.DRAWER_SPECIAL, R.drawable.drw_ic_ioextended, R.string.ioextended));
+        add(new DrawerItem(Const.DRAWER_ACHIEVEMENTS, R.drawable.drw_ic_achievements, R.string.achievements));
     }};
 
     public DrawerAdapter(Context ctx) {

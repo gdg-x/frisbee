@@ -28,9 +28,12 @@ default.properties
 *.iml
 gen-external-apklibs
 target
+build
 
-#Misc output folder
+# Output folder
 out/**
 
-
+# Misc
+.DS_Store
 app/res/values/keys.xml
+*.diff
