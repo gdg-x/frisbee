@@ -69,11 +69,16 @@ public class DrawerAdapter extends BaseAdapter {
     }
 
     public class DrawerItem {
-        private int mIcon, mTitle;
+        private int mId, mIcon, mTitle;
 
-        public DrawerItem(int icon, int title) {
+        public DrawerItem(int id, int icon, int title) {
+            mId = id;
             mIcon = icon;
             mTitle = title;
+        }
+
+        public int getId() {
+            return mId;
         }
 
         public int getIcon() {
