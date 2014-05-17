@@ -20,11 +20,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceManager;
+import android.preference.*;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -60,7 +59,7 @@ import java.io.IOException;
  * Date: 25.06.13
  * Time: 21:15
  */
-public class SettingsActivity extends SherlockPreferenceActivity implements PlayServicesHelper.PlayServicesHelperListener {
+public class SettingsActivity extends ActionBarActivity implements PlayServicesHelper.PlayServicesHelperListener {
 
     private static final String LOG_TAG = "GDG-SettingsActivity";
     private SharedPreferences mPreferences;

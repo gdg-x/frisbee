@@ -1,10 +1,10 @@
 package org.gdg.frisbee.android.fragment;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.android.volley.Response;
 
 import java.util.ArrayList;
@@ -113,7 +113,7 @@ public class DevFestEventFragment extends EventFragment {
             setIsLoading(true);
             sortEvents();
             setIsLoading(false);
-            getSherlockActivity().invalidateOptionsMenu();
+            getActivity().supportInvalidateOptionsMenu();
             scrollToSoonestEvent();
             return true;
         } else if (item.getItemId() == R.id.order_by_distance) {
@@ -121,7 +121,7 @@ public class DevFestEventFragment extends EventFragment {
             setIsLoading(true);
             sortEvents();
             setIsLoading(false);
-            getSherlockActivity().invalidateOptionsMenu();
+            getActivity().supportInvalidateOptionsMenu();
             getListView().setSelection(0);
             return true;
         }

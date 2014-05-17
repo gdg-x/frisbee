@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,9 +32,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
 import com.google.api.client.http.HttpTransport;
@@ -41,7 +39,9 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Person;
+
 import java.io.IOException;
+
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.GapiTransportChooser;
 import org.gdg.frisbee.android.app.App;
@@ -50,6 +50,9 @@ import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
@@ -61,7 +64,7 @@ import de.keyboardsurfer.android.widget.crouton.Style;
  * Date: 22.04.13
  * Time: 04:57
  */
-public class InfoFragment extends SherlockFragment {
+public class InfoFragment extends Fragment {
 
     private static final String LOG_TAG = "GDG-InfoFragment";
 

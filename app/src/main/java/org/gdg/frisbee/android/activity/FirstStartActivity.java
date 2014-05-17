@@ -27,23 +27,22 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
+
+import java.io.IOException;
+
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.ApiRequest;
@@ -56,7 +55,11 @@ import org.gdg.frisbee.android.fragment.FirstStartStep2Fragment;
 import org.gdg.frisbee.android.fragment.FirstStartStep3Fragment;
 import org.gdg.frisbee.android.utils.PlayServicesHelper;
 import org.gdg.frisbee.android.view.NonSwipeableViewPager;
-import java.io.IOException;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 /**
  * GDG Aachen
@@ -66,7 +69,7 @@ import java.io.IOException;
  * Date: 29.04.13
  * Time: 14:48
  */
-public class FirstStartActivity extends SherlockFragmentActivity implements FirstStartStep1Fragment.Step1Listener, FirstStartStep2Fragment.Step2Listener, FirstStartStep3Fragment.Step3Listener, PlayServicesHelper.PlayServicesHelperListener {
+public class FirstStartActivity extends ActionBarActivity implements FirstStartStep1Fragment.Step1Listener, FirstStartStep2Fragment.Step2Listener, FirstStartStep3Fragment.Step3Listener, PlayServicesHelper.PlayServicesHelperListener {
 
     private static String LOG_TAG = "GDG-FirstStartActivity";
 

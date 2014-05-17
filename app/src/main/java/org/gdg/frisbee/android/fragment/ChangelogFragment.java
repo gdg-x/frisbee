@@ -17,19 +17,21 @@
 package org.gdg.frisbee.android.fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import com.actionbarsherlock.app.SherlockFragment;
-import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.utils.Utils;
 import java.io.IOException;
 import java.io.InputStream;
+
+import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.utils.Utils;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * Created with IntelliJ IDEA.
@@ -38,7 +40,7 @@ import java.io.InputStream;
  * Time: 01:49
  * To change this template use File | Settings | File Templates.
  */
-public class ChangelogFragment extends SherlockFragment {
+public class ChangelogFragment extends Fragment {
 
     @InjectView(R.id.changelog)
     TextView mChangelog;

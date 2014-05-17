@@ -22,20 +22,17 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+
+import java.util.List;
+
 import org.gdg.frisbee.android.Const;
-import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.achievements.AchievementActionHandler;
 import org.gdg.frisbee.android.utils.PlayServicesHelper;
-import org.gdg.frisbee.android.utils.PullToRefreshTransformer;
 import org.gdg.frisbee.android.utils.ScopedBus;
 import org.gdg.frisbee.android.utils.Utils;
-import java.util.List;
 
 import butterknife.ButterKnife;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
-import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
-import uk.co.senab.actionbarpulltorefresh.library.Options;
-import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 
 /**
  * GDG Aachen
@@ -83,7 +80,7 @@ public abstract class GdgActivity extends TrackableActivity implements PlayServi
         mAchievementActionHandler =
                 new AchievementActionHandler(getHandler(), mPlayServicesHelper, mPreferences);
 
-        if(getSupportActionBar() != null)
+        if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 

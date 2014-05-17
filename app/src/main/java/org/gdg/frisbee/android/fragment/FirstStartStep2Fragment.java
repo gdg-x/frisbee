@@ -1,16 +1,17 @@
 package org.gdg.frisbee.android.fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import com.actionbarsherlock.app.SherlockFragment;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.FirstStartActivity;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * GDG Aachen
@@ -20,7 +21,7 @@ import org.gdg.frisbee.android.activity.FirstStartActivity;
  * Date: 14.06.13
  * Time: 02:52
  */
-public class FirstStartStep2Fragment extends SherlockFragment {
+public class FirstStartStep2Fragment extends Fragment {
 
     private static String LOG_TAG = "GDG-FirstStartStep2Fragment";
 

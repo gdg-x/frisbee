@@ -17,19 +17,12 @@
 package org.gdg.frisbee.android.fragment;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 
-import butterknife.Views;
-
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.android.volley.Response;
 
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
+import java.util.ArrayList;
+import java.util.Comparator;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -43,9 +36,9 @@ import org.gdg.frisbee.android.utils.TaggedEventDistanceComparator;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
+import butterknife.ButterKnife;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class TaggedEventFragment extends EventFragment {
 
@@ -90,7 +83,7 @@ public class TaggedEventFragment extends EventFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (mFragmentLayout != 0) {
             View v = inflater.inflate(mFragmentLayout, null);
-            Views.inject(this, v);
+            ButterKnife.inject(this, v);
             return v;
         } else {
             return super.onCreateView(inflater, container, savedInstanceState);
@@ -171,7 +164,7 @@ public class TaggedEventFragment extends EventFragment {
             setIsLoading(true);
             sortEvents();
             setIsLoading(false);
-            getSherlockActivity().invalidateOptionsMenu();
+            getActivity().supportInvalidateOptionsMenu();
             scrollToSoonestEvent();
             return true;
         } else if (item.getItemId() == R.id.order_by_distance) {
@@ -179,7 +172,7 @@ public class TaggedEventFragment extends EventFragment {
             setIsLoading(true);
             sortEvents();
             setIsLoading(false);
-            getSherlockActivity().invalidateOptionsMenu();
+            getActivity().supportInvalidateOptionsMenu();
             getListView().setSelection(0);
             return true;
         }

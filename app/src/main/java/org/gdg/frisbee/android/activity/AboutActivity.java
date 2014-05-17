@@ -22,12 +22,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import butterknife.InjectView;
-import com.actionbarsherlock.view.MenuItem;
+import android.view.MenuItem;
+
 import com.viewpagerindicator.TitlePageIndicator;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.fragment.*;
+
+import butterknife.InjectView;
 
 /**
  * GDG Aachen

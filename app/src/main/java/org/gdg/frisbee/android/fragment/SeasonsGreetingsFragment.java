@@ -22,10 +22,10 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import com.actionbarsherlock.app.SherlockDialogFragment;
+
 import org.gdg.frisbee.android.R;
 
 /**
@@ -35,7 +35,7 @@ import org.gdg.frisbee.android.R;
  * Time: 19:28
  * To change this template use File | Settings | File Templates.
  */
-public class SeasonsGreetingsFragment extends SherlockDialogFragment {
+public class SeasonsGreetingsFragment extends DialogFragment {
 
     private SharedPreferences mPreferences;
 
