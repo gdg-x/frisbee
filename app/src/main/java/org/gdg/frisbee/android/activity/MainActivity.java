@@ -25,11 +25,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.text.format.Time;
 import android.util.Log;
-import butterknife.InjectView;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockDialogFragment;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.viewpagerindicator.TitlePageIndicator;
@@ -37,6 +36,7 @@ import com.viewpagerindicator.TitlePageIndicator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.ChapterAdapter;
@@ -53,6 +53,8 @@ import org.gdg.frisbee.android.fragment.SeasonsGreetingsFragment;
 import org.gdg.frisbee.android.utils.ChapterComparator;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
+
+import butterknife.InjectView;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
@@ -198,7 +200,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         Time now = new Time();
         if((mPreferences.getInt(Const.SETTINGS_SEASONS_GREETINGS, now.year-1) < now.year) && (now.yearDay >= 354 || now.yearDay <= 366)) {
             mPreferences.edit().putInt(Const.SETTINGS_SEASONS_GREETINGS, now.year).commit();
-            SherlockDialogFragment seasonsGreetings = new SeasonsGreetingsFragment();
+            SeasonsGreetingsFragment seasonsGreetings = new SeasonsGreetingsFragment();
             seasonsGreetings.show(getSupportFragmentManager(), "dialog");
         }
     }

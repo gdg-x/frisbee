@@ -23,16 +23,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.widget.ArrayAdapter;
-import butterknife.InjectView;
-import com.actionbarsherlock.app.ActionBar;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.viewpagerindicator.TitlePageIndicator;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.ApiRequest;
 import org.gdg.frisbee.android.api.GroupDirectory;
@@ -41,6 +42,8 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.fragment.PulseFragment;
 import org.joda.time.DateTime;
+
+import butterknife.InjectView;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 

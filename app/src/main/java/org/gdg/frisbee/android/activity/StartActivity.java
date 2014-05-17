@@ -3,7 +3,8 @@ package org.gdg.frisbee.android.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import com.actionbarsherlock.app.SherlockActivity;
+import android.support.v7.app.ActionBarActivity;
+
 import org.gdg.frisbee.android.Const;
 
 /**
@@ -13,7 +14,7 @@ import org.gdg.frisbee.android.Const;
  * Time: 00:03
  * To change this template use File | Settings | File Templates.
  */
-public class StartActivity extends SherlockActivity {
+public class StartActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
