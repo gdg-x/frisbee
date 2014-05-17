@@ -22,7 +22,7 @@
                            android:src="@drawable/ic_logo_wide_light"/>
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                           android:text="Brussels" android:id="@+id/groupName2" android:layout_gravity="center"
-                          android:textColor="@color/abs__primary_text_holo_dark" android:layout_marginLeft="4dip"
+                          android:textColor="@android:color/primary_text_dark" android:layout_marginLeft="4dip"
                           android:textSize="11sp"/>
             </LinearLayout>
             <TextView
@@ -30,7 +30,7 @@
                     android:layout_height="fill_parent"
                     android:text="@string/no_scheduled_events"
                     android:id="@+id/textView1" android:gravity="center_vertical|center_horizontal"
-                    android:textColor="@color/abs__primary_text_holo_dark"/>
+                    android:textColor="@android:color/primary_text_dark"/>
         </LinearLayout>
         <LinearLayout
                 android:orientation="vertical"
@@ -49,26 +49,26 @@
                         android:layout_height="wrap_content"
                         android:text="Brussels"
                         android:id="@+id/groupName" android:layout_gravity="center"
-                        android:textColor="@color/abs__primary_text_holo_dark" android:layout_marginLeft="4dip"
+                        android:textColor="@android:color/primary_text_dark" android:layout_marginLeft="4dip"
                         android:textSize="11sp"/>
                 <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:text="27.08.2013"
                         android:id="@+id/startDate" android:layout_gravity="center" android:textSize="11sp"
-                        android:textColor="@color/abs__primary_text_holo_dark" android:gravity="right"/>
+                        android:textColor="@android:color/primary_text_dark" android:gravity="right"/>
             </LinearLayout>
             <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="Brussels GTUG travelling to Droidcon London"
-                    android:id="@+id/title" android:gravity="right" android:textColor="@color/abs__primary_text_holo_dark"
+                    android:id="@+id/title" android:gravity="right" android:textColor="@android:color/primary_text_dark"
                     android:textStyle="bold" android:ellipsize="end" android:maxLines="1"/>
             <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="Room 720 at 10 Floor Building F"
-                    android:id="@+id/location" android:gravity="right" android:textColor="@color/abs__primary_text_holo_dark"
+                    android:id="@+id/location" android:gravity="right" android:textColor="@android:color/primary_text_dark"
                     android:ellipsize="end" android:maxLines="1"/>
         </LinearLayout>
     </ViewFlipper>

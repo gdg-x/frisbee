@@ -48,7 +48,7 @@
         <item name="selectedBold">true</item>
     </style>
 
-  <style name="ActionBarGDG" parent="@style/Widget.Sherlock.Light.ActionBar.Solid">
+  <style name="ActionBarGDG" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
     <item name="background">@drawable/ab_solid_bg</item>
     <item name="android:background">@drawable/ab_solid_bg</item>
     <!--<item name="backgroundStacked">@drawable/ab_stacked_solid_themegdg</item>

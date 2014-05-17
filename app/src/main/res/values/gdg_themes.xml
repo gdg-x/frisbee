@@ -30,10 +30,10 @@
 
   <style name="GDG.NoActionBar" parent="Theme.GDG">
       <item name="windowActionBar">false</item>
-      <item name="windowNoTitle">true</item>
+      <item name="android:windowNoTitle">true</item>
   </style>
 
-  <style name="Theme.GDG" parent="Theme.Sherlock.Light">
+  <style name="Theme.GDG" parent="@style/Theme.AppCompat.Light">
     <item name="vpiTitlePageIndicatorStyle">@style/TitlePageIndicatorGDG</item>
     <item name="android:windowBackground">@color/default_bg</item>
     <item name="actionBarStyle">@style/ActionBarGDG</item>
