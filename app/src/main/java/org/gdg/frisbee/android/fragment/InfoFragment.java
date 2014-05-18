@@ -201,12 +201,12 @@ public class InfoFragment extends SherlockFragment {
                                     if(url.getValue().contains("communities")) {
                                         // TODO
                                     } else {
-                                        String org = url.getValue();
                                         try {
-                                        mFetchOrganizerInfo.addParameter(url.getValue().replace("plus.google.com/", "").replace("posts","").replace("/","").replace("about","").replace("u1","").replace("u0","").replace("https:","").replace("http:","").replace(getArguments().getString("plus_id"), "").replaceAll("[^\\d.]", "").substring(0,21));
+                                            mFetchOrganizerInfo.addParameter(getUrlFromPersonUrl(url));
                                         } catch(Exception ex) {
-                                            if(isAdded())
-                                                Crouton.makeText(getActivity(), String.format(getString(R.string.bogus_organizer), org), Style.ALERT);
+                                            if(isAdded()) {
+                                                Crouton.makeText(getActivity(), String.format(getString(R.string.bogus_organizer), url.getValue()), Style.ALERT);
+                                            }
                                         }
                                     }
                                 } else {
@@ -278,6 +278,14 @@ public class InfoFragment extends SherlockFragment {
                     Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
                 }
             });
+        }
+    }
+
+    private String getUrlFromPersonUrl(Person.Urls personUrl) {
+        if(personUrl.getValue().contains("+")) {
+            return personUrl.getValue();
+        } else {
+            return personUrl.getValue().replace("plus.google.com/", "").replace("posts","").replace("/","").replace("about","").replace("u1","").replace("u0","").replace("https:","").replace("http:","").replace(getArguments().getString("plus_id"), "").replaceAll("[^\\d.]", "").substring(0,21);
         }
     }
 
