@@ -41,6 +41,8 @@ import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Person;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.GapiTransportChooser;
@@ -207,7 +209,8 @@ public class InfoFragment extends Fragment {
                                     } else {
                                         String org = url.getValue();
                                         try {
-                                        mFetchOrganizerInfo.addParameter(url.getValue().replace("plus.google.com/", "").replace("posts","").replace("/","").replace("about","").replace("u1","").replace("u0","").replace("https:","").replace("http:","").replace(getArguments().getString("plus_id"), "").replaceAll("[^\\d.]", "").substring(0,21));
+                                            String organizerParameter = getUrlFromPersonUrl(url);
+                                            mFetchOrganizerInfo.addParameter(organizerParameter);
                                         } catch(Exception ex) {
                                             if(isAdded())
                                                 Crouton.makeText(getActivity(), String.format(getString(R.string.bogus_organizer), org), Style.ALERT);
@@ -285,6 +288,18 @@ public class InfoFragment extends Fragment {
         }
     }
 
+    private String getUrlFromPersonUrl(Person.Urls personUrl) {
+        if (personUrl.getValue().contains("+")) {
+            try {
+                return "+" + URLDecoder.decode(personUrl.getValue().replace("plus.google.com/", "").replace("posts", "").replace("/", "").replace("about", "").replace("u1", "").replace("u0", "").replace("https:", "").replace("http:", "").replace(getArguments().getString("plus_id"), ""), "UTF-8").trim();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+                return personUrl.getValue();
+            }
+        } else {
+            return personUrl.getValue().replace("plus.google.com/", "").replace("posts", "").replace("/", "").replace("about", "").replace("u1", "").replace("u0", "").replace("https:", "").replace("http:", "").replace(getArguments().getString("plus_id"), "").replaceAll("[^\\d.]", "").substring(0, 21);
+        }
+    }
 
     public void setIsLoading(boolean isLoading) {
 
