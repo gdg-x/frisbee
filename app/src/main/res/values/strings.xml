@@ -146,4 +146,5 @@
     <string name="flightschool_description">Dart hit 1.0 and is now Flight Ready! Developer communities around the world are hosting Dart Flight School events during the month of February 2014. Get your web development wings with Dart and Angular!</string>
     <string name="ioextended_description">Google I/O Extended is about joining the Google conference at your local group.</string>
     <string name="ioextended">Extended 2014</string>
+  <string name="media_route_menu_title">Cast session</string>
 </resources>
