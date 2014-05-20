@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.app;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -31,6 +32,8 @@ import android.widget.Toast;
 import com.google.analytics.tracking.android.GAServiceManager;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
+import com.google.android.gms.cast.CastMediaControlIntent;
+import com.google.sample.castcompanionlibrary.cast.VideoCastManager;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.LruCache;
 import com.squareup.picasso.Picasso;
@@ -43,7 +46,6 @@ import org.acra.annotation.ReportsCrashes;
 import org.acra.sender.HttpSender;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.CompatOkHttpLoader;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.GingerbreadLastLocationFinder;
 import org.gdg.frisbee.android.utils.Utils;
@@ -62,6 +64,7 @@ public class App extends Application implements LocationListener {
 
     private static App mInstance = null;
     private static boolean mFix = false;
+    private static VideoCastManager mVideoCastManager;
 
     public static App getInstance() {
         return mInstance;
@@ -123,12 +126,17 @@ public class App extends Application implements LocationListener {
 
         mPreferences.edit().putInt(Const.SETTINGS_APP_STARTS, mPreferences.getInt(Const.SETTINGS_APP_STARTS,0)+1).apply();
 
-        // Initialize Picasso
-        mPicasso = new Picasso.Builder(this)
-                //.downloader(new CompatOkHttpLoader(this))
-                .memoryCache(new LruCache(this))
-                .build();
-        mPicasso.setDebugging(Const.DEVELOPER_MODE);
+        new Thread(){
+            @Override
+            public void run() {
+                // Initialize Picasso
+                mPicasso = new Picasso.Builder(App.this)
+                        //.downloader(new CompatOkHttpLoader(this))
+                        .memoryCache(new LruCache(App.this))
+                        .build();
+                mPicasso.setDebugging(Const.DEVELOPER_MODE);
+            }
+        }.start();
 
         // Initialize GA
         mGaInstance = GoogleAnalytics.getInstance(getApplicationContext());
@@ -258,5 +266,16 @@ public class App extends Application implements LocationListener {
 
     @Override
     public void onProviderDisabled(String s) {
+    }
+
+    public static VideoCastManager getVideoCastManager(Context context){
+        if (null == mVideoCastManager) {
+            mVideoCastManager = VideoCastManager.initialize(context, CastMediaControlIntent.DEFAULT_MEDIA_RECEIVER_APPLICATION_ID, null, null);
+            mVideoCastManager.enableFeatures(VideoCastManager.FEATURE_NOTIFICATION |
+                    VideoCastManager.FEATURE_LOCKSCREEN |
+                    VideoCastManager.FEATURE_DEBUGGING);
+        }
+        mVideoCastManager.setContext(context);
+        return mVideoCastManager;
     }
 }

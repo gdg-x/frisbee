@@ -35,7 +35,9 @@ import com.viewpagerindicator.TitlePageIndicator;
 import java.lang.ref.WeakReference;
 
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.fragment.GdlListFragment;
+import org.gdg.frisbee.android.utils.PlayServicesHelper;
 
 import butterknife.InjectView;
 /**
@@ -53,11 +55,17 @@ public class GdlActivity extends GdgNavDrawerActivity {
 
     private GdlCategoryAdapter mViewPagerAdapter;
     private VideoCastManager mVideoCastManager;
+    protected int mRequestedClients = PlayServicesHelper.CLIENT_GAMES | PlayServicesHelper.CLIENT_PLUS;
+    private PlayServicesHelper mPlayerService;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mVideoCastManager = App.getVideoCastManager(this);
+
+        mPlayerService = new PlayServicesHelper(this);
+        mPlayerService.setup(this, mRequestedClients);
         setContentView(R.layout.activity_gdl);
 
         getSupportActionBar().setLogo(R.drawable.ic_gdl_logo_wide);
