@@ -39,6 +39,7 @@ import com.android.volley.VolleyError;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.plus.Plus;
 
@@ -54,13 +55,13 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.fragment.FirstStartStep1Fragment;
 import org.gdg.frisbee.android.fragment.FirstStartStep2Fragment;
 import org.gdg.frisbee.android.fragment.FirstStartStep3Fragment;
-import org.gdg.frisbee.android.utils.PlayServicesHelper;
 import org.gdg.frisbee.android.view.NonSwipeableViewPager;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
+import timber.log.Timber;
 
 /**
  * GDG Aachen
@@ -70,13 +71,11 @@ import de.keyboardsurfer.android.widget.crouton.Style;
  * Date: 29.04.13
  * Time: 14:48
  */
-public class FirstStartActivity extends ActionBarActivity implements FirstStartStep1Fragment.Step1Listener, FirstStartStep2Fragment.Step2Listener, FirstStartStep3Fragment.Step3Listener, PlayServicesHelper.PlayServicesHelperListener {
+public class FirstStartActivity extends ActionBarActivity implements FirstStartStep1Fragment.Step1Listener, FirstStartStep2Fragment.Step2Listener, FirstStartStep3Fragment.Step3Listener {
 
     private static String LOG_TAG = "GDG-FirstStartActivity";
 
-    private PlayServicesHelper mPlayHelper = null;
     private GoogleCloudMessaging mGcm;
-    protected int mRequestedClients = PlayServicesHelper.CLIENT_GAMES | PlayServicesHelper.CLIENT_PLUS;
 
     @InjectView(R.id.pager)
     NonSwipeableViewPager mViewPager;
@@ -90,10 +89,12 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
 
     private Handler mHandler = new Handler();
 
+    private GoogleApiClient mGoogleApiClient = null;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(LOG_TAG, "onCreate");
+        Timber.i("onCreate");
         setContentView(R.layout.activity_first_start);
 
         App.getInstance().updateLastLocation();
@@ -105,9 +106,6 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
         mViewPager.setAdapter(mViewPagerAdapter);
 
         mGcm = GoogleCloudMessaging.getInstance(this);
-
-        mPlayHelper = new PlayServicesHelper(this);
-        mPlayHelper.setup(this, mRequestedClients);
 
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -125,10 +123,6 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
                 //To change body of implemented methods use File | Settings | File Templates.
             }
         });
-    }
-
-    public PlayServicesHelper getPlayServicesHelper() {
-        return mPlayHelper;
     }
 
     private void setLoadingScreen(boolean show) {
@@ -179,22 +173,25 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
         mPreferences.edit()
                 .putString(Const.SETTINGS_HOME_GDG, chapter.getGplusId())
                 .apply();
-        mViewPager.setCurrentItem(1, true);
+
+        if(mGoogleApiClient == null) {
+            mViewPager.setCurrentItem(1, true);
+        } else {
+            mViewPager.setCurrentItem(2, true);
+        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d(LOG_TAG, "onActivityResult");
-
-        mPlayHelper.onActivityResult(requestCode, resultCode, data);
+        mViewPagerAdapter.getItem(mViewPager.getCurrentItem()).onActivityResult(requestCode, resultCode, data);
+        Timber.d("onActivityResult");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        mPlayHelper.onStart(this);
         App.getInstance().getTracker().sendView("/FirstStart/Step"+(1+mViewPager.getCurrentItem()));
     }
 
@@ -207,7 +204,14 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
     }
 
     @Override
-    public void onSignedIn(String accountName) {
+    public void onSignedIn(GoogleApiClient client, String accountName) {
+
+        mGoogleApiClient = client;
+
+        Timber.d("Signed in.");
+        FirstStartStep3Fragment step3 = (FirstStartStep3Fragment) mViewPagerAdapter.getItem(2);
+        step3.setSignedIn(true);
+
         mPreferences.edit()
                 .putBoolean(Const.SETTINGS_SIGNED_IN, true)
                 .apply();
@@ -230,7 +234,6 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
     @Override
     protected void onStop() {
         super.onStop();
-        mPlayHelper.onStop();
     }
 
     @Override
@@ -251,20 +254,6 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
     }
 
     @Override
-    public void onSignInFailed() {
-        Log.e(LOG_TAG, "SignIn failed");
-    }
-
-    @Override
-    public void onSignInSucceeded() {
-        Log.d(LOG_TAG, "Signed in.");
-        FirstStartStep3Fragment step3 = (FirstStartStep3Fragment) mViewPagerAdapter.getItem(2);
-        step3.setSignedIn(true);
-
-        onSignedIn(Plus.AccountApi.getAccountName(mPlayHelper.getPlusClient()));
-    }
-
-    @Override
     public void onComplete(final boolean enableAnalytics, final boolean enableGcm) {
 
         new AsyncTask<Void, Void, Void>() {
@@ -274,7 +263,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
                 if(enableGcm && mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
                     setLoadingScreen(true);
                     try {
-                        String token = GoogleAuthUtil.getToken(FirstStartActivity.this, Plus.AccountApi.getAccountName(mPlayHelper.getPlusClient()), "oauth2: "+ Scopes.PLUS_LOGIN);
+                        String token = GoogleAuthUtil.getToken(FirstStartActivity.this, Plus.AccountApi.getAccountName(mGoogleApiClient), "oauth2: "+ Scopes.PLUS_LOGIN);
                         final String regid = mGcm.register(getString(R.string.gcm_sender_id));
 
                         GdgX client = new GdgX(token);
@@ -297,7 +286,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
                             public void onErrorResponse(VolleyError volleyError) {
                                 setLoadingScreen(false);
                                 Crouton.showText(FirstStartActivity.this, getString(R.string.server_error), Style.ALERT);
-                                Log.e(LOG_TAG, "Fail", volleyError);
+                                Timber.e("Fail", volleyError);
                             }
                         });
                         req.execute();
@@ -305,9 +294,9 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
                         client.setHomeGdg(mPreferences.getString(Const.SETTINGS_HOME_GDG, ""), null ,null).execute();
 
                     } catch (IOException e) {
-                        Log.e(LOG_TAG, "Token fail.", e);
+                        Timber.e("Token fail.", e);
                     } catch (GoogleAuthException e) {
-                        Log.e(LOG_TAG, "Auth fail.", e);
+                        Timber.e("Auth fail.", e);
                     }
                 } else {
                     mPreferences.edit()

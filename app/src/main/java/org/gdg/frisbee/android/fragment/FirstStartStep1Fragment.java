@@ -50,6 +50,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
+import timber.log.Timber;
 
 public class FirstStartStep1Fragment extends Fragment {
 
@@ -74,7 +75,7 @@ public class FirstStartStep1Fragment extends Fragment {
     private ChapterComparator mLocationComparator;
 
     public static FirstStartStep1Fragment newInstance() {
-        Log.d(LOG_TAG, "newInstance");
+        Timber.d("newInstance");
         FirstStartStep1Fragment fragment = new FirstStartStep1Fragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -83,7 +84,7 @@ public class FirstStartStep1Fragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        Log.d(LOG_TAG, "onSaveInstanceState");
+        Timber.d("onSaveInstanceState");
         super.onSaveInstanceState(outState);
 
         if(mSpinnerAdapter != null && mSpinnerAdapter.getCount() > 0)
@@ -94,7 +95,7 @@ public class FirstStartStep1Fragment extends Fragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "onActivityCreated()");
+        Timber.d("onActivityCreated()");
 
         super.onActivityCreated(savedInstanceState);
 
@@ -129,7 +130,7 @@ public class FirstStartStep1Fragment extends Fragment {
                       } else {
                           Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
                       }
-                      Log.e(LOG_TAG, "Could'nt fetch chapter list", volleyError);
+                      Timber.e("Could'nt fetch chapter list", volleyError);
                   }
               });
 

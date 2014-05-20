@@ -18,6 +18,8 @@ package org.gdg.frisbee.android.api;
 
 import android.util.Log;
 import com.android.volley.*;
+import timber.log.Timber;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,7 +58,7 @@ public abstract class GdgRequest<T> extends Request<T> {
     public Map<String, String> getHeaders() throws AuthFailureError {
 
         super.getHeaders();
-        Log.d(LOG_TAG, "getHeaders()");
+        Timber.d("getHeaders()");
 
         HashMap<String, String> additionalHeaders = new HashMap<String, String>();
         additionalHeaders.put("User-Agent", USER_AGENT);

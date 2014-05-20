@@ -41,6 +41,7 @@ import java.net.URL;
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 import org.acra.sender.HttpSender;
+import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.CompatOkHttpLoader;
@@ -48,6 +49,7 @@ import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.GingerbreadLastLocationFinder;
 import org.gdg.frisbee.android.utils.Utils;
 
+import timber.log.Timber;
 import uk.co.senab.bitmapcache.BitmapLruCache;
 
 /**
@@ -89,8 +91,15 @@ public class App extends Application implements LocationListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
                     b.penaltyFlashScreen();
             }
-            StrictMode.setThreadPolicy(b.build());
+            //StrictMode.setThreadPolicy(b.build());
 
+        }
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        } else {
+            // TODO Crashlytics.start(this);
+            // TODO Timber.plant(new CrashlyticsTree());
         }
 
         // Initialize ACRA Bugreporting (reports get send to GDG[x] Hub)

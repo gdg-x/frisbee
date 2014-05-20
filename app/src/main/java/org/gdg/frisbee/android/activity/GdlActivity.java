@@ -35,6 +35,8 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.fragment.GdlListFragment;
 
 import butterknife.InjectView;
+import timber.log.Timber;
+
 /**
  * @author maui
  */
@@ -71,7 +73,7 @@ public class GdlActivity extends GdgNavDrawerActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(LOG_TAG, "onResume()");
+        Timber.d("onResume()");
 
         //mIndicator.setOnPageChangeListener(this);
     }
@@ -79,7 +81,7 @@ public class GdlActivity extends GdgNavDrawerActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d(LOG_TAG, "onPause()");
+        Timber.d("onPause()");
     }
 
     @Override

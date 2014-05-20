@@ -36,6 +36,8 @@
         </activity>
         <activity android:name=".activity.AboutActivity">
         </activity>
+        <activity android:name=".activity.SpecialEventActivity">
+        </activity>
         <activity android:name=".activity.SettingsActivity">
         </activity>
         <activity android:name=".activity.FirstStartActivity" android:theme="@style/GDG.NoActionBar">

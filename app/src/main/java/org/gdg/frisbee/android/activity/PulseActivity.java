@@ -46,6 +46,7 @@ import org.joda.time.DateTime;
 import butterknife.InjectView;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
+import timber.log.Timber;
 
 public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnNavigationListener {
 
@@ -68,7 +69,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.i(LOG_TAG, "onCreate");
+        Timber.i("onCreate");
         setContentView(R.layout.activity_pulse);
 
         getSupportActionBar().setLogo(R.drawable.ic_logo_pulse);
@@ -103,7 +104,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
                     Crouton.makeText(PulseActivity.this, getString(R.string.fetch_chapters_failed), Style.ALERT).show();
-                    Log.e(LOG_TAG, "Could'nt fetch chapter list", volleyError);
+                    Timber.e("Could'nt fetch chapter list", volleyError);
                 }
             }
         );
@@ -162,7 +163,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
         getSupportActionBar().setSelectedNavigationItem(itemPosition);
         mViewPagerAdapter.setSelectedPulseTarget(mSpinnerAdapter.getItem(itemPosition));
         if(!previous.equals(mSpinnerAdapter.getItem(itemPosition))) {
-            Log.d(LOG_TAG, "Switching chapter!");
+            Timber.d("Switching chapter!");
             mViewPagerAdapter.notifyDataSetChanged();
         }
         return true;

@@ -32,6 +32,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.gdg.frisbee.android.api.model.*;
 import org.joda.time.DateTime;
+import timber.log.Timber;
 
 /**
  * GDG Aachen
@@ -82,7 +83,7 @@ public class GroupDirectory {
     public ApiRequest getCountryPulse(String country, Response.Listener<Pulse> successListener, Response.ErrorListener errorListener) {
         GsonRequest<Void, Pulse> pulseReq = null;
         try {
-            Log.d(LOG_TAG, String.format(COUNTRY_PULSE_URL, URLEncoder.encode(country, "utf-8")));
+            Timber.d(String.format(COUNTRY_PULSE_URL, URLEncoder.encode(country, "utf-8")));
             pulseReq = new GsonRequest<Void, Pulse>(Request.Method.GET,
                     String.format(COUNTRY_PULSE_URL, country.replaceAll(" ","%20")),
                     Pulse.class,

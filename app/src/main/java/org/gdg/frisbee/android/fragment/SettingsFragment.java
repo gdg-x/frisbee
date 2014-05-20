@@ -21,6 +21,7 @@ import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.plus.Plus;
 
@@ -28,6 +29,7 @@ import java.io.IOException;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.api.ApiRequest;
 import org.gdg.frisbee.android.api.GdgX;
 import org.gdg.frisbee.android.api.model.Chapter;
@@ -35,10 +37,10 @@ import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.GcmRegistrationResponse;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
-import org.gdg.frisbee.android.utils.PlayServicesHelper;
 import org.gdg.frisbee.android.widget.UpcomingEventWidgetProvider;
+import timber.log.Timber;
 
-public class SettingsFragment extends PreferenceFragment implements PlayServicesHelper.PlayServicesHelperListener {
+public class SettingsFragment extends PreferenceFragment {
 
     private static final String LOG_TAG = "GDG-SettingsFragment";
 
@@ -47,14 +49,14 @@ public class SettingsFragment extends PreferenceFragment implements PlayServices
     private GoogleCloudMessaging mGcm;
     private SharedPreferences mPreferences;
 
-    private PlayServicesHelper mPlayServicesHelper;
+    private GoogleApiClient mGoogleApiClient;
 
     private Preference.OnPreferenceChangeListener mOnHomeGdgPreferenceChange = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object o) {
             final String homeGdg = (String) o;
 
-            if (mPlayServicesHelper.isSignedIn() && mPreferences.getBoolean("gcm", true)) {
+            if (mGoogleApiClient.isConnected() && mPreferences.getBoolean("gcm", true)) {
                 setHomeGdg(homeGdg);
             }
             // Update widgets to show newest chosen GdgHome events
@@ -70,7 +72,7 @@ public class SettingsFragment extends PreferenceFragment implements PlayServices
         public boolean onPreferenceChange(Preference preference, Object o) {
             final boolean enableGcm = (Boolean) o;
 
-            if (mPlayServicesHelper.isSignedIn()) {
+            if (mGoogleApiClient.isConnected()) {
                 mLoading.setVisibility(View.VISIBLE);
                 mLoading.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in));
 
@@ -78,7 +80,7 @@ public class SettingsFragment extends PreferenceFragment implements PlayServices
                     @Override
                     protected Void doInBackground(Void... voids) {
                         try {
-                            String token = GoogleAuthUtil.getToken(getActivity(), Plus.AccountApi.getAccountName(mPlayServicesHelper.getPlusClient()), "oauth2: " + Scopes.PLUS_LOGIN);
+                            String token = GoogleAuthUtil.getToken(getActivity(), Plus.AccountApi.getAccountName(mGoogleApiClient), "oauth2: " + Scopes.PLUS_LOGIN);
                             mXClient.setToken(token);
 
                             if (!enableGcm) {
@@ -93,7 +95,7 @@ public class SettingsFragment extends PreferenceFragment implements PlayServices
                                         }, new Response.ErrorListener() {
                                             @Override
                                             public void onErrorResponse(VolleyError volleyError) {
-                                                Log.e(LOG_TAG, "Fail", volleyError);
+                                                Timber.e("Fail", volleyError);
                                             }
                                         }
                                 );
@@ -112,7 +114,7 @@ public class SettingsFragment extends PreferenceFragment implements PlayServices
                                         }, new Response.ErrorListener() {
                                             @Override
                                             public void onErrorResponse(VolleyError volleyError) {
-                                                Log.e(LOG_TAG, "Fail", volleyError);
+                                                Timber.e("Fail", volleyError);
                                             }
                                         }
                                 );
@@ -121,10 +123,10 @@ public class SettingsFragment extends PreferenceFragment implements PlayServices
                                 setHomeGdg(mPreferences.getString(Const.SETTINGS_HOME_GDG, ""));
                             }
                         } catch (IOException e) {
-                            Log.e(LOG_TAG, "(Un)Register GCM gailed (IO)", e);
+                            Timber.e("(Un)Register GCM gailed (IO)", e);
                             e.printStackTrace();
                         } catch (GoogleAuthException e) {
-                            Log.e(LOG_TAG, "(Un)Register GCM gailed (Auth)", e);
+                            Timber.e("(Un)Register GCM gailed (Auth)", e);
                             e.printStackTrace();
                         }
                         return null;
@@ -167,23 +169,20 @@ public class SettingsFragment extends PreferenceFragment implements PlayServices
     };
     private LinearLayout mLoading;
 
-    protected void initPlayServices() {
-        mPlayServicesHelper = new PlayServicesHelper(getActivity());
-        mPlayServicesHelper.setup(this, PlayServicesHelper.CLIENT_PLUS | PlayServicesHelper.CLIENT_GAMES);
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mGoogleApiClient = ((GdgActivity)getActivity()).getGoogleApiClient();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        mPlayServicesHelper.onStart(getActivity());
     }
 
     @Override
     public void onStop() {
         super.onStop();
-
-        mPlayServicesHelper.onStop();
     }
 
     @Override
@@ -199,9 +198,6 @@ public class SettingsFragment extends PreferenceFragment implements PlayServices
         mPreferences = mPreferenceManager.getSharedPreferences();
 
         addPreferencesFromResource(R.xml.settings);
-
-
-        initPlayServices();
 
         initPreferences();
     }
@@ -255,14 +251,17 @@ public class SettingsFragment extends PreferenceFragment implements PlayServices
                     boolean signedIn = (Boolean) o;
 
                     if (!signedIn) {
-                        if (mPlayServicesHelper.isSignedIn()) {
-                            mPlayServicesHelper.signOut();
+                        if (mGoogleApiClient.isConnected()) {
+                            Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+                            mGoogleApiClient.disconnect();
+                            mGoogleApiClient.connect();
                         }
                     } else {
-                        if (!mPlayServicesHelper.isSignedIn()) {
-                            mPlayServicesHelper.beginUserInitiatedSignIn();
+                        if (!mGoogleApiClient.isConnected()) {
+                            mGoogleApiClient.connect();
                         }
                     }
+                    // TODO: Re-implement logout....
 
                     return true;
                 }
@@ -282,7 +281,7 @@ public class SettingsFragment extends PreferenceFragment implements PlayServices
 
                 String token = null;
                 try {
-                    token = GoogleAuthUtil.getToken(getActivity(), Plus.AccountApi.getAccountName(mPlayServicesHelper.getPlusClient()), "oauth2: " + Scopes.PLUS_LOGIN);
+                    token = GoogleAuthUtil.getToken(getActivity(), Plus.AccountApi.getAccountName(((GdgActivity)getActivity()).getGoogleApiClient()), "oauth2: " + Scopes.PLUS_LOGIN);
                     mXClient.setToken(token);
 
                     mXClient.setHomeGdg(homeGdg, null, null).execute();
@@ -297,9 +296,9 @@ public class SettingsFragment extends PreferenceFragment implements PlayServices
         }.execute();
     }
 
-    @Override
+    // TODO: Re-Implement with GMS 4.3
     public void onSignInFailed() {
-        Log.d(LOG_TAG, "onSignInFailed");
+        Timber.d("onSignInFailed");
         mPreferences.edit().putBoolean(Const.SETTINGS_SIGNED_IN, false).apply();
         CheckBoxPreference prefGoogleSignIn = (CheckBoxPreference) findPreference("gdg_signed_in");
         if (prefGoogleSignIn != null) {
@@ -308,13 +307,7 @@ public class SettingsFragment extends PreferenceFragment implements PlayServices
     }
 
     @Override
-    public void onSignInSucceeded() {
-        Log.d(LOG_TAG, "onSignInSucceeded");
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int responseCode, Intent data) {
         super.onActivityResult(requestCode, responseCode, data);
-        mPlayServicesHelper.onActivityResult(requestCode, responseCode, data);
     }
 }

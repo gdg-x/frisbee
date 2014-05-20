@@ -8,14 +8,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
-
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
-
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.DrawerAdapter;
-import org.gdg.frisbee.android.utils.PlayServicesHelper;
 import org.joda.time.DateTime;
 
 import butterknife.InjectView;
@@ -60,13 +56,8 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
                 switch (item.getId()) {
                     case Const.DRAWER_ACHIEVEMENTS:
-                        if (mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
-                            getPlayServicesHelper().getGamesClient(new PlayServicesHelper.OnGotGamesClientListener() {
-                                @Override
-                                public void onGotGamesClient(GoogleApiClient c) {
-                                    startActivityForResult(Games.Achievements.getAchievementsIntent(c), 0);
-                                }
-                            });
+                        if (mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false) && getGoogleApiClient().isConnected()) {
+                            startActivityForResult(Games.Achievements.getAchievementsIntent(getGoogleApiClient()), 0);
                         } else {
                             Crouton.makeText(GdgNavDrawerActivity.this, getString(R.string.achievements_need_signin), Style.INFO).show();
                         }

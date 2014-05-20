@@ -23,7 +23,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 
 import org.gdg.frisbee.android.Const;
-import org.gdg.frisbee.android.utils.PlayServicesHelper;
 
 /**
  *
@@ -33,16 +32,16 @@ import org.gdg.frisbee.android.utils.PlayServicesHelper;
  */
 public class AchievementActionHandler {
     private Handler mHandler;
-    private PlayServicesHelper mPlayHelper;
+    private GoogleApiClient mGoogleApi;
     private SharedPreferences mPreferences;
 
     private static final int ONE_SEC_IN_MILLISECONDS = 1000;
 
     public AchievementActionHandler(Handler handler,
-                                    PlayServicesHelper playHelper,
+                                    GoogleApiClient googleApiClient,
                                     SharedPreferences preferences) {
         mHandler = handler;
-        mPlayHelper = playHelper;
+        mGoogleApi = googleApiClient;
         mPreferences = preferences;
     }
 
@@ -88,12 +87,7 @@ public class AchievementActionHandler {
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mPlayHelper.getGamesClient(new PlayServicesHelper.OnGotGamesClientListener() {
-                    @Override
-                    public void onGotGamesClient(GoogleApiClient c) {
-                        Games.Achievements.unlock(c, achievementName);
-                    }
-                });
+                Games.Achievements.unlock(mGoogleApi, achievementName);
             }
         }, ONE_SEC_IN_MILLISECONDS);
     }

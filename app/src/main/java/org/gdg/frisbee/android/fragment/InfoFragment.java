@@ -57,6 +57,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
+import timber.log.Timber;
 
 /**
  * GDG Aachen
@@ -129,7 +130,7 @@ public class InfoFragment extends Fragment {
                             for(int i = 0; i < params.length; i++) {
                                 Person person = (Person) App.getInstance().getModelCache().get("person_"+params[i]);
 
-                                Log.d(LOG_TAG, "Get Organizer " + params[i]);
+                                Timber.d("Get Organizer " + params[i]);
                                 if(person == null) {
                                     Plus.People.Get request = mClient.people().get(params[i]);
                                     request.setFields("displayName,image,id");
@@ -150,7 +151,7 @@ public class InfoFragment extends Fragment {
                     @Override
                     public void onPostExecute(final Person[] person) {
                         if(person == null) {
-                            Log.d(LOG_TAG, "null person");
+                            Timber.d("null person");
                             View v = getUnknownOrganizerView();
                             mOrganizerBox.addView(v);
                             setIsLoading(false);

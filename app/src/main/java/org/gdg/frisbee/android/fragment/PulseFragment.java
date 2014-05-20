@@ -40,6 +40,7 @@ import org.gdg.frisbee.android.api.model.PulseEntry;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.joda.time.DateTime;
+import timber.log.Timber;
 
 import java.util.Map;
 
@@ -98,7 +99,7 @@ public class PulseFragment extends GdgListFragment {
                      public void onErrorResponse(VolleyError volleyError) {
                          if(isAdded())
                             Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
-                         Log.e(LOG_TAG, "Could'nt fetch pulse", volleyError);
+                         Timber.e("Could'nt fetch pulse", volleyError);
                      }
                  }
             );
@@ -118,7 +119,7 @@ public class PulseFragment extends GdgListFragment {
                         public void onErrorResponse(VolleyError volleyError) {
                             if(isAdded())
                                 Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
-                            Log.e(LOG_TAG, "Could'nt fetch pulse", volleyError);
+                            Timber.e("Could'nt fetch pulse", volleyError);
                         }
                     }
             );

@@ -33,6 +33,7 @@ import org.gdg.frisbee.android.utils.Log;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import timber.log.Timber;
 
 public class FirstStartStep3Fragment extends Fragment {
 
@@ -90,7 +91,7 @@ public class FirstStartStep3Fragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(LOG_TAG, "onResume()");
+        Timber.d("onResume()");
 
         FirstStartActivity activity = (FirstStartActivity)getActivity();
         if(!mIsSignedIn) {

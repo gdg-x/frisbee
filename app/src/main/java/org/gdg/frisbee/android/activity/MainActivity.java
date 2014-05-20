@@ -57,6 +57,7 @@ import org.joda.time.DateTime;
 import butterknife.InjectView;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
+import timber.log.Timber;
 
 public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNavigationListener{
 
@@ -96,7 +97,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-		Log.i(LOG_TAG, "onCreate");
+		Timber.i("onCreate");
         setContentView(R.layout.activity_main);
 
         mClient = new GroupDirectory();
@@ -129,7 +130,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 Crouton.makeText(MainActivity.this, getString(R.string.fetch_chapters_failed), Style.ALERT).show();
-                Log.e(LOG_TAG, "Could'nt fetch chapter list", volleyError);
+                Timber.e("Could'nt fetch chapter list", volleyError);
             }
         });
 
@@ -186,7 +187,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
 
         Intent intent = getIntent();
         if(intent != null && intent.getAction() != null && intent.getAction().equals("finish_first_start")) {
-                Log.d(LOG_TAG, "Completed FirstStartWizard");
+                Timber.d("Completed FirstStartWizard");
 
                 if(mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
                     mFirstStart = true;
@@ -262,18 +263,6 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         super.onActivityResult(requestCode, responseCode, intent);
     }
 
-    @Override
-    public void onSignInFailed() {
-        super.onSignInFailed();    //To change body of overridden methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void onSignInSucceeded() {
-        super.onSignInSucceeded();    //To change body of overridden methods use File | Settings | File Templates.
-
-        checkAchievements();
-    }
-
     private void checkAchievements() {
         if (mFirstStart)
             getAchievementActionHandler().handleSignIn();
@@ -291,7 +280,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d(LOG_TAG, "onStart()");
+        Timber.d("onStart()");
 
         if(mPreferences.getBoolean(Const.SETTINGS_FIRST_START, Const.SETTINGS_FIRST_START_DEFAULT)) {
             startActivityForResult(new Intent(this, FirstStartActivity.class), REQUEST_FIRST_START_WIZARD);
@@ -301,7 +290,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d(LOG_TAG, "onPause()");
+        Timber.d("onPause()");
     }
 
     @Override
@@ -319,7 +308,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         Chapter previous = mViewPagerAdapter.getSelectedChapter();
         mViewPagerAdapter.setSelectedChapter(mSpinnerAdapter.getItem(position));
         if(previous == null || !previous.equals(mSpinnerAdapter.getItem(position))) {
-            Log.d(LOG_TAG, "Switching chapter!");
+            Timber.d("Switching chapter!");
             mViewPagerAdapter.notifyDataSetChanged();
         }
         return true;

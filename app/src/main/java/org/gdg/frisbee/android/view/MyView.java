@@ -26,6 +26,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import org.gdg.frisbee.android.adapter.NewsAdapter;
+import timber.log.Timber;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -107,7 +109,7 @@ public class MyView extends AbsListView {
 
         mRoot.measure(MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.EXACTLY));
         mRoot.layout(0,0,getWidth(),getHeight());
-        Log.d(LOG_TAG, "layoutInit()");
+        Timber.d("layoutInit()");
     }
 
     @Override
@@ -122,7 +124,7 @@ public class MyView extends AbsListView {
             @Override
             public void onInvalidated() {
                 super.onInvalidated();
-                Log.d(LOG_TAG, "onInvalidated()");
+                Timber.d("onInvalidated()");
             }
             @Override
             public void onChanged() {
@@ -130,7 +132,7 @@ public class MyView extends AbsListView {
                 applyAdapterUpdate();
             }
         });
-        Log.d(LOG_TAG, "setAdapter()");
+        Timber.d("setAdapter()");
     }
 
     /*
@@ -161,7 +163,7 @@ public class MyView extends AbsListView {
         }
 
         if(v == null) {
-            Log.d(LOG_TAG, "Not so good..."+index);
+            Timber.d("Not so good..."+index);
         }
         return v;
     }
@@ -203,7 +205,7 @@ public class MyView extends AbsListView {
             if(lv.getFirstVisiblePosition() > val)
                 val = lv.getFirstVisiblePosition();
         }
-        Log.d(LOG_TAG, "Visible: "+ val);
+        Timber.d("Visible: "+ val);
         return val;
     }
 

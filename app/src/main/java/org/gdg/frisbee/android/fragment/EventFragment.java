@@ -102,9 +102,7 @@ public abstract class EventFragment extends GdgListFragment implements View.OnCl
         mClient = new GroupDirectory();
 
         mPlusClient = null;
-        if (((GdgActivity) getActivity()).getPlayServicesHelper() != null) {
-            mPlusClient = ((GdgActivity) getActivity()).getPlayServicesHelper().getPlusClient();
-        }
+        mPlusClient = ((GdgActivity) getActivity()).getGoogleApiClient();
 
         if(getListView() instanceof ListView) {
             ListView listView = (ListView) getListView();

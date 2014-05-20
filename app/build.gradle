@@ -16,6 +16,11 @@ android {
     compileSdkVersion 19
     buildToolsVersion "19.0.3"
 
+    dexOptions {
+        // Skip pre-dexing when running on Travis CI or when disabled via -Dpre-dex=false.
+        preDexLibraries = preDexEnabled && !isTravis
+    }
+
     defaultConfig {
         minSdkVersion 10
         targetSdkVersion 19
@@ -46,6 +51,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
+
     buildTypes {
         release {
             runProguard false
@@ -61,7 +67,9 @@ dependencies {
     compile 'org.jsoup:jsoup:1.7.3'
     compile 'joda-time:joda-time:2.3'
     compile 'ch.acra:acra:4.5.0'
-    compile 'com.mcxiaoke.actionbarpulltorefresh:library:0.9.5'
+    compile 'com.jakewharton.timber:timber:2.2.+'
+    compile 'com.github.chrisbanes.actionbarpulltorefresh:library:0.9.9'
+    compile 'com.github.chrisbanes.actionbarpulltorefresh:extra-abc:0.9.9'
     compile ('de.keyboardsurfer.android.widget:crouton:1.8.4') {
         exclude module: 'support-v4'
     }

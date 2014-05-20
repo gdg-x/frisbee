@@ -52,6 +52,7 @@ import org.joda.time.DateTime;
 import butterknife.ButterKnife;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
+import timber.log.Timber;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.Options;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
@@ -88,7 +89,7 @@ public class NewsFragment extends GdgListFragment implements OnRefreshListener {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        Log.d(LOG_TAG, "onSaveInstanceState()");
+        Timber.d("onSaveInstanceState()");
         super.onSaveInstanceState(outState);
     }
 
@@ -100,13 +101,13 @@ public class NewsFragment extends GdgListFragment implements OnRefreshListener {
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(LOG_TAG, "onStart()");
+        Timber.d("onStart()");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(LOG_TAG, "onResume()");
+        Timber.d("onResume()");
 
         for(int i = 0; i <= getListView().getChildCount(); i++) {
             mAdapter.updatePlusOne(getListView().getChildAt(i));
@@ -116,27 +117,23 @@ public class NewsFragment extends GdgListFragment implements OnRefreshListener {
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(LOG_TAG, "onPause()");
+        Timber.d("onPause()");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(LOG_TAG, "onStop()");
+        Timber.d("onStop()");
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d(LOG_TAG, "onActivityCreated()");
+        Timber.d("onActivityCreated()");
 
         mClient = new Plus.Builder(mTransport, mJsonFactory, null).setGoogleClientRequestInitializer(new CommonGoogleJsonClientRequestInitializer(getString(R.string.ip_simple_api_access_key))).build();
 
-        GoogleApiClient plusClient = null;
-        if(((GdgActivity)getActivity()).getPlayServicesHelper() != null) {
-            plusClient = ((GdgActivity)getActivity()).getPlayServicesHelper().getPlusClient();
-        }
-        mAdapter = new NewsAdapter(getActivity(), plusClient);
+        mAdapter = new NewsAdapter(getActivity(), ((GdgActivity)getActivity()).getGoogleApiClient());
         setListAdapter(mAdapter);
 
         registerForContextMenu(getListView());
@@ -276,7 +273,7 @@ public class NewsFragment extends GdgListFragment implements OnRefreshListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "onCreateView()");
+        Timber.d("onCreateView()");
         View v = inflater.inflate(R.layout.fragment_news, null);
         ButterKnife.inject(this, v);
         return v;
@@ -285,7 +282,7 @@ public class NewsFragment extends GdgListFragment implements OnRefreshListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(LOG_TAG, "onDestroy()");
+        Timber.d("onDestroy()");
     }
 
     @Override

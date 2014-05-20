@@ -32,7 +32,7 @@ import org.gdg.frisbee.android.app.App;
  * Date: 25.06.13
  * Time: 21:15
  */
-public class SettingsActivity extends ActionBarActivity  {
+public class SettingsActivity extends GdgActivity  {
 
 
     @Override

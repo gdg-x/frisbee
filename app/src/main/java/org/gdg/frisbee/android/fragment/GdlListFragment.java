@@ -29,6 +29,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.PlusClient;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -45,6 +46,7 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
+import timber.log.Timber;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 
 /**
@@ -75,14 +77,14 @@ public class GdlListFragment extends GdgListFragment implements GdlActivity.List
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        Log.d(LOG_TAG, "onSaveInstanceState()");
+        Timber.d("onSaveInstanceState()");
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(LOG_TAG, "onResume()");
+        Timber.d("onResume()");
 
         for(int i = 0; i <= mList.getChildCount(); i++) {
             mAdapter.updatePlusOne(mList.getChildAt(i));
@@ -92,16 +94,11 @@ public class GdlListFragment extends GdgListFragment implements GdlActivity.List
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d(LOG_TAG, "onActivityCreated()");
+        Timber.d("onActivityCreated()");
 
         mClient = new GoogleDevelopersLive();
 
-        PlusClient plusClient = null;
-        if(((GdgActivity)getActivity()).getPlayServicesHelper() != null) {
-            plusClient = ((GdgActivity)getActivity()).getPlayServicesHelper().getPlusClient();
-        }
-
-        mAdapter = new GdlAdapter(getActivity(), plusClient);
+        mAdapter = new GdlAdapter(getActivity(), ((GdgActivity)getActivity()).getGoogleApiClient());
         setListAdapter(mAdapter);
 
         setIsLoading(true);
@@ -148,7 +145,7 @@ public class GdlListFragment extends GdgListFragment implements GdlActivity.List
             @Override
             public void onGet(Object item) {
                 if(!force) {
-                    Log.d(LOG_TAG, "from Cache.");
+                    Timber.d("from Cache.");
                 }
 
                 setContent((GdlShowList) item, force);
@@ -163,7 +160,7 @@ public class GdlListFragment extends GdgListFragment implements GdlActivity.List
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "onCreateView()");
+        Timber.d("onCreateView()");
         View v = inflater.inflate(R.layout.fragment_gdl_list, null);
         ButterKnife.inject(this, v);
         return v;

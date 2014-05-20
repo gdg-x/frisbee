@@ -30,6 +30,7 @@ import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
+import timber.log.Timber;
 
 public class GdgProvider extends ContentProvider {
 
@@ -58,7 +59,7 @@ public class GdgProvider extends ContentProvider {
             @Override
             public void onGet(Object item) {
                 mDirectory = (Directory)item;
-                Log.d(LOG_TAG, "Initialized ContentProvider");
+                Timber.d("Initialized ContentProvider");
             }
 
             @Override
