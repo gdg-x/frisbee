@@ -9,7 +9,8 @@ import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.google.android.gms.games.GamesClient;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.games.Games;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -62,8 +63,8 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                         if (mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
                             getPlayServicesHelper().getGamesClient(new PlayServicesHelper.OnGotGamesClientListener() {
                                 @Override
-                                public void onGotGamesClient(GamesClient c) {
-                                    startActivityForResult(c.getAchievementsIntent(), 0);
+                                public void onGotGamesClient(GoogleApiClient c) {
+                                    startActivityForResult(Games.Achievements.getAchievementsIntent(c), 0);
                                 }
                             });
                         } else {

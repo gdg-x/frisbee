@@ -22,11 +22,14 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.google.android.gms.plus.PlusClient;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.PlusShare;
+
 import java.util.ArrayList;
+
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.adapter.EventAdapter;
@@ -61,7 +64,7 @@ public abstract class EventFragment extends GdgListFragment implements View.OnCl
     private ApiRequest mFetchEvents;
     protected DateTime mStart;
     protected DateTime mEnd;
-    private PlusClient mPlusClient;
+    private GoogleApiClient mPlusClient;
 
     Response.ErrorListener mErrorListener = new Response.ErrorListener() {
         @Override
@@ -198,7 +201,7 @@ public abstract class EventFragment extends GdgListFragment implements View.OnCl
 
     private void shareOnGplus(SimpleEvent event) {
         if (mPlusClient != null && mPlusClient.isConnected()) {
-            PlusShare.Builder builder = new PlusShare.Builder(this.getActivity(), mPlusClient);
+            PlusShare.Builder builder = new PlusShare.Builder(this.getActivity());
 
             Uri eventUri = Uri.parse("https://developers.google.com/events/" + event.getId() + "/");
 

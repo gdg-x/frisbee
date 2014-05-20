@@ -16,7 +16,6 @@
 
 package org.gdg.frisbee.android.utils;
 
-import java.util.Vector;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -27,19 +26,24 @@ import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
-import com.google.android.gms.appstate.AppStateClient;
+
+import com.google.android.gms.appstate.AppStateManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.Scopes;
-import com.google.android.gms.games.GamesClient;
-import com.google.android.gms.games.OnSignOutCompleteListener;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.games.Games;
 import com.google.android.gms.games.multiplayer.Invitation;
-import com.google.android.gms.plus.PlusClient;
+import com.google.android.gms.games.multiplayer.Multiplayer;
+import com.google.android.gms.plus.Plus;
+
+import java.util.Vector;
+
 import org.gdg.frisbee.android.R;
 
 public class PlayServicesHelper implements GooglePlayServicesClient.ConnectionCallbacks,
-        GooglePlayServicesClient.OnConnectionFailedListener, OnSignOutCompleteListener {
+        GooglePlayServicesClient.OnConnectionFailedListener {
 
     /** Listener for sign-in success or failure events. */
     public interface PlayServicesHelperListener {
@@ -77,9 +81,9 @@ public class PlayServicesHelper implements GooglePlayServicesClient.ConnectionCa
     final static int RC_UNUSED = 9002;
 
     // Client objects we manage. If a given client is not enabled, it is null.
-    GamesClient mGamesClient = null;
-    PlusClient mPlusClient = null;
-    AppStateClient mAppStateClient = null;
+    GoogleApiClient mGamesClient = null;
+    GoogleApiClient mPlusClient = null;
+    GoogleApiClient mAppStateClient = null;
 
     // What clients we manage (OR-able values, can be combined as flags)
     public final static int CLIENT_NONE = 0x00;
@@ -213,34 +217,39 @@ public class PlayServicesHelper implements GooglePlayServicesClient.ConnectionCa
         mScopes = new String[scopesVector.size()];
         scopesVector.copyInto(mScopes);
 
+
         if (0 != (clientsToUse & CLIENT_GAMES)) {
             debugLog("onCreate: creating GamesClient");
-            mGamesClient = new GamesClient.Builder(getContext(), this, this)
-                    .setGravityForPopups(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL)
-                    .setScopes(mScopes)
-                    .create();
+            GoogleApiClient.Builder clientBuilder = new GoogleApiClient.Builder(getContext());
+            clientBuilder.addApi(Games.API);
+            clientBuilder.addScope(Games.SCOPE_GAMES);
+            clientBuilder.setGravityForPopups(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
+            mGamesClient = clientBuilder.build();
         }
 
         if (0 != (clientsToUse & CLIENT_PLUS)) {
             debugLog("onCreate: creating GamesPlusClient");
-            mPlusClient = new PlusClient.Builder(getContext(), this, this)
-                    .setScopes(mScopes)
-                    .build();
+            GoogleApiClient.Builder clientBuilder = new GoogleApiClient.Builder(getContext());
+            clientBuilder.addApi(Plus.API);
+            clientBuilder.addScope(Plus.SCOPE_PLUS_LOGIN);
+            mPlusClient = clientBuilder.build();
         }
 
         if (0 != (clientsToUse & CLIENT_APPSTATE)) {
             debugLog("onCreate: creating AppStateClient");
-            mAppStateClient = new AppStateClient.Builder(getContext(), this, this)
-                    .setScopes(mScopes)
-                    .create();
+            GoogleApiClient.Builder clientBuilder = new GoogleApiClient.Builder(getContext());
+            clientBuilder.addApi(AppStateManager.API);
+            clientBuilder.addScope(AppStateManager.SCOPE_APP_STATE);
+            mAppStateClient = clientBuilder.build();
         }
+
     }
 
     /**
      * Returns the GamesClient object. In order to call this method, you must have
      * called @link{setup} with a set of clients that includes CLIENT_GAMES.
      */
-    public GamesClient getGamesClient() {
+    public GoogleApiClient getGamesClient() {
         if (mGamesClient == null) {
             throw new IllegalStateException("No GamesClient. Did you request it at setup?");
         }
@@ -253,14 +262,14 @@ public class PlayServicesHelper implements GooglePlayServicesClient.ConnectionCa
     }
 
     public interface OnGotGamesClientListener {
-        void onGotGamesClient(GamesClient c);
+        void onGotGamesClient(GoogleApiClient c);
     }
 
     /**
      * Returns the AppStateClient object. In order to call this method, you must have
      * called @link{#setup} with a set of clients that includes CLIENT_APPSTATE.
      */
-    public AppStateClient getAppStateClient() {
+    public GoogleApiClient getAppStateClient() {
         if (mAppStateClient == null) {
             throw new IllegalStateException("No AppStateClient. Did you request it at setup?");
         }
@@ -271,7 +280,7 @@ public class PlayServicesHelper implements GooglePlayServicesClient.ConnectionCa
      * Returns the PlusClient object. In order to call this method, you must have
      * called @link{#setup} with a set of clients that includes CLIENT_PLUS.
      */
-    public PlusClient getPlusClient() {
+    public GoogleApiClient getPlusClient() {
         if (mPlusClient == null) {
             throw new IllegalStateException("No PlusClient. Did you request it at setup?");
         }
@@ -402,19 +411,13 @@ public class PlayServicesHelper implements GooglePlayServicesClient.ConnectionCa
         mSignInError = false;
 
         if (mPlusClient != null && mPlusClient.isConnected()) {
-            mPlusClient.clearDefaultAccount();
+            Plus.AccountApi.clearDefaultAccount(mPlusClient);
 
-            mPlusClient.revokeAccessAndDisconnect(new PlusClient.OnAccessRevokedListener() {
-                @Override
-                public void onAccessRevoked(ConnectionResult status) {
-                    // mPlusClient is now disconnected and access has been revoked.
-                    // Trigger app logic to comply with the developer policies
-                }
-            });
+            Plus.AccountApi.revokeAccessAndDisconnect(mPlusClient);
         }
         if (mGamesClient != null && mGamesClient.isConnected()) {
             showProgressDialog(false);
-            mGamesClient.signOut(this);
+            Games.signOut(mGamesClient);
         }
 
         // kill connects to all clients but games, which must remain
@@ -622,7 +625,7 @@ public class PlayServicesHelper implements GooglePlayServicesClient.ConnectionCa
         // later retrieval.
         if (mClientCurrentlyConnecting == CLIENT_GAMES && connectionHint != null) {
             debugLog("onConnected: connection hint provided. Checking for invite.");
-            Invitation inv = connectionHint.getParcelable(GamesClient.EXTRA_INVITATION);
+            Invitation inv = connectionHint.getParcelable(Multiplayer.EXTRA_INVITATION);
             if (inv != null && inv.getInvitationId() != null) {
                 // accept invitation
                 debugLog("onConnected: connection hint has a room invite!");
@@ -768,12 +771,5 @@ public class PlayServicesHelper implements GooglePlayServicesClient.ConnectionCa
     void debugLog(String message) {
         if (mDebugLog)
             Log.d(mDebugTag, message);
-    }
-
-    @Override
-    public void onSignOutComplete() {
-        dismissDialog();
-        if (mGamesClient.isConnected())
-            mGamesClient.disconnect();
     }
 }

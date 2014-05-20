@@ -19,37 +19,38 @@ package org.gdg.frisbee.android.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.text.*;
+import android.text.Html;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
-import android.text.util.Linkify;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.*;
-import com.google.android.gms.plus.PlusClient;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.PlusOneButton;
 import com.google.api.services.plus.model.Activity;
+
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.YoutubeActivity;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ResizableImageView;
 import org.joda.time.DateTime;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
 
 
 /**
@@ -67,9 +68,9 @@ public class NewsAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater mInflater;
     private ArrayList<Item> mActivities;
-    private PlusClient mPlusClient;
+    private GoogleApiClient mPlusClient;
 
-    public NewsAdapter(Context ctx, PlusClient client) {
+    public NewsAdapter(Context ctx, GoogleApiClient client) {
         mContext = ctx;
         mPlusClient = client;
         mInflater = LayoutInflater.from(mContext);

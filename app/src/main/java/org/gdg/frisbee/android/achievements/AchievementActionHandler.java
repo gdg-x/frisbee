@@ -19,7 +19,8 @@ package org.gdg.frisbee.android.achievements;
 import android.content.SharedPreferences;
 import android.os.Handler;
 
-import com.google.android.gms.games.GamesClient;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.games.Games;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.utils.PlayServicesHelper;
@@ -89,8 +90,8 @@ public class AchievementActionHandler {
             public void run() {
                 mPlayHelper.getGamesClient(new PlayServicesHelper.OnGotGamesClientListener() {
                     @Override
-                    public void onGotGamesClient(GamesClient c) {
-                        c.unlockAchievement(achievementName);
+                    public void onGotGamesClient(GoogleApiClient c) {
+                        Games.Achievements.unlock(c, achievementName);
                     }
                 });
             }

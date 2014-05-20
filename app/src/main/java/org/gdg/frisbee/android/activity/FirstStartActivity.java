@@ -40,6 +40,7 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.plus.Plus;
 
 import java.io.IOException;
 
@@ -260,7 +261,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
         FirstStartStep3Fragment step3 = (FirstStartStep3Fragment) mViewPagerAdapter.getItem(2);
         step3.setSignedIn(true);
 
-        onSignedIn(mPlayHelper.getPlusClient().getAccountName());
+        onSignedIn(Plus.AccountApi.getAccountName(mPlayHelper.getPlusClient()));
     }
 
     @Override
@@ -273,7 +274,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
                 if(enableGcm && mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
                     setLoadingScreen(true);
                     try {
-                        String token = GoogleAuthUtil.getToken(FirstStartActivity.this, mPlayHelper.getPlusClient().getAccountName(), "oauth2: "+ Scopes.PLUS_LOGIN);
+                        String token = GoogleAuthUtil.getToken(FirstStartActivity.this, Plus.AccountApi.getAccountName(mPlayHelper.getPlusClient()), "oauth2: "+ Scopes.PLUS_LOGIN);
                         final String regid = mGcm.register(getString(R.string.gcm_sender_id));
 
                         GdgX client = new GdgX(token);

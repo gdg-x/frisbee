@@ -74,7 +74,7 @@ dependencies {
         exclude module: 'support-v4'
     }
     compile 'com.google.android:youtube-android-player-api:1.0.0'
-    compile 'com.google.android.gms:play-services:4.2.+'
+    compile 'com.google.android.gms:play-services:4.3.+'
     compile 'com.google.http-client:google-http-client-gson:1.17.0-rc'
     compile 'com.google.apis:google-api-services-plus:v1-rev118-1.17.0-rc'
     compile 'com.google.apis:google-api-services-youtube:v3-rev96-1.17.0-rc'

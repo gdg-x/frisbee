@@ -22,6 +22,7 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.plus.Plus;
 
 import java.io.IOException;
 
@@ -77,7 +78,7 @@ public class SettingsFragment extends PreferenceFragment implements PlayServices
                     @Override
                     protected Void doInBackground(Void... voids) {
                         try {
-                            String token = GoogleAuthUtil.getToken(getActivity(), mPlayServicesHelper.getPlusClient().getAccountName(), "oauth2: " + Scopes.PLUS_LOGIN);
+                            String token = GoogleAuthUtil.getToken(getActivity(), Plus.AccountApi.getAccountName(mPlayServicesHelper.getPlusClient()), "oauth2: " + Scopes.PLUS_LOGIN);
                             mXClient.setToken(token);
 
                             if (!enableGcm) {
@@ -281,7 +282,7 @@ public class SettingsFragment extends PreferenceFragment implements PlayServices
 
                 String token = null;
                 try {
-                    token = GoogleAuthUtil.getToken(getActivity(), mPlayServicesHelper.getPlusClient().getAccountName(), "oauth2: " + Scopes.PLUS_LOGIN);
+                    token = GoogleAuthUtil.getToken(getActivity(), Plus.AccountApi.getAccountName(mPlayServicesHelper.getPlusClient()), "oauth2: " + Scopes.PLUS_LOGIN);
                     mXClient.setToken(token);
 
                     mXClient.setHomeGdg(homeGdg, null, null).execute();
