@@ -183,6 +183,8 @@ public class GdlListFragment extends GdgListFragment implements GdlActivity.List
             metadata.addImage(new WebImage(Uri.parse(show.getMediumQualityThumbnail())));
             metadata.addImage(new WebImage(Uri.parse(show.getHighQualityThumbnail())));
             metadata.putString(MediaMetadata.KEY_TITLE, show.getTitle());
+            metadata.putString(MediaMetadata.KEY_SUBTITLE, show.getTitle());
+            metadata.putString(MediaMetadata.KEY_STUDIO, show.getTitle());
             MediaInfo mediaInfo = new MediaInfo.Builder(show.getUrl())
                     .setMetadata(metadata)
                     .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
