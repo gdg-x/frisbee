@@ -34,8 +34,6 @@
         </activity>
         <activity android:name=".activity.GdlActivity">
         </activity>
-        <activity android:name=".activity.DevFestActivity">
-        </activity>
         <activity android:name=".activity.AboutActivity">
         </activity>
         <activity android:name=".activity.SettingsActivity">
