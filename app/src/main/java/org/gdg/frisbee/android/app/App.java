@@ -33,6 +33,7 @@ import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.LruCache;
+import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -44,7 +45,6 @@ import org.acra.sender.HttpSender;
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.CompatOkHttpLoader;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.GingerbreadLastLocationFinder;
 import org.gdg.frisbee.android.utils.Utils;
@@ -134,7 +134,7 @@ public class App extends Application implements LocationListener {
 
         // Initialize Picasso
         mPicasso = new Picasso.Builder(this)
-                //.downloader(new CompatOkHttpLoader(this))
+                .downloader(new OkHttpDownloader(this))
                 .memoryCache(new LruCache(this))
                 .build();
         mPicasso.setDebugging(Const.DEVELOPER_MODE);
