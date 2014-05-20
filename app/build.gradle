@@ -91,6 +91,5 @@ dependencies {
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.squareup.picasso:picasso:2.2.0'
     compile 'com.jakewharton:butterknife:4.0.1'
-    compile project(':castlib')
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }

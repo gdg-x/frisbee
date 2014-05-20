@@ -17,7 +17,6 @@
 package org.gdg.frisbee.android.fragment;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,13 +25,13 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ListView;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.google.android.gms.cast.MediaInfo;
-import com.google.android.gms.cast.MediaMetadata;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.images.WebImage;
-
+import com.google.android.gms.plus.PlusClient;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.activity.GdlActivity;
@@ -44,12 +43,9 @@ import org.gdg.frisbee.android.api.model.GdlShow;
 import org.gdg.frisbee.android.api.model.GdlShowList;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 
 /**
  * Created with IntelliJ IDEA.
@@ -67,7 +63,6 @@ public class GdlListFragment extends GdgListFragment implements GdlActivity.List
     GridView mGrid;
 
     private GdlAdapter mAdapter;
-    private GoogleApiClient mApiClient;
 
     public static GdlListFragment newInstance(String cat, boolean active) {
         GdlListFragment fragment = new GdlListFragment();
@@ -101,7 +96,7 @@ public class GdlListFragment extends GdgListFragment implements GdlActivity.List
 
         mClient = new GoogleDevelopersLive();
 
-        GoogleApiClient plusClient = null;
+        PlusClient plusClient = null;
         if(((GdgActivity)getActivity()).getPlayServicesHelper() != null) {
             plusClient = ((GdgActivity)getActivity()).getPlayServicesHelper().getPlusClient();
         }
@@ -177,24 +172,10 @@ public class GdlListFragment extends GdgListFragment implements GdlActivity.List
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         final GdlShow show = (GdlShow) getListView().getItemAtPosition(position);
-        GdlActivity activity = (GdlActivity)getActivity();
-        if (activity.useCastDevice()){
-            MediaMetadata metadata= new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
-            metadata.addImage(new WebImage(Uri.parse(show.getMediumQualityThumbnail())));
-            metadata.addImage(new WebImage(Uri.parse(show.getHighQualityThumbnail())));
-            metadata.putString(MediaMetadata.KEY_TITLE, show.getTitle());
-            MediaInfo mediaInfo = new MediaInfo.Builder(show.getUrl())
-                    .setMetadata(metadata)
-                    .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
-                    .setContentType("video/mp4")
-                    .build();
-            ((GdlActivity)getActivity()).startCastControllerActivity(mediaInfo);
-        } else {
-            Intent playVideoIntent = new Intent(getActivity(), YoutubeActivity.class);
-            playVideoIntent.putExtra("gdl", true);
-            playVideoIntent.putExtra("video_id", show.getYoutubeId());
-            startActivity(playVideoIntent);
-        }
+        Intent playVideoIntent = new Intent(getActivity(), YoutubeActivity.class);
+        playVideoIntent.putExtra("gdl", true);
+        playVideoIntent.putExtra("video_id", show.getYoutubeId());
+        startActivity(playVideoIntent);
     }
 
     /*@Override

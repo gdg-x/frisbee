@@ -27,9 +27,6 @@ import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuInflater;
 
-import com.google.android.gms.cast.MediaInfo;
-import com.google.sample.castcompanionlibrary.cast.VideoCastManager;
-import com.google.sample.castcompanionlibrary.cast.exceptions.CastException;
 import com.viewpagerindicator.TitlePageIndicator;
 
 import java.lang.ref.WeakReference;
@@ -52,7 +49,6 @@ public class GdlActivity extends GdgNavDrawerActivity {
     TitlePageIndicator mIndicator;
 
     private GdlCategoryAdapter mViewPagerAdapter;
-    private VideoCastManager mVideoCastManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,12 +73,6 @@ public class GdlActivity extends GdgNavDrawerActivity {
         super.onResume();
         Log.d(LOG_TAG, "onResume()");
 
-        try {
-            mVideoCastManager = VideoCastManager.getInstance(this);
-            mVideoCastManager.incrementUiCounter();
-        } catch (CastException e) {
-            e.printStackTrace();
-        }
         //mIndicator.setOnPageChangeListener(this);
     }
 
@@ -90,23 +80,13 @@ public class GdlActivity extends GdgNavDrawerActivity {
     protected void onPause() {
         super.onPause();
         Log.d(LOG_TAG, "onPause()");
-        mVideoCastManager.decrementUiCounter();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.gdl_menu, menu);
-        mVideoCastManager.addMediaRouterButton(menu, R.id.media_route_menu_item);
         return true;
-    }
-
-    public void startCastControllerActivity(MediaInfo mediaInfo) {
-        mVideoCastManager.startCastControllerActivity(this, mediaInfo, 0, true);
-    }
-
-    public boolean useCastDevice() {
-        return mVideoCastManager != null && mVideoCastManager.isConnected();
     }
 
     public class GdlCategoryAdapter extends FragmentStatePagerAdapter implements ViewPager.OnPageChangeListener {
