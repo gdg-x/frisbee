@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="prefs_volume_names">
+        <item>Device Volume</item>
+        <item>Stream Volume</item>
+    </string-array>
+
+    <!-- Do not translate below this line -->
+    <string-array name="prefs_volume_values">
+        <item>device</item>
+        <item>stream</item>
+    </string-array>
+
+</resources>
