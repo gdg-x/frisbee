@@ -27,7 +27,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.text.format.Time;
-import android.util.Log;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -199,7 +198,8 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         }
 
         Time now = new Time();
-        if((mPreferences.getInt(Const.SETTINGS_SEASONS_GREETINGS, now.year-1) < now.year) && (now.yearDay >= 354 || now.yearDay <= 366)) {
+        now.setToNow();
+        if((mPreferences.getInt(Const.SETTINGS_SEASONS_GREETINGS, now.year-1) < now.year) && (now.yearDay >= 354 && now.yearDay <= 366)) {
             mPreferences.edit().putInt(Const.SETTINGS_SEASONS_GREETINGS, now.year).commit();
             SeasonsGreetingsFragment seasonsGreetings = new SeasonsGreetingsFragment();
             seasonsGreetings.show(getSupportFragmentManager(), "dialog");
