@@ -23,14 +23,14 @@ import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-
-import java.util.List;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.Plus;
+
+import java.util.List;
+
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.achievements.AchievementActionHandler;
 import org.gdg.frisbee.android.utils.ScopedBus;
@@ -38,7 +38,6 @@ import org.gdg.frisbee.android.utils.Utils;
 
 import butterknife.ButterKnife;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
-import timber.log.Timber;
 
 /**
  * GDG Aachen
@@ -130,7 +129,7 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
-                    .addApi(Plus.API, null)
+                    .addApi(Plus.API)
                     .addApi(Games.API)
                     .addScope(Plus.SCOPE_PLUS_LOGIN)
                     .addScope(Plus.SCOPE_PLUS_PROFILE)

@@ -15,8 +15,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.Plus;
+
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.activity.FirstStartActivity;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -98,7 +98,7 @@ public class FirstStartStep2Fragment extends Fragment implements GoogleApiClient
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
-                .addApi(Plus.API, null)
+                .addApi(Plus.API)
                 .addScope(Plus.SCOPE_PLUS_LOGIN)
                 .addScope(Plus.SCOPE_PLUS_PROFILE)
                 .addScope(Games.SCOPE_GAMES)

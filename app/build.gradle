@@ -14,7 +14,7 @@ def versionBuild = 1 // bump for dogfood builds, public betas, etc.
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.0.3"
+    buildToolsVersion "19.1"
 
     dexOptions {
         // Skip pre-dexing when running on Travis CI or when disabled via -Dpre-dex=false.
@@ -82,7 +82,7 @@ dependencies {
         exclude module: 'support-v4'
     }
     compile 'com.google.android:youtube-android-player-api:1.0.0'
-    compile 'com.google.android.gms:play-services:4.3.+'
+    compile 'com.google.android.gms:play-services:4.4.+'
     compile 'com.google.http-client:google-http-client-gson:1.17.0-rc'
     compile 'com.google.apis:google-api-services-plus:v1-rev118-1.17.0-rc'
     compile 'com.google.apis:google-api-services-youtube:v3-rev96-1.17.0-rc'
