@@ -80,6 +80,7 @@
         <item>Analytics</item>
         <item>Commerce</item>
         <item>Google TV</item>
+        <item>Wallet</item>
         <item>Primetime</item>
     </string-array>
     <string-array name="gdl_catgories_url">
@@ -93,8 +94,9 @@
         <item>io</item>
         <item>ads</item>
         <item>analytics</item>
-        <item>commerce</item>
+        <item>business</item>
         <item>tv</item>
+        <item>wallet</item>
         <item>primetime</item>
     </string-array>
     <string-array name="about_tabs">

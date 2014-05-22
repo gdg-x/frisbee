@@ -66,34 +66,36 @@
         <item quantity="other">"%d 일 전"</item>
     </plurals>
     <string-array name="gdl_catgories">
-        <item>"Android"</item>
-        <item>"Google+"</item>
-        <item>"Chrome"</item>
-        <item>"Cloud"</item>
-        <item>"Maps"</item>
-        <item>"YouTube"</item>
-        <item>"Drive"</item>
-        <item>"Google I/O"</item>
-        <item>"Ads"</item>
-        <item>"Analytics"</item>
-        <item>"Commerce"</item>
-        <item>"Google TV"</item>
-        <item>"Primetime"</item>
+        <item>Android</item>
+        <item>Google+</item>
+        <item>Chrome</item>
+        <item>Cloud</item>
+        <item>Maps</item>
+        <item>YouTube</item>
+        <item>Drive</item>
+        <item>Google I/O</item>
+        <item>Ads</item>
+        <item>Analytics</item>
+        <item>Commerce</item>
+        <item>Google TV</item>
+        <item>Wallet</item>
+        <item>Primetime</item>
     </string-array>
     <string-array name="gdl_catgories_url">
-        <item>"android"</item>
-        <item>"+"</item>
-        <item>"chrome"</item>
-        <item>"cloud"</item>
-        <item>"maps"</item>
-        <item>"youtube"</item>
-        <item>"drive"</item>
-        <item>"io"</item>
-        <item>"ads"</item>
-        <item>"analytics"</item>
-        <item>"commerce"</item>
-        <item>"tv"</item>
-        <item>"primetime"</item>
+        <item>android</item>
+        <item>+</item>
+        <item>chrome</item>
+        <item>cloud</item>
+        <item>maps</item>
+        <item>youtube</item>
+        <item>drive</item>
+        <item>io</item>
+        <item>ads</item>
+        <item>analytics</item>
+        <item>business</item>
+        <item>tv</item>
+        <item>wallet</item>
+        <item>primetime</item>
     </string-array>
     <string-array name="about_tabs">
         <item>"정보"</item>
