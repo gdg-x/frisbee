@@ -59,7 +59,7 @@ public class TaggedEventFragment extends EventFragment {
         args.putString(Const.SPECIAL_EVENT_VIEWTAG_EXTRA, eventTag);
         args.putLong(Const.SPECIAL_EVENT_START_EXTRA, start);
         args.putLong(Const.SPECIAL_EVENT_END_EXTRA, end);
-        args.putLong(Const.SPECIAL_EVENT_FRAGMENT_LAYOUT_EXTRA, fragmentLayout);
+        args.putInt(Const.SPECIAL_EVENT_FRAGMENT_LAYOUT_EXTRA, fragmentLayout);
         frag.setArguments(args);
         return frag;
     }
