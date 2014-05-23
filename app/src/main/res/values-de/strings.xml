@@ -143,4 +143,5 @@
     <string name="order_by_date">Nach Datum sortieren</string>
     <string name="order_by_distance">Nach Entfernung sortieren</string>
     <string name="gcm_event_ticker">Deine GDG hat ein neues Event angekündigt.</string>
+    <string name="navigate_to">Zum Event navigieren</string>
 </resources>
