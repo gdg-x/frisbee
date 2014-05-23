@@ -25,6 +25,8 @@ import com.android.volley.toolbox.*;
 import org.apache.http.*;
 import org.apache.http.client.HttpClient;
 import org.apache.http.protocol.HTTP;
+import timber.log.Timber;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -69,7 +71,7 @@ public class GdgStack implements HttpStack {
                     Matcher matcher = pattern.matcher(csrfCookie.getValue());
                     if(matcher.find()) {
                         mCsrfToken = matcher.group(1);
-                        Log.d(LOG_TAG, "Got csrf token: " + mCsrfToken);
+                        Timber.d("Got csrf token: " + mCsrfToken);
                     }
                 }
             }

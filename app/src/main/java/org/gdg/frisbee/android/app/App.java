@@ -33,6 +33,7 @@ import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.LruCache;
+import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -41,13 +42,14 @@ import java.net.URL;
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 import org.acra.sender.HttpSender;
+import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.CompatOkHttpLoader;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.GingerbreadLastLocationFinder;
 import org.gdg.frisbee.android.utils.Utils;
 
+import timber.log.Timber;
 import uk.co.senab.bitmapcache.BitmapLruCache;
 
 /**
@@ -89,8 +91,15 @@ public class App extends Application implements LocationListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
                     b.penaltyFlashScreen();
             }
-            StrictMode.setThreadPolicy(b.build());
+            //StrictMode.setThreadPolicy(b.build());
 
+        }
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        } else {
+            // TODO Crashlytics.start(this);
+            // TODO Timber.plant(new CrashlyticsTree());
         }
 
         // Initialize ACRA Bugreporting (reports get send to GDG[x] Hub)
@@ -125,7 +134,7 @@ public class App extends Application implements LocationListener {
 
         // Initialize Picasso
         mPicasso = new Picasso.Builder(this)
-                //.downloader(new CompatOkHttpLoader(this))
+                .downloader(new OkHttpDownloader(this))
                 .memoryCache(new LruCache(this))
                 .build();
         mPicasso.setDebugging(Const.DEVELOPER_MODE);

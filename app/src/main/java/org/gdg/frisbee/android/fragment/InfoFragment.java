@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,9 +31,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import butterknife.InjectView;
-import butterknife.Views;
-import com.actionbarsherlock.app.SherlockFragment;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
 import com.google.api.client.http.HttpTransport;
@@ -40,7 +39,11 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Person;
+
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.GapiTransportChooser;
 import org.gdg.frisbee.android.app.App;
@@ -49,8 +52,12 @@ import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
+import timber.log.Timber;
 
 /**
  * GDG Aachen
@@ -60,7 +67,7 @@ import de.keyboardsurfer.android.widget.crouton.Style;
  * Date: 22.04.13
  * Time: 04:57
  */
-public class InfoFragment extends SherlockFragment {
+public class InfoFragment extends Fragment {
 
     private static final String LOG_TAG = "GDG-InfoFragment";
 
@@ -123,7 +130,7 @@ public class InfoFragment extends SherlockFragment {
                             for(int i = 0; i < params.length; i++) {
                                 Person person = (Person) App.getInstance().getModelCache().get("person_"+params[i]);
 
-                                Log.d(LOG_TAG, "Get Organizer " + params[i]);
+                                Timber.d("Get Organizer " + params[i]);
                                 if(person == null) {
                                     Plus.People.Get request = mClient.people().get(params[i]);
                                     request.setFields("displayName,image,id");
@@ -144,7 +151,7 @@ public class InfoFragment extends SherlockFragment {
                     @Override
                     public void onPostExecute(final Person[] person) {
                         if(person == null) {
-                            Log.d(LOG_TAG, "null person");
+                            Timber.d("null person");
                             View v = getUnknownOrganizerView();
                             mOrganizerBox.addView(v);
                             setIsLoading(false);
@@ -203,7 +210,8 @@ public class InfoFragment extends SherlockFragment {
                                     } else {
                                         String org = url.getValue();
                                         try {
-                                        mFetchOrganizerInfo.addParameter(url.getValue().replace("plus.google.com/", "").replace("posts","").replace("/","").replace("about","").replace("u1","").replace("u0","").replace("https:","").replace("http:","").replace(getArguments().getString("plus_id"), "").replaceAll("[^\\d.]", "").substring(0,21));
+                                            String organizerParameter = getUrlFromPersonUrl(url);
+                                            mFetchOrganizerInfo.addParameter(organizerParameter);
                                         } catch(Exception ex) {
                                             if(isAdded())
                                                 Crouton.makeText(getActivity(), String.format(getString(R.string.bogus_organizer), org), Style.ALERT);
@@ -281,6 +289,18 @@ public class InfoFragment extends SherlockFragment {
         }
     }
 
+    private String getUrlFromPersonUrl(Person.Urls personUrl) {
+        if (personUrl.getValue().contains("+")) {
+            try {
+                return "+" + URLDecoder.decode(personUrl.getValue().replace("plus.google.com/", "").replace("posts", "").replace("/", "").replace("about", "").replace("u1", "").replace("u0", "").replace("https:", "").replace("http:", "").replace(getArguments().getString("plus_id"), ""), "UTF-8").trim();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+                return personUrl.getValue();
+            }
+        } else {
+            return personUrl.getValue().replace("plus.google.com/", "").replace("posts", "").replace("/", "").replace("about", "").replace("u1", "").replace("u0", "").replace("https:", "").replace("http:", "").replace(getArguments().getString("plus_id"), "").replaceAll("[^\\d.]", "").substring(0, 21);
+        }
+    }
 
     public void setIsLoading(boolean isLoading) {
 
@@ -343,7 +363,7 @@ public class InfoFragment extends SherlockFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_chapter_info, null);
-        Views.inject(this, v);
+        ButterKnife.inject(this, v);
         return v;
     }
 

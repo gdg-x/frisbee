@@ -17,12 +17,14 @@
 package org.gdg.frisbee.android.fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import butterknife.Views;
-import com.actionbarsherlock.app.SherlockFragment;
+
 import org.gdg.frisbee.android.R;
+
+import butterknife.ButterKnife;
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,12 +33,12 @@ import org.gdg.frisbee.android.R;
  * Time: 01:49
  * To change this template use File | Settings | File Templates.
  */
-public class GetInvolvedFragment extends SherlockFragment {
+public class GetInvolvedFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_get_involved, null);
-        Views.inject(this, v);
+        ButterKnife.inject(this, v);
         return v;
     }
 }

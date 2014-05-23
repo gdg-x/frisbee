@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2013 The GDG Frisbee Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ 	http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="news">News</string>
+    <string name="drawer_open">Open Drawer</string>
+    <string name="drawer_close">Close Drawer</string>
+    <string name="info">Info</string>
+    <string name="events">Events</string>
+    <string name="app_name">GDG</string>
+    <string name="add_to_calendar">Add to calendar</string>
+    <string name="share_with_googleplus">Share with Google+</string>
+    <string name="no_scheduled_events">No events scheduled\nwithin the next 30 days</string>
+    <string name="organizers">Organizers</string>
+    <string name="resources">Links</string>
+    <string name="fetch_events_failed">Could not fetch upcoming events</string>
+    <string name="fetch_chapters_failed">Could not fetch chapter list</string>
+    <string name="bogus_organizer">Could not parse Organizer Id: %1$s</string>
+    <string name="cached_content">You\'re currently offline. Here\'s some cached content.</string>
+    <string name="offline_alert">You\'re currently offline.</string>
+    <string name="welcome">Welcome.</string>
+    <string name="choose_home_gdg">Choose your home GDG</string>
+    <string name="signin_with_google">Sign-in with Google</string>
+    <string name="confirm">Confirm</string>
+    <string name="signin_description">The GDG App integrates with Google+ and other Google Services. To use these function we need you to be signed into Google.</string>
+    <string name="or">or</string>
+    <string name="no_thanks">no thanks.</string>
+    <string name="skip">Skip Sign-in</string>
+    <string name="youtube_init_failed">YouTube Player could not be initialized.</string>
+    <string name="achievements">Achievements</string>
+    <string name="settings">Settings</string>
+    <string name="about">About</string>
+    <string name="gdl">Google Developers Live</string>
+    <plurals name="seconds_ago">
+        <item quantity="zero">now</item>
+        <item quantity="one">just now</item>
+        <item quantity="other">%d seconds ago</item>
+    </plurals>
+    <plurals name="minutes_ago">
+        <item quantity="zero">now</item>
+        <item quantity="one">1 minute ago</item>
+        <item quantity="other">%d minutes ago</item>
+    </plurals>
+    <plurals name="hours_ago">
+        <item quantity="zero">now</item>
+        <item quantity="one">1 hour ago</item>
+        <item quantity="other">%d hours ago</item>
+    </plurals>
+    <plurals name="days_ago">
+        <item quantity="zero">now</item>
+        <item quantity="one">1 day ago</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
+    <string-array name="gdl_catgories">
+        <item>Android</item>
+        <item>Google+</item>
+        <item>Chrome</item>
+        <item>Cloud</item>
+        <item>Maps</item>
+        <item>YouTube</item>
+        <item>Drive</item>
+        <item>Google I/O</item>
+        <item>Ads</item>
+        <item>Analytics</item>
+        <item>Business</item>
+        <item>Google TV</item>
+        <item>Wallet</item>
+        <item>Primetime</item>
+    </string-array>
+    <string-array name="gdl_catgories_url">
+        <item>android</item>
+        <item>+</item>
+        <item>chrome</item>
+        <item>cloud</item>
+        <item>maps</item>
+        <item>youtube</item>
+        <item>drive</item>
+        <item>io</item>
+        <item>ads</item>
+        <item>analytics</item>
+        <item>business</item>
+        <item>tv</item>
+        <item>wallet</item>
+        <item>primetime</item>
+    </string-array>
+    <string-array name="about_tabs">
+        <item>About</item>
+        <item>Contributors</item>
+        <item>Changelog</item>
+        <item>Get Involved</item>
+        <item>3rd Party Libraries</item>
+    </string-array>
+    <string name="contributors">The GDG app is a community effort and open sourced. The following people contributed to the app:</string>
+    <string name="get_involved">Get Involved!</string>
+    <string name="get_involved_text">The GDG app is a community effort and open sourced. Everyone is welcome to participate and improve this app.\n\nJust head over to GitHub and checkout our code.\n\nhttps://github.com/gdg-x</string>
+    <string name="about_license">(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof the Apache 2.0 License</string>
+    <string name="past_event">PAST</string>
+    <string name="upcoming_widget">GDG - Upcoming Event</string>
+    <string name="global">Global</string>
+    <string name="pulse">GDG Pulse</string>
+    <string name="pulse_events">Events</string>
+    <string name="pulse_attendees">Attendees</string>
+    <string name="pulse_circlers">Chapter Circlers</string>
+    <string name="home_gdg">Home GDG</string>
+    <string name="home_gdg_summary">Select your primary GDG</string>
+    <string name="special_event">Dart Flight School</string>
+    <string name="analytics">Analytics</string>
+    <string name="analytics_summary_on">The app currently transmits anonymous usage data which allows us to improve the app</string>
+    <string name="analytics_summary_off">The app currently does not transmit any anonymous usage data</string>
+    <string name="gcm">Cloud Notifications</string>
+    <string name="gcm_summary_on">The app currently receives and processes GDG Cloud Notification</string>
+    <string name="gcm_summary_off">The app currently does not receive GDG Cloud Notification</string>
+    <string name="google_signed_in">Signed into Google+</string>
+    <string name="google_signed_in_on">You are currently signed in with Google+</string>
+    <string name="google_signed_in_off">You are not signed in</string>
+    <string name="achievements_need_signin">You need to be logged in to unlock achievements</string>
+    <string name="done">Done</string>
+    <string name="allow_analytics">Allow us to collect anonymous usage data which helps us to improve the app</string>
+    <string name="enable_gcm">Enable GDG Cloud Notifications (get notified about new Events)</string>
+    <string name="step3_text">One more thing before we start...</string>
+    <string name="share_on_gplus">Invite Friends</string>
+    <string name="join_me">Join me at this event!</string>
+    <string name="name_not_known">Name not known</string>
+    <string name="signin_first">You have to sign-in with G+ to use this feature</string>
+    <string name="originally_shared">originally shared:</string>
+    <string name="server_error">An error occurred. Try again.</string>
+    <string name="search_hint">Search GDG Chapter</string>
+    <string name="dashclock_description">Display information about the next upcoming event at your Home GDG</string>
+    <string name="special_description">GDG DevFests are large, community-run events that can offer speaker sessions across multiple product areas, all-day hack-a-thons, code labs, and more.\n\nEach GDG DevFest will be inspired by and uniquely tailored to the needs of the developer community that hosts it. While no two events will be exactly alike, each GDG DevFest will, at its core, be powered by a shared belief that when developers come together to exchange ideas, amazing things can happen.</string>
+    <string name="order_by_date">Sort by date</string>
+    <string name="order_by_distance">Sort by distance</string>
+    <string name="gcm_event_ticker">A new event at your home GDG has been scheduled.</string>
+    <string name="flightschool">Dart Flight School</string>
+    <string name="flightschool_description">Dart hit 1.0 and is now Flight Ready! Developer communities around the world are hosting Dart Flight School events during the month of February 2014. Get your web development wings with Dart and Angular!</string>
+    <string name="ioextended_description">Google I/O Extended is about joining the Google conference at your local group.</string>
+    <string name="ioextended">Extended 2014</string>
+    <string name="media_route_menu_title">Cast session</string>
+    <string name="navigate_to">Navigate to event</string>
+</resources>

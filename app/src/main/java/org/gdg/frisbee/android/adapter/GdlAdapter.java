@@ -24,16 +24,18 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import com.google.android.gms.plus.PlusClient;
+
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.PlusOneButton;
+
+import java.util.HashMap;
+
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.GdlShow;
 import org.gdg.frisbee.android.api.model.GdlShowList;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ResizableImageView;
-
-import java.util.HashMap;
 
 /**
  * Created with IntelliJ IDEA.
@@ -51,9 +53,9 @@ public class GdlAdapter extends BaseAdapter {
     private GdlShowList mShows;
 
     private HashMap<Integer,Object> mConsumedMap;
-    private PlusClient mPlusClient;
+    private GoogleApiClient mPlusClient;
 
-    public GdlAdapter(Context ctx, PlusClient client) {
+    public GdlAdapter(Context ctx, GoogleApiClient client) {
         mContext = ctx;
         mInflater = LayoutInflater.from(mContext);
         mShows = new GdlShowList("");
@@ -117,7 +119,7 @@ public class GdlAdapter extends BaseAdapter {
 
         if(mPlusClient != null) {
             holder.plusButton.setVisibility(View.VISIBLE);
-            holder.plusButton.initialize(mPlusClient, show.getYoutubeUrl(), 1);
+            holder.plusButton.initialize(show.getYoutubeUrl(), 1);
         } else {
             holder.plusButton.setVisibility(View.GONE);
         }
@@ -138,7 +140,7 @@ public class GdlAdapter extends BaseAdapter {
 
             if(mPlusClient != null && mPlusClient.isConnected()) {
                 holder.plusButton.setVisibility(View.VISIBLE);
-                holder.plusButton.initialize(mPlusClient, holder.ytUrl, 1);
+                holder.plusButton.initialize(holder.ytUrl, 1);
             }
         }
     }

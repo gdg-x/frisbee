@@ -1,26 +1,32 @@
 package org.gdg.frisbee.android.api.model;
 
-
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 public class TaggedEvent implements SimpleEvent {
-    String gplusEventUrl, name, defaultEventUrl, location;
-    LatLng latlng;
-    long end, start;
+    String eventUrl, title, location, timezone;
+    String _id;
+    LatLng geo;
+    DateTime end, start;
 
     @Override
     public DateTime getStart() {
-        return new DateTime(start * 1000);
+        return convertToEventTimezone(start);
     }
 
     @Override
     public DateTime getEnd() {
-        return new DateTime(end * 1000);
+        return convertToEventTimezone(end);
+    }
+
+    private DateTime convertToEventTimezone(DateTime dateTime) {
+        dateTime = dateTime.withZoneRetainFields(DateTimeZone.UTC);
+        return dateTime.withZone(DateTimeZone.forID(timezone));
     }
 
     @Override
     public String getTitle() {
-        return name;
+        return title;
     }
 
     @Override
@@ -30,18 +36,17 @@ public class TaggedEvent implements SimpleEvent {
 
     @Override
     public String getId() {
-        String[] parts = defaultEventUrl.split("/");
-        return parts[1];
+       return _id;
     }
 
     @Override
     public String getGPlusEventLink() {
-        return gplusEventUrl;
+        return eventUrl;
     }
 
     @Override
     public String getLink() {
-        return defaultEventUrl;
+        return eventUrl;
     }
 
     public String getLocation(){
@@ -49,7 +54,7 @@ public class TaggedEvent implements SimpleEvent {
     }
 
     public LatLng getLatLng() {
-        return latlng;
+        return geo;
     }
 
     public static class LatLng {

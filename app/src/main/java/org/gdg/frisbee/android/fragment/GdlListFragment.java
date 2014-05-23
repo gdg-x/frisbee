@@ -24,10 +24,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ListView;
+
+import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.Views;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.PlusClient;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -44,6 +46,7 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
+import timber.log.Timber;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 
 /**
@@ -53,7 +56,7 @@ import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
  * Time: 21:32
  * To change this template use File | Settings | File Templates.
  */
-public class GdlListFragment extends GdgListFragment implements PullToRefreshAttacher.OnRefreshListener, GdlActivity.Listener {
+public class GdlListFragment extends GdgListFragment implements GdlActivity.Listener { // TODO: implements PullToRefreshAttacher.OnRefreshListener
 
     private static final String LOG_TAG = "GDG-GdlListFragment";
     private GoogleDevelopersLive mClient;
@@ -74,14 +77,14 @@ public class GdlListFragment extends GdgListFragment implements PullToRefreshAtt
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        Log.d(LOG_TAG, "onSaveInstanceState()");
+        Timber.d("onSaveInstanceState()");
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(LOG_TAG, "onResume()");
+        Timber.d("onResume()");
 
         for(int i = 0; i <= mList.getChildCount(); i++) {
             mAdapter.updatePlusOne(mList.getChildAt(i));
@@ -91,16 +94,11 @@ public class GdlListFragment extends GdgListFragment implements PullToRefreshAtt
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d(LOG_TAG, "onActivityCreated()");
+        Timber.d("onActivityCreated()");
 
         mClient = new GoogleDevelopersLive();
 
-        PlusClient plusClient = null;
-        if(((GdgActivity)getActivity()).getPlayServicesHelper() != null) {
-            plusClient = ((GdgActivity)getActivity()).getPlayServicesHelper().getPlusClient();
-        }
-
-        mAdapter = new GdlAdapter(getActivity(), plusClient);
+        mAdapter = new GdlAdapter(getActivity(), ((GdgActivity)getActivity()).getGoogleApiClient());
         setListAdapter(mAdapter);
 
         setIsLoading(true);
@@ -120,8 +118,8 @@ public class GdlListFragment extends GdgListFragment implements PullToRefreshAtt
                 mAdapter.addAll(gdlShows);
                 setIsLoading(false);
 
-                if(wasForced)
-                    ((GdgActivity)getActivity()).getPullToRefreshHelper().setRefreshComplete();
+                /*if(wasForced)
+                    ((GdgActivity)getActivity()).getPullToRefreshHelper().setRefreshComplete();*/
             }
         });
     }
@@ -147,7 +145,7 @@ public class GdlListFragment extends GdgListFragment implements PullToRefreshAtt
             @Override
             public void onGet(Object item) {
                 if(!force) {
-                    Log.d(LOG_TAG, "from Cache.");
+                    Timber.d("from Cache.");
                 }
 
                 setContent((GdlShowList) item, force);
@@ -162,9 +160,9 @@ public class GdlListFragment extends GdgListFragment implements PullToRefreshAtt
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "onCreateView()");
+        Timber.d("onCreateView()");
         View v = inflater.inflate(R.layout.fragment_gdl_list, null);
-        Views.inject(this, v);
+        ButterKnife.inject(this, v);
         return v;
     }
 
@@ -177,7 +175,7 @@ public class GdlListFragment extends GdgListFragment implements PullToRefreshAtt
         startActivity(playVideoIntent);
     }
 
-    @Override
+    /*@Override
     public void onRefreshStarted(View view) {
         if(Utils.isOnline(getActivity())) {
             fetchContent(true);
@@ -185,10 +183,10 @@ public class GdlListFragment extends GdgListFragment implements PullToRefreshAtt
             if(isAdded())
                 Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
         }
-    }
+    }*/
 
     @Override
     public void onPageSelected() {
-        ((GdgActivity)getActivity()).getPullToRefreshHelper().addRefreshableView(getListView(), this);
+        //((GdgActivity)getActivity()).getPullToRefreshHelper().addRefreshableView(getListView(), this);
     }
 }

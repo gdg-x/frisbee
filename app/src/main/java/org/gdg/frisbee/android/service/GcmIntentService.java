@@ -19,6 +19,7 @@ import org.gdg.frisbee.android.receiver.GCMReceiver;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import timber.log.Timber;
 
 /**
  * Created with IntelliJ IDEA.
@@ -51,7 +52,7 @@ public class GcmIntentService extends IntentService {
             if (GoogleCloudMessaging.
                     MESSAGE_TYPE_MESSAGE.equals(messageType)) {
 
-                Log.i(LOG_TAG, "Received: " + extras.toString());
+                Timber.i("Received: " + extras.toString());
 
                 if(extras.getString("type","none").equals("upcoming_event")) {
                     sendEventNotification(extras);

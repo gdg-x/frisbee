@@ -1,3 +1,8 @@
+.gradle
+/local.properties
+/.idea/workspace.xml
+.DS_Store
+
 # built application files
 *.apk
 *.ap_
@@ -23,6 +28,7 @@ default.properties
 *.iml
 gen-external-apklibs
 target
+build
 
 # Output folder
 out/**

@@ -17,20 +17,18 @@
 package org.gdg.frisbee.android.fragment;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import butterknife.Views;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
+import android.view.*;
+
 import com.android.volley.Response;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.EventAdapter;
 import org.gdg.frisbee.android.api.ApiRequest;
+import org.gdg.frisbee.android.api.PagedList;
 import org.gdg.frisbee.android.api.model.TaggedEvent;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
@@ -39,9 +37,9 @@ import org.gdg.frisbee.android.utils.TaggedEventDistanceComparator;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
+import butterknife.ButterKnife;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class TaggedEventFragment extends EventFragment {
 
@@ -62,16 +60,16 @@ public class TaggedEventFragment extends EventFragment {
         args.putString(Const.SPECIAL_EVENT_VIEWTAG_EXTRA, eventTag);
         args.putLong(Const.SPECIAL_EVENT_START_EXTRA, start);
         args.putLong(Const.SPECIAL_EVENT_END_EXTRA, end);
-        args.putLong(Const.SPECIAL_EVENT_FRAGMENT_LAYOUT_EXTRA, fragmentLayout);
+        args.putInt(Const.SPECIAL_EVENT_FRAGMENT_LAYOUT_EXTRA, fragmentLayout);
         frag.setArguments(args);
         return frag;
     }
 
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        if(getArguments() != null) {
+        if (getArguments() != null) {
             Bundle args = getArguments();
             mCacheKey = args.getString(Const.SPECIAL_EVENT_CACHEKEY_EXTRA);
             mEventTag = args.getString(Const.SPECIAL_EVENT_VIEWTAG_EXTRA);
@@ -84,9 +82,9 @@ public class TaggedEventFragment extends EventFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if(mFragmentLayout != 0) {
+        if (mFragmentLayout != 0) {
             View v = inflater.inflate(mFragmentLayout, null);
-            Views.inject(this, v);
+            ButterKnife.inject(this, v);
             return v;
         } else {
             return super.onCreateView(inflater, container, savedInstanceState);
@@ -97,10 +95,10 @@ public class TaggedEventFragment extends EventFragment {
     void fetchEvents() {
         setIsLoading(true);
 
-        Response.Listener<ArrayList<TaggedEvent>> listener = new Response.Listener<ArrayList<TaggedEvent>>() {
+        Response.Listener<PagedList<TaggedEvent>> listener = new Response.Listener<PagedList<TaggedEvent>>() {
             @Override
-            public void onResponse(final ArrayList<TaggedEvent> events) {
-                mEvents.addAll(events);
+            public void onResponse(final PagedList<TaggedEvent> events) {
+                mEvents.addAll(events.getItems());
 
                 App.getInstance().getModelCache().putAsync(mCacheKey, mEvents, DateTime.now().plusHours(2), new ModelCache.CachePutListener() {
                     @Override
@@ -124,15 +122,16 @@ public class TaggedEventFragment extends EventFragment {
                     ArrayList<TaggedEvent> events = (ArrayList<TaggedEvent>) item;
 
                     mAdapter.addAll(events);
+                    sortEvents();
                     setIsLoading(false);
-                    if(isAdded())
+                    if (isAdded())
                         Crouton.makeText(getActivity(), getString(R.string.cached_content), Style.INFO).show();
                 }
 
                 @Override
                 public void onNotFound(String key) {
                     setIsLoading(false);
-                    if(isAdded())
+                    if (isAdded())
                         Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
                 }
             });
@@ -150,7 +149,7 @@ public class TaggedEventFragment extends EventFragment {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        if (mCurrentComparator == mLocationComparator){
+        if (mCurrentComparator == mLocationComparator) {
             menu.findItem(R.id.order_by_date).setVisible(true);
             menu.findItem(R.id.order_by_distance).setVisible(false);
         } else {
@@ -167,7 +166,7 @@ public class TaggedEventFragment extends EventFragment {
             setIsLoading(true);
             sortEvents();
             setIsLoading(false);
-            getSherlockActivity().invalidateOptionsMenu();
+            getActivity().supportInvalidateOptionsMenu();
             scrollToSoonestEvent();
             return true;
         } else if (item.getItemId() == R.id.order_by_distance) {
@@ -175,7 +174,7 @@ public class TaggedEventFragment extends EventFragment {
             setIsLoading(true);
             sortEvents();
             setIsLoading(false);
-            getSherlockActivity().invalidateOptionsMenu();
+            getActivity().supportInvalidateOptionsMenu();
             getListView().setSelection(0);
             return true;
         }
@@ -184,8 +183,8 @@ public class TaggedEventFragment extends EventFragment {
 
     private void scrollToSoonestEvent() {
         long now = System.currentTimeMillis();
-        for (int i = 0; i < mAdapter.getCount(); i++){
-            if (mAdapter.getItem(i).getStart().getMillis() > now){
+        for (int i = 0; i < mAdapter.getCount(); i++) {
+            if (mAdapter.getItem(i).getStart().getMillis() > now) {
                 getListView().setSelection(i);
                 return;
             }

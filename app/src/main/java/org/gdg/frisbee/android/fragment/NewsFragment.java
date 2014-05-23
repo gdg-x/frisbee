@@ -19,13 +19,11 @@ package org.gdg.frisbee.android.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.ActionBarActivity;
 import android.view.*;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import butterknife.Views;
-import com.google.android.gms.plus.PlusClient;
+
 import com.google.android.gms.plus.PlusShare;
 import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
 import com.google.api.client.http.HttpTransport;
@@ -34,21 +32,29 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Activity;
 import com.google.api.services.plus.model.ActivityFeed;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
-import org.gdg.frisbee.android.api.GapiTransportChooser;
-import org.gdg.frisbee.android.app.App;
+
+import java.io.IOException;
+
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.adapter.NewsAdapter;
+import org.gdg.frisbee.android.api.GapiTransportChooser;
+import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
+import org.gdg.frisbee.android.utils.PullToRefreshTransformer;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
-import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 
-import java.io.IOException;
+import butterknife.ButterKnife;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
+import timber.log.Timber;
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.Options;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
 /**
  * GDG Aachen
@@ -58,16 +64,19 @@ import java.io.IOException;
  * Date: 20.04.13
  * Time: 12:22
  */
-public class NewsFragment extends GdgListFragment implements PullToRefreshAttacher.OnRefreshListener {
+public class NewsFragment extends GdgListFragment implements OnRefreshListener {
 
     private static final String LOG_TAG = "GDG-NewsFragment";
 
     final HttpTransport mTransport = GapiTransportChooser.newCompatibleTransport();
     final JsonFactory mJsonFactory = new GsonFactory();
 
+    private PullToRefreshLayout mPullToRefreshLayout;
+
     private Plus mClient;
 
     private NewsAdapter mAdapter;
+    private PullToRefreshTransformer mPulltoRefreshTransformer;
 
     public static NewsFragment newInstance(String plusId) {
         NewsFragment fragment = new NewsFragment();
@@ -79,7 +88,7 @@ public class NewsFragment extends GdgListFragment implements PullToRefreshAttach
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        Log.d(LOG_TAG, "onSaveInstanceState()");
+        Timber.d("onSaveInstanceState()");
         super.onSaveInstanceState(outState);
     }
 
@@ -91,13 +100,13 @@ public class NewsFragment extends GdgListFragment implements PullToRefreshAttach
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(LOG_TAG, "onStart()");
+        Timber.d("onStart()");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(LOG_TAG, "onResume()");
+        Timber.d("onResume()");
 
         for(int i = 0; i <= getListView().getChildCount(); i++) {
             mAdapter.updatePlusOne(getListView().getChildAt(i));
@@ -107,32 +116,41 @@ public class NewsFragment extends GdgListFragment implements PullToRefreshAttach
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(LOG_TAG, "onPause()");
+        Timber.d("onPause()");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(LOG_TAG, "onStop()");
+        Timber.d("onStop()");
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d(LOG_TAG, "onActivityCreated()");
+        Timber.d("onActivityCreated()");
 
         mClient = new Plus.Builder(mTransport, mJsonFactory, null).setGoogleClientRequestInitializer(new CommonGoogleJsonClientRequestInitializer(getString(R.string.ip_simple_api_access_key))).build();
 
-        PlusClient plusClient = null;
-        if(((GdgActivity)getActivity()).getPlayServicesHelper() != null) {
-            plusClient = ((GdgActivity)getActivity()).getPlayServicesHelper().getPlusClient();
-        }
-        mAdapter = new NewsAdapter(getActivity(), plusClient);
+        mAdapter = new NewsAdapter(getActivity(), ((GdgActivity)getActivity()).getGoogleApiClient());
         setListAdapter(mAdapter);
 
         registerForContextMenu(getListView());
 
-        ((GdgActivity)getActivity()).getPullToRefreshHelper().addRefreshableView(getListView(), new PullToRefreshAttacher.ViewDelegate() {
+        if(((ActionBarActivity)getActivity()).getSupportActionBar() != null) {
+            mPullToRefreshLayout = new PullToRefreshLayout(getActivity());
+            mPulltoRefreshTransformer = new PullToRefreshTransformer();
+            ActionBarPullToRefresh.from(getActivity())
+                    .options(Options.create()
+                            .headerTransformer(mPulltoRefreshTransformer)
+                            .headerLayout(R.layout.pull_to_refresh)
+                            .build())
+                    .theseChildrenArePullable(android.R.id.list, android.R.id.empty)
+                    .insertLayoutInto((ViewGroup)getView())
+                    .listener(this)
+                    .setup(mPullToRefreshLayout);
+        }
+        /*((GdgActivity)getActivity()).getPullToRefreshHelper().addRefreshableView(getListView(), new PullToRefreshAttacher.ViewDelegate() {
             @Override
             public boolean isScrolledToTop(View view) {
                 AbsListView absListView = (AbsListView) view;
@@ -144,7 +162,7 @@ public class NewsFragment extends GdgListFragment implements PullToRefreshAttach
                 }
                 return false;
             }
-        }, this);
+        }, this);*/
 
         if(getListView() instanceof ListView) {
             ListView listView = (ListView) getListView();
@@ -254,16 +272,16 @@ public class NewsFragment extends GdgListFragment implements PullToRefreshAttach
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "onCreateView()");
+        Timber.d("onCreateView()");
         View v = inflater.inflate(R.layout.fragment_news, null);
-        Views.inject(this, v);
+        ButterKnife.inject(this, v);
         return v;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(LOG_TAG, "onDestroy()");
+        Timber.d("onDestroy()");
     }
 
     @Override
@@ -282,12 +300,12 @@ public class NewsFragment extends GdgListFragment implements PullToRefreshAttach
                         public ActivityFeed doInBackground(String... params) {
                             try {
 
-                                    Plus.Activities.List request = mClient.activities().list(params[0], "public");
-                                    request.setMaxResults(10L);
-                                    request.setFields("nextPageToken,items(id,published,url,object/content,verb,object/attachments,annotation,object(plusoners,replies,resharers))");
-                                    ActivityFeed feed = request.execute();
+                                Plus.Activities.List request = mClient.activities().list(params[0], "public");
+                                request.setMaxResults(10L);
+                                request.setFields("nextPageToken,items(id,published,url,object/content,verb,object/attachments,annotation,object(plusoners,replies,resharers))");
+                                ActivityFeed feed = request.execute();
 
-                                    App.getInstance().getModelCache().put("news_" + params[0], feed, DateTime.now().plusHours(1));
+                                App.getInstance().getModelCache().put("news_" + params[0], feed, DateTime.now().plusHours(1));
 
                                 return feed;
                             } catch (IOException e) {
@@ -299,12 +317,14 @@ public class NewsFragment extends GdgListFragment implements PullToRefreshAttach
                     .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<ActivityFeed>() {
                         @Override
                         public void onPostExecute(ActivityFeed activityFeed) {
-                            if(activityFeed != null) {
+                            if (activityFeed != null) {
                                 mAdapter.replaceAll(activityFeed.getItems(), 0);
                                 setIsLoading(false);
 
-                                if(getActivity() != null)
-                                    ((GdgActivity)getActivity()).getPullToRefreshHelper().setRefreshComplete();
+                                if (getActivity() != null) {
+                                    mPullToRefreshLayout.setRefreshComplete();
+                                    mPulltoRefreshTransformer.onReset();
+                                }
                             }
                         }
                     })
