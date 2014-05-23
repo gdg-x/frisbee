@@ -28,6 +28,7 @@ import java.util.ArrayList;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.gdg.frisbee.android.api.deserializer.ZuluDateTimeDeserializer;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.api.model.Pulse;
@@ -164,7 +165,7 @@ public class GroupDirectory {
         return new ApiRequest(eventReq);
     }
 
-    public ApiRequest getTaggedEventList(final DateTime start, final DateTime end, final String tag, Response.Listener<ArrayList<TaggedEvent>> successListener, Response.ErrorListener errorListener) {
+    public ApiRequest getTaggedEventList(final DateTime start, final DateTime end, final String tag, Response.Listener<PagedList<TaggedEvent>> successListener, Response.ErrorListener errorListener) {
 
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
 
@@ -204,19 +205,18 @@ public class GroupDirectory {
                 return "" + (int) (new DateTime().getMillis() / 1000);
             }
         });
-        Type type = new TypeToken<ArrayList<TaggedEvent>>() {
+        Type type = new TypeToken<PagedList<TaggedEvent>>() {
         }.getType();
 
         String url = TAGGED_EVENTS_URL + tag;
         url += "?" + URLEncodedUtils.format(params, "UTF-8");
 
-         GsonRequest<Void, ArrayList<TaggedEvent>> eventReq = new GsonRequest<Void, ArrayList<TaggedEvent>>(Request.Method.GET,
+         GsonRequest<Void, PagedList<TaggedEvent>> eventReq = new GsonRequest<Void, PagedList<TaggedEvent>>(Request.Method.GET,
                 url,
                 type,
                 successListener,
                 errorListener,
-                GsonRequest.getGson(FieldNamingPolicy.IDENTITY));
-
+                GsonRequest.getGson(FieldNamingPolicy.IDENTITY, new ZuluDateTimeDeserializer()));
         return new ApiRequest(eventReq);
 
     }

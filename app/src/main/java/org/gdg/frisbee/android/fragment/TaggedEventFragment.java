@@ -28,6 +28,7 @@ import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.EventAdapter;
 import org.gdg.frisbee.android.api.ApiRequest;
+import org.gdg.frisbee.android.api.PagedList;
 import org.gdg.frisbee.android.api.model.TaggedEvent;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
@@ -94,10 +95,10 @@ public class TaggedEventFragment extends EventFragment {
     void fetchEvents() {
         setIsLoading(true);
 
-        Response.Listener<ArrayList<TaggedEvent>> listener = new Response.Listener<ArrayList<TaggedEvent>>() {
+        Response.Listener<PagedList<TaggedEvent>> listener = new Response.Listener<PagedList<TaggedEvent>>() {
             @Override
-            public void onResponse(final ArrayList<TaggedEvent> events) {
-                mEvents.addAll(events);
+            public void onResponse(final PagedList<TaggedEvent> events) {
+                mEvents.addAll(events.getItems());
 
                 App.getInstance().getModelCache().putAsync(mCacheKey, mEvents, DateTime.now().plusHours(2), new ModelCache.CachePutListener() {
                     @Override

@@ -70,6 +70,7 @@ public abstract class EventFragment extends GdgListFragment implements View.OnCl
         @Override
         public void onErrorResponse(VolleyError volleyError) {
             setIsLoading(false);
+            volleyError.printStackTrace();
             if(isAdded())
                 Crouton.makeText(getActivity(), getString(R.string.fetch_events_failed), Style.ALERT).show();
         }

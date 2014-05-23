@@ -16,19 +16,21 @@
 
 package org.gdg.frisbee.android.api;
 
-import com.android.volley.*;
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
+import com.android.volley.Response;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.toolbox.HttpHeaderParser;
-import org.gdg.frisbee.android.api.deserializer.DateTimeDeserializer;
-import org.joda.time.DateTime;
+import com.google.gson.*;
+
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.Map;
+
+import org.gdg.frisbee.android.api.deserializer.DateTimeDeserializer;
+import org.joda.time.DateTime;
 
 
 public class GsonRequest<Input, Output> extends GdgRequest<Output> {
@@ -145,6 +147,14 @@ public class GsonRequest<Input, Output> extends GdgRequest<Output> {
                 .create();
     }
 
+    public static Gson getGson(FieldNamingPolicy policy, JsonDeserializer<DateTime> dateTimeDeserializer) {
+        return new GsonBuilder()
+                .setFieldNamingPolicy(policy)
+                .registerTypeAdapter(DateTime.class, dateTimeDeserializer)
+                .create();
+
+    }
+
     public String getToken() {
         return mToken;
     }
@@ -152,4 +162,5 @@ public class GsonRequest<Input, Output> extends GdgRequest<Output> {
     public void setToken(String token) {
         this.mToken = token;
     }
+
 }
