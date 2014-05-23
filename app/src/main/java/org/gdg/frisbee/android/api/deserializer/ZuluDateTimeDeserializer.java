@@ -39,7 +39,7 @@ public class ZuluDateTimeDeserializer implements JsonDeserializer<DateTime> {
     @Override
     public DateTime deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
         DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ss.SSS'Z'");
-        //2013-05-15T16:30:00+02:00
+        //2013-05-15T16:30:00.000Z
 
         return fmt.parseDateTime(jsonElement.getAsJsonPrimitive().getAsString());
     }

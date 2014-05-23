@@ -11,12 +11,17 @@ public class TaggedEvent implements SimpleEvent {
 
     @Override
     public DateTime getStart() {
-        return start.withZoneRetainFields(DateTimeZone.forID(timezone));
+        return convertToEventTimezone(start);
     }
 
     @Override
     public DateTime getEnd() {
-        return end.withZoneRetainFields(DateTimeZone.forID(timezone));
+        return convertToEventTimezone(end);
+    }
+
+    private DateTime convertToEventTimezone(DateTime dateTime) {
+        dateTime = dateTime.withZoneRetainFields(DateTimeZone.UTC);
+        return dateTime.withZone(DateTimeZone.forID(timezone));
     }
 
     @Override
