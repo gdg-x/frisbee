@@ -19,6 +19,13 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
+  <style name="ActionBarGDG" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
+    <item name="android:background">@drawable/ab_solid_bg</item>
+    <!--<item name="backgroundStacked">@drawable/ab_stacked_solid_themegdg</item>
+    <item name="backgroundSplit">@drawable/ab_bottom_solid_themegdg</item>
+    <item name="progressBarStyle">@style/ProgressBar.Themegdg</item>-->
+  </style>
+
   <style name="AutoCompleteTextViewGDG" parent="android:Widget.Holo.Light.AutoCompleteTextView">
       <item name="android:dropDownSelector">@drawable/list_selector_holo_light</item>
 	    <item name="android:background">@drawable/edit_text_holo_light</item>
