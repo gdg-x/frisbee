@@ -68,7 +68,7 @@ Before you submit your pull request consider the following guidelines:
 * Search [GitHub](https://github.com/gdg-x/frisbee/pulls) for an open or closed Pull Request
   that relates to your submission. You don't want to duplicate effort.
 * Please sign our [Contributor License Agreement (CLA)](#cla) before sending pull
-  requests. We cannot accept code without this.
+  requests. Otherwise, it is assumed the contributor agrees to the CLA without signing.
 * Make your changes in a new git branch
 
      ```shell
@@ -146,7 +146,7 @@ from the main (upstream) repository:
 ## <a name="rules"></a> Coding Rules
 To ensure consistency throughout the source code, keep these rules in mind as you are working:
 
-* All features or bug fixes **must be tested** by one or more [specs][unit-testing].
+* All features or bug fixes **must be tested** by one or more unit or integration test.
 * With the exceptions listed below, we follow the rules contained in
   [Google's Android Style Guide][android-code]:
     * Wrap all code at **150 characters**.
@@ -212,16 +212,16 @@ A detailed explanation can be found in this [document][commit-message-format].
 Please sign our Contributor License Agreement (CLA) before sending pull requests. For any code
 changes to be accepted, the CLA must be signed. It's a quick process, we promise!
 
-* For individuals we have a [simple click-through form][individual-cla].
-* For corporations we'll need you to
-  [print, sign and one of scan+email, fax or mail the form][corporate-cla].
+* For individuals we have a [simple document][individual-cla].
+* For corporations we have a [simple document][corporate-cla].
 
 ## <a name="info"></a> Further Information
 
 [hub-api]: https://hub.gdgx.io/developers/api
 [gplus-com]: https://plus.google.com/communities/100423211916386801761
 [github]: https://github.com/gdg-x/frisbee
-[coc]: https://github.com/gdg-x/frisbee/CODE_OF_CONDUCT.md
-[corporate-cla]: http://code.google.com/legal/corporate-cla-v1.0.html
-[individual-cla]: http://code.google.com/legal/individual-cla-v1.0.html
+[dev-doc]: https://github.com/gdg-x/frisbee/wiki/Developer-Documentation 
+[coc]: https://github.com/gdg-x/frisbee/blob/master/CODE_OF_CONDUCT.md
+[corporate-cla]: https://github.com/gdg-x/frisbee/blob/master/misc/Frisbee-Individual.pdf?raw=true
+[individual-cla]: https://github.com/gdg-x/frisbee/blob/master/misc/Frisbee-Entity.pdf?raw=true
 [android-code]: http://source.android.com/source/code-style.html
