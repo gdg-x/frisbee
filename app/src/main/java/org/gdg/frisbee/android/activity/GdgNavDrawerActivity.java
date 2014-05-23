@@ -81,6 +81,9 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                     case Const.DRAWER_PULSE:
                         navigateTo(PulseActivity.class, null);
                         break;
+                    case Const.DRAWER_ARROW:
+                        navigateTo(ArrowActivity.class, null);
+                        break;
                 }
             }
         });

@@ -16,12 +16,14 @@
 
 package org.gdg.frisbee.android.activity;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
@@ -58,6 +60,7 @@ import butterknife.InjectView;
  * Time: 20:44
  * To change this template use File | Settings | File Templates.
  */
+@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.OnNdefPushCompleteCallback, NfcAdapter.CreateNdefMessageCallback {
 
     private static String LOG_TAG = "GDG-Arrow";
@@ -271,7 +274,7 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
                     NdefRecord.TNF_MIME_MEDIA ,
                     Const.ARROW_MIME.getBytes(Charset.forName("US-ASCII")),
                     new byte[0],msg.getBytes(Charset.forName("US-ASCII")));
-            NdefMessage message = new NdefMessage(mimeRecord);
+            NdefMessage message = new NdefMessage(new NdefRecord[]{mimeRecord});
             return message;
         } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -313,6 +316,6 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
                         isOrganizer = false;
                         organizerOnly.setVisibility(View.INVISIBLE);
                     }
-                });
+                }).execute();
     }
 }
