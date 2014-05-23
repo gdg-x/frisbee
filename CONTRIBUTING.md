@@ -19,7 +19,7 @@ Help us keep Frisbee open and inclusive. Please read and follow our [Code of Con
 ## <a name="question"></a> Got a Question or Problem?
 
 If you have questions about how to use Frisbee, please direct these to 
-the [Google Plus Community][https://plus.google.com/communities/100423211916386801761].
+the [Google Plus Community][gplus-com].
 
 ## <a name="issue"></a> Found an Issue?
 If you find a bug in the source code or a mistake in the documentation, you can help us by
@@ -36,7 +36,7 @@ You can request a new feature by submitting an issue to our [GitHub Repository][
 would like to implement a new feature then consider what kind of change it is:
 
 * **Major Changes** that you wish to contribute to the project should be discussed first on 
-the [Google Plus Community][https://plus.google.com/communities/100423211916386801761] so that we can 
+the [Google Plus Community][gplus-com] so that we can 
 better coordinate our efforts, prevent duplication of work, and help you to craft the change so that it is successfully accepted into the
 project.
 * **Small Changes** can be crafted and submitted to the [GitHub Repository][github] as a Pull Request.
@@ -148,7 +148,7 @@ To ensure consistency throughout the source code, keep these rules in mind as yo
 
 * All features or bug fixes **must be tested** by one or more [specs][unit-testing].
 * With the exceptions listed below, we follow the rules contained in
-  [Google's Android Style Guide][http://source.android.com/source/code-style.html]:
+  [Google's Android Style Guide][android-code]:
     * Wrap all code at **150 characters**.
     * Instead of complex inheritance hierarchies, we **prefer simple objects**. We use prototypical
       inheritance only when absolutely necessary.
@@ -219,8 +219,8 @@ changes to be accepted, the CLA must be signed. It's a quick process, we promise
 ## <a name="info"></a> Further Information
 
 [hub-api]: https://hub.gdgx.io/developers/api
-[corporate-cla]: http://code.google.com/legal/corporate-cla-v1.0.html
+[gplus-com]: https://plus.google.com/communities/100423211916386801761
 [github]: https://github.com/gdg-x/frisbee
-[groups]: https://groups.google.com/forum/?fromgroups#!forum/angular
+[corporate-cla]: http://code.google.com/legal/corporate-cla-v1.0.html
 [individual-cla]: http://code.google.com/legal/individual-cla-v1.0.html
-[unit-testing]: 
+[android-code]: http://source.android.com/source/code-style.html
