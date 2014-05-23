@@ -20,12 +20,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.PlusShare;
 import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
 import com.google.api.client.http.HttpTransport;
@@ -78,6 +76,7 @@ public class NewsFragment extends GdgListFragment implements OnRefreshListener {
     private Plus mClient;
 
     private NewsAdapter mAdapter;
+    private PullToRefreshTransformer mPulltoRefreshTransformer;
 
     public static NewsFragment newInstance(String plusId) {
         NewsFragment fragment = new NewsFragment();
@@ -140,10 +139,10 @@ public class NewsFragment extends GdgListFragment implements OnRefreshListener {
 
         if(((ActionBarActivity)getActivity()).getSupportActionBar() != null) {
             mPullToRefreshLayout = new PullToRefreshLayout(getActivity());
-
+            mPulltoRefreshTransformer = new PullToRefreshTransformer();
             ActionBarPullToRefresh.from(getActivity())
                     .options(Options.create()
-                            .headerTransformer(new PullToRefreshTransformer())
+                            .headerTransformer(mPulltoRefreshTransformer)
                             .headerLayout(R.layout.pull_to_refresh)
                             .build())
                     .theseChildrenArePullable(android.R.id.list, android.R.id.empty)
@@ -322,8 +321,10 @@ public class NewsFragment extends GdgListFragment implements OnRefreshListener {
                                 mAdapter.replaceAll(activityFeed.getItems(), 0);
                                 setIsLoading(false);
 
-                                if(getActivity() != null)
+                                if (getActivity() != null) {
                                     mPullToRefreshLayout.setRefreshComplete();
+                                    mPulltoRefreshTransformer.onReset();
+                                }
                             }
                         }
                     })
