@@ -4,11 +4,10 @@ package org.gdg.frisbee.android.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
@@ -20,7 +19,6 @@ import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 
 import uk.co.senab.actionbarpulltorefresh.library.HeaderTransformer;
-import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 import uk.co.senab.actionbarpulltorefresh.library.R;
 
 /**
@@ -131,6 +129,11 @@ public class PullToRefreshTransformer extends HeaderTransformer {
         final boolean changeVis = mHeaderView.getVisibility() != View.INVISIBLE;
 
         if (changeVis) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
+                mHeaderView.setVisibility(View.INVISIBLE);
+                return changeVis;
+            }
+
             Animator animator;
             if (mHeaderView.getAlpha() >= 0.5f) {
                 // If the content layout is showing, translate and fade out

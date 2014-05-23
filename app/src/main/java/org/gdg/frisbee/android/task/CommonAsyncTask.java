@@ -64,7 +64,7 @@ public class CommonAsyncTask<Params, Result> extends AsyncTask<Params, Void, Res
     @Override
     protected final Result doInBackground(Params... params) {
         if(params != null && params.length == 0 && mBackgroundListener != null)
-            return mBackgroundListener.doInBackground(null);
+            return mBackgroundListener.doInBackground((Params[])null);
 
 
         ArrayList<Params> p = new ArrayList<Params>();
