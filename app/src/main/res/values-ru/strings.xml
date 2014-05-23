@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2013 The GDG Frisbee Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ 	http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="news">Новости</string>
+    <string name="drawer_open">Открыть Drawer</string>
+    <string name="drawer_close">Закрыть Drawer</string>
+    <string name="info">Информация</string>
+    <string name="events">Мероприятия</string>
+    <string name="app_name">GDG</string>
+    <string name="add_to_calendar">Добавить в календарь</string>
+    <string name="share_with_googleplus">Поделиться в Google+</string>
+    <string name="no_scheduled_events">Нет мероприятий, запранированных на следующие 30 дней</string>
+    <string name="organizers">Организаторы</string>
+    <string name="resources">Ссылки</string>
+    <string name="fetch_events_failed">Не удаётся получить предстоящие мероприятия</string>
+    <string name="fetch_chapters_failed">Не удаётся получить список групп</string>
+    <string name="bogus_organizer">Не удаётся проанализировать Organizer Id: %1$s</string>
+    <string name="cached_content">В настоящее время ты офлайн. Используется сохранённое в кэше содержание.</string>
+    <string name="offline_alert">В настоящее время ты офлайн.</string>
+    <string name="welcome">Добро пожаловать.</string>
+    <string name="choose_home_gdg">Выбери свой локальный GDG</string>
+    <string name="signin_with_google">Войди с Google</string>
+    <string name="confirm">Подтвердить</string>
+    <string name="signin_description">Приложение GDG интегрируется с Google+ и другими сервисами Google. Для использования этого функицонала, необходимо, чтобы ты вошёл в Google.</string>
+    <string name="or">или</string>
+    <string name="no_thanks">нет, спасибо.</string>
+    <string name="skip">Пропустить вход</string>
+    <string name="youtube_init_failed">Проигрыватель YouTube не может быть инициализирован.</string>
+    <string name="achievements">Достижения</string>
+    <string name="settings">Настройки</string>
+    <string name="about">О группе</string>
+    <string name="gdl">Google Developers Live</string>
+    <plurals name="seconds_ago">
+        <item quantity="zero">сейчас</item>
+        <item quantity="one">только что</item>
+        <item quantity="other">%d секунд назад</item>
+    </plurals>
+    <plurals name="minutes_ago">
+        <item quantity="zero">сейчас</item>
+        <item quantity="one">1 минуту назад</item>
+        <item quantity="other">%d минут назад</item>
+    </plurals>
+    <plurals name="hours_ago">
+        <item quantity="zero">сейчас</item>
+        <item quantity="one">1 час назад</item>
+        <item quantity="other">%d часов назад</item>
+    </plurals>
+    <plurals name="days_ago">
+        <item quantity="zero">сейчас</item>
+        <item quantity="one">1 день назад</item>
+        <item quantity="other">%d дней назад</item>
+    </plurals>
+    <string-array name="gdl_catgories">
+        <item>Android</item>
+        <item>Google+</item>
+        <item>Chrome</item>
+        <item>Cloud</item>
+        <item>Карты</item>
+        <item>YouTube</item>
+        <item>Диск</item>
+        <item>Google I/O</item>
+        <item>Объявления</item>
+        <item>Analytics</item>
+        <item>Business</item>
+        <item>Google TV</item>
+        <item>Wallet</item>
+        <item>Primetime</item>
+    </string-array>
+    <string-array name="gdl_catgories_url">
+        <item>android</item>
+        <item>+</item>
+        <item>chrome</item>
+        <item>cloud</item>
+        <item>maps</item>
+        <item>youtube</item>
+        <item>drive</item>
+        <item>io</item>
+        <item>ads</item>
+        <item>analytics</item>
+        <item>business</item>
+        <item>tv</item>
+        <item>wallet</item>
+        <item>primetime</item>
+    </string-array>
+    <string-array name="about_tabs">
+        <item>О приложении</item>
+        <item>Разработчики</item>
+        <item>Изменения</item>
+        <item>Прими участие</item>
+        <item>Сторонние библиотеки</item>
+    </string-array>
+    <string name="contributors">Приложение GDG создано усилиями сообщества и имеет открытый исходный код. Следуюшие разработчики приняли участие в создании приложения:</string>
+    <string name="get_involved">Прими участие!</string>
+    <string name="get_involved_text">Приложение GDG создано усилиями сообщества и имеет открытый исходный код. Все желающие могут участвовать и улучшать это приложение.\n\nОтправляйтесь на GitHub и сделайте checkout нашего кода.\n\nhttps://github.com/gdg-x</string>
+    <string name="about_license">(c) 2013 Проект GDG Frisbee\nВсе права защищены.\n\nРаспространяется под лицензией Apache 2.0</string>
+    <string name="past_event">ПРОШЛОЕ</string>
+    <string name="upcoming_widget">GDG - Предстоящее мероприятие</string>
+    <string name="global">Весь мир</string>
+    <string name="pulse">Пульс GDG</string>
+    <string name="pulse_events">Мероприятия</string>
+    <string name="pulse_attendees">Участники</string>
+    <string name="pulse_circlers">Участники на Google+</string>
+    <string name="home_gdg">Home GDG</string>
+    <string name="home_gdg_summary">Выбери свой основной GDG</string>
+    <string name="analytics">Analytics</string>
+    <string name="analytics_summary_on">В настоящее время приложение отправляет анонимные данные об использовании, которые позволяют нам улучшать приложение</string>
+    <string name="analytics_summary_off">В настоящее время приложение не отправляет анонимные данные об использовании</string>
+    <string name="gcm">Cloud-уведомления</string>
+    <string name="gcm_summary_on">В настоящее время приложение получает и обрабатывает GDG Cloud-уведомления</string>
+    <string name="gcm_summary_off">В настоящее время приложение не получает GDG Cloud-уведомления</string>
+    <string name="google_signed_in">Вошёл в Google+</string>
+    <string name="google_signed_in_on">В настоящее время ты вошёл с Google+</string>
+    <string name="google_signed_in_off">Ты не вошёл</string>
+    <string name="achievements_need_signin">Тебе необходимо войти, чтобы открыть достижения</string>
+    <string name="done">Готово</string>
+    <string name="allow_analytics">Разреши нам собирать анонимные данные об использовании, которые помогают нам улучшать приложение</string>
+    <string name="enable_gcm">Включить GDG Cloud-уведомления (получать уведомления о новых мероприятиях)</string>
+    <string name="step3_text">Ещё одна вещь, прежде чем мы начнём...</string>
+
+    <string name="share_on_gplus">Пригласите друзей</string>
+    <string name="join_me">Присоединяйся ко мне на этом мероприятии!</string>
+    <string name="name_not_known">Имя неизвестно</string>
+    <string name="signin_first">Вы должны войти с G+ для использования этого функционала</string>
+    <string name="originally_shared">изначально поделился:</string>
+</resources>

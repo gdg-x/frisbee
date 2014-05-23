@@ -19,15 +19,16 @@ package org.gdg.frisbee.android.fragment;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import butterknife.InjectView;
-import butterknife.Views;
-import com.actionbarsherlock.app.SherlockFragment;
+
 import org.gdg.frisbee.android.R;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * Created with IntelliJ IDEA.
@@ -36,7 +37,7 @@ import org.gdg.frisbee.android.R;
  * Time: 01:49
  * To change this template use File | Settings | File Templates.
  */
-public class AboutFragment extends SherlockFragment {
+public class AboutFragment extends Fragment {
 
     @InjectView(R.id.version)
     TextView mVersion;
@@ -44,7 +45,7 @@ public class AboutFragment extends SherlockFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_about, null);
-        Views.inject(this, v);
+        ButterKnife.inject(this, v);
         return v;
     }
 

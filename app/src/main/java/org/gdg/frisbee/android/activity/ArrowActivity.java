@@ -30,17 +30,15 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
-import butterknife.InjectView;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.google.android.gms.appstate.AppState;
 import com.google.android.gms.appstate.AppStateManager;
 import com.google.android.gms.appstate.AppStateStatusCodes;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.PlusClient;
+
+import java.nio.charset.Charset;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -48,10 +46,10 @@ import org.gdg.frisbee.android.api.GdgX;
 import org.gdg.frisbee.android.api.model.OrganizerCheckResponse;
 import org.gdg.frisbee.android.utils.CryptoUtils;
 import org.joda.time.DateMidnight;
+import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
+import butterknife.InjectView;
 
 /**
  * Created with IntelliJ IDEA.
@@ -171,12 +169,12 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
 
     private void score(final String id) {
 
-        if(id.equals(Plus.PeopleApi.getCurrentPerson(mGoogleApiClient).getId())) {
+        if(id.equals(Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getId())) {
             Toast.makeText(this, R.string.arrow_selfie, Toast.LENGTH_LONG).show();
             return;
         }
 
-        AppStateManager.load(mGoogleApiClient, Const.ARROW_DONE_STATE_KEY).setResultCallback(new ResultCallback<AppStateManager.StateResult>() {
+        AppStateManager.load(getGoogleApiClient(), Const.ARROW_DONE_STATE_KEY).setResultCallback(new ResultCallback<AppStateManager.StateResult>() {
             @Override
             public void onResult(AppStateManager.StateResult stateResult) {
                 AppStateManager.StateConflictResult conflictResult
@@ -268,7 +266,7 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
     public NdefMessage createNdefMessage(NfcEvent nfcEvent) {
 
         try {
-            String msg = CryptoUtils.encrypt(getString(R.string.arrow_k), Plus.PeopleApi.getCurrentPerson(mGoogleApiClient).getId()+"|"+new DateMidnight(DateTimeZone.UTC).getMillis());
+            String msg = CryptoUtils.encrypt(getString(R.string.arrow_k), Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getId()+"|"+DateTime.now(DateTimeZone.UTC).withTimeAtStartOfDay().getMillis());
             NdefRecord mimeRecord = new NdefRecord(
                     NdefRecord.TNF_MIME_MEDIA ,
                     Const.ARROW_MIME.getBytes(Charset.forName("US-ASCII")),
@@ -282,12 +280,9 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
         return null;
     }
 
-    private GoogleApiClient mGoogleApiClient;
-
     @Override
-    public void onSignInSucceeded(GoogleApiClient client) {
-        super.onSignInSucceeded(client);
-        mGoogleApiClient = client;
+    public void onConnected(Bundle bundle) {
+        super.onConnected(bundle);
 
         switchToSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -301,7 +296,7 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
         });
 
         GdgX xClient = new GdgX();
-        xClient.checkOrganizer(Plus.PeopleApi.getCurrentPerson(mGoogleApiClient).getId(), new Response.Listener<OrganizerCheckResponse>() {
+        xClient.checkOrganizer(Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getId(), new Response.Listener<OrganizerCheckResponse>() {
                     @Override
                     public void onResponse(OrganizerCheckResponse organizerCheckResponse) {
                         if(organizerCheckResponse.getChapters().size() > 0) {

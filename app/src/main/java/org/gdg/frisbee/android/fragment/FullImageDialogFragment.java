@@ -16,7 +16,7 @@
 
 package org.gdg.frisbee.android.fragment;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
+import android.support.v4.app.DialogFragment;
 
 /**
  * GDG Aachen
@@ -26,5 +26,5 @@ import com.actionbarsherlock.app.SherlockDialogFragment;
  * Date: 22.04.13
  * Time: 04:35
  */
-public class FullImageDialogFragment extends SherlockDialogFragment {
+public class FullImageDialogFragment extends DialogFragment {
 }

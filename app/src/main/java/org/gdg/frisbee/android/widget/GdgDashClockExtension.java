@@ -19,6 +19,7 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
+import timber.log.Timber;
 
 import java.util.ArrayList;
 
@@ -54,9 +55,9 @@ public class GdgDashClockExtension extends DashClockExtension {
                 final Chapter homeGdg = findChapter(mPreferences.getString(Const.SETTINGS_HOME_GDG, null));
 
                 if(homeGdg == null) {
-                    Log.d(LOG_TAG, "Got no Home GDG");
+                    Timber.d("Got no Home GDG");
                 } else {
-                    Log.d(LOG_TAG, "Fetching events");
+                    Timber.d("Fetching events");
                     String groupName = homeGdg.getName().replaceAll("GDG ","");
                     mDirectory.getChapterEventList(new DateTime(), new DateTime().plusMonths(1), homeGdg.getGplusId(), new Response.Listener<ArrayList<Event>>() {
                                 @Override
@@ -87,7 +88,7 @@ public class GdgDashClockExtension extends DashClockExtension {
                             {
                                 @Override
                                 public void onErrorResponse (VolleyError volleyError){
-                                    Log.e(LOG_TAG, "Error updating Widget", volleyError);
+                                    Timber.e("Error updating Widget", volleyError);
                                 }
                             }
 

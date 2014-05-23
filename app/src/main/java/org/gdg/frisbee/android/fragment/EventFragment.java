@@ -22,21 +22,24 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import butterknife.Views;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.google.android.gms.plus.PlusClient;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.PlusShare;
+
 import java.util.ArrayList;
+
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.adapter.EventAdapter;
 import org.gdg.frisbee.android.api.ApiRequest;
 import org.gdg.frisbee.android.api.GroupDirectory;
-import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.api.model.SimpleEvent;
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
+
+import butterknife.ButterKnife;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
@@ -60,12 +63,13 @@ public abstract class EventFragment extends GdgListFragment implements View.OnCl
     private ApiRequest mFetchEvents;
     protected DateTime mStart;
     protected DateTime mEnd;
-    private PlusClient mPlusClient;
+    private GoogleApiClient mPlusClient;
 
     Response.ErrorListener mErrorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError volleyError) {
             setIsLoading(false);
+            volleyError.printStackTrace();
             if(isAdded())
                 Crouton.makeText(getActivity(), getString(R.string.fetch_events_failed), Style.ALERT).show();
         }
@@ -98,9 +102,7 @@ public abstract class EventFragment extends GdgListFragment implements View.OnCl
         mClient = new GroupDirectory();
 
         mPlusClient = null;
-        if (((GdgActivity) getActivity()).getPlayServicesHelper() != null) {
-            mPlusClient = ((GdgActivity) getActivity()).getPlayServicesHelper().getPlusClient();
-        }
+        mPlusClient = ((GdgActivity) getActivity()).getGoogleApiClient();
 
         if(getListView() instanceof ListView) {
             ListView listView = (ListView) getListView();
@@ -127,22 +129,32 @@ public abstract class EventFragment extends GdgListFragment implements View.OnCl
         SimpleEvent event = (SimpleEvent) mAdapter.getItem(info.position);
         menu.setHeaderTitle(event.getTitle());
         getActivity().getMenuInflater().inflate(R.menu.event_context, menu);
+        menu.findItem(R.id.navigate_to).setVisible(event.getLocation() != null);
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        Event event = (Event) mAdapter.getItem(info.position);
+        SimpleEvent event = mAdapter.getItem(info.position);
 
         switch(item.getItemId()) {
             case R.id.add_calendar:
                 addEventToCalendar(event);
+                return true;
+            case R.id.navigate_to:
+                launchNavigation(event);
                 return true;
             default:
                 return super.onContextItemSelected(item);
         }
     }
 
+
+    private void launchNavigation(SimpleEvent event) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("geo:0,0?q=" + event.getLocation()));
+        startActivity(intent);
+    }
 
     public void addEventToCalendar(SimpleEvent event) {
         Intent intent = new Intent(Intent.ACTION_EDIT);
@@ -185,7 +197,7 @@ public abstract class EventFragment extends GdgListFragment implements View.OnCl
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_events, null);
-        Views.inject(this, v);
+        ButterKnife.inject(this, v);
         return v;
     }
 
@@ -197,7 +209,7 @@ public abstract class EventFragment extends GdgListFragment implements View.OnCl
 
     private void shareOnGplus(SimpleEvent event) {
         if (mPlusClient != null && mPlusClient.isConnected()) {
-            PlusShare.Builder builder = new PlusShare.Builder(this.getActivity(), mPlusClient);
+            PlusShare.Builder builder = new PlusShare.Builder(this.getActivity());
 
             Uri eventUri = Uri.parse("https://developers.google.com/events/" + event.getId() + "/");
 

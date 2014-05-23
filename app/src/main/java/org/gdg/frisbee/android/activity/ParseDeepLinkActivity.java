@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import com.google.android.gms.plus.PlusShare;
 import org.gdg.frisbee.android.app.App;
+import timber.log.Timber;
 
 public class ParseDeepLinkActivity extends Activity {
 
@@ -37,7 +38,7 @@ public class ParseDeepLinkActivity extends Activity {
      */
     private Intent parseDeepLinkId(String deepLinkId) {
         Intent route = new Intent();
-        Log.d(LOG_TAG, "Deep Link id: " + deepLinkId);
+        Timber.d("Deep Link id: " + deepLinkId);
         String[] parts = deepLinkId.split("/");
 
         // Our deep links look like this: /<plusId>/events/<eventId>/join, /join is optional

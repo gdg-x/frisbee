@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,14 +28,13 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
-import butterknife.InjectView;
-import butterknife.Views;
-import com.actionbarsherlock.app.SherlockFragment;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.google.android.gms.plus.GooglePlusUtil;
+
 import java.util.Collections;
 import java.util.List;
+
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.ChapterAdapter;
 import org.gdg.frisbee.android.api.ApiRequest;
@@ -45,10 +45,14 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.ChapterComparator;
 import org.joda.time.DateTime;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
+import timber.log.Timber;
 
-public class FirstStartStep1Fragment extends SherlockFragment {
+public class FirstStartStep1Fragment extends Fragment {
 
     private static String LOG_TAG = "GDG-FirstStartStep1Fragment";
 
@@ -71,7 +75,7 @@ public class FirstStartStep1Fragment extends SherlockFragment {
     private ChapterComparator mLocationComparator;
 
     public static FirstStartStep1Fragment newInstance() {
-        Log.d(LOG_TAG, "newInstance");
+        Timber.d("newInstance");
         FirstStartStep1Fragment fragment = new FirstStartStep1Fragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -80,7 +84,7 @@ public class FirstStartStep1Fragment extends SherlockFragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        Log.d(LOG_TAG, "onSaveInstanceState");
+        Timber.d("onSaveInstanceState");
         super.onSaveInstanceState(outState);
 
         if(mSpinnerAdapter != null && mSpinnerAdapter.getCount() > 0)
@@ -91,14 +95,10 @@ public class FirstStartStep1Fragment extends SherlockFragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "onActivityCreated()");
+        Timber.d("onActivityCreated()");
 
         super.onActivityCreated(savedInstanceState);
 
-        int errorCode = GooglePlusUtil.checkGooglePlusApp(getActivity());
-        if (errorCode != GooglePlusUtil.SUCCESS) {
-            GooglePlusUtil.getErrorDialog(errorCode, getActivity(), 0).show();
-        }
 
         mPreferences = getActivity().getSharedPreferences("gdg", Context.MODE_PRIVATE);
         mLocationComparator = new ChapterComparator(mPreferences);
@@ -130,7 +130,7 @@ public class FirstStartStep1Fragment extends SherlockFragment {
                       } else {
                           Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
                       }
-                      Log.e(LOG_TAG, "Could'nt fetch chapter list", volleyError);
+                      Timber.e("Could'nt fetch chapter list", volleyError);
                   }
               });
 
@@ -181,7 +181,7 @@ public class FirstStartStep1Fragment extends SherlockFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_welcome_step1, null);
-        Views.inject(this, v);
+        ButterKnife.inject(this, v);
         return v;
     }
 

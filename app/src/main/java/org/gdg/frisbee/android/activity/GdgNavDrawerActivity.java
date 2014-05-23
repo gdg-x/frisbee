@@ -3,27 +3,21 @@ package org.gdg.frisbee.android.activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
-import android.view.Gravity;
-import android.view.View;
+import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-import com.google.android.gms.games.GamesClient;
-import butterknife.InjectView;
-import butterknife.Views;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-import com.google.android.gms.games.GamesClient;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
+import com.google.android.gms.games.Games;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.DrawerAdapter;
-import org.gdg.frisbee.android.utils.PlayServicesHelper;
-import org.gdg.frisbee.android.view.ActionBarDrawerToggleCompat;
 import org.joda.time.DateTime;
+
+import butterknife.InjectView;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
+
 
 public abstract class GdgNavDrawerActivity extends GdgActivity {
 
@@ -35,7 +29,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
     protected DrawerAdapter mDrawerAdapter;
 
-    protected ActionBarDrawerToggleCompat mDrawerToggle;
+    protected ActionBarDrawerToggle mDrawerToggle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,13 +56,8 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
                 switch (item.getId()) {
                     case Const.DRAWER_ACHIEVEMENTS:
-                        if (mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
-                            getPlayServicesHelper().getGamesClient(new PlayServicesHelper.OnGotGamesClientListener() {
-                                @Override
-                                public void onGotGamesClient(GamesClient c) {
-                                    startActivityForResult(c.getAchievementsIntent(), 0);
-                                }
-                            });
+                        if (mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false) && getGoogleApiClient().isConnected()) {
+                            startActivityForResult(Games.Achievements.getAchievementsIntent(getGoogleApiClient()), 0);
                         } else {
                             Crouton.makeText(GdgNavDrawerActivity.this, getString(R.string.achievements_need_signin), Style.INFO).show();
                         }
@@ -81,12 +70,12 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                         break;
                     case Const.DRAWER_SPECIAL:
                         Bundle special = new Bundle();
-                        special.putInt(Const.SPECIAL_EVENT_LOGO_EXTRA, R.drawable.flightschool);
-                        special.putString(Const.SPECIAL_EVENT_VIEWTAG_EXTRA, "dartflightschool");
-                        special.putString(Const.SPECIAL_EVENT_CACHEKEY_EXTRA, "dartflightschool");
+                        special.putInt(Const.SPECIAL_EVENT_LOGO_EXTRA, R.drawable.ioextended);
+                        special.putString(Const.SPECIAL_EVENT_VIEWTAG_EXTRA, "i-oextended");
+                        special.putString(Const.SPECIAL_EVENT_CACHEKEY_EXTRA, "i-oextended");
                         special.putLong(Const.SPECIAL_EVENT_START_EXTRA, DateTime.now().getMillis());
                         special.putLong(Const.SPECIAL_EVENT_END_EXTRA, 1419984000000L);
-                        special.putInt(Const.SPECIAL_EVENT_DESCRIPTION_EXTRA, R.string.flightschool_description);
+                        special.putInt(Const.SPECIAL_EVENT_DESCRIPTION_EXTRA, R.string.ioextended_description);
                         navigateTo(SpecialEventActivity.class, special);
                         break;
                     case Const.DRAWER_PULSE:
@@ -96,7 +85,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             }
         });
 
-        mDrawerToggle = new ActionBarDrawerToggleCompat(
+        mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
                 mDrawerLayout,         /* DrawerLayout object */
                 R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
@@ -151,7 +140,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        com.actionbarsherlock.view.MenuInflater inflater = getSupportMenuInflater();
+        MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         return true;
 

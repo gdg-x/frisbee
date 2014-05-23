@@ -23,6 +23,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import org.gdg.frisbee.android.api.GdgStack;
+import timber.log.Timber;
 import uk.co.senab.bitmapcache.CacheableBitmapDrawable;
 
 /**
@@ -56,10 +57,10 @@ public class GdgVolley {
             @Override
             public Bitmap getBitmap(String url) {
                 // Check memcache here...disk cache lookup will be done by GdgStack
-                Log.d(LOG_TAG, "Looking up "+ url + " in cache");
+                Timber.d("Looking up " + url + " in cache");
                 CacheableBitmapDrawable bitmap = App.getInstance().getBitmapCache().get(url);
                 if(bitmap != null) {
-                    Log.d(LOG_TAG, "Bitmap Memcache hit");
+                    Timber.d("Bitmap Memcache hit");
                     return bitmap.getBitmap();
                 } else
                     return null;
@@ -71,7 +72,7 @@ public class GdgVolley {
                     @Override
                     public void run() {
                         String myurl = url.substring(6);
-                        Log.d(LOG_TAG, "Saving "+ myurl + " to cache");
+                        Timber.d("Saving "+ myurl + " to cache");
                         App.getInstance().getBitmapCache().put(myurl, bitmap);
                     }
                 }.start();

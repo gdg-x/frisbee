@@ -24,11 +24,19 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.util.SparseArray;
-import butterknife.InjectView;
+import android.view.Menu;
+import android.view.MenuInflater;
+
 import com.viewpagerindicator.TitlePageIndicator;
+
 import java.lang.ref.WeakReference;
+
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.fragment.GdlListFragment;
+
+import butterknife.InjectView;
+import timber.log.Timber;
+
 /**
  * @author maui
  */
@@ -65,15 +73,22 @@ public class GdlActivity extends GdgNavDrawerActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(LOG_TAG, "onResume()");
+        Timber.d("onResume()");
 
-        mIndicator.setOnPageChangeListener(this);
+        //mIndicator.setOnPageChangeListener(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d(LOG_TAG, "onPause()");
+        Timber.d("onPause()");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.gdl_menu, menu);
+        return true;
     }
 
     public class GdlCategoryAdapter extends FragmentStatePagerAdapter implements ViewPager.OnPageChangeListener {

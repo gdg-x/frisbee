@@ -23,9 +23,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import butterknife.Views;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+
+import butterknife.ButterKnife;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import org.gdg.frisbee.android.R;
@@ -39,6 +40,7 @@ import org.gdg.frisbee.android.api.model.PulseEntry;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.joda.time.DateTime;
+import timber.log.Timber;
 
 import java.util.Map;
 
@@ -97,7 +99,7 @@ public class PulseFragment extends GdgListFragment {
                      public void onErrorResponse(VolleyError volleyError) {
                          if(isAdded())
                             Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
-                         Log.e(LOG_TAG, "Could'nt fetch pulse", volleyError);
+                         Timber.e("Could'nt fetch pulse", volleyError);
                      }
                  }
             );
@@ -117,7 +119,7 @@ public class PulseFragment extends GdgListFragment {
                         public void onErrorResponse(VolleyError volleyError) {
                             if(isAdded())
                                 Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
-                            Log.e(LOG_TAG, "Could'nt fetch pulse", volleyError);
+                            Timber.e("Could'nt fetch pulse", volleyError);
                         }
                     }
             );
@@ -147,7 +149,7 @@ public class PulseFragment extends GdgListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_pulse, null);
-        Views.inject(this, v);
+        ButterKnife.inject(this, v);
         return v;
     }
 

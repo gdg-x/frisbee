@@ -24,9 +24,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import butterknife.Views;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+
+import butterknife.ButterKnife;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import org.gdg.frisbee.android.Const;
@@ -43,6 +44,7 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
+import timber.log.Timber;
 
 import java.util.ArrayList;
 
@@ -63,20 +65,20 @@ public class ContributorsFragment extends GdgListFragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        Log.d(LOG_TAG, "onSaveInstanceState()");
+        Timber.d("onSaveInstanceState()");
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(LOG_TAG, "onResume()");
+        Timber.d("onResume()");
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d(LOG_TAG, "onActivityCreated()");
+        Timber.d("onActivityCreated()");
 
         mClient = new GitHub();
         mAdapter = new ContributorAdapter(getActivity(), 0);
@@ -128,16 +130,16 @@ public class ContributorsFragment extends GdgListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "onCreateView()");
+        Timber.d("onCreateView()");
         View v = inflater.inflate(R.layout.fragment_gdl_list, null);
-        Views.inject(this, v);
+        ButterKnife.inject(this, v);
         return v;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(LOG_TAG, "onStart()");
+        Timber.d("onStart()");
     }
 
     @Override

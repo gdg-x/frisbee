@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import org.gdg.frisbee.android.R;
+import timber.log.Timber;
 
 public class SearchActivity extends GdgNavDrawerActivity {
 
@@ -31,7 +32,7 @@ public class SearchActivity extends GdgNavDrawerActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.d(LOG_TAG, "Init!");
+        Timber.d("Init!");
         setContentView(R.layout.activity_search);
 
         handleIntent(getIntent());
@@ -43,7 +44,7 @@ public class SearchActivity extends GdgNavDrawerActivity {
 
     private void handleIntent(Intent intent) {
         String action = intent.getAction();
-        Log.d(LOG_TAG, intent.getDataString());
+        Timber.d(intent.getDataString());
         if (Intent.ACTION_SEARCH.equals(action)) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             doSearch(query);

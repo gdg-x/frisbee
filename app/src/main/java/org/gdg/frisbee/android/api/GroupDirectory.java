@@ -16,8 +16,6 @@
 
 package org.gdg.frisbee.android.api;
 
-import android.util.Log;
-
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.google.gson.FieldNamingPolicy;
@@ -30,8 +28,14 @@ import java.util.ArrayList;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
-import org.gdg.frisbee.android.api.model.*;
+import org.gdg.frisbee.android.api.deserializer.ZuluDateTimeDeserializer;
+import org.gdg.frisbee.android.api.model.Directory;
+import org.gdg.frisbee.android.api.model.Event;
+import org.gdg.frisbee.android.api.model.Pulse;
+import org.gdg.frisbee.android.api.model.TaggedEvent;
 import org.joda.time.DateTime;
+
+import timber.log.Timber;
 
 /**
  * GDG Aachen
@@ -48,7 +52,7 @@ public class GroupDirectory {
     private static final String ALL_CALENDAR_URL = BASE_URL + "/events/calendar/fc?start=1366581600&end=1367186400&_=1366664352089";
     private static final String GDL_CALENDAR_URL = BASE_URL + "/events/calendar/fc?calendar=gdl&start=1366581600&end=1367186400&_=1366664644691";
     private static final String CHAPTER_CALENDAR_URL = BASE_URL + "/events/feed/json";
-    private static final String TAGGED_EVENTS_URL = "https://google-developers.appspot.com/events/event-markers.public";
+    private static final String TAGGED_EVENTS_URL = "https://hub.gdgx.io/api/v1/events/tag/";
     private static final String EVENT_DETAIL_URL = BASE_URL + "/events/%s/";
     private static final String SHOWCASE_NEXT_URL = BASE_URL + "/showcase/next";
     private static final String PULSE_URL = BASE_URL + "/devreldash/gdg/pulse_stats/";
@@ -82,7 +86,7 @@ public class GroupDirectory {
     public ApiRequest getCountryPulse(String country, Response.Listener<Pulse> successListener, Response.ErrorListener errorListener) {
         GsonRequest<Void, Pulse> pulseReq = null;
         try {
-            Log.d(LOG_TAG, String.format(COUNTRY_PULSE_URL, URLEncoder.encode(country, "utf-8")));
+            Timber.d(String.format(COUNTRY_PULSE_URL, URLEncoder.encode(country, "utf-8")));
             pulseReq = new GsonRequest<Void, Pulse>(Request.Method.GET,
                     String.format(COUNTRY_PULSE_URL, country.replaceAll(" ","%20")),
                     Pulse.class,
@@ -161,20 +165,9 @@ public class GroupDirectory {
         return new ApiRequest(eventReq);
     }
 
-    public ApiRequest getTaggedEventList(final DateTime start, final DateTime end, final String tag, Response.Listener<ArrayList<TaggedEvent>> successListener, Response.ErrorListener errorListener) {
+    public ApiRequest getTaggedEventList(final DateTime start, final DateTime end, final String tag, Response.Listener<PagedList<TaggedEvent>> successListener, Response.ErrorListener errorListener) {
 
         ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new NameValuePair() {
-            @Override
-            public String getName() {
-                return "tag";
-            }
-
-            @Override
-            public String getValue() {
-                return tag;
-            }
-        });
 
         params.add(new NameValuePair() {
             @Override
@@ -187,6 +180,7 @@ public class GroupDirectory {
                 return "" + (int) (start.getMillis() / 1000);
             }
         });
+
 
         if (end != null) {
             params.add(new NameValuePair() {
@@ -212,19 +206,31 @@ public class GroupDirectory {
                 return "" + (int) (new DateTime().getMillis() / 1000);
             }
         });
-        Type type = new TypeToken<ArrayList<TaggedEvent>>() {
+
+        params.add(new NameValuePair() {
+            @Override
+            public String getName() {
+                return "perpage";
+            }
+
+            @Override
+            public String getValue() {
+                return "1000" ;
+            }
+        });
+
+        Type type = new TypeToken<PagedList<TaggedEvent>>() {
         }.getType();
 
-        String url = TAGGED_EVENTS_URL;
+        String url = TAGGED_EVENTS_URL + tag;
         url += "?" + URLEncodedUtils.format(params, "UTF-8");
 
-         GsonRequest<Void, ArrayList<TaggedEvent>> eventReq = new GsonRequest<Void, ArrayList<TaggedEvent>>(Request.Method.GET,
+         GsonRequest<Void, PagedList<TaggedEvent>> eventReq = new GsonRequest<Void, PagedList<TaggedEvent>>(Request.Method.GET,
                 url,
                 type,
                 successListener,
                 errorListener,
-                GsonRequest.getGson(FieldNamingPolicy.IDENTITY));
-
+                GsonRequest.getGson(FieldNamingPolicy.IDENTITY, new ZuluDateTimeDeserializer()));
         return new ApiRequest(eventReq);
 
     }
