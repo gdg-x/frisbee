@@ -35,7 +35,6 @@ import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.adapter.EventAdapter;
 import org.gdg.frisbee.android.api.ApiRequest;
 import org.gdg.frisbee.android.api.GroupDirectory;
-import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.api.model.SimpleEvent;
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
@@ -136,7 +135,7 @@ public abstract class EventFragment extends GdgListFragment implements View.OnCl
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        Event event = (Event) mAdapter.getItem(info.position);
+        SimpleEvent event = mAdapter.getItem(info.position);
 
         switch(item.getItemId()) {
             case R.id.add_calendar:
@@ -151,7 +150,7 @@ public abstract class EventFragment extends GdgListFragment implements View.OnCl
     }
 
 
-    private void launchNavigation(Event event) {
+    private void launchNavigation(SimpleEvent event) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse("geo:0,0?q=" + event.getLocation()));
         startActivity(intent);
