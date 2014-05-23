@@ -6,9 +6,11 @@ buildscript {
         maven {
             url "http://gdg-x.hp.af.cm/m2/"
         }
+        maven { url "https://github.com/ben-manes/gradle-versions-plugin/raw/mvnrepo" }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:0.10.+'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.5-beta-2'
     }
 }
 
@@ -21,5 +23,6 @@ allprojects {
         maven {
             url "http://gdg-x.hp.af.cm/m2/"
         }
+        maven { url "https://github.com/ben-manes/gradle-versions-plugin/raw/mvnrepo" }
     }
 }
