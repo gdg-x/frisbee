@@ -221,6 +221,7 @@ changes to be accepted, the CLA must be signed. It's a quick process, we promise
 [hub-api]: https://hub.gdgx.io/developers/api
 [gplus-com]: https://plus.google.com/communities/100423211916386801761
 [github]: https://github.com/gdg-x/frisbee
+[coc]: https://github.com/gdg-x/frisbee/CODE_OF_CONDUCT.md
 [corporate-cla]: http://code.google.com/legal/corporate-cla-v1.0.html
 [individual-cla]: http://code.google.com/legal/individual-cla-v1.0.html
 [android-code]: http://source.android.com/source/code-style.html
