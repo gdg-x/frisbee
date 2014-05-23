@@ -1,4 +1,5 @@
 apply plugin: 'android'
+apply plugin: 'versions'
 
 def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
 def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone("UTC"))
@@ -73,7 +74,7 @@ dependencies {
     compile 'org.jsoup:jsoup:1.7.3'
     compile 'joda-time:joda-time:2.3'
     compile 'ch.acra:acra:4.5.0'
-    compile 'com.jakewharton.timber:timber:2.2.+'
+    compile 'com.jakewharton.timber:timber:2.3.+'
     compile 'com.github.chrisbanes.actionbarpulltorefresh:library:0.9.9'
     compile 'com.github.chrisbanes.actionbarpulltorefresh:extra-abc:0.9.9'
     compile ('de.keyboardsurfer.android.widget:crouton:1.8.4') {
@@ -87,10 +88,10 @@ dependencies {
     compile 'com.jakewharton:disklrucache:2.0.2'
     compile 'com.google.android:youtube-android-player-api:1.0.0'
     compile 'com.google.android.gms:play-services:4.4.+'
-    compile 'com.google.http-client:google-http-client-gson:1.17.0-rc'
-    compile 'com.google.apis:google-api-services-plus:v1-rev118-1.17.0-rc'
-    compile 'com.google.apis:google-api-services-youtube:v3-rev96-1.17.0-rc'
-    compile 'com.google.api-client:google-api-client-android:1.17.0-rc'
+    compile 'com.google.http-client:google-http-client-gson:1.18.0-rc'
+    compile 'com.google.apis:google-api-services-plus:v1-rev126-1.18.0-rc'
+    compile 'com.google.apis:google-api-services-youtube:v3-rev106-1.18.0-rc'
+    compile 'com.google.api-client:google-api-client-android:1.18.0-rc'
     compile 'com.android.support:appcompat-v7:19.1.+'
     compile 'com.android.support:mediarouter-v7:19.1.+'
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
@@ -98,6 +99,6 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:1.5.4'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.squareup.picasso:picasso:2.2.0'
-    compile 'com.jakewharton:butterknife:4.0.1'
+    compile 'com.jakewharton:butterknife:5.1.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
