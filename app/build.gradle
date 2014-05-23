@@ -32,9 +32,17 @@ android {
         buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
     }
 
+    signingConfigs {
+        debug {
+            storeFile file("debug.keystore")
+        }
+    }
+
     buildTypes {
         release {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            runProguard true
+            zipAlign true
             debuggable false
         }
         debug {
@@ -44,11 +52,6 @@ android {
         }
     }
 
-    signingConfigs {
-        debug {
-            storeFile file("debug.keystore")
-        }
-    }
 
     lintOptions {
         abortOnError false
@@ -57,13 +60,6 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
-    }
-
-    buildTypes {
-        release {
-            runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-        }
     }
 }
 
