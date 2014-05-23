@@ -129,7 +129,7 @@ public class PullToRefreshTransformer extends HeaderTransformer {
         final boolean changeVis = mHeaderView.getVisibility() != View.INVISIBLE;
 
         if (changeVis) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB){
                 mHeaderView.setVisibility(View.INVISIBLE);
                 return changeVis;
             }
