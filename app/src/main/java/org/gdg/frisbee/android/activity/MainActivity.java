@@ -30,6 +30,8 @@ import android.text.format.Time;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.viewpagerindicator.TitlePageIndicator;
 
 import java.util.ArrayList;
@@ -64,6 +66,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
     public static final String SECTION_EVENTS = "events";
     public static final String EXTRA_SECTION = "org.gdg.frisbee.SECTION";
     public static final String EXTRA_EVENT_ID = "org.gdg.frisbee.EVENT";
+    private static final int PLAY_SERVICE_DIALOG_REQUEST_CODE = 200;
 
     private static String LOG_TAG = "GDG-MainActivity";
 
@@ -203,6 +206,15 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
             mPreferences.edit().putInt(Const.SETTINGS_SEASONS_GREETINGS, now.year).commit();
             SeasonsGreetingsFragment seasonsGreetings = new SeasonsGreetingsFragment();
             seasonsGreetings.show(getSupportFragmentManager(), "dialog");
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        int playServiceStatus = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (ConnectionResult.SUCCESS != playServiceStatus ) {
+            GooglePlayServicesUtil.getErrorDialog(playServiceStatus, this, PLAY_SERVICE_DIALOG_REQUEST_CODE).show();
         }
     }
 
