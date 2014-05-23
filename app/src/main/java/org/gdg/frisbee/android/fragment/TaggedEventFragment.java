@@ -122,6 +122,7 @@ public class TaggedEventFragment extends EventFragment {
                     ArrayList<TaggedEvent> events = (ArrayList<TaggedEvent>) item;
 
                     mAdapter.addAll(events);
+                    sortEvents();
                     setIsLoading(false);
                     if (isAdded())
                         Crouton.makeText(getActivity(), getString(R.string.cached_content), Style.INFO).show();

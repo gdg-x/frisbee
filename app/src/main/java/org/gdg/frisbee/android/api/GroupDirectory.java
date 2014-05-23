@@ -181,6 +181,7 @@ public class GroupDirectory {
             }
         });
 
+
         if (end != null) {
             params.add(new NameValuePair() {
                 @Override
@@ -205,6 +206,19 @@ public class GroupDirectory {
                 return "" + (int) (new DateTime().getMillis() / 1000);
             }
         });
+
+        params.add(new NameValuePair() {
+            @Override
+            public String getName() {
+                return "perpage";
+            }
+
+            @Override
+            public String getValue() {
+                return "1000" ;
+            }
+        });
+
         Type type = new TypeToken<PagedList<TaggedEvent>>() {
         }.getType();
 
