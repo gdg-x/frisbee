@@ -22,6 +22,7 @@ import android.app.backup.BackupDataOutput;
 import android.app.backup.SharedPreferencesBackupHelper;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
+import timber.log.Timber;
 
 import java.io.IOException;
 
@@ -46,7 +47,7 @@ public class BackupAgent extends BackupAgentHelper {
     @Override
     public void onRestore(BackupDataInput data, int appVersionCode, ParcelFileDescriptor newState) throws IOException {
         super.onRestore(data, appVersionCode, newState);
-        Log.d(LOG_TAG, String.format("Restoring from backup (was saved using version %d)", appVersionCode));
+        Timber.d(String.format("Restoring from backup (was saved using version %d)", appVersionCode));
         App.getInstance().getTracker().sendEvent("backup","restore","",(long)0);
     }
 

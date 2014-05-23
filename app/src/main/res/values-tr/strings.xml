@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2013 The GDG Frisbee Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ 	http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="news">Haberler</string>
+    <string name="drawer_open">Menüyü Aç</string>
+    <string name="drawer_close">Menüyü Kapa</string>
+    <string name="info">Bilgi</string>
+    <string name="events">Etkinlikler</string>
+    <string name="add_to_calendar">Takvime ekle</string>
+    <string name="share_with_googleplus">Google+ ile Paylaş</string>
+    <string name="no_scheduled_events">30 gün içinde gerçekleşecek\netkinlik bulunmuyor.</string>
+    <string name="organizers">Ekip Üyeleri</string>
+    <string name="resources">Bağlantılar</string>
+    <string name="fetch_events_failed">Etkinliklere ulaşımda hata</string>
+    <string name="fetch_chapters_failed">Bölgelere ulaşımda hata</string>
+    <string name="bogus_organizer">Üye id\'sinde problem: %1$s</string>
+    <string name="cached_content">Şu an internet bağlantınız yok. Şimdi You\'re currently offline. Here\'s some cached content.</string>
+    <string name="offline_alert">Şu an internet bağlantınız yok</string>
+    <string name="welcome">Hoşgeldiniz</string>
+    <string name="choose_home_gdg">Bulunduğunuz GDG\'yi seçin</string>
+    <string name="signin_with_google">Google ile Giriş</string>
+    <string name="confirm">Kabul Et</string>
+    <string name="signin_description">GDG uygulaması Google+ ve Google Servisleriyle entegre çalışmaktadır. Bu özellikleri kullanmak için Google ile giriş yapmalısınız.</string>
+    <string name="or">veya</string>
+    <string name="no_thanks">hayır, teşekkürler</string>
+    <string name="skip">Girişi Atla</string>
+    <string name="youtube_init_failed">YouTube Player başlatılamadı.</string>
+    <string name="achievements">Başarılar</string>
+    <string name="settings">Ayarlar</string>
+    <string name="about">Hakkında</string>
+    <string name="gdl">Google Developers Canlı Yayın</string>
+    <plurals name="seconds_ago">
+        <item quantity="zero">şimdi</item>
+        <item quantity="one">hemen şimdi</item>
+        <item quantity="other">%d saniye önce</item>
+    </plurals>
+    <plurals name="minutes_ago">
+        <item quantity="zero">şimdi</item>
+        <item quantity="one">1 dakika önce</item>
+        <item quantity="other">%d dakika önce</item>
+    </plurals>
+    <plurals name="hours_ago">
+        <item quantity="zero">şimdi</item>
+        <item quantity="one">1 saat önce</item>
+        <item quantity="other">%d saat önce</item>
+    </plurals>
+    <plurals name="days_ago">
+        <item quantity="zero">şimdi</item>
+        <item quantity="one">1 gün önce</item>
+        <item quantity="other">%d gün önce</item>
+    </plurals>
+    <string-array name="about_tabs">
+        <item>Hakkında</item>
+        <item>Katkıda Bulunanlar</item>
+        <item>Change Log</item>
+        <item>Dahil Ol</item>
+        <item>3. Parti Kütüphaneler</item>
+    </string-array>
+    <string name="contributors">GDG uygulaması açık kaynaklıdır ve topluluk çabalarıyla geliştirilmektedir. Katkıda bulunan kişiler aşağıda:</string>
+    <string name="get_involved">Dahil Ol!</string>
+    <string name="get_involved_text">GDG uygulaması açık kaynaklıdır ve topluluk çabalarıyla geliştirilmektedir. Herkes uygulamaya dahil olabilir ve gelişmesine katkıda bulunabilir.\n\nBunun için GitHub\'ı açın ve kodumuzu checkout edin.\n\nhttps://github.com/gdg-x</string>
+    <string name="about_license">(c) 2013 The GDG Frisbee Project\nTüm Hakları Gizlidir.\n\nAşağıdaki lisans ile lisanslıdır\nthe Apache 2.0 License</string>
+    <string name="past_event">GEÇMİŞ</string>
+    <string name="upcoming_widget">GDG - Bir Sonraki Etkinlik</string>
+    <string name="global">Global</string>
+    <string name="pulse">GDG Nabzı</string>
+    <string name="pulse_events">Etkinlikler</string>
+    <string name="pulse_attendees">Katılımcılar</string>
+    <string name="pulse_circlers">Takipçiler</string>
+    <string name="home_gdg">Bulunduğunuz GDG</string>
+    <string name="home_gdg_summary">Bulunduğunuz GDG\'yi seçiniz</string>
+    <string name="special_event">Dart Flight School</string>
+    <string name="analytics">Analytics</string>
+    <string name="analytics_summary_on">Uygulamanın gelişimine yardımcı olan anonim kullanım datası paylaşımı açık</string>
+    <string name="analytics_summary_off">Anonim kullanım datası paylaşımı kapalı</string>
+    <string name="gcm">Anlık Bildirimler</string>
+    <string name="gcm_summary_on">GDG Anlık Bildirimleri açık</string>
+    <string name="gcm_summary_off">GDG Anlık Bildirimleri kapalı</string>
+    <string name="google_signed_in">Google+ ile giriş yaptın</string>
+    <string name="google_signed_in_on">Google+ ile giriş yaptın</string>
+    <string name="google_signed_in_off">Giriş yapmadın</string>
+    <string name="achievements_need_signin">Bu başarıyı açmak için giriş yapmalısın</string>
+    <string name="done">Bitti</string>
+    <string name="allow_analytics">Uygulamayı geliştirmemize yardımcı olmak için anonim kullanım bilgisi toplamamıza izin verin.</string>
+    <string name="enable_gcm">GDG Bildirimlerini Aktifleştir (yeni etkinliklerden haberin olsun.)</string>
+    <string name="step3_text">Başlamadan önce son bir şey...</string>
+    <string name="share_on_gplus">Arkadaşlarını Davet Et</string>
+    <string name="join_me">Bu etkinlikle bana katıl!</string>
+    <string name="name_not_known">İsim bilinmiyor.</string>
+    <string name="signin_first">Bu özelliği kullanmak için öncelikle G+ ile giriş yapmalısınız.</string>
+    <string name="originally_shared">paylaştı:</string>
+    <string name="server_error">Hata oluştu. Tekrar Deneyin.</string>
+    <string name="search_hint">GDG Şubesi Ara</string>
+    <string name="dashclock_description">Bulunduğunuz GDG\'de düzenlenecek etkinlikler hakkında bilgi gösterir.</string>
+    <string name="special_description">GDG DevFest\'ler GDG toplulukları tarafından düzenlenen ve farklı ürünler hakkında çeşitli sunumlardan, tüm gün süren hackathonlardan, kod workshoplarından oluşan organizasyonlardır.\n\nHer bir GDG DevFest bulunduğu topluluktan ilham alır ve bu topluluğun ihtiyaçlarına göre şekillenir. Hiçbir etkinlik birbirinin aynısı olmamakla birlikte, çekirdeğinde şu bilinç etrafında şekillenir: Geliştiriciler fikirlerini paylaşmak adına bir araya geldiklerinde, harika şeyler ortaya çıkar.</string>
+    <string name="order_by_date">Tarihe göre sırala</string>
+    <string name="order_by_distance">Uzaklığa göre sırala</string>
+    <string name="gcm_event_ticker">Bulunduğunuz GDG\'de yeni bir etkinlik düzenleniyor.</string>
+    <string name="flightschool">Dart Flight School</string>
+    <string name="flightschool_description">Dart 1.0\'e ulaştı ve uçuşa hazır! Geliştirici toplulukları 2014 Şubat ayı boyunca dünya çapında Dart Flight School etkinlikleri düzenliyorlar. Web geliştirme kanatlarınızı Dart ve Angular ile kazanın!</string>
+</resources>

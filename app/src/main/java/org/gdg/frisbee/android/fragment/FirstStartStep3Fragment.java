@@ -19,20 +19,23 @@ package org.gdg.frisbee.android.fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
-import butterknife.InjectView;
-import butterknife.Views;
-import com.actionbarsherlock.app.SherlockFragment;
+
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.FirstStartActivity;
 import org.gdg.frisbee.android.utils.Log;
 
-public class FirstStartStep3Fragment extends SherlockFragment {
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import timber.log.Timber;
+
+public class FirstStartStep3Fragment extends Fragment {
 
     private static String LOG_TAG = "GDG-FirstStartStep3Fragment";
 
@@ -88,7 +91,7 @@ public class FirstStartStep3Fragment extends SherlockFragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(LOG_TAG, "onResume()");
+        Timber.d("onResume()");
 
         FirstStartActivity activity = (FirstStartActivity)getActivity();
         if(!mIsSignedIn) {
@@ -101,7 +104,7 @@ public class FirstStartStep3Fragment extends SherlockFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_welcome_step3, null);
-        Views.inject(this, v);
+        ButterKnife.inject(this, v);
         return v;
     }
 

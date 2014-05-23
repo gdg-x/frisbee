@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2013 The GDG Frisbee Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ 	http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="news">最新消息</string>
+    <string name="drawer_open">開啟側欄</string>
+    <string name="drawer_close">關閉側欄</string>
+    <string name="info">資訊</string>
+    <string name="events">活動</string>
+    <string name="app_name">GDG</string>
+    <string name="add_to_calendar">新增至月曆</string>
+    <string name="share_with_googleplus">透過 Google+ 分享</string>
+    <string name="no_scheduled_events">未來 30 天內無安排活動</string>
+    <string name="organizers">發起人</string>
+    <string name="resources">連結</string>
+    <string name="fetch_events_failed">無法取得即將到來的活動列表</string>
+    <string name="fetch_chapters_failed">無法取得章節列表</string>
+    <string name="bogus_organizer">無法解析組織 Id：%1$s</string>
+    <string name="cached_content">您目前為離線狀態，這裡是快取內容</string>
+    <string name="offline_alert">您目前為離線狀態</string>
+    <string name="welcome">歡迎光臨</string>
+    <string name="choose_home_gdg">選擇您所在地 GDG</string>
+    <string name="signin_with_google">Google 登入</string>
+    <string name="confirm">確認</string>
+    <string name="signin_description">GDG 應用程式與 Google+ 及其他 Google 服務整合，使用這些功能需要您登入 Google 帳號</string>
+    <string name="or">或者</string>
+    <string name="no_thanks">不了謝謝</string>
+    <string name="skip">略過登入</string>
+    <string name="youtube_init_failed">YouTube 播放器無法初始化</string>
+    <string name="achievements">成就</string>
+    <string name="settings">設定</string>
+    <string name="about">關於</string>
+    <string name="gdl">Google 開發者直播</string>
+    <plurals name="seconds_ago">
+        <item quantity="zero">現在</item>
+        <item quantity="one">剛剛</item>
+        <item quantity="other">%d 秒前</item>
+    </plurals>
+    <plurals name="minutes_ago">
+        <item quantity="zero">現在</item>
+        <item quantity="one">1 分鐘前</item>
+        <item quantity="other">%d 分鐘前</item>
+    </plurals>
+    <plurals name="hours_ago">
+        <item quantity="zero">現在</item>
+        <item quantity="one">1 小時前</item>
+        <item quantity="other">%d 小時前</item>
+    </plurals>
+    <plurals name="days_ago">
+        <item quantity="zero">現在</item>
+        <item quantity="one">1 天前</item>
+        <item quantity="other">%d 天前</item>
+    </plurals>
+    <string-array name="about_tabs">
+        <item>關於</item>
+        <item>貢獻者</item>
+        <item>修改記錄</item>
+        <item>參與貢獻</item>
+        <item>第三方庫</item>
+    </string-array>
+    <string name="contributors">本 GDG 應用程式為社群貢獻的成果並開放原始碼。以下為參與貢獻的人士：</string>
+    <string name="get_involved">參與貢獻！</string>
+    <string name="get_involved_text">本 GDG 應用程式為社群貢獻的成果並開放原始碼，任何人都歡迎參與編修及改善本應用程式。\n\n請直接前往 Github 提取代碼。\n\nhttps://github.com/gdg-x</string>
+    <string name="past_event">過往活動</string>
+    <string name="upcoming_widget">GDG - 即將到來的活動</string>
+    <string name="global">全球</string>
+    <string name="pulse">GDG Pulse</string>
+    <string name="pulse_events">活動</string>
+    <string name="pulse_attendees">參與者</string>
+    <string name="pulse_circlers">分會圈選人</string>
+    <string name="home_gdg">所在地 GDG</string>
+    <string name="home_gdg_summary">設定您主要的 GDG</string>
+    <string name="devfest">DevFest 2013</string>
+    <string name="analytics">分析</string>
+    <string name="analytics_summary_on">應用程式目前會傳送匿名使用資料作為改善參考</string>
+    <string name="analytics_summary_off">應用程式目前不會傳送任何匿名使用資料</string>
+    <string name="gcm">雲端通知</string>
+    <string name="gcm_summary_on">應用程式目前接收並處理 GDG 雲端通知</string>
+    <string name="gcm_summary_off">應用程式目前不接收 GDG 雲端通知</string>
+    <string name="google_signed_in">登入 Google+</string>
+    <string name="google_signed_in_on">您已經登入 Google+</string>
+    <string name="google_signed_in_off">您尚未登入</string>
+    <string name="achievements_need_signin">您需要登入才能解除成就</string>
+    <string name="done">完成</string>
+    <string name="allow_analytics">允許我們收集匿名使用資料以改進應用程式</string>
+    <string name="enable_gcm">啟用 GDG 雲端通知 (當有新活動時會通知)</string>
+    <string name="step3_text">開始之前還有一件事…</string>
+    <string name="share_on_gplus">邀請朋友</string>
+    <string name="join_me">跟我一同參加本次活動！</string>
+    <string name="name_not_known">未知的名稱</string>
+    <string name="signin_first">您需要登入 Google+ 方能使用這個功能</string>
+    <string name="originally_shared">最先分享這則訊息:</string>
+    <string name="server_error">發生錯誤，請重試</string>
+    <string name="search_hint">搜尋 GDG 分會</string>
+    <string name="dashclock_description">顯示所在地 GDG 即將到來的活動資訊</string>
+    <string name="devfest_description">GDG DevFest 為社群發起的大型聚會，提供多種產品的演講議程、一整天的黑客松、程式開發教學…等活動\n\n每個 GDG DevFest 皆由主辦的開發者社群依據需求量身訂做，雖然每場活動內容都不一樣，但每個 GDG DevFest 都是為了一個共同的信念而生，那就是當開發者們同聚一堂交換彼此的想法時，總是可以激盪出令人驚嘆的火花</string>
+</resources>

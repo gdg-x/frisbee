@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Copyright 2013 The GDG Frisbee Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ 	http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!-- Generated with http://android-holo-colors.com -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <style name="GDG.SeeTrough" parent="Theme.GDG">
+      <item name="android:windowIsTranslucent">true</item>
+      <item name="android:windowBackground">@color/semi_transparent</item>
+      <item name="android:windowContentOverlay">@null</item>
+      <item name="android:windowNoTitle">true</item>
+      <item name="android:backgroundDimEnabled">false</item>
+      <item name="windowActionBar">false</item>
+  </style>
+
+  <style name="GDG.NoActionBar" parent="Theme.GDG">
+      <item name="windowActionBar">false</item>
+      <item name="android:windowNoTitle">true</item>
+  </style>
+
+  <style name="Theme.GDG" parent="@style/Theme.AppCompat.Light">
+    <item name="vpiTitlePageIndicatorStyle">@style/TitlePageIndicatorGDG</item>
+    <item name="android:windowBackground">@color/default_bg</item>
+    <item name="actionBarStyle">@style/ActionBarGDG</item>
+    <item name="android:actionBarStyle">@style/ActionBarGDG</item>
+
+    <item name="android:editTextStyle">@style/EditTextGDG</item>
+
+    <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewGDG</item>
+
+    <item name="android:checkboxStyle">@style/CheckBoxGDG</item>
+
+    <item name="android:radioButtonStyle">@style/RadioButtonGDG</item>
+
+    <item name="android:buttonStyle">@style/ButtonGDG</item>
+
+    <item name="android:imageButtonStyle">@style/ImageButtonGDG</item>
+
+    <item name="android:spinnerStyle">@style/SpinnerGDG</item>
+
+    <item name="android:dropDownSpinnerStyle">@style/SpinnerGDG.DropDown</item>
+
+    <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemGDG</item>
+
+    <item name="android:progressBarStyleHorizontal">@style/ProgressBarGDG</item>
+
+    <item name="android:seekBarStyle">@style/SeekBarGDG</item>
+
+    <item name="android:ratingBarStyle">@style/RatingBarGDG</item>
+
+    <item name="android:ratingBarStyleIndicator">@style/RatingBarBigGDG</item>
+
+    <item name="android:ratingBarStyleSmall">@style/RatingBarSmallGDG</item>
+
+    <item name="android:buttonStyleToggle">@style/ToggleGDG</item>
+
+    <item name="android:listViewStyle">@style/ListViewGDG</item>
+
+    <item name="android:listViewWhiteStyle">@style/ListViewGDG.White</item>
+
+    <item name="android:spinnerItemStyle">@style/SpinnerItemGDG</item>
+
+  </style>
+
+</resources>

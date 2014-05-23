@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="fill_parent" android:background="@color/cloud">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" android:layout_weight="1" android:gravity="center_vertical|center_horizontal"
+            android:padding="50dip">
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageView1" android:src="@drawable/ic_analytics"
+                    android:layout_marginRight="10dip"/>
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageView2" android:src="@drawable/ic_gcm"/>
+        </LinearLayout>
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:text="@string/step3_text" android:id="@+id/textView" android:singleLine="false"
+                  android:linksClickable="false" android:textIsSelectable="false"
+                  android:textColor="@color/asbestos" android:textAppearance="@android:style/TextAppearance.Large"
+                  android:gravity="center_horizontal" android:layout_marginBottom="20dip"/>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/analyticsContainer">
+            <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:text="@string/allow_analytics"
+                    android:id="@+id/enable_analytics" android:textColor="@color/asbestos" android:textSize="18sp"
+                    android:checked="true"/>
+        </LinearLayout>
+        <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content"
+                      android:layout_height="wrap_content" android:id="@+id/gcmContainer"
+                      android:layout_marginTop="10dip">
+            <CheckBox android:layout_width="wrap_content" android:layout_height="fill_parent"
+                      android:text="@string/enable_gcm" android:id="@+id/enable_gcm" android:textColor="@color/asbestos"
+                      android:textSize="18sp" android:checked="true"/>
+        </LinearLayout>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/done"
+                android:id="@+id/complete" android:layout_marginTop="25dip"/>
+    </LinearLayout>
+    <ImageView android:layout_width="fill_parent" android:layout_height="15dip" android:id="@+id/imageView"
+               android:background="@drawable/googly_bar"/>
+</LinearLayout>

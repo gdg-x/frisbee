@@ -19,7 +19,7 @@ package org.gdg.frisbee.android.fragment;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,10 +28,11 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import butterknife.InjectView;
-import butterknife.Views;
-import com.actionbarsherlock.app.SherlockFragment;
+
 import org.gdg.frisbee.android.R;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * GDG Aachen
@@ -41,7 +42,7 @@ import org.gdg.frisbee.android.R;
  * Date: 23.04.13
  * Time: 19:03
  */
-public class GdgListFragment extends SherlockFragment {
+public class GdgListFragment extends Fragment {
 
     private static final String LOG_TAG = "GDG-ListFragment";
 
@@ -95,7 +96,7 @@ public class GdgListFragment extends SherlockFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_list, null);
-        Views.inject(this, v);
+        ButterKnife.inject(this, v);
         return v;
     }
 

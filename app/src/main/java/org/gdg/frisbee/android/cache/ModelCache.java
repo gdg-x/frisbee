@@ -28,11 +28,13 @@ import com.google.gson.Gson;
 import android.os.Process;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.jakewharton.DiskLruCache;
+import com.jakewharton.disklrucache.DiskLruCache;
 import org.gdg.frisbee.android.api.deserializer.DateTimeDeserializer;
 import org.gdg.frisbee.android.api.deserializer.DateTimeSerializer;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
+import timber.log.Timber;
+
 import java.io.*;
 import java.lang.reflect.Type;
 import java.security.MessageDigest;
@@ -183,7 +185,7 @@ public class ModelCache {
                 if (null == mDiskCacheLocation) {
                     return false;
                 } else if (!mDiskCacheLocation.canWrite()) {
-                    Log.i(LOG_TAG, "Disk Cache Location is not write-able, disabling disk caching.");
+                    Timber.i("Disk Cache Location is not write-able, disabling disk caching.");
                     return false;
                 }
 
@@ -307,7 +309,7 @@ public class ModelCache {
     }
 
     public Object get(String url, boolean checkExpiration) {
-        Log.d(LOG_TAG, String.format("get(%s)", url));
+        Timber.d(String.format("get(%s)", url));
         CacheItem result;
 
         // First try Memory Cache
@@ -357,7 +359,7 @@ public class ModelCache {
                     }
                 }
             } catch (IOException e) {
-                Log.e(LOG_TAG, "getFromDiskCache failed.", e);
+                Timber.e("getFromDiskCache failed.", e);
                 e.printStackTrace();
             }
         }
@@ -423,7 +425,7 @@ public class ModelCache {
         if(obj == null)
             return null;
 
-        Log.d(LOG_TAG, String.format("put(%s)", url));
+        Timber.d(String.format("put(%s)", url));
         CacheItem d = new CacheItem(obj, expiresAt);
 
         if (null != mMemoryCache) {
@@ -585,7 +587,7 @@ public class ModelCache {
             } else
                 return mGson.fromJson(content, clazz);
         } catch(IllegalArgumentException e) {
-            Log.e(LOG_TAG, "Deserializing from disk failed", e);
+            Timber.e("Deserializing from disk failed", e);
             return null;
         } catch(ClassNotFoundException e) {
             throw new IOException(e.getMessage());

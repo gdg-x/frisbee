@@ -21,8 +21,10 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import butterknife.InjectView;
 import butterknife.Optional;
+
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.fragment.TaggedEventFragment;
@@ -50,11 +52,11 @@ public class SpecialEventActivity extends GdgNavDrawerActivity {
 
         getSupportActionBar().setLogo(getIntent().getIntExtra(Const.SPECIAL_EVENT_LOGO_EXTRA, R.drawable.ic_logo_devfest));
 
-        if(mDescription != null) {
+        if (mDescription != null) {
             mDescription.setText(getString(getIntent().getIntExtra(Const.SPECIAL_EVENT_DESCRIPTION_EXTRA, R.string.special_description)));
         }
 
-        if(mLogo != null) {
+        if (mLogo != null) {
             mLogo.setImageResource(getIntent().getIntExtra(Const.SPECIAL_EVENT_LOGO_EXTRA, R.drawable.ic_logo_devfest));
         }
 

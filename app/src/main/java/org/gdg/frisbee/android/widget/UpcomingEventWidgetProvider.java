@@ -47,6 +47,7 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
+import timber.log.Timber;
 
 public class UpcomingEventWidgetProvider extends AppWidgetProvider {
 
@@ -59,7 +60,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
 
         @Override
         public void onStart(Intent intent, int startId) {
-            Log.d(LOG_TAG, "onStart()");
+            Timber.d("onStart()");
 
             mPreferences = getSharedPreferences("gdg", MODE_PRIVATE);
             mDirectory = new GroupDirectory();
@@ -100,17 +101,17 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                     final Chapter homeGdg = findChapter(mPreferences.getString(Const.SETTINGS_HOME_GDG, null));
 
                     if(homeGdg == null) {
-                        Log.d(LOG_TAG, "Got no Home GDG");
+                        Timber.d("Got no Home GDG");
                         showChild(views, 0);
                     } else {
-                        Log.d(LOG_TAG, "Fetching events");
+                        Timber.d("Fetching events");
                         String groupName = homeGdg.getName().replaceAll("GDG ","");
                         views.setTextViewText(R.id.groupName, groupName);
                         views.setTextViewText(R.id.groupName2, groupName);
                         mDirectory.getChapterEventList(new DateTime(), new DateTime().plusMonths(1), homeGdg.getGplusId(), new Response.Listener<ArrayList<Event>>() {
                             @Override
                             public void onResponse(ArrayList<Event> events) {
-                                Log.d(LOG_TAG, "Got events");
+                                Timber.d("Got events");
                                 if (events.size() > 0) {
                                     views.setTextViewText(R.id.title, events.get(0).getTitle());
                                     views.setTextViewText(R.id.location, events.get(0).getLocation());
@@ -141,7 +142,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                             {
                                 @Override
                                 public void onErrorResponse (VolleyError volleyError){
-                                Log.e(LOG_TAG, "Error updating Widget", volleyError);
+                                Timber.e("Error updating Widget", volleyError);
                                 showChild(views, 0);
                                 manager.updateAppWidget(thisWidget, views);
                             }
