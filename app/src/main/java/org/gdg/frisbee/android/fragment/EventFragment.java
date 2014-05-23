@@ -130,6 +130,7 @@ public abstract class EventFragment extends GdgListFragment implements View.OnCl
         SimpleEvent event = (SimpleEvent) mAdapter.getItem(info.position);
         menu.setHeaderTitle(event.getTitle());
         getActivity().getMenuInflater().inflate(R.menu.event_context, menu);
+        menu.findItem(R.id.navigate_to).setVisible(event.getLocation() != null);
     }
 
     @Override
@@ -141,11 +142,20 @@ public abstract class EventFragment extends GdgListFragment implements View.OnCl
             case R.id.add_calendar:
                 addEventToCalendar(event);
                 return true;
+            case R.id.navigate_to:
+                launchNavigation(event);
+                return true;
             default:
                 return super.onContextItemSelected(item);
         }
     }
 
+
+    private void launchNavigation(Event event) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("geo:0,0?q=" + event.getLocation()));
+        startActivity(intent);
+    }
 
     public void addEventToCalendar(SimpleEvent event) {
         Intent intent = new Intent(Intent.ACTION_EDIT);

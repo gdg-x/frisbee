@@ -149,4 +149,5 @@
     <string name="ioextended_description">Google I/O Extended is about joining the Google conference at your local group.</string>
     <string name="ioextended">Extended 2014</string>
   <string name="media_route_menu_title">Cast session</string>
+  <string name="navigate_to">Navigate to event</string>
 </resources>
