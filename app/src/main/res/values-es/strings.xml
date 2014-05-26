@@ -23,23 +23,23 @@
     <string name="events">Eventos</string>
     <string name="app_name">GDG</string>
     <string name="add_to_calendar">Agregar al calendario</string>
-    <string name="share_with_googleplus">Compartir en Google+</string>
+    <string name="share_with_googleplus">Compartir con Google+</string>
     <string name="no_scheduled_events">No hay eventos programados\nen los próximos 30 días</string>
     <string name="organizers">Organizadores</string>
     <string name="resources">Links</string>
     <string name="fetch_events_failed">No se pudieron recuperar los próximos eventos</string>
-    <string name="fetch_chapters_failed">No se pudo recuperar la lista de chapter</string>
+    <string name="fetch_chapters_failed">No se pudo recuperar la lista de grupos</string>
     <string name="bogus_organizer">No se pudo recuperar el id de organizador: %1$s</string>
     <string name="cached_content">Actualmente te encuentras sin conexión. Puedes ver el contenido guardado.</string>
     <string name="offline_alert">Actualmente te encuentras sin conexión.</string>
     <string name="welcome">Bienvenido.</string>
     <string name="choose_home_gdg">Elige tu GDG</string>
-    <string name="signin_with_google">Logueate con Google</string>
+    <string name="signin_with_google">Inicia sesión con Google</string>
     <string name="confirm">Confirmar</string>
-    <string name="signin_description">La aplicación de GDG esta integrada con Google+ y otros servicio de Google. Para usar estas funcionalidades es necesario que estes logueado en tu cuenta de Google.</string>
+    <string name="signin_description">Esta app esta integrada con G+ y otros servicios de Google. Para usar al máximo los servicios deberas iniciar sesión con Google.</string>
     <string name="or">o</string>
     <string name="no_thanks">no gracias.</string>
-    <string name="skip">Saltearse el Sign-in</string>
+    <string name="skip">Omitir registro</string>
     <string name="youtube_init_failed">El reproductor de YouTube no pudo ser inicializado.</string>
     <string name="achievements">Logros</string>
     <string name="settings">Configuración</string>
@@ -99,17 +99,17 @@
     </string-array>
     <string-array name="about_tabs">
         <item>Acerca de</item>
-        <item>Contribuidores</item>
+        <item>Colaboradores</item>
         <item>Cambios</item>
-        <item>Participa</item>
+        <item>Colaborar</item>
         <item>3rd Party Libraries</item>
     </string-array>
-    <string name="contributors">La aplicación de GDG es un esfuerzo comunitario y de código abierto -del ingles "open source"-. La siguiente es una lista de las personas que contribuyeron con la aplicación:</string>
-    <string name="get_involved">Participa!</string>
+    <string name="contributors">La aplicación de GDG es un esfuerzo comunitario y de código abierto -del ingles "open source"-. Estas son algunas de las personas que colaboraron con la aplicación:</string>
+    <string name="get_involved">Colabora!</string>
     <string name="get_involved_text">La aplicación de GDG es un esfuerzo comunitario y de código abierto. Todos son bienvenidos a participar y mejorar esta aplicacion.\n\nSolo diríjanse a GitHub y bájense el código.\n\nhttps://github.com/gdg-x</string>
     <string name="about_license">(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof the Apache 2.0 License</string>
     <string name="past_event">Ocurridos</string>
-    <string name="upcoming_widget">GDG - Eventos por venir</string>
+    <string name="upcoming_widget">GDG - Próximos eventos</string>
     <string name="global">Global</string>
     <string name="pulse">GDG Pulse</string>
     <string name="pulse_events">Eventos</string>
@@ -124,24 +124,28 @@
     <string name="gcm">Notificaciones en la nube</string>
     <string name="gcm_summary_on">La aplicación actualmente recibe y procesa GDG notificaciones provenientes de la nube</string>
     <string name="gcm_summary_off">La aplicación actualmente NO recibe y procesa GDG notificaciones provenientes de la nube</string>
-    <string name="google_signed_in">Logueado en Google+</string>
+    <string name="google_signed_in">Sesión iniciada en Google+</string>
     <string name="google_signed_in_on">Has iniciado sesión con Google+</string>
     <string name="google_signed_in_off">Usted no ha iniciado sesión</string>
     <string name="achievements_need_signin">Tienes que estar registrado para desbloquear logros</string>
     <string name="done">Hecho</string>
     <string name="allow_analytics">Permitenos recoger datos anónimos sobre el uso que nos ayudan a mejorar la aplicación</string>
-    <string name="enable_gcm">Habilitar GDG Notificaciones desde la Nube (ser notificado sobre los nuevos eventos)</string>
+    <string name="enable_gcm">Habilitar Notificaciones GDG desde la Nube (ser notificado sobre los nuevos eventos)</string>
     <string name="step3_text">Una cosa más antes de empezar ...</string>
     <string name="share_on_gplus">Invitar amigos</string>
     <string name="join_me">Acompáñame en este evento!</string>
     <string name="name_not_known">Nombre desconocido</string>
-    <string name="signin_first">Usted tiene que iniciar sesión de G+ para poder utilizar esta función</string>
+    <string name="signin_first">Tienes que iniciar sesión con G+ para poder utilizar esta función</string>
     <string name="originally_shared">compartida originalmente por:</string>
     <string name="server_error">Se ha producido un error. Inténtelo de nuevo.</string>
-    <string name="search_hint">Buscar en el GDG</string>
+    <string name="search_hint">Buscar GDG</string>
     <string name="dashclock_description">Mostrar información sobre el próximo evento de su GDG principal</string>
     <string name="devfest_description">Los GDG DevFests son grandes eventos, dirigidos por la comunidad que pueden ofrecer sesiones con oradores en múltiples áreas y diferentes productos, hackathones de todo el día, laboratorios de programacion, etc. \n\nCada GDG DevFest será inspirado y único, y a la medida de las necesidades de la comunidad de desarrolladores que lo organiza. Aunque no habrá dos eventos exactamente iguales, cada GDG DevFest será, en su esencia, alimentado por la creencia compartida de que cuando los desarrolladores se reúnen para intercambiar ideas, cosas increíbles pueden suceder.</string>
     <string name="order_by_date">Ordenar por fecha</string>
     <string name="order_by_distance">Ordenar por distancia</string>
     <string name="gcm_event_ticker">Un nuevo evento de su GDG principal ha sido agendado</string>
+    <string name="ioextended_description">Google I/O Extended se trata de unirte a la conferencia de Google IO en tu grupo local.</string>
+    <string name="ioextended">Extended 2014</string>
+    <string name="media_route_menu_title">Cast session</string>
+    <string name="navigate_to">Dirección del evento</string>
 </resources>
