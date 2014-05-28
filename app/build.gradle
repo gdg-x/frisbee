@@ -97,4 +97,6 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.2.0'
     compile 'com.jakewharton:butterknife:5.1.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.1'
 }
