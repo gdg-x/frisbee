@@ -339,13 +339,18 @@ public class InfoFragment extends Fragment {
         View convertView = mInflater.inflate(R.layout.list_organizer_item, null);
 
         ImageView picture = (ImageView) convertView.findViewById(R.id.icon);
-        App.getInstance().getPicasso()
-                .load(item.getImage().getUrl())
-                .placeholder(R.drawable.ic_no_avatar)
-                .into(picture);
 
-        TextView title = (TextView) convertView.findViewById(R.id.title);
-        title.setText(item.getDisplayName());
+        if(item != null) {
+            if(item.getImage() != null) {
+                App.getInstance().getPicasso()
+                        .load(item.getImage().getUrl())
+                        .placeholder(R.drawable.ic_no_avatar)
+                        .into(picture);
+            }
+
+            TextView title = (TextView) convertView.findViewById(R.id.title);
+            title.setText(item.getDisplayName());
+        }
 
         return convertView;
     }
