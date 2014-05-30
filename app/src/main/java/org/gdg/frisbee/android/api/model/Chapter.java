@@ -18,6 +18,7 @@ package org.gdg.frisbee.android.api.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * GDG Aachen
@@ -28,7 +29,13 @@ import android.os.Parcelable;
  * Time: 22:27
  */
 public class Chapter implements Comparable<Chapter>, Parcelable {
-    private String status, city, name, gplusId, state, country;
+    private String status, city, name, state;
+
+    private Country country;
+
+    @SerializedName("_id")
+    private String gplusId;
+
     private Geo geo;
 
     public Chapter() {
@@ -47,7 +54,7 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
         city = in.readString();
         gplusId = in.readString();
         state = in.readString();
-        country = in.readString();
+        country = in.readParcelable(Country.class.getClassLoader());
         geo = in.readParcelable(Geo.class.getClassLoader());
     }
 
@@ -71,7 +78,7 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
         return state;
     }
 
-    public String getCountry() {
+    public Country getCountry() {
         return country;
     }
 
@@ -101,7 +108,7 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
         parcel.writeString(city);
         parcel.writeString(gplusId);
         parcel.writeString(state);
-        parcel.writeString(country);
+        parcel.writeParcelable(country, 0);
         parcel.writeParcelable(geo,0);
     }
 
