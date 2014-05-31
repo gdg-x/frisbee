@@ -35,6 +35,7 @@ import com.android.volley.VolleyError;
 import com.google.android.gms.appstate.AppStateManager;
 import com.google.android.gms.appstate.AppStateStatusCodes;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.People;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
@@ -271,6 +272,10 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
     private void addTaggedPersonToCloudSave(String id) {
         previous = previous + "|" + id;
         AppStateManager.update(getGoogleApiClient(), Const.ARROW_DONE_STATE_KEY, previous.getBytes());
+        Games.Leaderboards.submitScore(getGoogleApiClient(), Const.ARROW_LB, previous.split("\\|").length);
+
+        Toast.makeText(ArrowActivity.this, "It worked...you tagged " + id, Toast.LENGTH_LONG).show();
+
         Plus.PeopleApi.load(getGoogleApiClient(), id).setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
             @Override
             public void onResult(People.LoadPeopleResult loadPeopleResult) {
@@ -278,7 +283,6 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
                 Toast.makeText(ArrowActivity.this, "It worked...you tagged " + organizer.getDisplayName(), Toast.LENGTH_LONG).show();
             }
         });
-        Toast.makeText(ArrowActivity.this, "It worked...you tagged " + id, Toast.LENGTH_LONG).show();
     }
 
     @Override
