@@ -17,25 +17,22 @@
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                         android:orientation="vertical"
                                         android:id="@+id/drawer"
-                                        android:layout_width="fill_parent"
-                                        android:layout_height="fill_parent">
-
-    <ScrollView
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent">
 
         <ViewFlipper
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/viewFlipper">
-            <LinearLayout
+
+          <LinearLayout
                     android:orientation="vertical"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent" android:gravity="center_vertical" android:id="@+id/scanReady">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:gravity="center_vertical" android:id="@+id/scanReady">
                 <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
                         android:id="@+id/imageView" android:layout_gravity="center" android:src="@drawable/arrow_tagf"
                         android:scaleType="fitCenter" android:layout_marginTop="10dip"/>
                 <TextView
@@ -46,13 +43,15 @@
                         android:textStyle="bold"/>
                 <LinearLayout
                         android:orientation="vertical"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent" android:padding="15dip" android:id="@+id/organizerOnly"
-                        android:visibility="invisible">
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="15dip" android:id="@+id/organizerOnly"
+                        android:visibility="visible">
                     <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/arrow_organizer"
+                            android:gravity="center_vertical|center_horizontal"
                             android:id="@+id/textView1"/>
                     <Button
                             android:layout_width="wrap_content"
@@ -61,30 +60,40 @@
                             android:id="@+id/switchToSend" android:layout_gravity="center"/>
                 </LinearLayout>
             </LinearLayout>
-            <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent" android:gravity="center_vertical|center_horizontal"
-                    android:id="@+id/sendMode">
-                <ImageView
-                        android:layout_width="50dip"
-                        android:layout_height="500dip"
-                        android:id="@+id/organizerPic" android:layout_gravity="center"
-                        />
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/arrow_tag_here"
-                        android:id="@+id/textView2" android:textStyle="bold"
-                        android:textAppearance="@android:style/TextAppearance.Large"/>
-                <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/arrow_back_receive"
-                        android:id="@+id/switchToTag" android:layout_marginTop="30dip"/>
-            </LinearLayout>
+
+          <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|center_horizontal"
+            android:id="@+id/sendMode">
+
+            <ImageView
+              android:layout_width="fill_parent"
+              android:layout_height="0dp"
+              android:scaleType="centerInside"
+              android:layout_weight="1"
+              android:id="@+id/organizerPic"
+              android:layout_gravity="center" />
+
+            <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/arrow_tag_here"
+              android:id="@+id/textView2"
+              android:padding="30dip"
+              android:gravity="center_vertical|center_horizontal"
+              android:textStyle="bold"
+              android:textAppearance="@android:style/TextAppearance.Large" />
+
+            <Button
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/arrow_back_receive"
+              android:id="@+id/switchToTag"
+              android:layout_marginTop="30dip" />
+          </LinearLayout>
         </ViewFlipper>
-    </ScrollView>
 
     <ListView
             android:id="@+id/left_drawer"

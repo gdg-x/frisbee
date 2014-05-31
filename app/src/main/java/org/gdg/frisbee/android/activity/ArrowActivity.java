@@ -28,6 +28,9 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 
@@ -69,6 +72,8 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
 
     public static final String ID_SEPARATOR_FOR_SPLIT = "\\|";
     public static final String ID_SPLIT_CHAR = "|";
+    private static final int REQUEST_LEADERBOARD = 1;
+
     private static String LOG_TAG = "GDG-Arrow";
     private boolean isOrganizer = false;
     private String previous;
@@ -124,6 +129,24 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.arrow_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.arrow_lb:
+                startActivityForResult(Games.Leaderboards.getLeaderboardIntent(getGoogleApiClient(), Const.ARROW_LB), REQUEST_LEADERBOARD);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         handleIntent(getIntent());
@@ -161,7 +184,7 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
     private void taggedPerson(String msg) {
 
         try {
-            String decrypted = CryptoUtils.decrypt(getString(R.string.arrow_k), msg);
+            String decrypted = CryptoUtils.decrypt(Const.ARROW_K, msg);
 
             String[] parts = decrypted.split(ID_SEPARATOR_FOR_SPLIT);
 
@@ -272,7 +295,7 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
     public NdefMessage createNdefMessage(NfcEvent nfcEvent) {
 
         try {
-            String msg = CryptoUtils.encrypt(getString(R.string.arrow_k), Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getId()+
+            String msg = CryptoUtils.encrypt(Const.ARROW_K, Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getId()+
                     ID_SPLIT_CHAR + getStartOfToday());
             NdefRecord mimeRecord = new NdefRecord(
                     NdefRecord.TNF_MIME_MEDIA ,
