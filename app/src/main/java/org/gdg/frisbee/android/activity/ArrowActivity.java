@@ -26,6 +26,7 @@ import android.nfc.NfcEvent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
@@ -42,6 +43,9 @@ import com.google.android.gms.plus.model.people.Person;
 import com.squareup.picasso.Picasso;
 
 import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -215,6 +219,14 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
 
                     }
                 } else if (conflictResult != null) {
+                    previous = mergeIds(new String(conflictResult.getLocalData()), new String(conflictResult.getServerData()));
+
+                    if (previous.contains(id)) {
+                        Toast.makeText(ArrowActivity.this, R.string.arrow_already_tagged, Toast.LENGTH_LONG);
+                    } else {
+                        addTaggedPersonToCloudSave(id);
+                    }
+
                     Toast.makeText(ArrowActivity.this, getString(R.string.arrow_oops), Toast.LENGTH_LONG).show();
                 }
             }
@@ -267,6 +279,14 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
                                 }
                             }, Const.ARROW_STATE_KEY);     */
 
+    }
+
+    private String mergeIds(String list1, String list2) {
+        String[] parts1 = list1.split("\\|");
+        String[] parts2 = list2.split("\\|");
+        Set<String> mergedSet = new HashSet<String>(Arrays.asList(parts1));
+        mergedSet.addAll(Arrays.asList(parts2));
+        return TextUtils.join("|", mergedSet);
     }
 
     private void addTaggedPersonToCloudSave(String id) {
