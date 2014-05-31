@@ -45,9 +45,12 @@
         <activity android:name=".activity.SettingsActivity">
         </activity>
         <activity android:name=".activity.ArrowActivity" android:screenOrientation="portrait">
+          <intent-filter>
             <action android:name="android.nfc.action.NDEF_DISCOVERED" />
             <category android:name="android.intent.category.DEFAULT" />
             <data android:mimeType="application/vnd.org.gdgx.frisbee.arrow" />
+          </intent-filter>
+
         </activity>
         <activity android:name=".activity.FirstStartActivity" android:theme="@style/GDG.NoActionBar">
         </activity>
