@@ -119,7 +119,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
             @Override
             public void onResponse(final Directory directory) {
                 getSupportActionBar().setListNavigationCallbacks(mSpinnerAdapter, MainActivity.this);
-                App.getInstance().getModelCache().putAsync("chapter_list", directory, DateTime.now().plusDays(1), new ModelCache.CachePutListener() {
+                App.getInstance().getModelCache().putAsync("chapter_list_hub", directory, DateTime.now().plusDays(1), new ModelCache.CachePutListener() {
                     @Override
                     public void onPutIntoCache() {
                         ArrayList<Chapter> chapters = directory.getGroups();
