@@ -30,6 +30,7 @@
     <application android:icon="@drawable/icon" android:label="@string/app_name" android:hardwareAccelerated="true" android:largeHeap="true" android:theme="@style/Theme.GDG" android:logo="@drawable/ic_logo_wide" android:name=".app.App" android:backupAgent=".app.BackupAgent">
         <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="@string/android_simple_api_access_key"/>
         <meta-data android:name="com.google.android.gms.games.APP_ID" android:value="@string/play_app_id" />
+        <meta-data android:name="com.google.android.gms.appstate.APP_ID" android:value="@string/play_app_id"/>
         <meta-data android:name="com.google.android.backup.api_key" android:value="@string/android_backup_key" />
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
         <meta-data android:name="android.app.default_searchable"

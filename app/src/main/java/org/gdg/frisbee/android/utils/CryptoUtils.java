@@ -17,10 +17,8 @@
 package org.gdg.frisbee.android.utils;
 
 import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.SecureRandom;
 
 /**
  * Created with IntelliJ IDEA.
@@ -44,12 +42,8 @@ public class CryptoUtils {
         return new String(result);
     }
 
-    private static byte[] getRawKey(byte[] seed) throws Exception {
-        KeyGenerator kgen = KeyGenerator.getInstance("AES");
-        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
-        sr.setSeed(seed);
-        kgen.init(128, sr); // 192 and 256 bits may not be available
-        SecretKey skey = kgen.generateKey();
+    private static byte[] getRawKey(byte[] key) throws Exception {
+        SecretKey skey = new SecretKeySpec(key, "AES");
         byte[] raw = skey.getEncoded();
         return raw;
     }

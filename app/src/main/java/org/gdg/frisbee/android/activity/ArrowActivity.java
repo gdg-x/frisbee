@@ -205,18 +205,13 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
                             if (previous.contains(id)) {
                                 Toast.makeText(ArrowActivity.this, R.string.arrow_already_tagged, Toast.LENGTH_LONG);
                             } else {
-                                previous = previous + "|" + id;
-                                AppStateManager.update(getGoogleApiClient(), Const.ARROW_DONE_STATE_KEY, previous.getBytes());
-                                Plus.PeopleApi.load(getGoogleApiClient(), id).setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
-                                    @Override
-                                    public void onResult(People.LoadPeopleResult loadPeopleResult) {
-                                        Person organizer = loadPeopleResult.getPersonBuffer().get(0);
-                                        Toast.makeText(ArrowActivity.this, "It worked...you tagged " + organizer.getDisplayName(), Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                                Toast.makeText(ArrowActivity.this, "It worked...you tagged " + id, Toast.LENGTH_LONG).show();
+                                addTaggedPersonToCloudSave(id);
                             }
+                        } else {
+                            addTaggedPersonToCloudSave(id);
                         }
+                    } else {
+
                     }
                 } else if (conflictResult != null) {
                     Toast.makeText(ArrowActivity.this, getString(R.string.arrow_oops), Toast.LENGTH_LONG).show();
@@ -273,6 +268,19 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
 
     }
 
+    private void addTaggedPersonToCloudSave(String id) {
+        previous = previous + "|" + id;
+        AppStateManager.update(getGoogleApiClient(), Const.ARROW_DONE_STATE_KEY, previous.getBytes());
+        Plus.PeopleApi.load(getGoogleApiClient(), id).setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
+            @Override
+            public void onResult(People.LoadPeopleResult loadPeopleResult) {
+                Person organizer = loadPeopleResult.getPersonBuffer().get(0);
+                Toast.makeText(ArrowActivity.this, "It worked...you tagged " + organizer.getDisplayName(), Toast.LENGTH_LONG).show();
+            }
+        });
+        Toast.makeText(ArrowActivity.this, "It worked...you tagged " + id, Toast.LENGTH_LONG).show();
+    }
+
     @Override
     public void onNdefPushComplete(NfcEvent nfcEvent) {
 
@@ -316,6 +324,7 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
                 }
             }
         });
+        mNfcAdapter.setNdefPushMessage(null, this);
 
         GdgX xClient = new GdgX();
         xClient.checkOrganizer(Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getId(), new Response.Listener<OrganizerCheckResponse>() {
