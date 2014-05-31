@@ -28,17 +28,17 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.Toast;
-import android.widget.ViewFlipper;
+import android.widget.*;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.android.gms.appstate.AppStateManager;
 import com.google.android.gms.appstate.AppStateStatusCodes;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.plus.People;
 import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.model.people.Person;
+import com.squareup.picasso.Picasso;
 
 import java.nio.charset.Charset;
 
@@ -47,7 +47,6 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.GdgX;
 import org.gdg.frisbee.android.api.model.OrganizerCheckResponse;
 import org.gdg.frisbee.android.utils.CryptoUtils;
-import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
@@ -81,6 +80,10 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
 
     @InjectView(R.id.organizerOnly)
     LinearLayout organizerOnly;
+
+    @InjectView(R.id.organizerPic)
+    ImageView organizerPic;
+    private String mPendingScore;
 
     @Override
     protected String getTrackedViewName() {
@@ -128,7 +131,9 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
                     NdefRecord[] records = msgs[i].getRecords();
                     for(int j = 0; j < records.length; j++) {
                         NdefRecord record = records[j];
-                        if(record.getTnf() == NdefRecord.TNF_MIME_MEDIA && record.getType().equals(Const.ARROW_MIME.getBytes(Charset.forName("US-ASCII")))) {
+                        byte[] typeArray = record.getType();
+                        String mimeType = new String(typeArray);
+                        if(record.getTnf() == NdefRecord.TNF_MIME_MEDIA && mimeType.equals(Const.ARROW_MIME)) {
                             taggedPerson(new String(record.getPayload()));
                         }
                     }
@@ -140,7 +145,7 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
 
     @Override
     protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);    //To change body of overridden methods use File | Settings | File Templates.
+        super.onNewIntent(intent);
         handleIntent(intent);
     }
 
@@ -149,14 +154,19 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
         try {
             String decrypted = CryptoUtils.decrypt(getString(R.string.arrow_k), msg);
 
-            String[] parts = decrypted.split("|");
+            String[] parts = decrypted.split("\\|");
 
             if(parts.length == 2) {
 
                 long dt = Long.parseLong(parts[1]);
 
-                if(dt == new DateMidnight(DateTimeZone.UTC).getMillis()) {
-                    score(parts[0]);
+                if(dt == getStartOfToday()) {
+                    if (getGoogleApiClient().isConnected()) {
+                        score(parts[0]);
+                    } else {
+                        mPendingScore = parts[0];
+                        getGoogleApiClient().connect();
+                    }
                 } else {
                     Toast.makeText(this, getString(R.string.arrow_oops), Toast.LENGTH_LONG).show();
                 }
@@ -196,6 +206,14 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
                                 Toast.makeText(ArrowActivity.this, R.string.arrow_already_tagged, Toast.LENGTH_LONG);
                             } else {
                                 previous = previous + "|" + id;
+                                AppStateManager.update(getGoogleApiClient(), Const.ARROW_DONE_STATE_KEY, previous.getBytes());
+                                Plus.PeopleApi.load(getGoogleApiClient(), id).setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
+                                    @Override
+                                    public void onResult(People.LoadPeopleResult loadPeopleResult) {
+                                        Person organizer = loadPeopleResult.getPersonBuffer().get(0);
+                                        Toast.makeText(ArrowActivity.this, "It worked...you tagged " + organizer.getDisplayName(), Toast.LENGTH_LONG).show();
+                                    }
+                                });
                                 Toast.makeText(ArrowActivity.this, "It worked...you tagged " + id, Toast.LENGTH_LONG).show();
                             }
                         }
@@ -269,11 +287,12 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
     public NdefMessage createNdefMessage(NfcEvent nfcEvent) {
 
         try {
-            String msg = CryptoUtils.encrypt(getString(R.string.arrow_k), Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getId()+"|"+DateTime.now(DateTimeZone.UTC).withTimeAtStartOfDay().getMillis());
+            String msg = CryptoUtils.encrypt(getString(R.string.arrow_k), Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getId()+"|"+ getStartOfToday());
             NdefRecord mimeRecord = new NdefRecord(
                     NdefRecord.TNF_MIME_MEDIA ,
                     Const.ARROW_MIME.getBytes(Charset.forName("US-ASCII")),
-                    new byte[0],msg.getBytes(Charset.forName("US-ASCII")));
+                    new byte[0],
+                    msg.getBytes(Charset.forName("US-ASCII")));
             NdefMessage message = new NdefMessage(new NdefRecord[]{mimeRecord});
             return message;
         } catch (Exception e) {
@@ -305,6 +324,8 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
                         if(organizerCheckResponse.getChapters().size() > 0) {
                             isOrganizer = true;
                             organizerOnly.setVisibility(View.VISIBLE);
+                            String imageUrl = Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getImage().getUrl();
+                            Picasso.with(ArrowActivity.this).load(imageUrl).into(organizerPic);
                         } else {
                             isOrganizer = false;
                             organizerOnly.setVisibility(View.INVISIBLE);
@@ -317,5 +338,15 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
                         organizerOnly.setVisibility(View.INVISIBLE);
                     }
                 }).execute();
+
+        if (mPendingScore != null){
+            score(mPendingScore);
+            mPendingScore = null;
+        }
     }
+
+    public long getStartOfToday() {
+        return DateTime.now(DateTimeZone.UTC).withTimeAtStartOfDay().getMillis();
+    }
+
 }
