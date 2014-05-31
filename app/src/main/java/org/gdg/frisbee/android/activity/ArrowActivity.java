@@ -67,8 +67,12 @@ import butterknife.InjectView;
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.OnNdefPushCompleteCallback, NfcAdapter.CreateNdefMessageCallback {
 
+    public static final String ID_SEPARATOR_FOR_SPLIT = "\\|";
+    public static final String ID_SPLIT_CHAR = "|";
     private static String LOG_TAG = "GDG-Arrow";
     private boolean isOrganizer = false;
+    private String previous;
+    private int score;
 
     private NfcAdapter mNfcAdapter;
 
@@ -159,7 +163,7 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
         try {
             String decrypted = CryptoUtils.decrypt(getString(R.string.arrow_k), msg);
 
-            String[] parts = decrypted.split("\\|");
+            String[] parts = decrypted.split(ID_SEPARATOR_FOR_SPLIT);
 
             if(parts.length == 2) {
 
@@ -181,9 +185,6 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
     }
-
-    private String previous;
-    private int score;
 
     private void score(final String id) {
 
@@ -208,7 +209,7 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
                             previous = new String(loadedResult.getLocalData());
 
                             if (previous.contains(id)) {
-                                Toast.makeText(ArrowActivity.this, R.string.arrow_already_tagged, Toast.LENGTH_LONG);
+                                Toast.makeText(ArrowActivity.this, R.string.arrow_already_tagged, Toast.LENGTH_LONG).show();
                             } else {
                                 addTaggedPersonToCloudSave(id);
                             }
@@ -222,7 +223,7 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
                     previous = mergeIds(new String(conflictResult.getLocalData()), new String(conflictResult.getServerData()));
 
                     if (previous.contains(id)) {
-                        Toast.makeText(ArrowActivity.this, R.string.arrow_already_tagged, Toast.LENGTH_LONG);
+                        Toast.makeText(ArrowActivity.this, R.string.arrow_already_tagged, Toast.LENGTH_LONG).show();
                     } else {
                         addTaggedPersonToCloudSave(id);
                     }
@@ -231,66 +232,18 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
                 }
             }
         });
-
-                            /*
-                            appState.loadState(new OnStateLoadedListener() {
-                                @Override
-                                public void onStateLoaded(int statusCode, int stateKey, byte[] localData) {
-
-                                    if(statusCode == AppStateClient.STATUS_OK || statusCode == AppStateClient.STATUS_STATE_KEY_NOT_FOUND) {
-
-                                        int previousScore = 0;
-                                        if(statusCode == AppStateClient.STATUS_OK) {
-                                            previousScore = ByteBuffer.wrap(localData).getInt();
-                                        }
-
-                                        score = previousScore + 1;
-                                        appState.updateStateImmediate(new OnStateLoadedListener() {
-                                            @Override
-                                            public void onStateLoaded(int i, int i2, byte[] bytes) {
-                                                appState.updateStateImmediate(new OnStateLoadedListener() {
-                                                    @Override
-                                                    public void onStateLoaded(int i, int i2, byte[] localData) {
-                                                        int score = ByteBuffer.wrap(localData).getInt();
-                                                        gamesClient.submitScore(Const.ARROW_LB, score);
-                                                        Log.i(LOG_TAG, "Submitted new Score");
-                                                    }
-
-                                                    @Override
-                                                    public void onStateConflict(int i, String s, byte[] bytes, byte[] bytes2) {
-                                                        //To change body of implemented methods use File | Settings | File Templates.
-                                                        Toast.makeText(ArrowActivity.this, getString(R.string.arrow_oops), Toast.LENGTH_LONG).show();
-                                                    }
-                                                }, Const.ARROW_STATE_KEY, ByteBuffer.allocate(4).putInt(score).array());
-                                            }
-
-                                            @Override
-                                            public void onStateConflict(int i, String s, byte[] bytes, byte[] bytes2) {
-                                                Toast.makeText(ArrowActivity.this, getString(R.string.arrow_oops), Toast.LENGTH_LONG).show();
-                                            }
-                                        }, Const.ARROW_DONE_STATE_KEY, previous.getBytes());
-                                    }
-                                }
-
-                                @Override
-                                public void onStateConflict(int i, String s, byte[] bytes, byte[] bytes2) {
-                                    //To change body of implemented methods use File | Settings | File Templates.
-                                    Toast.makeText(ArrowActivity.this, getString(R.string.arrow_oops), Toast.LENGTH_LONG).show();
-                                }
-                            }, Const.ARROW_STATE_KEY);     */
-
     }
 
     private String mergeIds(String list1, String list2) {
-        String[] parts1 = list1.split("\\|");
-        String[] parts2 = list2.split("\\|");
+        String[] parts1 = list1.split(ID_SEPARATOR_FOR_SPLIT);
+        String[] parts2 = list2.split(ID_SEPARATOR_FOR_SPLIT);
         Set<String> mergedSet = new HashSet<String>(Arrays.asList(parts1));
         mergedSet.addAll(Arrays.asList(parts2));
-        return TextUtils.join("|", mergedSet);
+        return TextUtils.join(ID_SPLIT_CHAR, mergedSet);
     }
 
     private void addTaggedPersonToCloudSave(String id) {
-        previous = previous + "|" + id;
+        previous = previous + ID_SPLIT_CHAR + id;
         AppStateManager.update(getGoogleApiClient(), Const.ARROW_DONE_STATE_KEY, previous.getBytes());
         Games.Leaderboards.submitScore(getGoogleApiClient(), Const.ARROW_LB, previous.split("\\|").length);
 
@@ -319,7 +272,8 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
     public NdefMessage createNdefMessage(NfcEvent nfcEvent) {
 
         try {
-            String msg = CryptoUtils.encrypt(getString(R.string.arrow_k), Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getId()+"|"+ getStartOfToday());
+            String msg = CryptoUtils.encrypt(getString(R.string.arrow_k), Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getId()+
+                    ID_SPLIT_CHAR + getStartOfToday());
             NdefRecord mimeRecord = new NdefRecord(
                     NdefRecord.TNF_MIME_MEDIA ,
                     Const.ARROW_MIME.getBytes(Charset.forName("US-ASCII")),
