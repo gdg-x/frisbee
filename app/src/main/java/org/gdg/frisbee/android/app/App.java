@@ -82,7 +82,7 @@ public class App extends Application implements LocationListener {
     public void onCreate() {
         super.onCreate();
 
-        if (Const.DEVELOPER_MODE) {
+        if (BuildConfig.DEBUG) {
             StrictMode.ThreadPolicy.Builder b = new StrictMode.ThreadPolicy.Builder()
                     .detectDiskReads()
                     .detectDiskWrites()
@@ -157,22 +157,23 @@ public class App extends Application implements LocationListener {
 
     public void migrate(int oldVersion, int newVersion) {
 
-        mPreferences.edit().remove(Const.SETTINGS_GCM_REG_ID).apply();
+        if(oldVersion < 11100) {
+            mPreferences.edit().remove(Const.SETTINGS_GCM_REG_ID).apply();
 
-        mPreferences.edit().clear().apply();
-        mPreferences.edit().putBoolean(Const.SETTINGS_FIRST_START, true);
-        String rootDir = null;
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            // SD-card available
-            rootDir = Environment.getExternalStorageDirectory().getAbsolutePath()
-                    + "/Android/data/" + getPackageName() + "/cache";
-        } else {
+            mPreferences.edit().clear().apply();
+            mPreferences.edit().putBoolean(Const.SETTINGS_FIRST_START, true);
+            String rootDir = null;
+            if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+                // SD-card available
+                String extRootDir = Environment.getExternalStorageDirectory().getAbsolutePath()
+                        + "/Android/data/" + getPackageName() + "/cache";
+                deleteDirectory(new File(extRootDir));
+            }
+
             File internalCacheDir = getCacheDir();
             rootDir = internalCacheDir.getAbsolutePath();
+            deleteDirectory(new File(rootDir));
         }
-        deleteDirectory(new File(rootDir));
-
-        Toast.makeText(getApplicationContext(), "Alpha version always resets Preferences on update.", Toast.LENGTH_LONG).show();
 
         mPreferences.edit().putInt(Const.SETTINGS_VERSION_CODE, newVersion).apply();
     }

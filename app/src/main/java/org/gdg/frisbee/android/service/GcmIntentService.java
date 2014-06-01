@@ -87,7 +87,7 @@ public class GcmIntentService extends IntentService {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_stat_gdg)
-                        .setContentTitle(extras.getString("title",""))
+                        .setContentTitle(extras.containsKey("title") ? extras.getString("title") : "")
                         .setAutoCancel(true)
                         .setTicker(getString(R.string.gcm_event_ticker))
                         .setLights(0x0000FF00, 5000, 5000)

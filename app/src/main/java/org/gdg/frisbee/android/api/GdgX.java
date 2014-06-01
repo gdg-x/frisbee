@@ -30,10 +30,10 @@ import org.gdg.frisbee.android.api.model.*;
  */
 public class GdgX {
 
-    private static final String BASE_URL = "https://gdg-x.hp.af.cm";
-    private static final String GCM_REGISTER_URL = BASE_URL + "/api/v1/gcm/register";
-    private static final String GCM_UNREGISTER_URL = BASE_URL + "/api/v1/gcm/unregister";
-    private static final String GDGX_HOME_GDG_URL = BASE_URL + "/api/v1/user/home";
+    private static final String BASE_URL = "https://hub.gdgx.io";
+    private static final String GCM_REGISTER_URL = BASE_URL + "/api/v1/frisbee/gcm/register";
+    private static final String GCM_UNREGISTER_URL = BASE_URL + "/api/v1/frisbee/gcm/unregister";
+    private static final String GDGX_HOME_GDG_URL = BASE_URL + "/api/v1/frisbee/user/home";
 
     private static final String LOG_TAG = "GDG-GDGX";
     private String mToken;

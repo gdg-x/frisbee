@@ -243,8 +243,10 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
 
         Intent resultData = new Intent(FirstStartActivity.this, MainActivity.class);
         resultData.setAction("finish_first_start");
+        resultData.putExtra(MainActivity.EXTRA_GROUP_ID, mSelectedChapter);
         resultData.putExtra("selected_chapter", mSelectedChapter);
         startActivity(resultData);
+
         super.finish();
     }
 
@@ -261,9 +263,15 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
             protected Void doInBackground(Void... voids) {
 
                 if(enableGcm && mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
-                    setLoadingScreen(true);
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            setLoadingScreen(true);
+                        }
+                    });
                     try {
-                        String token = GoogleAuthUtil.getToken(FirstStartActivity.this, Plus.AccountApi.getAccountName(mGoogleApiClient), "oauth2: "+ Scopes.PLUS_LOGIN);
+                        String token = GoogleAuthUtil.getToken(FirstStartActivity.this, Plus.AccountApi.getAccountName(mGoogleApiClient),
+                                "audience:server:client_id:"+getString(R.string.hub_client_id));
                         final String regid = mGcm.register(getString(R.string.gcm_sender_id));
 
                         GdgX client = new GdgX(token);
@@ -271,6 +279,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
                         ApiRequest req = client.registerGcm(regid, new Response.Listener<GcmRegistrationResponse>() {
                             @Override
                             public void onResponse(GcmRegistrationResponse messageResponse) {
+                                setLoadingScreen(false);
                                 mPreferences.edit()
                                         .putBoolean(Const.SETTINGS_GCM, enableGcm)
                                         .putBoolean(Const.SETTINGS_ANALYTICS, enableAnalytics)
