@@ -55,7 +55,7 @@ public class GdgProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         App app = (App) getContext().getApplicationContext();
-        app.getModelCache().getAsync("chapter_list", false, new ModelCache.CacheListener() {
+        app.getModelCache().getAsync("chapter_list_hub", false, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 mDirectory = (Directory)item;

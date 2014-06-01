@@ -21,6 +21,7 @@
     <string name="drawer_close">Menüyü Kapa</string>
     <string name="info">Bilgi</string>
     <string name="events">Etkinlikler</string>
+
     <string name="add_to_calendar">Takvime ekle</string>
     <string name="share_with_googleplus">Google+ ile Paylaş</string>
     <string name="no_scheduled_events">30 gün içinde gerçekleşecek\netkinlik bulunmuyor.</string>
@@ -113,4 +114,8 @@
     <string name="gcm_event_ticker">Bulunduğunuz GDG\'de yeni bir etkinlik düzenleniyor.</string>
     <string name="flightschool">Dart Flight School</string>
     <string name="flightschool_description">Dart 1.0\'e ulaştı ve uçuşa hazır! Geliştirici toplulukları 2014 Şubat ayı boyunca dünya çapında Dart Flight School etkinlikleri düzenliyorlar. Web geliştirme kanatlarınızı Dart ve Angular ile kazanın!</string>
+    <string name="ioextended_description">Google I/O Extended etkinlikleri sayesinde yerel gruplarınız ile Google konferansına katılma deneyimi yaşarsınız.</string>
+    <string name="ioextended">Extended 2014</string>
+    <string name="media_route_menu_title">Oturumu Cast et</string>
+    <string name="navigate_to">Etkiliğe yol tarifi al</string>
 </resources>

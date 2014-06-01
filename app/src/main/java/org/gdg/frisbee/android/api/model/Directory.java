@@ -18,6 +18,7 @@ package org.gdg.frisbee.android.api.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
@@ -30,6 +31,8 @@ import java.util.ArrayList;
  * Time: 22:30
  */
 public class Directory implements GdgResponse, Parcelable {
+
+    @SerializedName("items")
     private ArrayList<Chapter> groups;
 
     public Directory() {

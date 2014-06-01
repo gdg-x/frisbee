@@ -211,7 +211,7 @@ public class SettingsFragment extends PreferenceFragment {
     private void initPreferences() {
         final ListPreference prefHomeGdgList = (ListPreference) findPreference(Const.SETTINGS_HOME_GDG);
         if (prefHomeGdgList != null) {
-            App.getInstance().getModelCache().getAsync("chapter_list", false, new ModelCache.CacheListener() {
+            App.getInstance().getModelCache().getAsync("chapter_list_hub", false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
                     Directory directory = (Directory) item;

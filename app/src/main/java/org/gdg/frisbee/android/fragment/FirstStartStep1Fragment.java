@@ -113,7 +113,7 @@ public class FirstStartStep1Fragment extends Fragment {
         mFetchChaptersTask = mClient.getDirectory(new Response.Listener<Directory>() {
                   @Override
                   public void onResponse(final Directory directory) {
-                      App.getInstance().getModelCache().putAsync("chapter_list", directory, DateTime.now().plusDays(4), new ModelCache.CachePutListener() {
+                      App.getInstance().getModelCache().putAsync("chapter_list_hub", directory, DateTime.now().plusDays(4), new ModelCache.CachePutListener() {
                           @Override
                           public void onPutIntoCache() {
                               addChapters(directory.getGroups());
@@ -134,7 +134,7 @@ public class FirstStartStep1Fragment extends Fragment {
                   }
               });
 
-        App.getInstance().getModelCache().getAsync("chapter_list", new ModelCache.CacheListener() {
+        App.getInstance().getModelCache().getAsync("chapter_list_hub", new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 Directory directory = (Directory) item;

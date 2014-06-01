@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Google Play game services IDs.
+Save this file as res/values/games-ids.xml in your project.
+-->
+<resources>
+    <string name="app_id">429371117063</string>
+    <string name="achievement_signin_palooza">CgkIh5yNxL8MEAIQAA</string>
+    <string name="achievement_cinephile">CgkIh5yNxL8MEAIQAQ</string>
+    <string name="achievement_gdg_maniac">CgkIh5yNxL8MEAIQAg</string>
+    <string name="achievement_thanks_for_coming_back.">CgkIh5yNxL8MEAIQAw</string>
+    <string name="achievement_king_of_the_hill">CgkIh5yNxL8MEAIQBA</string>
+    <string name="achievement_major_cinephile">CgkIh5yNxL8MEAIQBQ</string>
+    <string name="achievement_gdl_addict">CgkIh5yNxL8MEAIQBg</string>
+    <string name="leaderboard_organizer_hunt">CgkIh5yNxL8MEAIQBw</string>
+</resources>

@@ -24,6 +24,8 @@ import com.google.android.gms.games.Games;
 
 import org.gdg.frisbee.android.Const;
 
+import java.util.ArrayList;
+
 /**
  *
  * Simple Achievements action handler used not to clutter activity code with achievements unlocking.
@@ -35,11 +37,14 @@ public class AchievementActionHandler {
     private GoogleApiClient mGoogleApi;
     private SharedPreferences mPreferences;
 
+    private ArrayList<String> mPending;
+
     private static final int ONE_SEC_IN_MILLISECONDS = 1000;
 
     public AchievementActionHandler(Handler handler,
                                     GoogleApiClient googleApiClient,
                                     SharedPreferences preferences) {
+        mPending = new ArrayList<>();
         mHandler = handler;
         mGoogleApi = googleApiClient;
         mPreferences = preferences;
@@ -84,11 +89,22 @@ public class AchievementActionHandler {
     }
 
     private void postAchievementUnlockedEvent(final String achievementName) {
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Games.Achievements.unlock(mGoogleApi, achievementName);
-            }
-        }, ONE_SEC_IN_MILLISECONDS);
+        if(!mGoogleApi.isConnected())       {
+            mPending.add(achievementName);
+        } else {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Games.Achievements.unlock(mGoogleApi, achievementName);
+                }
+            }, ONE_SEC_IN_MILLISECONDS);
+        }
+    }
+
+    public void onConnected() {
+        for(String achievement : mPending) {
+            postAchievementUnlockedEvent(achievement);
+        }
+        mPending.clear();
     }
 }

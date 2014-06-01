@@ -71,6 +71,9 @@ public class ChapterAdapter extends ArrayAdapter<Chapter> {
 
     @Override
     public long getItemId(int position) {
-        return Utils.stringToLong(getItem(position).getGplusId());
+        if(position > 0 && position < getCount())
+            return Utils.stringToLong(getItem(position).getGplusId());
+        else
+            return 0;
     }
 }

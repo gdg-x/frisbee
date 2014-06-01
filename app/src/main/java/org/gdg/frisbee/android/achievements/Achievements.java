@@ -9,10 +9,10 @@ package org.gdg.frisbee.android.achievements;
 public class Achievements {
 
     // Achievements
-    public static final String ACHIEVEMENT_SIGNIN = "CgkI_9Ga8sMGEAIQAQ";
-    public static final String ACHIEVEMENT_CINEPHILE = "CgkI_9Ga8sMGEAIQAg";
-    public static final String ACHIEVEMENT_MANIAC = "CgkI_9Ga8sMGEAIQAw";
-    public static final String ACHIEVEMENT_RETURN = "CgkI_9Ga8sMGEAIQBA";
-    public static final String ACHIEVEMENT_KING_OF_THE_HILL = "CgkI_9Ga8sMGEAIQBQ";
-    public static final String ACHIEVEMENT_GDL_ADDICT = "CgkI_9Ga8sMGEAIQDg";
+    public static final String ACHIEVEMENT_SIGNIN = "CgkIh5yNxL8MEAIQAA";
+    public static final String ACHIEVEMENT_CINEPHILE = "CgkIh5yNxL8MEAIQAQ";
+    public static final String ACHIEVEMENT_MANIAC = "CgkIh5yNxL8MEAIQAg";
+    public static final String ACHIEVEMENT_RETURN = "CgkIh5yNxL8MEAIQAw";
+    public static final String ACHIEVEMENT_KING_OF_THE_HILL = "CgkIh5yNxL8MEAIQBA";
+    public static final String ACHIEVEMENT_GDL_ADDICT = "CgkIh5yNxL8MEAIQBg";
 }
