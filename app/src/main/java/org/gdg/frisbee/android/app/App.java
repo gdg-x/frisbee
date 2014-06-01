@@ -137,7 +137,7 @@ public class App extends Application implements LocationListener {
                 .downloader(new OkHttpDownloader(this))
                 .memoryCache(new LruCache(this))
                 .build();
-        mPicasso.setDebugging(Const.DEVELOPER_MODE);
+        mPicasso.setDebugging(BuildConfig.DEBUG);
 
         // Initialize GA
         mGaInstance = GoogleAnalytics.getInstance(getApplicationContext());

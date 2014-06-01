@@ -94,7 +94,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
 
             final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_upcoming_event);
 
-            App.getInstance().getModelCache().getAsync("chapter_list",false, new ModelCache.CacheListener() {
+            App.getInstance().getModelCache().getAsync("chapter_list_hub",false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
                     mChapters = ((Directory) item).getGroups();
