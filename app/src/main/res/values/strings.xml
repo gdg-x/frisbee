@@ -155,10 +155,11 @@
     <string name="arrow_scan">Ready to Scan!\nGo find a GDG Organizer\nand ask nicely if you may \"tag\" him/her</string>
     <string name="arrow_organizer">Hey, it seems you are a GDG Organizer. Switch to Send Mode here if you want to allow someone to \"tag\" you.</string>
     <string name="arrow_send_mode">Send Mode</string>
-    <string name="arrow_tag_here">Tag here!</string>
+    <string name="arrow_tag_here">Touch phones and tap to fire off the arrow!</string>
     <string name="arrow_back_receive">Back to Tag Mode</string>
     <string name="arrow_already_tagged">Shoot! You already tagged this Organizer!</string>
     <string name="arrow">Arrow</string>
     <string name="arrow_need_games">You need to be logged in to play GDG Arrow</string>
     <string name="arrow_selfie">You really can not tag yourself. Sorry ;)</string>
+    <string name="arrow_leaderboard">Best of Arrow</string>
 </resources>

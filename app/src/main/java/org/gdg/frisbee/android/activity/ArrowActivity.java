@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.activity;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -32,6 +33,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.*;
 
 import com.android.volley.Response;
@@ -43,6 +46,9 @@ import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.People;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.common.BitMatrix;
 import com.squareup.picasso.Picasso;
 
 import java.nio.charset.Charset;
@@ -98,6 +104,9 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
     @InjectView(R.id.organizerPic)
     ImageView organizerPic;
     private String mPendingScore;
+
+    private static final int WHITE = 0xFFFFFFFF;
+    private static final int BLACK = 0xFF000000;
 
     @Override
     protected String getTrackedViewName() {
@@ -295,8 +304,7 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
     public NdefMessage createNdefMessage(NfcEvent nfcEvent) {
 
         try {
-            String msg = CryptoUtils.encrypt(Const.ARROW_K, Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getId()+
-                    ID_SPLIT_CHAR + getStartOfToday());
+            String msg = getEncryptedMessage();
             NdefRecord mimeRecord = new NdefRecord(
                     NdefRecord.TNF_MIME_MEDIA ,
                     Const.ARROW_MIME.getBytes(Charset.forName("US-ASCII")),
@@ -309,6 +317,11 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
             Toast.makeText(this, getString(R.string.arrow_oops), Toast.LENGTH_LONG).show();
         }
         return null;
+    }
+
+    private String getEncryptedMessage() throws Exception {
+        return CryptoUtils.encrypt(Const.ARROW_K, Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getId() +
+                ID_SPLIT_CHAR + getStartOfToday());
     }
 
     @Override
@@ -334,6 +347,31 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
                         if(organizerCheckResponse.getChapters().size() > 0) {
                             isOrganizer = true;
                             organizerOnly.setVisibility(View.VISIBLE);
+                            Animation animation = AnimationUtils.loadAnimation(ArrowActivity.this, R.anim.grow);
+                            animation.setDuration(1500);
+                            organizerOnly.setAnimation(animation);
+                            organizerOnly.animate();
+                            try {
+                                String message = getEncryptedMessage();
+                                MultiFormatWriter mQrCodeWriter = new MultiFormatWriter();
+                                BitMatrix bitMatrix = mQrCodeWriter.encode(message, BarcodeFormat.QR_CODE, 150, 150);
+                                int width = bitMatrix.getWidth();
+                                int height = bitMatrix.getHeight();
+                                int[] pixels = new int[width * height];
+                                for (int y = 0; y < height; y++) {
+                                    int offset = y * width;
+                                    for (int x = 0; x < width; x++) {
+                                        pixels[offset + x] = bitMatrix.get(x, y) ? BLACK : WHITE;
+                                    }
+                                }
+
+                                Bitmap bitmap = Bitmap.createBitmap(width, height,
+                                        Bitmap.Config.ARGB_8888);
+                                bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+                                organizerPic.setImageBitmap(bitmap);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             String imageUrl = Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getImage().getUrl();
                             Picasso.with(ArrowActivity.this).load(imageUrl).into(organizerPic);
                         } else {
