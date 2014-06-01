@@ -22,6 +22,8 @@ import com.google.api.client.util.Preconditions;
 import com.google.api.client.util.SecurityUtils;
 import com.google.api.client.util.SslUtils;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.OkUrlFactory;
+
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
@@ -109,6 +111,7 @@ public class GapiOkTransport extends HttpTransport {
         // connection with proxy settings
         URL connUrl = new URL(url);
         OkHttpClient client = new OkHttpClient();
+        OkUrlFactory factory = new OkUrlFactory(client);
         SSLContext sslContext;
         try {
             sslContext = SSLContext.getInstance("TLS");
@@ -121,7 +124,7 @@ public class GapiOkTransport extends HttpTransport {
         if(proxy != null)
             client.setProxy(proxy);
 
-        URLConnection conn = client.open(connUrl);
+        URLConnection conn = factory.open(connUrl);
         HttpURLConnection connection = (HttpURLConnection) conn;
         connection.setRequestMethod(method);
 

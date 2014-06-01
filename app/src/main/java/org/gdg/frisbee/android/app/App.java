@@ -31,13 +31,11 @@ import android.widget.Toast;
 import com.google.analytics.tracking.android.GAServiceManager;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
-import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.LruCache;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.net.URL;
 
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
@@ -63,7 +61,6 @@ import uk.co.senab.bitmapcache.BitmapLruCache;
 public class App extends Application implements LocationListener {
 
     private static App mInstance = null;
-    private static boolean mFix = false;
 
     public static App getInstance() {
         return mInstance;
@@ -104,12 +101,6 @@ public class App extends Application implements LocationListener {
 
         // Initialize ACRA Bugreporting (reports get send to GDG[x] Hub)
         ACRA.init(this);
-
-        // Workaround for OkHttp Bug #184. Do it only once
-        if(mFix == false) {
-            URL.setURLStreamHandlerFactory(new OkHttpClient());
-            mFix = true;
-        }
 
         mInstance = this;
 

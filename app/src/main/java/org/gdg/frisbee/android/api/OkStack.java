@@ -23,6 +23,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.toolbox.HurlStack;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.OkUrlFactory;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -49,6 +50,7 @@ public class OkStack extends HurlStack {
     @Override
     protected HttpURLConnection createConnection(URL url) throws IOException {
         OkHttpClient client = new OkHttpClient();
+        OkUrlFactory factory = new OkUrlFactory(client);
         SSLContext sslContext;
         try {
             TrustManager[] trustAllCerts = new TrustManager[] { new GdgTrustManager(App.getInstance().getApplicationContext()) };
@@ -59,7 +61,7 @@ public class OkStack extends HurlStack {
             throw new AssertionError(); // The system has no TLS. Just give up.
         }
         client.setSslSocketFactory(sslContext.getSocketFactory());
-        return client.open(url);
+        return factory.open(url);
     }
 
     @Override
