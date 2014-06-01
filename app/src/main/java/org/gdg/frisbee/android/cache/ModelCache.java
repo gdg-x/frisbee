@@ -41,6 +41,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -517,6 +518,16 @@ public class ModelCache {
         out.close();
     }
 
+
+    private String parseArrayList(Object o) {
+        ArrayList d = (ArrayList)o;
+        String className = "";
+        if(d.size() > 0) {
+            className = className + "<" + d.get(0).getClass().getCanonicalName() + ">";
+        }
+        return className;
+    }
+
     private void writeValueToDisk(OutputStream os, Object o) throws IOException {
 
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(os));
@@ -524,9 +535,18 @@ public class ModelCache {
         String className = o.getClass().getCanonicalName();
 
         if(o instanceof ArrayList) {
-            ArrayList d = (ArrayList)o;
-            if(d.size() > 0)
-                className = className+"<"+d.get(0).getClass().getCanonicalName()+">";
+            className = parseArrayList(o);
+        } else if(o instanceof HashMap) {
+            HashMap d = (HashMap)o;
+            if(d.size() > 0) {
+                Map.Entry entry = (Map.Entry) d.entrySet().iterator().next();
+
+                if(entry.getValue() instanceof ArrayList) {
+                    className = className + "<"+ entry.getKey().getClass().getCanonicalName()+","+parseArrayList(entry.getValue())+">";
+                } else {
+                    className = className + "<"+ entry.getKey().getClass().getCanonicalName()+","+entry.getValue().getClass().getCanonicalName()+">";
+                }
+            }
         }
 
         out.write(className+"\n");
