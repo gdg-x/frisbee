@@ -82,7 +82,7 @@ public class App extends Application implements LocationListener {
     public void onCreate() {
         super.onCreate();
 
-        if (BuildConfig.DEBUG) {
+        if (Const.DEVELOPER_MODE) {
             StrictMode.ThreadPolicy.Builder b = new StrictMode.ThreadPolicy.Builder()
                     .detectDiskReads()
                     .detectDiskWrites()
@@ -119,7 +119,7 @@ public class App extends Application implements LocationListener {
             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
 
             if(mPreferences.getInt(Const.SETTINGS_VERSION_CODE, 0) < pInfo.versionCode)
-                migrate(mPreferences.getInt(Const.SETTINGS_VERSION_CODE, pInfo.versionCode), pInfo.versionCode);
+                migrate(mPreferences.getInt(Const.SETTINGS_VERSION_CODE, 0), pInfo.versionCode);
 
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -157,7 +157,7 @@ public class App extends Application implements LocationListener {
 
     public void migrate(int oldVersion, int newVersion) {
 
-        if(oldVersion < 11100) {
+        if(oldVersion < 11100 || Const.ALPHA) {
             mPreferences.edit().remove(Const.SETTINGS_GCM_REG_ID).apply();
 
             mPreferences.edit().clear().apply();
@@ -165,16 +165,18 @@ public class App extends Application implements LocationListener {
             String rootDir = null;
             if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
                 // SD-card available
-                String extRootDir = Environment.getExternalStorageDirectory().getAbsolutePath()
+                String rootDirExt = Environment.getExternalStorageDirectory().getAbsolutePath()
                         + "/Android/data/" + getPackageName() + "/cache";
-                deleteDirectory(new File(extRootDir));
+                deleteDirectory(new File(rootDirExt));
             }
 
             File internalCacheDir = getCacheDir();
             rootDir = internalCacheDir.getAbsolutePath();
             deleteDirectory(new File(rootDir));
-        }
 
+            if(Const.ALPHA)
+                Toast.makeText(getApplicationContext(), "Alpha version always resets Preferences on update.", Toast.LENGTH_LONG).show();
+        }
         mPreferences.edit().putInt(Const.SETTINGS_VERSION_CODE, newVersion).apply();
     }
 

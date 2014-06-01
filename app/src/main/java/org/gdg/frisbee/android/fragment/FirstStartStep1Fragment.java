@@ -134,7 +134,7 @@ public class FirstStartStep1Fragment extends Fragment {
                   }
               });
 
-        App.getInstance().getModelCache().getAsync("chapter_list", new ModelCache.CacheListener() {
+        App.getInstance().getModelCache().getAsync("chapter_list_hub", new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 Directory directory = (Directory) item;

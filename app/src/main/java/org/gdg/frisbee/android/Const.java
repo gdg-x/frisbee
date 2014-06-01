@@ -79,7 +79,8 @@ public class Const {
     }
 
     public static final int LOG_LEVEL = LogLevel.DEBUG;
-    public static final boolean DEVELOPER_MODE = true;
+    public static final boolean DEVELOPER_MODE = false;
 
     public static final String TRUSTSTORE_PW = "VU%&ibkr45pnq39v53x";
+    public static final boolean ALPHA = false;
 }

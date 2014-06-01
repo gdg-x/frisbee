@@ -263,7 +263,7 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
 
     @Override
     public void onConnected(Bundle bundle) {
-
+        mAchievementActionHandler.onConnected();
     }
 
     @Override

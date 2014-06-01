@@ -144,7 +144,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
             }
 
             if(Utils.isOnline(this)) {
-                App.getInstance().getModelCache().getAsync("chapter_list", new ModelCache.CacheListener() {
+                App.getInstance().getModelCache().getAsync("chapter_list_hub", new ModelCache.CacheListener() {
                     @Override
                     public void onGet(Object item) {
                         Directory directory = (Directory)item;
@@ -158,7 +158,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
                 });
             } else {
 
-                App.getInstance().getModelCache().getAsync("chapter_list", false, new ModelCache.CacheListener() {
+                App.getInstance().getModelCache().getAsync("chapter_list_hub", false, new ModelCache.CacheListener() {
                     @Override
                     public void onGet(Object item) {
                         Directory directory = (Directory)item;

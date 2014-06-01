@@ -10,7 +10,7 @@ def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
 // Manifest version information!
 def versionMajor = 1
 def versionMinor = 1
-def versionPatch = 0
+def versionPatch = 1
 def versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
 android {
@@ -97,6 +97,4 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.2.0'
     compile 'com.jakewharton:butterknife:5.1.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
-
-    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.1'
 }
