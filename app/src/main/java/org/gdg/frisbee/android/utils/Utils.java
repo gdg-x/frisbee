@@ -75,6 +75,15 @@ public class Utils {
         return dp;
     }
 
+    public static String getUppercaseLetters(String in ) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < in.length(); i++) {
+            char c = in.charAt(i);
+            if(Character.isUpperCase(c)) sb.append(c);
+        }
+        return sb.toString();
+    }
+
     public static Map<String, String> splitQuery(URL url) throws UnsupportedEncodingException {
         Map<String, String> query_pairs = new HashMap<String, String>();
         String query = url.getQuery();

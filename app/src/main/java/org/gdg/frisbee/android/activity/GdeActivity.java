@@ -2,6 +2,7 @@ package org.gdg.frisbee.android.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -23,6 +24,7 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.fragment.GdeListFragment;
 import org.gdg.frisbee.android.fragment.GdlListFragment;
+import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
 import timber.log.Timber;
 
@@ -47,20 +49,20 @@ public class GdeActivity extends GdgNavDrawerActivity {
     @InjectView(R.id.titles)
     TitlePageIndicator mIndicator;
 
+    private Handler mHandler = new Handler();
+
     private GdeCategoryAdapter mViewPagerAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_gdl);
+        setContentView(R.layout.activity_gde);
 
         getSupportActionBar().setLogo(R.drawable.ic_gde_logo_wide);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mViewPagerAdapter = new GdeCategoryAdapter(this, getSupportFragmentManager());
-        mViewPager.setAdapter(mViewPagerAdapter);
-        mIndicator.setViewPager(mViewPager);
 
         mGdeDirectory = new GdeDirectory();
         final ApiRequest mFetchGdesTask = mGdeDirectory.getDirectory(new Response.Listener<HashMap<String, ArrayList<Gde>>>() {
@@ -97,9 +99,17 @@ public class GdeActivity extends GdgNavDrawerActivity {
     }
 
 
-    private void addGdes(HashMap<String, ArrayList<Gde>> directory) {
-        mViewPagerAdapter.addMap(directory);
-        mViewPagerAdapter.notifyDataSetChanged();
+    private void addGdes(final HashMap<String, ArrayList<Gde>> directory) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                mViewPagerAdapter.addMap(directory);
+                mViewPagerAdapter.notifyDataSetChanged();
+
+                mViewPager.setAdapter(mViewPagerAdapter);
+                mIndicator.setViewPager(mViewPager);
+            }
+        });
     }
 
     protected String getTrackedViewName() {
@@ -145,7 +155,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
         @Override
         public Fragment getItem(int position) {
             String key = mGdeMap.keySet().toArray(new String[0])[position];
-            Fragment frag = GdeListFragment.newInstance(mGdeMap.get(mGdeMap.get(key)), position == mViewPager.getCurrentItem());
+            Fragment frag = GdeListFragment.newInstance(mGdeMap.get(key), position == mViewPager.getCurrentItem());
             mFragments.append(position, new WeakReference<Fragment>(frag));
 
             return frag;
@@ -153,8 +163,10 @@ public class GdeActivity extends GdgNavDrawerActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            if(position > 0 && position < mGdeMap.keySet().size()) {
-                return mGdeMap.keySet().toArray(new String[0])[position];
+            if(position > -1 && position < mGdeMap.keySet().size()) {
+                String title = mGdeMap.keySet().toArray(new String[0])[position];
+                title = title.length() > 14 ? Utils.getUppercaseLetters(title) : title;
+                return title;
             } else {
                 return "";
             }
