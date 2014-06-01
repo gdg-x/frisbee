@@ -111,7 +111,6 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         getSupportActionBar().setListNavigationCallbacks(mSpinnerAdapter, MainActivity.this);
 
 
-
         mFetchChaptersTask = mClient.getDirectory(new Response.Listener<Directory>() {
             @Override
             public void onResponse(final Directory directory) {
@@ -120,7 +119,6 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
                     @Override
                     public void onPutIntoCache() {
                         ArrayList<Chapter> chapters = directory.getGroups();
-
                         initChapters(chapters);
                     }
                 });
@@ -133,7 +131,17 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
             }
         });
 
+
         if(savedInstanceState == null) {
+
+            Intent intent = getIntent();
+            if(intent != null && intent.getAction() != null && intent.getAction().equals("finish_first_start")) {
+                Timber.d("Completed FirstStartWizard");
+
+                if(mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
+                    mFirstStart = true;
+                }
+            }
 
             if(Utils.isOnline(this)) {
                 App.getInstance().getModelCache().getAsync("chapter_list", new ModelCache.CacheListener() {
@@ -184,25 +192,17 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
             }
         }
 
-        Intent intent = getIntent();
-        if(intent != null && intent.getAction() != null && intent.getAction().equals("finish_first_start")) {
-                Timber.d("Completed FirstStartWizard");
-
-                if(mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
-                    mFirstStart = true;
-                }
-
-                Chapter homeGdgd = getIntent().getParcelableExtra("selected_chapter");
-                getSupportActionBar().setSelectedNavigationItem(mSpinnerAdapter.getPosition(homeGdgd));
-                mViewPagerAdapter.setSelectedChapter(homeGdgd);
-        }
-
         Time now = new Time();
         now.setToNow();
+
         if((mPreferences.getInt(Const.SETTINGS_SEASONS_GREETINGS, now.year-1) < now.year) && (now.yearDay >= 354 && now.yearDay <= 366)) {
             mPreferences.edit().putInt(Const.SETTINGS_SEASONS_GREETINGS, now.year).commit();
             SeasonsGreetingsFragment seasonsGreetings = new SeasonsGreetingsFragment();
             seasonsGreetings.show(getSupportFragmentManager(), "dialog");
+        }
+
+        if(mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
+            checkAchievements();
         }
     }
 
