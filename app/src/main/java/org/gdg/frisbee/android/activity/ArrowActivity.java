@@ -20,6 +20,7 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -47,6 +48,8 @@ import com.google.android.gms.plus.model.people.Person;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -76,6 +79,7 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
     public static final String ID_SEPARATOR_FOR_SPLIT = "\\|";
     public static final String ID_SPLIT_CHAR = "|";
     private static final int REQUEST_LEADERBOARD = 1;
+    private static final int REQUEST_QR_SCAN = 2;
 
     private static String LOG_TAG = "GDG-Arrow";
     private boolean isOrganizer = false;
@@ -97,6 +101,9 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
 
     @InjectView(R.id.organizerOnly)
     LinearLayout organizerOnly;
+
+    @InjectView(R.id.imageView)
+    ImageView scanImageView;
 
     @InjectView(R.id.organizerPic)
     ImageView organizerPic;
@@ -123,7 +130,18 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
         arrowPreferences = getSharedPreferences("arrow", MODE_PRIVATE);
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        if (mNfcAdapter == null) showNoNfc();
+        if (mNfcAdapter == null) {
+            showNoNfc();
+        }
+        scanImageView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                IntentIntegrator integrator = new IntentIntegrator(ArrowActivity.this);
+                integrator.initiateScan();
+            }
+        });
+
         switchToReceive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -185,6 +203,14 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         handleIntent(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, responseCode, intent);
+        if (result.getContents().startsWith(Const.QR_MSG_PREFIX)) {
+            taggedPerson(result.getContents().substring(Const.QR_MSG_PREFIX.length()));
+        }
     }
 
     private void taggedPerson(String msg) {
@@ -293,8 +319,7 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
     }
 
     public void showNoNfc() {
-        Toast.makeText(this, "No NFC Adapter detected. Sorry :(", Toast.LENGTH_LONG).show();
-        finish();
+        Toast.makeText(this, R.string.no_nfc_use_qr_scanner, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -332,6 +357,29 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
                     viewFlipper.setDisplayedChild(1);
                     mNfcAdapter.setNdefPushMessageCallback(ArrowActivity.this, ArrowActivity.this);
                     mNfcAdapter.setOnNdefPushCompleteCallback(ArrowActivity.this, ArrowActivity.this);
+
+                    try {
+                        String message = Const.QR_MSG_PREFIX + getEncryptedMessage();
+                        MultiFormatWriter mQrCodeWriter = new MultiFormatWriter();
+                        int qrCodeSize = getResources().getInteger(R.integer.qr_code_size);
+                        BitMatrix bitMatrix = mQrCodeWriter.encode(message, BarcodeFormat.QR_CODE, qrCodeSize, qrCodeSize);
+                        int width = bitMatrix.getWidth();
+                        int height = bitMatrix.getHeight();
+                        int[] pixels = new int[width * height];
+                        for (int y = 0; y < height; y++) {
+                            int offset = y * width;
+                            for (int x = 0; x < width; x++) {
+                                pixels[offset + x] = bitMatrix.get(x, y) ? BLACK : WHITE;
+                            }
+                        }
+
+                        Bitmap bitmap = Bitmap.createBitmap(width, height,
+                                Bitmap.Config.ARGB_8888);
+                        bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+                        organizerPic.setImageBitmap(bitmap);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -344,27 +392,6 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
                         if(organizerCheckResponse.getChapters().size() > 0) {
                             isOrganizer = true;
                             organizerOnly.setVisibility(View.VISIBLE);
-                            try {
-                                String message = getEncryptedMessage();
-                                MultiFormatWriter mQrCodeWriter = new MultiFormatWriter();
-                                BitMatrix bitMatrix = mQrCodeWriter.encode(message, BarcodeFormat.QR_CODE, R.integer.qr_code_size, R.integer.qr_code_size);
-                                int width = bitMatrix.getWidth();
-                                int height = bitMatrix.getHeight();
-                                int[] pixels = new int[width * height];
-                                for (int y = 0; y < height; y++) {
-                                    int offset = y * width;
-                                    for (int x = 0; x < width; x++) {
-                                        pixels[offset + x] = bitMatrix.get(x, y) ? BLACK : WHITE;
-                                    }
-                                }
-
-                                Bitmap bitmap = Bitmap.createBitmap(width, height,
-                                        Bitmap.Config.ARGB_8888);
-                                bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
-                                organizerPic.setImageBitmap(bitmap);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
                         } else {
                             isOrganizer = false;
                             organizerOnly.setVisibility(View.INVISIBLE);
