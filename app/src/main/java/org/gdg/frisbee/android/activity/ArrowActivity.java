@@ -33,8 +33,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.*;
 
 import com.android.volley.Response;
@@ -49,7 +47,6 @@ import com.google.android.gms.plus.model.people.Person;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
-import com.squareup.picasso.Picasso;
 
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -347,14 +344,10 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
                         if(organizerCheckResponse.getChapters().size() > 0) {
                             isOrganizer = true;
                             organizerOnly.setVisibility(View.VISIBLE);
-                            Animation animation = AnimationUtils.loadAnimation(ArrowActivity.this, R.anim.grow);
-                            animation.setDuration(1500);
-                            organizerOnly.setAnimation(animation);
-                            organizerOnly.animate();
                             try {
                                 String message = getEncryptedMessage();
                                 MultiFormatWriter mQrCodeWriter = new MultiFormatWriter();
-                                BitMatrix bitMatrix = mQrCodeWriter.encode(message, BarcodeFormat.QR_CODE, 150, 150);
+                                BitMatrix bitMatrix = mQrCodeWriter.encode(message, BarcodeFormat.QR_CODE, R.integer.qr_code_size, R.integer.qr_code_size);
                                 int width = bitMatrix.getWidth();
                                 int height = bitMatrix.getHeight();
                                 int[] pixels = new int[width * height];
@@ -372,8 +365,6 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            String imageUrl = Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getImage().getUrl();
-                            Picasso.with(ArrowActivity.this).load(imageUrl).into(organizerPic);
                         } else {
                             isOrganizer = false;
                             organizerOnly.setVisibility(View.INVISIBLE);
