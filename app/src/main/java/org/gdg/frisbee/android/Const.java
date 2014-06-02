@@ -62,6 +62,7 @@ public class Const {
     public static final int DRAWER_SPECIAL = 3;
     public static final int DRAWER_ACHIEVEMENTS = 4;
     public static final int DRAWER_ARROW = 99;
+    public static final String QR_MSG_PREFIX = "gdgx://arrow?m=";
 
     // Location
     public static int MAX_DISTANCE = 50000; // 50KM
