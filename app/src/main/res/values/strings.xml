@@ -104,6 +104,11 @@
         <item>Get Involved</item>
         <item>3rd Party Libraries</item>
     </string-array>
+    <string-array name="event_tabs">
+      <item>Info</item>
+      <item>Agenda</item>
+      <item>More</item>
+    </string-array>
     <string name="contributors">The GDG app is a community effort and open sourced. The following people contributed to the app:</string>
     <string name="get_involved">Get Involved!</string>
     <string name="get_involved_text">The GDG app is a community effort and open sourced. Everyone is welcome to participate and improve this app.\n\nJust head over to GitHub and checkout our code.\n\nhttps://github.com/gdg-x</string>
@@ -163,4 +168,6 @@
     <string name="arrow_selfie">You really can not tag yourself. Sorry ;)</string>
     <string name="arrow_leaderboard">Best of Arrow</string>
     <string name="no_nfc_use_qr_scanner">No NFC detected, use QR scanner!</string>
+  <string name="event_description">Description</string>
+  <string name="event">Event</string>
 </resources>

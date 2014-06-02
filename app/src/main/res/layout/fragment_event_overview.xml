@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+    <LinearLayout
+      android:orientation="vertical"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:id="@+id/loading"
+      android:gravity="center_vertical|center_horizontal">
+
+      <org.gdg.frisbee.android.view.AnimationImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:src="@drawable/gdg_load" />
+    </LinearLayout>
+
+  <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/scrollView">
+
+    <LinearLayout
+      android:orientation="vertical"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:padding="10dip">
+
+      <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="March 14, 2014"
+        android:id="@+id/date"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="15dip"
+        android:textStyle="bold" />
+
+      <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Event Title"
+        android:id="@+id/title"
+        android:layout_marginTop="10dip"
+        android:gravity="center_horizontal"
+        android:textAppearance="?android:textAppearanceLarge" />
+
+      <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Begin 20:15"
+        android:id="@+id/start_time"
+        android:gravity="start"
+        android:layout_marginTop="15dip"
+       />
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/event_description"
+        android:id="@+id/textView"
+        android:textStyle="bold"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        android:layout_marginLeft="5dip" />
+
+      <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        android:background="@drawable/resources_box"
+        android:padding="8dip"
+        android:id="@+id/event_description_container" >
+        <TextView
+          android:id="@+id/event_description"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+  </ScrollView>
+</LinearLayout>

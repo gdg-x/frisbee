@@ -50,7 +50,7 @@ public class GroupDirectory {
     private static final String GDL_CALENDAR_URL = BASE_URL + "/events/calendar/fc?calendar=gdl&start=1366581600&end=1367186400&_=1366664644691";
     private static final String CHAPTER_CALENDAR_URL = BASE_URL + "/events/feed/json";
     private static final String TAGGED_EVENTS_URL = "https://hub.gdgx.io/api/v1/events/tag/";
-    private static final String EVENT_DETAIL_URL = BASE_URL + "/events/%s/";
+    private static final String EVENT_DETAIL_URL = "https://hub.gdgx.io/api/v1/events/";
     private static final String SHOWCASE_NEXT_URL = BASE_URL + "/showcase/next";
     private static final String PULSE_URL = BASE_URL + "/devreldash/gdg/pulse_stats/";
     private static final String COUNTRY_PULSE_URL = BASE_URL + "/devreldash/gdg/pulse_stats/%s/";
@@ -94,6 +94,16 @@ public class GroupDirectory {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
         return new ApiRequest(pulseReq);
+    }
+
+    public ApiRequest getEvent(String eventId, Response.Listener<EventFullDetails> successListener, Response.ErrorListener errorListener) {
+        GsonRequest<Void, EventFullDetails> eventReq = new GsonRequest<Void, EventFullDetails>(Request.Method.GET,
+                EVENT_DETAIL_URL + eventId,
+                EventFullDetails.class,
+                successListener,
+                errorListener,
+                GsonRequest.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES, new ZuluDateTimeDeserializer()));
+        return new ApiRequest(eventReq);
     }
 
     public ApiRequest getChapterEventList(final DateTime start, final DateTime end, final String chapterId, Response.Listener<ArrayList<Event>> successListener, Response.ErrorListener errorListener) {
