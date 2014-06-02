@@ -16,7 +16,6 @@
 
 package org.gdg.frisbee.android.activity;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -25,7 +24,6 @@ import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextUtils;
@@ -71,15 +69,12 @@ import butterknife.InjectView;
  * User: maui
  * Date: 02.04.14
  * Time: 20:44
- * To change this template use File | Settings | File Templates.
  */
-@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.OnNdefPushCompleteCallback, NfcAdapter.CreateNdefMessageCallback {
 
     public static final String ID_SEPARATOR_FOR_SPLIT = "\\|";
     public static final String ID_SPLIT_CHAR = "|";
     private static final int REQUEST_LEADERBOARD = 1;
-    private static final int REQUEST_QR_SCAN = 2;
 
     private static String LOG_TAG = "GDG-Arrow";
     private boolean isOrganizer = false;
@@ -133,6 +128,7 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
         if (mNfcAdapter == null) {
             showNoNfc();
         }
+
         scanImageView.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -189,7 +185,7 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
                         NdefRecord record = records[j];
                         byte[] typeArray = record.getType();
                         String mimeType = new String(typeArray);
-                        if(record.getTnf() == NdefRecord.TNF_MIME_MEDIA && mimeType.equals(Const.ARROW_MIME)) {
+                        if (record.getTnf() == NdefRecord.TNF_MIME_MEDIA && mimeType.equals(Const.ARROW_MIME)) {
                             taggedPerson(new String(record.getPayload()));
                         }
                     }
@@ -357,33 +353,11 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
                     viewFlipper.setDisplayedChild(1);
                     mNfcAdapter.setNdefPushMessageCallback(ArrowActivity.this, ArrowActivity.this);
                     mNfcAdapter.setOnNdefPushCompleteCallback(ArrowActivity.this, ArrowActivity.this);
-
-                    try {
-                        String message = Const.QR_MSG_PREFIX + getEncryptedMessage();
-                        MultiFormatWriter mQrCodeWriter = new MultiFormatWriter();
-                        int qrCodeSize = getResources().getInteger(R.integer.qr_code_size);
-                        BitMatrix bitMatrix = mQrCodeWriter.encode(message, BarcodeFormat.QR_CODE, qrCodeSize, qrCodeSize);
-                        int width = bitMatrix.getWidth();
-                        int height = bitMatrix.getHeight();
-                        int[] pixels = new int[width * height];
-                        for (int y = 0; y < height; y++) {
-                            int offset = y * width;
-                            for (int x = 0; x < width; x++) {
-                                pixels[offset + x] = bitMatrix.get(x, y) ? BLACK : WHITE;
-                            }
-                        }
-
-                        Bitmap bitmap = Bitmap.createBitmap(width, height,
-                                Bitmap.Config.ARGB_8888);
-                        bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
-                        organizerPic.setImageBitmap(bitmap);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
                 }
             }
         });
         mNfcAdapter.setNdefPushMessage(null, this);
+
 
         GdgX xClient = new GdgX();
         xClient.checkOrganizer(Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getId(), new Response.Listener<OrganizerCheckResponse>() {
