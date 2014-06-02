@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+  <item
+    android:id="@+id/arrow_lb"
+    android:title="@string/arrow_leaderboard"
+    app:showAsAction="ifRoom"
+    android:icon="@drawable/ic_play_games_badge_leaderboards_gray"/>
+  <item
+    android:id="@+id/settings"
+    android:title="@string/settings"
+    app:showAsAction="collapseActionView"
+    android:menuCategory="secondary" />
+  <item
+    android:id="@+id/about"
+    android:title="@string/about"
+    app:showAsAction="collapseActionView"
+    android:menuCategory="secondary" />
+</menu>

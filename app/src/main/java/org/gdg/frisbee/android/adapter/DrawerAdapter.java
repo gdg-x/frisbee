@@ -1,6 +1,8 @@
 package org.gdg.frisbee.android.adapter;
 
 import android.content.Context;
+import android.nfc.NfcAdapter;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,17 +27,23 @@ public class DrawerAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater mInflater;
 
-    private ArrayList<DrawerItem> mItems = new ArrayList<DrawerItem>() {{
-        add(new DrawerItem(Const.DRAWER_HOME, R.drawable.drw_ic_home_gdg, R.string.home_gdg));
-        add(new DrawerItem(Const.DRAWER_GDL, R.drawable.drw_ic_gdl, R.string.gdl));
-        add(new DrawerItem(Const.DRAWER_PULSE, R.drawable.drw_ic_pulse, R.string.pulse));
-        add(new DrawerItem(Const.DRAWER_SPECIAL, R.drawable.drw_ic_ioextended, R.string.ioextended));
-        add(new DrawerItem(Const.DRAWER_ACHIEVEMENTS, R.drawable.drw_ic_achievements, R.string.achievements));
-    }};
+    private ArrayList<DrawerItem> mItems;
 
     public DrawerAdapter(Context ctx) {
         mContext = ctx;
         mInflater = LayoutInflater.from(mContext);
+        initAdapter();
+    }
+
+    private void initAdapter() {
+        mItems = new ArrayList<DrawerItem>() {{
+            add(new DrawerItem(Const.DRAWER_HOME, R.drawable.drw_ic_home_gdg, R.string.home_gdg));
+            add(new DrawerItem(Const.DRAWER_GDL, R.drawable.drw_ic_gdl, R.string.gdl));
+            add(new DrawerItem(Const.DRAWER_PULSE, R.drawable.drw_ic_pulse, R.string.pulse));
+            add(new DrawerItem(Const.DRAWER_SPECIAL, R.drawable.drw_ic_ioextended, R.string.ioextended));
+            add(new DrawerItem(Const.DRAWER_ACHIEVEMENTS, R.drawable.drw_ic_achievements, R.string.achievements));
+            add(new DrawerItem(Const.DRAWER_ARROW, R.drawable.drw_ic_arrow, R.string.arrow));
+        }};
     }
 
     @Override

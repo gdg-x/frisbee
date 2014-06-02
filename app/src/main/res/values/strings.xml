@@ -150,4 +150,17 @@
     <string name="ioextended">Extended 2014</string>
     <string name="media_route_menu_title">Cast session</string>
     <string name="navigate_to">Navigate to event</string>
+
+    <string name="arrow_oops">Uh oh, something went wrong. Please try again.</string>
+    <string name="arrow_scan">Ready to Scan!\nGo find a GDG Organizer\nand ask nicely if you may \"tag\" him/her</string>
+    <string name="arrow_organizer">Hey, it seems you are a GDG Organizer. Switch to Send Mode here if you want to allow someone to \"tag\" you.</string>
+    <string name="arrow_send_mode">Send Mode</string>
+    <string name="arrow_tag_here">Touch NFC phones and tap to fire off the arrow!</string>
+    <string name="arrow_back_receive">Back to Tag Mode</string>
+    <string name="arrow_already_tagged">Shoot! You already tagged this Organizer!</string>
+    <string name="arrow">Arrow</string>
+    <string name="arrow_need_games">You need to be logged in to play GDG Arrow</string>
+    <string name="arrow_selfie">You really can not tag yourself. Sorry ;)</string>
+    <string name="arrow_leaderboard">Best of Arrow</string>
+    <string name="no_nfc_use_qr_scanner">No NFC detected, use QR scanner!</string>
 </resources>
