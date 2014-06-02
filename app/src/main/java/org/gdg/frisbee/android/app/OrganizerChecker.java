@@ -1,58 +1,87 @@
 package org.gdg.frisbee.android.app;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.api.GdgX;
 import org.gdg.frisbee.android.api.model.OrganizerCheckResponse;
 
 public class OrganizerChecker {
     private final Context mContext;
-    private boolean isOrganizer = false;
-    private long lastOrganizerCheck = 0;
+    private boolean mIsOrganizer = false;
+    private long mLastOrganizerCheck = 0;
+    private String mCheckedId = null;
+    private SharedPreferences mPreferences;
 
-    public OrganizerChecker(Context context) {
+    public OrganizerChecker(Context context, SharedPreferences preferences) {
         mContext = context;
+        mPreferences = preferences;
     }
 
-    public void setLastOrganizerCheck(long lastOrganizerCheck) {
-        this.lastOrganizerCheck = lastOrganizerCheck;
+    public void setLastOrganizerCheckTime(long lastOrganizerCheck) {
+        mLastOrganizerCheck = lastOrganizerCheck;
+    }
+
+    public long getLastOrganizerCheckTime(){
+        return mLastOrganizerCheck;
+    }
+
+    public void setLastOrganizerCheckId(String organizerCheckId) {
+        mCheckedId = organizerCheckId;
+    }
+
+    public String getLastOrganizerCheckId() {
+        return mCheckedId;
     }
 
     public boolean isOrganizer() {
-        return isOrganizer;
+        return mIsOrganizer;
     }
 
     public void checkOrganizer(GoogleApiClient apiClient, final OrganizerResponseHandler responseHandler) {
-        if (System.currentTimeMillis() > lastOrganizerCheck + 24 * 60 * 60 * 1000) {
+        final String currentId = Plus.PeopleApi.getCurrentPerson(apiClient).getId();
+
+        if (currentId == null || !currentId.equals(mCheckedId)  || System.currentTimeMillis() > mLastOrganizerCheck + Const.ORGANIZER_CHECK_MAX_TIME) {
+            mIsOrganizer = false;
             GdgX xClient = new GdgX();
-            xClient.checkOrganizer(Plus.PeopleApi.getCurrentPerson(apiClient).getId(), new Response.Listener<OrganizerCheckResponse>() {
+            xClient.checkOrganizer(currentId, new Response.Listener<OrganizerCheckResponse>() {
                 @Override
                 public void onResponse(OrganizerCheckResponse organizerCheckResponse) {
-                    lastOrganizerCheck = System.currentTimeMillis();
+                    mLastOrganizerCheck = System.currentTimeMillis();
+                    mCheckedId = currentId;
+                    savePreferences();
 
                     if (organizerCheckResponse.getChapters().size() > 0) {
-                        isOrganizer = true;
+                        mIsOrganizer = true;
                         responseHandler.onOrganizerResponse(true);
                     } else {
-                        isOrganizer = false;
+                        mIsOrganizer = false;
                         responseHandler.onOrganizerResponse(false);
                     }
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
-                    isOrganizer = false;
+                    mIsOrganizer = false;
                     responseHandler.onErrorResponse();
                 }
             }).execute();
         } else {
-            responseHandler.onOrganizerResponse(isOrganizer);
+            responseHandler.onOrganizerResponse(mIsOrganizer);
         }
+    }
+
+    private void savePreferences() {
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putLong(Const.PREF_ORGANIZER_CHECK_TIME, getLastOrganizerCheckTime());
+        editor.putString(Const.PREF_ORGANIZER_CHECK_ID, getLastOrganizerCheckId());
+        editor.apply();
     }
 
     public static interface OrganizerResponseHandler {

@@ -140,8 +140,10 @@ public class App extends Application implements LocationListener {
         mTracker.setAnonymizeIp(true);
         mGaInstance.setDefaultTracker(mTracker);
 
-        mOrganizerChecker = new OrganizerChecker(this);
-        mOrganizerChecker.setLastOrganizerCheck(mPreferences.getLong("organizer_check", 0));
+        mOrganizerChecker = new OrganizerChecker(this, mPreferences);
+        mOrganizerChecker.setLastOrganizerCheckTime(mPreferences.getLong("organizer_check_time", 0));
+        mOrganizerChecker.setLastOrganizerCheckId(mPreferences.getString("organizer_check_id", null));
+
         GoogleAnalytics.getInstance(this).setAppOptOut(mPreferences.getBoolean("analytics",false));
 
         // Init LastLocationFinder

@@ -63,6 +63,9 @@ public class Const {
     public static final int DRAWER_ACHIEVEMENTS = 4;
     public static final int DRAWER_ARROW = 99;
     public static final String QR_MSG_PREFIX = "gdgx://arrow?m=";
+    public static final String PREF_ORGANIZER_CHECK_TIME = "pref_organizer_check_time";
+    public static final String PREF_ORGANIZER_CHECK_ID = "pref_organizer_check_id";
+    public static final long ORGANIZER_CHECK_MAX_TIME = 2592000000L; // 30 days
 
     // Location
     public static int MAX_DISTANCE = 50000; // 50KM
