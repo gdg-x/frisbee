@@ -16,14 +16,15 @@
 
 package org.gdg.frisbee.android.activity;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextUtils;
@@ -34,8 +35,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.google.android.gms.appstate.AppStateManager;
 import com.google.android.gms.appstate.AppStateStatusCodes;
 import com.google.android.gms.common.api.ResultCallback;
@@ -56,8 +55,7 @@ import java.util.Set;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.GdgX;
-import org.gdg.frisbee.android.api.model.OrganizerCheckResponse;
+import org.gdg.frisbee.android.app.OrganizerChecker;
 import org.gdg.frisbee.android.utils.CryptoUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -70,17 +68,16 @@ import butterknife.InjectView;
  * Date: 02.04.14
  * Time: 20:44
  */
-public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.OnNdefPushCompleteCallback, NfcAdapter.CreateNdefMessageCallback {
+public class ArrowActivity extends GdgNavDrawerActivity {
 
     public static final String ID_SEPARATOR_FOR_SPLIT = "\\|";
     public static final String ID_SPLIT_CHAR = "|";
     private static final int REQUEST_LEADERBOARD = 1;
 
     private static String LOG_TAG = "GDG-Arrow";
-    private boolean isOrganizer = false;
     private String previous;
-    private int score;
 
+    private BaseArrowHandler mArrowHandler;
     private NfcAdapter mNfcAdapter;
 
     private SharedPreferences arrowPreferences;
@@ -121,12 +118,18 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
         if (!mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false))
             finish();
 
-
         arrowPreferences = getSharedPreferences("arrow", MODE_PRIVATE);
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (mNfcAdapter == null) {
             showNoNfc();
+            mArrowHandler = new BaseArrowHandler();
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                mArrowHandler = new NfcArrowHandler();
+            } else {
+                mArrowHandler = new BaseArrowHandler();
+            }
         }
 
         scanImageView.setOnClickListener(new View.OnClickListener() {
@@ -144,7 +147,6 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
                 viewFlipper.setDisplayedChild(0);
             }
         });
-
 
     }
 
@@ -192,6 +194,11 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
 
                 }
             }
+        } else if (Intent.ACTION_VIEW.equals(intent.getAction())){
+            if (intent.getData() != null && intent.getDataString().length() > Const.QR_MSG_PREFIX.length()){
+                String msg = intent.getDataString().substring(Const.QR_MSG_PREFIX.length());
+                taggedPerson(msg);
+            }
         }
     }
 
@@ -203,9 +210,16 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
 
     @Override
     protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, responseCode, intent);
-        if (result.getContents().startsWith(Const.QR_MSG_PREFIX)) {
-            taggedPerson(result.getContents().substring(Const.QR_MSG_PREFIX.length()));
+        switch ( requestCode ) {
+            case IntentIntegrator.REQUEST_CODE:
+                if (responseCode == RESULT_CANCELED){
+                    return;
+                }
+
+                IntentResult result = IntentIntegrator.parseActivityResult(requestCode, responseCode, intent);
+                if (result.getContents().startsWith(Const.QR_MSG_PREFIX)) {
+                    taggedPerson(result.getContents().substring(Const.QR_MSG_PREFIX.length()));
+                }
         }
     }
 
@@ -309,33 +323,10 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
         });
     }
 
-    @Override
-    public void onNdefPushComplete(NfcEvent nfcEvent) {
-
-    }
-
     public void showNoNfc() {
         Toast.makeText(this, R.string.no_nfc_use_qr_scanner, Toast.LENGTH_LONG).show();
     }
 
-    @Override
-    public NdefMessage createNdefMessage(NfcEvent nfcEvent) {
-
-        try {
-            String msg = getEncryptedMessage();
-            NdefRecord mimeRecord = new NdefRecord(
-                    NdefRecord.TNF_MIME_MEDIA ,
-                    Const.ARROW_MIME.getBytes(Charset.forName("US-ASCII")),
-                    new byte[0],
-                    msg.getBytes(Charset.forName("US-ASCII")));
-            NdefMessage message = new NdefMessage(new NdefRecord[]{mimeRecord});
-            return message;
-        } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            Toast.makeText(this, getString(R.string.arrow_oops), Toast.LENGTH_LONG).show();
-        }
-        return null;
-    }
 
     private String getEncryptedMessage() throws Exception {
         return CryptoUtils.encrypt(Const.ARROW_K, Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getId() +
@@ -349,35 +340,30 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
         switchToSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isOrganizer) {
+                if(isOrganizer()) {
                     viewFlipper.setDisplayedChild(1);
-                    mNfcAdapter.setNdefPushMessageCallback(ArrowActivity.this, ArrowActivity.this);
-                    mNfcAdapter.setOnNdefPushCompleteCallback(ArrowActivity.this, ArrowActivity.this);
+                    mArrowHandler.enablePush();
                 }
             }
         });
-        mNfcAdapter.setNdefPushMessage(null, this);
+        mArrowHandler.disablePush();
 
+        checkOrganizer(new OrganizerChecker.OrganizerResponseHandler(){
+            @Override
+            public void onOrganizerResponse(boolean isOrganizer) {
+                if (isOrganizer) {
+                    organizerOnly.setVisibility(View.VISIBLE);
+                    setQrCode(organizerPic);
+                } else {
+                    organizerOnly.setVisibility(View.GONE);
+                }
+            }
 
-        GdgX xClient = new GdgX();
-        xClient.checkOrganizer(Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getId(), new Response.Listener<OrganizerCheckResponse>() {
-                    @Override
-                    public void onResponse(OrganizerCheckResponse organizerCheckResponse) {
-                        if(organizerCheckResponse.getChapters().size() > 0) {
-                            isOrganizer = true;
-                            organizerOnly.setVisibility(View.VISIBLE);
-                        } else {
-                            isOrganizer = false;
-                            organizerOnly.setVisibility(View.INVISIBLE);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        isOrganizer = false;
-                        organizerOnly.setVisibility(View.INVISIBLE);
-                    }
-                }).execute();
+            @Override
+            public void onErrorResponse() {
+                organizerOnly.setVisibility(View.GONE);
+            }
+        });
 
         if (mPendingScore != null){
             score(mPendingScore);
@@ -385,8 +371,75 @@ public class ArrowActivity extends GdgNavDrawerActivity implements NfcAdapter.On
         }
     }
 
+    private void setQrCode(ImageView imageView) {
+        try {
+            String message = Const.QR_MSG_PREFIX + getEncryptedMessage();
+            MultiFormatWriter mQrCodeWriter = new MultiFormatWriter();
+            int qrCodeSize = getResources().getInteger(R.integer.qr_code_size);
+            BitMatrix bitMatrix = mQrCodeWriter.encode(message, BarcodeFormat.QR_CODE, qrCodeSize, qrCodeSize);
+            int width = bitMatrix.getWidth();
+            int height = bitMatrix.getHeight();
+            int[] pixels = new int[width * height];
+            for (int y = 0; y < height; y++) {
+                int offset = y * width;
+                for (int x = 0; x < width; x++) {
+                    pixels[offset + x] = bitMatrix.get(x, y) ? BLACK : WHITE;
+                }
+            }
+
+            Bitmap bitmap = Bitmap.createBitmap(width, height,
+                    Bitmap.Config.ARGB_8888);
+            bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+            imageView.setImageBitmap(bitmap);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public long getStartOfToday() {
         return DateTime.now(DateTimeZone.UTC).withTimeAtStartOfDay().getMillis();
     }
 
+    private class BaseArrowHandler {
+        public void enablePush() {}
+
+        public void disablePush() {
+        }
+    }
+
+@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    private class NfcArrowHandler extends BaseArrowHandler implements NfcAdapter.OnNdefPushCompleteCallback, NfcAdapter.CreateNdefMessageCallback{
+        public void enablePush() {
+            mNfcAdapter.setNdefPushMessageCallback(this, ArrowActivity.this);
+            mNfcAdapter.setOnNdefPushCompleteCallback(this, ArrowActivity.this);
+        }
+
+        public void disablePush() {
+            mNfcAdapter.setNdefPushMessage(null, ArrowActivity.this);
+        }
+
+        @Override
+        public NdefMessage createNdefMessage(NfcEvent nfcEvent) {
+
+            try {
+                String msg = getEncryptedMessage();
+                NdefRecord mimeRecord = new NdefRecord(
+                        NdefRecord.TNF_MIME_MEDIA,
+                        Const.ARROW_MIME.getBytes(Charset.forName("US-ASCII")),
+                        new byte[0],
+                        msg.getBytes(Charset.forName("US-ASCII")));
+                NdefMessage message = new NdefMessage(new NdefRecord[]{mimeRecord});
+                return message;
+            } catch (Exception e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                Toast.makeText(ArrowActivity.this, ArrowActivity.this.getString(R.string.arrow_oops), Toast.LENGTH_LONG).show();
+            }
+            return null;
+        }
+
+        @Override
+        public void onNdefPushComplete(NfcEvent nfcEvent) {
+
+        }
+    }
 }

@@ -8,10 +8,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
 import com.google.android.gms.games.Games;
+
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.DrawerAdapter;
+import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.app.OrganizerChecker;
 import org.joda.time.DateTime;
 
 import butterknife.InjectView;
@@ -178,5 +182,13 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         if (mPreferences.getBoolean(Const.SETTINGS_OPEN_DRAWER_ON_START, Const.SETTINGS_OPEN_DRAWER_ON_START_DEFAULT)) {
             mDrawerLayout.openDrawer(Gravity.LEFT);
         }
+    }
+
+    public boolean isOrganizer() {
+        return ((App)getApplication()).isOrganizer();
+    }
+
+    protected void checkOrganizer(final OrganizerChecker.OrganizerResponseHandler responseHandler) {
+        ((App) getApplication()).checkOrganizer(getGoogleApiClient(), responseHandler);
     }
 }

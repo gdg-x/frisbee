@@ -31,6 +31,7 @@ import android.widget.Toast;
 import com.google.analytics.tracking.android.GAServiceManager;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.picasso.LruCache;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
@@ -74,6 +75,7 @@ public class App extends Application implements LocationListener {
     private Tracker mTracker;
     private GingerbreadLastLocationFinder mLocationFinder;
     private Location mLastLocation;
+    private OrganizerChecker mOrganizerChecker;
 
     @Override
     public void onCreate() {
@@ -138,6 +140,8 @@ public class App extends Application implements LocationListener {
         mTracker.setAnonymizeIp(true);
         mGaInstance.setDefaultTracker(mTracker);
 
+        mOrganizerChecker = new OrganizerChecker(this);
+        mOrganizerChecker.setLastOrganizerCheck(mPreferences.getLong("organizer_check", 0));
         GoogleAnalytics.getInstance(this).setAppOptOut(mPreferences.getBoolean("analytics",false));
 
         // Init LastLocationFinder
@@ -258,5 +262,13 @@ public class App extends Application implements LocationListener {
 
     @Override
     public void onProviderDisabled(String s) {
+    }
+
+    public boolean isOrganizer() {
+        return mOrganizerChecker.isOrganizer();
+    }
+
+    public void checkOrganizer(GoogleApiClient apiClient, OrganizerChecker.OrganizerResponseHandler responseHandler) {
+        mOrganizerChecker.checkOrganizer(apiClient, responseHandler);
     }
 }

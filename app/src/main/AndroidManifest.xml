@@ -51,7 +51,11 @@
             <category android:name="android.intent.category.DEFAULT" />
             <data android:mimeType="application/vnd.org.gdgx.frisbee.arrow" />
           </intent-filter>
-
+          <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <data android:scheme="gdgx" android:host="arrow" />
+          </intent-filter>
         </activity>
         <activity android:name=".activity.FirstStartActivity" android:theme="@style/GDG.NoActionBar">
         </activity>
