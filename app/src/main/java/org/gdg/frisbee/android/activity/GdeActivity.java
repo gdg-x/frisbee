@@ -25,6 +25,7 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.fragment.GdeListFragment;
 import org.gdg.frisbee.android.fragment.GdlListFragment;
+import org.gdg.frisbee.android.fragment.PlainLayoutFragment;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
 import timber.log.Timber;
@@ -160,22 +161,28 @@ public class GdeActivity extends GdgNavDrawerActivity {
 
         @Override
         public int getCount() {
-            return mGdeMap.keySet().size();
+            return mGdeMap.keySet().size()+1;
         }
 
         @Override
         public Fragment getItem(int position) {
-            String key = mGdeMap.keySet().toArray(new String[0])[position];
-            Fragment frag = GdeListFragment.newInstance(mGdeMap.get(key), position == mViewPager.getCurrentItem());
-            mFragments.append(position, new WeakReference<Fragment>(frag));
+            if(position == 0) {
+                return PlainLayoutFragment.newInstance(R.layout.fragment_gde_about);
+            } else {
+                String key = mGdeMap.keySet().toArray(new String[0])[position-1];
+                Fragment frag = GdeListFragment.newInstance(mGdeMap.get(key), position == mViewPager.getCurrentItem());
+                mFragments.append(position, new WeakReference<Fragment>(frag));
 
-            return frag;
+                return frag;
+            }
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            if(position > -1 && position < mGdeMap.keySet().size()) {
-                String title = mGdeMap.keySet().toArray(new String[0])[position];
+            if(position == 0) {
+                return getString(R.string.about);
+            } else if(position > -1 && position-1 < mGdeMap.keySet().size()) {
+                String title = mGdeMap.keySet().toArray(new String[0])[position-1];
                 title = title.length() > 14 ? Utils.getUppercaseLetters(title) : title;
                 return title;
             } else {
@@ -188,16 +195,20 @@ public class GdeActivity extends GdgNavDrawerActivity {
         }
 
         @Override
-        public void onPageSelected(int i) {
-            String key = mGdeMap.keySet().toArray(new String[0])[i];
-            trackView("GDE/" + key);
+        public void onPageSelected(int position) {
+            if (position == 0) {
+                trackView("GDE/About");
+            } else  {
+                String key = mGdeMap.keySet().toArray(new String[0])[position-1];
+                trackView("GDE/" + key);
 
-            WeakReference<Fragment> ref = mFragments.get(i);
-            Fragment frag = null != ref ? ref.get() : null;
+                WeakReference<Fragment> ref = mFragments.get(position-1);
+                Fragment frag = null != ref ? ref.get() : null;
 
-            // We need to notify the fragment that it is selected
-            if (frag != null && frag instanceof Listener) {
-                ((Listener) frag).onPageSelected();
+                // We need to notify the fragment that it is selected
+                if (frag != null && frag instanceof Listener) {
+                    ((Listener) frag).onPageSelected();
+                }
             }
         }
 
