@@ -1,10 +1,13 @@
 package org.gdg.frisbee.android.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.ListView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import org.gdg.frisbee.android.R;
@@ -55,10 +58,6 @@ public class GdeListFragment extends GdgListFragment implements GdeActivity.List
     public void onResume() {
         super.onResume();
         Timber.d("onResume()");
-
-        for(int i = 0; i <= mList.getChildCount(); i++) {
-            mAdapter.updatePlusOne(mList.getChildAt(i));
-        }
     }
 
     @Override
@@ -78,6 +77,15 @@ public class GdeListFragment extends GdgListFragment implements GdeActivity.List
         if(getArguments().getBoolean("active")) {
             onPageSelected();
         }
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        Gde gde = (Gde) mAdapter.getItem(position);
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(gde.getSocialUrl())));
+
     }
 
     @Override

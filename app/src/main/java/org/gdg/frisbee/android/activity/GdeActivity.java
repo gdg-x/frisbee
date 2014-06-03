@@ -20,6 +20,7 @@ import org.gdg.frisbee.android.api.ApiRequest;
 import org.gdg.frisbee.android.api.GdeDirectory;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.Gde;
+import org.gdg.frisbee.android.api.model.GdeList;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.fragment.GdeListFragment;
@@ -65,9 +66,9 @@ public class GdeActivity extends GdgNavDrawerActivity {
         mViewPagerAdapter = new GdeCategoryAdapter(this, getSupportFragmentManager());
 
         mGdeDirectory = new GdeDirectory();
-        final ApiRequest mFetchGdesTask = mGdeDirectory.getDirectory(new Response.Listener<HashMap<String, ArrayList<Gde>>>() {
+        final ApiRequest mFetchGdesTask = mGdeDirectory.getDirectory(new Response.Listener<GdeList>() {
             @Override
-            public void onResponse(final HashMap<String, ArrayList<Gde>> directory) {
+            public void onResponse(final GdeList directory) {
                 App.getInstance().getModelCache().putAsync("gde_map", directory, DateTime.now().plusDays(4), new ModelCache.CachePutListener() {
                     @Override
                     public void onPutIntoCache() {
@@ -87,7 +88,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
         App.getInstance().getModelCache().getAsync("gde_map", new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
-                HashMap<String, ArrayList<Gde>> directory = (HashMap<String, ArrayList<Gde>>) item;
+                GdeList directory = (GdeList) item;
                 addGdes(directory);
             }
 
@@ -99,11 +100,21 @@ public class GdeActivity extends GdgNavDrawerActivity {
     }
 
 
-    private void addGdes(final HashMap<String, ArrayList<Gde>> directory) {
+    private void addGdes(final GdeList directory) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                mViewPagerAdapter.addMap(directory);
+                HashMap<String, GdeList> gdeMap = new HashMap<>();
+
+                for(Gde gde : directory) {
+                    if(!gdeMap.containsKey(gde.getProduct())) {
+                        gdeMap.put(gde.getProduct(), new GdeList());
+                    }
+
+                    gdeMap.get(gde.getProduct()).add(gde);
+                }
+
+                mViewPagerAdapter.addMap(gdeMap);
                 mViewPagerAdapter.notifyDataSetChanged();
 
                 mViewPager.setAdapter(mViewPagerAdapter);
@@ -133,17 +144,17 @@ public class GdeActivity extends GdgNavDrawerActivity {
     public class GdeCategoryAdapter extends FragmentStatePagerAdapter implements ViewPager.OnPageChangeListener {
         private Context mContext;
 
-        private HashMap<String, ArrayList<Gde>> mGdeMap;
+        private HashMap<String, GdeList> mGdeMap;
         private final SparseArray<WeakReference<Fragment>> mFragments
                 = new SparseArray<WeakReference<Fragment>>();
 
         public GdeCategoryAdapter(Context ctx, FragmentManager fm) {
             super(fm);
             mContext = ctx;
-            mGdeMap = new HashMap<String, ArrayList<Gde>>();
+            mGdeMap = new HashMap<String, GdeList>();
         }
 
-        public void addMap(Map<String, ArrayList<Gde>> collection) {
+        public void addMap(Map<String, GdeList> collection) {
             mGdeMap.putAll(collection);
         }
 

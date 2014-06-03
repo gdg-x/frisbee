@@ -5,6 +5,7 @@ import com.android.volley.Response;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.reflect.TypeToken;
 import org.gdg.frisbee.android.api.model.Gde;
+import org.gdg.frisbee.android.api.model.GdeList;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -22,29 +23,11 @@ public class GdeDirectory {
     public GdeDirectory() {
     }
 
-    public ApiRequest getDirectory(final Response.Listener<HashMap<String, ArrayList<Gde>>> successListener, Response.ErrorListener errorListener) {
-        Type type = new TypeToken<ArrayList<Gde>>() {}.getType();
-        GsonRequest<Void, ArrayList<Gde>> dirReq = new GsonRequest<Void, ArrayList<Gde>>(Request.Method.GET,
+    public ApiRequest getDirectory(final Response.Listener<GdeList> successListener, Response.ErrorListener errorListener) {
+        GsonRequest<Void, GdeList> dirReq = new GsonRequest<Void, GdeList>(Request.Method.GET,
                 DIRECTORY_URL,
-                type,
-                new Response.Listener<ArrayList<Gde>>() {
-                    @Override
-                    public void onResponse(ArrayList<Gde> gdes) {
-                        HashMap<String, ArrayList<Gde>> gdeMap = new HashMap<>();
-
-                        for(Gde gde : gdes) {
-                            if(!gdeMap.containsKey(gde.getProduct())) {
-                                gdeMap.put(gde.getProduct(), new ArrayList<Gde>());
-                            }
-
-                            gdeMap.get(gde.getProduct()).add(gde);
-                        }
-
-                        if(successListener != null) {
-                            successListener.onResponse(gdeMap);
-                        }
-                    }
-                },
+                GdeList.class,
+                successListener,
                 errorListener,
                 GsonRequest.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES));
         return new ApiRequest(dirReq);
