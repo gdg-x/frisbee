@@ -24,6 +24,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.google.android.gms.appstate.AppStateManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
@@ -131,6 +132,7 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
                     .addOnConnectionFailedListener(this)
                     .addApi(Plus.API)
                     .addApi(Games.API)
+                    .addApi(AppStateManager.API)
                     .addScope(Plus.SCOPE_PLUS_LOGIN)
                     .addScope(Plus.SCOPE_PLUS_PROFILE)
                     .addScope(Games.SCOPE_GAMES)

@@ -62,6 +62,11 @@ public class Const {
     public static final int DRAWER_SPECIAL = 3;
     public static final int DRAWER_ACHIEVEMENTS = 4;
     public static final int DRAWER_GDE = 5;
+    public static final int DRAWER_ARROW = 99;
+    public static final String QR_MSG_PREFIX = "gdgx://arrow?m=";
+    public static final String PREF_ORGANIZER_CHECK_TIME = "pref_organizer_check_time";
+    public static final String PREF_ORGANIZER_CHECK_ID = "pref_organizer_check_id";
+    public static final long ORGANIZER_CHECK_MAX_TIME = 2592000000L; // 30 days
 
     // Location
     public static int MAX_DISTANCE = 50000; // 50KM
@@ -70,6 +75,13 @@ public class Const {
     public static final String GOOGLE_DEVELOPERS_YT_ID = "UC_x5XG1OV2P6uZZ5FSM9Ttw";
     public static final String ANDROID_DEVELOPERS_YT_ID = "UCVHFbqXqoYvEWM1Ddxl0QDg";
     public static final String YOUTUBE_DEVELOPERS_YT_ID = "UCtVd0c0tGXuTSbU5d8cSBUg";
+
+    public static final String ARROW_MIME = "application/vnd.org.gdgx.frisbee.arrow";
+    public static final String ARROW_LB = "CgkIh5yNxL8MEAIQBw";
+    public static final String ARROW_K = "XXXX111122223333";
+    public static final int ARROW_STATE_KEY = 1;
+
+    public static final int ARROW_DONE_STATE_KEY = 2;
 
     public static final class LogLevel {
         public static final int NONE    = 0;

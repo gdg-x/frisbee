@@ -31,13 +31,12 @@ import android.widget.Toast;
 import com.google.analytics.tracking.android.GAServiceManager;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
-import com.squareup.okhttp.OkHttpClient;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.picasso.LruCache;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.net.URL;
 
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
@@ -63,7 +62,6 @@ import uk.co.senab.bitmapcache.BitmapLruCache;
 public class App extends Application implements LocationListener {
 
     private static App mInstance = null;
-    private static boolean mFix = false;
 
     public static App getInstance() {
         return mInstance;
@@ -77,6 +75,7 @@ public class App extends Application implements LocationListener {
     private Tracker mTracker;
     private GingerbreadLastLocationFinder mLocationFinder;
     private Location mLastLocation;
+    private OrganizerChecker mOrganizerChecker;
 
     @Override
     public void onCreate() {
@@ -104,12 +103,6 @@ public class App extends Application implements LocationListener {
 
         // Initialize ACRA Bugreporting (reports get send to GDG[x] Hub)
         ACRA.init(this);
-
-        // Workaround for OkHttp Bug #184. Do it only once
-        if(mFix == false) {
-            URL.setURLStreamHandlerFactory(new OkHttpClient());
-            mFix = true;
-        }
 
         mInstance = this;
 
@@ -146,6 +139,10 @@ public class App extends Application implements LocationListener {
         mTracker.setAppName(getString(R.string.app_name));
         mTracker.setAnonymizeIp(true);
         mGaInstance.setDefaultTracker(mTracker);
+
+        mOrganizerChecker = new OrganizerChecker(this, mPreferences);
+        mOrganizerChecker.setLastOrganizerCheckTime(mPreferences.getLong("organizer_check_time", 0));
+        mOrganizerChecker.setLastOrganizerCheckId(mPreferences.getString("organizer_check_id", null));
 
         GoogleAnalytics.getInstance(this).setAppOptOut(mPreferences.getBoolean("analytics",false));
 
@@ -270,5 +267,13 @@ public class App extends Application implements LocationListener {
 
     @Override
     public void onProviderDisabled(String s) {
+    }
+
+    public boolean isOrganizer() {
+        return mOrganizerChecker.isOrganizer();
+    }
+
+    public void checkOrganizer(GoogleApiClient apiClient, OrganizerChecker.OrganizerResponseHandler responseHandler) {
+        mOrganizerChecker.checkOrganizer(apiClient, responseHandler);
     }
 }
