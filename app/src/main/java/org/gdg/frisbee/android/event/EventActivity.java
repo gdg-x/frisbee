@@ -73,6 +73,10 @@ public class EventActivity extends GdgActivity {
         mIndicator.setViewPager(mViewPager);
 
         mEventId = getIntent().getStringExtra(Const.EXTRA_EVENT_ID);
+        String section = getIntent().getStringExtra(Const.EXTRA_SECTION);
+        if (EventPagerAdapter.SECTION_OVERVIEW.equals(section)){
+            mIndicator.setCurrentItem(0);
+        }
     }
 
     protected String getTrackedViewName() {
@@ -91,6 +95,7 @@ public class EventActivity extends GdgActivity {
     }
 
     public class EventPagerAdapter extends FragmentStatePagerAdapter {
+        public static final String SECTION_OVERVIEW = "overview";
         private Context mContext;
 
         public EventPagerAdapter(Context ctx, FragmentManager fm) {

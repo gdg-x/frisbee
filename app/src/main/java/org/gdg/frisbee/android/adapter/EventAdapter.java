@@ -123,7 +123,7 @@ public class EventAdapter extends BaseAdapter {
         if (event.getIconUrl() != null){
             holder.icon.setVisibility(View.VISIBLE);
             App.getInstance().getPicasso()
-                .load("https://developers.google.com" + event.getIconUrl())
+                .load(Const.URL_DEVELOPERS_GOOGLE_COM + event.getIconUrl())
                 .into(holder.icon);
         } else {
             holder.icon.setVisibility(View.GONE);
@@ -184,7 +184,7 @@ public class EventAdapter extends BaseAdapter {
             link = event.getLink();
             if (!TextUtils.isEmpty(link)) {
                 if (!link.startsWith("http")) {
-                    link = "https://developers.google.com" + link;
+                    link = Const.URL_DEVELOPERS_GOOGLE_COM + link;
                 }
                 openEventInExternalApp(link);
             }

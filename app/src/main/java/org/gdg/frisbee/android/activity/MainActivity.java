@@ -62,10 +62,7 @@ import timber.log.Timber;
 
 public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNavigationListener{
 
-    public static final String EXTRA_GROUP_ID = "org.gdg.frisbee.CHAPTER";
     public static final String SECTION_EVENTS = "events";
-    public static final String EXTRA_SECTION = "org.gdg.frisbee.SECTION";
-    public static final String EXTRA_EVENT_ID = "org.gdg.frisbee.EVENT";
     private static final int PLAY_SERVICE_DIALOG_REQUEST_CODE = 200;
 
     private static String LOG_TAG = "GDG-MainActivity";
@@ -227,8 +224,8 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         addChapters(chapters);
         Chapter chapter = null;
 
-        if(getIntent().hasExtra(EXTRA_GROUP_ID)) {
-            String chapterId = getIntent().getStringExtra(EXTRA_GROUP_ID);
+        if(getIntent().hasExtra(Const.EXTRA_GROUP_ID)) {
+            String chapterId = getIntent().getStringExtra(Const.EXTRA_GROUP_ID);
             for(Chapter c : chapters) {
                 if(c.getGplusId().equals(chapterId)) {
                     chapter = c;
@@ -246,7 +243,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         mViewPager.setOffscreenPageLimit(2);
         mIndicator.setViewPager(mViewPager);
 
-        if (SECTION_EVENTS.equals(getIntent().getStringExtra(EXTRA_SECTION))) {
+        if (SECTION_EVENTS.equals(getIntent().getStringExtra(Const.EXTRA_SECTION))) {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {

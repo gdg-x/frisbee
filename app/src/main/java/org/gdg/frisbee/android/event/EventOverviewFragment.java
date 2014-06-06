@@ -86,8 +86,12 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
 
     public void updateWithDetails(EventFullDetails eventFullDetails) {
         mTitle.setText(eventFullDetails.getTitle());
-        mEventDescription.setText(Html.fromHtml(eventFullDetails.getAbout()));
-        mStartTime.setText(formatTime(eventFullDetails));
+        String about = eventFullDetails.getAbout();
+        if (about == null) {
+            about = getString(R.string.no_description_available);
+        }
+        mEventDescription.setText(Html.fromHtml(about));
+        mStartTime.setText(getString(R.string.starting_at, formatTime(eventFullDetails)));
         mDate.setText(formatDate(eventFullDetails));
         setIsLoading(false);
     }

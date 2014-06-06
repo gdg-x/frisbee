@@ -170,4 +170,6 @@
     <string name="no_nfc_use_qr_scanner">No NFC detected, use QR scanner!</string>
   <string name="event_description">Description</string>
   <string name="event">Event</string>
+  <string name="no_description_available"><![CDATA[<i>No description available.</i>]]></string>
+  <string name="starting_at">Starting at %1$s</string>
 </resources>

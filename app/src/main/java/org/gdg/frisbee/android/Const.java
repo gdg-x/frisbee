@@ -67,6 +67,10 @@ public class Const {
     public static final String PREF_ORGANIZER_CHECK_ID = "pref_organizer_check_id";
     public static final long ORGANIZER_CHECK_MAX_TIME = 2592000000L; // 30 days
     public static final String EXTRA_EVENT_ID = "EXTRA_EVENT_ID";
+    public static final String EXTRA_SECTION = "EXTRA_SECTION";
+    public static final String URL_DEVELOPERS_GOOGLE_COM = "https://developers.google.com";
+    public static final String EVENTS = "events";
+    public static final String EXTRA_GROUP_ID = "org.gdg.frisbee.CHAPTER";
 
     // Location
     public static int MAX_DISTANCE = 50000; // 50KM
