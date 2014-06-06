@@ -135,19 +135,18 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         if(savedInstanceState == null) {
 
             Intent intent = getIntent();
-            if(intent != null && intent.getAction() != null && intent.getAction().equals("finish_first_start")) {
+            if (intent != null && intent.getAction() != null && intent.getAction().equals("finish_first_start")) {
                 Timber.d("Completed FirstStartWizard");
 
-                if(mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
+                if (mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
                     mFirstStart = true;
                 }
             }
 
-
             App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
-                    Directory directory = (Directory)item;
+                    Directory directory = (Directory) item;
                     initChapters(directory.getGroups());
                 }
 
@@ -161,7 +160,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
                 }
             });
 
-
+        } else {
             if(savedInstanceState.containsKey("chapters")) {
                 ArrayList<Chapter> chapters = savedInstanceState.getParcelableArrayList("chapters");
                 mSpinnerAdapter.clear();

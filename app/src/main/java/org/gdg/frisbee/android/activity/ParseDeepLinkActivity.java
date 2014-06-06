@@ -49,7 +49,7 @@ public class ParseDeepLinkActivity extends Activity {
         // or <plus_id>/events/<eventId>/join    join is optional
         if (deepLinkId.startsWith(Const.URL_DEVELOPERS_GOOGLE_COM)) {
             route.setClass(getApplicationContext(), EventActivity.class);
-            route.putExtra(Const.EXTRA_EVENT_ID, parts[0]);
+            route.putExtra(Const.EXTRA_EVENT_ID, parts[4]);
             route.putExtra(Const.EXTRA_SECTION, EventActivity.EventPagerAdapter.SECTION_OVERVIEW);
         } else {
             // Fallback to the MainActivity in your app.

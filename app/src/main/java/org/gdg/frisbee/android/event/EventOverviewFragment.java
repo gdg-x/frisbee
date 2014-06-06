@@ -16,6 +16,9 @@
 
 package org.gdg.frisbee.android.event;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
@@ -24,15 +27,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.plus.People;
+import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.model.people.Person;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.api.GroupDirectory;
+import org.gdg.frisbee.android.api.model.Chapter;
+import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.EventFullDetails;
+import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -40,6 +57,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
+import timber.log.Timber;
 
 public class EventOverviewFragment extends Fragment implements Response.Listener<EventFullDetails>, Response.ErrorListener {
 
@@ -58,8 +76,13 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
     @InjectView(R.id.loading)
     View mProgressContainer;
 
+    @InjectView(R.id.group_logo)
+    ImageView mGroupLogo;
+
     private boolean mLoading;
     private GroupDirectory mClient;
+    private Directory mDirectory;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,8 +90,6 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
         ButterKnife.inject(this, v);
 
         mClient = new GroupDirectory();
-        mClient.getEvent(getArguments().getString(Const.EXTRA_EVENT_ID), this, this).execute();
-
         return v;
     }
 
@@ -81,7 +102,7 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        mClient.getEvent(getArguments().getString(Const.EXTRA_EVENT_ID), this, this).execute();
     }
 
     public void updateWithDetails(EventFullDetails eventFullDetails) {
@@ -109,8 +130,71 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
     }
 
     @Override
-    public void onResponse(EventFullDetails eventFullDetails) {
+    public void onResponse(final EventFullDetails eventFullDetails) {
         updateWithDetails(eventFullDetails);
+
+        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
+            @Override
+            public void onGet(Object item) {
+                mDirectory = (Directory) item;
+                updateGroupDetails(mDirectory.getGroupById(eventFullDetails.getChapter()));
+            }
+
+            @Override
+            public void onNotFound(String key) {
+                if (Utils.isOnline(getActivity())) {
+                    mClient.getDirectory(new Response.Listener<Directory>() {
+                        @Override
+                        public void onResponse(final Directory directory) {
+                            mDirectory = directory;
+                            updateGroupDetails(mDirectory.getGroupById(eventFullDetails.getChapter()));
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError volleyError) {
+                            Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
+                            Timber.e("Could'nt fetch chapter list", volleyError);
+                        }
+                    }).execute();
+                } else {
+                    Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
+                }
+            }
+        });
+    }
+
+    private void updateGroupDetails(Chapter group) {
+        Plus.PeopleApi.load(((GdgActivity)getActivity()).getGoogleApiClient(), group.getGplusId())
+                .setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
+                    @Override
+                    public void onResult(People.LoadPeopleResult loadPeopleResult) {
+                        if (loadPeopleResult.getStatus().getStatusCode() == CommonStatusCodes.SUCCESS ) {
+                            Person gplusChapter = loadPeopleResult.getPersonBuffer().get(0);
+                            if (gplusChapter.getImage().hasUrl()) {
+                                Picasso.with(getActivity()).load(gplusChapter.getImage().getUrl()).into(new Target() {
+                                    @Override
+                                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
+                                        BitmapDrawable logo = new BitmapDrawable(getResources(), bitmap );
+                                        mGroupLogo.setVisibility(View.VISIBLE);
+                                        mGroupLogo.setImageDrawable(logo);
+                                    }
+
+                                    @Override
+                                    public void onBitmapFailed(Drawable drawable) {
+                                        mGroupLogo.setVisibility(View.INVISIBLE);
+                                    }
+
+                                    @Override
+                                    public void onPrepareLoad(Drawable drawable) {
+
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
+        ((GdgActivity) getActivity()).getSupportActionBar().setTitle(group.getName());
+        mGroupLogo.setVisibility(View.INVISIBLE);
     }
 
     @Override
