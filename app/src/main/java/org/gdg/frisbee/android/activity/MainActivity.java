@@ -115,7 +115,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
             @Override
             public void onResponse(final Directory directory) {
                 getSupportActionBar().setListNavigationCallbacks(mSpinnerAdapter, MainActivity.this);
-                App.getInstance().getModelCache().putAsync("chapter_list_hub", directory, DateTime.now().plusDays(1), new ModelCache.CachePutListener() {
+                App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, directory, DateTime.now().plusDays(1), new ModelCache.CachePutListener() {
                     @Override
                     public void onPutIntoCache() {
                         ArrayList<Chapter> chapters = directory.getGroups();
@@ -143,35 +143,24 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
                 }
             }
 
-            if(Utils.isOnline(this)) {
-                App.getInstance().getModelCache().getAsync("chapter_list_hub", new ModelCache.CacheListener() {
-                    @Override
-                    public void onGet(Object item) {
-                        Directory directory = (Directory)item;
-                        initChapters(directory.getGroups());
-                    }
 
-                    @Override
-                    public void onNotFound(String key) {
+            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
+                @Override
+                public void onGet(Object item) {
+                    Directory directory = (Directory)item;
+                    initChapters(directory.getGroups());
+                }
+
+                @Override
+                public void onNotFound(String key) {
+                    if (Utils.isOnline(MainActivity.this)) {
                         mFetchChaptersTask.execute();
-                    }
-                });
-            } else {
-
-                App.getInstance().getModelCache().getAsync("chapter_list_hub", false, new ModelCache.CacheListener() {
-                    @Override
-                    public void onGet(Object item) {
-                        Directory directory = (Directory)item;
-                        initChapters(directory.getGroups());
-                    }
-
-                    @Override
-                    public void onNotFound(String key) {
+                    } else {
                         Crouton.makeText(MainActivity.this, getString(R.string.offline_alert), Style.ALERT).show();
                     }
-                });
-            }
-        } else {
+                }
+            });
+
 
             if(savedInstanceState.containsKey("chapters")) {
                 ArrayList<Chapter> chapters = savedInstanceState.getParcelableArrayList("chapters");
