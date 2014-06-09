@@ -28,7 +28,6 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
-import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -39,14 +38,17 @@ import java.util.ArrayList;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.activity.MainActivity;
 import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.event.EventActivity;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
+
 import timber.log.Timber;
 
 public class UpcomingEventWidgetProvider extends AppWidgetProvider {
@@ -102,7 +104,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
 
                     if(homeGdg == null) {
                         Timber.d("Got no Home GDG");
-                        showChild(views, 0);
+                        showErrorChild(views, R.string.loading_data_failed, context);
                     } else {
                         Timber.d("Fetching events");
                         String groupName = homeGdg.getName().replaceAll("GDG ","");
@@ -113,14 +115,15 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                             public void onResponse(ArrayList<Event> events) {
                                 Timber.d("Got events");
                                 if (events.size() > 0) {
-                                    views.setTextViewText(R.id.title, events.get(0).getTitle());
-                                    views.setTextViewText(R.id.location, events.get(0).getLocation());
-                                    views.setTextViewText(R.id.startDate, events.get(0).getStart().toLocalDateTime().toString(DateTimeFormat.patternForStyle("MS", res.getConfiguration().locale)));
+                                    Event firstEvent = events.get(0);
+                                    views.setTextViewText(R.id.title, firstEvent.getTitle());
+                                    views.setTextViewText(R.id.location, firstEvent.getLocation());
+                                    views.setTextViewText(R.id.startDate, firstEvent.getStart().toLocalDateTime().toString(DateTimeFormat.patternForStyle("MS", res.getConfiguration().locale)));
                                     showChild(views, 1);
 
-                                    if (events.get(0).getGPlusEventLink() != null) {
+                                    if (firstEvent.getGPlusEventLink() != null) {
 
-                                        String url = events.get(0).getGPlusEventLink();
+                                        String url = firstEvent.getGPlusEventLink();
 
                                         if (!url.startsWith("http")) {
                                             url = "https://" + url;
@@ -129,9 +132,13 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                                         Intent i = new Intent(Intent.ACTION_VIEW);
                                         i.setData(Uri.parse(url));
                                         views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(context, 0, i, 0));
+                                    }  else {
+                                        Intent i = new Intent(context, EventActivity.class);
+                                        i.putExtra(Const.EXTRA_EVENT_ID, firstEvent.getId());
+                                        views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(context, 0, i, 0));
                                     }
                                 } else {
-                                    showChild(views, 0);
+                                    showErrorChild(views, R.string.no_scheduled_events, context);
                                 }
                                 manager.updateAppWidget(thisWidget, views);
                             }
@@ -143,7 +150,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                                 @Override
                                 public void onErrorResponse (VolleyError volleyError){
                                 Timber.e("Error updating Widget", volleyError);
-                                showChild(views, 0);
+                                showErrorChild(views, R.string.loading_data_failed, context);
                                 manager.updateAppWidget(thisWidget, views);
                             }
                             }
@@ -160,6 +167,13 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                 }
             });
 
+        }
+
+        private void showErrorChild(RemoteViews views, int errorStringResource, Context context) {
+            views.setTextViewText(R.id.textView_no_events, getString(errorStringResource));
+            showChild(views, 0);
+            Intent i = new Intent(context, MainActivity.class);
+            views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(context, 0, i, 0));
         }
 
         private void showChild(RemoteViews views, int i) {
