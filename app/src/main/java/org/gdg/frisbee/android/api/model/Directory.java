@@ -67,4 +67,13 @@ public class Directory implements GdgResponse, Parcelable {
             return new Chapter[size];
         }
     };
+
+    public Chapter getGroupById(String chapterId) {
+        for (Chapter group: groups){
+            if (group.getGplusId().equals(chapterId)){
+                return group;
+            }
+        }
+        return null;
+    }
 }
