@@ -16,6 +16,7 @@
 
 package org.gdg.frisbee.android.task;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
@@ -47,7 +48,7 @@ public class Builder<Params, Result> {
         return this;
     }
 
-    public Builder<Params, Result> setOnPostExecuteListener(CommonAsyncTask.OnPostExecuteListener<Result> listener) {
+    public Builder<Params, Result> setOnPostExecuteListener(CommonAsyncTask.OnPostExecuteListener<Params, Result> listener) {
         mTask.setPostListener(listener);
         return this;
     }
@@ -63,7 +64,8 @@ public class Builder<Params, Result> {
     }
 
     public CommonAsyncTask<Params, Result> build() {
-        mTask.setParameters((Params[])mParams.toArray());
+        Params[] p = (Params[]) Array.newInstance(mTask.getParamsType(), 0);
+        mTask.setParameters((Params[])mParams.toArray(p));
         return mTask;
     }
 

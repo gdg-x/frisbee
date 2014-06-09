@@ -147,9 +147,9 @@ public class InfoFragment extends Fragment {
                         return null;
                     }
                 })
-                .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<Person[]>() {
+                .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person[]>() {
                     @Override
-                    public void onPostExecute(final Person[] person) {
+                    public void onPostExecute(String[] params, final Person[] person) {
                         if(person == null) {
                             Timber.d("null person");
                             View v = getUnknownOrganizerView();
@@ -196,9 +196,9 @@ public class InfoFragment extends Fragment {
                         return null;
                     }
                 })
-                .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<Person>() {
+                .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person>() {
                     @Override
-                    public void onPostExecute(Person person) {
+                    public void onPostExecute(String[] params, Person person) {
                         if(person != null && person.getUrls() != null) {
                             mTagline.setText(person.getTagline());
                             mAbout.setText(Html.fromHtml(person.getAboutMe()));

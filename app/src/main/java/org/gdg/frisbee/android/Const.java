@@ -61,6 +61,7 @@ public class Const {
     public static final int DRAWER_PULSE = 2;
     public static final int DRAWER_SPECIAL = 3;
     public static final int DRAWER_ACHIEVEMENTS = 4;
+    public static final int DRAWER_GDE = 5;
     public static final int DRAWER_ARROW = 99;
     public static final String QR_MSG_PREFIX = "gdgx://arrow?m=";
     public static final String PREF_ORGANIZER_CHECK_TIME = "pref_organizer_check_time";

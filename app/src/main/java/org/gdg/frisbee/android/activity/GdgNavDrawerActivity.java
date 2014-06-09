@@ -72,6 +72,9 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                     case Const.DRAWER_GDL:
                         navigateTo(GdlActivity.class, null);
                         break;
+                    case Const.DRAWER_GDE:
+                        navigateTo(GdeActivity.class, null);
+                        break;
                     case Const.DRAWER_SPECIAL:
                         Bundle special = new Bundle();
                         special.putInt(Const.SPECIAL_EVENT_LOGO_EXTRA, R.drawable.ioextended);

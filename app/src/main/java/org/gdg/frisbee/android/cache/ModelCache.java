@@ -41,6 +41,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -517,6 +518,16 @@ public class ModelCache {
         out.close();
     }
 
+
+    private String parseArrayList(Object o) {
+        ArrayList d = (ArrayList)o;
+        String className = "";
+        if(d.size() > 0) {
+            className = className + "<" + d.get(0).getClass().getCanonicalName() + ">";
+        }
+        return className;
+    }
+
     private void writeValueToDisk(OutputStream os, Object o) throws IOException {
 
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(os));
@@ -524,9 +535,18 @@ public class ModelCache {
         String className = o.getClass().getCanonicalName();
 
         if(o instanceof ArrayList) {
-            ArrayList d = (ArrayList)o;
-            if(d.size() > 0)
-                className = className+"<"+d.get(0).getClass().getCanonicalName()+">";
+            className = parseArrayList(o);
+        } else if(o instanceof HashMap) {
+            HashMap d = (HashMap)o;
+            if(d.size() > 0) {
+                Map.Entry entry = (Map.Entry) d.entrySet().iterator().next();
+
+                if(entry.getValue() instanceof ArrayList) {
+                    className = className + "<"+ entry.getKey().getClass().getCanonicalName()+",java.util.ArrayList"+parseArrayList(entry.getValue())+">";
+                } else {
+                    className = className + "<"+ entry.getKey().getClass().getCanonicalName()+","+entry.getValue().getClass().getCanonicalName()+">";
+                }
+            }
         }
 
         out.write(className+"\n");
@@ -557,12 +577,36 @@ public class ModelCache {
         }
 
         Type type = null;
-        if(className.contains("ArrayList")) {
-            String inner = className.substring("ArrayList<".length(), className.length()-1);
+        if(className.startsWith("java.util.ArrayList")) {
+            String inner = className.substring("java.util.ArrayList<".length(), className.length()-1);
             Class innerClass = null;
             try {
                 innerClass = Class.forName(inner);
                 type = TypeToken.get(Utils.createListOfType(innerClass).getClass()).getType();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else if(className.startsWith("java.util.HashMap")) {
+            String[] inner = className.substring("java.util.HashMap<".length(), className.length()-1).split(",");
+
+            try {
+                Class keyClass = Class.forName(inner[0]);
+
+                Class valueClass = null;
+                if(inner[1].startsWith("java.util.ArrayList")) {
+                    String innterT = inner[1].substring("java.util.ArrayList<".length(), inner[1].length() - 1);
+                    try {
+                        Class innerClass = Class.forName(innterT);
+                        Type t3 = TypeToken.get(Utils.createListOfType(innerClass).getClass()).getType();
+                        valueClass = (Class) t3;
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    valueClass = Class.forName(inner[1]);
+                }
+
+                type = TypeToken.get(Utils.createMapOfType(keyClass, valueClass).getClass()).getType();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
@@ -578,14 +622,16 @@ public class ModelCache {
 
         Class<?> clazz;
         try {
-            clazz = Class.forName(className);
 
             if(className.contains("google")) {
+                clazz = Class.forName(className);
                 return mJsonFactory.createJsonParser(content).parseAndClose(clazz, null);
             } else if(type != null) {
                 return mGson.fromJson(content, type);
-            } else
+            } else {
+                clazz = Class.forName(className);
                 return mGson.fromJson(content, clazz);
+            }
         } catch(IllegalArgumentException e) {
             Timber.e("Deserializing from disk failed", e);
             return null;

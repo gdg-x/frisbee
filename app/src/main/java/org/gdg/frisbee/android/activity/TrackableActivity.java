@@ -72,6 +72,8 @@ public abstract class TrackableActivity extends ActionBarActivity implements Vie
     }
 
     protected void trackView(String viewName) {
-        App.getInstance().getTracker().sendView("/"+viewName);
+        if(viewName != null) {
+            App.getInstance().getTracker().sendView("/" + viewName);
+        }
     }
 }

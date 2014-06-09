@@ -54,6 +54,10 @@ public class Utils {
         return new ArrayList<T>();
     }
 
+    public static <K,V> Map<K,V> createMapOfType(Class<K> keyType, Class<V> valueType) {
+        return new HashMap<K, V>();
+    }
+
     /**
      * @return Application's version code from the {@code PackageManager}.
      */
@@ -73,6 +77,15 @@ public class Utils {
         DisplayMetrics metrics = resources.getDisplayMetrics();
         float dp = px / (metrics.densityDpi / 160f);
         return dp;
+    }
+
+    public static String getUppercaseLetters(String in ) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < in.length(); i++) {
+            char c = in.charAt(i);
+            if(Character.isUpperCase(c)) sb.append(c);
+        }
+        return sb.toString();
     }
 
     public static Map<String, String> splitQuery(URL url) throws UnsupportedEncodingException {
