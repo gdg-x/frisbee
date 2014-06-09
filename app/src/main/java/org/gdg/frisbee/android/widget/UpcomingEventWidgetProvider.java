@@ -28,7 +28,6 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
-import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -47,6 +46,7 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
+
 import timber.log.Timber;
 
 public class UpcomingEventWidgetProvider extends AppWidgetProvider {
@@ -102,7 +102,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
 
                     if(homeGdg == null) {
                         Timber.d("Got no Home GDG");
-                        showChild(views, 0);
+                        showErrorChild(views, R.string.loading_data_failed);
                     } else {
                         Timber.d("Fetching events");
                         String groupName = homeGdg.getName().replaceAll("GDG ","");
@@ -131,7 +131,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                                         views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(context, 0, i, 0));
                                     }
                                 } else {
-                                    showChild(views, 0);
+                                    showErrorChild(views, R.string.no_scheduled_events);
                                 }
                                 manager.updateAppWidget(thisWidget, views);
                             }
@@ -143,7 +143,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                                 @Override
                                 public void onErrorResponse (VolleyError volleyError){
                                 Timber.e("Error updating Widget", volleyError);
-                                showChild(views, 0);
+                                showErrorChild(views, R.string.loading_data_failed);
                                 manager.updateAppWidget(thisWidget, views);
                             }
                             }
@@ -160,6 +160,11 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                 }
             });
 
+        }
+
+        private void showErrorChild(RemoteViews views, int errorStringResource) {
+            views.setTextViewText(R.id.textView_no_events, getString(errorStringResource));
+            showChild(views, 0);
         }
 
         private void showChild(RemoteViews views, int i) {
