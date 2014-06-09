@@ -38,6 +38,7 @@ import java.util.ArrayList;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.activity.MainActivity;
 import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
@@ -102,7 +103,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
 
                     if(homeGdg == null) {
                         Timber.d("Got no Home GDG");
-                        showErrorChild(views, R.string.loading_data_failed);
+                        showErrorChild(views, R.string.loading_data_failed, context);
                     } else {
                         Timber.d("Fetching events");
                         String groupName = homeGdg.getName().replaceAll("GDG ","");
@@ -129,9 +130,13 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                                         Intent i = new Intent(Intent.ACTION_VIEW);
                                         i.setData(Uri.parse(url));
                                         views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(context, 0, i, 0));
+                                    }  else {
+                                        Intent i = new Intent(Intent.ACTION_VIEW);
+                                        i.setData(Uri.parse(events.get(0).getId()));
+                                        views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(context, 0, i, 0));
                                     }
                                 } else {
-                                    showErrorChild(views, R.string.no_scheduled_events);
+                                    showErrorChild(views, R.string.no_scheduled_events, context);
                                 }
                                 manager.updateAppWidget(thisWidget, views);
                             }
@@ -143,7 +148,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                                 @Override
                                 public void onErrorResponse (VolleyError volleyError){
                                 Timber.e("Error updating Widget", volleyError);
-                                showErrorChild(views, R.string.loading_data_failed);
+                                showErrorChild(views, R.string.loading_data_failed, context);
                                 manager.updateAppWidget(thisWidget, views);
                             }
                             }
@@ -162,9 +167,11 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
 
         }
 
-        private void showErrorChild(RemoteViews views, int errorStringResource) {
+        private void showErrorChild(RemoteViews views, int errorStringResource, Context context) {
             views.setTextViewText(R.id.textView_no_events, getString(errorStringResource));
             showChild(views, 0);
+            Intent i = new Intent(context, MainActivity.class);
+            views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(context, 0, i, 0));
         }
 
         private void showChild(RemoteViews views, int i) {
