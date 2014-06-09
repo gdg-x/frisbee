@@ -45,6 +45,7 @@ import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.event.EventActivity;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
@@ -114,14 +115,15 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                             public void onResponse(ArrayList<Event> events) {
                                 Timber.d("Got events");
                                 if (events.size() > 0) {
-                                    views.setTextViewText(R.id.title, events.get(0).getTitle());
-                                    views.setTextViewText(R.id.location, events.get(0).getLocation());
-                                    views.setTextViewText(R.id.startDate, events.get(0).getStart().toLocalDateTime().toString(DateTimeFormat.patternForStyle("MS", res.getConfiguration().locale)));
+                                    Event firstEvent = events.get(0);
+                                    views.setTextViewText(R.id.title, firstEvent.getTitle());
+                                    views.setTextViewText(R.id.location, firstEvent.getLocation());
+                                    views.setTextViewText(R.id.startDate, firstEvent.getStart().toLocalDateTime().toString(DateTimeFormat.patternForStyle("MS", res.getConfiguration().locale)));
                                     showChild(views, 1);
 
-                                    if (events.get(0).getGPlusEventLink() != null) {
+                                    if (firstEvent.getGPlusEventLink() != null) {
 
-                                        String url = events.get(0).getGPlusEventLink();
+                                        String url = firstEvent.getGPlusEventLink();
 
                                         if (!url.startsWith("http")) {
                                             url = "https://" + url;
@@ -131,8 +133,8 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                                         i.setData(Uri.parse(url));
                                         views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(context, 0, i, 0));
                                     }  else {
-                                        Intent i = new Intent(Intent.ACTION_VIEW);
-                                        i.setData(Uri.parse(events.get(0).getId()));
+                                        Intent i = new Intent(context, EventActivity.class);
+                                        i.putExtra(Const.EXTRA_EVENT_ID, firstEvent.getId());
                                         views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(context, 0, i, 0));
                                     }
                                 } else {
