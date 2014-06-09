@@ -202,9 +202,9 @@ public class NewsFragment extends GdgListFragment implements OnRefreshListener {
                             return null;
                         }
                     })
-                    .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<ActivityFeed>() {
+                    .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, ActivityFeed>() {
                         @Override
-                        public void onPostExecute(ActivityFeed activityFeed) {
+                        public void onPostExecute(String[] params, ActivityFeed activityFeed) {
                             if(activityFeed != null) {
                                 mAdapter.addAll(activityFeed.getItems());
                                 setIsLoading(false);
@@ -314,9 +314,9 @@ public class NewsFragment extends GdgListFragment implements OnRefreshListener {
                             return null;
                         }
                     })
-                    .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<ActivityFeed>() {
+                    .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, ActivityFeed>() {
                         @Override
-                        public void onPostExecute(ActivityFeed activityFeed) {
+                        public void onPostExecute(String[] params, ActivityFeed activityFeed) {
                             if (activityFeed != null) {
                                 mAdapter.replaceAll(activityFeed.getItems(), 0);
                                 setIsLoading(false);

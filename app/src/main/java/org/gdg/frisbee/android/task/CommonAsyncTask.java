@@ -32,7 +32,7 @@ import java.util.Arrays;
 public class CommonAsyncTask<Params, Result> extends AsyncTask<Params, Void, Result> {
 
     private OnBackgroundExecuteListener<Params, Result> mBackgroundListener;
-    private OnPostExecuteListener<Result> mPostListener;
+    private OnPostExecuteListener<Params, Result> mPostListener;
     private OnPreExecuteListener mPreListener;
     private Params[] mParams;
 
@@ -67,16 +67,12 @@ public class CommonAsyncTask<Params, Result> extends AsyncTask<Params, Void, Res
             return mBackgroundListener.doInBackground((Params[])null);
 
 
-        ArrayList<Params> p = new ArrayList<Params>();
-        if(params != null)
-            for(int i = 0; i < params.length; i++) {
-                p.add(params[i]);
-            }
-
-        Params[] p2 = (Params[]) Array.newInstance(mParamsType,p.size());
-
+        mParams = (Params[]) Array.newInstance(mParamsType, params.length);
+        for(int i = 0; i < params.length; i++) {
+            mParams[i] = params[i];
+        }
         if(mBackgroundListener != null) {
-            return mBackgroundListener.doInBackground(p.toArray(p2));
+            return mBackgroundListener.doInBackground(mParams);
         }
 
         return null;
@@ -86,8 +82,9 @@ public class CommonAsyncTask<Params, Result> extends AsyncTask<Params, Void, Res
     protected final void onPostExecute(Result success) {
         super.onPostExecute(success);
 
-        if(mPostListener != null)
-            mPostListener.onPostExecute(success);
+        if(mPostListener != null) {
+            mPostListener.onPostExecute(mParams, success);
+        }
     }
 
     public OnBackgroundExecuteListener<Params, Result> getBackgroundListener() {
@@ -106,11 +103,11 @@ public class CommonAsyncTask<Params, Result> extends AsyncTask<Params, Void, Res
         this.mPreListener = mPreListener;
     }
 
-    public OnPostExecuteListener<Result> getPostListener() {
+    public OnPostExecuteListener<Params, Result> getPostListener() {
         return mPostListener;
     }
 
-    public void setPostListener(OnPostExecuteListener<Result> mPostListener) {
+    public void setPostListener(OnPostExecuteListener<Params, Result> mPostListener) {
         this.mPostListener = mPostListener;
     }
 
@@ -126,8 +123,8 @@ public class CommonAsyncTask<Params, Result> extends AsyncTask<Params, Void, Res
         public Result doInBackground(Params... params);
     }
 
-    public interface OnPostExecuteListener<Result> {
-        public void onPostExecute(Result result);
+    public interface OnPostExecuteListener<Params, Result> {
+        public void onPostExecute(Params[] params, Result result);
     }
 
     public interface OnPreExecuteListener {

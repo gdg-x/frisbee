@@ -10,15 +10,18 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
+
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.activity.MainActivity;
 import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.event.EventActivity;
 import org.gdg.frisbee.android.receiver.GCMReceiver;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+
 import timber.log.Timber;
 
 /**
@@ -32,6 +35,8 @@ public class GcmIntentService extends IntentService {
 
     public static final int NOTIFICATION_ID = 1;
     public static final String LOG_TAG = "GDG-GcmIntentService";
+    public static final String UPCOMING_EVENT = "upcoming_event";
+    public static final String EXTRA_TYPE = "type";
 
     private NotificationManager mNotificationManager;
     NotificationCompat.Builder builder;
@@ -54,7 +59,7 @@ public class GcmIntentService extends IntentService {
 
                 Timber.i("Received: " + extras.toString());
 
-                if(extras.getString("type","none").equals("upcoming_event")) {
+                if(UPCOMING_EVENT.equals(extras.getString(EXTRA_TYPE))) {
                     sendEventNotification(extras);
                 }
             }
@@ -70,10 +75,10 @@ public class GcmIntentService extends IntentService {
 
         Intent eventIntent = new Intent();
         App.getInstance().getTracker().sendEvent("gcm","clickedGcmEventNotification",extras.getString("id"), 0L);
-        eventIntent.setClass(getApplicationContext(), MainActivity.class);
-        eventIntent.putExtra(MainActivity.EXTRA_GROUP_ID, extras.getString("chapter"));
-        eventIntent.putExtra(MainActivity.EXTRA_EVENT_ID, extras.getString("id"));
-        eventIntent.putExtra(MainActivity.EXTRA_SECTION, MainActivity.SECTION_EVENTS);
+        eventIntent.setClass(getApplicationContext(), EventActivity.class);
+        eventIntent.putExtra(Const.EXTRA_GROUP_ID, extras.getString("chapter"));
+        eventIntent.putExtra(Const.EXTRA_EVENT_ID, extras.getString("id"));
+        eventIntent.putExtra(Const.EXTRA_SECTION, EventActivity.EventPagerAdapter.SECTION_OVERVIEW);
 
         final DateTimeFormatter df = DateTimeFormat
                 .forPattern("YYYY-MM-dd'T'HH:mm:ss.SSS'Z'");

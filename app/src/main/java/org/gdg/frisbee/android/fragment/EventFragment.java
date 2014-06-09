@@ -30,6 +30,7 @@ import com.google.android.gms.plus.PlusShare;
 
 import java.util.ArrayList;
 
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.adapter.EventAdapter;
@@ -211,7 +212,7 @@ public abstract class EventFragment extends GdgListFragment implements View.OnCl
         if (mPlusClient != null && mPlusClient.isConnected()) {
             PlusShare.Builder builder = new PlusShare.Builder(this.getActivity());
 
-            Uri eventUri = Uri.parse("https://developers.google.com/events/" + event.getId() + "/");
+            Uri eventUri = Uri.parse(Const.URL_DEVELOPERS_GOOGLE_COM + "/events/" + event.getId() + "/");
 
             if(getArguments() != null && getArguments().containsKey("plus_id")) {
                 String eventDeepLinkId = getArguments().getString("plus_id") + "/events/" + event.getId();
@@ -229,7 +230,7 @@ public abstract class EventFragment extends GdgListFragment implements View.OnCl
                 builder.addCallToAction(
                         "JOIN", /** call-to-action button label */
                         eventUri, /** call-to-action url (for desktop use) */
-                        eventUri +"/join" /** call to action deep-link ID (for mobile use), 512 characters or fewer */);
+                        eventUri +"join" /** call to action deep-link ID (for mobile use), 512 characters or fewer */);
             }
             // Set the content url (for desktop use).
             builder.setContentUrl(eventUri);

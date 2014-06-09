@@ -62,10 +62,7 @@ import timber.log.Timber;
 
 public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNavigationListener{
 
-    public static final String EXTRA_GROUP_ID = "org.gdg.frisbee.CHAPTER";
     public static final String SECTION_EVENTS = "events";
-    public static final String EXTRA_SECTION = "org.gdg.frisbee.SECTION";
-    public static final String EXTRA_EVENT_ID = "org.gdg.frisbee.EVENT";
     private static final int PLAY_SERVICE_DIALOG_REQUEST_CODE = 200;
 
     private static String LOG_TAG = "GDG-MainActivity";
@@ -118,7 +115,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
             @Override
             public void onResponse(final Directory directory) {
                 getSupportActionBar().setListNavigationCallbacks(mSpinnerAdapter, MainActivity.this);
-                App.getInstance().getModelCache().putAsync("chapter_list_hub", directory, DateTime.now().plusDays(1), new ModelCache.CachePutListener() {
+                App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, directory, DateTime.now().plusDays(1), new ModelCache.CachePutListener() {
                     @Override
                     public void onPutIntoCache() {
                         ArrayList<Chapter> chapters = directory.getGroups();
@@ -138,44 +135,32 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         if(savedInstanceState == null) {
 
             Intent intent = getIntent();
-            if(intent != null && intent.getAction() != null && intent.getAction().equals("finish_first_start")) {
+            if (intent != null && intent.getAction() != null && intent.getAction().equals("finish_first_start")) {
                 Timber.d("Completed FirstStartWizard");
 
-                if(mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
+                if (mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
                     mFirstStart = true;
                 }
             }
 
-            if(Utils.isOnline(this)) {
-                App.getInstance().getModelCache().getAsync("chapter_list_hub", new ModelCache.CacheListener() {
-                    @Override
-                    public void onGet(Object item) {
-                        Directory directory = (Directory)item;
-                        initChapters(directory.getGroups());
-                    }
+            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
+                @Override
+                public void onGet(Object item) {
+                    Directory directory = (Directory) item;
+                    initChapters(directory.getGroups());
+                }
 
-                    @Override
-                    public void onNotFound(String key) {
+                @Override
+                public void onNotFound(String key) {
+                    if (Utils.isOnline(MainActivity.this)) {
                         mFetchChaptersTask.execute();
-                    }
-                });
-            } else {
-
-                App.getInstance().getModelCache().getAsync("chapter_list_hub", false, new ModelCache.CacheListener() {
-                    @Override
-                    public void onGet(Object item) {
-                        Directory directory = (Directory)item;
-                        initChapters(directory.getGroups());
-                    }
-
-                    @Override
-                    public void onNotFound(String key) {
+                    } else {
                         Crouton.makeText(MainActivity.this, getString(R.string.offline_alert), Style.ALERT).show();
                     }
-                });
-            }
-        } else {
+                }
+            });
 
+        } else {
             if(savedInstanceState.containsKey("chapters")) {
                 ArrayList<Chapter> chapters = savedInstanceState.getParcelableArrayList("chapters");
                 mSpinnerAdapter.clear();
@@ -227,8 +212,8 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         addChapters(chapters);
         Chapter chapter = null;
 
-        if(getIntent().hasExtra(EXTRA_GROUP_ID)) {
-            String chapterId = getIntent().getStringExtra(EXTRA_GROUP_ID);
+        if(getIntent().hasExtra(Const.EXTRA_GROUP_ID)) {
+            String chapterId = getIntent().getStringExtra(Const.EXTRA_GROUP_ID);
             for(Chapter c : chapters) {
                 if(c.getGplusId().equals(chapterId)) {
                     chapter = c;
@@ -246,7 +231,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         mViewPager.setOffscreenPageLimit(2);
         mIndicator.setViewPager(mViewPager);
 
-        if (SECTION_EVENTS.equals(getIntent().getStringExtra(EXTRA_SECTION))) {
+        if (SECTION_EVENTS.equals(getIntent().getStringExtra(Const.EXTRA_SECTION))) {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {

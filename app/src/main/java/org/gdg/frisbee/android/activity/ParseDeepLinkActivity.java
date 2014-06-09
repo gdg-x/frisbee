@@ -4,15 +4,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import android.util.Log;
 import com.google.android.gms.plus.PlusShare;
+
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.event.EventActivity;
+
 import timber.log.Timber;
 
 public class ParseDeepLinkActivity extends Activity {
 
     public static final String LOG_TAG = "GDG-ParseDeepLinkActivity";
-    public static final String EVENTS = "events";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +43,14 @@ public class ParseDeepLinkActivity extends Activity {
         Timber.d("Deep Link id: " + deepLinkId);
         String[] parts = deepLinkId.split("/");
 
-        // Our deep links look like this: /<plusId>/events/<eventId>/join, /join is optional
-        if (parts.length <= 4 && EVENTS.equals(parts[1])) {
-            App.getInstance().getTracker().sendEvent("gplus","deepLink",deepLinkId, 0L);
-            route.setClass(getApplicationContext(), MainActivity.class);
-            route.putExtra(MainActivity.EXTRA_GROUP_ID, parts[0]);
-            route.putExtra(MainActivity.EXTRA_SECTION, MainActivity.SECTION_EVENTS);
+        App.getInstance().getTracker().sendEvent("gplus", "deepLink", deepLinkId, 0L);
+
+        // Our deep links look like this: https://developers.google.com/events/<eventId>/join,
+        // or <plus_id>/events/<eventId>/join    join is optional
+        if (deepLinkId.startsWith(Const.URL_DEVELOPERS_GOOGLE_COM)) {
+            route.setClass(getApplicationContext(), EventActivity.class);
+            route.putExtra(Const.EXTRA_EVENT_ID, parts[4]);
+            route.putExtra(Const.EXTRA_SECTION, EventActivity.EventPagerAdapter.SECTION_OVERVIEW);
         } else {
             // Fallback to the MainActivity in your app.
             route.setClass(getApplicationContext(), MainActivity.class);

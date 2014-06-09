@@ -26,7 +26,6 @@ public class DrawerAdapter extends BaseAdapter {
 
     private Context mContext;
     private LayoutInflater mInflater;
-
     private ArrayList<DrawerItem> mItems;
 
     public DrawerAdapter(Context ctx) {

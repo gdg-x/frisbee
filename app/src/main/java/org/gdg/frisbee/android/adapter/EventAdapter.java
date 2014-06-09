@@ -34,10 +34,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.api.model.SimpleEvent;
 import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.event.EventActivity;
 import org.gdg.frisbee.android.view.SquaredImageView;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -121,7 +123,7 @@ public class EventAdapter extends BaseAdapter {
         if (event.getIconUrl() != null){
             holder.icon.setVisibility(View.VISIBLE);
             App.getInstance().getPicasso()
-                .load("https://developers.google.com" + event.getIconUrl())
+                .load(Const.URL_DEVELOPERS_GOOGLE_COM + event.getIconUrl())
                 .into(holder.icon);
         } else {
             holder.icon.setVisibility(View.GONE);
@@ -144,21 +146,9 @@ public class EventAdapter extends BaseAdapter {
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String link = event.getGPlusEventLink();
-                if (!TextUtils.isEmpty(link)){
-                    if (!link.startsWith("http")){
-                        link = "https://" + link;
-                    }
-                    openEventInExternalApp(link);
-                } else {
-                    link = event.getLink();
-                    if (!TextUtils.isEmpty(link)) {
-                        if (!link.startsWith("http")) {
-                            link = "https://developers.google.com" + link;
-                        }
-                        openEventInExternalApp(link);
-                    }
-                }
+                Intent intent = new Intent(mContext, EventActivity.class);
+                intent.putExtra(Const.EXTRA_EVENT_ID, event.getId());
+                mContext.startActivity(intent);
             }
         });
 
@@ -181,6 +171,24 @@ public class EventAdapter extends BaseAdapter {
 
 
         return rowView;
+    }
+
+    private void openEventLink(SimpleEvent event) {
+        String link = event.getGPlusEventLink();
+        if (!TextUtils.isEmpty(link)){
+            if (!link.startsWith("http")){
+                link = "https://" + link;
+            }
+            openEventInExternalApp(link);
+        } else {
+            link = event.getLink();
+            if (!TextUtils.isEmpty(link)) {
+                if (!link.startsWith("http")) {
+                    link = Const.URL_DEVELOPERS_GOOGLE_COM + link;
+                }
+                openEventInExternalApp(link);
+            }
+        }
     }
 
     public void openEventInExternalApp(String uri) {

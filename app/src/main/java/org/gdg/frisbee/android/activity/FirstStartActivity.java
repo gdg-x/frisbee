@@ -37,7 +37,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.plus.Plus;
@@ -242,7 +241,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
 
         Intent resultData = new Intent(FirstStartActivity.this, MainActivity.class);
         resultData.setAction("finish_first_start");
-        resultData.putExtra(MainActivity.EXTRA_GROUP_ID, mSelectedChapter);
+        resultData.putExtra(Const.EXTRA_GROUP_ID, mSelectedChapter);
         resultData.putExtra("selected_chapter", mSelectedChapter);
         startActivity(resultData);
 
