@@ -23,12 +23,13 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.text.Html;
 import android.view.*;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -106,10 +107,12 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mClient.getEvent(getArguments().getString(Const.EXTRA_EVENT_ID), this, new Response.ErrorListener() {
+        final String eventId = getArguments().getString(Const.EXTRA_EVENT_ID);
+        mClient.getEvent(eventId, this, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 if (getActivity() != null) {
+                    Timber.d(volleyError, "error while retrieving event %s", eventId);
                     Crouton.makeText(getActivity(), R.string.server_error, Style.ALERT).show();
                 }
             }
@@ -142,10 +145,13 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
 
     @Override
     public void onResponse(final EventFullDetails eventFullDetails) {
+        if (getActivity() == null){
+            return;
+        }
         mEvent = eventFullDetails;
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_TEXT, mEvent.getEventUrl());
-        mShareActionProvider.setShareIntent(shareIntent);
+
+        getActivity().supportInvalidateOptionsMenu();
+
 
         updateWithDetails(eventFullDetails);
 
@@ -247,9 +253,17 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.event_menu, menu);
-        MenuItem item = menu.findItem(R.id.share);
-        mShareActionProvider = (ShareActionProvider) item.getActionProvider();
+        if (mEvent != null) {
+            inflater.inflate(R.menu.event_menu, menu);
+            MenuItem item = menu.findItem(R.id.share);
+
+            mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, mEvent.getEventUrl());
+            if (mShareActionProvider != null) {
+                mShareActionProvider.setShareIntent(shareIntent);
+            }
+        }
     }
 
     @Override
