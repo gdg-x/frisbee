@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schema.android.com/apk/res-auto">
+  <item
+    android:id="@+id/share"
+    android:title="@string/share"
+    app:showAsAction="ifRoom"
+    android:actionProviderClass="android.widget.ShareActionProvider"></item>
+  <item
+    android:id="@+id/add_calendar"
+    android:title="@string/add_to_calendar"></item>
+  <item
+    android:id="@+id/navigate_to"
+    android:title="@string/navigate_to"></item>
+</menu>

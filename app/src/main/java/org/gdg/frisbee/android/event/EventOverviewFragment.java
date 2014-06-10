@@ -16,18 +16,19 @@
 
 package org.gdg.frisbee.android.event;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -59,7 +60,7 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import timber.log.Timber;
 
-public class EventOverviewFragment extends Fragment implements Response.Listener<EventFullDetails>, Response.ErrorListener {
+public class EventOverviewFragment extends Fragment implements Response.Listener<EventFullDetails> {
 
     @InjectView(R.id.title)
     TextView mTitle;
@@ -82,12 +83,15 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
     private boolean mLoading;
     private GroupDirectory mClient;
     private Directory mDirectory;
-
+    private EventFullDetails mEvent;
+    private ShareActionProvider mShareActionProvider;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_event_overview, null);
         ButterKnife.inject(this, v);
+
+        setHasOptionsMenu(true);
 
         mClient = new GroupDirectory();
         return v;
@@ -102,7 +106,14 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mClient.getEvent(getArguments().getString(Const.EXTRA_EVENT_ID), this, this).execute();
+        mClient.getEvent(getArguments().getString(Const.EXTRA_EVENT_ID), this, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                if (getActivity() != null) {
+                    Crouton.makeText(getActivity(), R.string.server_error, Style.ALERT).show();
+                }
+            }
+        }).execute();
     }
 
     public void updateWithDetails(EventFullDetails eventFullDetails) {
@@ -131,6 +142,11 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
 
     @Override
     public void onResponse(final EventFullDetails eventFullDetails) {
+        mEvent = eventFullDetails;
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, mEvent.getEventUrl());
+        mShareActionProvider.setShareIntent(shareIntent);
+
         updateWithDetails(eventFullDetails);
 
         App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
@@ -197,11 +213,6 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
         mGroupLogo.setVisibility(View.INVISIBLE);
     }
 
-    @Override
-    public void onErrorResponse(VolleyError volleyError) {
-        Crouton.makeText(getActivity(), R.string.server_error, Style.ALERT).show();
-    }
-
     public void setIsLoading(boolean isLoading) {
 
         if (isLoading == mLoading || getActivity() == null)
@@ -234,6 +245,44 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
         }
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.event_menu, menu);
+        MenuItem item = menu.findItem(R.id.share);
+        mShareActionProvider = (ShareActionProvider) item.getActionProvider();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.add_calendar: addEventToCalendar();return true;
+            case R.id.navigate_to: launchNavigation();return true;
+            default:
+                return false;
+        }
+    }
+
+    private void launchNavigation() {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("geo:0,0?q=" + mEvent.getLocation()));
+        startActivity(intent);
+    }
+
+    public void addEventToCalendar() {
+        Intent intent = new Intent(Intent.ACTION_EDIT);
+        intent.setType("vnd.android.cursor.item/event");
+
+        intent.putExtra("beginTime", mEvent.getStart().getMillis());
+        intent.putExtra("endTime", mEvent.getEnd().getMillis());
+        intent.putExtra("title", mEvent.getTitle());
+
+        String location = mEvent.getLocation();
+        if (location != null) {
+            intent.putExtra("eventLocation", location);
+        }
+
+        startActivity(intent);
+    }
 
     public static Fragment createFor(String eventId) {
         EventOverviewFragment fragment = new EventOverviewFragment();
