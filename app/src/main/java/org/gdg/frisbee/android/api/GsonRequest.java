@@ -124,7 +124,7 @@ public class GsonRequest<Input, Output> extends GdgRequest<Output> {
                     HttpHeaderParser.parseCacheHeaders(response));
         }
         try {
-            String json = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+            String json = new String(response.data, "UTF-8");
             return (Response<Output>)Response.success(mGson.fromJson(json, mClazz),
                     HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {
