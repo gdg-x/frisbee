@@ -253,12 +253,13 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (mEvent != null) {
+        if (mEvent != null && mEvent.getEventUrl() != null) {
             inflater.inflate(R.menu.event_menu, menu);
             MenuItem item = menu.findItem(R.id.share);
 
             mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
             shareIntent.putExtra(Intent.EXTRA_TEXT, mEvent.getEventUrl());
             if (mShareActionProvider != null) {
                 mShareActionProvider.setShareIntent(shareIntent);

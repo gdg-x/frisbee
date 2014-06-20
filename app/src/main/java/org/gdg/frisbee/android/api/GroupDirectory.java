@@ -103,7 +103,7 @@ public class GroupDirectory {
                 EventFullDetails.class,
                 successListener,
                 errorListener,
-                GsonRequest.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES, new ZuluDateTimeDeserializer()));
+                GsonRequest.getGson(FieldNamingPolicy.IDENTITY, new ZuluDateTimeDeserializer()));
         eventReq.setRetryPolicy(new DefaultRetryPolicy(
                 60000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
