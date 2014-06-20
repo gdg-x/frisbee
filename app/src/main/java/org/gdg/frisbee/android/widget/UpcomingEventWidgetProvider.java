@@ -107,7 +107,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                         showErrorChild(views, R.string.loading_data_failed, context);
                     } else {
                         Timber.d("Fetching events");
-                        String groupName = homeGdg.toString();
+                        String groupName = homeGdg.getShortName();
                         views.setTextViewText(R.id.groupName, groupName);
                         views.setTextViewText(R.id.groupName2, groupName);
                         mDirectory.getChapterEventList(new DateTime(), new DateTime().plusMonths(1), homeGdg.getGplusId(), new Response.Listener<ArrayList<Event>>() {

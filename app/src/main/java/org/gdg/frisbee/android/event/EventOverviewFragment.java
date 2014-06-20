@@ -215,7 +215,7 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
                         }
                     }
                 });
-        ((GdgActivity) getActivity()).getSupportActionBar().setTitle(group.toString());
+        ((GdgActivity) getActivity()).getSupportActionBar().setTitle(group.getShortName());
         mGroupLogo.setVisibility(View.INVISIBLE);
     }
 
