@@ -88,7 +88,11 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
 
     @Override
     public String toString() {
-        return name.replaceAll("GDG ","");
+        return getShortName();
+    }
+
+    public String getShortName(){
+        return name.replaceAll("GDG ", "");
     }
 
     @Override
