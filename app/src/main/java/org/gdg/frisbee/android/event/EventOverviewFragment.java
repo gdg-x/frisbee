@@ -272,6 +272,10 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
         switch (item.getItemId()){
             case R.id.add_calendar: addEventToCalendar();return true;
             case R.id.navigate_to: launchNavigation();return true;
+            case R.id.view_event_url: if (mEvent.getEventUrl() != null) {
+                launchUrl(mEvent.getEventUrl());
+                return true;
+            }
             default:
                 return false;
         }
@@ -280,6 +284,12 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
     private void launchNavigation() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse("geo:0,0?q=" + mEvent.getLocation()));
+        startActivity(intent);
+    }
+
+    private void launchUrl(String eventUrl) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(eventUrl));
         startActivity(intent);
     }
 

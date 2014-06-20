@@ -13,4 +13,8 @@
   <item
     android:id="@+id/navigate_to"
     android:title="@string/navigate_to"></item>
+  <item
+    android:id="@+id/view_event_url"
+    android:title="@string/open_event_site"></item>
+
 </menu>
