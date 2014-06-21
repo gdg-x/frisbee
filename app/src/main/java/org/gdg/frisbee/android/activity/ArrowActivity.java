@@ -310,7 +310,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
     private void addTaggedPersonToCloudSave(String id) {
         previous = previous + ID_SPLIT_CHAR + id;
         AppStateManager.update(getGoogleApiClient(), Const.ARROW_DONE_STATE_KEY, previous.getBytes());
-        Games.Leaderboards.submitScore(getGoogleApiClient(), Const.ARROW_LB, previous.split("\\|").length);
+        Games.Leaderboards.submitScore(getGoogleApiClient(), Const.ARROW_LB, previous.split("\\|").length-1);
 
         Toast.makeText(ArrowActivity.this, "It worked...you tagged " + id, Toast.LENGTH_LONG).show();
 

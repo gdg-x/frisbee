@@ -200,12 +200,14 @@ public class MyView extends AbsListView {
     @Override
     public int getFirstVisiblePosition() {
         int val = 0;
-        for(int i = 0; i < mColumnCount; i++) {
-            ListView lv = (ListView) mRoot.getChildAt(i);
-            if(lv.getFirstVisiblePosition() > val)
-                val = lv.getFirstVisiblePosition();
+        if(mRoot != null) {
+            for (int i = 0; i < mColumnCount; i++) {
+                ListView lv = (ListView) mRoot.getChildAt(i);
+                if (lv.getFirstVisiblePosition() > val)
+                    val = lv.getFirstVisiblePosition();
+            }
+            Timber.d("Visible: " + val);
         }
-        Timber.d("Visible: "+ val);
         return val;
     }
 
