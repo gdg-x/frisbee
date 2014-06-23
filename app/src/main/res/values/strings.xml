@@ -162,6 +162,7 @@
     <string name="gde_what_title">What kind of activities do GDEs do?</string>
     <string name="gde_what_desc">GDEs write code and launch apps; they open source as much as possible of the code they write to benefit other developers. They have written and continue to write blog posts, articles, documentation, books, etc. about development on the Google platform.\n\nThey also translate existing documentation into other languages to benefit local developers. GDEs have high reps on forums like Stack Overflow and are top contributors on product mailing lists.\n\nThey speak at developer conferences, organize and lead GDGs, and conduct hackathons. GDEs can be nominated for the program for doing one or more types of activities for a product. Once they are accepted as a GDE, they are expected to continue contributing in any of the ways listed above.</string>
     <string name="arrow_oops">Uh oh, something went wrong. Please try again.</string>
+    <string name="arrow_stale">Uh oh, that code has expired. Try again.</string>
     <string name="arrow_scan">Ready to Scan!\nGo find a GDG Organizer\nand ask nicely if you may \"tag\" him/her</string>
     <string name="arrow_organizer">Hey, it seems you are a GDG Organizer. Switch to Send Mode here if you want to allow someone to \"tag\" you.</string>
     <string name="arrow_send_mode">Send Mode</string>
