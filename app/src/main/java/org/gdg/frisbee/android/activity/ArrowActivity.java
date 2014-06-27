@@ -167,6 +167,9 @@ public class ArrowActivity extends GdgNavDrawerActivity {
             case R.id.arrow_lb:
                 startActivityForResult(Games.Leaderboards.getLeaderboardIntent(getGoogleApiClient(), Const.ARROW_LB), REQUEST_LEADERBOARD);
                 return true;
+            case R.id.arrow_tagged:
+                startActivity(new Intent(this, ArrowTaggedActivity.class));
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

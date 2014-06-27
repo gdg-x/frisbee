@@ -59,6 +59,7 @@
             <data android:scheme="gdgx" android:host="arrow" />
           </intent-filter>
         </activity>
+        <activity android:name=".activity.ArrowTaggedActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.FirstStartActivity" android:theme="@style/GDG.NoActionBar">
         </activity>
         <activity android:name=".activity.YoutubeActivity" android:theme="@style/GDG.SeeTrough" android:screenOrientation="sensor"

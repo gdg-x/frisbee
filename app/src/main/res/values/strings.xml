@@ -179,4 +179,5 @@
     <string name="no_description_available"><![CDATA[<i>No description available.</i>]]></string>
     <string name="starting_at">Starting at %1$s</string>
     <string name="loading_data_failed">Couldn\'t load event list..</string>
+    <string name="arrow_tagged">Your tagged Organizers</string>
 </resources>
