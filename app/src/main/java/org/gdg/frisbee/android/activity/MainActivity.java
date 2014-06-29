@@ -109,7 +109,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         mSpinnerAdapter = new ChapterAdapter(MainActivity.this, android.R.layout.simple_list_item_1);
         getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         getSupportActionBar().setListNavigationCallbacks(mSpinnerAdapter, MainActivity.this);
-
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         mFetchChaptersTask = mClient.getDirectory(new Response.Listener<Directory>() {
             @Override

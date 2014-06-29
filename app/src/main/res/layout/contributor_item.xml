@@ -4,22 +4,27 @@
               android:orientation="vertical"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content" android:padding="5dip">
-
-    <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" android:background="@drawable/card_bg" android:padding="5dip"
-            android:gravity="center_vertical">
-        <ImageView android:layout_width="45dip"
-              android:layout_height="45dip"
-              android:id="@+id/contributorIcon"
-              android:minHeight="45dip" android:minWidth="45dip" android:scaleType="centerCrop"
-                />
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="New Text"
-                android:id="@+id/contributorName" android:layout_marginLeft="10dip" android:autoLink="web"
-                android:textStyle="bold"/>
-    </LinearLayout>
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        card_view:cardCornerRadius="5dp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical">
+            <ImageView android:layout_width="45dip"
+                  android:layout_height="45dip"
+                  android:id="@+id/contributorIcon"
+                  android:minHeight="45dip" android:minWidth="45dip" android:scaleType="centerCrop"
+                    />
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New Text"
+                    android:id="@+id/contributorName" android:layout_marginLeft="10dip" android:autoLink="web"
+                    android:textStyle="bold"/>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 </LinearLayout>

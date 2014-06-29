@@ -31,20 +31,19 @@
       android:layout_height="wrap_content"
       android:padding="10dip">
 
-      <LinearLayout
-        android:orientation="vertical"
+      <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        card_view:cardCornerRadius="5dp"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/card_bg"
-        android:layout_weight="1">
-
+        android:layout_weight="1"
+        android:layout_height="wrap_content">
         <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="@string/special_description"
           android:id="@+id/special_description"
           android:padding="10dip" />
-      </LinearLayout>
+      </android.support.v7.widget.CardView>
     </LinearLayout>
 
     <FrameLayout

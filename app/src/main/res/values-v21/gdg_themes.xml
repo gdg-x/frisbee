@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.GDG" parent="@style/Theme.AppCompat.Light">
-        <item name="android:colorPrimaryDark">#ff69b4</item>
+        <item name="android:colorPrimaryDark">#ff383838</item>
         <item name="vpiTitlePageIndicatorStyle">@style/TitlePageIndicatorGDG</item>
         <item name="android:windowBackground">@color/default_bg</item>
         <item name="android:actionBarStyle">@style/ActionBarGDG</item>
