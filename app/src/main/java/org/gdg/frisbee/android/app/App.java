@@ -27,16 +27,15 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.widget.Toast;
+
 import com.crashlytics.android.Crashlytics;
-import com.google.analytics.tracking.android.GAServiceManager;
-import com.google.analytics.tracking.android.GoogleAnalytics;
-import com.google.analytics.tracking.android.Tracker;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.picasso.LruCache;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
-import io.fabric.sdk.android.Fabric;
-import java.io.File;
+
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -45,6 +44,9 @@ import org.gdg.frisbee.android.utils.CrashlyticsTree;
 import org.gdg.frisbee.android.utils.GingerbreadLastLocationFinder;
 import org.gdg.frisbee.android.utils.Utils;
 
+import java.io.File;
+
+import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 import uk.co.senab.bitmapcache.BitmapLruCache;
 
@@ -84,7 +86,7 @@ public class App extends Application implements LocationListener {
                     .detectDiskWrites()
                     .detectNetwork()
                     .penaltyLog();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
                 b.penaltyFlashScreen();
             }
 
@@ -101,7 +103,7 @@ public class App extends Application implements LocationListener {
         try {
             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
 
-            if(mPreferences.getInt(Const.SETTINGS_VERSION_CODE, 0) < pInfo.versionCode)
+            if (mPreferences.getInt(Const.SETTINGS_VERSION_CODE, 0) < pInfo.versionCode)
                 migrate(mPreferences.getInt(Const.SETTINGS_VERSION_CODE, 0), pInfo.versionCode);
 
         } catch (PackageManager.NameNotFoundException e) {
@@ -113,7 +115,7 @@ public class App extends Application implements LocationListener {
         getBitmapCache();
         GdgVolley.init(this);
 
-        mPreferences.edit().putInt(Const.SETTINGS_APP_STARTS, mPreferences.getInt(Const.SETTINGS_APP_STARTS,0)+1).apply();
+        mPreferences.edit().putInt(Const.SETTINGS_APP_STARTS, mPreferences.getInt(Const.SETTINGS_APP_STARTS, 0) + 1).apply();
 
         // Initialize Picasso
         mPicasso = new Picasso.Builder(this)
@@ -122,19 +124,11 @@ public class App extends Application implements LocationListener {
                 .build();
         mPicasso.setIndicatorsEnabled(BuildConfig.DEBUG);
 
-        // Initialize GA
-        mGaInstance = GoogleAnalytics.getInstance(getApplicationContext());
-        mTracker = mGaInstance.getTracker(getString(R.string.ga_trackingId));
-        GAServiceManager.getInstance().setDispatchPeriod(0);
-        mTracker.setAppName(getString(R.string.app_name));
-        mTracker.setAnonymizeIp(true);
-        mGaInstance.setDefaultTracker(mTracker);
-
         mOrganizerChecker = new OrganizerChecker(this, mPreferences);
         mOrganizerChecker.setLastOrganizerCheckTime(mPreferences.getLong("organizer_check_time", 0));
         mOrganizerChecker.setLastOrganizerCheckId(mPreferences.getString("organizer_check_id", null));
 
-        GoogleAnalytics.getInstance(this).setAppOptOut(mPreferences.getBoolean("analytics",false));
+        GoogleAnalytics.getInstance(this).setAppOptOut(mPreferences.getBoolean("analytics", false));
 
         // Init LastLocationFinder
         mLocationFinder = new GingerbreadLastLocationFinder(this);
@@ -144,7 +138,7 @@ public class App extends Application implements LocationListener {
 
     public void migrate(int oldVersion, int newVersion) {
 
-        if(oldVersion < 11100 || Const.ALPHA) {
+        if (oldVersion < 11100 || Const.ALPHA) {
             mPreferences.edit().remove(Const.SETTINGS_GCM_REG_ID).apply();
 
             mPreferences.edit().clear().apply();
@@ -161,19 +155,19 @@ public class App extends Application implements LocationListener {
             rootDir = internalCacheDir.getAbsolutePath();
             deleteDirectory(new File(rootDir));
 
-            if(Const.ALPHA)
+            if (Const.ALPHA)
                 Toast.makeText(getApplicationContext(), "Alpha version always resets Preferences on update.", Toast.LENGTH_LONG).show();
         }
         mPreferences.edit().putInt(Const.SETTINGS_VERSION_CODE, newVersion).apply();
     }
 
     public void updateLastLocation() {
-        if(Utils.isEmulator())
+        if (Utils.isEmulator())
             return;
 
-        Location loc = mLocationFinder.getLastBestLocation(5000,60*60*1000);
+        Location loc = mLocationFinder.getLastBestLocation(5000, 60 * 60 * 1000);
 
-        if(loc != null)
+        if (loc != null)
             mLastLocation = loc;
     }
 
@@ -186,11 +180,20 @@ public class App extends Application implements LocationListener {
     }
 
     public Tracker getTracker() {
+        if (mTracker == null) {
+            // Initialize GA
+            mGaInstance = GoogleAnalytics.getInstance(getApplicationContext());
+            mTracker = mGaInstance.newTracker(getString(R.string.ga_trackingId));
+
+            mTracker.setAppName(getString(R.string.app_name));
+            mTracker.setAnonymizeIp(true);
+        }
+
         return mTracker;
     }
 
     public ModelCache getModelCache() {
-        if(mModelCache == null) {
+        if (mModelCache == null) {
 
             File rootDir = null;
             if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
@@ -214,7 +217,7 @@ public class App extends Application implements LocationListener {
     }
 
     public BitmapLruCache getBitmapCache() {
-        if(mBitmapCache == null) {
+        if (mBitmapCache == null) {
 
             String rootDir = null;
             if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {

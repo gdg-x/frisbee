@@ -14,6 +14,7 @@
 
 package org.gdg.frisbee.android.api;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.api.client.http.LowLevelHttpRequest;
 import com.google.api.client.http.LowLevelHttpResponse;
 import com.google.api.client.util.Preconditions;
@@ -91,7 +92,14 @@ public class GapiOkHttpRequest extends LowLevelHttpRequest {
             connection.connect();
             GapiOkResponse response = new GapiOkResponse(connection);
             successfulConnection = true;
-            App.getInstance().getTracker().sendTiming("net",System.currentTimeMillis()-startTime, "gapi", null);
+
+            App.getInstance().getTracker().send(new HitBuilders.TimingBuilder()
+                    .setCategory("net")
+                    .setValue(System.currentTimeMillis()-startTime)
+                    .setVariable("gapi")
+                    .setLabel("gapi")
+                    .build());
+
             return response;
         } finally {
             if (!successfulConnection) {

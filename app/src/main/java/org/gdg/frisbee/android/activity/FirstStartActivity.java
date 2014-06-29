@@ -35,6 +35,8 @@ import android.widget.LinearLayout;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -113,7 +115,13 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
 
             @Override
             public void onPageSelected(int i) {
-                App.getInstance().getTracker().sendView("/FirstStart/Step"+(1+i));
+                Tracker t = App.getInstance().getTracker();
+                // Set screen name.
+                // Where path is a String representing the screen name.
+                t.setScreenName("/FirstStart/Step"+(1+i));
+
+                // Send a screen view.
+                t.send(new HitBuilders.AppViewBuilder().build());
             }
 
             @Override
@@ -190,7 +198,13 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
     protected void onStart() {
         super.onStart();
 
-        App.getInstance().getTracker().sendView("/FirstStart/Step"+(1+mViewPager.getCurrentItem()));
+        Tracker t = App.getInstance().getTracker();
+        // Set screen name.
+        // Where path is a String representing the screen name.
+        t.setScreenName("/FirstStart/Step"+(1+mViewPager.getCurrentItem()));
+
+        // Send a screen view.
+        t.send(new HitBuilders.AppViewBuilder().build());
     }
 
     @Override

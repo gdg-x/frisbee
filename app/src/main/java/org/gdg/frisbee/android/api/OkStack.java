@@ -22,6 +22,7 @@ import android.os.Build;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.toolbox.HurlStack;
+import com.google.android.gms.analytics.HitBuilders;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.OkUrlFactory;
 
@@ -71,14 +72,24 @@ public class OkStack extends HurlStack {
             TrafficStats.setThreadStatsTag(0xF00D);
             try {
                 HttpResponse res = super.performRequest(request, additionalHeaders);
-                App.getInstance().getTracker().sendTiming("net",System.currentTimeMillis()-startTime, "volley", null);
+                App.getInstance().getTracker().send(new HitBuilders.TimingBuilder()
+                        .setCategory("net")
+                        .setValue(System.currentTimeMillis()-startTime)
+                        .setVariable("okhttp")
+                        .setLabel("okhttp")
+                        .build());
                 return res;
             } finally {
                 TrafficStats.clearThreadStatsTag();
             }
         } else {
             HttpResponse response = super.performRequest(request, additionalHeaders);
-            App.getInstance().getTracker().sendTiming("net",System.currentTimeMillis()-startTime, "gapi", null);
+            App.getInstance().getTracker().send(new HitBuilders.TimingBuilder()
+                    .setCategory("net")
+                    .setValue(System.currentTimeMillis()-startTime)
+                    .setVariable("okhttp")
+                    .setLabel("okhttp")
+                    .build());
             return response;
         }
     }

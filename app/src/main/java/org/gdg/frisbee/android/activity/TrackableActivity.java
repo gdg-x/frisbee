@@ -20,6 +20,9 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import org.gdg.frisbee.android.app.App;
 
 /**
@@ -73,7 +76,13 @@ public abstract class TrackableActivity extends ActionBarActivity implements Vie
 
     protected void trackView(String viewName) {
         if(viewName != null) {
-            App.getInstance().getTracker().sendView("/" + viewName);
+            Tracker t = App.getInstance().getTracker();
+            // Set screen name.
+            // Where path is a String representing the screen name.
+            t.setScreenName("/" + viewName);
+
+            // Send a screen view.
+            t.send(new HitBuilders.AppViewBuilder().build());
         }
     }
 }

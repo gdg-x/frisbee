@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.gdg.frisbee.android.Const;
@@ -74,7 +75,13 @@ public class GcmIntentService extends IntentService {
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Intent eventIntent = new Intent();
-        App.getInstance().getTracker().sendEvent("gcm","clickedGcmEventNotification",extras.getString("id"), 0L);
+
+        App.getInstance().getTracker().send(new HitBuilders.EventBuilder()
+                .setCategory("gcm")
+                .setAction("clickedGcmEventNotification")
+                .setLabel(extras.getString("id"))
+                .build());
+
         eventIntent.setClass(getApplicationContext(), EventActivity.class);
         eventIntent.putExtra(Const.EXTRA_GROUP_ID, extras.getString("chapter"));
         eventIntent.putExtra(Const.EXTRA_EVENT_ID, extras.getString("id"));

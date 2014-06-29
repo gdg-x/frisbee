@@ -22,6 +22,9 @@ import android.app.backup.BackupDataOutput;
 import android.app.backup.SharedPreferencesBackupHelper;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
+
+import com.google.android.gms.analytics.HitBuilders;
+
 import timber.log.Timber;
 
 import java.io.IOException;
@@ -48,12 +51,22 @@ public class BackupAgent extends BackupAgentHelper {
     public void onRestore(BackupDataInput data, int appVersionCode, ParcelFileDescriptor newState) throws IOException {
         super.onRestore(data, appVersionCode, newState);
         Timber.d(String.format("Restoring from backup (was saved using version %d)", appVersionCode));
-        App.getInstance().getTracker().sendEvent("backup","restore","",(long)0);
+
+        App.getInstance().getTracker().send(new HitBuilders.EventBuilder()
+                .setCategory("backup")
+                .setAction("restore")
+                .setLabel(""+appVersionCode)
+                .build());
     }
 
     @Override
     public void onBackup(ParcelFileDescriptor oldState, BackupDataOutput data, ParcelFileDescriptor newState) throws IOException {
         super.onBackup(oldState, data, newState);    //To change body of overridden methods use File | Settings | File Templates.
-        App.getInstance().getTracker().sendEvent("backup","backup","",(long)0);
+
+        App.getInstance().getTracker().send(new HitBuilders.EventBuilder()
+                .setCategory("backup")
+                .setAction("backup")
+                .setLabel("")
+                .build());
     }
 }

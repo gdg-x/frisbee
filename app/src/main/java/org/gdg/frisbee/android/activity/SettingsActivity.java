@@ -21,6 +21,9 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.app.App;
 
@@ -47,9 +50,14 @@ public class SettingsActivity extends GdgActivity  {
 
         setContentView(R.layout.activity_settings);
 
-        App.getInstance().getTracker().sendView("/Settings");
 
+        Tracker t = App.getInstance().getTracker();
+        // Set screen name.
+        // Where path is a String representing the screen name.
+        t.setScreenName("/Settings");
 
+        // Send a screen view.
+        t.send(new HitBuilders.AppViewBuilder().build());
 
     }
 

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.plus.PlusShare;
 
 import org.gdg.frisbee.android.Const;
@@ -43,7 +44,11 @@ public class ParseDeepLinkActivity extends Activity {
         Timber.d("Deep Link id: " + deepLinkId);
         String[] parts = deepLinkId.split("/");
 
-        App.getInstance().getTracker().sendEvent("gplus", "deepLink", deepLinkId, 0L);
+        App.getInstance().getTracker().send(new HitBuilders.EventBuilder()
+                .setCategory("gplus")
+                .setAction("deepLink")
+                .setLabel(deepLinkId)
+                .build());
 
         // Our deep links look like this: https://developers.google.com/events/<eventId>/join,
         // or <plus_id>/events/<eventId>/join    join is optional
