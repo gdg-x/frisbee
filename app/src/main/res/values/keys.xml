@@ -4,6 +4,7 @@
     <string name="browser_simple_api_access_key"></string>
     <string name="ip_simple_api_access_key"></string>
     <string name="android_backup_key"></string>
+    <string name="hub_client_id"></string>
     <string name="play_app_id"></string>
 	<string name="gcm_sender_id"></string>
 </resources>
