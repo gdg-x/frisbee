@@ -86,7 +86,7 @@ dependencies {
     compile 'com.google.android.analytics:analytics:3'
     compile 'com.jakewharton:disklrucache:2.0.2'
     compile 'com.google.android:youtube-android-player-api:1.0.0'
-    compile 'com.google.android.gms:play-services:5.2.08'
+    compile 'com.google.android.gms:play-services:4.4.+'
     compile 'com.google.http-client:google-http-client-gson:1.18.0-rc'
     compile 'com.google.apis:google-api-services-plus:v1-rev126-1.18.0-rc'
     compile 'com.google.apis:google-api-services-youtube:v3-rev106-1.18.0-rc'

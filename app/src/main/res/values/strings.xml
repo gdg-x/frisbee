@@ -153,6 +153,8 @@
     <string name="flightschool_description">Dart hit 1.0 and is now Flight Ready! Developer communities around the world are hosting Dart Flight School events during the month of February 2014. Get your web development wings with Dart and Angular!</string>
     <string name="ioextended_description">Google I/O Extended is about joining the Google conference at your local group.</string>
     <string name="ioextended">Extended 2014</string>
+    <string name="devfest">DevFest 2014</string>
+    <string name="devfest_description">GDG DevFests are large, community-run events that can offer speaker sessions across multiple product areas, all-day hack-a-thons, code labs, and more.\n\nEach GDG DevFest will be inspired by and uniquely tailored to the needs of the developer community that hosts it. While no two events will be exactly alike, each GDG DevFest will, at its core, be powered by a shared belief that when developers come together to exchange ideas, amazing things can happen.</string>
     <string name="media_route_menu_title">Cast session</string>
     <string name="navigate_to">Navigate to event</string>
     <string name="gde">Google Developer Experts</string>
