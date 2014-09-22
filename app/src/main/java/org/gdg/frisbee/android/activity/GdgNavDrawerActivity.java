@@ -69,9 +69,9 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                     case Const.DRAWER_HOME:
                         navigateTo(MainActivity.class, null);
                         break;
-                    case Const.DRAWER_GDL:
-                        navigateTo(GdlActivity.class, null);
-                        break;
+                    //case Const.DRAWER_GDL:
+                    //    navigateTo(GdlActivity.class, null);
+                    //    break;
                     case Const.DRAWER_GDE:
                         navigateTo(GdeActivity.class, null);
                         break;
