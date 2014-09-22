@@ -111,7 +111,7 @@ public class TaggedEventFragment extends EventFragment {
             }
         };
 
-        ApiRequest fetchEvents = mClient.getTaggedEventList(mStart, mEnd, mEventTag, listener, mErrorListener);
+        ApiRequest fetchEvents = mClient.getTaggedEventUpcomingList(mEventTag, listener, mErrorListener);
 
         if (Utils.isOnline(getActivity())) {
             fetchEvents.execute();
