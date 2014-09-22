@@ -25,6 +25,7 @@
 
 # OkHttp
 -dontwarn com.squareup.okhttp.**
+-dontwarn okio.**
 
 # Volley
 -keep class android.support.v4.app.** { *; }
