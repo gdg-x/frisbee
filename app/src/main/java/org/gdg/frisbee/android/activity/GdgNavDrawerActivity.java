@@ -69,20 +69,20 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                     case Const.DRAWER_HOME:
                         navigateTo(MainActivity.class, null);
                         break;
-                    case Const.DRAWER_GDL:
-                        navigateTo(GdlActivity.class, null);
-                        break;
+                    //case Const.DRAWER_GDL:
+                    //    navigateTo(GdlActivity.class, null);
+                    //    break;
                     case Const.DRAWER_GDE:
                         navigateTo(GdeActivity.class, null);
                         break;
                     case Const.DRAWER_SPECIAL:
                         Bundle special = new Bundle();
-                        special.putInt(Const.SPECIAL_EVENT_LOGO_EXTRA, R.drawable.ioextended);
-                        special.putString(Const.SPECIAL_EVENT_VIEWTAG_EXTRA, "i-oextended");
-                        special.putString(Const.SPECIAL_EVENT_CACHEKEY_EXTRA, "i-oextended");
+                        special.putInt(Const.SPECIAL_EVENT_LOGO_EXTRA, R.drawable.ic_logo_devfest);
+                        special.putString(Const.SPECIAL_EVENT_VIEWTAG_EXTRA, "devfest");
+                        special.putString(Const.SPECIAL_EVENT_CACHEKEY_EXTRA, "devfest");
                         special.putLong(Const.SPECIAL_EVENT_START_EXTRA, DateTime.now().getMillis());
                         special.putLong(Const.SPECIAL_EVENT_END_EXTRA, 1419984000000L);
-                        special.putInt(Const.SPECIAL_EVENT_DESCRIPTION_EXTRA, R.string.ioextended_description);
+                        special.putInt(Const.SPECIAL_EVENT_DESCRIPTION_EXTRA, R.string.devfest_description);
                         navigateTo(SpecialEventActivity.class, special);
                         break;
                     case Const.DRAWER_PULSE:

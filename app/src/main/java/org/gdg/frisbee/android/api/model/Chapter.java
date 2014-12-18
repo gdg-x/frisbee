@@ -20,6 +20,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 /**
  * GDG Aachen
  * org.gdg.frisbee.android.api.model
@@ -36,16 +38,20 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
     @SerializedName("_id")
     private String gplusId;
 
+    private ArrayList<String> organizers;
+
     private Geo geo;
 
     public Chapter() {
         name = "";
         gplusId = "";
+        organizers = new ArrayList<>();
     }
 
     public Chapter(String name, String gplusId) {
         this.name = name;
         this.gplusId = gplusId;
+        organizers = new ArrayList<>();
     }
 
     public Chapter(Parcel in) {
@@ -56,6 +62,13 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
         state = in.readString();
         country = in.readParcelable(Country.class.getClassLoader());
         geo = in.readParcelable(Geo.class.getClassLoader());
+
+        organizers = new ArrayList<>();
+        in.readStringList(organizers);
+    }
+
+    public ArrayList<String> getOrganizers() {
+        return organizers;
     }
 
     public String getStatus() {
@@ -114,6 +127,7 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
         parcel.writeString(state);
         parcel.writeParcelable(country, 0);
         parcel.writeParcelable(geo,0);
+        parcel.writeStringList(organizers);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {

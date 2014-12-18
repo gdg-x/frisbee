@@ -26,6 +26,7 @@ import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
@@ -99,7 +100,10 @@ public class ArrowActivity extends GdgNavDrawerActivity {
 
     @InjectView(R.id.organizerPic)
     ImageView organizerPic;
+
     private String mPendingScore;
+
+    private Handler mHandler = new Handler();
 
     private static final int WHITE = 0xFFFFFFFF;
     private static final int BLACK = 0xFF000000;
@@ -162,6 +166,9 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         switch(item.getItemId()) {
             case R.id.arrow_lb:
                 startActivityForResult(Games.Leaderboards.getLeaderboardIntent(getGoogleApiClient(), Const.ARROW_LB), REQUEST_LEADERBOARD);
+                return true;
+            case R.id.arrow_tagged:
+                startActivity(new Intent(this, ArrowTaggedActivity.class));
                 return true;
         }
 
@@ -234,7 +241,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
 
                 long dt = Long.parseLong(parts[1]);
 
-                if(dt == getStartOfToday()) {
+                if((getNow() - dt) < 60000) {
                     if (getGoogleApiClient().isConnected()) {
                         score(parts[0]);
                     } else {
@@ -242,7 +249,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
                         getGoogleApiClient().connect();
                     }
                 } else {
-                    Toast.makeText(this, getString(R.string.arrow_oops), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.arrow_stale), Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -310,9 +317,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
     private void addTaggedPersonToCloudSave(String id) {
         previous = previous + ID_SPLIT_CHAR + id;
         AppStateManager.update(getGoogleApiClient(), Const.ARROW_DONE_STATE_KEY, previous.getBytes());
-        Games.Leaderboards.submitScore(getGoogleApiClient(), Const.ARROW_LB, previous.split("\\|").length);
-
-        Toast.makeText(ArrowActivity.this, "It worked...you tagged " + id, Toast.LENGTH_LONG).show();
+        Games.Leaderboards.submitScore(getGoogleApiClient(), Const.ARROW_LB, previous.split("\\|").length-1);
 
         Plus.PeopleApi.load(getGoogleApiClient(), id).setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
             @Override
@@ -330,7 +335,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
 
     private String getEncryptedMessage() throws Exception {
         return CryptoUtils.encrypt(Const.ARROW_K, Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getId() +
-                ID_SPLIT_CHAR + getStartOfToday());
+                ID_SPLIT_CHAR + getNow());
     }
 
     @Override
@@ -353,7 +358,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
             public void onOrganizerResponse(boolean isOrganizer) {
                 if (isOrganizer) {
                     organizerOnly.setVisibility(View.VISIBLE);
-                    setQrCode(organizerPic);
+                    setQrCode();
                 } else {
                     organizerOnly.setVisibility(View.GONE);
                 }
@@ -371,33 +376,43 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         }
     }
 
-    private void setQrCode(ImageView imageView) {
-        try {
-            String message = Const.QR_MSG_PREFIX + getEncryptedMessage();
-            MultiFormatWriter mQrCodeWriter = new MultiFormatWriter();
-            int qrCodeSize = getResources().getInteger(R.integer.qr_code_size);
-            BitMatrix bitMatrix = mQrCodeWriter.encode(message, BarcodeFormat.QR_CODE, qrCodeSize, qrCodeSize);
-            int width = bitMatrix.getWidth();
-            int height = bitMatrix.getHeight();
-            int[] pixels = new int[width * height];
-            for (int y = 0; y < height; y++) {
-                int offset = y * width;
-                for (int x = 0; x < width; x++) {
-                    pixels[offset + x] = bitMatrix.get(x, y) ? BLACK : WHITE;
+    private Runnable updateQrCode = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                String message = Const.QR_MSG_PREFIX + getEncryptedMessage();
+                MultiFormatWriter mQrCodeWriter = new MultiFormatWriter();
+                int qrCodeSize = getResources().getInteger(R.integer.qr_code_size);
+                BitMatrix bitMatrix = mQrCodeWriter.encode(message, BarcodeFormat.QR_CODE, qrCodeSize, qrCodeSize);
+                int width = bitMatrix.getWidth();
+                int height = bitMatrix.getHeight();
+                int[] pixels = new int[width * height];
+                for (int y = 0; y < height; y++) {
+                    int offset = y * width;
+                    for (int x = 0; x < width; x++) {
+                        pixels[offset + x] = bitMatrix.get(x, y) ? BLACK : WHITE;
+                    }
                 }
-            }
 
-            Bitmap bitmap = Bitmap.createBitmap(width, height,
-                    Bitmap.Config.ARGB_8888);
-            bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
-            imageView.setImageBitmap(bitmap);
-        } catch (Exception e) {
-            e.printStackTrace();
+                Bitmap bitmap = Bitmap.createBitmap(width, height,
+                        Bitmap.Config.ARGB_8888);
+                bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+                organizerPic.setImageBitmap(bitmap);
+
+                mHandler.postDelayed(updateQrCode, 60000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+    };
+
+    private void setQrCode() {
+        mHandler.post(updateQrCode);
+
     }
 
-    public long getStartOfToday() {
-        return DateTime.now(DateTimeZone.UTC).withTimeAtStartOfDay().getMillis();
+    public long getNow() {
+        return DateTime.now(DateTimeZone.UTC).getMillis();
     }
 
     private class BaseArrowHandler {

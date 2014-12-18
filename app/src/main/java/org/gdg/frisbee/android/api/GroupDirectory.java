@@ -51,6 +51,7 @@ public class GroupDirectory {
     private static final String GDL_CALENDAR_URL = BASE_URL + "/events/calendar/fc?calendar=gdl&start=1366581600&end=1367186400&_=1366664644691";
     private static final String CHAPTER_CALENDAR_URL = BASE_URL + "/events/feed/json";
     private static final String TAGGED_EVENTS_URL = "https://hub.gdgx.io/api/v1/events/tag/";
+    private static final String TAGGED_EVENTS_URL_UPCOMING = "https://hub.gdgx.io/api/v1/events/tag/%s/upcoming";
     private static final String EVENT_DETAIL_URL = "https://hub.gdgx.io/api/v1/events/";
     private static final String SHOWCASE_NEXT_URL = BASE_URL + "/showcase/next";
     private static final String PULSE_URL = BASE_URL + "/devreldash/gdg/pulse_stats/";
@@ -238,6 +239,50 @@ public class GroupDirectory {
         url += "?" + URLEncodedUtils.format(params, "UTF-8");
 
          GsonRequest<Void, PagedList<TaggedEvent>> eventReq = new GsonRequest<Void, PagedList<TaggedEvent>>(Request.Method.GET,
+                url,
+                type,
+                successListener,
+                errorListener,
+                GsonRequest.getGson(FieldNamingPolicy.IDENTITY, new ZuluDateTimeDeserializer()));
+        return new ApiRequest(eventReq);
+
+    }
+
+    public ApiRequest getTaggedEventUpcomingList(final String tag, Response.Listener<PagedList<TaggedEvent>> successListener, Response.ErrorListener errorListener) {
+
+        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+
+        params.add(new NameValuePair() {
+            @Override
+            public String getName() {
+                return "_";
+            }
+
+            @Override
+            public String getValue() {
+                return "" + (int) (new DateTime().getMillis() / 1000);
+            }
+        });
+
+        params.add(new NameValuePair() {
+            @Override
+            public String getName() {
+                return "perpage";
+            }
+
+            @Override
+            public String getValue() {
+                return "1000" ;
+            }
+        });
+
+        Type type = new TypeToken<PagedList<TaggedEvent>>() {
+        }.getType();
+
+        String url = String.format(TAGGED_EVENTS_URL_UPCOMING,tag);
+        url += "?" + URLEncodedUtils.format(params, "UTF-8");
+
+        GsonRequest<Void, PagedList<TaggedEvent>> eventReq = new GsonRequest<Void, PagedList<TaggedEvent>>(Request.Method.GET,
                 url,
                 type,
                 successListener,

@@ -7,6 +7,11 @@
     android:title="@string/arrow_leaderboard"
     app:showAsAction="ifRoom"
     android:icon="@drawable/ic_play_games_badge_leaderboards_gray"/>
+ <item
+    android:id="@+id/arrow_tagged"
+    android:title="@string/arrow_tagged"
+    app:showAsAction="ifRoom"
+    android:icon="@drawable/ic_arrow_tagged"/>
   <item
     android:id="@+id/settings"
     android:title="@string/settings"
