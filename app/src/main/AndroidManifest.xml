@@ -91,7 +91,10 @@
                 android:resource="@xml/searchable"/>
         </activity>
         <activity android:name=".event.EventActivity"
-          android:parentActivityName=".activity.MainActivity"/>
+          android:parentActivityName=".activity.MainActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity"/>
+        </activity>
 
         <provider android:name=".provider.GdgProvider"
             android:authorities="org.gdg.frisbee.android.provider.GdgProvider"
