@@ -3,6 +3,10 @@
 /.idea/workspace.xml
 .DS_Store
 
+# ignore crashlytics generated files
+crashlytics-build.properties
+com_crashlytics_export_strings.xml
+
 # built application files
 *.apk
 *.ap_

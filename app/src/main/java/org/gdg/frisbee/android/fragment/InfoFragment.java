@@ -32,7 +32,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.GoogleMap;
 import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -75,8 +74,6 @@ public class InfoFragment extends Fragment {
     final JsonFactory mJsonFactory = new GsonFactory();
 
     private Plus mClient;
-
-    private GoogleMap mMap;
 
     @InjectView(R.id.about)
     TextView mAbout;
