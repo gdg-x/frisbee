@@ -17,6 +17,12 @@ Check http://github.com/gdg-x for more information.
 
 [![Build Status](https://travis-ci.org/gdg-x/frisbee.png?branch=master)](https://travis-ci.org/gdg-x/frisbee)
 
+###Translation
+
+There are GDG communities all over the world, so we want Frisbee to be available in every language there is.
+You can help us out. Head over to Crowdin and start translating Frisbee to your language.
+https://crowdin.com/project/gdgx-frisbee
+
 ######The GDG App, GDG[x] are not endorsed and/or supported by Google, the corporation.
 
-&copy; 2013 GDG[x]
+&copy; 2013-2015 GDG[x]
