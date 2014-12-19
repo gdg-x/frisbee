@@ -27,7 +27,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.widget.Toast;
-
+import com.crashlytics.android.Crashlytics;
 import com.google.analytics.tracking.android.GAServiceManager;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
@@ -35,16 +35,13 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.picasso.LruCache;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
-
+import io.fabric.sdk.android.Fabric;
 import java.io.File;
-
-import org.acra.ACRA;
-import org.acra.annotation.ReportsCrashes;
-import org.acra.sender.HttpSender;
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.utils.CrashlyticsTree;
 import org.gdg.frisbee.android.utils.GingerbreadLastLocationFinder;
 import org.gdg.frisbee.android.utils.Utils;
 
@@ -57,8 +54,6 @@ import uk.co.senab.bitmapcache.BitmapLruCache;
  * Date: 20.04.13
  * Time: 12:09
  */
-
-@ReportsCrashes(httpMethod = HttpSender.Method.POST, reportType = HttpSender.Type.JSON, formUri = "https://gdg-x.hp.af.cm/api/v1/crashreport", formKey = "", disableSSLCertValidation = true)
 public class App extends Application implements LocationListener {
 
     private static App mInstance = null;
@@ -81,28 +76,23 @@ public class App extends Application implements LocationListener {
     public void onCreate() {
         super.onCreate();
 
-        if (Const.DEVELOPER_MODE) {
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+
             StrictMode.ThreadPolicy.Builder b = new StrictMode.ThreadPolicy.Builder()
                     .detectDiskReads()
                     .detectDiskWrites()
                     .detectNetwork()
                     .penaltyLog();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
-                    b.penaltyFlashScreen();
+                b.penaltyFlashScreen();
             }
-            //StrictMode.setThreadPolicy(b.build());
 
-        }
-
-        if (BuildConfig.DEBUG) {
-            Timber.plant(new Timber.DebugTree());
+            StrictMode.setThreadPolicy(b.build());
         } else {
-            // TODO Crashlytics.start(this);
-            // TODO Timber.plant(new CrashlyticsTree());
+            Fabric.with(this, new Crashlytics());
+            Timber.plant(new CrashlyticsTree());
         }
-
-        // Initialize ACRA Bugreporting (reports get send to GDG[x] Hub)
-        ACRA.init(this);
 
         mInstance = this;
 
@@ -130,7 +120,7 @@ public class App extends Application implements LocationListener {
                 .downloader(new OkHttpDownloader(this))
                 .memoryCache(new LruCache(this))
                 .build();
-        mPicasso.setDebugging(Const.DEVELOPER_MODE);
+        mPicasso.setIndicatorsEnabled(BuildConfig.DEBUG);
 
         // Initialize GA
         mGaInstance = GoogleAnalytics.getInstance(getApplicationContext());

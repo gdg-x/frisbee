@@ -116,6 +116,8 @@
     protected Object[][] getContents();
 }
 
+-dontwarn com.google.android.gms.**
+
 -keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable {
     public static final *** NULL;
 }

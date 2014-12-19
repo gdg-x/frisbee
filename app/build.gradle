@@ -1,4 +1,5 @@
 apply plugin: 'android'
+apply plugin: 'io.fabric'
 apply plugin: 'versions'
 
 def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
@@ -55,7 +56,6 @@ android {
         }
     }
 
-
     lintOptions {
         abortOnError false
         checkReleaseBuilds false
@@ -73,7 +73,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3'
     compile 'org.jsoup:jsoup:1.7.3'
     compile 'joda-time:joda-time:2.3'
-    compile 'ch.acra:acra:4.5.0'
     compile 'com.jakewharton.timber:timber:2.3.0'
     compile 'com.github.chrisbanes.actionbarpulltorefresh:library:0.9.9'
     compile ('com.github.chrisbanes.actionbarpulltorefresh:extra-abc:0.9.9'){
@@ -106,5 +105,62 @@ dependencies {
     compile 'com.jakewharton:butterknife:5.1.0'
     compile 'com.google.zxing:android-integration:3.1.0'
     compile 'com.google.zxing:core:3.1.0'
+    compile('com.crashlytics.sdk.android:crashlytics:2.2.0@aar') {
+        transitive = true;
+    }
     compile fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+def toCamelCase(String string) {
+    String result = ""
+    string.findAll("[^\\W]+") { String word ->
+        result += word.capitalize()
+    }
+    return result
+}
+
+afterEvaluate { project ->
+    Configuration runtimeConfiguration = project.configurations.getByName('compile')
+    ResolutionResult resolution = runtimeConfiguration.incoming.resolutionResult
+    // Forces resolve of configuration
+    ModuleVersionIdentifier module = resolution.getAllComponents().find { it.moduleVersion.name.equals("play-services") }.moduleVersion
+
+    String prepareTaskName = "prepare${toCamelCase("${module.group} ${module.name} ${module.version}")}Library"
+    File playServiceRootFolder = project.tasks.find { it.name.equals(prepareTaskName) }.explodedDir
+
+    Task stripPlayServices = project.tasks.create(name: 'stripPlayServices', group: "Strip") {
+        inputs.files new File(playServiceRootFolder, "classes.jar")
+        outputs.dir playServiceRootFolder
+        description 'Strip useless packages from Google Play Services library to avoid reaching dex limit'
+
+        doLast {
+            copy {
+                from(file(new File(playServiceRootFolder, "classes.jar")))
+                into(file(playServiceRootFolder))
+                rename { fileName ->
+                    fileName = "classes_orig.jar"
+                }
+            }
+            tasks.create(name: "stripPlayServices" + module.version, type: Jar) {
+                destinationDir = playServiceRootFolder
+                archiveName = "classes.jar"
+                from(zipTree(new File(playServiceRootFolder, "classes_orig.jar"))) {
+                    exclude "com/google/ads/**"
+                    exclude "com/google/android/gms/drive/**"
+                    exclude "com/google/android/gms/ads/**"
+                    exclude "com/google/android/gms/wallet/**"
+                    exclude "com/google/android/gms/wearable/**"
+                    exclude "com/google/android/gms/panorama/**"
+                    exclude "com/google/android/gms/maps/**"
+                    exclude "com/google/android/gms/tagmanager/**"
+                    exclude "com/google/android/gms/wearable/**"
+                }
+            }.execute()
+            delete file(new File(playServiceRootFolder, "classes_orig.jar"))
+        }
+    }
+
+    project.tasks.findAll { it.name.startsWith('prepare') && it.name.endsWith('Dependencies') }.each { Task task ->
+        task.dependsOn stripPlayServices
+    }
 }
