@@ -4,7 +4,7 @@ jdk: oraclejdk7
 branches:
   only:
     - master
-    - release
+    - develop
 
 before_install:
   - SDK_TOOLS_VERSION=24.0.2
