@@ -69,10 +69,10 @@ Before you submit your pull request consider the following guidelines:
   that relates to your submission. You don't want to duplicate effort.
 * Please sign our [Contributor License Agreement (CLA)](#cla) before sending pull
   requests. Otherwise, it is assumed the contributor agrees to the CLA without signing.
-* Make your changes in a new git branch
+* Make your changes in a new git branch. Please be aware that we are following the [git flow branching model](http://nvie.com/posts/a-successful-git-branching-model/) with `develop` as the branch for the next version:
 
      ```shell
-     git checkout -b my-fix-branch master
+     git checkout -b feature/my-shiny-contribution develop
      ```
 
 * Create your patch, **including appropriate test cases**.
@@ -98,17 +98,17 @@ Before you submit your pull request consider the following guidelines:
 * Push your branch to GitHub:
 
     ```shell
-    git push origin my-fix-branch
+    git push origin feature/my-shiny-contribution
     ```
 
-* In GitHub, send a pull request to `frisbee:master`.
+* In GitHub, send a pull request to `frisbee:develop`.
 * If we suggest changes then 
   * Make the required updates.
   * Re-run the Frisbee test suite to ensure tests are still passing.
   * Rebase your branch and force push to your GitHub repository (this will update your Pull Request):
 
     ```shell
-    git rebase master -i
+    git rebase develop -i
     git push -f
     ```
 
@@ -122,25 +122,25 @@ from the main (upstream) repository:
 * Delete the remote branch on GitHub either through the GitHub web UI or your local shell as follows:
 
     ```shell
-    git push origin --delete my-fix-branch
+    git push origin --delete feature/my-shiny-contribution
     ```
 
-* Check out the master branch:
+* Check out the develop branch:
 
     ```shell
-    git checkout master -f
+    git checkout develop -f
     ```
 
 * Delete the local branch:
 
     ```shell
-    git branch -D my-fix-branch
+    git branch -D feature/my-shiny-contribution
     ```
 
-* Update your master with the latest upstream version:
+* Update your develop with the latest upstream version:
 
     ```shell
-    git pull --ff upstream master
+    git pull --ff upstream develop
     ```
 
 ## <a name="rules"></a> Coding Rules
@@ -225,3 +225,4 @@ changes to be accepted, the CLA must be signed. It's a quick process, we promise
 [corporate-cla]: https://github.com/gdg-x/frisbee/blob/master/misc/Frisbee-Individual.pdf?raw=true
 [individual-cla]: https://github.com/gdg-x/frisbee/blob/master/misc/Frisbee-Entity.pdf?raw=true
 [android-code]: http://source.android.com/source/code-style.html
+[git flow]: http://nvie.com/posts/a-successful-git-branching-model/
