@@ -40,6 +40,12 @@ android {
             storePassword "android"
             keyPassword "android"
         }
+        release {
+            storeFile file("../settings/debug.keystore")
+            keyAlias "androiddebugkey"
+            storePassword "android"
+            keyPassword "android"
+        }
     }
 
     buildTypes {
@@ -152,6 +158,8 @@ afterEvaluate { project ->
                     exclude "com/google/android/gms/wearable/**"
                     exclude "com/google/android/gms/panorama/**"
                     exclude "com/google/android/gms/maps/**"
+                    exclude "com/google/android/gms/tagmanager/**"
+                    exclude "com/google/android/gms/wearable/**"
                 }
             }.execute()
             delete file(new File(playServiceRootFolder, "classes_orig.jar"))
