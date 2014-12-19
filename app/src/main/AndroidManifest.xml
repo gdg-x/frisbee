@@ -121,6 +121,7 @@
             <meta-data android:name="worldReadable" android:value="true" />
             <meta-data android:name="description" android:value="@string/dashclock_description" />
         </service>
+        <meta-data android:name="com.crashlytics.ApiKey" android:value="39ee8135e5c4935b35bda31d7302a6d39b65570d"/>
     </application>
 
 </manifest>
