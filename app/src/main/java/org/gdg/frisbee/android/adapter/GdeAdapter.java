@@ -125,6 +125,9 @@ public class GdeAdapter extends BaseAdapter {
                 .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<ViewHolder, Person>() {
                     @Override
                     public Person doInBackground(ViewHolder... params) {
+                        if (params[0] == null || params[0].socialUrl == null) {
+                            return null;
+                        }
                         Matcher matcher = mPlusPattern.matcher(params[0].socialUrl);
 
                         Person gde = null;
