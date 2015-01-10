@@ -16,6 +16,7 @@
 
 package org.gdg.frisbee.android.api;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.google.gson.FieldNamingPolicy;
@@ -103,7 +104,11 @@ public class GroupDirectory {
                 EventFullDetails.class,
                 successListener,
                 errorListener,
-                GsonRequest.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES, new ZuluDateTimeDeserializer()));
+                GsonRequest.getGson(FieldNamingPolicy.IDENTITY, new ZuluDateTimeDeserializer()));
+        eventReq.setRetryPolicy(new DefaultRetryPolicy(
+                60000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return new ApiRequest(eventReq);
     }
 
