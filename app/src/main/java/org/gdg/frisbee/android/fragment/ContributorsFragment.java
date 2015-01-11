@@ -57,11 +57,8 @@ import java.util.ArrayList;
  */
 public class ContributorsFragment extends GdgListFragment {
 
-    private static final String LOG_TAG = "GDG-ContributorsFragment";
-    private LayoutInflater mInflater;
-    private GitHub mClient;
     private ApiRequest mFetchContent;
-    private ContributorAdapter mAdapter;
+    protected ContributorAdapter mAdapter;
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -80,11 +77,16 @@ public class ContributorsFragment extends GdgListFragment {
         super.onActivityCreated(savedInstanceState);
         Timber.d("onActivityCreated()");
 
-        mClient = new GitHub();
+
         mAdapter = new ContributorAdapter(getActivity(), 0);
         setListAdapter(mAdapter);
 
-        mFetchContent = mClient.getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO,
+        loadContributors();
+    }
+
+    protected void loadContributors() {
+        GitHub githubClient = new GitHub();
+        mFetchContent = githubClient.getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO,
                 new Response.Listener<ArrayList<Contributor>>() {
                     @Override
                     public void onResponse(final ArrayList<Contributor> contributors) {
