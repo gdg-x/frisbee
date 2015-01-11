@@ -1,6 +1,7 @@
 package org.gdg.frisbee.android.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,11 +42,12 @@ public class ContributorAdapter extends ArrayAdapter<Contributor> {
 
         TextView name = (TextView)view.findViewById(R.id.contributorName);
         name.setText(contributor.getLogin());
-        final ImageView c = (ImageView) view.findViewById(R.id.contributorIcon);
-        App.getInstance().getPicasso()
-                .load(contributor.getAvatarUrl())
-                .into(c);
-
+        if (!TextUtils.isEmpty(contributor.getAvatarUrl())) {
+            final ImageView c = (ImageView) view.findViewById(R.id.contributorIcon);
+            App.getInstance().getPicasso()
+                    .load(contributor.getAvatarUrl())
+                    .into(c);
+        }
         return view;
     }
 

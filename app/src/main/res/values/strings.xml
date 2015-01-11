@@ -68,6 +68,7 @@
     <string-array name="about_tabs">
         <item>About</item>
         <item>Contributors</item>
+        <item>Translators</item>
         <item>Changelog</item>
         <item>Get Involved</item>
         <item>3rd Party Libraries</item>

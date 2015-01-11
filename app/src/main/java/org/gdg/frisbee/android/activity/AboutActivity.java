@@ -110,10 +110,12 @@ public class AboutActivity extends GdgActivity {
                 case 1:
                     return new ContributorsFragment();
                 case 2:
-                    return new ChangelogFragment();
+                    return new TranslatorsFragment();
                 case 3:
-                    return new GetInvolvedFragment();
+                    return new ChangelogFragment();
                 case 4:
+                    return new GetInvolvedFragment();
+                case 5:
                     return new ExtLibrariesFragment();
             }
             return null;
