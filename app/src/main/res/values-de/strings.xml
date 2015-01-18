@@ -100,6 +100,7 @@
     <string-array name="about_tabs">
         <item>Über</item>
         <item>Entwickler</item>
+        <item>Übersetzer</item>
         <item>Änderungen</item>
         <item>Mach mit</item>
         <item>Drittlizenzen</item>

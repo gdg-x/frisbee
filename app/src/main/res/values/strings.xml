@@ -65,18 +65,6 @@
         <item quantity="one">1 day ago</item>
         <item quantity="other">%d days ago</item>
     </plurals>
-    <string-array name="about_tabs">
-        <item>About</item>
-        <item>Contributors</item>
-        <item>Changelog</item>
-        <item>Get Involved</item>
-        <item>3rd Party Libraries</item>
-    </string-array>
-    <string-array name="event_tabs">
-      <item>Info</item>
-      <item>Agenda</item>
-      <item>More</item>
-    </string-array>
     <string name="contributors">The GDG app is a community effort and open sourced. The following people contributed to the app:</string>
     <string name="get_involved">Get Involved!</string>
     <string name="get_involved_text">The GDG app is a community effort and open sourced. Everyone is welcome to participate and improve this app.\n\nJust head over to GitHub and checkout our code.\n\nhttps://github.com/gdg-x</string>
@@ -152,4 +140,14 @@
     <string name="share">Share</string>
     <string name="open_event_site">View event page</string>
     <string name="arrow_tagged">Your tagged Organizers</string>
+    <string name="get_involved_translation_text">If you like to contribute to the localization of the app, i.e. translate to a new language or improve existing ones, please goto the crowdin page at\n\nhttps://crowdin.com/project/gdgx-frisbee</string>
+    <string name="about_about">About</string>
+    <string name="about_contributors">Contributors</string>
+    <string name="about_translators">Translators</string>
+    <string name="about_changelog">Changelog</string>
+    <string name="about_get_involved">Get Involved</string>
+    <string name="about_third_party_libraries">3rd Party Libraries</string>
+    <string name="event_info">Info</string>
+    <string name="event_agenda">Agenda</string>
+    <string name="event_more">More</string>
 </resources>
