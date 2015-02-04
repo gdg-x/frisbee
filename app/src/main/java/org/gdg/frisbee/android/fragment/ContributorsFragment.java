@@ -19,34 +19,31 @@ package org.gdg.frisbee.android.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
-import butterknife.ButterKnife;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
+import java.util.ArrayList;
+
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.adapter.ContributorAdapter;
-import org.gdg.frisbee.android.adapter.GdlAdapter;
 import org.gdg.frisbee.android.api.ApiRequest;
 import org.gdg.frisbee.android.api.GitHub;
-import org.gdg.frisbee.android.api.GoogleDevelopersLive;
 import org.gdg.frisbee.android.api.model.Contributor;
-import org.gdg.frisbee.android.api.model.GdlShowList;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
-import timber.log.Timber;
 
-import java.util.ArrayList;
+import butterknife.ButterKnife;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
+import timber.log.Timber;
 
 /**
  * Created with IntelliJ IDEA.
@@ -57,8 +54,8 @@ import java.util.ArrayList;
  */
 public class ContributorsFragment extends GdgListFragment {
 
-    private ApiRequest mFetchContent;
     protected ContributorAdapter mAdapter;
+    private ApiRequest mFetchContent;
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -77,8 +74,7 @@ public class ContributorsFragment extends GdgListFragment {
         super.onActivityCreated(savedInstanceState);
         Timber.d("onActivityCreated()");
 
-
-        mAdapter = new ContributorAdapter(getActivity(), 0);
+        mAdapter = new ContributorAdapter(getActivity());
         setListAdapter(mAdapter);
 
         loadContributors();
