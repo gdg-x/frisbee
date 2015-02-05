@@ -67,8 +67,7 @@ public class ContributorAdapter extends ArrayAdapter<Contributor> {
         for (Contributor c : contributors) {
             add(c);
         }
-        setNotifyOnChange(true);
-        notifyDataSetChanged();
+        notifyDataSetChanged(); // also sets mNotifyOnChange = true;
     }
 
     static final class ViewHolder {
