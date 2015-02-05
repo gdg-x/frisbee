@@ -70,7 +70,7 @@ public class ContributorAdapter extends ArrayAdapter<Contributor> {
         notifyDataSetChanged();
     }
 
-    private static final class ViewHolder {
+    static final class ViewHolder {
         @InjectView(R.id.contributorName)
         TextView contributorName;
         @InjectView(R.id.contributorIcon)
