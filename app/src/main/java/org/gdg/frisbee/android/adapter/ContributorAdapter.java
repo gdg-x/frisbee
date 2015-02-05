@@ -24,12 +24,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.Collection;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Contributor;
+import org.gdg.frisbee.android.app.App;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -54,7 +53,9 @@ public class ContributorAdapter extends ArrayAdapter<Contributor> {
         viewHolder.contributorName.setText(contributor.getLogin());
 
         if (!TextUtils.isEmpty(contributor.getAvatarUrl())) {
-            Picasso.with(getContext()).load(contributor.getAvatarUrl()).into(viewHolder.contributorAvatar);
+            App.getInstance().getPicasso()
+                    .load(contributor.getAvatarUrl())
+                    .into(viewHolder.contributorAvatar);
         }
 
         return convertView;
