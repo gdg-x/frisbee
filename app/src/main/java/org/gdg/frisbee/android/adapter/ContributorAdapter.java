@@ -17,7 +17,6 @@
 package org.gdg.frisbee.android.adapter;
 
 import android.content.Context;
-import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +31,9 @@ import java.util.Collection;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Contributor;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 public class ContributorAdapter extends ArrayAdapter<Contributor> {
 
     public ContributorAdapter(Context context) {
@@ -42,11 +44,7 @@ public class ContributorAdapter extends ArrayAdapter<Contributor> {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = View.inflate(getContext(), R.layout.contributor_item, null);
-
-            ViewHolder viewHolder = new ViewHolder();
-            viewHolder.contributorName = (TextView) convertView.findViewById(R.id.contributorName);
-            viewHolder.contributorAvatar = (ImageView) convertView.findViewById(R.id.contributorIcon);
-
+            ViewHolder viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         }
 
@@ -64,17 +62,22 @@ public class ContributorAdapter extends ArrayAdapter<Contributor> {
 
     @Override
     public void addAll(Collection<? extends Contributor> contributors) {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
-            super.addAll(contributors);
-        } else {
-            for (Contributor c : contributors) {
-                add(c);
-            }
+        setNotifyOnChange(false);
+        for (Contributor c : contributors) {
+            add(c);
         }
+        setNotifyOnChange(true);
+        notifyDataSetChanged();
     }
 
     private static final class ViewHolder {
-        public TextView contributorName;
-        public ImageView contributorAvatar;
+        @InjectView(R.id.contributorName)
+        TextView contributorName;
+        @InjectView(R.id.contributorIcon)
+        ImageView contributorAvatar;
+
+        public ViewHolder(View view) {
+            ButterKnife.inject(this, view);
+        }
     }
 }
