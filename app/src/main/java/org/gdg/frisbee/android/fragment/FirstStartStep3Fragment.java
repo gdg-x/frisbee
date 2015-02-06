@@ -29,7 +29,6 @@ import android.widget.LinearLayout;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.FirstStartActivity;
-import org.gdg.frisbee.android.utils.Log;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -54,11 +53,6 @@ public class FirstStartStep3Fragment extends Fragment {
     private SharedPreferences mPreferences;
 
     private boolean mIsSignedIn = false;
-
-    public static FirstStartStep3Fragment newInstance() {
-        FirstStartStep3Fragment fragment = new FirstStartStep3Fragment();
-        return fragment;
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

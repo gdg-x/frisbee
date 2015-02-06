@@ -342,7 +342,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
             super(fm);
             mContext = ctx;
             mFragments = new Fragment[] {
-                FirstStartStep1Fragment.newInstance(), FirstStartStep2Fragment.newInstance(), FirstStartStep3Fragment.newInstance()
+                new FirstStartStep1Fragment(), new FirstStartStep2Fragment(), new FirstStartStep3Fragment()
             };
         }
 

@@ -76,11 +76,6 @@ public class FirstStartStep2Fragment extends Fragment implements GoogleApiClient
     @InjectView(R.id.skipSignin)
     Button mSkipSignin;
 
-    public static FirstStartStep2Fragment newInstance() {
-        FirstStartStep2Fragment fragment = new FirstStartStep2Fragment();
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

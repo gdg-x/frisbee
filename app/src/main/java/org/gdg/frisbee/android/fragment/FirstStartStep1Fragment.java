@@ -71,14 +71,6 @@ public class FirstStartStep1Fragment extends Fragment {
 
     private ChapterComparator mLocationComparator;
 
-    public static FirstStartStep1Fragment newInstance() {
-        Timber.d("newInstance");
-        FirstStartStep1Fragment fragment = new FirstStartStep1Fragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         Timber.d("onSaveInstanceState");
