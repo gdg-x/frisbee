@@ -109,7 +109,7 @@ public class FirstStartStep2Fragment extends Fragment implements GoogleApiClient
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_welcome_step2, null);
+        View v = inflater.inflate(R.layout.fragment_welcome_step2, container, false);
         ButterKnife.inject(this, v);
         return v;
     }
