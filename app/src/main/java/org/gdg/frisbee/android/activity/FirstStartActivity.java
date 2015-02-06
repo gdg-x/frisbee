@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 The GDG Frisbee Project
+ * Copyright 2013-2015 The GDG Frisbee Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,14 +62,6 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import timber.log.Timber;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.activity
- * <p/>
- * User: maui
- * Date: 29.04.13
- * Time: 14:48
- */
 public class FirstStartActivity extends ActionBarActivity implements FirstStartStep1Fragment.Step1Listener, FirstStartStep2Fragment.Step2Listener, FirstStartStep3Fragment.Step3Listener {
 
     private GoogleCloudMessaging mGcm;
