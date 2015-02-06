@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +57,6 @@ public class FirstStartStep1Fragment extends Fragment {
 
     private ApiRequest mFetchChaptersTask;
     private ChapterAdapter mSpinnerAdapter;
-    private GroupDirectory mClient;
 
     private Chapter mSelectedChapter;
 
@@ -71,7 +69,6 @@ public class FirstStartStep1Fragment extends Fragment {
     @InjectView(R.id.viewSwitcher)
     ViewSwitcher mLoadSwitcher;
 
-    private SharedPreferences mPreferences;
     private ChapterComparator mLocationComparator;
 
     public static FirstStartStep1Fragment newInstance() {
@@ -99,40 +96,39 @@ public class FirstStartStep1Fragment extends Fragment {
 
         super.onActivityCreated(savedInstanceState);
 
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("gdg", Context.MODE_PRIVATE);
+        mLocationComparator = new ChapterComparator(sharedPreferences);
 
-        mPreferences = getActivity().getSharedPreferences("gdg", Context.MODE_PRIVATE);
-        mLocationComparator = new ChapterComparator(mPreferences);
-
-        mClient = new GroupDirectory();
+        GroupDirectory client = new GroupDirectory();
         mSpinnerAdapter = new ChapterAdapter(getActivity(), android.R.layout.simple_list_item_1);
 
         if(savedInstanceState != null) {
             mSelectedChapter = savedInstanceState.getParcelable("selected_chapter");
         }
 
-        mFetchChaptersTask = mClient.getDirectory(new Response.Listener<Directory>() {
-                  @Override
-                  public void onResponse(final Directory directory) {
-                      App.getInstance().getModelCache().putAsync("chapter_list_hub", directory, DateTime.now().plusDays(4), new ModelCache.CachePutListener() {
-                          @Override
-                          public void onPutIntoCache() {
-                              addChapters(directory.getGroups());
-                              mLoadSwitcher.setDisplayedChild(1);
-                          }
-                      });
+        mFetchChaptersTask = client.getDirectory(new Response.Listener<Directory>() {
+            @Override
+            public void onResponse(final Directory directory) {
+                App.getInstance().getModelCache().putAsync("chapter_list_hub", directory, DateTime.now().plusDays(4), new ModelCache.CachePutListener() {
+                    @Override
+                    public void onPutIntoCache() {
+                        addChapters(directory.getGroups());
+                        mLoadSwitcher.setDisplayedChild(1);
+                    }
+                });
 
-                  }
-              }, new Response.ErrorListener() {
-                  @Override
-                  public void onErrorResponse(VolleyError volleyError) {
-                      if (isDetached()){
-                          Toast.makeText(getActivity(), R.string.fetch_chapters_failed, Toast.LENGTH_SHORT).show();
-                      } else {
-                          Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
-                      }
-                      Timber.e("Could'nt fetch chapter list", volleyError);
-                  }
-              });
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                if (isDetached()) {
+                    Toast.makeText(getActivity(), R.string.fetch_chapters_failed, Toast.LENGTH_SHORT).show();
+                } else {
+                    Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
+                }
+                Timber.e("Could'nt fetch chapter list", volleyError);
+            }
+        });
 
         App.getInstance().getModelCache().getAsync("chapter_list_hub", new ModelCache.CacheListener() {
             @Override
