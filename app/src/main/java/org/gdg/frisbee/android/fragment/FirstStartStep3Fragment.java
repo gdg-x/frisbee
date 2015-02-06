@@ -55,8 +55,8 @@ public class FirstStartStep3Fragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                if(getActivity() instanceof Step3Listener) {
-                    ((Step3Listener)getActivity()).onComplete(mEnableAnalytics.isChecked(), mEnableGcm.isChecked());
+                if (getActivity() instanceof Step3Listener) {
+                    ((Step3Listener) getActivity()).onComplete(mEnableAnalytics.isChecked(), mEnableGcm.isChecked());
                 }
             }
         });
@@ -67,7 +67,7 @@ public class FirstStartStep3Fragment extends Fragment {
         super.onResume();
         Timber.d("onResume()");
 
-        if(!mIsSignedIn) {
+        if (!mIsSignedIn) {
             mGcmContainer.setVisibility(View.GONE);
         } else {
             mGcmContainer.setVisibility(View.VISIBLE);
@@ -84,8 +84,8 @@ public class FirstStartStep3Fragment extends Fragment {
     public void setSignedIn(boolean mIsSignedIn) {
         this.mIsSignedIn = mIsSignedIn;
 
-        if(mGcmContainer != null) {
-            if(!mIsSignedIn) {
+        if (mGcmContainer != null) {
+            if (!mIsSignedIn) {
                 mGcmContainer.setVisibility(View.GONE);
             } else {
                 mGcmContainer.setVisibility(View.VISIBLE);

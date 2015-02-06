@@ -74,11 +74,11 @@ public class FirstStartStep1Fragment extends Fragment {
         Timber.d("onSaveInstanceState");
         super.onSaveInstanceState(outState);
 
-        if(mSpinnerAdapter != null && mSpinnerAdapter.getCount() > 0)
+        if (mSpinnerAdapter != null && mSpinnerAdapter.getCount() > 0) {
             outState.putParcelable("selected_chapter", mSpinnerAdapter.getItem(mChapterSpinner.getSelectedItemPosition()));
+        }
 
     }
-
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -92,7 +92,7 @@ public class FirstStartStep1Fragment extends Fragment {
         GroupDirectory client = new GroupDirectory();
         mSpinnerAdapter = new ChapterAdapter(getActivity(), android.R.layout.simple_list_item_1);
 
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             mSelectedChapter = savedInstanceState.getParcelable("selected_chapter");
         }
 
@@ -140,8 +140,9 @@ public class FirstStartStep1Fragment extends Fragment {
                 Chapter selectedChapter = (Chapter) mChapterSpinner.getSelectedItem();
                 getArguments().putParcelable("selected_chapter", selectedChapter);
 
-                if (getActivity() instanceof Step1Listener)
+                if (getActivity() instanceof Step1Listener) {
                     ((Step1Listener) getActivity()).onConfirmedChapter(selectedChapter);
+                }
             }
         });
     }
@@ -153,7 +154,7 @@ public class FirstStartStep1Fragment extends Fragment {
 
         mChapterSpinner.setAdapter(mSpinnerAdapter);
 
-        if(mSelectedChapter != null) {
+        if (mSelectedChapter != null) {
             int pos = mSpinnerAdapter.getPosition(mSelectedChapter);
             mChapterSpinner.setSelection(pos);
         }

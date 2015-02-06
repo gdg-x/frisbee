@@ -115,7 +115,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
                 Tracker t = App.getInstance().getTracker();
                 // Set screen name.
                 // Where path is a String representing the screen name.
-                t.setScreenName("/FirstStart/Step"+(1+i));
+                t.setScreenName("/FirstStart/Step" + (1 + i));
 
                 // Send a screen view.
                 t.send(new HitBuilders.AppViewBuilder().build());
@@ -130,7 +130,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
 
     private void setLoadingScreen(boolean show) {
         Animation fadeAnim;
-        if(show) {
+        if (show) {
             fadeAnim = AnimationUtils.loadAnimation(this, R.anim.fade_in);
             fadeAnim.setAnimationListener(new Animation.AnimationListener() {
                 @Override
@@ -177,7 +177,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
                 .putString(Const.SETTINGS_HOME_GDG, chapter.getGplusId())
                 .apply();
 
-        if(mGoogleApiClient == null) {
+        if (mGoogleApiClient == null) {
             mViewPager.setCurrentItem(1, true);
         } else {
             mViewPager.setCurrentItem(2, true);
@@ -198,7 +198,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
         Tracker t = App.getInstance().getTracker();
         // Set screen name.
         // Where path is a String representing the screen name.
-        t.setScreenName("/FirstStart/Step"+(1+mViewPager.getCurrentItem()));
+        t.setScreenName("/FirstStart/Step" + (1 + mViewPager.getCurrentItem()));
 
         // Send a screen view.
         t.send(new HitBuilders.AppViewBuilder().build());
@@ -206,10 +206,11 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
 
     @Override
     public void onBackPressed() {
-        if(mViewPager.getCurrentItem() > 0)
-            mViewPager.setCurrentItem(mViewPager.getCurrentItem()-1, true);
-        else
+        if (mViewPager.getCurrentItem() > 0) {
+            mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1, true);
+        } else {
             super.finish();
+        }
     }
 
     @Override
@@ -225,8 +226,9 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
                 .putBoolean(Const.SETTINGS_SIGNED_IN, true)
                 .apply();
 
-        if(mViewPager.getCurrentItem() >= 1)
+        if (mViewPager.getCurrentItem() >= 1) {
             mViewPager.setCurrentItem(2, true);
+        }
     }
 
     @Override
@@ -266,7 +268,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
             @Override
             protected Void doInBackground(Void... voids) {
 
-                if(enableGcm && mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
+                if (enableGcm && mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -275,7 +277,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
                     });
                     try {
                         String token = GoogleAuthUtil.getToken(FirstStartActivity.this, Plus.AccountApi.getAccountName(mGoogleApiClient),
-                                "audience:server:client_id:"+getString(R.string.hub_client_id));
+                                "audience:server:client_id:" + getString(R.string.hub_client_id));
                         final String regid = mGcm.register(getString(R.string.gcm_sender_id));
 
                         GdgX client = new GdgX(token);
@@ -304,7 +306,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
                         });
                         req.execute();
 
-                        client.setHomeGdg(mPreferences.getString(Const.SETTINGS_HOME_GDG, ""), null ,null).execute();
+                        client.setHomeGdg(mPreferences.getString(Const.SETTINGS_HOME_GDG, ""), null, null).execute();
 
                     } catch (IOException e) {
                         Timber.e("Token fail.", e);
@@ -331,8 +333,8 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
 
         public FirstStartPageAdapter(FragmentManager fm) {
             super(fm);
-            mFragments = new Fragment[] {
-                new FirstStartStep1Fragment(), new FirstStartStep2Fragment(), new FirstStartStep3Fragment()
+            mFragments = new Fragment[]{
+                    new FirstStartStep1Fragment(), new FirstStartStep2Fragment(), new FirstStartStep3Fragment()
             };
         }
 

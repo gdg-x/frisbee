@@ -94,7 +94,6 @@ public class FirstStartStep2Fragment extends Fragment implements GoogleApiClient
                 .build();
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
@@ -116,7 +115,7 @@ public class FirstStartStep2Fragment extends Fragment implements GoogleApiClient
 
             @Override
             public void onClick(View view) {
-                if(getActivity() instanceof Step2Listener) {
+                if (getActivity() instanceof Step2Listener) {
                     resolveSignInError();
                 }
             }
@@ -125,12 +124,12 @@ public class FirstStartStep2Fragment extends Fragment implements GoogleApiClient
         mSkipSignin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(getActivity() instanceof Step2Listener)
-                    ((Step2Listener)getActivity()).onSkippedSignIn();
+                if (getActivity() instanceof Step2Listener) {
+                    ((Step2Listener) getActivity()).onSkippedSignIn();
+                }
             }
         });
     }
-
 
     @Override
     public void onStop() {
@@ -149,8 +148,8 @@ public class FirstStartStep2Fragment extends Fragment implements GoogleApiClient
 
     @Override
     public void onConnected(Bundle bundle) {
-        if(getActivity() instanceof Step2Listener) {
-            ((Step2Listener)getActivity()).onSignedIn(mGoogleApiClient, Plus.AccountApi.getAccountName(mGoogleApiClient));
+        if (getActivity() instanceof Step2Listener) {
+            ((Step2Listener) getActivity()).onSignedIn(mGoogleApiClient, Plus.AccountApi.getAccountName(mGoogleApiClient));
         }
     }
 
@@ -238,6 +237,7 @@ public class FirstStartStep2Fragment extends Fragment implements GoogleApiClient
 
     public interface Step2Listener {
         void onSignedIn(GoogleApiClient client, String accountName);
+
         void onSkippedSignIn();
     }
 }
