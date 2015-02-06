@@ -31,8 +31,6 @@ import butterknife.InjectView;
  */
 public class FirstStartStep2Fragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    private static String LOG_TAG = "GDG-FirstStartStep2Fragment";
-
     private static final int STATE_DEFAULT = 0;
     private static final int STATE_SIGN_IN = 1;
     private static final int STATE_IN_PROGRESS = 2;
@@ -65,10 +63,6 @@ public class FirstStartStep2Fragment extends Fragment implements GoogleApiClient
     // Used to store the PendingIntent most recently returned by Google Play
     // services until the user clicks 'sign in'.
     private PendingIntent mSignInIntent;
-
-    // Used to store the error code most recently returned by Google Play services
-    // until the user clicks 'sign in'.
-    private int mSignInError;
 
     @InjectView(R.id.googleSignin)
     Button mSignInButton;
@@ -171,7 +165,6 @@ public class FirstStartStep2Fragment extends Fragment implements GoogleApiClient
             // We do not have an intent in progress so we should store the latest
             // error resolution intent for use when the sign in button is clicked.
             mSignInIntent = result.getResolution();
-            mSignInError = result.getErrorCode();
 
             if (mSignInProgress == STATE_SIGN_IN) {
                 // STATE_SIGN_IN indicates the user already clicked the sign in button

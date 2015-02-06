@@ -53,8 +53,6 @@ import timber.log.Timber;
 
 public class FirstStartStep1Fragment extends Fragment {
 
-    private static String LOG_TAG = "GDG-FirstStartStep1Fragment";
-
     private ApiRequest mFetchChaptersTask;
     private ChapterAdapter mSpinnerAdapter;
 
@@ -148,11 +146,6 @@ public class FirstStartStep1Fragment extends Fragment {
         });
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
     private void addChapters(List<Chapter> chapterList) {
         Collections.sort(chapterList, mLocationComparator);
         mSpinnerAdapter.clear();
@@ -171,12 +164,6 @@ public class FirstStartStep1Fragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_welcome_step1, container, false);
         ButterKnife.inject(this, v);
         return v;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
     }
 
     public interface Step1Listener {

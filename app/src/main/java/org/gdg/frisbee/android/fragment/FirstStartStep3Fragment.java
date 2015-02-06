@@ -16,8 +16,6 @@
 
 package org.gdg.frisbee.android.fragment;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -28,15 +26,12 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.activity.FirstStartActivity;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import timber.log.Timber;
 
 public class FirstStartStep3Fragment extends Fragment {
-
-    private static String LOG_TAG = "GDG-FirstStartStep3Fragment";
 
     @InjectView(R.id.complete)
     Button mCompleteButton;
@@ -50,16 +45,7 @@ public class FirstStartStep3Fragment extends Fragment {
     @InjectView(R.id.enable_analytics)
     CheckBox mEnableAnalytics;
 
-    private SharedPreferences mPreferences;
-
     private boolean mIsSignedIn = false;
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        mPreferences = getActivity().getSharedPreferences("gdg", Context.MODE_PRIVATE);
-    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -77,17 +63,10 @@ public class FirstStartStep3Fragment extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         Timber.d("onResume()");
 
-        FirstStartActivity activity = (FirstStartActivity)getActivity();
         if(!mIsSignedIn) {
             mGcmContainer.setVisibility(View.GONE);
         } else {
@@ -100,10 +79,6 @@ public class FirstStartStep3Fragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_welcome_step3, container, false);
         ButterKnife.inject(this, v);
         return v;
-    }
-
-    public boolean isSignedIn() {
-        return mIsSignedIn;
     }
 
     public void setSignedIn(boolean mIsSignedIn) {

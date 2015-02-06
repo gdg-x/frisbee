@@ -17,7 +17,6 @@
 package org.gdg.frisbee.android.activity;
 
 import android.app.backup.BackupManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -73,8 +72,6 @@ import timber.log.Timber;
  */
 public class FirstStartActivity extends ActionBarActivity implements FirstStartStep1Fragment.Step1Listener, FirstStartStep2Fragment.Step2Listener, FirstStartStep3Fragment.Step3Listener {
 
-    private static String LOG_TAG = "GDG-FirstStartActivity";
-
     private GoogleCloudMessaging mGcm;
 
     @InjectView(R.id.pager)
@@ -102,7 +99,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
 
         ButterKnife.inject(this);
 
-        mViewPagerAdapter = new FirstStartPageAdapter(this, getSupportFragmentManager());
+        mViewPagerAdapter = new FirstStartPageAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);
 
         mGcm = GoogleCloudMessaging.getInstance(this);
@@ -244,11 +241,6 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
     public void finish() {
 
         requestBackup();
@@ -335,12 +327,10 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
     }
 
     public class FirstStartPageAdapter extends FragmentStatePagerAdapter {
-        private Context mContext;
         private Fragment[] mFragments;
 
-        public FirstStartPageAdapter(Context ctx, FragmentManager fm) {
+        public FirstStartPageAdapter(FragmentManager fm) {
             super(fm);
-            mContext = ctx;
             mFragments = new Fragment[] {
                 new FirstStartStep1Fragment(), new FirstStartStep2Fragment(), new FirstStartStep3Fragment()
             };
