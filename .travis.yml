@@ -12,6 +12,9 @@ android:
     # if you need to run emulator(s) during your tests
     # - sys-img-x86-android-21
 
+before_script:
+    - GRADLE_OPTS=-Xmx512m -XX:MaxPermSize=256m
+
 script: "./gradlew clean build"
 
 branches:
