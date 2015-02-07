@@ -116,3 +116,8 @@ dependencies {
     }
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
+
+compileJava {
+    options.fork = true  // Fork your compilation into a child process
+    options.forkOptions.setMemoryMaximumSize("2g") // Set maximum memory to 2g
+}
