@@ -15,7 +15,7 @@ android:
 before_script:
     - GRADLE_OPTS="-Xms40m -Xmx1536m -XX:MaxPermSize=1536m"
 
-script: "./gradlew clean build"
+script: "./gradlew clean build -Dpre-dex=false"
 
 branches:
   only:
