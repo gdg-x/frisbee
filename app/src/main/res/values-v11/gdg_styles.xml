@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-  ~ Copyright 2013 The GDG Frisbee Project
+  ~ Copyright 2013-2015 The GDG Frisbee Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,17 +14,10 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
+-->
 
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-
-  <style name="ActionBarGDG" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
-    <item name="android:background">@drawable/ab_solid_bg</item>
-    <!--<item name="backgroundStacked">@drawable/ab_stacked_solid_themegdg</item>
-    <item name="backgroundSplit">@drawable/ab_bottom_solid_themegdg</item>
-    <item name="progressBarStyle">@style/ProgressBar.Themegdg</item>-->
-  </style>
 
   <style name="AutoCompleteTextViewGDG" parent="android:Widget.Holo.Light.AutoCompleteTextView">
       <item name="android:dropDownSelector">@drawable/list_selector_holo_light</item>
