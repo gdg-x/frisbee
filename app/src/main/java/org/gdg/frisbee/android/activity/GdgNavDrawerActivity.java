@@ -1,10 +1,26 @@
+/*
+ * Copyright 2013-2015 The GDG Frisbee Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.gdg.frisbee.android.activity;
 
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -22,18 +38,14 @@ import butterknife.InjectView;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
-
 public abstract class GdgNavDrawerActivity extends GdgActivity {
 
+    protected DrawerAdapter mDrawerAdapter;
+    protected ActionBarDrawerToggle mDrawerToggle;
     @InjectView(R.id.drawer)
     DrawerLayout mDrawerLayout;
-
     @InjectView(R.id.left_drawer)
     ListView mDrawerContent;
-
-    protected DrawerAdapter mDrawerAdapter;
-
-    protected ActionBarDrawerToggle mDrawerToggle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -127,8 +139,9 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         Intent i = new Intent(GdgNavDrawerActivity.this, activityClass);
         i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-        if(additional != null)
+        if (additional != null) {
             i.putExtras(additional);
+        }
 
         startActivity(i);
         mDrawerLayout.closeDrawers();
@@ -187,7 +200,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     public boolean isOrganizer() {
-        return ((App)getApplication()).isOrganizer();
+        return ((App) getApplication()).isOrganizer();
     }
 
     protected void checkOrganizer(final OrganizerChecker.OrganizerResponseHandler responseHandler) {
