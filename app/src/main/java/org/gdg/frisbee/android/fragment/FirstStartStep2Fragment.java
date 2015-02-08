@@ -1,3 +1,19 @@
+/*
+ * Copyright 2013-2015 The GDG Frisbee Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.gdg.frisbee.android.fragment;
 
 import android.app.Activity;
@@ -21,17 +37,7 @@ import org.gdg.frisbee.android.R;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.fragment
- * <p/>
- * User: maui
- * Date: 14.06.13
- * Time: 02:52
- */
 public class FirstStartStep2Fragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-
-    private static String LOG_TAG = "GDG-FirstStartStep2Fragment";
 
     private static final int STATE_DEFAULT = 0;
     private static final int STATE_SIGN_IN = 1;
@@ -66,20 +72,11 @@ public class FirstStartStep2Fragment extends Fragment implements GoogleApiClient
     // services until the user clicks 'sign in'.
     private PendingIntent mSignInIntent;
 
-    // Used to store the error code most recently returned by Google Play services
-    // until the user clicks 'sign in'.
-    private int mSignInError;
-
     @InjectView(R.id.googleSignin)
     Button mSignInButton;
 
     @InjectView(R.id.skipSignin)
     Button mSkipSignin;
-
-    public static FirstStartStep2Fragment newInstance() {
-        FirstStartStep2Fragment fragment = new FirstStartStep2Fragment();
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -105,7 +102,6 @@ public class FirstStartStep2Fragment extends Fragment implements GoogleApiClient
                 .build();
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
@@ -114,7 +110,7 @@ public class FirstStartStep2Fragment extends Fragment implements GoogleApiClient
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_welcome_step2, null);
+        View v = inflater.inflate(R.layout.fragment_welcome_step2, container, false);
         ButterKnife.inject(this, v);
         return v;
     }
@@ -127,7 +123,7 @@ public class FirstStartStep2Fragment extends Fragment implements GoogleApiClient
 
             @Override
             public void onClick(View view) {
-                if(getActivity() instanceof Step2Listener) {
+                if (getActivity() instanceof Step2Listener) {
                     resolveSignInError();
                 }
             }
@@ -136,12 +132,12 @@ public class FirstStartStep2Fragment extends Fragment implements GoogleApiClient
         mSkipSignin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(getActivity() instanceof Step2Listener)
-                    ((Step2Listener)getActivity()).onSkippedSignIn();
+                if (getActivity() instanceof Step2Listener) {
+                    ((Step2Listener) getActivity()).onSkippedSignIn();
+                }
             }
         });
     }
-
 
     @Override
     public void onStop() {
@@ -160,8 +156,8 @@ public class FirstStartStep2Fragment extends Fragment implements GoogleApiClient
 
     @Override
     public void onConnected(Bundle bundle) {
-        if(getActivity() instanceof Step2Listener) {
-            ((Step2Listener)getActivity()).onSignedIn(mGoogleApiClient, Plus.AccountApi.getAccountName(mGoogleApiClient));
+        if (getActivity() instanceof Step2Listener) {
+            ((Step2Listener) getActivity()).onSignedIn(mGoogleApiClient, Plus.AccountApi.getAccountName(mGoogleApiClient));
         }
     }
 
@@ -176,7 +172,6 @@ public class FirstStartStep2Fragment extends Fragment implements GoogleApiClient
             // We do not have an intent in progress so we should store the latest
             // error resolution intent for use when the sign in button is clicked.
             mSignInIntent = result.getResolution();
-            mSignInError = result.getErrorCode();
 
             if (mSignInProgress == STATE_SIGN_IN) {
                 // STATE_SIGN_IN indicates the user already clicked the sign in button
@@ -250,6 +245,7 @@ public class FirstStartStep2Fragment extends Fragment implements GoogleApiClient
 
     public interface Step2Listener {
         void onSignedIn(GoogleApiClient client, String accountName);
+
         void onSkippedSignIn();
     }
 }

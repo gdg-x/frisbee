@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 The GDG Frisbee Project
+ * Copyright 2013-2015 The GDG Frisbee Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package org.gdg.frisbee.android.activity;
 
 import android.app.backup.BackupManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -63,17 +62,7 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import timber.log.Timber;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.activity
- * <p/>
- * User: maui
- * Date: 29.04.13
- * Time: 14:48
- */
 public class FirstStartActivity extends ActionBarActivity implements FirstStartStep1Fragment.Step1Listener, FirstStartStep2Fragment.Step2Listener, FirstStartStep3Fragment.Step3Listener {
-
-    private static String LOG_TAG = "GDG-FirstStartActivity";
 
     private GoogleCloudMessaging mGcm;
 
@@ -102,7 +91,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
 
         ButterKnife.inject(this);
 
-        mViewPagerAdapter = new FirstStartPageAdapter(this, getSupportFragmentManager());
+        mViewPagerAdapter = new FirstStartPageAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);
 
         mGcm = GoogleCloudMessaging.getInstance(this);
@@ -118,7 +107,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
                 Tracker t = App.getInstance().getTracker();
                 // Set screen name.
                 // Where path is a String representing the screen name.
-                t.setScreenName("/FirstStart/Step"+(1+i));
+                t.setScreenName("/FirstStart/Step" + (1 + i));
 
                 // Send a screen view.
                 t.send(new HitBuilders.AppViewBuilder().build());
@@ -133,7 +122,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
 
     private void setLoadingScreen(boolean show) {
         Animation fadeAnim;
-        if(show) {
+        if (show) {
             fadeAnim = AnimationUtils.loadAnimation(this, R.anim.fade_in);
             fadeAnim.setAnimationListener(new Animation.AnimationListener() {
                 @Override
@@ -180,7 +169,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
                 .putString(Const.SETTINGS_HOME_GDG, chapter.getGplusId())
                 .apply();
 
-        if(mGoogleApiClient == null) {
+        if (mGoogleApiClient == null) {
             mViewPager.setCurrentItem(1, true);
         } else {
             mViewPager.setCurrentItem(2, true);
@@ -201,7 +190,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
         Tracker t = App.getInstance().getTracker();
         // Set screen name.
         // Where path is a String representing the screen name.
-        t.setScreenName("/FirstStart/Step"+(1+mViewPager.getCurrentItem()));
+        t.setScreenName("/FirstStart/Step" + (1 + mViewPager.getCurrentItem()));
 
         // Send a screen view.
         t.send(new HitBuilders.AppViewBuilder().build());
@@ -209,10 +198,11 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
 
     @Override
     public void onBackPressed() {
-        if(mViewPager.getCurrentItem() > 0)
-            mViewPager.setCurrentItem(mViewPager.getCurrentItem()-1, true);
-        else
+        if (mViewPager.getCurrentItem() > 0) {
+            mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1, true);
+        } else {
             super.finish();
+        }
     }
 
     @Override
@@ -228,8 +218,9 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
                 .putBoolean(Const.SETTINGS_SIGNED_IN, true)
                 .apply();
 
-        if(mViewPager.getCurrentItem() >= 1)
+        if (mViewPager.getCurrentItem() >= 1) {
             mViewPager.setCurrentItem(2, true);
+        }
     }
 
     @Override
@@ -241,11 +232,6 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
         step3.setSignedIn(false);
 
         mViewPager.setCurrentItem(2, true);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
     }
 
     @Override
@@ -274,7 +260,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
             @Override
             protected Void doInBackground(Void... voids) {
 
-                if(enableGcm && mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
+                if (enableGcm && mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -283,7 +269,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
                     });
                     try {
                         String token = GoogleAuthUtil.getToken(FirstStartActivity.this, Plus.AccountApi.getAccountName(mGoogleApiClient),
-                                "audience:server:client_id:"+getString(R.string.hub_client_id));
+                                "audience:server:client_id:" + getString(R.string.hub_client_id));
                         final String regid = mGcm.register(getString(R.string.gcm_sender_id));
 
                         GdgX client = new GdgX(token);
@@ -312,7 +298,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
                         });
                         req.execute();
 
-                        client.setHomeGdg(mPreferences.getString(Const.SETTINGS_HOME_GDG, ""), null ,null).execute();
+                        client.setHomeGdg(mPreferences.getString(Const.SETTINGS_HOME_GDG, ""), null, null).execute();
 
                     } catch (IOException e) {
                         Timber.e("Token fail.", e);
@@ -335,14 +321,12 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
     }
 
     public class FirstStartPageAdapter extends FragmentStatePagerAdapter {
-        private Context mContext;
         private Fragment[] mFragments;
 
-        public FirstStartPageAdapter(Context ctx, FragmentManager fm) {
+        public FirstStartPageAdapter(FragmentManager fm) {
             super(fm);
-            mContext = ctx;
-            mFragments = new Fragment[] {
-                FirstStartStep1Fragment.newInstance(), FirstStartStep2Fragment.newInstance(), FirstStartStep3Fragment.newInstance()
+            mFragments = new Fragment[]{
+                    new FirstStartStep1Fragment(), new FirstStartStep2Fragment(), new FirstStartStep3Fragment()
             };
         }
 

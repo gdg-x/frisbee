@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 The GDG Frisbee Project
+ * Copyright 2013-2015 The GDG Frisbee Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 
 package org.gdg.frisbee.android.fragment;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -28,16 +26,12 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.activity.FirstStartActivity;
-import org.gdg.frisbee.android.utils.Log;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import timber.log.Timber;
 
 public class FirstStartStep3Fragment extends Fragment {
-
-    private static String LOG_TAG = "GDG-FirstStartStep3Fragment";
 
     @InjectView(R.id.complete)
     Button mCompleteButton;
@@ -51,21 +45,7 @@ public class FirstStartStep3Fragment extends Fragment {
     @InjectView(R.id.enable_analytics)
     CheckBox mEnableAnalytics;
 
-    private SharedPreferences mPreferences;
-
     private boolean mIsSignedIn = false;
-
-    public static FirstStartStep3Fragment newInstance() {
-        FirstStartStep3Fragment fragment = new FirstStartStep3Fragment();
-        return fragment;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        mPreferences = getActivity().getSharedPreferences("gdg", Context.MODE_PRIVATE);
-    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -75,17 +55,11 @@ public class FirstStartStep3Fragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                if(getActivity() instanceof Step3Listener) {
-                    ((Step3Listener)getActivity()).onComplete(mEnableAnalytics.isChecked(), mEnableGcm.isChecked());
+                if (getActivity() instanceof Step3Listener) {
+                    ((Step3Listener) getActivity()).onComplete(mEnableAnalytics.isChecked(), mEnableGcm.isChecked());
                 }
             }
         });
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
     }
 
     @Override
@@ -93,8 +67,7 @@ public class FirstStartStep3Fragment extends Fragment {
         super.onResume();
         Timber.d("onResume()");
 
-        FirstStartActivity activity = (FirstStartActivity)getActivity();
-        if(!mIsSignedIn) {
+        if (!mIsSignedIn) {
             mGcmContainer.setVisibility(View.GONE);
         } else {
             mGcmContainer.setVisibility(View.VISIBLE);
@@ -103,20 +76,16 @@ public class FirstStartStep3Fragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_welcome_step3, null);
+        View v = inflater.inflate(R.layout.fragment_welcome_step3, container, false);
         ButterKnife.inject(this, v);
         return v;
-    }
-
-    public boolean isSignedIn() {
-        return mIsSignedIn;
     }
 
     public void setSignedIn(boolean mIsSignedIn) {
         this.mIsSignedIn = mIsSignedIn;
 
-        if(mGcmContainer != null) {
-            if(!mIsSignedIn) {
+        if (mGcmContainer != null) {
+            if (!mIsSignedIn) {
                 mGcmContainer.setVisibility(View.GONE);
             } else {
                 mGcmContainer.setVisibility(View.VISIBLE);
