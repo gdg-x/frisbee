@@ -59,7 +59,7 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import timber.log.Timber;
 
-public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNavigationListener{
+public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNavigationListener {
 
     public static final String SECTION_EVENTS = "events";
     public static final int REQUEST_FIRST_START_WIZARD = 100;
@@ -82,14 +82,15 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
 
     /**
      * Called when the activity is first created.
+     *
      * @param savedInstanceState If the activity is being re-initialized after
-     * previously being shut down then this Bundle contains the data it most
-     * recently supplied in onSaveInstanceState(Bundle). <b>Note: Otherwise it is null.</b>
+     *                           previously being shut down then this Bundle contains the data it most
+     *                           recently supplied in onSaveInstanceState(Bundle). <b>Note: Otherwise it is null.</b>
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-		Timber.i("onCreate");
+        Timber.i("onCreate");
         setContentView(R.layout.activity_main);
 
         GroupDirectory client = new GroupDirectory();
@@ -124,8 +125,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
             }
         });
 
-
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
 
             Intent intent = getIntent();
             if (intent != null && intent.getAction() != null && intent.getAction().equals("finish_first_start")) {
@@ -154,12 +154,12 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
             });
 
         } else {
-            if(savedInstanceState.containsKey("chapters")) {
+            if (savedInstanceState.containsKey("chapters")) {
                 ArrayList<Chapter> chapters = savedInstanceState.getParcelableArrayList("chapters");
                 mSpinnerAdapter.clear();
                 mSpinnerAdapter.addAll(chapters);
 
-                if(savedInstanceState.containsKey("selected_chapter")) {
+                if (savedInstanceState.containsKey("selected_chapter")) {
                     Chapter selectedChapter = savedInstanceState.getParcelable("selected_chapter");
                     selectChapter(selectedChapter);
                 } else {
@@ -176,13 +176,13 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         Time now = new Time();
         now.setToNow();
 
-        if((mPreferences.getInt(Const.SETTINGS_SEASONS_GREETINGS, now.year-1) < now.year) && (now.yearDay >= 354 && now.yearDay <= 366)) {
+        if ((mPreferences.getInt(Const.SETTINGS_SEASONS_GREETINGS, now.year - 1) < now.year) && (now.yearDay >= 354 && now.yearDay <= 366)) {
             mPreferences.edit().putInt(Const.SETTINGS_SEASONS_GREETINGS, now.year).apply();
             SeasonsGreetingsFragment seasonsGreetings = new SeasonsGreetingsFragment();
             seasonsGreetings.show(getSupportFragmentManager(), "dialog");
         }
 
-        if(mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
+        if (mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
             checkAchievements();
         }
     }
@@ -191,7 +191,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
     protected void onResume() {
         super.onResume();
         int playServiceStatus = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        if (ConnectionResult.SUCCESS != playServiceStatus ) {
+        if (ConnectionResult.SUCCESS != playServiceStatus) {
             GooglePlayServicesUtil.getErrorDialog(playServiceStatus, this, PLAY_SERVICE_DIALOG_REQUEST_CODE).show();
         }
     }
@@ -205,16 +205,17 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         addChapters(chapters);
         Chapter chapter = null;
 
-        if(getIntent().hasExtra(Const.EXTRA_GROUP_ID)) {
+        if (getIntent().hasExtra(Const.EXTRA_GROUP_ID)) {
             String chapterId = getIntent().getStringExtra(Const.EXTRA_GROUP_ID);
-            for(Chapter c : chapters) {
-                if(c.getGplusId().equals(chapterId)) {
+            for (Chapter c : chapters) {
+                if (c.getGplusId().equals(chapterId)) {
                     chapter = c;
                     break;
                 }
             }
-            if(chapter == null)
+            if (chapter == null) {
                 chapter = chapters.get(0);
+            }
         } else {
             chapter = chapters.get(0);
         }
@@ -230,13 +231,14 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
                 public void run() {
                     mViewPager.setCurrentItem(2, true);
                 }
-            },500);
+            }, 500);
         }
     }
 
     protected String getTrackedViewName() {
-        if(mViewPager == null || mViewPagerAdapter.getSelectedChapter() == null)
+        if (mViewPager == null || mViewPagerAdapter.getSelectedChapter() == null) {
             return "Main";
+        }
         final String[] pagesNames = {"News", "Info", "Events"};
         String pageName;
         try {
@@ -244,7 +246,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         } catch (IndexOutOfBoundsException e) {
             pageName = "";
         }
-        return "Main/" + mViewPagerAdapter.getSelectedChapter().getName().replaceAll(" ", "-")+
+        return "Main/" + mViewPagerAdapter.getSelectedChapter().getName().replaceAll(" ", "-") +
                 "/" + pageName;
     }
 
@@ -254,11 +256,11 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
     }
 
     private void checkAchievements() {
-        if (mFirstStart)
+        if (mFirstStart) {
             getAchievementActionHandler().handleSignIn();
+        }
         getAchievementActionHandler().handleAppStarted();
     }
-
 
     private void addChapters(List<Chapter> chapterList) {
         Collections.sort(chapterList, mLocationComparator);
@@ -266,13 +268,12 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         mSpinnerAdapter.addAll(chapterList);
     }
 
-
     @Override
     protected void onStart() {
         super.onStart();
         Timber.d("onStart()");
 
-        if(mPreferences.getBoolean(Const.SETTINGS_FIRST_START, Const.SETTINGS_FIRST_START_DEFAULT)) {
+        if (mPreferences.getBoolean(Const.SETTINGS_FIRST_START, Const.SETTINGS_FIRST_START_DEFAULT)) {
             startActivityForResult(new Intent(this, FirstStartActivity.class), REQUEST_FIRST_START_WIZARD);
         }
     }
@@ -287,17 +288,19 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        if(mSpinnerAdapter.getCount() > 0)
+        if (mSpinnerAdapter.getCount() > 0) {
             outState.putParcelableArrayList("chapters", mSpinnerAdapter.getAll());
-        if(mViewPagerAdapter.getSelectedChapter() != null)
+        }
+        if (mViewPagerAdapter.getSelectedChapter() != null) {
             outState.putParcelable("selected_chapter", mViewPagerAdapter.getSelectedChapter());
+        }
     }
 
     @Override
     public boolean onNavigationItemSelected(int position, long l) {
         Chapter previous = mViewPagerAdapter.getSelectedChapter();
         mViewPagerAdapter.setSelectedChapter(mSpinnerAdapter.getItem(position));
-        if(previous == null || !previous.equals(mSpinnerAdapter.getItem(position))) {
+        if (previous == null || !previous.equals(mSpinnerAdapter.getItem(position))) {
             Timber.d("Switching chapter!");
             mViewPagerAdapter.notifyDataSetChanged();
         }
@@ -320,15 +323,16 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
 
         @Override
         public int getCount() {
-            if(mSelectedChapter == null)
+            if (mSelectedChapter == null) {
                 return 0;
-            else
+            } else {
                 return 3;
+            }
         }
 
         @Override
         public Fragment getItem(int position) {
-            switch(position) {
+            switch (position) {
                 case 0:
                     return NewsFragment.newInstance(mSelectedChapter.getGplusId());
                 case 1:
@@ -341,7 +345,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
 
         @Override
         public CharSequence getPageTitle(int position) {
-            switch(position) {
+            switch (position) {
                 case 0:
                     return mContext.getText(R.string.news);
                 case 1:
@@ -357,8 +361,9 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         }
 
         public void setSelectedChapter(Chapter chapter) {
-            if(mSelectedChapter != null)
+            if (mSelectedChapter != null) {
                 trackView();
+            }
 
             this.mSelectedChapter = chapter;
         }
