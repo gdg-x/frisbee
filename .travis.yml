@@ -13,7 +13,7 @@ android:
     # - sys-img-x86-android-21
 
 before_script:
-    - GRADLE_OPTS="-Xms40m -Xmx2g -XX:MaxPermSize=2g"
+    - GRADLE_OPTS="-Xms40m -Xmx3g -XX:MaxPermSize=3g"
 
 script: "./gradlew clean build -Dpre-dex=false"
 
