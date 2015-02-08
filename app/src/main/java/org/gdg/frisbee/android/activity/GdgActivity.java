@@ -50,7 +50,6 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
  */
 public abstract class GdgActivity extends TrackableActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String LOG_TAG = "GDG-GdgActivity";
     private AchievementActionHandler mAchievementActionHandler;
 
     SharedPreferences mPreferences;
@@ -72,8 +71,6 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
     private static final int RC_SIGN_IN = 0;
 
     private static final int DIALOG_PLAY_SERVICES_ERROR = 0;
-
-    private static final String SAVED_PROGRESS = "sign_in_progress";
 
     // GoogleApiClient wraps our service connection to Google Play services and
     // provides access to the users sign in state and Google's APIs.
@@ -99,10 +96,6 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
     // Used to store the PendingIntent most recently returned by Google Play
     // services until the user clicks 'sign in'.
     private PendingIntent mSignInIntent;
-
-    // Used to store the error code most recently returned by Google Play services
-    // until the user clicks 'sign in'.
-    private int mSignInError;
 
     @Override
     public void setContentView(int layoutResId) {
@@ -256,11 +249,8 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
 
         List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
 
-        if(taskList.get(0).numActivities == 1 &&
-           taskList.get(0).topActivity.getClassName().equals(this.getClass().getName())) {
-            return true;
-        }
-        return false;
+        return taskList.get(0).numActivities == 1 &&
+                taskList.get(0).topActivity.getClassName().equals(this.getClass().getName());
     }
 
     @Override
@@ -279,7 +269,6 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
             // We do not have an intent in progress so we should store the latest
             // error resolution intent for use when the sign in button is clicked.
             mSignInIntent = result.getResolution();
-            mSignInError = result.getErrorCode();
 
             //if (mSignInProgress == STATE_SIGN_IN) {
                 // STATE_SIGN_IN indicates the user already clicked the sign in button
