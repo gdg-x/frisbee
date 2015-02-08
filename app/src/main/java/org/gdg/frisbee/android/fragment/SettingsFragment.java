@@ -1,3 +1,19 @@
+/*
+ * Copyright 2013-2015 The GDG Frisbee Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.gdg.frisbee.android.fragment;
 
 import android.content.Intent;
@@ -42,9 +58,6 @@ import timber.log.Timber;
 
 public class SettingsFragment extends PreferenceFragment {
 
-    private static final String LOG_TAG = "GDG-SettingsFragment";
-
-    private PreferenceManager mPreferenceManager;
     private GdgX mXClient;
     private GoogleCloudMessaging mGcm;
     private SharedPreferences mPreferences;
@@ -172,30 +185,20 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mGoogleApiClient = ((GdgActivity)getActivity()).getGoogleApiClient();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
+        mGoogleApiClient = ((GdgActivity) getActivity()).getGoogleApiClient();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mPreferenceManager = getPreferenceManager();
-        mPreferenceManager.setSharedPreferencesName("gdg");
+        PreferenceManager preferenceManager = getPreferenceManager();
+        preferenceManager.setSharedPreferencesName("gdg");
 
         mXClient = new GdgX();
         mGcm = GoogleCloudMessaging.getInstance(getActivity());
 
-        mPreferences = mPreferenceManager.getSharedPreferences();
+        mPreferences = preferenceManager.getSharedPreferences();
 
         addPreferencesFromResource(R.xml.settings);
 
@@ -279,15 +282,15 @@ public class SettingsFragment extends PreferenceFragment {
             @Override
             protected Void doInBackground(Void... voids) {
 
-                String token = null;
                 try {
-                    token = GoogleAuthUtil.getToken(getActivity(), Plus.AccountApi.getAccountName(((GdgActivity)getActivity()).getGoogleApiClient()), "oauth2: " + Scopes.PLUS_LOGIN);
+                    GdgActivity activity = (GdgActivity) getActivity();
+                    String token = GoogleAuthUtil.getToken(
+                            activity,
+                            Plus.AccountApi.getAccountName(activity.getGoogleApiClient()),
+                            "oauth2: " + Scopes.PLUS_LOGIN);
                     mXClient.setToken(token);
-
                     mXClient.setHomeGdg(homeGdg, null, null).execute();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (GoogleAuthException e) {
+                } catch (IOException | GoogleAuthException e) {
                     e.printStackTrace();
                 }
 
@@ -306,8 +309,4 @@ public class SettingsFragment extends PreferenceFragment {
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int responseCode, Intent data) {
-        super.onActivityResult(requestCode, responseCode, data);
-    }
 }

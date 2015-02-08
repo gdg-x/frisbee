@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
-  ~ Copyright 2013 The GDG Frisbee Project
+  ~ Copyright 2013-2015 The GDG Frisbee Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -13,7 +14,7 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
+-->
 
 <resources>
     <color name="story_red">#e46f61</color>
@@ -31,4 +32,6 @@
     <color name="semi_transparent">#96000000</color>
     <color name="default_bg">#e5e5e5</color>
     <color name="light_semi_transparent">#b6e0e0e0</color>
+    <color name="material_blue_500">#2196F3</color>
+    <color name="material_blue_700">#1976D2</color>
 </resources>

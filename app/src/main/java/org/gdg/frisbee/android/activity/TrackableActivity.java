@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 The GDG Frisbee Project
+ * Copyright 2013-2015 The GDG Frisbee Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import org.gdg.frisbee.android.app.App;
 
 /**
  * Activity which provides handy mechanism for google analytics.
- *
+ * <p/>
  * Every extending Activity needs to implement @ref getTrackedViewName() method
  * which should return view name for tracking, without leading '/'.
  * Each extending Activity is tracked on {@link #onCreate(Bundle)} and {@link #onResume()}
@@ -59,23 +59,25 @@ public abstract class TrackableActivity extends ActionBarActivity implements Vie
     }
 
     @Override
-    public void onPageScrolled(int i, float v, int i2) {}
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    }
 
     @Override
-    public void onPageSelected(int i) {
-        mCurrentPage = i;
+    public void onPageSelected(int position) {
+        mCurrentPage = position;
         trackView(getTrackedViewName());
     }
 
     @Override
-    public void onPageScrollStateChanged(int i) {}
+    public void onPageScrollStateChanged(int state) {
+    }
 
     protected void trackView() {
         trackView(getTrackedViewName());
     }
 
     protected void trackView(String viewName) {
-        if(viewName != null) {
+        if (viewName != null) {
             Tracker t = App.getInstance().getTracker();
             // Set screen name.
             // Where path is a String representing the screen name.
