@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 The GDG Frisbee Project
+ * Copyright 2013-2015 The GDG Frisbee Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,37 +40,17 @@ import org.gdg.frisbee.android.utils.Utils;
 import butterknife.ButterKnife;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.activity
- * <p/>
- * User: maui
- * Date: 21.04.13
- * Time: 21:56
- */
 public abstract class GdgActivity extends TrackableActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-
-    private AchievementActionHandler mAchievementActionHandler;
-
-    SharedPreferences mPreferences;
-    private Handler mHandler = new Handler();
-    private final ScopedBus scopedBus = new ScopedBus();
-
-    protected ScopedBus getBus() {
-        return scopedBus;
-    }
-
-    public Handler getHandler() {
-        return mHandler;
-    }
 
     private static final int STATE_DEFAULT = 0;
     private static final int STATE_SIGN_IN = 1;
     private static final int STATE_IN_PROGRESS = 2;
-
     private static final int RC_SIGN_IN = 0;
-
     private static final int DIALOG_PLAY_SERVICES_ERROR = 0;
+    private final ScopedBus scopedBus = new ScopedBus();
+    SharedPreferences mPreferences;
+    private AchievementActionHandler mAchievementActionHandler;
+    private Handler mHandler = new Handler();
 
     // GoogleApiClient wraps our service connection to Google Play services and
     // provides access to the users sign in state and Google's APIs.
@@ -97,6 +77,14 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
     // services until the user clicks 'sign in'.
     private PendingIntent mSignInIntent;
 
+    protected ScopedBus getBus() {
+        return scopedBus;
+    }
+
+    public Handler getHandler() {
+        return mHandler;
+    }
+
     @Override
     public void setContentView(int layoutResId) {
         super.setContentView(layoutResId);
@@ -116,9 +104,9 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mPreferences = getSharedPreferences("gdg",MODE_PRIVATE);
+        mPreferences = getSharedPreferences("gdg", MODE_PRIVATE);
 
-        if(!Utils.isEmulator()) {
+        if (!Utils.isEmulator()) {
 
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
@@ -135,16 +123,16 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
         mAchievementActionHandler =
                 new AchievementActionHandler(getHandler(), mGoogleApiClient, mPreferences);
 
-        if (getSupportActionBar() != null)
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
     }
-
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        if(mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
+        if (mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
             mGoogleApiClient.connect();
         }
     }
@@ -153,7 +141,7 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
     protected void onStop() {
         super.onStop();
 
-        if (mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false) &&  mGoogleApiClient.isConnected()) {
+        if (mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false) && mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
     }
@@ -178,7 +166,7 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
     protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
         super.onActivityResult(requestCode, responseCode, intent);
 
-        if(mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false) && !Utils.isEmulator()) {
+        if (mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false) && !Utils.isEmulator()) {
             switch (requestCode) {
                 case RC_SIGN_IN:
                     if (responseCode == RESULT_OK) {
@@ -240,12 +228,13 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if (!isLastActivityOnStack())
+        if (!isLastActivityOnStack()) {
             overridePendingTransition(0, 0);
+        }
     }
 
     private boolean isLastActivityOnStack() {
-        ActivityManager mngr = (ActivityManager) getSystemService( ACTIVITY_SERVICE );
+        ActivityManager mngr = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
 
         List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
 
@@ -271,10 +260,10 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
             mSignInIntent = result.getResolution();
 
             //if (mSignInProgress == STATE_SIGN_IN) {
-                // STATE_SIGN_IN indicates the user already clicked the sign in button
-                // so we should continue processing errors until the user is signed in
-                // or they click cancel.
-                resolveSignInError();
+            // STATE_SIGN_IN indicates the user already clicked the sign in button
+            // so we should continue processing errors until the user is signed in
+            // or they click cancel.
+            resolveSignInError();
             //}
         }
     }
