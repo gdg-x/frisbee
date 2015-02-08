@@ -58,9 +58,6 @@ import timber.log.Timber;
 
 public class SettingsFragment extends PreferenceFragment {
 
-    private static final String LOG_TAG = "GDG-SettingsFragment";
-
-    private PreferenceManager mPreferenceManager;
     private GdgX mXClient;
     private GoogleCloudMessaging mGcm;
     private SharedPreferences mPreferences;
@@ -192,26 +189,16 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mPreferenceManager = getPreferenceManager();
-        mPreferenceManager.setSharedPreferencesName("gdg");
+        PreferenceManager preferenceManager = getPreferenceManager();
+        preferenceManager.setSharedPreferencesName("gdg");
 
         mXClient = new GdgX();
         mGcm = GoogleCloudMessaging.getInstance(getActivity());
 
-        mPreferences = mPreferenceManager.getSharedPreferences();
+        mPreferences = preferenceManager.getSharedPreferences();
 
         addPreferencesFromResource(R.xml.settings);
 
@@ -295,15 +282,15 @@ public class SettingsFragment extends PreferenceFragment {
             @Override
             protected Void doInBackground(Void... voids) {
 
-                String token = null;
                 try {
-                    token = GoogleAuthUtil.getToken(getActivity(), Plus.AccountApi.getAccountName(((GdgActivity) getActivity()).getGoogleApiClient()), "oauth2: " + Scopes.PLUS_LOGIN);
+                    GdgActivity activity = (GdgActivity) getActivity();
+                    String token = GoogleAuthUtil.getToken(
+                            activity,
+                            Plus.AccountApi.getAccountName(activity.getGoogleApiClient()),
+                            "oauth2: " + Scopes.PLUS_LOGIN);
                     mXClient.setToken(token);
-
                     mXClient.setHomeGdg(homeGdg, null, null).execute();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (GoogleAuthException e) {
+                } catch (IOException | GoogleAuthException e) {
                     e.printStackTrace();
                 }
 
@@ -322,8 +309,4 @@ public class SettingsFragment extends PreferenceFragment {
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int responseCode, Intent data) {
-        super.onActivityResult(requestCode, responseCode, data);
-    }
 }
