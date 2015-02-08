@@ -18,7 +18,6 @@ package org.gdg.frisbee.android.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -63,12 +62,8 @@ import timber.log.Timber;
 public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNavigationListener{
 
     public static final String SECTION_EVENTS = "events";
-    private static final int PLAY_SERVICE_DIALOG_REQUEST_CODE = 200;
-
-    private static String LOG_TAG = "GDG-MainActivity";
-
     public static final int REQUEST_FIRST_START_WIZARD = 100;
-
+    private static final int PLAY_SERVICE_DIALOG_REQUEST_CODE = 200;
     @InjectView(R.id.pager)
     ViewPager mViewPager;
 
@@ -80,8 +75,6 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
     private ChapterAdapter mSpinnerAdapter;
     private MyAdapter mViewPagerAdapter;
     private ApiRequest mFetchChaptersTask;
-    private LocationManager mLocationManager;
-    private GroupDirectory mClient;
 
     private boolean mFirstStart = false;
 
@@ -89,8 +82,8 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
 
     /**
      * Called when the activity is first created.
-     * @param savedInstanceState If the activity is being re-initialized after 
-     * previously being shut down then this Bundle contains the data it most 
+     * @param savedInstanceState If the activity is being re-initialized after
+     * previously being shut down then this Bundle contains the data it most
      * recently supplied in onSaveInstanceState(Bundle). <b>Note: Otherwise it is null.</b>
      */
     @Override
@@ -99,7 +92,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
 		Timber.i("onCreate");
         setContentView(R.layout.activity_main);
 
-        mClient = new GroupDirectory();
+        GroupDirectory client = new GroupDirectory();
 
         mLocationComparator = new ChapterComparator(mPreferences);
 
@@ -111,7 +104,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         getSupportActionBar().setListNavigationCallbacks(mSpinnerAdapter, MainActivity.this);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
-        mFetchChaptersTask = mClient.getDirectory(new Response.Listener<Directory>() {
+        mFetchChaptersTask = client.getDirectory(new Response.Listener<Directory>() {
             @Override
             public void onResponse(final Directory directory) {
                 getSupportActionBar().setListNavigationCallbacks(mSpinnerAdapter, MainActivity.this);
@@ -184,7 +177,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         now.setToNow();
 
         if((mPreferences.getInt(Const.SETTINGS_SEASONS_GREETINGS, now.year-1) < now.year) && (now.yearDay >= 354 && now.yearDay <= 366)) {
-            mPreferences.edit().putInt(Const.SETTINGS_SEASONS_GREETINGS, now.year).commit();
+            mPreferences.edit().putInt(Const.SETTINGS_SEASONS_GREETINGS, now.year).apply();
             SeasonsGreetingsFragment seasonsGreetings = new SeasonsGreetingsFragment();
             seasonsGreetings.show(getSupportFragmentManager(), "dialog");
         }
