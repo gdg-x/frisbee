@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 The GDG Frisbee Project
+ * Copyright 2013-2015 The GDG Frisbee Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,8 @@
 package org.gdg.frisbee.android.api;
 
 import com.android.volley.Request;
-import org.gdg.frisbee.android.app.GdgVolley;
 
-import java.util.ArrayList;
+import org.gdg.frisbee.android.app.GdgVolley;
 
 /**
  * Created with IntelliJ IDEA.

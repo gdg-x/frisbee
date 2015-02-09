@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 The GDG Frisbee Project
+ * Copyright 2013-2015 The GDG Frisbee Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package org.gdg.frisbee.android.utils;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -27,11 +26,6 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import org.gdg.frisbee.android.Const;
-import org.gdg.frisbee.android.R;
-import org.joda.time.DateTime;
-import org.joda.time.Period;
-import org.joda.time.format.DateTimeFormat;
 
 import java.io.*;
 import java.net.URL;
@@ -40,6 +34,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.gdg.frisbee.android.R;
+import org.joda.time.DateTime;
+import org.joda.time.Period;
+import org.joda.time.format.DateTimeFormat;
 
 /**
  * GDG Aachen
