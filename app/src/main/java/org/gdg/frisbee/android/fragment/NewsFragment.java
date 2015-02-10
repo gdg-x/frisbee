@@ -52,17 +52,7 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import timber.log.Timber;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.fragment
- * <p/>
- * User: maui
- * Date: 20.04.13
- * Time: 12:22
- */
 public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.OnRefreshListener {
-
-    private static final String LOG_TAG = "GDG-NewsFragment";
 
     final HttpTransport mTransport = GapiTransportChooser.newCompatibleTransport();
     final JsonFactory mJsonFactory = new GsonFactory();
@@ -89,11 +79,6 @@ public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public void onStart() {
         super.onStart();
         Timber.d("onStart()");
@@ -104,7 +89,7 @@ public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.
         super.onResume();
         Timber.d("onResume()");
 
-        for(int i = 0; i <= getListView().getChildCount(); i++) {
+        for (int i = 0; i <= getListView().getChildCount(); i++) {
             mAdapter.updatePlusOne(getListView().getChildAt(i));
         }
     }
@@ -128,21 +113,21 @@ public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.
 
         mClient = new Plus.Builder(mTransport, mJsonFactory, null).setGoogleClientRequestInitializer(new CommonGoogleJsonClientRequestInitializer(getString(R.string.ip_simple_api_access_key))).build();
 
-        mAdapter = new NewsAdapter(getActivity(), ((GdgActivity)getActivity()).getGoogleApiClient());
+        mAdapter = new NewsAdapter(getActivity(), ((GdgActivity) getActivity()).getGoogleApiClient());
         setListAdapter(mAdapter);
 
         registerForContextMenu(getListView());
 
         mPullToRefreshLayout.setOnRefreshListener(this);
 
-        if(getListView() instanceof ListView) {
+        if (getListView() instanceof ListView) {
             ListView listView = (ListView) getListView();
             listView.setDivider(null);
             listView.setDividerHeight(0);
         }
 
-        if(Utils.isOnline(getActivity())) {
-            new Builder<String, ActivityFeed>(String.class, ActivityFeed.class)
+        if (Utils.isOnline(getActivity())) {
+            new Builder<>(String.class, ActivityFeed.class)
                     .addParameter(getArguments().getString("plus_id"))
                     .setOnPreExecuteListener(new CommonAsyncTask.OnPreExecuteListener() {
                         @Override
@@ -176,7 +161,7 @@ public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.
                     .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, ActivityFeed>() {
                         @Override
                         public void onPostExecute(String[] params, ActivityFeed activityFeed) {
-                            if(activityFeed != null) {
+                            if (activityFeed != null) {
                                 mAdapter.addAll(activityFeed.getItems());
                                 setIsLoading(false);
                             }
@@ -184,13 +169,14 @@ public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.
                     })
                     .buildAndExecute();
         } else {
-            App.getInstance().getModelCache().getAsync("news_" +getArguments().getString("plus_id"), false, new ModelCache.CacheListener() {
+            App.getInstance().getModelCache().getAsync("news_" + getArguments().getString("plus_id"), false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
-                    ActivityFeed feed = (ActivityFeed)item;
+                    ActivityFeed feed = (ActivityFeed) item;
 
-                    if(isAdded())
+                    if (isAdded()) {
                         Crouton.makeText(getActivity(), getString(R.string.cached_content), Style.INFO).show();
+                    }
 
                     mAdapter.addAll(feed.getItems());
                     setIsLoading(false);
@@ -198,18 +184,17 @@ public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.
 
                 @Override
                 public void onNotFound(String key) {
-                    if(isAdded())
+                    if (isAdded()) {
                         Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
+                    }
                 }
             });
         }
     }
 
-
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
         getActivity().getMenuInflater().inflate(R.menu.news_context, menu);
     }
 
@@ -218,7 +203,7 @@ public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         Activity activity = (Activity) mAdapter.getItem(info.position);
 
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.share_with_googleplus:
                 shareWithGooglePlus(activity);
                 return true;
@@ -237,14 +222,9 @@ public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Timber.d("onCreateView()");
-        View v = inflater.inflate(R.layout.fragment_news, null);
+        View v = inflater.inflate(R.layout.fragment_news, container, false);
         ButterKnife.inject(this, v);
         return v;
     }
@@ -258,7 +238,7 @@ public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.
     @Override
     public void onRefresh() {
         if (Utils.isOnline(getActivity())) {
-            new Builder<String, ActivityFeed>(String.class, ActivityFeed.class)
+            new Builder<>(String.class, ActivityFeed.class)
                     .addParameter(getArguments().getString("plus_id"))
                     .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, ActivityFeed>() {
                         @Override
