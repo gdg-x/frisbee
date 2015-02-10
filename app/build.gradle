@@ -83,11 +83,6 @@ dependencies {
     compile 'org.jsoup:jsoup:1.7.3'
     compile 'joda-time:joda-time:2.3'
     compile 'com.jakewharton.timber:timber:2.3.0'
-    compile 'com.github.chrisbanes.actionbarpulltorefresh:library:0.9.9'
-    compile ('com.github.chrisbanes.actionbarpulltorefresh:extra-abc:0.9.9'){
-        exclude group: 'com.android.support', module:'support-v4'
-        exclude group: 'com.android.support', module:'appcompat-v7'
-    }
     compile ('de.keyboardsurfer.android.widget:crouton:1.8.4') {
         exclude module: 'support-v4'
     }

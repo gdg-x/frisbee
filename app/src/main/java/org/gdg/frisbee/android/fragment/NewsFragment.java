@@ -19,7 +19,7 @@ package org.gdg.frisbee.android.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -43,18 +43,14 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
-import org.gdg.frisbee.android.utils.PullToRefreshTransformer;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
 
 import butterknife.ButterKnife;
+import butterknife.InjectView;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import timber.log.Timber;
-import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
-import uk.co.senab.actionbarpulltorefresh.library.Options;
-import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
-import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
 /**
  * GDG Aachen
@@ -64,19 +60,19 @@ import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
  * Date: 20.04.13
  * Time: 12:22
  */
-public class NewsFragment extends GdgListFragment implements OnRefreshListener {
+public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private static final String LOG_TAG = "GDG-NewsFragment";
 
     final HttpTransport mTransport = GapiTransportChooser.newCompatibleTransport();
     final JsonFactory mJsonFactory = new GsonFactory();
 
-    private PullToRefreshLayout mPullToRefreshLayout;
+    @InjectView(R.id.news_fragment_swipe_refresh_layout)
+    SwipeRefreshLayout mPullToRefreshLayout;
 
     private Plus mClient;
 
     private NewsAdapter mAdapter;
-    private PullToRefreshTransformer mPulltoRefreshTransformer;
 
     public static NewsFragment newInstance(String plusId) {
         NewsFragment fragment = new NewsFragment();
@@ -137,32 +133,7 @@ public class NewsFragment extends GdgListFragment implements OnRefreshListener {
 
         registerForContextMenu(getListView());
 
-        if(((ActionBarActivity)getActivity()).getSupportActionBar() != null) {
-            mPullToRefreshLayout = new PullToRefreshLayout(getActivity());
-            mPulltoRefreshTransformer = new PullToRefreshTransformer();
-            ActionBarPullToRefresh.from(getActivity())
-                    .options(Options.create()
-                            .headerTransformer(mPulltoRefreshTransformer)
-                            .headerLayout(R.layout.pull_to_refresh)
-                            .build())
-                    .theseChildrenArePullable(android.R.id.list, android.R.id.empty)
-                    .insertLayoutInto((ViewGroup)getView())
-                    .listener(this)
-                    .setup(mPullToRefreshLayout);
-        }
-        /*((GdgActivity)getActivity()).getPullToRefreshHelper().addRefreshableView(getListView(), new PullToRefreshAttacher.ViewDelegate() {
-            @Override
-            public boolean isScrolledToTop(View view) {
-                AbsListView absListView = (AbsListView) view;
-                if (absListView.getCount() == 0) {
-                    return true;
-                } else if (absListView.getFirstVisiblePosition() == 0) {
-                    final View firstVisibleChild = absListView.getChildAt(0);
-                    return firstVisibleChild != null && firstVisibleChild.getTop() >= 0;
-                }
-                return false;
-            }
-        }, this);*/
+        mPullToRefreshLayout.setOnRefreshListener(this);
 
         if(getListView() instanceof ListView) {
             ListView listView = (ListView) getListView();
@@ -285,16 +256,10 @@ public class NewsFragment extends GdgListFragment implements OnRefreshListener {
     }
 
     @Override
-    public void onRefreshStarted(View view) {
-        if(Utils.isOnline(getActivity())) {
+    public void onRefresh() {
+        if (Utils.isOnline(getActivity())) {
             new Builder<String, ActivityFeed>(String.class, ActivityFeed.class)
                     .addParameter(getArguments().getString("plus_id"))
-                    .setOnPreExecuteListener(new CommonAsyncTask.OnPreExecuteListener() {
-                        @Override
-                        public void onPreExecute() {
-                            setIsLoading(true);
-                        }
-                    })
                     .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, ActivityFeed>() {
                         @Override
                         public ActivityFeed doInBackground(String... params) {
@@ -319,11 +284,9 @@ public class NewsFragment extends GdgListFragment implements OnRefreshListener {
                         public void onPostExecute(String[] params, ActivityFeed activityFeed) {
                             if (activityFeed != null) {
                                 mAdapter.replaceAll(activityFeed.getItems(), 0);
-                                setIsLoading(false);
 
                                 if (getActivity() != null) {
-                                    mPullToRefreshLayout.setRefreshComplete();
-                                    mPulltoRefreshTransformer.onReset();
+                                    mPullToRefreshLayout.setRefreshing(false);
                                 }
                             }
                         }
