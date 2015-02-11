@@ -1,6 +1,8 @@
 # Project Frisbee
 ### Powered by GDG[x]
 
+[![Join the chat at https://gitter.im/gdg-x/frisbee](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/gdg-x/frisbee?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 All GDG content in one place. Project Frisbee is the result of GDG[x]'s coordinated efforts to build an applications that makes it easier to discover Google Developer Group content while being on the go.
 The GDG App features the Google+ Newsfeed, Upcoming Events and general information on every
 active chapter listed in the Google Developer Group Directory
