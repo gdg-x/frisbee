@@ -17,14 +17,11 @@
 package org.gdg.frisbee.android.app;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.util.Log;
+
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+
 import org.gdg.frisbee.android.api.GdgStack;
-import timber.log.Timber;
-import uk.co.senab.bitmapcache.CacheableBitmapDrawable;
 
 /**
  * GDG Aachen
@@ -43,8 +40,7 @@ public class GdgVolley {
         return mInstance;
     }
 
-    private RequestQueue mRequestQueue, mImageRequestQueue;
-    private ImageLoader mImageLoader;
+    private RequestQueue mRequestQueue;
 
     static void init(Context ctx) {
         mInstance = new GdgVolley(ctx);
@@ -52,32 +48,6 @@ public class GdgVolley {
 
     private GdgVolley(Context ctx) {
         mRequestQueue = Volley.newRequestQueue(ctx, new GdgStack());
-        mImageRequestQueue = Volley.newRequestQueue(ctx, new GdgStack());
-        mImageLoader = new ImageLoader(mImageRequestQueue, new ImageLoader.ImageCache() {
-            @Override
-            public Bitmap getBitmap(String url) {
-                // Check memcache here...disk cache lookup will be done by GdgStack
-                Timber.d("Looking up " + url + " in cache");
-                CacheableBitmapDrawable bitmap = App.getInstance().getBitmapCache().get(url);
-                if(bitmap != null) {
-                    Timber.d("Bitmap Memcache hit");
-                    return bitmap.getBitmap();
-                } else
-                    return null;
-            }
-
-            @Override
-            public void putBitmap(final String url, final Bitmap bitmap) {
-                new Thread() {
-                    @Override
-                    public void run() {
-                        String myurl = url.substring(6);
-                        Timber.d("Saving "+ myurl + " to cache");
-                        App.getInstance().getBitmapCache().put(myurl, bitmap);
-                    }
-                }.start();
-            }
-        });
     }
 
     public RequestQueue getRequestQueue() {
@@ -85,14 +55,6 @@ public class GdgVolley {
             return mRequestQueue;
         } else {
             throw new IllegalStateException("RequestQueue not initialized");
-        }
-    }
-
-    public ImageLoader getImageLoader() {
-        if (mImageLoader != null) {
-            return mImageLoader;
-        } else {
-            throw new IllegalStateException("ImageLoader not initialized");
         }
     }
 }

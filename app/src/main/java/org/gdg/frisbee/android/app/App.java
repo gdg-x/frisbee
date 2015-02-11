@@ -48,7 +48,6 @@ import java.io.File;
 
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
-import uk.co.senab.bitmapcache.BitmapLruCache;
 
 /**
  * Created with IntelliJ IDEA.
@@ -64,7 +63,6 @@ public class App extends Application implements LocationListener {
         return mInstance;
     }
 
-    private BitmapLruCache mBitmapCache;
     private ModelCache mModelCache;
     private Picasso mPicasso;
     private SharedPreferences mPreferences;
@@ -112,7 +110,6 @@ public class App extends Application implements LocationListener {
 
         // Initialize ModelCache and Volley
         getModelCache();
-        getBitmapCache();
         GdgVolley.init(this);
 
         mPreferences.edit().putInt(Const.SETTINGS_APP_STARTS, mPreferences.getInt(Const.SETTINGS_APP_STARTS, 0) + 1).apply();
@@ -214,27 +211,6 @@ public class App extends Application implements LocationListener {
                     .build();
         }
         return mModelCache;
-    }
-
-    public BitmapLruCache getBitmapCache() {
-        if (mBitmapCache == null) {
-
-            String rootDir = null;
-            if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-                // SD-card available
-                rootDir = Environment.getExternalStorageDirectory().getAbsolutePath()
-                        + "/Android/data/" + getPackageName() + "/cache";
-            } else {
-                File internalCacheDir = getCacheDir();
-                rootDir = internalCacheDir.getAbsolutePath();
-            }
-
-            mBitmapCache = new BitmapLruCache.Builder(getApplicationContext())
-                    .setMemoryCacheEnabled(true)
-                    .setMemoryCacheMaxSizeUsingHeapSize()
-                    .build();
-        }
-        return mBitmapCache;
     }
 
     private void deleteDirectory(File dir) {
