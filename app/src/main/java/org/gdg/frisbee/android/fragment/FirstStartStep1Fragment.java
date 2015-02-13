@@ -31,9 +31,6 @@ import android.widget.ViewSwitcher;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.ChapterAdapter;
 import org.gdg.frisbee.android.api.ApiRequest;
@@ -44,6 +41,9 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.ChapterComparator;
 import org.joda.time.DateTime;
+
+import java.util.Collections;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -68,6 +68,12 @@ public class FirstStartStep1Fragment extends Fragment {
     ViewSwitcher mLoadSwitcher;
 
     private ChapterComparator mLocationComparator;
+
+    public static FirstStartStep1Fragment newInstance() {
+        FirstStartStep1Fragment fragment = new FirstStartStep1Fragment();
+        fragment.setArguments(new Bundle());
+        return fragment;
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
