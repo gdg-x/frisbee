@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 The GDG Frisbee Project
+ * Copyright 2013-2015 The GDG Frisbee Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,9 @@ package org.gdg.frisbee.android.activity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+
 import org.gdg.frisbee.android.R;
+
 import timber.log.Timber;
 
 public class SearchActivity extends GdgNavDrawerActivity {

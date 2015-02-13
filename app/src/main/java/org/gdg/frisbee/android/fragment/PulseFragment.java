@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 The GDG Frisbee Project
+ * Copyright 2013-2015 The GDG Frisbee Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,16 @@ package org.gdg.frisbee.android.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
-import butterknife.ButterKnife;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
+import java.util.Map;
+
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.MainActivity;
 import org.gdg.frisbee.android.activity.PulseActivity;
@@ -40,9 +39,11 @@ import org.gdg.frisbee.android.api.model.PulseEntry;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.joda.time.DateTime;
-import timber.log.Timber;
 
-import java.util.Map;
+import butterknife.ButterKnife;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
+import timber.log.Timber;
 
 public class PulseFragment extends GdgListFragment {
 
