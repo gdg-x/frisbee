@@ -69,7 +69,6 @@
       android:value=".activity.SearchActivity" />
 
     <activity android:name=".activity.MainActivity" />
-    <activity android:name=".activity.GdlActivity" />
     <activity android:name=".activity.GdeActivity" />
     <activity android:name=".activity.AboutActivity" />
     <activity android:name=".activity.SpecialEventActivity" />
