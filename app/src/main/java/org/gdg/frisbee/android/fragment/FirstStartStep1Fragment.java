@@ -69,12 +69,6 @@ public class FirstStartStep1Fragment extends Fragment {
 
     private ChapterComparator mLocationComparator;
 
-    public static FirstStartStep1Fragment newInstance() {
-        FirstStartStep1Fragment fragment = new FirstStartStep1Fragment();
-        fragment.setArguments(new Bundle());
-        return fragment;
-    }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         Timber.d("onSaveInstanceState");
@@ -144,7 +138,6 @@ public class FirstStartStep1Fragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Chapter selectedChapter = (Chapter) mChapterSpinner.getSelectedItem();
-                getArguments().putParcelable("selected_chapter", selectedChapter);
 
                 if (getActivity() instanceof Step1Listener) {
                     ((Step1Listener) getActivity()).onConfirmedChapter(selectedChapter);

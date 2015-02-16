@@ -326,7 +326,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
         public FirstStartPageAdapter(FragmentManager fm) {
             super(fm);
             mFragments = new Fragment[]{
-                    FirstStartStep1Fragment.newInstance(),
+                    new FirstStartStep1Fragment(),
                     new FirstStartStep2Fragment(),
                     new FirstStartStep3Fragment()
             };
