@@ -24,6 +24,7 @@
     <GridView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:drawSelectorOnTop="true"
             android:numColumns="auto_fit"
             android:id="@android:id/list"
             android:stretchMode="columnWidth"

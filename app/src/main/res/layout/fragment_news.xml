@@ -29,6 +29,7 @@
     <ListView
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:drawSelectorOnTop="true"
       android:id="@android:id/list" />
 
   </android.support.v4.widget.SwipeRefreshLayout>
