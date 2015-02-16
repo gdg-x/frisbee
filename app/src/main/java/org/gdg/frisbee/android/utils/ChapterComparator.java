@@ -17,10 +17,11 @@ import java.util.Comparator;
  */
 public class ChapterComparator implements Comparator<Chapter> {
 
-    private SharedPreferences mPreferences;
+    private static final float MAX_DISTANCE = 500000;
+    private final String mHomeGdg;
 
     public ChapterComparator(SharedPreferences prefs) {
-        mPreferences = prefs;
+        mHomeGdg = prefs.getString(Const.SETTINGS_HOME_GDG, "");
     }
 
     @Override
@@ -28,32 +29,47 @@ public class ChapterComparator implements Comparator<Chapter> {
         float[] results = new float[1];
         float[] results2 = new float[1];
 
-        if(chapter.getGplusId().equals(mPreferences.getString(Const.SETTINGS_HOME_GDG,""))) {
+        if (chapter.getGplusId().equals(mHomeGdg)) {
             return -1;
         }
 
-        if(chapter2.getGplusId().equals(mPreferences.getString(Const.SETTINGS_HOME_GDG,""))) {
+        if (chapter2.getGplusId().equals(mHomeGdg)) {
             return 1;
         }
 
         Location lastLocation = App.getInstance().getLastLocation();
-        if(lastLocation == null)
+        if (lastLocation == null) {
             return chapter.getName().compareTo(chapter2.getName());
+        }
 
-        if(chapter.getGeo() == null)
+        if (chapter.getGeo() == null) {
             return 1;
-        if(chapter2.getGeo() == null)
+        }
+        if (chapter2.getGeo() == null) {
             return -1;
+        }
 
         Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(), chapter.getGeo().getLat(), chapter.getGeo().getLng(), results);
         Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(), chapter2.getGeo().getLat(), chapter2.getGeo().getLng(), results2);
 
-        if(results[0] == results2[0])
-            return 0;
-        else if(results[0] > results2[0])
-            return 1;
-        else
+        final boolean closeEnough = results[0] <= MAX_DISTANCE;
+        final boolean closeEnough2 = results2[0] <= MAX_DISTANCE;
+        
+        if (closeEnough && closeEnough2) {
+            if (results[0] == results2[0]) {
+                return 0;
+            } else if (results[0] > results2[0]) {
+                return 1;
+            } else {
+                return -1;
+            }
+        } else if (closeEnough) {
             return -1;
+        } else if (closeEnough2) {
+            return 1;
+        } else {
+            return chapter.getName().compareTo(chapter2.getName());
+        }
     }
 
     @Override
