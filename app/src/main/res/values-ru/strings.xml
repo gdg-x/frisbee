@@ -65,38 +65,6 @@
         <item quantity="one">1 день назад</item>
         <item quantity="other">%d дней назад</item>
     </plurals>
-    <string-array name="gdl_catgories">
-        <item>Android</item>
-        <item>Google+</item>
-        <item>Chrome</item>
-        <item>Cloud</item>
-        <item>Карты</item>
-        <item>YouTube</item>
-        <item>Диск</item>
-        <item>Google I/O</item>
-        <item>Объявления</item>
-        <item>Analytics</item>
-        <item>Business</item>
-        <item>Google TV</item>
-        <item>Wallet</item>
-        <item>Primetime</item>
-    </string-array>
-    <string-array name="gdl_catgories_url">
-        <item>android</item>
-        <item>+</item>
-        <item>chrome</item>
-        <item>cloud</item>
-        <item>maps</item>
-        <item>youtube</item>
-        <item>drive</item>
-        <item>io</item>
-        <item>ads</item>
-        <item>analytics</item>
-        <item>business</item>
-        <item>tv</item>
-        <item>wallet</item>
-        <item>primetime</item>
-    </string-array>
     <string-array name="about_tabs">
         <item>О приложении</item>
         <item>Разработчики</item>
