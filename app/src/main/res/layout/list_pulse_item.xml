@@ -10,6 +10,7 @@
         android:id="@+id/card_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        card_view:contentPadding="10dp"
         card_view:cardCornerRadius="3dp" android:padding="10dip" android:layout_margin="5dip">
     <LinearLayout
             android:orientation="horizontal"
