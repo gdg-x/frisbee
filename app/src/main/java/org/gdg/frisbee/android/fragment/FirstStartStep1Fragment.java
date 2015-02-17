@@ -31,9 +31,6 @@ import android.widget.ViewSwitcher;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.ChapterAdapter;
 import org.gdg.frisbee.android.api.ApiRequest;
@@ -44,6 +41,9 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.ChapterComparator;
 import org.joda.time.DateTime;
+
+import java.util.Collections;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -138,7 +138,6 @@ public class FirstStartStep1Fragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Chapter selectedChapter = (Chapter) mChapterSpinner.getSelectedItem();
-                getArguments().putParcelable("selected_chapter", selectedChapter);
 
                 if (getActivity() instanceof Step1Listener) {
                     ((Step1Listener) getActivity()).onConfirmedChapter(selectedChapter);

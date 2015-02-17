@@ -42,8 +42,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.plus.Plus;
 
-import java.io.IOException;
-
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.ApiRequest;
@@ -55,6 +53,8 @@ import org.gdg.frisbee.android.fragment.FirstStartStep1Fragment;
 import org.gdg.frisbee.android.fragment.FirstStartStep2Fragment;
 import org.gdg.frisbee.android.fragment.FirstStartStep3Fragment;
 import org.gdg.frisbee.android.view.NonSwipeableViewPager;
+
+import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -326,7 +326,9 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
         public FirstStartPageAdapter(FragmentManager fm) {
             super(fm);
             mFragments = new Fragment[]{
-                    new FirstStartStep1Fragment(), new FirstStartStep2Fragment(), new FirstStartStep3Fragment()
+                    new FirstStartStep1Fragment(),
+                    new FirstStartStep2Fragment(),
+                    new FirstStartStep3Fragment()
             };
         }
 
