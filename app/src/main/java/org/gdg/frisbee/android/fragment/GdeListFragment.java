@@ -24,8 +24,6 @@ import java.util.ArrayList;
  */
 public class GdeListFragment extends GdgListFragment implements GdeActivity.Listener {
 
-    private static final String LOG_TAG = "GDG-GdeListFragment";
-
     @InjectView(android.R.id.list)
     GridView mGrid;
 

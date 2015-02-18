@@ -47,7 +47,6 @@ import timber.log.Timber;
 
 public class PulseFragment extends GdgListFragment {
 
-    private static final String LOG_TAG = "GDG-PulseFragment";
     private int mMode;
     private String mTarget;
     private PulseAdapter mAdapter;

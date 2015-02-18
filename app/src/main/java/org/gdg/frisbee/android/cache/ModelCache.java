@@ -205,8 +205,6 @@ public class ModelCache {
     private File mTempDir;
     private Resources mResources;
 
-    private static final String LOG_TAG = "GDG-ModelCache";
-
     final JsonFactory mJsonFactory = new GsonFactory();
 
     private Gson mGson;

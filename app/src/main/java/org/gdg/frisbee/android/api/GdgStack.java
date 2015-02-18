@@ -38,7 +38,6 @@ import java.util.regex.Pattern;
  */
 public class GdgStack implements HttpStack {
 
-    private static final String LOG_TAG = "GDG-GdgStack";
     private static final String BASE_URL = "https://developers.google.com";
     private static final String DIRECTORY_URL = BASE_URL + "/groups/directory/";
     private static final String USER_AGENT = "GDG-Frisbee/0.1 (Android)";

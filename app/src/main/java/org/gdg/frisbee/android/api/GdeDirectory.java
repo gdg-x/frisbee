@@ -18,8 +18,6 @@ public class GdeDirectory {
 
     private static final String DIRECTORY_URL = "https://gde-map.appspot.com/gde/list";
 
-    private static final String LOG_TAG = "GDG-GdeDirectory";
-
     public GdeDirectory() {
     }
 

@@ -63,8 +63,6 @@ import org.joda.time.DateTime;
  */
 public class NewsAdapter extends BaseAdapter {
 
-    private static final String LOG_TAG = "GDG-NewsAdapter";
-
     private Context mContext;
     private LayoutInflater mInflater;
     private ArrayList<Item> mActivities;

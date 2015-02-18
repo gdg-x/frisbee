@@ -35,7 +35,6 @@ import timber.log.Timber;
 public class GcmIntentService extends IntentService {
 
     public static final int NOTIFICATION_ID = 1;
-    public static final String LOG_TAG = "GDG-GcmIntentService";
     public static final String UPCOMING_EVENT = "upcoming_event";
     public static final String EXTRA_TYPE = "type";
 

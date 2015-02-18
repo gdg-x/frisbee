@@ -65,7 +65,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import butterknife.InjectView;
-import timber.log.Timber;
 
 /**
  * Created with IntelliJ IDEA.
@@ -119,7 +118,6 @@ public class ArrowActivity extends GdgNavDrawerActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Timber.i("onCreate");
         setContentView(R.layout.activity_arrow);
 
         if (!mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false))

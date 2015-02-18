@@ -68,8 +68,6 @@ import timber.log.Timber;
  */
 public class InfoFragment extends Fragment {
 
-    private static final String LOG_TAG = "GDG-InfoFragment";
-
     final HttpTransport mTransport = GapiTransportChooser.newCompatibleTransport();
     final JsonFactory mJsonFactory = new GsonFactory();
 

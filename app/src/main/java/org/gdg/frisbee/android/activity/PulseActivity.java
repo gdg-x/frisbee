@@ -49,7 +49,6 @@ import timber.log.Timber;
 
 public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnNavigationListener {
 
-    private static String LOG_TAG = "GDG-PulseActivity";
     private GroupDirectory mClient;
 
     private ArrayAdapter<String> mSpinnerAdapter;

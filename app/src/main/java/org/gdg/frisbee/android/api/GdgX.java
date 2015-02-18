@@ -35,7 +35,6 @@ public class GdgX {
     private static final String GCM_UNREGISTER_URL = BASE_URL + "/api/v1/frisbee/gcm/unregister";
     private static final String GDGX_HOME_GDG_URL = BASE_URL + "/api/v1/frisbee/user/home";
 
-    private static final String LOG_TAG = "GDG-GDGX";
     private String mToken;
 
     public GdgX() {

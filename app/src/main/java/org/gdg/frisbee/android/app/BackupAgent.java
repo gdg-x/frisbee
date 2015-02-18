@@ -37,7 +37,6 @@ import java.io.IOException;
  */
 public class BackupAgent extends BackupAgentHelper {
 
-    private static final String LOG_TAG = "GDG-BackupAgent";
     private static final String PREFS_BACKUP_KEY = "gdg_prefs";
 
     @Override

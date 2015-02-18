@@ -15,7 +15,6 @@ import android.widget.ImageView;
  */
 public class ResizableImageView extends ImageView {
 
-    private static final String LOG_TAG = "GDG-ResizableImageView";
     private int mWidth = -1, mHeight = -1;
     private String mUri;
 

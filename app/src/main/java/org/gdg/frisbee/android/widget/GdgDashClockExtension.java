@@ -25,8 +25,6 @@ import java.util.ArrayList;
 
 public class GdgDashClockExtension extends DashClockExtension {
 
-    private static final String LOG_TAG = "GDG-GdgDashClockExtension";
-
     private SharedPreferences mPreferences;
     private GroupDirectory mDirectory;
     private ArrayList<Chapter> mChapters;
