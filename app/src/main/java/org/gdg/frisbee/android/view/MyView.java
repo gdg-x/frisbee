@@ -41,8 +41,6 @@ import java.util.Map;
  */
 public class MyView extends AbsListView {
 
-    private final static String LOG_TAG = "GDG-MyView";
-
     private ListAdapter mAdapter;
 
     private LinearLayout mRoot;

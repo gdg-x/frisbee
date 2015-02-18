@@ -16,8 +16,7 @@
   -->
 
 <resources>
-    <declare-styleable name="MasonryView">
-        <attr name="drawSelectorOnTop" format="boolean" />
+    <declare-styleable name="MyView">
         <attr name="numColumns" format="integer" />
     </declare-styleable>
 </resources>
