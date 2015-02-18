@@ -107,9 +107,10 @@ dependencies {
 
     //Square
     compile 'com.squareup:otto:1.3.6'
-    compile 'com.squareup.okhttp:okhttp:1.6.0'
-    compile 'com.squareup.okhttp:okhttp-urlconnection:1.6.0'
-    compile 'com.squareup.picasso:picasso:2.3.0'
+    compile 'com.squareup.okhttp:okhttp:2.2.0'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
+    compile 'com.squareup.okio:okio:1.2.0'
+    compile 'com.squareup.picasso:picasso:2.5.0'
 
     //Jake Wharton
     compile 'com.nineoldandroids:library:2.4.0'
