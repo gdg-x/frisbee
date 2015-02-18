@@ -90,12 +90,6 @@
   <style name="SpinnerDropDownItemGDG" parent="android:Widget.DropDownItem.Spinner">
       <item name="android:checkMark">@drawable/btn_radio_holo_light</item>
   </style>
-  <style name="ProgressBarGDG" parent="android:Widget.ProgressBar.Horizontal">
-      <item name="android:progressDrawable">@drawable/progress_horizontal_holo_light</item>
-      <item name="android:indeterminateDrawable">@drawable/progress_indeterminate_horizontal_holo_light</item>
-      <item name="android:minHeight">16dip</item>
-      <item name="android:maxHeight">16dip</item>
-  </style>
 
   <style name="SeekBarGDG" parent="android:Widget.SeekBar">
       <item name="android:progressDrawable">@drawable/scrubber_progress_horizontal_holo_light</item>

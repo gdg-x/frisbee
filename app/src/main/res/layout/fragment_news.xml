@@ -17,26 +17,39 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/news_fragment_swipe_refresh_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <ListView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@android:id/list"/>
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" android:id="@+id/loading" android:gravity="center_vertical|center_horizontal">
-        <org.gdg.frisbee.android.view.AnimationImageView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageView" android:src="@drawable/gdg_load"/>
-    </LinearLayout>
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" android:id="@+id/empty">
-    </LinearLayout>
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:id="@android:id/list" />
+
+  </android.support.v4.widget.SwipeRefreshLayout>
+
+  <LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/loading"
+    android:gravity="center_vertical|center_horizontal">
+
+    <org.gdg.frisbee.android.view.AnimationImageView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/imageView"
+      android:src="@drawable/gdg_load" />
+  </LinearLayout>
+
+  <LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/empty" />
 </LinearLayout>
