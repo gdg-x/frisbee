@@ -35,6 +35,8 @@ android {
         buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
         buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
 
+        resConfigs "en", "cs", "de", "es", "fr", "hi", "ko", "lt", "nl", "pl", "pt-rBR", "ru", "sk", "th", "tr", "uk", "zh-rCN", "zh-rHK", "zh-rTW"
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -52,6 +54,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             minifyEnabled true
             zipAlignEnabled true
+            shrinkResources true
             debuggable false
         }
         debug {
