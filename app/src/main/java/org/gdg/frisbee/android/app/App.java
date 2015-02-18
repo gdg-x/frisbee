@@ -121,9 +121,7 @@ public class App extends Application implements LocationListener {
                 .build();
         mPicasso.setIndicatorsEnabled(BuildConfig.DEBUG);
 
-        mOrganizerChecker = new OrganizerChecker(this, mPreferences);
-        mOrganizerChecker.setLastOrganizerCheckTime(mPreferences.getLong("organizer_check_time", 0));
-        mOrganizerChecker.setLastOrganizerCheckId(mPreferences.getString("organizer_check_id", null));
+        mOrganizerChecker = new OrganizerChecker(mPreferences);
 
         GoogleAnalytics.getInstance(this).setAppOptOut(mPreferences.getBoolean("analytics", false));
 
@@ -152,8 +150,9 @@ public class App extends Application implements LocationListener {
             rootDir = internalCacheDir.getAbsolutePath();
             deleteDirectory(new File(rootDir));
 
-            if (Const.ALPHA)
+            if (Const.ALPHA) {
                 Toast.makeText(getApplicationContext(), "Alpha version always resets Preferences on update.", Toast.LENGTH_LONG).show();
+            }
         }
         mPreferences.edit().putInt(Const.SETTINGS_VERSION_CODE, newVersion).apply();
     }
@@ -164,8 +163,9 @@ public class App extends Application implements LocationListener {
 
         Location loc = mLocationFinder.getLastBestLocation(5000, 60 * 60 * 1000);
 
-        if (loc != null)
+        if (loc != null) {
             mLastLocation = loc;
+        }
     }
 
     public Location getLastLocation() {
@@ -214,9 +214,11 @@ public class App extends Application implements LocationListener {
     }
 
     private void deleteDirectory(File dir) {
-        if (dir.isDirectory())
-            for (File child : dir.listFiles())
+        if (dir.isDirectory()) {
+            for (File child : dir.listFiles()) {
                 deleteDirectory(child);
+            }
+        }
 
         dir.delete();
     }
