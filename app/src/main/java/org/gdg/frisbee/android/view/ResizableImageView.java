@@ -1,12 +1,9 @@
 package org.gdg.frisbee.android.view;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 /**
  * GDG Aachen

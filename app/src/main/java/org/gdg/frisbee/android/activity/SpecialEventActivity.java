@@ -17,19 +17,17 @@
 package org.gdg.frisbee.android.activity;
 
 import android.os.Bundle;
-
 import android.support.v4.app.FragmentTransaction;
-import android.widget.ListView;
 import android.widget.TextView;
-
-import butterknife.InjectView;
-import butterknife.Optional;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.fragment.TaggedEventFragment;
 import org.gdg.frisbee.android.view.ResizableImageView;
 import org.joda.time.DateTime;
+
+import butterknife.InjectView;
+import butterknife.Optional;
 
 public class SpecialEventActivity extends GdgNavDrawerActivity {
 

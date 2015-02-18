@@ -20,16 +20,21 @@ import android.content.Context;
 import android.database.DataSetObserver;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.AbsListView;
+import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+
 import org.gdg.frisbee.android.adapter.NewsAdapter;
-import timber.log.Timber;
 
 import java.util.ArrayList;
 import java.util.Map;
+
+import timber.log.Timber;
 
 /**
  * GDG Aachen

@@ -6,12 +6,15 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
-import butterknife.InjectView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.android.gms.appstate.AppStateManager;
@@ -21,16 +24,19 @@ import com.google.android.gms.plus.People;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.squareup.picasso.Picasso;
+
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
-import timber.log.Timber;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+
+import butterknife.InjectView;
+import timber.log.Timber;
 
 /**
  * Created by maui on 23.06.14.
