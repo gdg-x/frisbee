@@ -31,7 +31,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.viewpagerindicator.TitlePageIndicator;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -48,7 +47,12 @@ import org.gdg.frisbee.android.fragment.NewsFragment;
 import org.gdg.frisbee.android.fragment.SeasonsGreetingsFragment;
 import org.gdg.frisbee.android.utils.ChapterComparator;
 import org.gdg.frisbee.android.utils.Utils;
+import org.gdg.frisbee.android.view.SlidingTabLayout;
 import org.joda.time.DateTime;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -68,7 +72,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
     ViewPager mViewPager;
 
     @InjectView(R.id.titles)
-    TitlePageIndicator mIndicator;
+    SlidingTabLayout mSlidingTabLayout;
 
     private Handler mHandler = new Handler();
 
@@ -97,7 +101,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
 
         mLocationComparator = new ChapterComparator(mPreferences);
 
-        mIndicator.setOnPageChangeListener(this);
+        mSlidingTabLayout.setOnPageChangeListener(this);
 
         mViewPagerAdapter = new MyAdapter(this, getSupportFragmentManager());
         mSpinnerAdapter = new ChapterAdapter(MainActivity.this, android.R.layout.simple_list_item_1);
@@ -167,7 +171,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
                 }
 
                 mViewPager.setAdapter(mViewPagerAdapter);
-                mIndicator.setViewPager(mViewPager);
+                mSlidingTabLayout.setViewPager(mViewPager);
             } else {
                 mFetchChaptersTask.execute();
             }
@@ -223,7 +227,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         getSupportActionBar().setSelectedNavigationItem(mSpinnerAdapter.getPosition(chapter));
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.setOffscreenPageLimit(2);
-        mIndicator.setViewPager(mViewPager);
+        mSlidingTabLayout.setViewPager(mViewPager);
 
         if (SECTION_EVENTS.equals(getIntent().getStringExtra(Const.EXTRA_SECTION))) {
             mHandler.postDelayed(new Runnable() {

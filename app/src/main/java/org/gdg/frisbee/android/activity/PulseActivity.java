@@ -28,7 +28,6 @@ import android.widget.ArrayAdapter;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.viewpagerindicator.TitlePageIndicator;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.ApiRequest;
@@ -37,6 +36,7 @@ import org.gdg.frisbee.android.api.model.Pulse;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.fragment.PulseFragment;
+import org.gdg.frisbee.android.view.SlidingTabLayout;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
     ViewPager mViewPager;
 
     @InjectView(R.id.titles)
-    TitlePageIndicator mIndicator;
+    SlidingTabLayout mSlidingTabLayout;
 
     private MyAdapter mViewPagerAdapter;
     private ArrayList<String> mPulseTargets;
@@ -74,7 +74,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
 
         mClient = new GroupDirectory();
 
-        mIndicator.setOnPageChangeListener(this);
+        mSlidingTabLayout.setOnPageChangeListener(this);
 
         mPulseTargets = new ArrayList<String>();
 
@@ -152,7 +152,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
             }
         }
         mViewPager.setAdapter(mViewPagerAdapter);
-        mIndicator.setViewPager(mViewPager);
+        mSlidingTabLayout.setViewPager(mViewPager);
     }
 
     @Override

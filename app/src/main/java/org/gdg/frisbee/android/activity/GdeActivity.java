@@ -11,7 +11,6 @@ import android.util.SparseArray;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.viewpagerindicator.TitlePageIndicator;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.ApiRequest;
@@ -23,6 +22,7 @@ import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.fragment.GdeListFragment;
 import org.gdg.frisbee.android.fragment.PlainLayoutFragment;
 import org.gdg.frisbee.android.utils.Utils;
+import org.gdg.frisbee.android.view.SlidingTabLayout;
 import org.joda.time.DateTime;
 
 import java.lang.ref.WeakReference;
@@ -45,7 +45,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
     ViewPager mViewPager;
 
     @InjectView(R.id.titles)
-    TitlePageIndicator mIndicator;
+    SlidingTabLayout mSlidingTabLayout;
 
     private Handler mHandler = new Handler();
 
@@ -115,7 +115,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
                 mViewPagerAdapter.notifyDataSetChanged();
 
                 mViewPager.setAdapter(mViewPagerAdapter);
-                mIndicator.setViewPager(mViewPager);
+                mSlidingTabLayout.setViewPager(mViewPager);
             }
         });
     }
@@ -129,7 +129,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
         super.onResume();
         Timber.d("onResume()");
 
-        //mIndicator.setOnPageChangeListener(this);
+        //mSlidingTabLayout.setOnPageChangeListener(this);
     }
 
     @Override

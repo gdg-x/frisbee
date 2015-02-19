@@ -24,12 +24,11 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 
-import com.viewpagerindicator.TitlePageIndicator;
-
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.api.GroupDirectory;
+import org.gdg.frisbee.android.view.SlidingTabLayout;
 
 import butterknife.InjectView;
 
@@ -47,7 +46,7 @@ public class EventActivity extends GdgActivity {
     ViewPager mViewPager;
 
     @InjectView(R.id.titles)
-    TitlePageIndicator mIndicator;
+    SlidingTabLayout mSlidingTabLayout;
 
     private EventPagerAdapter mViewPagerAdapter;
     private String mEventId;
@@ -65,16 +64,16 @@ public class EventActivity extends GdgActivity {
         getSupportActionBar().setTitle(R.string.event);
 
 
-        mIndicator.setOnPageChangeListener(this);
+        mSlidingTabLayout.setOnPageChangeListener(this);
 
         mViewPagerAdapter = new EventPagerAdapter(this, getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);
-        mIndicator.setViewPager(mViewPager);
+        mSlidingTabLayout.setViewPager(mViewPager);
 
         mEventId = getIntent().getStringExtra(Const.EXTRA_EVENT_ID);
         String section = getIntent().getStringExtra(Const.EXTRA_SECTION);
         if (EventPagerAdapter.SECTION_OVERVIEW.equals(section)){
-            mIndicator.setCurrentItem(0);
+            mViewPager.setCurrentItem(0);
         }
     }
 
