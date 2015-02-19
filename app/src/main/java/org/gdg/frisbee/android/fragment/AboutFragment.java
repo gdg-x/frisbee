@@ -20,6 +20,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,13 +31,6 @@ import org.gdg.frisbee.android.R;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-/**
- * Created with IntelliJ IDEA.
- * User: maui
- * Date: 08.07.13
- * Time: 01:49
- * To change this template use File | Settings | File Templates.
- */
 public class AboutFragment extends Fragment {
 
     @InjectView(R.id.version)
@@ -44,26 +38,21 @@ public class AboutFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_about, null);
+        View v = inflater.inflate(R.layout.fragment_about, container, false);
         ButterKnife.inject(this, v);
         return v;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        PackageInfo pInfo = null;
         try {
-            pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
-            mVersion.setText(pInfo.versionName);
+            FragmentActivity activity = getActivity();
+            PackageInfo packageInfo = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0);
+            mVersion.setText(packageInfo.versionName);
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
     }
 }
