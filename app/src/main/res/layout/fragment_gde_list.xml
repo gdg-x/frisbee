@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-  ~ Copyright 2014 The GDG Frisbee Project
+  ~ Copyright 2013-2015 The GDG Frisbee Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,33 +14,39 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
+-->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
 
-    <GridView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:drawSelectorOnTop="true"
-            android:numColumns="auto_fit"
-            android:id="@android:id/list"
-            android:stretchMode="columnWidth"
-            android:gravity="top"/>
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" android:id="@+id/loading" android:gravity="center_vertical|center_horizontal">
-        <org.gdg.frisbee.android.view.AnimationImageView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageView" android:src="@drawable/gdg_load"/>
-    </LinearLayout>
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" android:id="@+id/empty">
-    </LinearLayout>
+  <GridView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:numColumns="auto_fit"
+    android:id="@android:id/list"
+    android:stretchMode="columnWidth"
+    android:gravity="top" />
+
+  <LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/loading"
+    android:gravity="center_vertical|center_horizontal">
+
+    <org.gdg.frisbee.android.view.AnimationImageView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/imageView"
+      android:src="@drawable/gdg_load" />
+  </LinearLayout>
+
+  <LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/empty"></LinearLayout>
 </LinearLayout>
+  
