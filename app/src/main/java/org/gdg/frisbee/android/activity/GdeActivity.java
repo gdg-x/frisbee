@@ -1,6 +1,5 @@
 package org.gdg.frisbee.android.activity;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -34,12 +33,7 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import timber.log.Timber;
 
-/**
- * Created by maui on 28.05.2014.
- */
 public class GdeActivity extends GdgNavDrawerActivity {
-
-    private GdeDirectory mGdeDirectory;
 
     @InjectView(R.id.pager)
     ViewPager mViewPager;
@@ -60,10 +54,10 @@ public class GdeActivity extends GdgNavDrawerActivity {
         getSupportActionBar().setLogo(R.drawable.ic_gde_logo_wide);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mViewPagerAdapter = new GdeCategoryAdapter(this, getSupportFragmentManager());
+        mViewPagerAdapter = new GdeCategoryAdapter(getSupportFragmentManager());
 
-        mGdeDirectory = new GdeDirectory();
-        final ApiRequest mFetchGdesTask = mGdeDirectory.getDirectory(new Response.Listener<GdeList>() {
+        final GdeDirectory gdeDirectory = new GdeDirectory();
+        final ApiRequest mFetchGdesTask = gdeDirectory.getDirectory(new Response.Listener<GdeList>() {
             @Override
             public void onResponse(final GdeList directory) {
                 App.getInstance().getModelCache().putAsync("gde_map", directory, DateTime.now().plusDays(4), new ModelCache.CachePutListener() {
@@ -103,8 +97,8 @@ public class GdeActivity extends GdgNavDrawerActivity {
             public void run() {
                 HashMap<String, GdeList> gdeMap = new HashMap<>();
 
-                for(Gde gde : directory) {
-                    if(!gdeMap.containsKey(gde.getProduct())) {
+                for (Gde gde : directory) {
+                    if (!gdeMap.containsKey(gde.getProduct())) {
                         gdeMap.put(gde.getProduct(), new GdeList());
                     }
 
@@ -139,16 +133,12 @@ public class GdeActivity extends GdgNavDrawerActivity {
     }
 
     public class GdeCategoryAdapter extends FragmentStatePagerAdapter implements ViewPager.OnPageChangeListener {
-        private Context mContext;
-
         private HashMap<String, GdeList> mGdeMap;
-        private final SparseArray<WeakReference<Fragment>> mFragments
-                = new SparseArray<WeakReference<Fragment>>();
+        private final SparseArray<WeakReference<Fragment>> mFragments = new SparseArray<>();
 
-        public GdeCategoryAdapter(Context ctx, FragmentManager fm) {
+        public GdeCategoryAdapter(FragmentManager fm) {
             super(fm);
-            mContext = ctx;
-            mGdeMap = new HashMap<String, GdeList>();
+            mGdeMap = new HashMap<>();
         }
 
         public void addMap(Map<String, GdeList> collection) {
@@ -157,17 +147,17 @@ public class GdeActivity extends GdgNavDrawerActivity {
 
         @Override
         public int getCount() {
-            return mGdeMap.keySet().size()+1;
+            return mGdeMap.keySet().size() + 1;
         }
 
         @Override
         public Fragment getItem(int position) {
-            if(position == 0) {
+            if (position == 0) {
                 return PlainLayoutFragment.newInstance(R.layout.fragment_gde_about);
             } else {
-                String key = mGdeMap.keySet().toArray(new String[0])[position-1];
+                String key = mGdeMap.keySet().toArray(new String[0])[position - 1];
                 Fragment frag = GdeListFragment.newInstance(mGdeMap.get(key), position == mViewPager.getCurrentItem());
-                mFragments.append(position, new WeakReference<Fragment>(frag));
+                mFragments.append(position, new WeakReference<>(frag));
 
                 return frag;
             }
@@ -175,10 +165,10 @@ public class GdeActivity extends GdgNavDrawerActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            if(position == 0) {
+            if (position == 0) {
                 return getString(R.string.about);
-            } else if(position > -1 && position-1 < mGdeMap.keySet().size()) {
-                String title = mGdeMap.keySet().toArray(new String[0])[position-1];
+            } else if (position > -1 && position - 1 < mGdeMap.keySet().size()) {
+                String title = mGdeMap.keySet().toArray(new String[0])[position - 1];
                 title = title.length() > 14 ? Utils.getUppercaseLetters(title) : title;
                 return title;
             } else {
@@ -194,11 +184,11 @@ public class GdeActivity extends GdgNavDrawerActivity {
         public void onPageSelected(int position) {
             if (position == 0) {
                 trackView("GDE/About");
-            } else  {
-                String key = mGdeMap.keySet().toArray(new String[0])[position-1];
+            } else {
+                String key = mGdeMap.keySet().toArray(new String[0])[position - 1];
                 trackView("GDE/" + key);
 
-                WeakReference<Fragment> ref = mFragments.get(position-1);
+                WeakReference<Fragment> ref = mFragments.get(position - 1);
                 Fragment frag = null != ref ? ref.get() : null;
 
                 // We need to notify the fragment that it is selected
