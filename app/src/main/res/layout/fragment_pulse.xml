@@ -24,7 +24,9 @@
     <ListView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:id="@android:id/list"/>
+            android:drawSelectorOnTop="true"
+            android:id="@android:id/list"
+        />
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"

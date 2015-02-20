@@ -24,6 +24,7 @@
     <GridView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:drawSelectorOnTop="true"
             android:id="@android:id/list" android:stretchMode="columnWidth" android:numColumns="3"
             android:gravity="top"/>
     <LinearLayout
