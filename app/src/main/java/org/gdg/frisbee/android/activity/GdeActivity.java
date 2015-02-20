@@ -38,7 +38,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
     @InjectView(R.id.pager)
     ViewPager mViewPager;
 
-    @InjectView(R.id.titles)
+    @InjectView(R.id.sliding_tabs)
     SlidingTabLayout mSlidingTabLayout;
 
     private Handler mHandler = new Handler();
@@ -53,6 +53,9 @@ public class GdeActivity extends GdgNavDrawerActivity {
 
         getSupportActionBar().setLogo(R.drawable.ic_gde_logo_wide);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
+        mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.tab_selected_strip));
 
         mViewPagerAdapter = new GdeCategoryAdapter(getSupportFragmentManager());
 
@@ -132,9 +135,16 @@ public class GdeActivity extends GdgNavDrawerActivity {
         Timber.d("onPause()");
     }
 
+    public interface Listener {
+        /**
+         * Called when the item has been selected in the ViewPager.
+         */
+        void onPageSelected();
+    }
+
     public class GdeCategoryAdapter extends FragmentStatePagerAdapter implements ViewPager.OnPageChangeListener {
-        private HashMap<String, GdeList> mGdeMap;
         private final SparseArray<WeakReference<Fragment>> mFragments = new SparseArray<>();
+        private HashMap<String, GdeList> mGdeMap;
 
         public GdeCategoryAdapter(FragmentManager fm) {
             super(fm);
@@ -202,12 +212,5 @@ public class GdeActivity extends GdgNavDrawerActivity {
         public void onPageScrollStateChanged(int i) {
         }
 
-    }
-
-    public interface Listener {
-        /**
-         * Called when the item has been selected in the ViewPager.
-         */
-        void onPageSelected();
     }
 }

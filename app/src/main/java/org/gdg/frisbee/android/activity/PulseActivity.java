@@ -49,14 +49,11 @@ import timber.log.Timber;
 
 public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnNavigationListener {
 
-    private ArrayAdapter<String> mSpinnerAdapter;
-
     @InjectView(R.id.pager)
     ViewPager mViewPager;
-
-    @InjectView(R.id.titles)
+    @InjectView(R.id.sliding_tabs)
     SlidingTabLayout mSlidingTabLayout;
-
+    private ArrayAdapter<String> mSpinnerAdapter;
     private MyAdapter mViewPagerAdapter;
     private ArrayList<String> mPulseTargets;
     private ApiRequest mFetchGlobalPulseTask;
@@ -72,6 +69,8 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
 
         final GroupDirectory mClient = new GroupDirectory();
 
+        mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
+        mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.tab_selected_strip));
         mSlidingTabLayout.setOnPageChangeListener(this);
 
         mPulseTargets = new ArrayList<>();

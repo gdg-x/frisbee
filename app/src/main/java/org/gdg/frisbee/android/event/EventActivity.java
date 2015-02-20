@@ -36,7 +36,7 @@ public class EventActivity extends GdgActivity {
     @InjectView(R.id.pager)
     ViewPager mViewPager;
 
-    @InjectView(R.id.titles)
+    @InjectView(R.id.sliding_tabs)
     SlidingTabLayout mSlidingTabLayout;
 
     private String mEventId;
@@ -52,6 +52,8 @@ public class EventActivity extends GdgActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setTitle(R.string.event);
 
+        mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
+        mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.tab_selected_strip));
         mSlidingTabLayout.setOnPageChangeListener(this);
 
         final EventPagerAdapter mViewPagerAdapter = new EventPagerAdapter(this, getSupportFragmentManager());

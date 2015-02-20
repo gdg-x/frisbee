@@ -71,7 +71,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
     @InjectView(R.id.pager)
     ViewPager mViewPager;
 
-    @InjectView(R.id.titles)
+    @InjectView(R.id.sliding_tabs)
     SlidingTabLayout mSlidingTabLayout;
 
     private Handler mHandler = new Handler();
@@ -101,6 +101,9 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
 
         mLocationComparator = new ChapterComparator(mPreferences);
 
+        mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
+        mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.tab_selected_strip));
+        mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setOnPageChangeListener(this);
 
         mViewPagerAdapter = new MyAdapter(this, getSupportFragmentManager());
@@ -327,22 +330,19 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
 
         @Override
         public int getCount() {
-            if (mSelectedChapter == null) {
-                return 0;
-            } else {
-                return 3;
-            }
+            return 3;
         }
 
         @Override
         public Fragment getItem(int position) {
+            String gplusId = mSelectedChapter == null ? "" : mSelectedChapter.getGplusId();
             switch (position) {
                 case 0:
-                    return NewsFragment.newInstance(mSelectedChapter.getGplusId());
+                    return NewsFragment.newInstance(gplusId);
                 case 1:
-                    return InfoFragment.newInstance(mSelectedChapter.getGplusId());
+                    return InfoFragment.newInstance(gplusId);
                 case 2:
-                    return EventFragment.newInstance(mSelectedChapter.getGplusId());
+                    return EventFragment.newInstance(gplusId);
             }
             return null;
         }
