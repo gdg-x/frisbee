@@ -49,11 +49,20 @@ public class ChangelogFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        InputStream is = null;
         try {
-            InputStream is = getResources().getAssets().open("changelog.html");
+            is = getResources().getAssets().open("changelog.html");
             mChangelog.setText(Html.fromHtml(Utils.inputStreamToString(is)));
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }
