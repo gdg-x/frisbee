@@ -27,28 +27,22 @@ import android.view.MenuItem;
 import com.viewpagerindicator.TitlePageIndicator;
 
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.fragment.*;
+import org.gdg.frisbee.android.fragment.AboutFragment;
+import org.gdg.frisbee.android.fragment.ChangelogFragment;
+import org.gdg.frisbee.android.fragment.ContributorsFragment;
+import org.gdg.frisbee.android.fragment.ExtLibrariesFragment;
+import org.gdg.frisbee.android.fragment.GetInvolvedFragment;
+import org.gdg.frisbee.android.fragment.TranslatorsFragment;
 
 import butterknife.InjectView;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.activity
- * <p/>
- * User: maui
- * Date: 22.04.13
- * Time: 23:03
- */
 public class AboutActivity extends GdgActivity {
-    private static String LOG_TAG = "GDG-AboutActivity";
 
     @InjectView(R.id.pager)
     ViewPager mViewPager;
 
     @InjectView(R.id.titles)
     TitlePageIndicator mIndicator;
-
-    private AboutPagerAdapter mViewPagerAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,22 +55,20 @@ public class AboutActivity extends GdgActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setTitle(R.string.about);
 
-
         mIndicator.setOnPageChangeListener(this);
 
-        mViewPagerAdapter = new AboutPagerAdapter(this, getSupportFragmentManager());
-        mViewPager.setAdapter(mViewPagerAdapter);
+        mViewPager.setAdapter(new AboutPagerAdapter(this, getSupportFragmentManager()));
         mIndicator.setViewPager(mViewPager);
     }
 
     protected String getTrackedViewName() {
-        return "About/"+getResources().getStringArray(R.array.about_tabs)[getCurrentPage()];
+        return "About/" + getResources().getStringArray(R.array.about_tabs)[getCurrentPage()];
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(item.getItemId() == android.R.id.home) {
+        if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
         }
@@ -104,7 +96,7 @@ public class AboutActivity extends GdgActivity {
 
         @Override
         public Fragment getItem(int position) {
-            switch(position) {
+            switch (position) {
                 case 0:
                     return new AboutFragment();
                 case 1:

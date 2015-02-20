@@ -24,50 +24,36 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.utils.Utils;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-/**
- * Created with IntelliJ IDEA.
- * User: maui
- * Date: 08.07.13
- * Time: 01:49
- * To change this template use File | Settings | File Templates.
- */
 public class ExtLibrariesFragment extends Fragment {
 
     @InjectView(R.id.external)
     TextView mExternal;
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);    //To change body of overridden methods use File | Settings | File Templates.
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_external_libraries, null);
+        View v = inflater.inflate(R.layout.fragment_external_libraries, container, false);
         ButterKnife.inject(this, v);
         return v;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);    //To change body of overridden methods use File | Settings | File Templates.
+        super.onViewCreated(view, savedInstanceState);
 
-        InputStream is = null;
         try {
-            is = getResources().getAssets().open("third_party.html");
+            InputStream is = getResources().getAssets().open("third_party.html");
             mExternal.setText(Html.fromHtml(Utils.inputStreamToString(is)));
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
-
     }
 }

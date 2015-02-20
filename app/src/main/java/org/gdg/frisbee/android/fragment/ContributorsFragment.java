@@ -27,8 +27,6 @@ import android.widget.ListView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
-import java.util.ArrayList;
-
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.ContributorAdapter;
@@ -40,22 +38,16 @@ import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
 
+import java.util.ArrayList;
+
 import butterknife.ButterKnife;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import timber.log.Timber;
 
-/**
- * Created with IntelliJ IDEA.
- * User: maui
- * Date: 08.07.13
- * Time: 01:49
- * To change this template use File | Settings | File Templates.
- */
 public class ContributorsFragment extends GdgListFragment {
 
     protected ContributorAdapter mAdapter;
-    private ApiRequest mFetchContent;
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -82,7 +74,7 @@ public class ContributorsFragment extends GdgListFragment {
 
     protected void loadContributors() {
         GitHub githubClient = new GitHub();
-        mFetchContent = githubClient.getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO,
+        final ApiRequest mFetchContent = githubClient.getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO,
                 new Response.Listener<ArrayList<Contributor>>() {
                     @Override
                     public void onResponse(final ArrayList<Contributor> contributors) {
@@ -97,17 +89,16 @@ public class ContributorsFragment extends GdgListFragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        //To change body of implemented methods use File | Settings | File Templates.
                     }
                 });
 
-        if(Utils.isOnline(getActivity())) {
+        if (Utils.isOnline(getActivity())) {
             mFetchContent.execute();
         } else {
             App.getInstance().getModelCache().getAsync("frisbee_contributors", false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
-                    ArrayList<Contributor> contributors = (ArrayList<Contributor>)item;
+                    ArrayList<Contributor> contributors = (ArrayList<Contributor>) item;
 
                     Crouton.makeText(getActivity(), getString(R.string.cached_content), Style.INFO).show();
                     mAdapter.addAll(contributors);
@@ -122,14 +113,9 @@ public class ContributorsFragment extends GdgListFragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Timber.d("onCreateView()");
-        View v = inflater.inflate(R.layout.fragment_gdl_list, null);
+        View v = inflater.inflate(R.layout.fragment_gde_list, container, false);
         ButterKnife.inject(this, v);
         return v;
     }

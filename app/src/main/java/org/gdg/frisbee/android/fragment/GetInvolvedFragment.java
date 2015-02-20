@@ -26,18 +26,11 @@ import org.gdg.frisbee.android.R;
 
 import butterknife.ButterKnife;
 
-/**
- * Created with IntelliJ IDEA.
- * User: maui
- * Date: 08.07.13
- * Time: 01:49
- * To change this template use File | Settings | File Templates.
- */
 public class GetInvolvedFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_get_involved, null);
+        View v = inflater.inflate(R.layout.fragment_get_involved, container, false);
         ButterKnife.inject(this, v);
         return v;
     }
