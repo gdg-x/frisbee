@@ -32,6 +32,7 @@ import java.io.InputStream;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import timber.log.Timber;
 
 public class ChangelogFragment extends Fragment {
 
@@ -54,13 +55,13 @@ public class ChangelogFragment extends Fragment {
             is = getResources().getAssets().open("changelog.html");
             mChangelog.setText(Html.fromHtml(Utils.inputStreamToString(is)));
         } catch (IOException e) {
-            e.printStackTrace();
+            Timber.e(e, e.getMessage());
         } finally {
             if (is != null) {
                 try {
                     is.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Timber.e(e, e.getMessage());
                 }
             }
         }
