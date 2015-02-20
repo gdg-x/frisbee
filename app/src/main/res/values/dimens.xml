@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <dimen name="logo_size">50dip</dimen>
+  <dimen name="text_size_small">12sp</dimen>
 </resources>
