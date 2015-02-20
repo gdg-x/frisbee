@@ -1,6 +1,5 @@
 package org.gdg.frisbee.android.app;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.android.volley.Response;
@@ -13,27 +12,20 @@ import org.gdg.frisbee.android.api.GdgX;
 import org.gdg.frisbee.android.api.model.OrganizerCheckResponse;
 
 public class OrganizerChecker {
-    private final Context mContext;
     private boolean mIsOrganizer = false;
     private long mLastOrganizerCheck = 0;
     private String mCheckedId = null;
     private SharedPreferences mPreferences;
 
-    public OrganizerChecker(Context context, SharedPreferences preferences) {
-        mContext = context;
+    public OrganizerChecker(SharedPreferences preferences) {
         mPreferences = preferences;
-    }
 
-    public void setLastOrganizerCheckTime(long lastOrganizerCheck) {
-        mLastOrganizerCheck = lastOrganizerCheck;
+        mLastOrganizerCheck = mPreferences.getLong("organizer_check_time", 0);
+        mCheckedId = mPreferences.getString("organizer_check_id", null);
     }
 
     public long getLastOrganizerCheckTime(){
         return mLastOrganizerCheck;
-    }
-
-    public void setLastOrganizerCheckId(String organizerCheckId) {
-        mCheckedId = organizerCheckId;
     }
 
     public String getLastOrganizerCheckId() {

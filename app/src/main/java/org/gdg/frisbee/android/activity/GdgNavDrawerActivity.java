@@ -200,10 +200,10 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     public boolean isOrganizer() {
-        return ((App) getApplication()).isOrganizer();
+        return App.getInstance().isOrganizer();
     }
 
     protected void checkOrganizer(final OrganizerChecker.OrganizerResponseHandler responseHandler) {
-        ((App) getApplication()).checkOrganizer(getGoogleApiClient(), responseHandler);
+        App.getInstance().checkOrganizer(getGoogleApiClient(), responseHandler);
     }
 }

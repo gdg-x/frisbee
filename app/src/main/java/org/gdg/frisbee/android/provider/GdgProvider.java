@@ -24,12 +24,13 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
-import android.util.Log;
+
 import org.gdg.frisbee.android.activity.SearchActivity;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
+
 import timber.log.Timber;
 
 public class GdgProvider extends ContentProvider {
@@ -54,8 +55,7 @@ public class GdgProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        App app = (App) getContext().getApplicationContext();
-        app.getModelCache().getAsync("chapter_list_hub", false, new ModelCache.CacheListener() {
+        App.getInstance().getModelCache().getAsync("chapter_list_hub", false, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 mDirectory = (Directory)item;
