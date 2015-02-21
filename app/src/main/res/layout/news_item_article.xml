@@ -1,37 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content" android:padding="10dip">
-    <View android:layout_width="fill_parent"
-          android:layout_height="1dip" android:background="@color/cloud" android:layout_marginBottom="5dip"
-          android:layout_marginLeft="5dip" android:layout_marginRight="5dip"></View>
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="vertical"
+  android:padding="10dip">
+
+  <View
+    android:layout_width="fill_parent"
+    android:layout_height="1dip"
+    android:layout_marginBottom="5dip"
+    android:layout_marginLeft="5dip"
+    android:layout_marginRight="5dip"
+    android:background="@color/cloud"></View>
+
+  <LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal">
+
+    <org.gdg.frisbee.android.view.ResizableImageView
+      android:id="@+id/image"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal|top"
+      android:layout_weight="2" />
+
     <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-        <org.gdg.frisbee.android.view.ResizableImageView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/image" android:layout_gravity="center_horizontal|top" android:layout_weight="2"
-                />
-        <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" android:layout_marginLeft="10dip" android:layout_weight="1">
-            <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="New Text"
-                    android:id="@+id/displayName"
-                    android:layout_marginBottom="10dip" android:autoLink="email|map|web"/>
-            <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="New Text"
-                    android:id="@+id/content" android:textColor="@color/asbestos"
-                    android:textAppearance="@android:style/TextAppearance.Small" android:autoLink="email|map|web"/>
-        </LinearLayout>
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="10dip"
+      android:layout_weight="1"
+      android:orientation="vertical">
+
+      <TextView
+        android:id="@+id/displayName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dip"
+        android:autoLink="email|map|web"
+        android:text="New Text" />
+
+      <TextView
+        android:id="@+id/content"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:autoLink="email|map|web"
+        android:text="New Text"
+        android:textAppearance="@android:style/TextAppearance.Small"
+        android:textColor="@color/asbestos" />
     </LinearLayout>
+  </LinearLayout>
 </LinearLayout>

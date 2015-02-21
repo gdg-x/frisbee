@@ -2,105 +2,105 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
-  android:orientation="vertical"
   android:layout_width="match_parent"
-  android:layout_height="match_parent">
+  android:layout_height="match_parent"
+  android:orientation="vertical">
 
   <LinearLayout
-    android:orientation="vertical"
+    android:id="@+id/loading"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:id="@+id/loading"
-    android:gravity="center_vertical|center_horizontal">
+    android:gravity="center_vertical|center_horizontal"
+    android:orientation="vertical">
 
     <org.gdg.frisbee.android.view.AnimationImageView
+      android:id="@+id/imageView"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
-      android:id="@+id/imageView"
       android:src="@drawable/gdg_load" />
   </LinearLayout>
 
   <ScrollView
+    android:id="@+id/scrollView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/scrollView">
+    android:layout_height="match_parent">
 
     <RelativeLayout
-      android:orientation="vertical"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
+      android:orientation="vertical"
       android:padding="10dip">
 
       <ImageView
+        android:id="@+id/group_logo"
         android:layout_width="@dimen/logo_size"
         android:layout_height="@dimen/logo_size"
-        android:id="@+id/group_logo"
-        android:scaleType="fitCenter"
-        android:src="@drawable/icon"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_margin="8dip" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="8dip"
+        android:scaleType="fitCenter"
+        android:src="@drawable/icon" />
 
       <TextView
+        android:id="@+id/date"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        tools:text="March 14, 2014"
-        android:id="@+id/date"
-        android:gravity="center_horizontal"
-        android:textStyle="bold"
         android:layout_alignParentTop="true"
         android:layout_marginTop="16dip"
-        android:layout_toLeftOf="@+id/group_logo" />
+        android:layout_toLeftOf="@+id/group_logo"
+        android:gravity="center_horizontal"
+        android:textStyle="bold"
+        tools:text="March 14, 2014" />
 
       <TextView
+        android:id="@+id/title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        tools:text="Event Title"
-        android:id="@+id/title"
-        android:gravity="center_horizontal"
-        android:textAppearance="?android:textAppearanceLarge"
         android:layout_below="@+id/date"
         android:layout_margin="16dip"
-        android:layout_toLeftOf="@+id/group_logo" />
+        android:layout_toLeftOf="@+id/group_logo"
+        android:gravity="center_horizontal"
+        android:textAppearance="?android:textAppearanceLarge"
+        tools:text="Event Title" />
 
       <TextView
+        android:id="@+id/start_time"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        tools:text="Begin 20:15"
-        android:id="@+id/start_time"
-        android:gravity="start"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/title"
         android:layout_marginLeft="16dip"
-        android:layout_marginRight="16dip" />
+        android:layout_marginRight="16dip"
+        android:gravity="start"
+        tools:text="Begin 20:15" />
 
       <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/event_description"
-        android:id="@+id/textView"
-        android:textStyle="bold"
-        android:textAppearance="@android:style/TextAppearance.Medium"
-        android:layout_below="@+id/start_time"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginLeft="16dip" />
+        android:layout_below="@+id/start_time"
+        android:layout_marginLeft="16dip"
+        android:text="@string/event_description"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        android:textStyle="bold" />
 
       <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/event_description_container"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_gravity="center"
-        android:background="@drawable/resources_box"
-        android:padding="8dip"
-        android:id="@+id/event_description_container"
-        android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/textView"
+        android:layout_gravity="center"
         android:layout_marginLeft="8dip"
-        android:layout_marginRight="8dip">
+        android:layout_marginRight="8dip"
+        android:background="@drawable/resources_box"
+        android:orientation="vertical"
+        android:padding="8dip">
 
         <TextView
           android:id="@+id/event_description"
