@@ -16,11 +16,12 @@
   ~ limitations under the License.
 -->
 
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
+<android.support.v4.widget.DrawerLayout
   android:id="@+id/drawer"
+  xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
-  android:layout_height="match_parent">
+  android:layout_height="match_parent"
+  android:orientation="vertical">
 
   <LinearLayout
     android:id="@+id/content_frame"
@@ -28,15 +29,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.viewpagerindicator.TitlePageIndicator
-      android:id="@+id/titles"
+    <org.gdg.frisbee.android.view.SlidingTabLayout
+      android:id="@+id/sliding_tabs"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_width="match_parent" />
+      android:background="@color/theme_primary" />
 
     <android.support.v4.view.ViewPager
       android:id="@+id/pager"
-      android:layout_height="wrap_content"
-      android:layout_width="match_parent" />
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content" />
   </LinearLayout>
 
   <ListView
@@ -44,8 +46,8 @@
     android:layout_width="240dp"
     android:layout_height="match_parent"
     android:layout_gravity="start"
+    android:background="#111"
     android:choiceMode="singleChoice"
     android:divider="@android:color/transparent"
-    android:dividerHeight="0dp"
-    android:background="#111" />
+    android:dividerHeight="0dp" />
 </android.support.v4.widget.DrawerLayout>

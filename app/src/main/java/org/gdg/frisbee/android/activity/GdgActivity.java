@@ -125,6 +125,7 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setElevation(0);
         }
     }
 

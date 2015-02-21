@@ -17,21 +17,30 @@
   -->
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
-    <org.gdg.frisbee.android.view.NonSwipeableViewPager android:id="@+id/pager"
-                                       android:layout_height="match_parent"
-                                       android:layout_width="match_parent"></org.gdg.frisbee.android.view.NonSwipeableViewPager>
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" android:id="@+id/loading" android:visibility="gone"
-            android:background="@color/light_semi_transparent" android:clickable="true"
-            android:gravity="center_vertical|center_horizontal">
-        <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/progressBar" android:indeterminate="true"/>
-    </LinearLayout>
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+  <org.gdg.frisbee.android.view.NonSwipeableViewPager
+    android:id="@+id/pager"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"></org.gdg.frisbee.android.view.NonSwipeableViewPager>
+
+  <LinearLayout
+    android:id="@+id/loading"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/light_semi_transparent"
+    android:clickable="true"
+    android:gravity="center_vertical|center_horizontal"
+    android:orientation="vertical"
+    android:visibility="gone">
+
+    <ProgressBar
+      android:id="@+id/progressBar"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:indeterminate="true" />
+  </LinearLayout>
 </FrameLayout>
+

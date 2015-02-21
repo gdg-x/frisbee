@@ -24,34 +24,22 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 
-import com.viewpagerindicator.TitlePageIndicator;
-
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgActivity;
-import org.gdg.frisbee.android.api.GroupDirectory;
+import org.gdg.frisbee.android.view.SlidingTabLayout;
 
 import butterknife.InjectView;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.activity
- * <p/>
- * User: maui
- * Date: 22.04.13
- * Time: 23:03
- */
 public class EventActivity extends GdgActivity {
 
     @InjectView(R.id.pager)
     ViewPager mViewPager;
 
-    @InjectView(R.id.titles)
-    TitlePageIndicator mIndicator;
+    @InjectView(R.id.sliding_tabs)
+    SlidingTabLayout mSlidingTabLayout;
 
-    private EventPagerAdapter mViewPagerAdapter;
     private String mEventId;
-    private GroupDirectory mClient;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,28 +52,29 @@ public class EventActivity extends GdgActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setTitle(R.string.event);
 
+        mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
+        mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.tab_selected_strip));
+        mSlidingTabLayout.setOnPageChangeListener(this);
 
-        mIndicator.setOnPageChangeListener(this);
-
-        mViewPagerAdapter = new EventPagerAdapter(this, getSupportFragmentManager());
+        final EventPagerAdapter mViewPagerAdapter = new EventPagerAdapter(this, getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);
-        mIndicator.setViewPager(mViewPager);
+        mSlidingTabLayout.setViewPager(mViewPager);
 
         mEventId = getIntent().getStringExtra(Const.EXTRA_EVENT_ID);
         String section = getIntent().getStringExtra(Const.EXTRA_SECTION);
-        if (EventPagerAdapter.SECTION_OVERVIEW.equals(section)){
-            mIndicator.setCurrentItem(0);
+        if (EventPagerAdapter.SECTION_OVERVIEW.equals(section)) {
+            mViewPager.setCurrentItem(0);
         }
     }
 
     protected String getTrackedViewName() {
-        return "Event/"+getResources().getStringArray(R.array.about_tabs)[getCurrentPage()];
+        return "Event/" + getResources().getStringArray(R.array.about_tabs)[getCurrentPage()];
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(item.getItemId() == android.R.id.home) {
+        if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
         }
@@ -109,13 +98,12 @@ public class EventActivity extends GdgActivity {
 
         @Override
         public int getCount() {
-            int count = mContext.getResources().getStringArray(R.array.event_tabs).length;
             return 1;
         }
 
         @Override
         public Fragment getItem(int position) {
-            switch(position) {
+            switch (position) {
                 case 0:
                     return EventOverviewFragment.createFor(mEventId);
                 case 1:

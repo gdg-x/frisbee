@@ -28,7 +28,6 @@ import android.widget.ArrayAdapter;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.viewpagerindicator.TitlePageIndicator;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.ApiRequest;
@@ -37,6 +36,7 @@ import org.gdg.frisbee.android.api.model.Pulse;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.fragment.PulseFragment;
+import org.gdg.frisbee.android.view.SlidingTabLayout;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
@@ -49,16 +49,11 @@ import timber.log.Timber;
 
 public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnNavigationListener {
 
-    private GroupDirectory mClient;
-
-    private ArrayAdapter<String> mSpinnerAdapter;
-
     @InjectView(R.id.pager)
     ViewPager mViewPager;
-
-    @InjectView(R.id.titles)
-    TitlePageIndicator mIndicator;
-
+    @InjectView(R.id.sliding_tabs)
+    SlidingTabLayout mSlidingTabLayout;
+    private ArrayAdapter<String> mSpinnerAdapter;
     private MyAdapter mViewPagerAdapter;
     private ArrayList<String> mPulseTargets;
     private ApiRequest mFetchGlobalPulseTask;
@@ -72,14 +67,16 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
 
         getSupportActionBar().setLogo(R.drawable.ic_logo_pulse);
 
-        mClient = new GroupDirectory();
+        final GroupDirectory mClient = new GroupDirectory();
 
-        mIndicator.setOnPageChangeListener(this);
+        mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
+        mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.tab_selected_strip));
+        mSlidingTabLayout.setOnPageChangeListener(this);
 
-        mPulseTargets = new ArrayList<String>();
+        mPulseTargets = new ArrayList<>();
 
         mViewPagerAdapter = new MyAdapter(this, getSupportFragmentManager());
-        mSpinnerAdapter = new ArrayAdapter<String>(PulseActivity.this, android.R.layout.simple_list_item_1);
+        mSpinnerAdapter = new ArrayAdapter<>(PulseActivity.this, android.R.layout.simple_list_item_1);
         getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         getSupportActionBar().setListNavigationCallbacks(mSpinnerAdapter, PulseActivity.this);
 
@@ -87,30 +84,30 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
         getSupportActionBar().setHomeButtonEnabled(true);
 
         mFetchGlobalPulseTask = mClient.getPulse(new Response.Listener<Pulse>() {
-                @Override
-                public void onResponse(final Pulse pulse) {
-                    getSupportActionBar().setListNavigationCallbacks(mSpinnerAdapter, PulseActivity.this);
-                    App.getInstance().getModelCache().putAsync("pulse_global", pulse, DateTime.now().plusDays(1), new ModelCache.CachePutListener() {
-                         @Override
-                         public void onPutIntoCache() {
-                            mPulseTargets.addAll(pulse.keySet());
-                            initSpinner();
-                         }
-                    });
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError volleyError) {
-                    Crouton.makeText(PulseActivity.this, getString(R.string.fetch_chapters_failed), Style.ALERT).show();
-                    Timber.e("Could'nt fetch chapter list", volleyError);
-                }
-            }
+                                                     @Override
+                                                     public void onResponse(final Pulse pulse) {
+                                                         getSupportActionBar().setListNavigationCallbacks(mSpinnerAdapter, PulseActivity.this);
+                                                         App.getInstance().getModelCache().putAsync("pulse_global", pulse, DateTime.now().plusDays(1), new ModelCache.CachePutListener() {
+                                                             @Override
+                                                             public void onPutIntoCache() {
+                                                                 mPulseTargets.addAll(pulse.keySet());
+                                                                 initSpinner();
+                                                             }
+                                                         });
+                                                     }
+                                                 }, new Response.ErrorListener() {
+                                                     @Override
+                                                     public void onErrorResponse(VolleyError volleyError) {
+                                                         Crouton.makeText(PulseActivity.this, getString(R.string.fetch_chapters_failed), Style.ALERT).show();
+                                                         Timber.e("Could'nt fetch chapter list", volleyError);
+                                                     }
+                                                 }
         );
 
         App.getInstance().getModelCache().getAsync("pulse_global", true, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
-                Pulse pulse = (Pulse)item;
+                Pulse pulse = (Pulse) item;
                 mPulseTargets.addAll(pulse.keySet());
                 initSpinner();
             }
@@ -134,13 +131,13 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
             pageName = "";
         }
 
-        return "Pulse/"+mViewPagerAdapter.getSelectedPulseTarget().replaceAll(" ", "-") +
+        return "Pulse/" + mViewPagerAdapter.getSelectedPulseTarget().replaceAll(" ", "-") +
                 "/" + pageName;
     }
 
     private void initSpinner() {
         Collections.sort(mPulseTargets);
-        mPulseTargets.add(0,"Global");
+        mPulseTargets.add(0, "Global");
         mViewPagerAdapter.setSelectedPulseTarget(mPulseTargets.get(0));
         mSpinnerAdapter.clear();
 
@@ -152,7 +149,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
             }
         }
         mViewPager.setAdapter(mViewPagerAdapter);
-        mIndicator.setViewPager(mViewPager);
+        mSlidingTabLayout.setViewPager(mViewPager);
     }
 
     @Override
@@ -160,7 +157,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
         String previous = mViewPagerAdapter.getSelectedPulseTarget();
         getSupportActionBar().setSelectedNavigationItem(itemPosition);
         mViewPagerAdapter.setSelectedPulseTarget(mSpinnerAdapter.getItem(itemPosition));
-        if(!previous.equals(mSpinnerAdapter.getItem(itemPosition))) {
+        if (!previous.equals(mSpinnerAdapter.getItem(itemPosition))) {
             Timber.d("Switching chapter!");
             mViewPagerAdapter.notifyDataSetChanged();
         }
@@ -191,7 +188,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
 
         @Override
         public int getCount() {
-            if(mSelectedPulseTarget == null)
+            if (mSelectedPulseTarget == null)
                 return 0;
             else
                 return 3;
@@ -199,7 +196,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
 
         @Override
         public Fragment getItem(int position) {
-            switch(position) {
+            switch (position) {
                 case 0:
                     return PulseFragment.newInstance(0, mSelectedPulseTarget);
                 case 1:
@@ -212,7 +209,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
 
         @Override
         public CharSequence getPageTitle(int position) {
-            switch(position) {
+            switch (position) {
                 case 0:
                     return mContext.getText(R.string.pulse_events);
                 case 1:
@@ -228,7 +225,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
         }
 
         public void setSelectedPulseTarget(String pulseTarget) {
-            if(mSelectedPulseTarget != null)
+            if (mSelectedPulseTarget != null)
                 trackView();
 
             this.mSelectedPulseTarget = pulseTarget;

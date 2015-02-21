@@ -17,43 +17,57 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
 
-    <ListView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:drawSelectorOnTop="true"
-            android:id="@android:id/list"/>
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" android:id="@+id/loading" android:gravity="center_vertical|center_horizontal">
-        <org.gdg.frisbee.android.view.AnimationImageView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageView" android:src="@drawable/gdg_load"/>
-    </LinearLayout>
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" android:id="@+id/empty" android:gravity="center_vertical|center_horizontal">
+  <ListView
+    android:id="@android:id/list"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:drawSelectorOnTop="true" />
 
-        <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:gravity="center_vertical|center_horizontal">
-            <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/imageView1" android:src="@drawable/no_events"/>
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/no_scheduled_events"
-                    android:id="@+id/textView" android:layout_marginTop="15dip" android:layout_gravity="left"
-                    android:singleLine="true"/>
-        </LinearLayout>
+  <LinearLayout
+    android:id="@+id/loading"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center_vertical|center_horizontal"
+    android:orientation="vertical">
+
+    <org.gdg.frisbee.android.view.AnimationImageView
+      android:id="@+id/imageView"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:src="@drawable/gdg_load" />
+  </LinearLayout>
+
+  <LinearLayout
+    android:id="@+id/empty"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center_vertical|center_horizontal"
+    android:orientation="vertical">
+
+    <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:gravity="center_vertical|center_horizontal"
+      android:orientation="vertical">
+
+      <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/no_events" />
+
+      <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginTop="15dip"
+        android:singleLine="true"
+        android:text="@string/no_scheduled_events" />
     </LinearLayout>
+  </LinearLayout>
 </LinearLayout>

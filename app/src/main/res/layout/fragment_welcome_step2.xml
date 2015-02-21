@@ -1,37 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="fill_parent" android:background="@color/cloud">
+  android:layout_width="match_parent"
+  android:layout_height="fill_parent"
+  android:background="@color/cloud"
+  android:orientation="vertical">
 
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" android:layout_weight="1" android:gravity="center_vertical|center_horizontal"
-            android:padding="50dip">
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:text="@string/signin_description" android:id="@+id/textView" android:singleLine="false"
-                  android:linksClickable="false" android:textIsSelectable="false"
-                  android:textColor="@color/asbestos" android:textAppearance="@android:style/TextAppearance.Large"
-                  android:gravity="center_horizontal" android:layout_marginBottom="20dip"/>
-        <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/signin_with_google"
-                android:id="@+id/googleSignin" android:layout_gravity="center" android:background="@drawable/btn_g_signin"
-                style="@style/GoogleSignIn" android:layout_marginBottom="15dip"/>
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:text="@string/or" android:id="@+id/textView1" android:singleLine="false"
-                  android:linksClickable="false" android:textIsSelectable="false" android:textColor="@color/asbestos"
-                  android:textAppearance="@android:style/TextAppearance.Large" android:gravity="center_horizontal"
-                  android:layout_marginBottom="15dip" android:phoneNumber="false" android:autoText="false"/>
-        <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/skip"
-                android:id="@+id/skipSignin"/>
-    </LinearLayout>
-    <ImageView android:layout_width="fill_parent" android:layout_height="15dip" android:id="@+id/imageView"
-               android:background="@drawable/googly_bar"/>
+  <LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_weight="1"
+    android:gravity="center_vertical|center_horizontal"
+    android:orientation="vertical"
+    android:padding="50dip">
+
+    <TextView
+      android:id="@+id/textView"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="20dip"
+      android:gravity="center_horizontal"
+      android:linksClickable="false"
+      android:singleLine="false"
+      android:text="@string/signin_description"
+      android:textAppearance="@android:style/TextAppearance.Large"
+      android:textColor="@color/asbestos"
+      android:textIsSelectable="false" />
+
+    <Button
+      android:id="@+id/googleSignin"
+      style="@style/GoogleSignIn"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:layout_marginBottom="15dip"
+      android:background="@drawable/btn_g_signin"
+      android:text="@string/signin_with_google" />
+
+    <TextView
+      android:id="@+id/textView1"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="15dip"
+      android:autoText="false"
+      android:gravity="center_horizontal"
+      android:linksClickable="false"
+      android:phoneNumber="false"
+      android:singleLine="false"
+      android:text="@string/or"
+      android:textAppearance="@android:style/TextAppearance.Large"
+      android:textColor="@color/asbestos"
+      android:textIsSelectable="false" />
+
+    <Button
+      android:id="@+id/skipSignin"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/skip" />
+  </LinearLayout>
+
+  <ImageView
+    android:id="@+id/imageView"
+    android:layout_width="fill_parent"
+    android:layout_height="15dip"
+    android:background="@drawable/googly_bar" />
 </LinearLayout>

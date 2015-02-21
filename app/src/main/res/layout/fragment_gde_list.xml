@@ -17,36 +17,36 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
   android:layout_width="match_parent"
-  android:layout_height="match_parent">
+  android:layout_height="match_parent"
+  android:orientation="vertical">
 
   <GridView
+    android:id="@android:id/list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="top"
     android:numColumns="auto_fit"
-    android:id="@android:id/list"
-    android:stretchMode="columnWidth"
-    android:gravity="top" />
+    android:stretchMode="columnWidth" />
 
   <LinearLayout
-    android:orientation="vertical"
+    android:id="@+id/loading"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/loading"
-    android:gravity="center_vertical|center_horizontal">
+    android:gravity="center_vertical|center_horizontal"
+    android:orientation="vertical">
 
     <org.gdg.frisbee.android.view.AnimationImageView
+      android:id="@+id/imageView"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:id="@+id/imageView"
       android:src="@drawable/gdg_load" />
   </LinearLayout>
 
   <LinearLayout
-    android:orientation="vertical"
+    android:id="@+id/empty"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/empty"></LinearLayout>
+    android:orientation="vertical"></LinearLayout>
 </LinearLayout>
   

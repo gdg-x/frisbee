@@ -24,8 +24,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 
-import com.viewpagerindicator.TitlePageIndicator;
-
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.fragment.AboutFragment;
 import org.gdg.frisbee.android.fragment.ChangelogFragment;
@@ -33,6 +31,7 @@ import org.gdg.frisbee.android.fragment.ContributorsFragment;
 import org.gdg.frisbee.android.fragment.ExtLibrariesFragment;
 import org.gdg.frisbee.android.fragment.GetInvolvedFragment;
 import org.gdg.frisbee.android.fragment.TranslatorsFragment;
+import org.gdg.frisbee.android.view.SlidingTabLayout;
 
 import butterknife.InjectView;
 
@@ -41,8 +40,8 @@ public class AboutActivity extends GdgActivity {
     @InjectView(R.id.pager)
     ViewPager mViewPager;
 
-    @InjectView(R.id.titles)
-    TitlePageIndicator mIndicator;
+    @InjectView(R.id.sliding_tabs)
+    SlidingTabLayout mSlidingTabLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,10 +54,12 @@ public class AboutActivity extends GdgActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setTitle(R.string.about);
 
-        mIndicator.setOnPageChangeListener(this);
+        mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
+        mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.tab_selected_strip));
+        mSlidingTabLayout.setOnPageChangeListener(this);
 
         mViewPager.setAdapter(new AboutPagerAdapter(this, getSupportFragmentManager()));
-        mIndicator.setViewPager(mViewPager);
+        mSlidingTabLayout.setViewPager(mViewPager);
     }
 
     protected String getTrackedViewName() {

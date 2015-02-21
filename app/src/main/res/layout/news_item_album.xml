@@ -1,28 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="horizontal"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="horizontal">
+
+  <org.gdg.frisbee.android.view.SquaredImageView
+    android:id="@+id/pic1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_column="0"
+    android:layout_row="0"
+    android:layout_rowSpan="2"
+    android:layout_weight="1"
+    android:adjustViewBounds="true" />
+
+  <LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="2"
+    android:orientation="vertical">
 
     <org.gdg.frisbee.android.view.SquaredImageView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/pic1" android:layout_row="0" android:layout_column="0"
-            android:layout_rowSpan="2" android:layout_weight="1" android:adjustViewBounds="true" />
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent" android:layout_weight="2">
-        <org.gdg.frisbee.android.view.SquaredImageView
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:id="@+id/pic2" android:layout_row="0" android:layout_column="1" android:layout_weight="1"
-                android:adjustViewBounds="true"/>
-        <org.gdg.frisbee.android.view.SquaredImageView
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:id="@+id/pic3" android:layout_column="1" android:layout_row="1" android:layout_weight="1"
-                android:adjustViewBounds="true"/>
-    </LinearLayout>
+      android:id="@+id/pic2"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:layout_column="1"
+      android:layout_row="0"
+      android:layout_weight="1"
+      android:adjustViewBounds="true" />
+
+    <org.gdg.frisbee.android.view.SquaredImageView
+      android:id="@+id/pic3"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:layout_column="1"
+      android:layout_row="1"
+      android:layout_weight="1"
+      android:adjustViewBounds="true" />
+  </LinearLayout>
 </LinearLayout>

@@ -17,30 +17,36 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
 
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/contributors"
-            android:id="@+id/textView" android:padding="10dip"/>
-    <GridView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:drawSelectorOnTop="true"
-            android:numColumns="auto_fit"
-            android:id="@android:id/list" android:stretchMode="columnWidth"
-            android:gravity="top"/>
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" android:id="@+id/loading" android:gravity="center_vertical|center_horizontal">
-    </LinearLayout>
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" android:id="@+id/empty">
-    </LinearLayout>
+  <TextView
+    android:id="@+id/textView"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dip"
+    android:text="@string/contributors" />
+
+  <GridView
+    android:id="@android:id/list"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:drawSelectorOnTop="true"
+    android:gravity="top"
+    android:numColumns="auto_fit"
+    android:stretchMode="columnWidth" />
+
+  <LinearLayout
+    android:id="@+id/loading"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center_vertical|center_horizontal"
+    android:orientation="vertical"></LinearLayout>
+
+  <LinearLayout
+    android:id="@+id/empty"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"></LinearLayout>
 </LinearLayout>

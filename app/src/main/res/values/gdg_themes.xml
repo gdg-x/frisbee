@@ -20,26 +20,26 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
   <style name="Theme.GDG.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+    <item name="android:windowContentOverlay">@null</item>
     <item name="colorPrimary">@color/material_blue_500</item>
     <item name="colorPrimaryDark">@color/material_blue_700</item>
   </style>
 
   <style name="GDG.SeeTrough" parent="Theme.GDG">
-      <item name="android:windowIsTranslucent">true</item>
-      <item name="android:windowBackground">@color/semi_transparent</item>
-      <item name="android:windowContentOverlay">@null</item>
-      <item name="android:windowNoTitle">true</item>
-      <item name="android:backgroundDimEnabled">false</item>
-      <item name="windowActionBar">false</item>
+    <item name="android:windowIsTranslucent">true</item>
+    <item name="android:windowBackground">@color/semi_transparent</item>
+    <item name="android:windowContentOverlay">@null</item>
+    <item name="android:windowNoTitle">true</item>
+    <item name="android:backgroundDimEnabled">false</item>
+    <item name="windowActionBar">false</item>
   </style>
 
   <style name="GDG.NoActionBar" parent="Theme.GDG">
-      <item name="windowActionBar">false</item>
-      <item name="android:windowNoTitle">true</item>
+    <item name="windowActionBar">false</item>
+    <item name="android:windowNoTitle">true</item>
   </style>
 
   <style name="Theme.GDG" parent="Theme.GDG.Base">
-    <item name="vpiTitlePageIndicatorStyle">@style/TitlePageIndicatorGDG</item>
     <item name="android:windowBackground">@color/default_bg</item>
     <item name="android:editTextStyle">@style/EditTextGDG</item>
 
