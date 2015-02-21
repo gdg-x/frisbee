@@ -29,7 +29,6 @@ import org.gdg.frisbee.android.activity.SearchActivity;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.cache.ModelCache;
 
 import timber.log.Timber;
 
@@ -61,7 +60,7 @@ public class GdgProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
 
-        if(! isSetupDone()) {
+        if (!isSetupDone()) {
             prepareProvider();
         }
 
