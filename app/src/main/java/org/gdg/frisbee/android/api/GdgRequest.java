@@ -33,7 +33,6 @@ import java.util.Map;
  */
 public abstract class GdgRequest<T> extends Request<T> {
 
-    private static final String LOG_TAG = "GDG-GdgRequest";
     private static final String BASE_URL = "https://developers.google.com";
     private static final String DIRECTORY_URL = BASE_URL + "/groups/directory/";
     private static final String USER_AGENT = "GDG-Frisbee/0.1 (Android)";

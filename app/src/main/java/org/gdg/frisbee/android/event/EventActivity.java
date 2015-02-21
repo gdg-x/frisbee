@@ -42,7 +42,6 @@ import butterknife.InjectView;
  * Time: 23:03
  */
 public class EventActivity extends GdgActivity {
-    private static String LOG_TAG = "GDG-EventActivity";
 
     @InjectView(R.id.pager)
     ViewPager mViewPager;

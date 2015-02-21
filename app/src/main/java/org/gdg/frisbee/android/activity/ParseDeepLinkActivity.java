@@ -15,8 +15,6 @@ import timber.log.Timber;
 
 public class ParseDeepLinkActivity extends Activity {
 
-    public static final String LOG_TAG = "GDG-ParseDeepLinkActivity";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

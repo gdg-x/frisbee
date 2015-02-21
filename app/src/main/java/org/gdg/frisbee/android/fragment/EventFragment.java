@@ -54,7 +54,6 @@ import de.keyboardsurfer.android.widget.crouton.Style;
  */
 public abstract class EventFragment extends GdgListFragment implements View.OnClickListener {
 
-    private static final String LOG_TAG = "GDG-EventFragment";
     protected GroupDirectory mClient;
 
     private int mSelectedMonth;

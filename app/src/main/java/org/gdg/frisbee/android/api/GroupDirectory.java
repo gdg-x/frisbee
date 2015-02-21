@@ -57,8 +57,6 @@ public class GroupDirectory {
     private static final String PULSE_URL = BASE_URL + "/groups/pulse_stats/";
     private static final String COUNTRY_PULSE_URL = BASE_URL + "/groups/pulse_stats/%s/";
 
-    private static final String LOG_TAG = "GDG-GroupDirectory";
-
     public GroupDirectory() {
     }
 

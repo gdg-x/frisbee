@@ -27,7 +27,6 @@ import timber.log.Timber;
 public class SearchActivity extends GdgNavDrawerActivity {
 
     public static final String ACTION_FOUND = "org.gdg.frisbee.android.FOUND";
-    public static final String LOG_TAG = "GDG-SearchActivity";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

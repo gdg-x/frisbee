@@ -23,11 +23,19 @@ import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.io.*;
+import org.gdg.frisbee.android.R;
+import org.joda.time.DateTime;
+import org.joda.time.Period;
+import org.joda.time.format.DateTimeFormat;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -35,10 +43,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.gdg.frisbee.android.R;
-import org.joda.time.DateTime;
-import org.joda.time.Period;
-import org.joda.time.format.DateTimeFormat;
+import timber.log.Timber;
 
 /**
  * GDG Aachen
@@ -130,7 +135,7 @@ public class Utils {
     }
 
     public static boolean isEmulator() {
-        Log.d("GDG", Build.PRODUCT);
+        Timber.d(Build.PRODUCT);
         return Build.PRODUCT.equals("google_sdk");
     }
 

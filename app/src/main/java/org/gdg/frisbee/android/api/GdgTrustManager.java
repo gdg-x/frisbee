@@ -40,8 +40,6 @@ import java.util.List;
  */
 public class GdgTrustManager implements X509TrustManager {
 
-    private static final String LOG_TAG = "GDG-GdgTrustManager";
-
     private X509TrustManager mDefaultTrustManager;
     private X509TrustManager mLocalTrustManager;
 

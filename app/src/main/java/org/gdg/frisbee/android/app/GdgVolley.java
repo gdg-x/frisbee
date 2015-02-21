@@ -33,8 +33,6 @@ import org.gdg.frisbee.android.api.GdgStack;
  */
 public class GdgVolley {
 
-    public static final String LOG_TAG = "GDG-GdgVolley";
-
     private static GdgVolley mInstance;
     public static GdgVolley getInstance() {
         return mInstance;

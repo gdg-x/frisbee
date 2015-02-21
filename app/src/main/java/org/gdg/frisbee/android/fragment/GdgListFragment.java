@@ -44,8 +44,6 @@ import butterknife.InjectView;
  */
 public class GdgListFragment extends Fragment {
 
-    private static final String LOG_TAG = "GDG-ListFragment";
-
     final private Handler mHandler = new Handler();
 
     final private Runnable mRequestFocus = new Runnable() {

@@ -17,8 +17,6 @@
 package org.gdg.frisbee.android.utils;
 
 
-import java.util.List;
-
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -28,7 +26,12 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+
 import org.gdg.frisbee.android.utils.base.ILastLocationFinder;
+
+import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * Optimized implementation of Last Location Finder for devices running Gingerbread
@@ -121,9 +124,9 @@ public class GingerbreadLastLocationFinder implements ILastLocationFinder {
                         locationManager.requestSingleUpdate(criteria, singleUpatePI);
                 }
             } catch (SecurityException ex) {
-                Log.e(TAG, "fail to request location update, ignore", ex);
+                Timber.e(TAG, "fail to request location update, ignore", ex);
             } catch (IllegalArgumentException ex) {
-                Log.d(TAG, "provider does not exist " + ex.getMessage());
+                Timber.d(TAG, "provider does not exist " + ex.getMessage());
             }
         }
 

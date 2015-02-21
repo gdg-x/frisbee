@@ -53,8 +53,6 @@ import timber.log.Timber;
 
 public class UpcomingEventWidgetProvider extends AppWidgetProvider {
 
-    public static final String LOG_TAG = "GDG-UpcomingEventWidgetProvider";
-
     public static class UpdateService extends Service {
         private SharedPreferences mPreferences;
         private GroupDirectory mDirectory;

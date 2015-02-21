@@ -21,8 +21,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.PowerManager;
-import android.util.Log;
 import android.util.SparseArray;
+
+import timber.log.Timber;
 
 /**
  * Helper for the common pattern of implementing a {@link BroadcastReceiver}
@@ -127,7 +128,7 @@ public abstract class WakefulBroadcastReceiver extends BroadcastReceiver {
             // We just log a warning here if there is no wake lock found, which could
             // happen for example if this function is called twice on the same
             // intent or the process is killed and restarted before processing the intent.
-            Log.w("WakefulBroadcastReceiver", "No active wake lock id #" + id);
+            Timber.w("No active wake lock id #" + id);
             return true;
         }
     }

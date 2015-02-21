@@ -39,8 +39,6 @@ import timber.log.Timber;
  */
 public class GdeActivity extends GdgNavDrawerActivity {
 
-    private static String LOG_TAG = "GDG-GdeActivity";
-
     private GdeDirectory mGdeDirectory;
 
     @InjectView(R.id.pager)
