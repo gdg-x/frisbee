@@ -40,7 +40,7 @@ public class DrawerAdapter extends BaseAdapter {
             //add(new DrawerItem(Const.DRAWER_GDL, R.drawable.drw_ic_gdl, R.string.gdl));
             add(new DrawerItem(Const.DRAWER_GDE, R.drawable.drw_ic_gde, R.string.gde));
             add(new DrawerItem(Const.DRAWER_PULSE, R.drawable.drw_ic_pulse, R.string.pulse));
-            add(new DrawerItem(Const.DRAWER_SPECIAL, R.drawable.drw_ic_devfest, R.string.devfest));
+            add(new DrawerItem(Const.DRAWER_SPECIAL, R.drawable.drw_ic_ioextended, R.string.ioextended));
             add(new DrawerItem(Const.DRAWER_ACHIEVEMENTS, R.drawable.drw_ic_achievements, R.string.achievements));
             add(new DrawerItem(Const.DRAWER_ARROW, R.drawable.drw_ic_arrow, R.string.arrow));
         }};
