@@ -44,6 +44,7 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 
 public abstract class GdgNavDrawerActivity extends GdgActivity {
 
+    private static final long DATE_2015_06_01_GMT_IN_MILLIS = 1433116800000L;
     protected DrawerAdapter mDrawerAdapter;
     protected ActionBarDrawerToggle mDrawerToggle;
     @InjectView(R.id.drawer)
@@ -93,12 +94,12 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                         break;
                     case Const.DRAWER_SPECIAL:
                         Bundle special = new Bundle();
-                        special.putInt(Const.SPECIAL_EVENT_LOGO_EXTRA, R.drawable.ic_logo_devfest);
-                        special.putString(Const.SPECIAL_EVENT_VIEWTAG_EXTRA, "devfest");
-                        special.putString(Const.SPECIAL_EVENT_CACHEKEY_EXTRA, "devfest");
+                        special.putInt(Const.SPECIAL_EVENT_LOGO_EXTRA, R.drawable.ioextended);
+                        special.putString(Const.SPECIAL_EVENT_VIEWTAG_EXTRA, "io-extended");
+                        special.putString(Const.SPECIAL_EVENT_CACHEKEY_EXTRA, "io-extended");
                         special.putLong(Const.SPECIAL_EVENT_START_EXTRA, DateTime.now().getMillis());
-                        special.putLong(Const.SPECIAL_EVENT_END_EXTRA, 1419984000000L);
-                        special.putInt(Const.SPECIAL_EVENT_DESCRIPTION_EXTRA, R.string.devfest_description);
+                        special.putLong(Const.SPECIAL_EVENT_END_EXTRA, DATE_2015_06_01_GMT_IN_MILLIS);
+                        special.putInt(Const.SPECIAL_EVENT_DESCRIPTION_EXTRA, R.string.ioextended_description);
                         navigateTo(SpecialEventActivity.class, special);
                         break;
                     case Const.DRAWER_PULSE:
