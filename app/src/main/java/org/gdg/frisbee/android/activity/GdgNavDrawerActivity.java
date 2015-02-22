@@ -36,6 +36,8 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.DrawerAdapter;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.OrganizerChecker;
+import org.gdg.frisbee.android.special.SpecialEventActivity;
+import org.gdg.frisbee.android.special.SpecialEvents;
 import org.joda.time.DateTime;
 
 import butterknife.InjectView;
@@ -44,7 +46,6 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 
 public abstract class GdgNavDrawerActivity extends GdgActivity {
 
-    private static final long DATE_2015_06_01_GMT_IN_MILLIS = 1433116800000L;
     protected DrawerAdapter mDrawerAdapter;
     protected ActionBarDrawerToggle mDrawerToggle;
     @InjectView(R.id.drawer)
@@ -93,13 +94,14 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                         navigateTo(GdeActivity.class, null);
                         break;
                     case Const.DRAWER_SPECIAL:
+                        SpecialEvents specialEvents = SpecialEvents.getCurrent();
                         Bundle special = new Bundle();
-                        special.putInt(Const.SPECIAL_EVENT_LOGO_EXTRA, R.drawable.ioextended);
-                        special.putString(Const.SPECIAL_EVENT_VIEWTAG_EXTRA, "io-extended");
-                        special.putString(Const.SPECIAL_EVENT_CACHEKEY_EXTRA, "io-extended");
+                        special.putInt(Const.SPECIAL_EVENT_LOGO_EXTRA, specialEvents.getLogoResId());
+                        special.putString(Const.SPECIAL_EVENT_VIEWTAG_EXTRA, specialEvents.getTag());
+                        special.putString(Const.SPECIAL_EVENT_CACHEKEY_EXTRA, specialEvents.getTag());
                         special.putLong(Const.SPECIAL_EVENT_START_EXTRA, DateTime.now().getMillis());
-                        special.putLong(Const.SPECIAL_EVENT_END_EXTRA, DATE_2015_06_01_GMT_IN_MILLIS);
-                        special.putInt(Const.SPECIAL_EVENT_DESCRIPTION_EXTRA, R.string.ioextended_description);
+                        special.putLong(Const.SPECIAL_EVENT_END_EXTRA, specialEvents.getEndDateInMillis());
+                        special.putInt(Const.SPECIAL_EVENT_DESCRIPTION_EXTRA, specialEvents.getDescriptionResId());
                         navigateTo(SpecialEventActivity.class, special);
                         break;
                     case Const.DRAWER_PULSE:
