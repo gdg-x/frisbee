@@ -1,8 +1,6 @@
 package org.gdg.frisbee.android.adapter;
 
 import android.content.Context;
-import android.nfc.NfcAdapter;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +12,8 @@ import java.util.ArrayList;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.special.SpecialEvents;
 
-/**
- * Created with IntelliJ IDEA.
- * User: maui
- * Date: 03.07.13
- * Time: 02:50
- * To change this template use File | Settings | File Templates.
- */
 public class DrawerAdapter extends BaseAdapter {
 
     private Context mContext;
@@ -37,10 +29,10 @@ public class DrawerAdapter extends BaseAdapter {
     private void initAdapter() {
         mItems = new ArrayList<DrawerItem>() {{
             add(new DrawerItem(Const.DRAWER_HOME, R.drawable.drw_ic_home_gdg, R.string.home_gdg));
-            //add(new DrawerItem(Const.DRAWER_GDL, R.drawable.drw_ic_gdl, R.string.gdl));
             add(new DrawerItem(Const.DRAWER_GDE, R.drawable.drw_ic_gde, R.string.gde));
             add(new DrawerItem(Const.DRAWER_PULSE, R.drawable.drw_ic_pulse, R.string.pulse));
-            add(new DrawerItem(Const.DRAWER_SPECIAL, R.drawable.drw_ic_devfest, R.string.devfest));
+            SpecialEvents specialEvents = SpecialEvents.getCurrent();
+            add(new DrawerItem(Const.DRAWER_SPECIAL, specialEvents.getDrawerIconResId(), specialEvents.getTitleResId()));
             add(new DrawerItem(Const.DRAWER_ACHIEVEMENTS, R.drawable.drw_ic_achievements, R.string.achievements));
             add(new DrawerItem(Const.DRAWER_ARROW, R.drawable.drw_ic_arrow, R.string.arrow));
         }};
