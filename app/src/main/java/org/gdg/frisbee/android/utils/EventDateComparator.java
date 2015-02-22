@@ -12,7 +12,11 @@ public class EventDateComparator implements Comparator<EventAdapter.Item> {
     @Override
     public int compare(EventAdapter.Item event1, EventAdapter.Item event2) {
         if (event1.getEvent().getStart() == null){
-            return 1;
+            if (event2.getEvent().getStart() == null) {
+                return 0;
+            } else {
+                return 1;
+            }
         } else if (event2.getEvent().getStart() == null) {
             return -1;
         } else {
