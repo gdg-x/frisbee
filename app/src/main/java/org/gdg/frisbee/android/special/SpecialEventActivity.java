@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.gdg.frisbee.android.activity;
+package org.gdg.frisbee.android.special;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.activity.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.fragment.TaggedEventFragment;
 import org.gdg.frisbee.android.view.ResizableImageView;
 import org.joda.time.DateTime;
@@ -62,8 +63,8 @@ public class SpecialEventActivity extends GdgNavDrawerActivity {
         trans.replace(R.id.content_fragment, TaggedEventFragment.newInstance(
                 getIntent().hasExtra(Const.SPECIAL_EVENT_CACHEKEY_EXTRA) ? getIntent().getStringExtra(Const.SPECIAL_EVENT_CACHEKEY_EXTRA) : "specialevent",
                 getIntent().hasExtra(Const.SPECIAL_EVENT_VIEWTAG_EXTRA) ? getIntent().getStringExtra(Const.SPECIAL_EVENT_VIEWTAG_EXTRA) : "specialevent",
-                getIntent().getLongExtra(Const.SPECIAL_EVENT_START_EXTRA, DateTime.now().getMillis()),
-                getIntent().getLongExtra(Const.SPECIAL_EVENT_END_EXTRA, DateTime.now().getMillis() + 604800000),
+                getIntent().getLongExtra(Const.SPECIAL_EVENT_START_EXTRA, getIntent().getLongExtra(Const.SPECIAL_EVENT_END_EXTRA, DateTime.now().getMillis())),
+                getIntent().getLongExtra(Const.SPECIAL_EVENT_END_EXTRA, getIntent().getLongExtra(Const.SPECIAL_EVENT_END_EXTRA, DateTime.now().getMillis() + 604800000)),
                 getIntent().getIntExtra(Const.SPECIAL_EVENT_FRAGMENT_LAYOUT_EXTRA, R.layout.fragment_events)));
         trans.commit();
     }

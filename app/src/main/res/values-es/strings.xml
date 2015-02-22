@@ -113,7 +113,7 @@
     <string name="order_by_distance">Ordenar por distancia</string>
     <string name="gcm_event_ticker">Un nuevo evento de su GDG principal ha sido agendado</string>
     <string name="ioextended_description">Google I/O Extended se trata de unirte a la conferencia de Google IO en tu grupo local.</string>
-    <string name="ioextended">Extended 2014</string>
+    <string name="ioextended">Extended 2015</string>
     <string name="media_route_menu_title">Cast session</string>
     <string name="navigate_to">Dirección del evento</string>
 </resources>
