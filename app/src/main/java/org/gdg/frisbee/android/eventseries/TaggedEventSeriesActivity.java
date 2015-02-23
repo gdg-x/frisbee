@@ -53,10 +53,8 @@ public class TaggedEventSeriesActivity extends GdgNavDrawerActivity {
         
         setContentView(R.layout.activity_special);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_drawer);
+        Toolbar toolbar = getActionBarToolbar();
         toolbar.setTitle(R.string.devfest);
-        setSupportActionBar(toolbar);
 
         mTaggedEventSeries = getIntent().getParcelableExtra(Const.EXTRA_TAGGED_EVENT);
         if (mTaggedEventSeries == null) {
