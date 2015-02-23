@@ -23,14 +23,14 @@
 
   <LinearLayout
     android:id="@+id/loading"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:gravity="center_vertical|center_horizontal"
     android:orientation="vertical">
 
     <org.gdg.frisbee.android.view.AnimationImageView
       android:id="@+id/imageView"
-      android:layout_width="fill_parent"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:src="@drawable/gdg_load" />
   </LinearLayout>
@@ -42,8 +42,8 @@
 
     <LinearLayout
       android:id="@+id/scrollView"
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
       android:orientation="vertical"
       android:paddingBottom="5dip"
       android:paddingLeft="10dip"
@@ -60,15 +60,15 @@
         android:textStyle="bold" />
 
       <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:padding="8dip"
         card_view:cardCornerRadius="5dp">
 
         <LinearLayout
           android:id="@+id/about_box"
-          android:layout_width="fill_parent"
-          android:layout_height="fill_parent"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
           android:layout_gravity="center"
           android:layout_marginBottom="10dip"
           android:orientation="vertical">
@@ -92,15 +92,15 @@
         android:textStyle="bold" />
 
       <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:padding="8dip"
         card_view:cardCornerRadius="5dp">
 
         <LinearLayout
           android:id="@+id/organizer_box"
-          android:layout_width="fill_parent"
-          android:layout_height="fill_parent"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
           android:layout_gravity="center"
           android:layout_marginBottom="10dip"
           android:orientation="vertical"></LinearLayout>
@@ -117,15 +117,15 @@
         android:textStyle="bold" />
 
       <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:padding="8dip"
         card_view:cardCornerRadius="5dp">
 
         <LinearLayout
           android:id="@+id/resources_box"
-          android:layout_width="fill_parent"
-          android:layout_height="fill_parent"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
           android:layout_gravity="center"
           android:orientation="vertical" />
       </android.support.v7.widget.CardView>

@@ -22,23 +22,23 @@
               android:layout_height="match_parent">
 
     <GridView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:drawSelectorOnTop="true"
             android:id="@android:id/list" android:stretchMode="columnWidth" android:numColumns="3"
             android:gravity="top"/>
     <LinearLayout
             android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" android:id="@+id/loading" android:gravity="center_vertical|center_horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:id="@+id/loading" android:gravity="center_vertical|center_horizontal">
         <org.gdg.frisbee.android.view.AnimationImageView
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/imageView" android:src="@drawable/gdg_load"/>
     </LinearLayout>
     <LinearLayout
             android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" android:id="@+id/empty" android:gravity="center_vertical|center_horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:id="@+id/empty" android:gravity="center_vertical|center_horizontal">
     </LinearLayout>
 </LinearLayout>
