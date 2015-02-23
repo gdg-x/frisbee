@@ -52,18 +52,10 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     ListView mDrawerContent;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public void setContentView(int layoutResId) {
         super.setContentView(layoutResId);
 
         initNavigationDrawer();
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
     }
 
     private void initNavigationDrawer() {
@@ -85,9 +77,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                     case Const.DRAWER_HOME:
                         navigateTo(MainActivity.class, null);
                         break;
-                    //case Const.DRAWER_GDL:
-                    //    navigateTo(GdlActivity.class, null);
-                    //    break;
                     case Const.DRAWER_GDE:
                         navigateTo(GdeActivity.class, null);
                         break;

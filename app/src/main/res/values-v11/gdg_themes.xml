@@ -19,11 +19,6 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <style name="GDG.NoActionBar" parent="Theme.GDG">
-      <item name="android:windowActionBar">false</item>
-      <item name="android:windowNoTitle">true</item>
-  </style>
-
   <style name="GDG" parent="android:Theme.Holo.Light">
 
     <item name="android:editTextBackground">@drawable/edit_text_holo_light</item>

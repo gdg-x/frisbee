@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <style name="TabIndicator" />
+
+  <style name="ActionBarThemeOverlay" parent="">
+    <item name="android:textColorPrimary">#fff</item>
+    <item name="colorControlNormal">@android:color/white</item>
+    <item name="colorControlHighlight">#3fff</item>
+  </style>
+
+  <style name="ActionBar.TitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+    <item name="android:textColor">#fff</item>
+    <item name="android:textSize">18sp</item>
+  </style>
+
+</resources>
