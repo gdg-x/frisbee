@@ -17,6 +17,7 @@
 -->
 
 <resources>
+
   <style name="Theme.GDG" parent="Theme.GDG.Base">
     <item name="android:windowBackground">@color/default_bg</item>
   </style>

@@ -34,8 +34,8 @@
     <item name="windowActionBar">false</item>
   </style>
 
-  <style name="GDG.NoActionBar" parent="Theme.GDG">
-    <item name="windowActionBar">false</item>
+  <style name="GDG.NoActionBar" parent="Theme.GDG.Base">
+  <item name="windowActionBar">false</item>
     <item name="android:windowNoTitle">true</item>
   </style>
 

@@ -24,45 +24,58 @@
   android:orientation="vertical">
 
   <LinearLayout
-    android:id="@+id/content_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
-    <FrameLayout
-      android:id="@+id/content_fragment"
+    <android.support.v7.widget.Toolbar
+      android:id="@+id/toolbar"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_weight="2">/</FrameLayout>
+      android:layout_height="?attr/actionBarSize"
+      android:background="?attr/colorPrimary" />
 
     <LinearLayout
+      android:id="@+id/content_frame"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_weight="3"
-      android:orientation="vertical"
-      android:padding="10dip">
+      android:orientation="horizontal">
 
-      <view
-        android:id="@+id/special_logo"
-        class="org.gdg.frisbee.android.view.ResizableImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="25dip"
-        android:scaleType="matrix" />
+      <FrameLayout
+        android:id="@+id/content_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2" />
 
       <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/card_bg"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:orientation="vertical"
+        android:padding="10dip">
 
-        <TextView
-          android:id="@+id/special_description"
+        <view
+          android:id="@+id/special_logo"
+          class="org.gdg.frisbee.android.view.ResizableImageView"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:padding="10dip"
-          android:text="@string/special_description" />
+          android:padding="25dip"
+          android:scaleType="matrix" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:background="@drawable/card_bg"
+          android:orientation="vertical">
+
+          <TextView
+            android:id="@+id/special_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dip"
+            android:text="@string/special_description" />
+        </LinearLayout>
       </LinearLayout>
+
     </LinearLayout>
 
   </LinearLayout>
