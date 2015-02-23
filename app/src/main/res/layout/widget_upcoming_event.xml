@@ -14,18 +14,18 @@
 
   <ViewFlipper
     android:id="@+id/viewFlipper"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
       android:id="@+id/noEventContainer"
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
       android:orientation="vertical">
 
       <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
@@ -48,8 +48,8 @@
 
       <TextView
         android:id="@+id/textView_no_events"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:gravity="center_vertical|center_horizontal"
         android:text="@string/no_scheduled_events"
         android:textColor="@android:color/primary_text_dark" />
@@ -57,13 +57,13 @@
 
     <LinearLayout
       android:id="@+id/eventContainer"
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
       android:orientation="vertical"
       android:padding="3dip">
 
       <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
@@ -85,7 +85,7 @@
 
         <TextView
           android:id="@+id/startDate"
-          android:layout_width="fill_parent"
+          android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_gravity="center"
           android:gravity="right"
@@ -96,7 +96,7 @@
 
       <TextView
         android:id="@+id/title"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:gravity="right"
@@ -107,7 +107,7 @@
 
       <TextView
         android:id="@+id/location"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:gravity="right"
