@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.util.SparseArray;
 
 import com.android.volley.Response;
@@ -51,8 +52,8 @@ public class GdeActivity extends GdgNavDrawerActivity {
 
         setContentView(R.layout.activity_gde);
 
-        getSupportActionBar().setLogo(R.drawable.ic_gde_logo_wide);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Toolbar toolbar = getActionBarToolbar();
+        toolbar.setTitle(R.string.gde);
 
         mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
         mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.tab_selected_strip));
@@ -92,7 +93,6 @@ public class GdeActivity extends GdgNavDrawerActivity {
             }
         });
     }
-
 
     private void addGdes(final GdeList directory) {
         mHandler.post(new Runnable() {
