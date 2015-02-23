@@ -112,7 +112,9 @@
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
-    <activity android:name=".activity.PulseActivity" />
+    <activity
+      android:name=".activity.PulseActivity"
+      android:theme="@style/GDG.NoActionBar" />
     <activity android:name=".activity.ParseDeepLinkActivity">
       <intent-filter>
         <action android:name="com.google.android.apps.plus.VIEW_DEEP_LINK" />
