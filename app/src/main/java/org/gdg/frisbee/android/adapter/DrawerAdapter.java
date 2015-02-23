@@ -8,11 +8,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.special.TaggedEvent;
+
+import java.util.ArrayList;
 
 public class DrawerAdapter extends BaseAdapter {
 
@@ -35,6 +35,8 @@ public class DrawerAdapter extends BaseAdapter {
             add(new DrawerItem(Const.DRAWER_SPECIAL, taggedEvent.getDrawerIconResId(), taggedEvent.getTitleResId()));
             add(new DrawerItem(Const.DRAWER_ACHIEVEMENTS, R.drawable.drw_ic_achievements, R.string.achievements));
             add(new DrawerItem(Const.DRAWER_ARROW, R.drawable.drw_ic_arrow, R.string.arrow));
+            add(new DrawerItem(Const.DRAWER_SETTINGS, R.drawable.drw_ic_settings, R.string.settings));
+            add(new DrawerItem(Const.DRAWER_ABOUT, R.drawable.drw_ic_about, R.string.about));
         }};
     }
 
@@ -55,11 +57,11 @@ public class DrawerAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        if(view == null)
+        if (view == null)
             view = mInflater.inflate(R.layout.list_drawer_item, null);
 
-        ImageView mIcon = (ImageView)view.findViewById(R.id.icon);
-        TextView mTitle = (TextView)view.findViewById(R.id.title);
+        ImageView mIcon = (ImageView) view.findViewById(R.id.icon);
+        TextView mTitle = (TextView) view.findViewById(R.id.title);
 
         DrawerItem item = (DrawerItem) getItem(i);
         mIcon.setImageResource(item.getIcon());

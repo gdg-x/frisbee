@@ -23,8 +23,6 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -110,6 +108,12 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                             Crouton.makeText(GdgNavDrawerActivity.this, getString(R.string.arrow_need_games), Style.INFO).show();
                         }
                         break;
+                    case Const.DRAWER_SETTINGS:
+                        navigateTo(SettingsActivity.class, null);
+                        break;
+                    case Const.DRAWER_ABOUT:
+                        navigateTo(AboutActivity.class, null);
+                        break;
                 }
             }
         });
@@ -168,36 +172,10 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-        return true;
-
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Pass the event to ActionBarDrawerToggle, if it returns
         // true, then it has handled the app icon touch event
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        // Handle your other action bar items...
-
-        switch (item.getItemId()) {
-            case R.id.settings:
-                startActivity(new Intent(this, SettingsActivity.class));
-                return true;
-            case R.id.help:
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Const.URL_HELP)));
-                return true;
-            case R.id.about:
-                startActivity(new Intent(this, AboutActivity.class));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
+        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     @Override
