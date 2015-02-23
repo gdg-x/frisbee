@@ -93,6 +93,7 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
     public void setContentView(int layoutResId) {
         super.setContentView(layoutResId);
         ButterKnife.inject(this);
+        getActionBarToolbar();
     }
 
     @Override
