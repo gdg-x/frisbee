@@ -20,7 +20,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.*;
+import android.view.ContextMenu;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -33,18 +37,18 @@ import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Activity;
 import com.google.api.services.plus.model.ActivityFeed;
 
-import java.io.IOException;
-
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.adapter.NewsAdapter;
-import org.gdg.frisbee.android.api.GapiTransportChooser;
+import org.gdg.frisbee.android.api.GapiOkTransport;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
+
+import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -54,7 +58,7 @@ import timber.log.Timber;
 
 public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    final HttpTransport mTransport = GapiTransportChooser.newCompatibleTransport();
+    final HttpTransport mTransport = new GapiOkTransport();
     final JsonFactory mJsonFactory = new GsonFactory();
 
     @InjectView(R.id.news_fragment_swipe_refresh_layout)

@@ -176,19 +176,9 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
 
         private void showChild(RemoteViews views, int i) {
             if (i == 1){
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
-                    views.setDisplayedChild(R.id.viewFlipper, 1);
-                } else {
-                    views.setViewVisibility(R.id.noEventContainer, View.GONE);
-                    views.setViewVisibility(R.id.eventContainer, View.VISIBLE);
-                }
+                views.setDisplayedChild(R.id.viewFlipper, 1);
             } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
-                    views.setDisplayedChild(R.id.viewFlipper, 0);
-                } else {
-                    views.setViewVisibility(R.id.noEventContainer, View.VISIBLE);
-                    views.setViewVisibility(R.id.eventContainer, View.GONE);
-                }
+                views.setDisplayedChild(R.id.viewFlipper, 0);
             }
         }
     }

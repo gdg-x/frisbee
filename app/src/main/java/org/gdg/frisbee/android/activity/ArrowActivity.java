@@ -130,11 +130,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
             showNoNfc();
             mArrowHandler = new BaseArrowHandler();
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                mArrowHandler = new NfcArrowHandler();
-            } else {
-                mArrowHandler = new BaseArrowHandler();
-            }
+            mArrowHandler = new NfcArrowHandler();
         }
 
         scanImageView.setOnClickListener(new View.OnClickListener() {

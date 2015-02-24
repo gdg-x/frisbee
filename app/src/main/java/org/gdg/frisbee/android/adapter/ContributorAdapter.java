@@ -24,11 +24,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.Collection;
-
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Contributor;
 import org.gdg.frisbee.android.app.App;
+
+import java.util.Collection;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

@@ -46,13 +46,7 @@ public class GdgStack implements HttpStack {
     private HttpStack mInnerStack;
 
     public GdgStack() {
-        if (Build.VERSION.SDK_INT >= 9) {
-            mInnerStack = new OkStack(); // SPDY+HTTP
-        } else {
-            // Prior to Gingerbread, HttpUrlConnection was unreliable.
-            // See: http://android-developers.blogspot.com/2011/09/androids-http-clients.html
-            mInnerStack = new HttpClientStack(AndroidHttpClient.newInstance(USER_AGENT));
-        }
+        mInnerStack = new OkStack(); // SPDY+HTTP
     }
 
     private void acquireCsrfToken() {

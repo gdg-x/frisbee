@@ -7,10 +7,9 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.plus.PlusOneButton;
 import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -18,23 +17,23 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Person;
 import com.squareup.picasso.Picasso;
+
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.GapiTransportChooser;
+import org.gdg.frisbee.android.api.GapiOkTransport;
 import org.gdg.frisbee.android.api.model.Gde;
 import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.Utils;
-import org.gdg.frisbee.android.view.ResizableImageView;
 import org.gdg.frisbee.android.view.SquaredImageView;
-import timber.log.Timber;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import timber.log.Timber;
 
 /**
  * Created by maui on 29.05.2014.
@@ -46,7 +45,7 @@ public class GdeAdapter extends BaseAdapter {
 
     private ArrayList<Gde> mGdes;
 
-    final HttpTransport mTransport = GapiTransportChooser.newCompatibleTransport();
+    final HttpTransport mTransport = new GapiOkTransport();
     final JsonFactory mJsonFactory = new GsonFactory();
     private Plus mClient;
 

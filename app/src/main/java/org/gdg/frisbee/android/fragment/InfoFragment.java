@@ -21,7 +21,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,18 +38,18 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Person;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.GapiTransportChooser;
+import org.gdg.frisbee.android.api.GapiOkTransport;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -68,7 +67,7 @@ import timber.log.Timber;
  */
 public class InfoFragment extends Fragment {
 
-    final HttpTransport mTransport = GapiTransportChooser.newCompatibleTransport();
+    final HttpTransport mTransport = new GapiOkTransport();
     final JsonFactory mJsonFactory = new GsonFactory();
 
     private Plus mClient;
