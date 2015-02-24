@@ -37,6 +37,7 @@ import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Activity;
 import com.google.api.services.plus.model.ActivityFeed;
 
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.adapter.NewsAdapter;
@@ -68,10 +69,10 @@ public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.
 
     private NewsAdapter mAdapter;
 
-    public static NewsFragment newInstance(String plusId) {
+    public static NewsFragment newInstance(final String plusId) {
         NewsFragment fragment = new NewsFragment();
         Bundle arguments = new Bundle();
-        arguments.putString("plus_id", plusId);
+        arguments.putString(Const.EXTRA_PLUS_ID, plusId);
         fragment.setArguments(arguments);
         return fragment;
     }
@@ -130,9 +131,10 @@ public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.
             listView.setDividerHeight(0);
         }
 
+        final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID);
         if (Utils.isOnline(getActivity())) {
             new Builder<>(String.class, ActivityFeed.class)
-                    .addParameter(getArguments().getString("plus_id"))
+                    .addParameter(plusId)
                     .setOnPreExecuteListener(new CommonAsyncTask.OnPreExecuteListener() {
                         @Override
                         public void onPreExecute() {
@@ -173,7 +175,7 @@ public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.
                     })
                     .buildAndExecute();
         } else {
-            App.getInstance().getModelCache().getAsync("news_" + getArguments().getString("plus_id"), false, new ModelCache.CacheListener() {
+            App.getInstance().getModelCache().getAsync("news_" + plusId, false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
                     ActivityFeed feed = (ActivityFeed) item;
@@ -227,7 +229,6 @@ public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Timber.d("onCreateView()");
         View v = inflater.inflate(R.layout.fragment_news, container, false);
         ButterKnife.inject(this, v);
         return v;
@@ -236,14 +237,13 @@ public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Timber.d("onDestroy()");
     }
 
     @Override
     public void onRefresh() {
         if (Utils.isOnline(getActivity())) {
             new Builder<>(String.class, ActivityFeed.class)
-                    .addParameter(getArguments().getString("plus_id"))
+                    .addParameter(getArguments().getString(Const.EXTRA_PLUS_ID))
                     .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, ActivityFeed>() {
                         @Override
                         public ActivityFeed doInBackground(String... params) {
