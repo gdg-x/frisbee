@@ -61,6 +61,8 @@
 
 # Jodatime
 -dontwarn org.joda.convert.**
+-keep class org.joda.time.** { *; }
+-keep interface org.joda.time.** { *; }
 
 # ButterKnife
 -dontwarn butterknife.internal.**
