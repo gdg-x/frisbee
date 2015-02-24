@@ -18,11 +18,11 @@ package org.gdg.frisbee.android.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.utils.Utils;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

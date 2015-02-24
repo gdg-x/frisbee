@@ -141,13 +141,8 @@ public class PulseActivity extends GdgNavDrawerActivity implements ActionBar.OnN
         mViewPagerAdapter.setSelectedPulseTarget(mPulseTargets.get(0));
         mSpinnerAdapter.clear();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            mSpinnerAdapter.addAll(mPulseTargets);
-        } else {
-            for (String item : mPulseTargets) {
-                mSpinnerAdapter.add(item);
-            }
-        }
+        mSpinnerAdapter.addAll(mPulseTargets);
+
         mViewPager.setAdapter(mViewPagerAdapter);
         mSlidingTabLayout.setViewPager(mViewPager);
     }

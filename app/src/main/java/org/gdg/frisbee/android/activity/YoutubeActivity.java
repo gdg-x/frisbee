@@ -33,9 +33,7 @@ import org.gdg.frisbee.android.R;
 public class YoutubeActivity extends GdgActivity implements YouTubePlayer.OnInitializedListener {
     private YouTubePlayerSupportFragment mPlayerFragment;
 
-    private static final int PORTRAIT_ORIENTATION = Build.VERSION.SDK_INT < 9
-            ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-            : ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;
+    private static final int PORTRAIT_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;
 
     protected String getTrackedViewName() {
         return "YouTube";

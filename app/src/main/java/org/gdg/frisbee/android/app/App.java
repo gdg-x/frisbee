@@ -83,10 +83,8 @@ public class App extends Application implements LocationListener {
                     .detectDiskReads()
                     .detectDiskWrites()
                     .detectNetwork()
-                    .penaltyLog();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                b.penaltyFlashScreen();
-            }
+                    .penaltyLog()
+                    .penaltyFlashScreen();
 
             StrictMode.setThreadPolicy(b.build());
         } else {
