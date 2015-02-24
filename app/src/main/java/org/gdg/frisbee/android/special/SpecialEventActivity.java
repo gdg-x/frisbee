@@ -39,41 +39,37 @@ public class SpecialEventActivity extends GdgNavDrawerActivity {
     @InjectView(R.id.special_description)
     TextView mDescription;
     
-    private SpecialEvents mSpecialEvent;
+    private TaggedEvent mTaggedEvent;
 
     protected String getTrackedViewName() {
-        return mSpecialEvent != null && !TextUtils.isEmpty(mSpecialEvent.getTag())
-                ? mSpecialEvent.getTag() : "SpecialEvent";
+        return mTaggedEvent != null && !TextUtils.isEmpty(mTaggedEvent.getTag())
+                ? mTaggedEvent.getTag() : "SpecialEvent";
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getIntent().getIntExtra(Const.SPECIAL_EVENT_LAYOUT_EXTRA,
-                R.layout.activity_special));
+        setContentView(R.layout.activity_special);
 
-        mSpecialEvent = getIntent().getParcelableExtra(Const.SPECIAL_EVENT_EXTRA);
-        if (mSpecialEvent == null) {
+        mTaggedEvent = getIntent().getParcelableExtra(Const.EXTRA_TAGGED_EVENT);
+        if (mTaggedEvent == null) {
             throw new IllegalArgumentException("Special Event must be provided with " 
-                    + Const.SPECIAL_EVENT_EXTRA + " key as an Intent extra.");
+                    + Const.EXTRA_TAGGED_EVENT + " key as an Intent extra.");
         }
         
-        getSupportActionBar().setLogo(mSpecialEvent.getLogoResId());
+        getSupportActionBar().setLogo(mTaggedEvent.getLogoResId());
 
-        mDescription.setText(mSpecialEvent.getDescriptionResId());
+        mDescription.setText(mTaggedEvent.getDescriptionResId());
 
         if (mLogo != null) {
-            mLogo.setImageResource(mSpecialEvent.getLogoResId());
+            mLogo.setImageResource(mTaggedEvent.getLogoResId());
         }
 
         FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
-        final String cacheExtra = getIntent().getStringExtra(Const.SPECIAL_EVENT_CACHEKEY_EXTRA);
+        final String cacheExtra = getIntent().getStringExtra(Const.EXTRA_TAGGED_EVENT_CACHEKEY);
         trans.replace(R.id.content_fragment, TaggedEventFragment.newInstance(
                 cacheExtra != null ? cacheExtra : "specialevent",
-                mSpecialEvent,
-                getIntent().getIntExtra(Const.SPECIAL_EVENT_FRAGMENT_LAYOUT_EXTRA, 
-                        R.layout.fragment_events))
-        );
+                        mTaggedEvent));
         trans.commit();
     }
 

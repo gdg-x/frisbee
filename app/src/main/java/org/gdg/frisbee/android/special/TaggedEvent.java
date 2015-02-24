@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import org.gdg.frisbee.android.R;
 import org.joda.time.DateTime;
 
-public class SpecialEvents implements Parcelable {
+public class TaggedEvent implements Parcelable {
     private static final long DATE_2015_06_01_GMT_IN_MILLIS = 1433116800000L;
     private static final long DATE_2015_04_01_GMT_IN_MILLIS = 1427846400000L;
 
@@ -19,7 +19,7 @@ public class SpecialEvents implements Parcelable {
     private long mEndDateInMillis;
 
 
-    public SpecialEvents(String tag, int drawerIconResId, int titleResId, int descriptionResId, int logoResId, long endDateInMillis) {
+    public TaggedEvent(String tag, int drawerIconResId, int titleResId, int descriptionResId, int logoResId, long endDateInMillis) {
         mTag = tag;
         mDrawerIconResId = drawerIconResId;
         mTitleResId = titleResId;
@@ -29,8 +29,8 @@ public class SpecialEvents implements Parcelable {
         mEndDateInMillis = endDateInMillis;
     }
 
-    public static SpecialEvents getCurrent() {
-        return new SpecialEvents("wtm", R.drawable.drw_ic_wtm, R.string.wtm, R.string.wtm_description,
+    public static TaggedEvent getCurrent() {
+        return new TaggedEvent("wtm", R.drawable.drw_ic_wtm, R.string.wtm, R.string.wtm_description,
                 R.drawable.ic_wtm, DATE_2015_04_01_GMT_IN_MILLIS);
     }
 
@@ -75,7 +75,7 @@ public class SpecialEvents implements Parcelable {
         dest.writeLong(this.mEndDateInMillis);
     }
 
-    private SpecialEvents(Parcel in) {
+    private TaggedEvent(Parcel in) {
         this.mTag = in.readString();
         this.mDrawerIconResId = in.readInt();
         this.mTitleResId = in.readInt();
@@ -85,13 +85,13 @@ public class SpecialEvents implements Parcelable {
         this.mEndDateInMillis = in.readLong();
     }
 
-    public static final Parcelable.Creator<SpecialEvents> CREATOR = new Parcelable.Creator<SpecialEvents>() {
-        public SpecialEvents createFromParcel(Parcel source) {
-            return new SpecialEvents(source);
+    public static final Parcelable.Creator<TaggedEvent> CREATOR = new Parcelable.Creator<TaggedEvent>() {
+        public TaggedEvent createFromParcel(Parcel source) {
+            return new TaggedEvent(source);
         }
 
-        public SpecialEvents[] newArray(int size) {
-            return new SpecialEvents[size];
+        public TaggedEvent[] newArray(int size) {
+            return new TaggedEvent[size];
         }
     };
 }
