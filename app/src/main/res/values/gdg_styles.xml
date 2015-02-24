@@ -41,10 +41,6 @@
     <item name="android:button">@drawable/btn_check_holo_light</item>
   </style>
 
-  <style name="RadioButtonGDG" parent="android:Widget.CompoundButton.RadioButton">
-    <item name="android:button">@drawable/btn_radio_holo_light</item>
-  </style>
-
   <style name="ButtonGDG" parent="android:Widget.Button">
     <item name="android:background">@drawable/btn_default_holo_light</item>
     <item name="android:minHeight">48dip</item>
@@ -61,14 +57,6 @@
     <item name="android:dropDownSelector">@drawable/list_selector_holo_light</item>
   </style>
 
-  <style name="SpinnerGDG.DropDown">
-    <item name="android:spinnerMode">dropdown</item>
-  </style>
-
-  <style name="SpinnerDropDownItemGDG" parent="android:Widget.DropDownItem.Spinner">
-    <item name="android:checkMark">@drawable/btn_radio_holo_light</item>
-  </style>
-
   <style name="SeekBarGDG" parent="android:Widget.SeekBar">
     <item name="android:progressDrawable">@drawable/scrubber_progress_horizontal_holo_light</item>
     <item name="android:indeterminateDrawable">@drawable/scrubber_progress_horizontal_holo_light</item>
@@ -78,25 +66,6 @@
     <item name="android:thumbOffset">16dip</item>
     <item name="android:paddingLeft">16dip</item>
     <item name="android:paddingRight">16dip</item>
-  </style>
-
-  <style name="RatingBarGDG" parent="android:Widget.RatingBar">
-    <item name="android:progressDrawable">@drawable/ratingbar_full_holo_light</item>
-    <item name="android:indeterminateDrawable">@drawable/ratingbar_full_holo_light</item>
-  </style>
-
-  <style name="RatingBarBigGDG">
-    <item name="android:progressDrawable">@drawable/ratingbar_holo_light</item>
-    <item name="android:indeterminateDrawable">@drawable/ratingbar_holo_light</item>
-    <item name="android:minHeight">35dip</item>
-    <item name="android:maxHeight">35dip</item>
-  </style>
-
-  <style name="RatingBarSmallGDG">
-    <item name="android:progressDrawable">@drawable/ratingbar_small_holo_light</item>
-    <item name="android:indeterminateDrawable">@drawable/ratingbar_small_holo_light</item>
-    <item name="android:minHeight">16dip</item>
-    <item name="android:maxHeight">16dip</item>
   </style>
 
   <style name="ToggleGDG" parent="android:Widget.Button.Toggle">
@@ -110,10 +79,6 @@
 
   <style name="ListViewGDG.White" parent="android:Widget.ListView.White">
     <item name="android:listSelector">@drawable/list_selector_holo_light</item>
-  </style>
-
-  <style name="SpinnerItemGDG" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
-    <item name="android:textColor">#000000</item>
   </style>
 
 </resources>

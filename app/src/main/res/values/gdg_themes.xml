@@ -35,7 +35,7 @@
   </style>
 
   <style name="GDG.NoActionBar" parent="Theme.GDG.Base">
-  <item name="windowActionBar">false</item>
+    <item name="windowActionBar">false</item>
     <item name="android:windowNoTitle">true</item>
   </style>
 
@@ -47,33 +47,19 @@
 
     <item name="android:checkboxStyle">@style/CheckBoxGDG</item>
 
-    <item name="android:radioButtonStyle">@style/RadioButtonGDG</item>
-
     <item name="android:buttonStyle">@style/ButtonGDG</item>
 
     <item name="android:imageButtonStyle">@style/ImageButtonGDG</item>
 
     <item name="android:spinnerStyle">@style/SpinnerGDG</item>
 
-    <item name="android:dropDownSpinnerStyle">@style/SpinnerGDG.DropDown</item>
-
-    <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemGDG</item>
-
     <item name="android:seekBarStyle">@style/SeekBarGDG</item>
-
-    <item name="android:ratingBarStyle">@style/RatingBarGDG</item>
-
-    <item name="android:ratingBarStyleIndicator">@style/RatingBarBigGDG</item>
-
-    <item name="android:ratingBarStyleSmall">@style/RatingBarSmallGDG</item>
 
     <item name="android:buttonStyleToggle">@style/ToggleGDG</item>
 
     <item name="android:listViewStyle">@style/ListViewGDG</item>
 
     <item name="android:listViewWhiteStyle">@style/ListViewGDG.White</item>
-
-    <item name="android:spinnerItemStyle">@style/SpinnerItemGDG</item>
 
   </style>
 </resources>

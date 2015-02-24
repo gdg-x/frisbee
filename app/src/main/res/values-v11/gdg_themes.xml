@@ -20,16 +20,11 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
   <style name="GDG" parent="android:Theme.Holo.Light">
-
-    <item name="android:editTextBackground">@drawable/edit_text_holo_light</item>
-
     <item name="android:windowBackground">@color/default_bg</item>
 
     <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewGDG</item>
 
     <item name="android:listChoiceIndicatorMultiple">@drawable/btn_check_holo_light</item>
-
-    <item name="android:listChoiceIndicatorSingle">@drawable/btn_radio_holo_light</item>
 
     <item name="android:buttonStyle">@style/ButtonGDG</item>
 
@@ -39,20 +34,11 @@
 
     <item name="android:seekBarStyle">@style/SeekBarGDG</item>
 
-    <item name="android:ratingBarStyle">@style/RatingBarGDG</item>
-
-    <item name="android:ratingBarStyleIndicator">@style/RatingBarBigGDG</item>
-
-    <item name="android:ratingBarStyleSmall">@style/RatingBarSmallGDG</item>
-
     <item name="android:buttonStyleToggle">@style/ToggleGDG</item>
-
-    <item name="android:listChoiceBackgroundIndicator">@drawable/list_selector_holo_light</item>
 
     <item name="android:activatedBackgroundIndicator">@drawable/activated_background_holo_light</item>
 
     <item name="android:fastScrollThumbDrawable">@drawable/fastscroll_thumb_holo</item>
-
   </style>
 
 </resources>
