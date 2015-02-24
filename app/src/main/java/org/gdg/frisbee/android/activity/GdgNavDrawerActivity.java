@@ -94,14 +94,10 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                         navigateTo(GdeActivity.class, null);
                         break;
                     case Const.DRAWER_SPECIAL:
-                        SpecialEvents specialEvents = SpecialEvents.getCurrent();
+                        final SpecialEvents specialEvent = SpecialEvents.getCurrent();
                         Bundle special = new Bundle();
-                        special.putInt(Const.SPECIAL_EVENT_LOGO_EXTRA, specialEvents.getLogoResId());
-                        special.putString(Const.SPECIAL_EVENT_VIEWTAG_EXTRA, specialEvents.getTag());
-                        special.putString(Const.SPECIAL_EVENT_CACHEKEY_EXTRA, specialEvents.getTag());
-                        special.putLong(Const.SPECIAL_EVENT_START_EXTRA, DateTime.now().getMillis());
-                        special.putLong(Const.SPECIAL_EVENT_END_EXTRA, specialEvents.getEndDateInMillis());
-                        special.putInt(Const.SPECIAL_EVENT_DESCRIPTION_EXTRA, specialEvents.getDescriptionResId());
+                        special.putString(Const.SPECIAL_EVENT_CACHEKEY_EXTRA, specialEvent.getTag());
+                        special.putParcelable(Const.SPECIAL_EVENT_EXTRA, specialEvent);
                         navigateTo(SpecialEventActivity.class, special);
                         break;
                     case Const.DRAWER_PULSE:

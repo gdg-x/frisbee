@@ -31,7 +31,7 @@ public class DrawerAdapter extends BaseAdapter {
             add(new DrawerItem(Const.DRAWER_HOME, R.drawable.drw_ic_home_gdg, R.string.home_gdg));
             add(new DrawerItem(Const.DRAWER_GDE, R.drawable.drw_ic_gde, R.string.gde));
             add(new DrawerItem(Const.DRAWER_PULSE, R.drawable.drw_ic_pulse, R.string.pulse));
-            SpecialEvents specialEvents = SpecialEvents.getCurrent();
+            final SpecialEvents specialEvents = SpecialEvents.getCurrent();
             add(new DrawerItem(Const.DRAWER_SPECIAL, specialEvents.getDrawerIconResId(), specialEvents.getTitleResId()));
             add(new DrawerItem(Const.DRAWER_ACHIEVEMENTS, R.drawable.drw_ic_achievements, R.string.achievements));
             add(new DrawerItem(Const.DRAWER_ARROW, R.drawable.drw_ic_arrow, R.string.arrow));
