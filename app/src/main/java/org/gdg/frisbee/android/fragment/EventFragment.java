@@ -19,7 +19,12 @@ package org.gdg.frisbee.android.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.*;
+import android.text.TextUtils;
+import android.view.ContextMenu;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -28,17 +33,16 @@ import com.android.volley.VolleyError;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.PlusShare;
 
-import java.util.ArrayList;
-
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.adapter.EventAdapter;
-import org.gdg.frisbee.android.api.ApiRequest;
 import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.SimpleEvent;
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
+
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -54,13 +58,12 @@ import de.keyboardsurfer.android.widget.crouton.Style;
  */
 public abstract class EventFragment extends GdgListFragment implements View.OnClickListener {
 
+    
     protected GroupDirectory mClient;
 
-    private int mSelectedMonth;
     protected EventAdapter mAdapter;
 
     protected ArrayList<SimpleEvent> mEvents;
-    private ApiRequest mFetchEvents;
     protected DateTime mStart;
     protected DateTime mEnd;
     private GoogleApiClient mPlusClient;
@@ -78,7 +81,7 @@ public abstract class EventFragment extends GdgListFragment implements View.OnCl
     public static EventFragment newInstance(String plusId) {
         EventFragment fragment = new GdgEventFragment();
         Bundle arguments = new Bundle();
-        arguments.putString("plus_id", plusId);
+        arguments.putString(Const.EXTRA_PLUS_ID, plusId);
         fragment.setArguments(arguments);
         return fragment;
     }
@@ -98,7 +101,6 @@ public abstract class EventFragment extends GdgListFragment implements View.OnCl
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mSelectedMonth = DateTime.now().getMonthOfYear()+1;
         mClient = new GroupDirectory();
 
         mPlusClient = null;
@@ -115,7 +117,7 @@ public abstract class EventFragment extends GdgListFragment implements View.OnCl
 
         mAdapter = new EventAdapter(getActivity(), this);
         setListAdapter(mAdapter);
-        mEvents = new ArrayList<SimpleEvent>();
+        mEvents = new ArrayList<>();
 
         fetchEvents();
     }
@@ -126,7 +128,7 @@ public abstract class EventFragment extends GdgListFragment implements View.OnCl
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        SimpleEvent event = (SimpleEvent) mAdapter.getItem(info.position);
+        SimpleEvent event = mAdapter.getItem(info.position);
         menu.setHeaderTitle(event.getTitle());
         getActivity().getMenuInflater().inflate(R.menu.event_context, menu);
         menu.findItem(R.id.navigate_to).setVisible(event.getLocation() != null);
@@ -189,14 +191,8 @@ public abstract class EventFragment extends GdgListFragment implements View.OnCl
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_events, null);
+        View v = inflater.inflate(R.layout.fragment_events, container, false);
         ButterKnife.inject(this, v);
         return v;
     }
@@ -213,8 +209,9 @@ public abstract class EventFragment extends GdgListFragment implements View.OnCl
 
             Uri eventUri = Uri.parse(Const.URL_DEVELOPERS_GOOGLE_COM + "/events/" + event.getId() + "/");
 
-            if(getArguments() != null && getArguments().containsKey("plus_id")) {
-                String eventDeepLinkId = getArguments().getString("plus_id") + "/events/" + event.getId();
+            final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID);
+            if(!TextUtils.isEmpty(plusId)) {
+                String eventDeepLinkId = plusId + "/events/" + event.getId();
 
                 // Set call-to-action metadata.
                 builder.addCallToAction(

@@ -17,12 +17,14 @@
 package org.gdg.frisbee.android.fragment;
 
 import android.os.Bundle;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.android.volley.Response;
-
-import java.util.ArrayList;
-import java.util.Comparator;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -36,6 +38,9 @@ import org.gdg.frisbee.android.utils.EventDateComparator;
 import org.gdg.frisbee.android.utils.TaggedEventDistanceComparator;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
+
+import java.util.ArrayList;
+import java.util.Comparator;
 
 import butterknife.ButterKnife;
 import de.keyboardsurfer.android.widget.crouton.Crouton;

@@ -56,6 +56,8 @@ public class Const {
     public static final String SPECIAL_EVENT_START_EXTRA = "org.gdg.frisbee.SPECIAL_EVENT_START";
     public static final String SPECIAL_EVENT_END_EXTRA = "org.gdg.frisbee.SPECIAL_EVENT_END";
 
+    public static final String EXTRA_PLUS_ID = "plus_id";
+
     public static final int DRAWER_HOME = 0;
     public static final int DRAWER_GDL = 1;
     public static final int DRAWER_PULSE = 2;

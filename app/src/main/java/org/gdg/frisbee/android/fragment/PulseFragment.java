@@ -26,8 +26,6 @@ import android.widget.ListView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
-import java.util.Map;
-
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.MainActivity;
 import org.gdg.frisbee.android.activity.PulseActivity;
@@ -39,6 +37,8 @@ import org.gdg.frisbee.android.api.model.PulseEntry;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.joda.time.DateTime;
+
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import de.keyboardsurfer.android.widget.crouton.Crouton;

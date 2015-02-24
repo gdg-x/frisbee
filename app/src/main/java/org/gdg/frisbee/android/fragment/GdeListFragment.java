@@ -8,16 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ListView;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
+
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdeActivity;
 import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.adapter.GdeAdapter;
 import org.gdg.frisbee.android.api.model.Gde;
-import timber.log.Timber;
 
 import java.util.ArrayList;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import timber.log.Timber;
 
 /**
  * Created by maui on 29.05.2014.

@@ -2,8 +2,8 @@ package org.gdg.frisbee.android.fragment;
 
 import com.android.volley.Response;
 
-import java.util.ArrayList;
-
+import org.gdg.frisbee.android.Const;
+import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.ApiRequest;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.app.App;
@@ -11,7 +11,7 @@ import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
 
-import org.gdg.frisbee.android.R;
+import java.util.ArrayList;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -19,12 +19,13 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 public class GdgEventFragment extends EventFragment {
     @Override
     void fetchEvents() {
-        DateTime now = new DateTime();
+        final DateTime now = new DateTime();
         mStart = now.minusMonths(2).dayOfMonth().withMinimumValue();
         mEnd = now.plusYears(1).dayOfMonth().withMaximumValue();
 
         setIsLoading(true);
-        final String cacheKey = "event_" + getArguments().getString("plus_id");
+        final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID);
+        final String cacheKey = "event_" + plusId;
 
         Response.Listener<ArrayList<Event>> listener = new Response.Listener<ArrayList<Event>>() {
             @Override
@@ -41,7 +42,7 @@ public class GdgEventFragment extends EventFragment {
             }
         };
 
-        ApiRequest fetchEvents = mClient.getChapterEventList(mStart, mEnd, getArguments().getString("plus_id"), listener, mErrorListener);
+        ApiRequest fetchEvents = mClient.getChapterEventList(mStart, mEnd, plusId, listener, mErrorListener);
 
         if (Utils.isOnline(getActivity())) {
             fetchEvents.execute();

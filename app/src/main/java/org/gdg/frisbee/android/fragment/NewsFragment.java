@@ -37,6 +37,7 @@ import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Activity;
 import com.google.api.services.plus.model.ActivityFeed;
 
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.adapter.NewsAdapter;
@@ -54,7 +55,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
-import timber.log.Timber;
 
 public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -71,27 +71,14 @@ public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.
     public static NewsFragment newInstance(String plusId) {
         NewsFragment fragment = new NewsFragment();
         Bundle arguments = new Bundle();
-        arguments.putString("plus_id", plusId);
+        arguments.putString(Const.EXTRA_PLUS_ID, plusId);
         fragment.setArguments(arguments);
         return fragment;
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        Timber.d("onSaveInstanceState()");
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Timber.d("onStart()");
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
-        Timber.d("onResume()");
 
         for (int i = 0; i <= getListView().getChildCount(); i++) {
             mAdapter.updatePlusOne(getListView().getChildAt(i));
@@ -99,21 +86,8 @@ public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        Timber.d("onPause()");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Timber.d("onStop()");
-    }
-
-    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Timber.d("onActivityCreated()");
 
         mClient = new Plus.Builder(mTransport, mJsonFactory, null).setGoogleClientRequestInitializer(new CommonGoogleJsonClientRequestInitializer(getString(R.string.ip_simple_api_access_key))).build();
 
@@ -130,9 +104,10 @@ public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.
             listView.setDividerHeight(0);
         }
 
+        final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID);
         if (Utils.isOnline(getActivity())) {
             new Builder<>(String.class, ActivityFeed.class)
-                    .addParameter(getArguments().getString("plus_id"))
+                    .addParameter(plusId)
                     .setOnPreExecuteListener(new CommonAsyncTask.OnPreExecuteListener() {
                         @Override
                         public void onPreExecute() {
@@ -173,7 +148,7 @@ public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.
                     })
                     .buildAndExecute();
         } else {
-            App.getInstance().getModelCache().getAsync("news_" + getArguments().getString("plus_id"), false, new ModelCache.CacheListener() {
+            App.getInstance().getModelCache().getAsync("news_" + plusId, false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
                     ActivityFeed feed = (ActivityFeed) item;
@@ -227,23 +202,16 @@ public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Timber.d("onCreateView()");
         View v = inflater.inflate(R.layout.fragment_news, container, false);
         ButterKnife.inject(this, v);
         return v;
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Timber.d("onDestroy()");
-    }
-
-    @Override
     public void onRefresh() {
         if (Utils.isOnline(getActivity())) {
             new Builder<>(String.class, ActivityFeed.class)
-                    .addParameter(getArguments().getString("plus_id"))
+                    .addParameter(getArguments().getString(Const.EXTRA_PLUS_ID))
                     .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, ActivityFeed>() {
                         @Override
                         public ActivityFeed doInBackground(String... params) {

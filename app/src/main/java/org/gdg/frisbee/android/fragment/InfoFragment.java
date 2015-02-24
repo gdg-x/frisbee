@@ -38,6 +38,7 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Person;
 
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.GapiOkTransport;
 import org.gdg.frisbee.android.app.App;
@@ -99,7 +100,7 @@ public class InfoFragment extends Fragment {
     public static InfoFragment newInstance(String plusId) {
         InfoFragment fragment = new InfoFragment();
         Bundle arguments = new Bundle();
-        arguments.putString("plus_id", plusId);
+        arguments.putString(Const.EXTRA_PLUS_ID, plusId);
         fragment.setArguments(arguments);
         return fragment;
     }
@@ -169,7 +170,7 @@ public class InfoFragment extends Fragment {
                 });
 
         new Builder<String, Person>(String.class, Person.class)
-                .addParameter(getArguments().getString("plus_id"))
+                .addParameter(getArguments().getString(Const.EXTRA_PLUS_ID))
                 .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person>() {
                     @Override
                     public Person doInBackground(String... params) {
@@ -224,7 +225,8 @@ public class InfoFragment extends Fragment {
                 })
                 .buildAndExecute();
         } else {
-            App.getInstance().getModelCache().getAsync("person_"+getArguments().getString("plus_id"), false, new ModelCache.CacheListener() {
+            final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID);
+            App.getInstance().getModelCache().getAsync("person_" + plusId, false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
                     final Person chachedChapter = (Person)item;
@@ -237,7 +239,7 @@ public class InfoFragment extends Fragment {
                         if(url.getValue().contains("plus.google.com/") && !url.getValue().contains("communities")) {
                             String org = url.getValue();
                             try {
-                                String id = url.getValue().replace("plus.google.com/", "").replace("posts","").replace("/","").replace("about","").replace("u1","").replace("u0","").replace("https:","").replace("http:","").replace(getArguments().getString("plus_id"), "").replaceAll("[^\\d.]", "").substring(0,21);
+                                String id = url.getValue().replace("plus.google.com/", "").replace("posts","").replace("/","").replace("about","").replace("u1","").replace("u0","").replace("https:","").replace("http:","").replace(plusId, "").replaceAll("[^\\d.]", "").substring(0,21);
 
                                 final int finalI = i;
                                 App.getInstance().getModelCache().getAsync("person_"+ id, false, new ModelCache.CacheListener() {
@@ -284,15 +286,16 @@ public class InfoFragment extends Fragment {
     }
 
     private String getUrlFromPersonUrl(Person.Urls personUrl) {
+        final String plus_id = getArguments().getString(Const.EXTRA_PLUS_ID);
         if (personUrl.getValue().contains("+")) {
             try {
-                return "+" + URLDecoder.decode(personUrl.getValue().replace("plus.google.com/", "").replace("posts", "").replace("/", "").replace("about", "").replace("u1", "").replace("u0", "").replace("https:", "").replace("http:", "").replace(getArguments().getString("plus_id"), ""), "UTF-8").trim();
+                return "+" + URLDecoder.decode(personUrl.getValue().replace("plus.google.com/", "").replace("posts", "").replace("/", "").replace("about", "").replace("u1", "").replace("u0", "").replace("https:", "").replace("http:", "").replace(plus_id, ""), "UTF-8").trim();
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
                 return personUrl.getValue();
             }
         } else {
-            return personUrl.getValue().replace("plus.google.com/", "").replace("posts", "").replace("/", "").replace("about", "").replace("u1", "").replace("u0", "").replace("https:", "").replace("http:", "").replace(getArguments().getString("plus_id"), "").replaceAll("[^\\d.]", "").substring(0, 21);
+            return personUrl.getValue().replace("plus.google.com/", "").replace("posts", "").replace("/", "").replace("about", "").replace("u1", "").replace("u0", "").replace("https:", "").replace("http:", "").replace(plus_id, "").replaceAll("[^\\d.]", "").substring(0, 21);
         }
     }
 
