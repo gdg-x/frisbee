@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'versions'
+apply plugin: 'play'
 
 def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
 def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone("UTC"))
@@ -77,6 +78,11 @@ android {
     packagingOptions {
         exclude 'LICENSE.txt'
     }
+}
+
+play {
+    serviceAccountEmail = 'your-service-account-email'
+    pk12File = file('key.p12')
 }
 
 dependencies {
