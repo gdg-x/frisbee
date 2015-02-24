@@ -23,95 +23,103 @@
   android:layout_height="match_parent"
   android:orientation="vertical">
 
-  <ViewFlipper
-    android:id="@+id/viewFlipper"
+  <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout
-      android:id="@+id/scanReady"
+    <include layout="@layout/toolbar_actionbar" />
+
+    <ViewFlipper
+      android:id="@+id/viewFlipper"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:animateLayoutChanges="true"
-      android:gravity="center_vertical"
-      android:orientation="vertical">
-
-      <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dip"
-        android:layout_weight="1"
-        android:scaleType="fitCenter"
-        android:src="@drawable/arrow_tagf" />
-
-      <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical|center_horizontal"
-        android:padding="30dip"
-        android:text="@string/arrow_scan"
-        android:textStyle="bold" />
+      android:layout_height="match_parent">
 
       <LinearLayout
-        android:id="@+id/organizerOnly"
+        android:id="@+id/scanReady"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="15dip"
-        android:visibility="gone">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <ImageView
+          android:id="@+id/imageView"
+          android:layout_width="match_parent"
+          android:layout_height="0dp"
+          android:layout_gravity="center"
+          android:layout_marginTop="10dip"
+          android:layout_weight="1"
+          android:scaleType="fitCenter"
+          android:src="@drawable/arrow_tagf" />
 
         <TextView
-          android:id="@+id/textView1"
+          android:id="@+id/textView"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:gravity="center_vertical|center_horizontal"
-          android:text="@string/arrow_organizer" />
+          android:padding="30dip"
+          android:text="@string/arrow_scan"
+          android:textStyle="bold" />
 
-        <Button
-          android:id="@+id/switchToSend"
+        <LinearLayout
+          android:id="@+id/organizerOnly"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:padding="15dip"
+          android:visibility="gone">
+
+          <TextView
+            android:id="@+id/textView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="@string/arrow_organizer" />
+
+          <Button
+            android:id="@+id/switchToSend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/arrow_send_mode" />
+        </LinearLayout>
+      </LinearLayout>
+
+      <LinearLayout
+        android:id="@+id/sendMode"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+          android:id="@+id/organizerPic"
+          android:layout_width="match_parent"
+          android:layout_height="0dp"
+          android:layout_gravity="center"
+          android:layout_weight="1"
+          android:scaleType="fitCenter" />
+
+        <TextView
+          android:id="@+id/textView2"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:text="@string/arrow_send_mode" />
+          android:gravity="center_vertical|center_horizontal"
+          android:padding="30dip"
+          android:text="@string/arrow_tag_here"
+          android:textAppearance="@android:style/TextAppearance.Large"
+          android:textStyle="bold" />
+
+        <Button
+          android:id="@+id/switchToTag"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="30dip"
+          android:text="@string/arrow_back_receive" />
       </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-      android:id="@+id/sendMode"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:gravity="center_vertical|center_horizontal"
-      android:orientation="vertical">
-
-      <ImageView
-        android:id="@+id/organizerPic"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:scaleType="fitCenter" />
-
-      <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical|center_horizontal"
-        android:padding="30dip"
-        android:text="@string/arrow_tag_here"
-        android:textAppearance="@android:style/TextAppearance.Large"
-        android:textStyle="bold" />
-
-      <Button
-        android:id="@+id/switchToTag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dip"
-        android:text="@string/arrow_back_receive" />
-    </LinearLayout>
-  </ViewFlipper>
+    </ViewFlipper>
+  </LinearLayout>
 
   <ListView
     android:id="@+id/left_drawer"
