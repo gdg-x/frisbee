@@ -71,7 +71,7 @@
     <activity android:name=".activity.MainActivity" />
     <activity android:name=".activity.GdeActivity" />
     <activity android:name=".activity.AboutActivity" />
-    <activity android:name=".activity.SpecialEventActivity" />
+    <activity android:name=".special.SpecialEventActivity" />
     <activity android:name=".activity.SettingsActivity" />
     <activity
       android:name=".activity.ArrowActivity"

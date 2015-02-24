@@ -36,7 +36,8 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.DrawerAdapter;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.OrganizerChecker;
-import org.joda.time.DateTime;
+import org.gdg.frisbee.android.special.SpecialEventActivity;
+import org.gdg.frisbee.android.special.TaggedEvent;
 
 import butterknife.InjectView;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -92,13 +93,10 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                         navigateTo(GdeActivity.class, null);
                         break;
                     case Const.DRAWER_SPECIAL:
+                        final TaggedEvent taggedEvent = TaggedEvent.getCurrent();
                         Bundle special = new Bundle();
-                        special.putInt(Const.SPECIAL_EVENT_LOGO_EXTRA, R.drawable.ic_logo_devfest);
-                        special.putString(Const.SPECIAL_EVENT_VIEWTAG_EXTRA, "devfest");
-                        special.putString(Const.SPECIAL_EVENT_CACHEKEY_EXTRA, "devfest");
-                        special.putLong(Const.SPECIAL_EVENT_START_EXTRA, DateTime.now().getMillis());
-                        special.putLong(Const.SPECIAL_EVENT_END_EXTRA, 1419984000000L);
-                        special.putInt(Const.SPECIAL_EVENT_DESCRIPTION_EXTRA, R.string.devfest_description);
+                        special.putString(Const.EXTRA_TAGGED_EVENT_CACHEKEY, taggedEvent.getTag());
+                        special.putParcelable(Const.EXTRA_TAGGED_EVENT, taggedEvent);
                         navigateTo(SpecialEventActivity.class, special);
                         break;
                     case Const.DRAWER_PULSE:

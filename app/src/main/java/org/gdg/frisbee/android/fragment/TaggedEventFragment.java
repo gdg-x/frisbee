@@ -31,9 +31,9 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.EventAdapter;
 import org.gdg.frisbee.android.api.ApiRequest;
 import org.gdg.frisbee.android.api.PagedList;
-import org.gdg.frisbee.android.api.model.TaggedEvent;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.special.TaggedEvent;
 import org.gdg.frisbee.android.utils.EventDateComparator;
 import org.gdg.frisbee.android.utils.TaggedEventDistanceComparator;
 import org.gdg.frisbee.android.utils.Utils;
@@ -49,23 +49,16 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 public class TaggedEventFragment extends EventFragment {
 
     private String mCacheKey = "";
-    private String mEventTag = "";
+    private TaggedEvent mTaggedEvent;
     private Comparator<EventAdapter.Item> mLocationComparator = new TaggedEventDistanceComparator();
     private Comparator<EventAdapter.Item> mDateComparator = new EventDateComparator();
     private Comparator<EventAdapter.Item> mCurrentComparator = mLocationComparator;
 
-    private DateTime mStart, mEnd;
-
-    private Integer mFragmentLayout = null;
-
-    public static TaggedEventFragment newInstance(String cacheKey, String eventTag, long start, long end, int fragmentLayout) {
+    public static TaggedEventFragment newInstance(String cacheKey, TaggedEvent taggedEvent) {
         TaggedEventFragment frag = new TaggedEventFragment();
         Bundle args = new Bundle();
-        args.putString(Const.SPECIAL_EVENT_CACHEKEY_EXTRA, cacheKey);
-        args.putString(Const.SPECIAL_EVENT_VIEWTAG_EXTRA, eventTag);
-        args.putLong(Const.SPECIAL_EVENT_START_EXTRA, start);
-        args.putLong(Const.SPECIAL_EVENT_END_EXTRA, end);
-        args.putInt(Const.SPECIAL_EVENT_FRAGMENT_LAYOUT_EXTRA, fragmentLayout);
+        args.putString(Const.EXTRA_TAGGED_EVENT_CACHEKEY, cacheKey);
+        args.putParcelable(Const.EXTRA_TAGGED_EVENT, taggedEvent);
         frag.setArguments(args);
         return frag;
     }
@@ -76,33 +69,25 @@ public class TaggedEventFragment extends EventFragment {
 
         if (getArguments() != null) {
             Bundle args = getArguments();
-            mCacheKey = args.getString(Const.SPECIAL_EVENT_CACHEKEY_EXTRA);
-            mEventTag = args.getString(Const.SPECIAL_EVENT_VIEWTAG_EXTRA);
-            mStart = new DateTime(args.getLong(Const.SPECIAL_EVENT_START_EXTRA));
-            mEnd = new DateTime(args.getLong(Const.SPECIAL_EVENT_END_EXTRA));
-
-            mFragmentLayout = args.getInt(Const.SPECIAL_EVENT_FRAGMENT_LAYOUT_EXTRA, R.layout.fragment_events);
+            mCacheKey = args.getString(Const.EXTRA_TAGGED_EVENT_CACHEKEY);
+            mTaggedEvent = args.getParcelable(Const.EXTRA_TAGGED_EVENT);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (mFragmentLayout != 0) {
-            View v = inflater.inflate(mFragmentLayout, null);
-            ButterKnife.inject(this, v);
-            return v;
-        } else {
-            return super.onCreateView(inflater, container, savedInstanceState);
-        }
+        View v = inflater.inflate(R.layout.fragment_events, container, false);
+        ButterKnife.inject(this, v);
+        return v;
     }
 
     @Override
     void fetchEvents() {
         setIsLoading(true);
 
-        Response.Listener<PagedList<TaggedEvent>> listener = new Response.Listener<PagedList<TaggedEvent>>() {
+        Response.Listener<PagedList<org.gdg.frisbee.android.api.model.TaggedEvent>> listener = new Response.Listener<PagedList<org.gdg.frisbee.android.api.model.TaggedEvent>>() {
             @Override
-            public void onResponse(final PagedList<TaggedEvent> events) {
+            public void onResponse(final PagedList<org.gdg.frisbee.android.api.model.TaggedEvent> events) {
                 mEvents.addAll(events.getItems());
 
                 App.getInstance().getModelCache().putAsync(mCacheKey, mEvents, DateTime.now().plusHours(2), new ModelCache.CachePutListener() {
@@ -116,7 +101,8 @@ public class TaggedEventFragment extends EventFragment {
             }
         };
 
-        ApiRequest fetchEvents = mClient.getTaggedEventUpcomingList(mEventTag, listener, mErrorListener);
+        ApiRequest fetchEvents = mClient
+                .getTaggedEventUpcomingList(mTaggedEvent.getTag(), listener, mErrorListener);
 
         if (Utils.isOnline(getActivity())) {
             fetchEvents.execute();
@@ -124,7 +110,7 @@ public class TaggedEventFragment extends EventFragment {
             App.getInstance().getModelCache().getAsync(mCacheKey, false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
-                    ArrayList<TaggedEvent> events = (ArrayList<TaggedEvent>) item;
+                    ArrayList<org.gdg.frisbee.android.api.model.TaggedEvent> events = (ArrayList<org.gdg.frisbee.android.api.model.TaggedEvent>) item;
 
                     mAdapter.addAll(events);
                     sortEvents();

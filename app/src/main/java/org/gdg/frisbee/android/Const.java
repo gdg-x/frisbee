@@ -46,15 +46,8 @@ public class Const {
     public static final String GITHUB_ORGA = "gdg-x";
     public static final String GITHUB_REPO = "frisbee";
 
-    public static final String SPECIAL_EVENT_TITLE_EXTRA = "org.gdg.frisbee.SPECIAL_EVENT_TITLE";
-    public static final String SPECIAL_EVENT_LAYOUT_EXTRA = "org.gdg.frisbee.SPECIAL_EVENT_LAYOUT";
-    public static final String SPECIAL_EVENT_FRAGMENT_LAYOUT_EXTRA = "org.gdg.frisbee.SPECIAL_EVENT_FRAGMENT_LAYOUT";
-    public static final String SPECIAL_EVENT_LOGO_EXTRA = "org.gdg.frisbee.SPECIAL_EVENT_LOGO";
-    public static final String SPECIAL_EVENT_VIEWTAG_EXTRA = "org.gdg.frisbee.SPECIAL_EVENT_VIEWTAG";
-    public static final String SPECIAL_EVENT_CACHEKEY_EXTRA = "org.gdg.frisbee.SPECIAL_EVENT_CACHEKEY";
-    public static final String SPECIAL_EVENT_DESCRIPTION_EXTRA = "org.gdg.frisbee.SPECIAL_EVENT_DESCRIPTION";
-    public static final String SPECIAL_EVENT_START_EXTRA = "org.gdg.frisbee.SPECIAL_EVENT_START";
-    public static final String SPECIAL_EVENT_END_EXTRA = "org.gdg.frisbee.SPECIAL_EVENT_END";
+    public static final String EXTRA_TAGGED_EVENT = "org.gdg.frisbee.TAGGED_EVENT";
+    public static final String EXTRA_TAGGED_EVENT_CACHEKEY = "org.gdg.frisbee.TAGGED_EVENT_CACHEKEY";
 
     public static final String EXTRA_PLUS_ID = "plus_id";
 
