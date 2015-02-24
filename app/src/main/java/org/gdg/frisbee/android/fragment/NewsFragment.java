@@ -55,7 +55,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
-import timber.log.Timber;
 
 public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -69,7 +68,7 @@ public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.
 
     private NewsAdapter mAdapter;
 
-    public static NewsFragment newInstance(final String plusId) {
+    public static NewsFragment newInstance(String plusId) {
         NewsFragment fragment = new NewsFragment();
         Bundle arguments = new Bundle();
         arguments.putString(Const.EXTRA_PLUS_ID, plusId);
@@ -78,21 +77,8 @@ public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        Timber.d("onSaveInstanceState()");
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Timber.d("onStart()");
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
-        Timber.d("onResume()");
 
         for (int i = 0; i <= getListView().getChildCount(); i++) {
             mAdapter.updatePlusOne(getListView().getChildAt(i));
@@ -100,21 +86,8 @@ public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        Timber.d("onPause()");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Timber.d("onStop()");
-    }
-
-    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Timber.d("onActivityCreated()");
 
         mClient = new Plus.Builder(mTransport, mJsonFactory, null).setGoogleClientRequestInitializer(new CommonGoogleJsonClientRequestInitializer(getString(R.string.ip_simple_api_access_key))).build();
 
@@ -232,11 +205,6 @@ public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.
         View v = inflater.inflate(R.layout.fragment_news, container, false);
         ButterKnife.inject(this, v);
         return v;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
     @Override

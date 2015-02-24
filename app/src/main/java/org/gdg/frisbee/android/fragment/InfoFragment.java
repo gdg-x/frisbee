@@ -289,7 +289,7 @@ public class InfoFragment extends Fragment {
         final String plus_id = getArguments().getString(Const.EXTRA_PLUS_ID);
         if (personUrl.getValue().contains("+")) {
             try {
-                return "+" + URLDecoder.decode(personUrl.getValue().replace("plus.google.com/", "").replace("posts", "").replace("/", "").replace("about", "").replace("u1", "").replace("u0", "").replace("https:", "").replace("http:", "").replace(plus_id                               , ""), "UTF-8").trim();
+                return "+" + URLDecoder.decode(personUrl.getValue().replace("plus.google.com/", "").replace("posts", "").replace("/", "").replace("about", "").replace("u1", "").replace("u0", "").replace("https:", "").replace("http:", "").replace(plus_id, ""), "UTF-8").trim();
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
                 return personUrl.getValue();
