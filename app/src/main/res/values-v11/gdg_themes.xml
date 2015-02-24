@@ -22,17 +22,11 @@
   <style name="GDG" parent="android:Theme.Holo.Light">
     <item name="android:windowBackground">@color/default_bg</item>
 
-    <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewGDG</item>
-
     <item name="android:listChoiceIndicatorMultiple">@drawable/btn_check_holo_light</item>
 
     <item name="android:buttonStyle">@style/ButtonGDG</item>
 
     <item name="android:imageButtonStyle">@style/ImageButtonGDG</item>
-
-    <item name="android:dropDownSpinnerStyle">@style/SpinnerGDG</item>
-
-    <item name="android:seekBarStyle">@style/SeekBarGDG</item>
 
     <item name="android:buttonStyleToggle">@style/ToggleGDG</item>
 

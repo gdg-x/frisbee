@@ -41,9 +41,6 @@
 
   <style name="Theme.GDG" parent="Theme.GDG.Base">
     <item name="android:windowBackground">@color/default_bg</item>
-    <item name="android:editTextStyle">@style/EditTextGDG</item>
-
-    <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewGDG</item>
 
     <item name="android:checkboxStyle">@style/CheckBoxGDG</item>
 
@@ -51,15 +48,6 @@
 
     <item name="android:imageButtonStyle">@style/ImageButtonGDG</item>
 
-    <item name="android:spinnerStyle">@style/SpinnerGDG</item>
-
-    <item name="android:seekBarStyle">@style/SeekBarGDG</item>
-
     <item name="android:buttonStyleToggle">@style/ToggleGDG</item>
-
-    <item name="android:listViewStyle">@style/ListViewGDG</item>
-
-    <item name="android:listViewWhiteStyle">@style/ListViewGDG.White</item>
-
   </style>
 </resources>
