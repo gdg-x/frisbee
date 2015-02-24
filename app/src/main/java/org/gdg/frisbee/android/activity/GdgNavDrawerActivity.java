@@ -103,7 +103,11 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                         navigateTo(PulseActivity.class, null);
                         break;
                     case Const.DRAWER_ARROW:
-                        navigateTo(ArrowActivity.class, null);
+                        if (mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false) && getGoogleApiClient().isConnected()) {
+                            navigateTo(ArrowActivity.class, null);
+                        } else {
+                            Crouton.makeText(GdgNavDrawerActivity.this, getString(R.string.arrow_need_games), Style.INFO).show();
+                        }
                         break;
                 }
             }
