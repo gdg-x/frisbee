@@ -28,6 +28,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include layout="@layout/toolbar_actionbar" />
+
     <ListView
       android:id="@+id/taggedList"
       android:layout_width="match_parent"
@@ -40,6 +42,8 @@
     android:layout_width="240dp"
     android:layout_height="match_parent"
     android:layout_gravity="start"
+    android:background="#111"
+    android:choiceMode="singleChoice"
     android:divider="@android:color/transparent"
     android:dividerHeight="0dp" />
 </android.support.v4.widget.DrawerLayout>

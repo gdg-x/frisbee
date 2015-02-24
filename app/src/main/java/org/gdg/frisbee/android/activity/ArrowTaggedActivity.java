@@ -1,8 +1,23 @@
+/*
+ * Copyright 2014-2015 The GDG Frisbee Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.gdg.frisbee.android.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -38,21 +53,15 @@ import java.util.Set;
 import butterknife.InjectView;
 import timber.log.Timber;
 
-/**
- * Created by maui on 23.06.14.
- */
 public class ArrowTaggedActivity extends GdgNavDrawerActivity {
-
-    private SharedPreferences arrowPreferences;
 
     public static final String ID_SEPARATOR_FOR_SPLIT = "\\|";
     public static final String ID_SPLIT_CHAR = "|";
 
     @InjectView(R.id.taggedList)
     ListView taggedList;
-
+    String taggedOrganizers = "";
     private GroupDirectory groupDirectory;
-
     private OrganizerAdapter adapter;
 
     @Override
@@ -72,20 +81,16 @@ public class ArrowTaggedActivity extends GdgNavDrawerActivity {
         if (!mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false))
             finish();
 
-        arrowPreferences = getSharedPreferences("arrow", MODE_PRIVATE);
-
         taggedList.setAdapter(adapter);
         taggedList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Organizer item = adapter.getItem(i);
 
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/"+item.plusId+"/posts")));
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/" + item.plusId + "/posts")));
             }
         });
     }
-
-    String taggedOrganizers = "";
 
     @Override
     protected void onStart() {
@@ -101,7 +106,7 @@ public class ArrowTaggedActivity extends GdgNavDrawerActivity {
 
                 taggedOrganizers = "";
                 if (loadedResult != null) {
-                    if(loadedResult.getStatus().getStatusCode() == AppStateStatusCodes.STATUS_OK || loadedResult.getStatus().getStatusCode() == AppStateStatusCodes.STATUS_STATE_KEY_NOT_FOUND) {
+                    if (loadedResult.getStatus().getStatusCode() == AppStateStatusCodes.STATUS_OK || loadedResult.getStatus().getStatusCode() == AppStateStatusCodes.STATUS_STATE_KEY_NOT_FOUND) {
                         taggedOrganizers = "";
 
                         if (loadedResult.getStatus().getStatusCode() == AppStateStatusCodes.STATUS_OK) {
@@ -116,19 +121,17 @@ public class ArrowTaggedActivity extends GdgNavDrawerActivity {
                     @Override
                     public void onResponse(Directory directory) {
                         String[] orgas = taggedOrganizers.split("\\|");
-                        for(int i = 0; i < orgas.length; i++) {
-                            String orga = orgas[i];
-
+                        for (String orga : orgas) {
                             Chapter orgaChapter = null;
-                            for(Chapter c : directory.getGroups()) {
-                                if(c.getOrganizers().contains(orga)) {
+                            for (Chapter c : directory.getGroups()) {
+                                if (c.getOrganizers().contains(orga)) {
                                     orgaChapter = c;
                                     break;
                                 }
                             }
 
 
-                            if(orgaChapter != null) {
+                            if (orgaChapter != null) {
                                 final Organizer organizer = new Organizer();
                                 organizer.plusId = orga;
                                 organizer.chapterName = orgaChapter.getName();
@@ -189,7 +192,7 @@ public class ArrowTaggedActivity extends GdgNavDrawerActivity {
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            if(convertView == null) {
+            if (convertView == null) {
                 convertView = inflater.inflate(R.layout.list_tagged_organizer_item, null);
             }
 
