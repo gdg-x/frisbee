@@ -31,12 +31,6 @@ public class SettingsActivity extends GdgActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(R.string.settings);
-            getSupportActionBar().setDisplayShowTitleEnabled(true);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-
         setContentView(R.layout.activity_settings);
 
         Tracker t = App.getInstance().getTracker();

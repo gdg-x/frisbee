@@ -81,7 +81,9 @@
     <activity
       android:name=".special.SpecialEventActivity"
       android:theme="@style/GDG.NoActionBar" />
-    <activity android:name=".activity.SettingsActivity" />
+    <activity
+      android:name=".activity.SettingsActivity"
+      android:theme="@style/GDG.NoActionBar" />
     <activity
       android:name=".activity.ArrowActivity"
       android:screenOrientation="portrait">
