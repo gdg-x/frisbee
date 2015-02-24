@@ -214,6 +214,8 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
 
         if (getIntent().hasExtra(Const.EXTRA_GROUP_ID)) {
             String chapterId = getIntent().getStringExtra(Const.EXTRA_GROUP_ID);
+        if (getIntent().hasExtra(Const.EXTRA_CHAPTER_ID)) {
+            final String chapterId = getIntent().getStringExtra(Const.EXTRA_CHAPTER_ID);
             for (Chapter c : chapters) {
                 if (c.getGplusId().equals(chapterId)) {
                     chapter = c;
