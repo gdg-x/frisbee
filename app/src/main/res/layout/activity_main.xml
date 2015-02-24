@@ -29,6 +29,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include layout="@layout/toolbar_actionbar" />
+
     <org.gdg.frisbee.android.view.SlidingTabLayout
       android:id="@+id/sliding_tabs"
       android:layout_width="match_parent"

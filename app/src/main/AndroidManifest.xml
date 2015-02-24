@@ -69,11 +69,15 @@
       android:name="android.app.default_searchable"
       android:value=".activity.SearchActivity" />
 
-    <activity android:name=".activity.MainActivity" />
+    <activity
+      android:name=".activity.MainActivity"
+      android:theme="@style/GDG.NoActionBar" />
     <activity
       android:name=".activity.GdeActivity"
       android:theme="@style/GDG.NoActionBar" />
-    <activity android:name=".activity.AboutActivity" />
+    <activity
+      android:name=".activity.AboutActivity"
+      android:theme="@style/GDG.NoActionBar" />
     <activity android:name=".eventseries.TaggedEventSeriesActivity"
       android:theme="@style/GDG.NoActionBar" />
     <activity android:name=".activity.SettingsActivity" />
