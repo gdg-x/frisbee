@@ -21,7 +21,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -116,7 +115,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
                     @Override
                     public void onPutIntoCache() {
                         ArrayList<Chapter> chapters = directory.getGroups();
-                        initChapters(chapters, null);
+                        initChapters(chapters);
                     }
                 });
             }
@@ -143,7 +142,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
                 @Override
                 public void onGet(Object item) {
                     Directory directory = (Directory) item;
-                    initChapters(directory.getGroups(), null);
+                    initChapters(directory.getGroups());
                 }
 
                 @Override
@@ -191,21 +190,18 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
     }
 
     /**
-     * Initializes ViewPager, SlidingTabLayout, and Spinner Navigation. 
-     * 
-     * If the selectedChapter is null, tries to get it from Intent Extras,
-     *                                  if not found, gets the first Chapter.
-     * This function is called after cache query or network call is success,
-     * or after an orientation change using savedInstance.
-     *  
+     * Initializes ViewPager, SlidingTabLayout, and Spinner Navigation.
+     *
+     * It tries to get selected chapter from Intent Extras,
+     *                                  if not found, gets the first Chapter in the array.
+     * This function is called after cache query or network call is success
+     *
      * @param chapters Chapter array to be initialized, never null.
-     * @param selectedChapter selectedChapter, can be null.
      */
-    private void initChapters(@NonNull ArrayList<Chapter> chapters,
-                              @Nullable Chapter selectedChapter) {
-        addChapters(chapters);
+    private void initChapters(@NonNull ArrayList<Chapter> chapters) {
 
-        if (selectedChapter == null && getIntent().hasExtra(Const.EXTRA_CHAPTER_ID)) {
+        Chapter selectedChapter = null;
+        if (getIntent().hasExtra(Const.EXTRA_CHAPTER_ID)) {
             final String chapterId = getIntent().getStringExtra(Const.EXTRA_CHAPTER_ID);
             for (Chapter c : chapters) {
                 if (c.getGplusId().equals(chapterId)) {
@@ -214,10 +210,24 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
                 }
             }
         }
-        
+
         if (selectedChapter == null) {
             selectedChapter = chapters.get(0);
         }
+        initChapters(chapters, selectedChapter);
+    }
+
+    /**
+     * Initializes ViewPager, SlidingTabLayout, and Spinner Navigation.
+     * This function is called after cache query or network call is success,
+     * or after an orientation change using savedInstance.
+     *  
+     * @param chapters Chapter array to be initialized, never null.
+     * @param selectedChapter selectedChapter, never null.
+     */
+    private void initChapters(@NonNull ArrayList<Chapter> chapters,
+                              @NonNull Chapter selectedChapter) {
+        addChapters(chapters);
 
         getSupportActionBar().setSelectedNavigationItem(mSpinnerAdapter.getPosition(selectedChapter));
 
@@ -318,7 +328,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         public ChapterFragmentPagerAdapter(Context ctx, FragmentManager fm, @NonNull Chapter selectedChapter) {
             super(fm);
             mContext = ctx;
-            this.mSelectedChapter = selectedChapter;
+            mSelectedChapter = selectedChapter;
         }
 
         @Override
@@ -366,7 +376,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
             if (mSelectedChapter != null) {
                 trackView();
             }
-            this.mSelectedChapter = chapter;
+            mSelectedChapter = chapter;
         }
     }
 }
