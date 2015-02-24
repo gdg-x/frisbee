@@ -18,6 +18,7 @@ package org.gdg.frisbee.android.activity;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -186,6 +187,9 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         switch (item.getItemId()) {
             case R.id.settings:
                 startActivity(new Intent(this, SettingsActivity.class));
+                return true;
+            case R.id.help:
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Const.URL_HELP)));
                 return true;
             case R.id.about:
                 startActivity(new Intent(this, AboutActivity.class));
