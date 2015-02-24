@@ -152,4 +152,5 @@
     <string name="event_info">Info</string>
     <string name="event_agenda">Agenda</string>
     <string name="event_more">More</string>
+    <string name="help">Help</string>
 </resources>

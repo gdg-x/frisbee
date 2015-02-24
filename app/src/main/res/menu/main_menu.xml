@@ -8,6 +8,11 @@
     app:showAsAction="collapseActionView"
     android:menuCategory="secondary"/>
   <item
+    android:id="@+id/help"
+    android:title="@string/help"
+    app:showAsAction="collapseActionView"
+    android:menuCategory="secondary" />
+  <item
     android:id="@+id/about"
     android:title="@string/about"
     app:showAsAction="collapseActionView"
