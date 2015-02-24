@@ -35,6 +35,8 @@ import com.squareup.picasso.LruCache;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -120,6 +122,8 @@ public class App extends Application implements LocationListener {
                 .build();
         mPicasso.setIndicatorsEnabled(BuildConfig.DEBUG);
 
+        JodaTimeAndroid.init(this);
+        
         mOrganizerChecker = new OrganizerChecker(PrefUtils.prefs(this));
 
         GoogleAnalytics.getInstance(this).setAppOptOut(PrefUtils.isAnalyticsEnabled(this));
@@ -128,7 +132,7 @@ public class App extends Application implements LocationListener {
         mLocationFinder = new GingerbreadLastLocationFinder(this);
         mLocationFinder.setChangedLocationListener(this);
         updateLastLocation();
-        
+
         initTaggedEventSeries();
     }
 
