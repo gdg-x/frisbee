@@ -4,6 +4,7 @@ import org.gdg.frisbee.android.R;
 
 public class SpecialEvents {
     private static final long DATE_2015_06_01_GMT_IN_MILLIS = 1433116800000L;
+    private static final long DATE_2015_04_01_GMT_IN_MILLIS = 1427846400000L;
 
     private String mTag;
     private int mDrawerIconResId;
@@ -23,8 +24,8 @@ public class SpecialEvents {
     }
 
     public static SpecialEvents getCurrent() {
-        return new SpecialEvents("io-extended", R.drawable.drw_ic_ioextended, R.string.ioextended, R.string.ioextended_description,
-                R.drawable.ioextended, DATE_2015_06_01_GMT_IN_MILLIS);
+        return new SpecialEvents("wtm", R.drawable.drw_ic_wtm, R.string.wtm, R.string.wtm_description,
+                R.drawable.ic_wtm, DATE_2015_04_01_GMT_IN_MILLIS);
     }
 
     public String getTag() {
