@@ -49,10 +49,7 @@ public class AboutActivity extends GdgActivity {
 
         setContentView(R.layout.activity_about);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
-        getSupportActionBar().setTitle(R.string.about);
+        getActionBarToolbar().setTitle(R.string.about);
 
         mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
         mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.tab_selected_strip));
