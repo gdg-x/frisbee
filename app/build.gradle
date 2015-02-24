@@ -121,6 +121,8 @@ dependencies {
     //Others
     compile 'org.jsoup:jsoup:1.7.3'
     compile 'joda-time:joda-time:2.3'
+    compile 'com.google.code.findbugs:jsr305:2.0.1'
+
     compile ('de.keyboardsurfer.android.widget:crouton:1.8.4') {
         exclude module: 'support-v4'
     }
@@ -128,6 +130,8 @@ dependencies {
         transitive = true;
     }
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    testCompile 'junit:junit:4.12'
 
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.0'
     androidTestCompile 'com.android.support.test:testing-support-lib:0.1'

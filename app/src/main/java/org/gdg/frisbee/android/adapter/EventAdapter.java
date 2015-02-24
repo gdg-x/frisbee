@@ -202,7 +202,7 @@ public class EventAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public class Item {
+    public static class Item {
         private SimpleEvent mEvent;
         private boolean mConsumed = false;
 
