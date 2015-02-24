@@ -44,6 +44,12 @@ public class StartActivity extends ActionBarActivity {
             intentForStart = new Intent(StartActivity.this, FirstStartActivity.class);
         } else {
             intentForStart = new Intent(StartActivity.this, MainActivity.class);
+
+            final String selectedChapterGplusId = 
+                    preferences.getString(Const.SETTINGS_HOME_GDG, null);
+            if (selectedChapterGplusId != null) {
+                intentForStart.putExtra(Const.EXTRA_CHAPTER_ID, selectedChapterGplusId);
+            }
         }
 
         startActivity(intentForStart);

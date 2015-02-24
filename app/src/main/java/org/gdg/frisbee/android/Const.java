@@ -66,7 +66,7 @@ public class Const {
     public static final String EXTRA_SECTION = "EXTRA_SECTION";
     public static final String URL_DEVELOPERS_GOOGLE_COM = "https://developers.google.com";
     public static final String EVENTS = "events";
-    public static final String EXTRA_GROUP_ID = "org.gdg.frisbee.CHAPTER";
+    public static final String EXTRA_CHAPTER_ID = "org.gdg.frisbee.CHAPTER";
     public static final String CACHE_KEY_CHAPTER_LIST_HUB = "chapter_list_hub";
 
     // Location
