@@ -38,4 +38,5 @@
   <color name="tab_selected_strip">@color/theme_accent_1</color>
   <color name="theme_primary">@color/material_blue_500</color>
   <color name="theme_accent_1">@android:color/white</color>
+  <color name="navdrawer_background">#ffffffff</color>
 </resources>

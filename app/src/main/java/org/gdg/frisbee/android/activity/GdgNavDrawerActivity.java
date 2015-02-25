@@ -51,7 +51,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     protected ActionBarDrawerToggle mDrawerToggle;
     @InjectView(R.id.drawer)
     DrawerLayout mDrawerLayout;
-    @InjectView(R.id.left_drawer)
+    @InjectView(R.id.navdrawer)
     ListView mDrawerContent;
 
     @Override

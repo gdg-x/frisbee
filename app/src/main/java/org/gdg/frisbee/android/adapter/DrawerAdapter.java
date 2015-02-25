@@ -17,13 +17,11 @@ import java.util.ArrayList;
 
 public class DrawerAdapter extends BaseAdapter {
 
-    private Context mContext;
-    private LayoutInflater mInflater;
+    private final Context mContext;
     private ArrayList<DrawerItem> mItems;
 
-    public DrawerAdapter(Context ctx) {
-        mContext = ctx;
-        mInflater = LayoutInflater.from(mContext);
+    public DrawerAdapter(Context context) {
+        mContext = context;
         initAdapter();
     }
 
@@ -64,15 +62,16 @@ public class DrawerAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        if (view == null)
-            view = mInflater.inflate(R.layout.list_drawer_item, null);
+        if (view == null) {
+            view = LayoutInflater.from(mContext).inflate(R.layout.list_drawer_item, viewGroup, false);
+        }
 
-        ImageView mIcon = (ImageView) view.findViewById(R.id.icon);
-        TextView mTitle = (TextView) view.findViewById(R.id.title);
+        ImageView icon = (ImageView) view.findViewById(R.id.icon);
+        TextView title = (TextView) view.findViewById(R.id.title);
 
         DrawerItem item = (DrawerItem) getItem(i);
-        mIcon.setImageResource(item.getIcon());
-        mTitle.setText(item.getTitle());
+        icon.setImageResource(item.getIcon());
+        title.setText(item.getTitle());
 
         return view;
     }
@@ -94,16 +93,16 @@ public class DrawerAdapter extends BaseAdapter {
             return mIcon;
         }
 
-        public void setIcon(int mIcon) {
-            this.mIcon = mIcon;
+        public void setIcon(int icon) {
+            mIcon = icon;
         }
 
         public int getTitle() {
             return mTitle;
         }
 
-        public void setTitle(int mTitle) {
-            this.mTitle = mTitle;
+        public void setTitle(int title) {
+            mTitle = title;
         }
     }
 }
