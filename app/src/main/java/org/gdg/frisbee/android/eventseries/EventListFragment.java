@@ -79,14 +79,6 @@ public abstract class EventListFragment extends GdgListFragment implements View.
         }
     };
 
-    public static EventListFragment newInstance(String plusId) {
-        EventListFragment fragment = new GdgEventListFragment();
-        Bundle arguments = new Bundle();
-        arguments.putString(Const.EXTRA_PLUS_ID, plusId);
-        fragment.setArguments(arguments);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

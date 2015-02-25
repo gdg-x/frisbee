@@ -42,7 +42,7 @@ import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
-import org.gdg.frisbee.android.eventseries.EventListFragment;
+import org.gdg.frisbee.android.eventseries.GdgEventListFragment;
 import org.gdg.frisbee.android.fragment.InfoFragment;
 import org.gdg.frisbee.android.fragment.NewsFragment;
 import org.gdg.frisbee.android.fragment.SeasonsGreetingsFragment;
@@ -350,7 +350,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
                 case 1:
                     return InfoFragment.newInstance(gplusId);
                 case 2:
-                    return EventListFragment.newInstance(gplusId);
+                    return GdgEventListFragment.newInstance(gplusId);
             }
             return null;
         }
