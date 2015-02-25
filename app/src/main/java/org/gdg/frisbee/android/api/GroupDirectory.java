@@ -37,6 +37,11 @@ import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.http.GET;
+import retrofit.http.Path;
+import retrofit.http.Query;
 import timber.log.Timber;
 
 /**
@@ -54,14 +59,35 @@ public class GroupDirectory {
     private static final String ALL_CALENDAR_URL = BASE_URL + "/events/calendar/fc?start=1366581600&end=1367186400&_=1366664352089";
     private static final String GDL_CALENDAR_URL = BASE_URL + "/events/calendar/fc?calendar=gdl&start=1366581600&end=1367186400&_=1366664644691";
     private static final String CHAPTER_CALENDAR_URL = BASE_URL + "/events/feed/json";
-    private static final String TAGGED_EVENTS_URL = "https://hub.gdgx.io/api/v1/events/tag/";
-    private static final String TAGGED_EVENTS_URL_UPCOMING = "https://hub.gdgx.io/api/v1/events/tag/%s/upcoming";
     private static final String EVENT_DETAIL_URL = "https://hub.gdgx.io/api/v1/events/";
     private static final String SHOWCASE_NEXT_URL = BASE_URL + "/showcase/next";
     private static final String PULSE_URL = BASE_URL + "/groups/pulse_stats/";
     private static final String COUNTRY_PULSE_URL = BASE_URL + "/groups/pulse_stats/%s/";
+    private static Hub _hubInstance;
 
     public GroupDirectory() {
+    }
+
+    public Hub getHub() {
+        if (_hubInstance == null) {
+            _hubInstance = new RestAdapter.Builder()
+                    .setEndpoint("https://hub.gdgx.io/api/v1")
+                    .build().create(Hub.class);
+        }
+        return _hubInstance;
+    }
+
+    public static interface Hub {
+
+        @GET("/chapters?perpage=-1")
+        void getDirectory(Callback<Directory> callback);
+
+        @GET("/events/{id}")
+        void getEvent(@Path("id") String eventId, Callback<EventFullDetails> callback);
+
+        @GET("/events/tag/{tag}/upcoming?perPage=1000")
+        void getTaggedEventUpcomingList(@Path("tag") String tag, @Query("_") DateTime now, Callback<PagedList<TaggedEvent>> callback);
+
     }
 
     public ApiRequest getDirectory(Response.Listener<Directory> successListener, Response.ErrorListener errorListener) {
@@ -183,125 +209,5 @@ public class GroupDirectory {
                 GsonRequest.getGson(FieldNamingPolicy.IDENTITY));
 
         return new ApiRequest(eventReq);
-    }
-
-    public ApiRequest getTaggedEventList(final DateTime start, 
-                                         final DateTime end, 
-                                         final String tag, 
-                                         Response.Listener<PagedList<TaggedEvent>> successListener, 
-                                         Response.ErrorListener errorListener) {
-
-        ArrayList<NameValuePair> params = new ArrayList<>();
-
-        params.add(new NameValuePair() {
-            @Override
-            public String getName() {
-                return "start";
-            }
-
-            @Override
-            public String getValue() {
-                return "" + (int) (start.getMillis() / 1000);
-            }
-        });
-
-
-        if (end != null) {
-            params.add(new NameValuePair() {
-                @Override
-                public String getName() {
-                    return "end";
-                }
-
-                @Override
-                public String getValue() {
-                    return "" + (int) (end.getMillis() / 1000);
-                }
-            });
-        }
-        params.add(new NameValuePair() {
-            @Override
-            public String getName() {
-                return "_";
-            }
-
-            @Override
-            public String getValue() {
-                return "" + (int) (new DateTime().getMillis() / 1000);
-            }
-        });
-
-        params.add(new NameValuePair() {
-            @Override
-            public String getName() {
-                return "perpage";
-            }
-
-            @Override
-            public String getValue() {
-                return "1000";
-            }
-        });
-
-        Type type = new TypeToken<PagedList<TaggedEvent>>() {
-        }.getType();
-
-        String url = TAGGED_EVENTS_URL + tag;
-        url += "?" + URLEncodedUtils.format(params, "UTF-8");
-
-        GsonRequest<Void, PagedList<TaggedEvent>> eventReq = new GsonRequest<>(Request.Method.GET,
-                url,
-                type,
-                successListener,
-                errorListener,
-                GsonRequest.getGson(FieldNamingPolicy.IDENTITY, new ZuluDateTimeDeserializer()));
-        return new ApiRequest(eventReq);
-
-    }
-
-    public ApiRequest getTaggedEventUpcomingList(final String tag, 
-                                                 Response.Listener<PagedList<TaggedEvent>> successListener, 
-                                                 Response.ErrorListener errorListener) {
-
-        ArrayList<NameValuePair> params = new ArrayList<>();
-
-        params.add(new NameValuePair() {
-            @Override
-            public String getName() {
-                return "_";
-            }
-
-            @Override
-            public String getValue() {
-                return "" + (int) (new DateTime().getMillis() / 1000);
-            }
-        });
-
-        params.add(new NameValuePair() {
-            @Override
-            public String getName() {
-                return "perpage";
-            }
-
-            @Override
-            public String getValue() {
-                return "1000";
-            }
-        });
-
-        Type type = new TypeToken<PagedList<TaggedEvent>>() {
-        }.getType();
-
-        String url = String.format(TAGGED_EVENTS_URL_UPCOMING, tag);
-        url += "?" + URLEncodedUtils.format(params, "UTF-8");
-
-        GsonRequest<Void, PagedList<TaggedEvent>> eventReq = new GsonRequest<>(Request.Method.GET,
-                url,
-                type,
-                successListener,
-                errorListener,
-                GsonRequest.getGson(FieldNamingPolicy.IDENTITY, new ZuluDateTimeDeserializer()));
-        return new ApiRequest(eventReq);
-
     }
 }
