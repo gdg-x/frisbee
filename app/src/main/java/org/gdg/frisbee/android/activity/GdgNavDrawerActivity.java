@@ -18,7 +18,6 @@ package org.gdg.frisbee.android.activity;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -119,9 +118,8 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
              * Called when a drawer has settled in a completely closed state.
              */
             public void onDrawerClosed(View view) {
-                //getActionBar().setTitle(mTitle);
-                if (mPreferences.getBoolean(Const.SETTINGS_OPEN_DRAWER_ON_START, Const.SETTINGS_OPEN_DRAWER_ON_START_DEFAULT)) {
-                    mPreferences.edit().putBoolean(Const.SETTINGS_OPEN_DRAWER_ON_START, !Const.SETTINGS_OPEN_DRAWER_ON_START_DEFAULT).apply();
+                if (PrefUtils.isFirstStartDone(GdgNavDrawerActivity.this)) {
+                    PrefUtils.setFirstStartDone(GdgNavDrawerActivity.this);
                 }
             }
 
