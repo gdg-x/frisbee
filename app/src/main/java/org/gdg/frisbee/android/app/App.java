@@ -22,10 +22,10 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
@@ -40,11 +40,14 @@ import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.utils.CrashlyticsTree;
 import org.gdg.frisbee.android.utils.GingerbreadLastLocationFinder;
 import org.gdg.frisbee.android.utils.Utils;
+import org.joda.time.DateTime;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
@@ -71,6 +74,7 @@ public class App extends Application implements LocationListener {
     private GingerbreadLastLocationFinder mLocationFinder;
     private Location mLastLocation;
     private OrganizerChecker mOrganizerChecker;
+    private ArrayList<TaggedEventSeries> mTaggedEventSeriesList;
 
     @Override
     public void onCreate() {
@@ -127,9 +131,46 @@ public class App extends Application implements LocationListener {
         mLocationFinder = new GingerbreadLastLocationFinder(this);
         mLocationFinder.setChangedLocationListener(this);
         updateLastLocation();
+        
+        //Init TaggedEventSeries
+        mTaggedEventSeriesList = new ArrayList<>();
+        addTaggedEventSeriesIfDateFits(new TaggedEventSeries("wtm",
+                R.drawable.drw_ic_wtm,
+                R.string.wtm,
+                R.string.wtm_description,
+                R.drawable.ic_wtm,
+                Const.START_TIME_WTM,
+                Const.END_TIME_WTM));
+        addTaggedEventSeriesIfDateFits(new TaggedEventSeries("studyjam",
+                R.drawable.drw_ic_studyjams,
+                R.string.studyjams,
+                R.string.studyjams_description,
+                R.drawable.ic_studyjams,
+                Const.START_TIME_STUDY_JAMS,
+                Const.END_TIME_STUDY_JAMS));
+        addTaggedEventSeriesIfDateFits(new TaggedEventSeries("io-extended",
+                R.drawable.drw_ic_ioextended,
+                R.string.ioextended,
+                R.string.ioextended_description,
+                R.drawable.ic_ioextended,
+                Const.START_TIME_IOEXTENDED,
+                Const.END_TIME_IOEXTENDED));
     }
 
-    public void migrate(int oldVersion, int newVersion) {
+    /**
+     * Adds the given event series to the list if the series is started and not finished. 
+     *
+     * @param taggedEventSeries given event series object.
+     */
+    private void addTaggedEventSeriesIfDateFits(@NonNull TaggedEventSeries taggedEventSeries) {
+        DateTime now = DateTime.now();
+        if (now.isAfter(taggedEventSeries.getSartDateInMillis())
+                && now.isBefore(taggedEventSeries.getEndDateInMillis())) {
+            mTaggedEventSeriesList.add(taggedEventSeries);
+        }
+    }
+
+    private void migrate(int oldVersion, int newVersion) {
 
         if (oldVersion < 11100 || Const.ALPHA) {
             mPreferences.edit().remove(Const.SETTINGS_GCM_REG_ID).apply();
@@ -244,5 +285,16 @@ public class App extends Application implements LocationListener {
 
     public void checkOrganizer(GoogleApiClient apiClient, OrganizerChecker.OrganizerResponseHandler responseHandler) {
         mOrganizerChecker.checkOrganizer(apiClient, responseHandler);
+    }
+
+    /**
+     * Return the current list of GDG event series occurring in the world.
+     * This may be empty but cannot be null.
+     *
+     * @return Array of current event series. 
+     */
+    @NonNull
+    public ArrayList<TaggedEventSeries> getTaggedEventSeriesList() {
+        return mTaggedEventSeriesList;
     }
 }

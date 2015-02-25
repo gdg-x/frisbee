@@ -52,7 +52,6 @@ public class Const {
     public static final String EXTRA_PLUS_ID = "plus_id";
 
     public static final int DRAWER_HOME = 0;
-    public static final int DRAWER_GDL = 1;
     public static final int DRAWER_PULSE = 2;
     public static final int DRAWER_SPECIAL = 3;
     public static final int DRAWER_ACHIEVEMENTS = 4;
@@ -97,4 +96,12 @@ public class Const {
 
     public static final String TRUSTSTORE_PW = "VU%&ibkr45pnq39v53x";
     public static final boolean ALPHA = false;
+
+    public static final long START_TIME_IOEXTENDED = 1430438400000L;
+    public static final long START_TIME_STUDY_JAMS = 1422748800000L;
+    public static final long START_TIME_WTM = 1422748800000L;
+    
+    public static final long END_TIME_IOEXTENDED = 1433116800000L;
+    public static final long END_TIME_STUDY_JAMS = 1430438400000L;
+    public static final long END_TIME_WTM =        1427846400000L;
 }
