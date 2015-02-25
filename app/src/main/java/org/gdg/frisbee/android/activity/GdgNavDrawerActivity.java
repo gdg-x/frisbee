@@ -47,7 +47,7 @@ import butterknife.OnItemClick;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
-public abstract class GdgNavDrawerActivity extends GdgActivity{
+public abstract class GdgNavDrawerActivity extends GdgActivity {
 
     protected DrawerAdapter mDrawerAdapter;
     protected ActionBarDrawerToggle mDrawerToggle;
@@ -141,7 +141,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity{
     public void onDrawerSpecialItemClick(DrawerAdapter.DrawerItem item) {
 
         final ArrayList<TaggedEventSeries> currentEventSeries =
-                App.getInstance().getTaggedEventSeriesList();
+                App.getInstance().currentTaggedEventSeries();
         for (TaggedEventSeries taggedEventSeries : currentEventSeries) {
             if (taggedEventSeries.getDrawerIconResId() == item.getIcon()) {
 

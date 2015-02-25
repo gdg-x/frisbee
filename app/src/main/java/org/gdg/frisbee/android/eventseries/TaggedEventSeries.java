@@ -14,22 +14,22 @@ public class TaggedEventSeries implements Parcelable {
     private int mTitleResId;
     private int mDescriptionResId;
     private int mLogoResId;
-    private long mSartDateInMillis;
-    private long mEndDateInMillis;
+    private DateTime mStartDateInMillis;
+    private DateTime mEndDateInMillis;
 
     public TaggedEventSeries(String tag, 
                              @DrawableRes int drawerIconResId, 
                              @StringRes int titleResId, 
                              @StringRes int descriptionResId, 
                              @DrawableRes int logoResId,
-                             long startDateInMillis,
-                             long endDateInMillis) {
+                             DateTime startDateInMillis,
+                             DateTime endDateInMillis) {
         mTag = tag;
         mDrawerIconResId = drawerIconResId;
         mTitleResId = titleResId;
         mDescriptionResId = descriptionResId;
         mLogoResId = logoResId;
-        mSartDateInMillis = startDateInMillis;
+        mStartDateInMillis = startDateInMillis;
         mEndDateInMillis = endDateInMillis;
     }
 
@@ -53,11 +53,11 @@ public class TaggedEventSeries implements Parcelable {
         return mLogoResId;
     }
 
-    public long getSartDateInMillis() {
-        return mSartDateInMillis;
+    public DateTime getStartDateInMillis() {
+        return mStartDateInMillis;
     }
 
-    public long getEndDateInMillis() {
+    public DateTime getEndDateInMillis() {
         return mEndDateInMillis;
     }
 
@@ -68,23 +68,23 @@ public class TaggedEventSeries implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.mTag);
-        dest.writeInt(this.mDrawerIconResId);
-        dest.writeInt(this.mTitleResId);
-        dest.writeInt(this.mDescriptionResId);
-        dest.writeInt(this.mLogoResId);
-        dest.writeLong(this.mSartDateInMillis);
-        dest.writeLong(this.mEndDateInMillis);
+        dest.writeString(mTag);
+        dest.writeInt(mDrawerIconResId);
+        dest.writeInt(mTitleResId);
+        dest.writeInt(mDescriptionResId);
+        dest.writeInt(mLogoResId);
+        dest.writeLong(mStartDateInMillis.getMillis());
+        dest.writeLong(mEndDateInMillis.getMillis());
     }
 
     private TaggedEventSeries(Parcel in) {
-        this.mTag = in.readString();
-        this.mDrawerIconResId = in.readInt();
-        this.mTitleResId = in.readInt();
-        this.mDescriptionResId = in.readInt();
-        this.mLogoResId = in.readInt();
-        this.mSartDateInMillis = in.readLong();
-        this.mEndDateInMillis = in.readLong();
+        mTag = in.readString();
+        mDrawerIconResId = in.readInt();
+        mTitleResId = in.readInt();
+        mDescriptionResId = in.readInt();
+        mLogoResId = in.readInt();
+        mStartDateInMillis = new DateTime(in.readLong());
+        mEndDateInMillis = new DateTime(in.readLong());
     }
 
     public static final Parcelable.Creator<TaggedEventSeries> CREATOR = new Parcelable.Creator<TaggedEventSeries>() {

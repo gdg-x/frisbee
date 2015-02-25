@@ -34,7 +34,7 @@ public class DrawerAdapter extends BaseAdapter {
             add(new DrawerItem(Const.DRAWER_PULSE, R.drawable.drw_ic_pulse, R.string.pulse));
 
             final ArrayList<TaggedEventSeries> currentEventSeries =
-                    App.getInstance().getTaggedEventSeriesList();
+                    App.getInstance().currentTaggedEventSeries();
             for (TaggedEventSeries taggedEventSeries : currentEventSeries) {
                 add(new DrawerItem(Const.DRAWER_SPECIAL, 
                         taggedEventSeries.getDrawerIconResId(), 

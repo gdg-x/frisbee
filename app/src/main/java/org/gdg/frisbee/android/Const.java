@@ -16,6 +16,8 @@
 
 package org.gdg.frisbee.android;
 
+import org.joda.time.DateTime;
+
 /**
  * Created with IntelliJ IDEA.
  * User: maui
@@ -97,11 +99,11 @@ public class Const {
     public static final String TRUSTSTORE_PW = "VU%&ibkr45pnq39v53x";
     public static final boolean ALPHA = false;
 
-    public static final long START_TIME_IOEXTENDED = 1430438400000L;
-    public static final long START_TIME_STUDY_JAMS = 1422748800000L;
-    public static final long START_TIME_WTM = 1422748800000L;
+    public static final DateTime START_TIME_IOEXTENDED =    new DateTime(2015, 5, 1, 0, 0);
+    public static final DateTime START_TIME_STUDY_JAMS =    new DateTime(2015, 2, 1, 0, 0);
+    public static final DateTime START_TIME_WTM =           new DateTime(2015, 2, 1, 0, 0);
     
-    public static final long END_TIME_IOEXTENDED = 1433116800000L;
-    public static final long END_TIME_STUDY_JAMS = 1430438400000L;
-    public static final long END_TIME_WTM =        1427846400000L;
+    public static final DateTime END_TIME_IOEXTENDED =      new DateTime(2015, 6, 1, 0, 0);
+    public static final DateTime END_TIME_STUDY_JAMS =      new DateTime(2015, 5, 1, 0, 0);
+    public static final DateTime END_TIME_WTM =             new DateTime(2015, 4, 1, 0, 0);
 }

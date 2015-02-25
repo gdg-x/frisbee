@@ -132,8 +132,17 @@ public class App extends Application implements LocationListener {
         mLocationFinder.setChangedLocationListener(this);
         updateLastLocation();
         
-        //Init TaggedEventSeries
+        initTaggedEventSeries();
+    }
+
+    
+    /**
+     * Init TaggedEventSeries.
+     */
+    private void initTaggedEventSeries() {
+
         mTaggedEventSeriesList = new ArrayList<>();
+        //Add Women Techmakers
         addTaggedEventSeriesIfDateFits(new TaggedEventSeries("wtm",
                 R.drawable.drw_ic_wtm,
                 R.string.wtm,
@@ -141,6 +150,7 @@ public class App extends Application implements LocationListener {
                 R.drawable.ic_wtm,
                 Const.START_TIME_WTM,
                 Const.END_TIME_WTM));
+        //Add Android Fundamentals Study Jams
         addTaggedEventSeriesIfDateFits(new TaggedEventSeries("studyjam",
                 R.drawable.drw_ic_studyjams,
                 R.string.studyjams,
@@ -148,6 +158,7 @@ public class App extends Application implements LocationListener {
                 R.drawable.ic_studyjams,
                 Const.START_TIME_STUDY_JAMS,
                 Const.END_TIME_STUDY_JAMS));
+        //Add IO Extended
         addTaggedEventSeriesIfDateFits(new TaggedEventSeries("io-extended",
                 R.drawable.drw_ic_ioextended,
                 R.string.ioextended,
@@ -156,15 +167,10 @@ public class App extends Application implements LocationListener {
                 Const.START_TIME_IOEXTENDED,
                 Const.END_TIME_IOEXTENDED));
     }
-
-    /**
-     * Adds the given event series to the list if the series is started and not finished. 
-     *
-     * @param taggedEventSeries given event series object.
-     */
+    
     private void addTaggedEventSeriesIfDateFits(@NonNull TaggedEventSeries taggedEventSeries) {
         DateTime now = DateTime.now();
-        if (now.isAfter(taggedEventSeries.getSartDateInMillis())
+        if (now.isAfter(taggedEventSeries.getStartDateInMillis())
                 && now.isBefore(taggedEventSeries.getEndDateInMillis())) {
             mTaggedEventSeriesList.add(taggedEventSeries);
         }
@@ -291,10 +297,10 @@ public class App extends Application implements LocationListener {
      * Return the current list of GDG event series occurring in the world.
      * This may be empty but cannot be null.
      *
-     * @return Array of current event series. 
+     * @return ArrayList of current event series.
      */
     @NonNull
-    public ArrayList<TaggedEventSeries> getTaggedEventSeriesList() {
+    public ArrayList<TaggedEventSeries> currentTaggedEventSeries() {
         return mTaggedEventSeriesList;
     }
 }
