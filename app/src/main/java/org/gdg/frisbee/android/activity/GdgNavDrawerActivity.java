@@ -37,6 +37,7 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.OrganizerChecker;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeriesActivity;
+import org.gdg.frisbee.android.utils.PrefUtils;
 
 import java.util.ArrayList;
 
@@ -124,7 +125,13 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 } else {
                     Crouton.makeText(GdgNavDrawerActivity.this, getString(R.string.arrow_need_games), Style.INFO).show();
                 }
+            case Const.DRAWER_SETTINGS:
+                navigateTo(SettingsActivity.class, null);
                 break;
+            case Const.DRAWER_ABOUT:
+                navigateTo(AboutActivity.class, null);
+                break;
+            break;
         }
     }
 
@@ -181,8 +188,8 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     protected void onResume() {
         super.onResume();
 
-        if (mPreferences.getBoolean(Const.SETTINGS_OPEN_DRAWER_ON_START, Const.SETTINGS_OPEN_DRAWER_ON_START_DEFAULT)) {
-            mDrawerLayout.openDrawer(Gravity.LEFT);
+        if (!PrefUtils.isFirstStartDone(this)) {
+            mDrawerLayout.openDrawer(Gravity.START);
         }
     }
 
