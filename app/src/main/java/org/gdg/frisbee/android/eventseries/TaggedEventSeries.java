@@ -1,4 +1,4 @@
-package org.gdg.frisbee.android.special;
+package org.gdg.frisbee.android.eventseries;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import org.gdg.frisbee.android.R;
 import org.joda.time.DateTime;
 
-public class TaggedEvent implements Parcelable {
+public class TaggedEventSeries implements Parcelable {
     private static final long DATE_2015_06_01_GMT_IN_MILLIS = 1433116800000L;
     private static final long DATE_2015_04_01_GMT_IN_MILLIS = 1427846400000L;
 
@@ -18,8 +18,7 @@ public class TaggedEvent implements Parcelable {
     private long mSartDateInMillis;
     private long mEndDateInMillis;
 
-
-    public TaggedEvent(String tag, int drawerIconResId, int titleResId, int descriptionResId, int logoResId, long endDateInMillis) {
+    public TaggedEventSeries(String tag, int drawerIconResId, int titleResId, int descriptionResId, int logoResId, long endDateInMillis) {
         mTag = tag;
         mDrawerIconResId = drawerIconResId;
         mTitleResId = titleResId;
@@ -29,8 +28,8 @@ public class TaggedEvent implements Parcelable {
         mEndDateInMillis = endDateInMillis;
     }
 
-    public static TaggedEvent getCurrent() {
-        return new TaggedEvent("wtm", R.drawable.drw_ic_wtm, R.string.wtm, R.string.wtm_description,
+    public static TaggedEventSeries getCurrent() {
+        return new TaggedEventSeries("wtm", R.drawable.drw_ic_wtm, R.string.wtm, R.string.wtm_description,
                 R.drawable.ic_wtm, DATE_2015_04_01_GMT_IN_MILLIS);
     }
 
@@ -75,7 +74,7 @@ public class TaggedEvent implements Parcelable {
         dest.writeLong(this.mEndDateInMillis);
     }
 
-    private TaggedEvent(Parcel in) {
+    private TaggedEventSeries(Parcel in) {
         this.mTag = in.readString();
         this.mDrawerIconResId = in.readInt();
         this.mTitleResId = in.readInt();
@@ -85,13 +84,13 @@ public class TaggedEvent implements Parcelable {
         this.mEndDateInMillis = in.readLong();
     }
 
-    public static final Parcelable.Creator<TaggedEvent> CREATOR = new Parcelable.Creator<TaggedEvent>() {
-        public TaggedEvent createFromParcel(Parcel source) {
-            return new TaggedEvent(source);
+    public static final Parcelable.Creator<TaggedEventSeries> CREATOR = new Parcelable.Creator<TaggedEventSeries>() {
+        public TaggedEventSeries createFromParcel(Parcel source) {
+            return new TaggedEventSeries(source);
         }
 
-        public TaggedEvent[] newArray(int size) {
-            return new TaggedEvent[size];
+        public TaggedEventSeries[] newArray(int size) {
+            return new TaggedEventSeries[size];
         }
     };
 }

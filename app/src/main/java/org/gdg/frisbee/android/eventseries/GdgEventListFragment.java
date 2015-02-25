@@ -1,4 +1,4 @@
-package org.gdg.frisbee.android.fragment;
+package org.gdg.frisbee.android.eventseries;
 
 import com.android.volley.Response;
 
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
-public class GdgEventFragment extends EventFragment {
+public class GdgEventListFragment extends EventListFragment {
     @Override
     void fetchEvents() {
         final DateTime now = new DateTime();

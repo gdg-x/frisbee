@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.gdg.frisbee.android.special;
+package org.gdg.frisbee.android.eventseries;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -24,13 +24,12 @@ import android.widget.TextView;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgNavDrawerActivity;
-import org.gdg.frisbee.android.fragment.TaggedEventFragment;
 import org.gdg.frisbee.android.view.ResizableImageView;
 
 import butterknife.InjectView;
 import butterknife.Optional;
 
-public class SpecialEventActivity extends GdgNavDrawerActivity {
+public class TaggedEventSeriesActivity extends GdgNavDrawerActivity {
 
     @InjectView(R.id.special_logo)
     @Optional
@@ -39,11 +38,11 @@ public class SpecialEventActivity extends GdgNavDrawerActivity {
     @InjectView(R.id.special_description)
     TextView mDescription;
     
-    private TaggedEvent mTaggedEvent;
+    private TaggedEventSeries mTaggedEventSeries;
 
     protected String getTrackedViewName() {
-        return mTaggedEvent != null && !TextUtils.isEmpty(mTaggedEvent.getTag())
-                ? mTaggedEvent.getTag() : "SpecialEvent";
+        return mTaggedEventSeries != null && !TextUtils.isEmpty(mTaggedEventSeries.getTag())
+                ? mTaggedEventSeries.getTag() : "SpecialEvent";
     }
 
     @Override
@@ -51,25 +50,25 @@ public class SpecialEventActivity extends GdgNavDrawerActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_special);
 
-        mTaggedEvent = getIntent().getParcelableExtra(Const.EXTRA_TAGGED_EVENT);
-        if (mTaggedEvent == null) {
+        mTaggedEventSeries = getIntent().getParcelableExtra(Const.EXTRA_TAGGED_EVENT);
+        if (mTaggedEventSeries == null) {
             throw new IllegalArgumentException("Special Event must be provided with " 
                     + Const.EXTRA_TAGGED_EVENT + " key as an Intent extra.");
         }
         
-        getSupportActionBar().setLogo(mTaggedEvent.getLogoResId());
+        getSupportActionBar().setLogo(mTaggedEventSeries.getLogoResId());
 
-        mDescription.setText(mTaggedEvent.getDescriptionResId());
+        mDescription.setText(mTaggedEventSeries.getDescriptionResId());
 
         if (mLogo != null) {
-            mLogo.setImageResource(mTaggedEvent.getLogoResId());
+            mLogo.setImageResource(mTaggedEventSeries.getLogoResId());
         }
 
         FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
         final String cacheExtra = getIntent().getStringExtra(Const.EXTRA_TAGGED_EVENT_CACHEKEY);
-        trans.replace(R.id.content_fragment, TaggedEventFragment.newInstance(
+        trans.replace(R.id.content_fragment, TaggedEventSeriesFragment.newInstance(
                 cacheExtra != null ? cacheExtra : "specialevent",
-                        mTaggedEvent));
+                mTaggedEventSeries));
         trans.commit();
     }
 
