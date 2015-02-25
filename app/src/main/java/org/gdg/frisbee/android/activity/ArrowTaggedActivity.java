@@ -45,6 +45,7 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
+import org.gdg.frisbee.android.utils.PrefUtils;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -78,7 +79,7 @@ public class ArrowTaggedActivity extends GdgNavDrawerActivity {
 
         adapter = new OrganizerAdapter(this, 0);
 
-        if (!mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false))
+        if (!PrefUtils.isSignedIn(this))
             finish();
 
         taggedList.setAdapter(adapter);

@@ -55,6 +55,7 @@ import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.app.OrganizerChecker;
 import org.gdg.frisbee.android.utils.CryptoUtils;
+import org.gdg.frisbee.android.utils.PrefUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
@@ -100,7 +101,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arrow);
 
-        if (!mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false))
+        if (!PrefUtils.isSignedIn(this))
             finish();
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);

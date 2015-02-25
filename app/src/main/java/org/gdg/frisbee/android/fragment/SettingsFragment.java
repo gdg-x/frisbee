@@ -50,6 +50,7 @@ import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.GcmRegistrationResponse;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.widget.UpcomingEventWidgetProvider;
 
 import java.io.IOException;
@@ -302,7 +303,7 @@ public class SettingsFragment extends PreferenceFragment {
     // TODO: Re-Implement with GMS 4.3
     public void onSignInFailed() {
         Timber.d("onSignInFailed");
-        mPreferences.edit().putBoolean(Const.SETTINGS_SIGNED_IN, false).apply();
+        PrefUtils.setLoggedOut(getActivity());
         CheckBoxPreference prefGoogleSignIn = (CheckBoxPreference) findPreference("gdg_signed_in");
         if (prefGoogleSignIn != null) {
             prefGoogleSignIn.setChecked(false);

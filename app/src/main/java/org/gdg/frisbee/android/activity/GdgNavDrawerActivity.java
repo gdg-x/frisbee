@@ -37,6 +37,7 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.OrganizerChecker;
 import org.gdg.frisbee.android.special.SpecialEventActivity;
 import org.gdg.frisbee.android.special.TaggedEvent;
+import org.gdg.frisbee.android.utils.PrefUtils;
 
 import butterknife.InjectView;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -68,7 +69,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
                 switch (item.getId()) {
                     case Const.DRAWER_ACHIEVEMENTS:
-                        if (mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false) && getGoogleApiClient().isConnected()) {
+                        if (PrefUtils.isSignedIn(GdgNavDrawerActivity.this) && getGoogleApiClient().isConnected()) {
                             startActivityForResult(Games.Achievements.getAchievementsIntent(getGoogleApiClient()), 0);
                         } else {
                             Crouton.makeText(GdgNavDrawerActivity.this, getString(R.string.achievements_need_signin), Style.INFO).show();
@@ -91,7 +92,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                         navigateTo(PulseActivity.class, null);
                         break;
                     case Const.DRAWER_ARROW:
-                        if (mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false) && getGoogleApiClient().isConnected()) {
+                        if (PrefUtils.isSignedIn(GdgNavDrawerActivity.this) && getGoogleApiClient().isConnected()) {
                             navigateTo(ArrowActivity.class, null);
                         } else {
                             Crouton.makeText(GdgNavDrawerActivity.this, getString(R.string.arrow_need_games), Style.INFO).show();
@@ -171,8 +172,8 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     protected void onResume() {
         super.onResume();
 
-        if (mPreferences.getBoolean(Const.SETTINGS_OPEN_DRAWER_ON_START, Const.SETTINGS_OPEN_DRAWER_ON_START_DEFAULT)) {
-            mDrawerLayout.openDrawer(Gravity.LEFT);
+        if (!PrefUtils.isFirstStartDone(this)) {
+            mDrawerLayout.openDrawer(Gravity.START);
         }
     }
 

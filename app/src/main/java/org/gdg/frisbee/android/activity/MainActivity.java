@@ -53,6 +53,7 @@ import org.gdg.frisbee.android.fragment.InfoFragment;
 import org.gdg.frisbee.android.fragment.NewsFragment;
 import org.gdg.frisbee.android.fragment.SeasonsGreetingsFragment;
 import org.gdg.frisbee.android.utils.ChapterComparator;
+import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.SlidingTabLayout;
 import org.joda.time.DateTime;
@@ -137,7 +138,7 @@ public class MainActivity extends GdgNavDrawerActivity {
             if (intent != null && intent.getAction() != null && intent.getAction().equals("finish_first_start")) {
                 Timber.d("Completed FirstStartWizard");
 
-                if (mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
+                if (PrefUtils.isSignedIn(this)) {
                     mFirstStart = true;
                 }
             }
@@ -179,7 +180,7 @@ public class MainActivity extends GdgNavDrawerActivity {
             seasonsGreetings.show(getSupportFragmentManager(), "dialog");
         }
 
-        if (mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
+        if (PrefUtils.isSignedIn(this)) {
             checkAchievements();
         }
     }
