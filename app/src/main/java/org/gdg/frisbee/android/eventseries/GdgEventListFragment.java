@@ -1,4 +1,6 @@
-package org.gdg.frisbee.android.fragment;
+package org.gdg.frisbee.android.eventseries;
+
+import android.os.Bundle;
 
 import com.android.volley.Response;
 
@@ -16,7 +18,16 @@ import java.util.ArrayList;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
-public class GdgEventFragment extends EventFragment {
+public class GdgEventListFragment extends EventListFragment {
+
+    public static EventListFragment newInstance(String plusId) {
+        EventListFragment fragment = new GdgEventListFragment();
+        Bundle arguments = new Bundle();
+        arguments.putString(Const.EXTRA_PLUS_ID, plusId);
+        fragment.setArguments(arguments);
+        return fragment;
+    }
+    
     @Override
     void fetchEvents() {
         final DateTime now = new DateTime();
@@ -65,5 +76,4 @@ public class GdgEventFragment extends EventFragment {
             });
         }
     }
-
 }

@@ -12,7 +12,8 @@ import java.util.ArrayList;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.special.TaggedEvent;
+import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 
 public class DrawerAdapter extends BaseAdapter {
 
@@ -31,8 +32,14 @@ public class DrawerAdapter extends BaseAdapter {
             add(new DrawerItem(Const.DRAWER_HOME, R.drawable.drw_ic_home_gdg, R.string.home_gdg));
             add(new DrawerItem(Const.DRAWER_GDE, R.drawable.drw_ic_gde, R.string.gde));
             add(new DrawerItem(Const.DRAWER_PULSE, R.drawable.drw_ic_pulse, R.string.pulse));
-            final TaggedEvent taggedEvent = TaggedEvent.getCurrent();
-            add(new DrawerItem(Const.DRAWER_SPECIAL, taggedEvent.getDrawerIconResId(), taggedEvent.getTitleResId()));
+
+            final ArrayList<TaggedEventSeries> currentEventSeries =
+                    App.getInstance().currentTaggedEventSeries();
+            for (TaggedEventSeries taggedEventSeries : currentEventSeries) {
+                add(new DrawerItem(Const.DRAWER_SPECIAL, 
+                        taggedEventSeries.getDrawerIconResId(), 
+                        taggedEventSeries.getTitleResId()));
+            }
             add(new DrawerItem(Const.DRAWER_ACHIEVEMENTS, R.drawable.drw_ic_achievements, R.string.achievements));
             add(new DrawerItem(Const.DRAWER_ARROW, R.drawable.drw_ic_arrow, R.string.arrow));
         }};

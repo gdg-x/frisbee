@@ -16,6 +16,8 @@
 
 package org.gdg.frisbee.android;
 
+import org.joda.time.DateTime;
+
 /**
  * Created with IntelliJ IDEA.
  * User: maui
@@ -52,7 +54,6 @@ public class Const {
     public static final String EXTRA_PLUS_ID = "plus_id";
 
     public static final int DRAWER_HOME = 0;
-    public static final int DRAWER_GDL = 1;
     public static final int DRAWER_PULSE = 2;
     public static final int DRAWER_SPECIAL = 3;
     public static final int DRAWER_ACHIEVEMENTS = 4;
@@ -97,4 +98,12 @@ public class Const {
 
     public static final String TRUSTSTORE_PW = "VU%&ibkr45pnq39v53x";
     public static final boolean ALPHA = false;
+
+    public static final DateTime START_TIME_IOEXTENDED =    new DateTime(2015, 5, 1, 0, 0);
+    public static final DateTime START_TIME_STUDY_JAMS =    new DateTime(2015, 2, 1, 0, 0);
+    public static final DateTime START_TIME_WTM =           new DateTime(2015, 2, 1, 0, 0);
+    
+    public static final DateTime END_TIME_IOEXTENDED =      new DateTime(2015, 6, 1, 0, 0);
+    public static final DateTime END_TIME_STUDY_JAMS =      new DateTime(2015, 5, 1, 0, 0);
+    public static final DateTime END_TIME_WTM =             new DateTime(2015, 4, 1, 0, 0);
 }

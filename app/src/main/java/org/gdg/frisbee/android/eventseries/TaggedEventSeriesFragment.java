@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.gdg.frisbee.android.fragment;
+package org.gdg.frisbee.android.eventseries;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -33,7 +33,6 @@ import org.gdg.frisbee.android.api.ApiRequest;
 import org.gdg.frisbee.android.api.PagedList;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
-import org.gdg.frisbee.android.special.TaggedEvent;
 import org.gdg.frisbee.android.utils.EventDateComparator;
 import org.gdg.frisbee.android.utils.TaggedEventDistanceComparator;
 import org.gdg.frisbee.android.utils.Utils;
@@ -46,19 +45,19 @@ import butterknife.ButterKnife;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
-public class TaggedEventFragment extends EventFragment {
+public class TaggedEventSeriesFragment extends EventListFragment {
 
     private String mCacheKey = "";
-    private TaggedEvent mTaggedEvent;
+    private TaggedEventSeries mTaggedEventSeries;
     private Comparator<EventAdapter.Item> mLocationComparator = new TaggedEventDistanceComparator();
     private Comparator<EventAdapter.Item> mDateComparator = new EventDateComparator();
     private Comparator<EventAdapter.Item> mCurrentComparator = mLocationComparator;
 
-    public static TaggedEventFragment newInstance(String cacheKey, TaggedEvent taggedEvent) {
-        TaggedEventFragment frag = new TaggedEventFragment();
+    public static TaggedEventSeriesFragment newInstance(String cacheKey, TaggedEventSeries taggedEventSeries) {
+        TaggedEventSeriesFragment frag = new TaggedEventSeriesFragment();
         Bundle args = new Bundle();
         args.putString(Const.EXTRA_TAGGED_EVENT_CACHEKEY, cacheKey);
-        args.putParcelable(Const.EXTRA_TAGGED_EVENT, taggedEvent);
+        args.putParcelable(Const.EXTRA_TAGGED_EVENT, taggedEventSeries);
         frag.setArguments(args);
         return frag;
     }
@@ -70,7 +69,7 @@ public class TaggedEventFragment extends EventFragment {
         if (getArguments() != null) {
             Bundle args = getArguments();
             mCacheKey = args.getString(Const.EXTRA_TAGGED_EVENT_CACHEKEY);
-            mTaggedEvent = args.getParcelable(Const.EXTRA_TAGGED_EVENT);
+            mTaggedEventSeries = args.getParcelable(Const.EXTRA_TAGGED_EVENT);
         }
     }
 
@@ -102,7 +101,7 @@ public class TaggedEventFragment extends EventFragment {
         };
 
         ApiRequest fetchEvents = mClient
-                .getTaggedEventUpcomingList(mTaggedEvent.getTag(), listener, mErrorListener);
+                .getTaggedEventUpcomingList(mTaggedEventSeries.getTag(), listener, mErrorListener);
 
         if (Utils.isOnline(getActivity())) {
             fetchEvents.execute();

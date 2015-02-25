@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.gdg.frisbee.android.fragment;
+package org.gdg.frisbee.android.eventseries;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -39,6 +39,7 @@ import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.adapter.EventAdapter;
 import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.SimpleEvent;
+import org.gdg.frisbee.android.fragment.GdgListFragment;
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
 
@@ -56,7 +57,7 @@ import de.keyboardsurfer.android.widget.crouton.Style;
  * Date: 22.04.13
  * Time: 23:10
  */
-public abstract class EventFragment extends GdgListFragment implements View.OnClickListener {
+public abstract class EventListFragment extends GdgListFragment implements View.OnClickListener {
 
     
     protected GroupDirectory mClient;
@@ -77,14 +78,6 @@ public abstract class EventFragment extends GdgListFragment implements View.OnCl
                 Crouton.makeText(getActivity(), getString(R.string.fetch_events_failed), Style.ALERT).show();
         }
     };
-
-    public static EventFragment newInstance(String plusId) {
-        EventFragment fragment = new GdgEventFragment();
-        Bundle arguments = new Bundle();
-        arguments.putString(Const.EXTRA_PLUS_ID, plusId);
-        fragment.setArguments(arguments);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
