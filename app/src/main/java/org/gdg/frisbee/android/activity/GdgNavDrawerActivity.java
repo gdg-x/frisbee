@@ -76,8 +76,8 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
              * Called when a drawer has settled in a completely closed state.
              */
             public void onDrawerClosed(View view) {
-                if (PrefUtils.isFirstStartDone(GdgNavDrawerActivity.this)) {
-                    PrefUtils.setFirstStartDone(GdgNavDrawerActivity.this);
+                if (PrefUtils.shouldOpenDrawerOnStart(GdgNavDrawerActivity.this)) {
+                    PrefUtils.setShouldNotOpenDrawerOnStart(GdgNavDrawerActivity.this);
                 }
             }
 
@@ -185,7 +185,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     protected void onResume() {
         super.onResume();
 
-        if (!PrefUtils.isFirstStartDone(this)) {
+        if (PrefUtils.shouldOpenDrawerOnStart(this)) {
             mDrawerLayout.openDrawer(Gravity.START);
         }
     }
