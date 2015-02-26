@@ -4,7 +4,10 @@ apply plugin: 'versions'
 apply plugin: 'play'
 
 Properties local_properties = new Properties()
-local_properties.load(project.rootProject.file('local.properties').newDataInputStream())
+File localPropertiesFile = project.rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    local_properties.load(localPropertiesFile.newDataInputStream())
+}
 
 def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
 def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone("UTC"))
