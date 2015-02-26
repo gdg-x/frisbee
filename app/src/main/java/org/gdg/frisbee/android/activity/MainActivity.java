@@ -166,11 +166,11 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
             }
         }
 
-        Time now = new Time();
-        now.setToNow();
+        DateTime now = DateTime.now();
 
-        if ((mPreferences.getInt(Const.SETTINGS_SEASONS_GREETINGS, now.year - 1) < now.year) && (now.yearDay >= 354 && now.yearDay <= 366)) {
-            mPreferences.edit().putInt(Const.SETTINGS_SEASONS_GREETINGS, now.year).apply();
+        if (mPreferences.getInt(Const.SETTINGS_SEASONS_GREETINGS, now.getYear() - 1) < now.getYear()
+                && (now.getDayOfYear() >= 354 && now.getDayOfYear() <= 366)) {
+            mPreferences.edit().putInt(Const.SETTINGS_SEASONS_GREETINGS, now.getYear()).apply();
             SeasonsGreetingsFragment seasonsGreetings = new SeasonsGreetingsFragment();
             seasonsGreetings.show(getSupportFragmentManager(), "dialog");
         }
@@ -305,7 +305,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         if (mSpinnerAdapter.getCount() > 0) {
             outState.putParcelableArrayList("chapters", mSpinnerAdapter.getAll());
         }
-        if (mViewPagerAdapter.getSelectedChapter() != null) {
+        if (mViewPagerAdapter != null && mViewPagerAdapter.getSelectedChapter() != null) {
             outState.putParcelable("selected_chapter", mViewPagerAdapter.getSelectedChapter());
         }
     }
