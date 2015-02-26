@@ -25,7 +25,6 @@ import android.widget.Toast;
 
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
-import org.gdg.frisbee.android.R;
 
 public class StartActivity extends ActionBarActivity {
 
@@ -33,7 +32,7 @@ public class StartActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (BuildConfig.DEBUG && TextUtils.isEmpty(getString(R.string.play_app_id))) {
+        if (BuildConfig.DEBUG && TextUtils.isEmpty(BuildConfig.PLAY_APP_ID)) {
             Toast.makeText(this, "no API keys defined!", Toast.LENGTH_SHORT).show();
         }
 

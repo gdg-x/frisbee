@@ -42,6 +42,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.plus.Plus;
 
+import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.ApiRequest;
@@ -267,9 +268,10 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
                         }
                     });
                     try {
-                        String token = GoogleAuthUtil.getToken(FirstStartActivity.this, Plus.AccountApi.getAccountName(mGoogleApiClient),
-                                "audience:server:client_id:" + getString(R.string.hub_client_id));
-                        final String regid = mGcm.register(getString(R.string.gcm_sender_id));
+                        String token = GoogleAuthUtil.getToken(FirstStartActivity.this, 
+                                Plus.AccountApi.getAccountName(mGoogleApiClient),
+                                "audience:server:client_id:" + BuildConfig.HUB_CLIENT_ID);
+                        final String regid = mGcm.register(BuildConfig.GCM_SENDER_ID);
 
                         GdgX client = new GdgX(token);
 
@@ -300,9 +302,9 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
                         client.setHomeGdg(mPreferences.getString(Const.SETTINGS_HOME_GDG, ""), null, null).execute();
 
                     } catch (IOException e) {
-                        Timber.e("Token fail.", e);
+                        Timber.e("Token fail. %s", e);
                     } catch (GoogleAuthException e) {
-                        Timber.e("Auth fail.", e);
+                        Timber.e("Auth fail. %s", e);
                     }
                 } else {
                     mPreferences.edit()

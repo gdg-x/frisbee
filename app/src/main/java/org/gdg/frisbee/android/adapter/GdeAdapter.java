@@ -18,6 +18,7 @@ import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Person;
 import com.squareup.picasso.Picasso;
 
+import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.GapiOkTransport;
 import org.gdg.frisbee.android.api.model.Gde;
@@ -61,7 +62,11 @@ public class GdeAdapter extends BaseAdapter {
         mPlusClient = client;
         mConsumedMap = new HashMap<Integer, Object>();
 
-        mClient = new Plus.Builder(mTransport, mJsonFactory, null).setGoogleClientRequestInitializer(new CommonGoogleJsonClientRequestInitializer(ctx.getString(R.string.ip_simple_api_access_key))).setApplicationName("GDG Frisbee").build();
+        mClient = new Plus.Builder(mTransport, mJsonFactory, null)
+                .setGoogleClientRequestInitializer(
+                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.IP_SIMPLE_API_ACCESS_KEY))
+                .setApplicationName("GDG Frisbee")
+                .build();
         mPlusPattern = Pattern.compile("http[s]?:\\/\\/plus\\..*google\\.com.*(\\+[a-zA-Z]+|[0-9]{21}).*");
     }
 

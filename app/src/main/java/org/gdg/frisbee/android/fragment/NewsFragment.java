@@ -37,6 +37,7 @@ import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Activity;
 import com.google.api.services.plus.model.ActivityFeed;
 
+import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgActivity;
@@ -89,7 +90,10 @@ public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mClient = new Plus.Builder(mTransport, mJsonFactory, null).setGoogleClientRequestInitializer(new CommonGoogleJsonClientRequestInitializer(getString(R.string.ip_simple_api_access_key))).build();
+        mClient = new Plus.Builder(mTransport, mJsonFactory, null)
+                .setGoogleClientRequestInitializer(
+                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.IP_SIMPLE_API_ACCESS_KEY))
+                .build();
 
         mAdapter = new NewsAdapter(getActivity(), ((GdgActivity) getActivity()).getGoogleApiClient());
         setListAdapter(mAdapter);
