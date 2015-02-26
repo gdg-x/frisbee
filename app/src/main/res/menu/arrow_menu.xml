@@ -4,22 +4,12 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
   <item
     android:id="@+id/arrow_lb"
+    android:icon="@drawable/ic_play_games_badge_leaderboards_gray"
     android:title="@string/arrow_leaderboard"
-    app:showAsAction="ifRoom"
-    android:icon="@drawable/ic_play_games_badge_leaderboards_gray"/>
- <item
+    app:showAsAction="ifRoom" />
+  <item
     android:id="@+id/arrow_tagged"
+    android:icon="@drawable/ic_arrow_tagged"
     android:title="@string/arrow_tagged"
-    app:showAsAction="ifRoom"
-    android:icon="@drawable/ic_arrow_tagged"/>
-  <item
-    android:id="@+id/settings"
-    android:title="@string/settings"
-    app:showAsAction="collapseActionView"
-    android:menuCategory="secondary" />
-  <item
-    android:id="@+id/about"
-    android:title="@string/about"
-    app:showAsAction="collapseActionView"
-    android:menuCategory="secondary" />
+    app:showAsAction="ifRoom" />
 </menu>

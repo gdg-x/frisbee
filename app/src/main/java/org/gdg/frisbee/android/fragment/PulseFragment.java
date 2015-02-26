@@ -16,6 +16,7 @@
 
 package org.gdg.frisbee.android.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -28,11 +29,9 @@ import com.android.volley.VolleyError;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.MainActivity;
-import org.gdg.frisbee.android.activity.PulseActivity;
 import org.gdg.frisbee.android.adapter.PulseAdapter;
 import org.gdg.frisbee.android.api.ApiRequest;
 import org.gdg.frisbee.android.api.GroupDirectory;
-import org.gdg.frisbee.android.api.model.Pulse;
 import org.gdg.frisbee.android.api.model.PulseEntry;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
@@ -47,32 +46,45 @@ import timber.log.Timber;
 
 public class PulseFragment extends GdgListFragment {
 
+    private static final String ARG_MODE = "mode";
+    private static final String ARG_TARGET = "target";
+
     private int mMode;
     private String mTarget;
     private PulseAdapter mAdapter;
-    private GroupDirectory mClient;
-    private Pulse mPulse;
     private ApiRequest mFetchPulseTask;
+    private Pulse mListener;
 
     public static PulseFragment newInstance(int mode, String target) {
         PulseFragment fragment = new PulseFragment();
         Bundle arguments = new Bundle();
-        arguments.putInt("mode", mode);
-        arguments.putString("target", target);
+        arguments.putInt(ARG_MODE, mode);
+        arguments.putString(ARG_TARGET, target);
         fragment.setArguments(arguments);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(final Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof Pulse) {
+            mListener = (Pulse) activity;
+        } else {
+            throw new ClassCastException("Activity " + activity.getClass().getSimpleName() +
+                    " must implement " + Pulse.class.getSimpleName() + " interface.");
+        }
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mClient = new GroupDirectory();
+        final GroupDirectory client = new GroupDirectory();
 
-        mTarget = getArguments().getString("target");
-        mMode = getArguments().getInt("mode");
+        mTarget = getArguments().getString(ARG_TARGET);
+        mMode = getArguments().getInt(ARG_MODE);
 
-        if(getListView() instanceof ListView) {
+        if (getListView() instanceof ListView) {
             ListView listView = (ListView) getListView();
             listView.setDivider(null);
             listView.setDividerHeight(0);
@@ -83,31 +95,31 @@ public class PulseFragment extends GdgListFragment {
 
         setIsLoading(true);
 
-        if(mTarget.equals("Global")) {
-            mFetchPulseTask = mClient.getPulse(new Response.Listener<Pulse>() {
-                     @Override
-                     public void onResponse(final Pulse pulse) {
-                         App.getInstance().getModelCache().putAsync("pulse_"+mTarget.toLowerCase(), pulse, DateTime.now().plusDays(1), new ModelCache.CachePutListener() {
-                             @Override
-                             public void onPutIntoCache() {
-                                 initAdapter(pulse);
-                             }
-                         });
-                     }
-                 }, new Response.ErrorListener() {
-                     @Override
-                     public void onErrorResponse(VolleyError volleyError) {
-                         if(isAdded())
-                            Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
-                         Timber.e("Could'nt fetch pulse", volleyError);
-                     }
-                 }
+        if (mTarget.equals("Global")) {
+            mFetchPulseTask = client.getPulse(new Response.Listener<org.gdg.frisbee.android.api.model.Pulse>() {
+                                                  @Override
+                                                  public void onResponse(final org.gdg.frisbee.android.api.model.Pulse pulse) {
+                                                      App.getInstance().getModelCache().putAsync("pulse_" + mTarget.toLowerCase(), pulse, DateTime.now().plusDays(1), new ModelCache.CachePutListener() {
+                                                          @Override
+                                                          public void onPutIntoCache() {
+                                                              initAdapter(pulse);
+                                                          }
+                                                      });
+                                                  }
+                                              }, new Response.ErrorListener() {
+                                                  @Override
+                                                  public void onErrorResponse(VolleyError volleyError) {
+                                                      if (isAdded())
+                                                          Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
+                                                      Timber.e("Couldn't fetch pulse", volleyError);
+                                                  }
+                                              }
             );
         } else {
-            mFetchPulseTask = mClient.getCountryPulse(mTarget, new Response.Listener<Pulse>() {
+            mFetchPulseTask = client.getCountryPulse(mTarget, new Response.Listener<org.gdg.frisbee.android.api.model.Pulse>() {
                         @Override
-                        public void onResponse(final Pulse pulse) {
-                            App.getInstance().getModelCache().putAsync("pulse_" + mTarget.toLowerCase().replace(" ","-"), pulse, DateTime.now().plusDays(1), new ModelCache.CachePutListener() {
+                        public void onResponse(final org.gdg.frisbee.android.api.model.Pulse pulse) {
+                            App.getInstance().getModelCache().putAsync("pulse_" + mTarget.toLowerCase().replace(" ", "-"), pulse, DateTime.now().plusDays(1), new ModelCache.CachePutListener() {
                                 @Override
                                 public void onPutIntoCache() {
                                     initAdapter(pulse);
@@ -117,18 +129,18 @@ public class PulseFragment extends GdgListFragment {
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
-                            if(isAdded())
+                            if (isAdded())
                                 Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
-                            Timber.e("Could'nt fetch pulse", volleyError);
+                            Timber.e("Couldn't fetch pulse", volleyError);
                         }
                     }
             );
         }
 
-        App.getInstance().getModelCache().getAsync("pulse_"+mTarget.toLowerCase().replace(" ","-"), true, new ModelCache.CacheListener() {
+        App.getInstance().getModelCache().getAsync("pulse_" + mTarget.toLowerCase().replace(" ", "-"), true, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
-                Pulse pulse = (Pulse)item;
+                org.gdg.frisbee.android.api.model.Pulse pulse = (org.gdg.frisbee.android.api.model.Pulse) item;
                 initAdapter(pulse);
             }
 
@@ -139,16 +151,15 @@ public class PulseFragment extends GdgListFragment {
         });
     }
 
-    private void initAdapter(Pulse pulse) {
-        mPulse = pulse;
-        mAdapter.setPulse(mMode, mPulse);
+    private void initAdapter(org.gdg.frisbee.android.api.model.Pulse pulse) {
+        mAdapter.setPulse(mMode, pulse);
         mAdapter.notifyDataSetChanged();
         setIsLoading(false);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_pulse, null);
+        View v = inflater.inflate(R.layout.fragment_pulse, container, false);
         ButterKnife.inject(this, v);
         return v;
     }
@@ -157,15 +168,16 @@ public class PulseFragment extends GdgListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         Map.Entry<String, PulseEntry> pulse = (Map.Entry<String, PulseEntry>) mAdapter.getItem(position);
 
-        if(mTarget.equals("Global")) {
-            if(getActivity() instanceof PulseActivity) {
-                PulseActivity activity = (PulseActivity) getActivity();
-                activity.onNavigationItemSelected(activity.getPulseTargets().indexOf(pulse.getKey()),0);
-            }
+        if (mTarget.equals("Global")) {
+            mListener.openPulse(pulse.getKey());
         } else {
             Intent chapterIntent = new Intent(getActivity(), MainActivity.class);
             chapterIntent.putExtra("org.gdg.frisbee.CHAPTER", pulse.getValue().getId());
             startActivity(chapterIntent);
         }
+    }
+
+    public interface Pulse {
+        void openPulse(String key);
     }
 }

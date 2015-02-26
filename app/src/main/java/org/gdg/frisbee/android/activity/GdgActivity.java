@@ -23,6 +23,7 @@ import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.Toolbar;
 
 import com.google.android.gms.appstate.AppStateManager;
 import com.google.android.gms.common.ConnectionResult;
@@ -30,8 +31,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.Plus;
 
-import org.gdg.frisbee.android.Const;
+import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.achievements.AchievementActionHandler;
+import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.ScopedBus;
 import org.gdg.frisbee.android.utils.Utils;
 
@@ -77,6 +79,8 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
     // services until the user clicks 'sign in'.
     private PendingIntent mSignInIntent;
 
+    private Toolbar mActionBarToolbar;
+
     protected ScopedBus getBus() {
         return scopedBus;
     }
@@ -89,6 +93,7 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
     public void setContentView(int layoutResId) {
         super.setContentView(layoutResId);
         ButterKnife.inject(this);
+        getActionBarToolbar();
     }
 
     @Override
@@ -122,18 +127,13 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
 
         mAchievementActionHandler =
                 new AchievementActionHandler(getHandler(), mGoogleApiClient, mPreferences);
-
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-            getSupportActionBar().setElevation(0);
-        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        if (mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
+        if (PrefUtils.isSignedIn(this)) {
             mGoogleApiClient.connect();
         }
     }
@@ -142,7 +142,7 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
     protected void onStop() {
         super.onStop();
 
-        if (mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false) && mGoogleApiClient.isConnected()) {
+        if (PrefUtils.isSignedIn(this) && mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
     }
@@ -167,7 +167,7 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
     protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
         super.onActivityResult(requestCode, responseCode, intent);
 
-        if (mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false) && !Utils.isEmulator()) {
+        if (PrefUtils.isSignedIn(this) && !Utils.isEmulator()) {
             switch (requestCode) {
                 case RC_SIGN_IN:
                     if (responseCode == RESULT_OK) {
@@ -188,6 +188,17 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
                     break;
             }
         }
+    }
+
+    protected Toolbar getActionBarToolbar() {
+        if (mActionBarToolbar == null) {
+            mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+            if (mActionBarToolbar != null) {
+                mActionBarToolbar.setNavigationIcon(R.drawable.ic_drawer);
+                setSupportActionBar(mActionBarToolbar);
+            }
+        }
+        return mActionBarToolbar;
     }
 
     private void resolveSignInError() {

@@ -26,7 +26,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.text.format.Time;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -47,6 +53,7 @@ import org.gdg.frisbee.android.fragment.InfoFragment;
 import org.gdg.frisbee.android.fragment.NewsFragment;
 import org.gdg.frisbee.android.fragment.SeasonsGreetingsFragment;
 import org.gdg.frisbee.android.utils.ChapterComparator;
+import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.SlidingTabLayout;
 import org.joda.time.DateTime;
@@ -60,7 +67,7 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import timber.log.Timber;
 
-public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNavigationListener {
+public class MainActivity extends GdgNavDrawerActivity {
 
     public static final String SECTION_EVENTS = "events";
     public static final int REQUEST_FIRST_START_WIZARD = 100;
@@ -80,6 +87,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
     private boolean mFirstStart = false;
 
     private ChapterComparator mLocationComparator;
+    private Spinner mSpinner;
 
     /**
      * Called when the activity is first created.
@@ -103,14 +111,11 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         mSlidingTabLayout.setOnPageChangeListener(this);
 
         mSpinnerAdapter = new ChapterAdapter(MainActivity.this, android.R.layout.simple_list_item_1);
-        getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-        getSupportActionBar().setListNavigationCallbacks(mSpinnerAdapter, MainActivity.this);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        initSpinner();
 
         mFetchChaptersTask = client.getDirectory(new Response.Listener<Directory>() {
             @Override
             public void onResponse(final Directory directory) {
-                getSupportActionBar().setListNavigationCallbacks(mSpinnerAdapter, MainActivity.this);
                 App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, directory, DateTime.now().plusDays(1), new ModelCache.CachePutListener() {
                     @Override
                     public void onPutIntoCache() {
@@ -123,7 +128,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 Crouton.makeText(MainActivity.this, getString(R.string.fetch_chapters_failed), Style.ALERT).show();
-                Timber.e("Could'nt fetch chapter list", volleyError);
+                Timber.e("Couldn't fetch chapter list", volleyError);
             }
         });
 
@@ -133,7 +138,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
             if (intent != null && intent.getAction() != null && intent.getAction().equals("finish_first_start")) {
                 Timber.d("Completed FirstStartWizard");
 
-                if (mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
+                if (PrefUtils.isSignedIn(this)) {
                     mFirstStart = true;
                 }
             }
@@ -175,7 +180,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
             seasonsGreetings.show(getSupportFragmentManager(), "dialog");
         }
 
-        if (mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
+        if (PrefUtils.isSignedIn(this)) {
             checkAchievements();
         }
     }
@@ -188,12 +193,12 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
             GooglePlayServicesUtil.getErrorDialog(playServiceStatus, this, PLAY_SERVICE_DIALOG_REQUEST_CODE).show();
         }
     }
-
+    
     /**
      * Initializes ViewPager, SlidingTabLayout, and Spinner Navigation.
-     *
+     * <p/>
      * It tries to get selected chapter from Intent Extras,
-     *                                  if not found, gets the first Chapter in the array.
+     * if not found, gets the first Chapter in the array.
      * This function is called after cache query or network call is success
      *
      * @param chapters Chapter array to be initialized, never null.
@@ -221,15 +226,15 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
      * Initializes ViewPager, SlidingTabLayout, and Spinner Navigation.
      * This function is called after cache query or network call is success,
      * or after an orientation change using savedInstance.
-     *  
-     * @param chapters Chapter array to be initialized, never null.
+     *
+     * @param chapters        Chapter array to be initialized, never null.
      * @param selectedChapter selectedChapter, never null.
      */
     private void initChapters(@NonNull ArrayList<Chapter> chapters,
                               @NonNull Chapter selectedChapter) {
         addChapters(chapters);
 
-        getSupportActionBar().setSelectedNavigationItem(mSpinnerAdapter.getPosition(selectedChapter));
+        mSpinner.setSelection(mSpinnerAdapter.getPosition(selectedChapter));
 
         mViewPagerAdapter = new ChapterFragmentPagerAdapter(this,
                 getSupportFragmentManager(), selectedChapter);
@@ -310,15 +315,32 @@ public class MainActivity extends GdgNavDrawerActivity implements ActionBar.OnNa
         }
     }
 
-    @Override
-    public boolean onNavigationItemSelected(int position, long l) {
-        Chapter previous = mViewPagerAdapter.getSelectedChapter();
-        mViewPagerAdapter.setSelectedChapter(mSpinnerAdapter.getItem(position));
-        if (previous == null || !previous.equals(mSpinnerAdapter.getItem(position))) {
-            Timber.d("Switching chapter!");
-            mViewPagerAdapter.notifyDataSetChanged();
-        }
-        return true;
+    private void initSpinner() {
+        Toolbar toolbar = getActionBarToolbar();
+        View spinnerContainer = LayoutInflater.from(this).inflate(R.layout.actionbar_spinner,
+                toolbar, false);
+        ActionBar.LayoutParams lp = new ActionBar.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        toolbar.addView(spinnerContainer, lp);
+
+        mSpinner = (Spinner) spinnerContainer.findViewById(R.id.actionbar_spinner);
+        mSpinner.setAdapter(mSpinnerAdapter);
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
+                Chapter previous = mViewPagerAdapter.getSelectedChapter();
+                mViewPagerAdapter.setSelectedChapter(mSpinnerAdapter.getItem(position));
+                if (previous == null || !previous.equals(mSpinnerAdapter.getItem(position))) {
+                    Timber.d("Switching chapter!");
+                    mViewPagerAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(final AdapterView<?> parent) {
+                // Nothing to do.
+            }
+        });
     }
 
     public class ChapterFragmentPagerAdapter extends FragmentStatePagerAdapter {

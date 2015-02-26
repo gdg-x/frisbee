@@ -8,16 +8,16 @@
 
   <android.support.v7.widget.CardView
     android:id="@+id/card_view"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_margin="5dip"
     android:padding="10dip"
     card_view:cardCornerRadius="3dp"
     card_view:contentPadding="10dp">
 
     <LinearLayout
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
       android:orientation="horizontal">
 
       <TextView
@@ -38,7 +38,7 @@
 
       <TextView
         android:id="@+id/value"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|top"
         android:gravity="right"

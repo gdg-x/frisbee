@@ -28,6 +28,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include layout="@layout/toolbar_actionbar" />
+
     <org.gdg.frisbee.android.view.SlidingTabLayout
       android:id="@+id/sliding_tabs"
       android:layout_width="match_parent"
@@ -40,13 +42,6 @@
       android:layout_height="wrap_content" />
   </LinearLayout>
 
-  <ListView
-    android:id="@+id/left_drawer"
-    android:layout_width="240dp"
-    android:layout_height="match_parent"
-    android:layout_gravity="start"
-    android:background="#111"
-    android:choiceMode="singleChoice"
-    android:divider="@android:color/transparent"
-    android:dividerHeight="0dp" />
+  <include layout="@layout/navdrawer" />
+
 </android.support.v4.widget.DrawerLayout>

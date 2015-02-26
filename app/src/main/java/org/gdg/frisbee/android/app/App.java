@@ -144,7 +144,7 @@ public class App extends Application implements LocationListener {
         mTaggedEventSeriesList = new ArrayList<>();
         //Add Women Techmakers
         addTaggedEventSeriesIfDateFits(new TaggedEventSeries("wtm",
-                R.drawable.drw_ic_wtm,
+                R.drawable.ic_drawer_wtm,
                 R.string.wtm,
                 R.string.wtm_description,
                 R.drawable.ic_wtm,
@@ -152,7 +152,7 @@ public class App extends Application implements LocationListener {
                 Const.END_TIME_WTM));
         //Add Android Fundamentals Study Jams
         addTaggedEventSeriesIfDateFits(new TaggedEventSeries("studyjam",
-                R.drawable.drw_ic_studyjams,
+                R.drawable.ic_drawer_studyjams,
                 R.string.studyjams,
                 R.string.studyjams_description,
                 R.drawable.ic_studyjams,
@@ -160,7 +160,7 @@ public class App extends Application implements LocationListener {
                 Const.END_TIME_STUDY_JAMS));
         //Add IO Extended
         addTaggedEventSeriesIfDateFits(new TaggedEventSeries("io-extended",
-                R.drawable.drw_ic_ioextended,
+                R.drawable.ic_drawer_ioextended,
                 R.string.ioextended,
                 R.string.ioextended_description,
                 R.drawable.ic_ioextended,

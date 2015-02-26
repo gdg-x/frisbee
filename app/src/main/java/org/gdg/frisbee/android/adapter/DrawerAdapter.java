@@ -8,30 +8,28 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 
+import java.util.ArrayList;
+
 public class DrawerAdapter extends BaseAdapter {
 
-    private Context mContext;
-    private LayoutInflater mInflater;
+    private final Context mContext;
     private ArrayList<DrawerItem> mItems;
 
-    public DrawerAdapter(Context ctx) {
-        mContext = ctx;
-        mInflater = LayoutInflater.from(mContext);
+    public DrawerAdapter(Context context) {
+        mContext = context;
         initAdapter();
     }
 
     private void initAdapter() {
         mItems = new ArrayList<DrawerItem>() {{
-            add(new DrawerItem(Const.DRAWER_HOME, R.drawable.drw_ic_home_gdg, R.string.home_gdg));
-            add(new DrawerItem(Const.DRAWER_GDE, R.drawable.drw_ic_gde, R.string.gde));
-            add(new DrawerItem(Const.DRAWER_PULSE, R.drawable.drw_ic_pulse, R.string.pulse));
+            add(new DrawerItem(Const.DRAWER_HOME, R.drawable.ic_drawer_home_gdg, R.string.home_gdg));
+            add(new DrawerItem(Const.DRAWER_GDE, R.drawable.ic_drawer_gde, R.string.gde));
+            add(new DrawerItem(Const.DRAWER_PULSE, R.drawable.ic_drawer_pulse, R.string.pulse));
 
             final ArrayList<TaggedEventSeries> currentEventSeries =
                     App.getInstance().currentTaggedEventSeries();
@@ -40,8 +38,10 @@ public class DrawerAdapter extends BaseAdapter {
                         taggedEventSeries.getDrawerIconResId(), 
                         taggedEventSeries.getTitleResId()));
             }
-            add(new DrawerItem(Const.DRAWER_ACHIEVEMENTS, R.drawable.drw_ic_achievements, R.string.achievements));
-            add(new DrawerItem(Const.DRAWER_ARROW, R.drawable.drw_ic_arrow, R.string.arrow));
+            add(new DrawerItem(Const.DRAWER_ACHIEVEMENTS, R.drawable.ic_drawer_achievements, R.string.achievements));
+            add(new DrawerItem(Const.DRAWER_ARROW, R.drawable.ic_drawer_arrow, R.string.arrow));
+            add(new DrawerItem(Const.DRAWER_SETTINGS, R.drawable.ic_drawer_settings, R.string.settings));
+            add(new DrawerItem(Const.DRAWER_ABOUT, R.drawable.ic_drawer_about, R.string.about));
         }};
     }
 
@@ -62,15 +62,16 @@ public class DrawerAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        if(view == null)
-            view = mInflater.inflate(R.layout.list_drawer_item, null);
+        if (view == null) {
+            view = LayoutInflater.from(mContext).inflate(R.layout.list_drawer_item, viewGroup, false);
+        }
 
-        ImageView mIcon = (ImageView)view.findViewById(R.id.icon);
-        TextView mTitle = (TextView)view.findViewById(R.id.title);
+        ImageView icon = (ImageView) view.findViewById(R.id.icon);
+        TextView title = (TextView) view.findViewById(R.id.title);
 
         DrawerItem item = (DrawerItem) getItem(i);
-        mIcon.setImageResource(item.getIcon());
-        mTitle.setText(item.getTitle());
+        icon.setImageResource(item.getIcon());
+        title.setText(item.getTitle());
 
         return view;
     }
@@ -92,16 +93,16 @@ public class DrawerAdapter extends BaseAdapter {
             return mIcon;
         }
 
-        public void setIcon(int mIcon) {
-            this.mIcon = mIcon;
+        public void setIcon(int icon) {
+            mIcon = icon;
         }
 
         public int getTitle() {
             return mTitle;
         }
 
-        public void setTitle(int mTitle) {
-            this.mTitle = mTitle;
+        public void setTitle(int title) {
+            mTitle = title;
         }
     }
 }

@@ -53,6 +53,7 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.fragment.FirstStartStep1Fragment;
 import org.gdg.frisbee.android.fragment.FirstStartStep2Fragment;
 import org.gdg.frisbee.android.fragment.FirstStartStep3Fragment;
+import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.view.NonSwipeableViewPager;
 
 import java.io.IOException;
@@ -215,9 +216,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
         FirstStartStep3Fragment step3 = (FirstStartStep3Fragment) mViewPagerAdapter.getItem(2);
         step3.setSignedIn(true);
 
-        mPreferences.edit()
-                .putBoolean(Const.SETTINGS_SIGNED_IN, true)
-                .apply();
+        PrefUtils.setSignedIn(this);
 
         if (mViewPager.getCurrentItem() >= 1) {
             mViewPager.setCurrentItem(2, true);
@@ -226,9 +225,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
 
     @Override
     public void onSkippedSignIn() {
-        mPreferences.edit()
-                .putBoolean(Const.SETTINGS_SIGNED_IN, false)
-                .apply();
+        PrefUtils.setLoggedOut(this);
         FirstStartStep3Fragment step3 = (FirstStartStep3Fragment) mViewPagerAdapter.getItem(2);
         step3.setSignedIn(false);
 
@@ -260,7 +257,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
             @Override
             protected Void doInBackground(Void... voids) {
 
-                if (enableGcm && mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false)) {
+                if (enableGcm && PrefUtils.isSignedIn(FirstStartActivity.this)) {
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {

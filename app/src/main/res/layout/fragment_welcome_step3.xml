@@ -2,13 +2,13 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
-  android:layout_height="fill_parent"
+  android:layout_height="match_parent"
   android:background="@color/cloud"
   android:orientation="vertical">
 
   <LinearLayout
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_weight="1"
     android:gravity="center_vertical|center_horizontal"
     android:orientation="vertical"
@@ -35,7 +35,7 @@
 
     <TextView
       android:id="@+id/textView"
-      android:layout_width="fill_parent"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginBottom="20dip"
       android:gravity="center_horizontal"
@@ -55,7 +55,7 @@
       <CheckBox
         android:id="@+id/enable_analytics"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_height="match_parent"
         android:checked="true"
         android:text="@string/allow_analytics"
         android:textColor="@color/asbestos"
@@ -72,7 +72,7 @@
       <CheckBox
         android:id="@+id/enable_gcm"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_height="match_parent"
         android:checked="true"
         android:text="@string/enable_gcm"
         android:textColor="@color/asbestos"
@@ -89,7 +89,7 @@
 
   <ImageView
     android:id="@+id/imageView"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="15dip"
     android:background="@drawable/googly_bar" />
 </LinearLayout>

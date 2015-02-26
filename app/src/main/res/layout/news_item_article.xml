@@ -7,7 +7,7 @@
   android:padding="10dip">
 
   <View
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="1dip"
     android:layout_marginBottom="5dip"
     android:layout_marginLeft="5dip"
@@ -15,19 +15,19 @@
     android:background="@color/cloud"></View>
 
   <LinearLayout
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="horizontal">
 
     <org.gdg.frisbee.android.view.ResizableImageView
       android:id="@+id/image"
-      android:layout_width="fill_parent"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_gravity="center_horizontal|top"
       android:layout_weight="2" />
 
     <LinearLayout
-      android:layout_width="fill_parent"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginLeft="10dip"
       android:layout_weight="1"
@@ -35,7 +35,7 @@
 
       <TextView
         android:id="@+id/displayName"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dip"
         android:autoLink="email|map|web"
@@ -43,7 +43,7 @@
 
       <TextView
         android:id="@+id/content"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autoLink="email|map|web"
         android:text="New Text"

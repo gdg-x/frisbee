@@ -14,11 +14,10 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
+-->
 
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
   android:layout_height="wrap_content">
 
   <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -31,8 +30,8 @@
     card_view:cardCornerRadius="5dp">
 
     <LinearLayout
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
       android:orientation="vertical">
 
       <LinearLayout
@@ -53,18 +52,18 @@
 
         <LinearLayout
           android:id="@+id/shareContainer"
-          android:layout_width="fill_parent"
-          android:layout_height="fill_parent"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
           android:orientation="vertical"
           android:visibility="gone">
 
           <View
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="1dip"
             android:layout_marginBottom="5dip"
             android:layout_marginLeft="5dip"
             android:layout_marginRight="5dip"
-            android:background="@color/cloud"></View>
+            android:background="@color/cloud" />
 
           <TextView
             android:id="@+id/shareContent"
@@ -81,11 +80,11 @@
         android:id="@+id/attachmentContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"></LinearLayout>
+        android:orientation="vertical" />
 
       <LinearLayout
         android:id="@+id/options"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingBottom="15dip"
@@ -93,7 +92,8 @@
         android:paddingRight="10dip"
         android:paddingTop="10dip">
 
-        <com.google.android.gms.plus.PlusOneButton android:id="@+id/plus_one_button"
+        <com.google.android.gms.plus.PlusOneButton
+          android:id="@+id/plus_one_button"
           xmlns:plus="http://schemas.android.com/apk/lib/com.google.android.gms.plus"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
@@ -102,7 +102,7 @@
 
         <TextView
           android:id="@+id/timestamp"
-          android:layout_width="fill_parent"
+          android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:gravity="right"
           android:paddingTop="2dip"

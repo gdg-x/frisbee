@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 The GDG Frisbee Project
+ * Copyright 2014-2015 The GDG Frisbee Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,12 @@
 
 package org.gdg.frisbee.android.activity;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
@@ -56,6 +53,7 @@ import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.app.OrganizerChecker;
 import org.gdg.frisbee.android.utils.CryptoUtils;
+import org.gdg.frisbee.android.utils.PrefUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
@@ -66,49 +64,30 @@ import java.util.Set;
 
 import butterknife.InjectView;
 
-/**
- * Created with IntelliJ IDEA.
- * User: maui
- * Date: 02.04.14
- * Time: 20:44
- */
 public class ArrowActivity extends GdgNavDrawerActivity {
 
     public static final String ID_SEPARATOR_FOR_SPLIT = "\\|";
     public static final String ID_SPLIT_CHAR = "|";
     private static final int REQUEST_LEADERBOARD = 1;
-
-    private String previous;
-
-    private BaseArrowHandler mArrowHandler;
-    private NfcAdapter mNfcAdapter;
-
-    private SharedPreferences arrowPreferences;
-
-    @InjectView(R.id.viewFlipper)
-    ViewFlipper viewFlipper;
-
-    @InjectView(R.id.switchToSend)
-    Button switchToSend;
-
-    @InjectView(R.id.switchToTag)
-    Button switchToReceive;
-
-    @InjectView(R.id.organizerOnly)
-    LinearLayout organizerOnly;
-
-    @InjectView(R.id.imageView)
-    ImageView scanImageView;
-
-    @InjectView(R.id.organizerPic)
-    ImageView organizerPic;
-
-    private String mPendingScore;
-
-    private Handler mHandler = new Handler();
-
     private static final int WHITE = 0xFFFFFFFF;
     private static final int BLACK = 0xFF000000;
+    @InjectView(R.id.viewFlipper)
+    ViewFlipper viewFlipper;
+    @InjectView(R.id.switchToSend)
+    Button switchToSend;
+    @InjectView(R.id.switchToTag)
+    Button switchToReceive;
+    @InjectView(R.id.organizerOnly)
+    LinearLayout organizerOnly;
+    @InjectView(R.id.imageView)
+    ImageView scanImageView;
+    @InjectView(R.id.organizerPic)
+    ImageView organizerPic;
+    private String previous;
+    private BaseArrowHandler mArrowHandler;
+    private NfcAdapter mNfcAdapter;
+    private String mPendingScore;
+    private Handler mHandler = new Handler();
 
     @Override
     protected String getTrackedViewName() {
@@ -120,10 +99,8 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arrow);
 
-        if (!mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false))
+        if (!PrefUtils.isSignedIn(this))
             finish();
-
-        arrowPreferences = getSharedPreferences("arrow", MODE_PRIVATE);
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (mNfcAdapter == null) {
@@ -160,7 +137,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.arrow_lb:
                 startActivityForResult(Games.Leaderboards.getLeaderboardIntent(getGoogleApiClient(), Const.ARROW_LB), REQUEST_LEADERBOARD);
                 return true;
@@ -187,8 +164,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
                     msgs[i] = (NdefMessage) rawMsgs[i];
 
                     NdefRecord[] records = msgs[i].getRecords();
-                    for(int j = 0; j < records.length; j++) {
-                        NdefRecord record = records[j];
+                    for (NdefRecord record : records) {
                         byte[] typeArray = record.getType();
                         String mimeType = new String(typeArray);
                         if (record.getTnf() == NdefRecord.TNF_MIME_MEDIA && mimeType.equals(Const.ARROW_MIME)) {
@@ -198,8 +174,8 @@ public class ArrowActivity extends GdgNavDrawerActivity {
 
                 }
             }
-        } else if (Intent.ACTION_VIEW.equals(intent.getAction())){
-            if (intent.getData() != null && intent.getDataString().length() > Const.QR_MSG_PREFIX.length()){
+        } else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+            if (intent.getData() != null && intent.getDataString().length() > Const.QR_MSG_PREFIX.length()) {
                 String msg = intent.getDataString().substring(Const.QR_MSG_PREFIX.length());
                 taggedPerson(msg);
             }
@@ -214,9 +190,9 @@ public class ArrowActivity extends GdgNavDrawerActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
-        switch ( requestCode ) {
+        switch (requestCode) {
             case IntentIntegrator.REQUEST_CODE:
-                if (responseCode == RESULT_CANCELED){
+                if (responseCode == RESULT_CANCELED) {
                     return;
                 }
 
@@ -234,11 +210,11 @@ public class ArrowActivity extends GdgNavDrawerActivity {
 
             String[] parts = decrypted.split(ID_SEPARATOR_FOR_SPLIT);
 
-            if(parts.length == 2) {
+            if (parts.length == 2) {
 
                 long dt = Long.parseLong(parts[1]);
 
-                if((getNow() - dt) < 60000) {
+                if ((getNow() - dt) < 60000) {
                     if (getGoogleApiClient().isConnected()) {
                         score(parts[0]);
                     } else {
@@ -257,7 +233,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
 
     private void score(final String id) {
 
-        if(id.equals(Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getId())) {
+        if (id.equals(Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getId())) {
             Toast.makeText(this, R.string.arrow_selfie, Toast.LENGTH_LONG).show();
             return;
         }
@@ -271,7 +247,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
                         = stateResult.getLoadedResult();
 
                 if (loadedResult != null) {
-                    if(loadedResult.getStatus().getStatusCode() == AppStateStatusCodes.STATUS_OK || loadedResult.getStatus().getStatusCode() == AppStateStatusCodes.STATUS_STATE_KEY_NOT_FOUND) {
+                    if (loadedResult.getStatus().getStatusCode() == AppStateStatusCodes.STATUS_OK || loadedResult.getStatus().getStatusCode() == AppStateStatusCodes.STATUS_STATE_KEY_NOT_FOUND) {
                         previous = "";
 
                         if (loadedResult.getStatus().getStatusCode() == AppStateStatusCodes.STATUS_OK) {
@@ -285,8 +261,6 @@ public class ArrowActivity extends GdgNavDrawerActivity {
                         } else {
                             addTaggedPersonToCloudSave(id);
                         }
-                    } else {
-
                     }
                 } else if (conflictResult != null) {
                     previous = mergeIds(new String(conflictResult.getLocalData()), new String(conflictResult.getServerData()));
@@ -306,7 +280,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
     private String mergeIds(String list1, String list2) {
         String[] parts1 = list1.split(ID_SEPARATOR_FOR_SPLIT);
         String[] parts2 = list2.split(ID_SEPARATOR_FOR_SPLIT);
-        Set<String> mergedSet = new HashSet<String>(Arrays.asList(parts1));
+        Set<String> mergedSet = new HashSet<>(Arrays.asList(parts1));
         mergedSet.addAll(Arrays.asList(parts2));
         return TextUtils.join(ID_SPLIT_CHAR, mergedSet);
     }
@@ -314,7 +288,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
     private void addTaggedPersonToCloudSave(String id) {
         previous = previous + ID_SPLIT_CHAR + id;
         AppStateManager.update(getGoogleApiClient(), Const.ARROW_DONE_STATE_KEY, previous.getBytes());
-        Games.Leaderboards.submitScore(getGoogleApiClient(), Const.ARROW_LB, previous.split("\\|").length-1);
+        Games.Leaderboards.submitScore(getGoogleApiClient(), Const.ARROW_LB, previous.split("\\|").length - 1);
 
         Plus.PeopleApi.load(getGoogleApiClient(), id).setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
             @Override
@@ -342,7 +316,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         switchToSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isOrganizer()) {
+                if (isOrganizer()) {
                     viewFlipper.setDisplayedChild(1);
                     mArrowHandler.enablePush();
                 }
@@ -350,7 +324,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         });
         mArrowHandler.disablePush();
 
-        checkOrganizer(new OrganizerChecker.OrganizerResponseHandler(){
+        checkOrganizer(new OrganizerChecker.OrganizerResponseHandler() {
             @Override
             public void onOrganizerResponse(boolean isOrganizer) {
                 if (isOrganizer) {
@@ -367,10 +341,15 @@ public class ArrowActivity extends GdgNavDrawerActivity {
             }
         });
 
-        if (mPendingScore != null){
+        if (mPendingScore != null) {
             score(mPendingScore);
             mPendingScore = null;
         }
+    }
+
+    private void setQrCode() {
+        mHandler.post(updateQrCode);
+
     }
 
     private Runnable updateQrCode = new Runnable() {
@@ -403,24 +382,19 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         }
     };
 
-    private void setQrCode() {
-        mHandler.post(updateQrCode);
-
-    }
-
     public long getNow() {
         return DateTime.now(DateTimeZone.UTC).getMillis();
     }
 
     private class BaseArrowHandler {
-        public void enablePush() {}
+        public void enablePush() {
+        }
 
         public void disablePush() {
         }
     }
 
-@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-    private class NfcArrowHandler extends BaseArrowHandler implements NfcAdapter.OnNdefPushCompleteCallback, NfcAdapter.CreateNdefMessageCallback{
+    private class NfcArrowHandler extends BaseArrowHandler implements NfcAdapter.OnNdefPushCompleteCallback, NfcAdapter.CreateNdefMessageCallback {
         public void enablePush() {
             mNfcAdapter.setNdefPushMessageCallback(this, ArrowActivity.this);
             mNfcAdapter.setOnNdefPushCompleteCallback(this, ArrowActivity.this);
@@ -440,10 +414,9 @@ public class ArrowActivity extends GdgNavDrawerActivity {
                         Const.ARROW_MIME.getBytes(Charset.forName("US-ASCII")),
                         new byte[0],
                         msg.getBytes(Charset.forName("US-ASCII")));
-                NdefMessage message = new NdefMessage(new NdefRecord[]{mimeRecord});
-                return message;
+                return new NdefMessage(new NdefRecord[]{mimeRecord});
             } catch (Exception e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
                 Toast.makeText(ArrowActivity.this, ArrowActivity.this.getString(R.string.arrow_oops), Toast.LENGTH_LONG).show();
             }
             return null;
@@ -454,4 +427,6 @@ public class ArrowActivity extends GdgNavDrawerActivity {
 
         }
     }
+
+
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
   package="org.gdg.frisbee.android"
+  xmlns:android="http://schemas.android.com/apk/res/android"
   android:installLocation="auto">
 
   <uses-feature
@@ -8,9 +9,9 @@
     android:required="false" />
 
   <supports-screens
+    android:largeScreens="true"
     android:normalScreens="true"
     android:smallScreens="true"
-    android:largeScreens="true"
     android:xlargeScreens="true" />
 
   <uses-permission android:name="android.permission.INTERNET" />
@@ -41,14 +42,14 @@
     android:required="true" />
 
   <application
+    android:name=".app.App"
+    android:backupAgent=".app.BackupAgent"
+    android:hardwareAccelerated="true"
     android:icon="@drawable/icon"
     android:label="@string/app_name"
-    android:hardwareAccelerated="true"
     android:largeHeap="true"
-    android:theme="@style/Theme.GDG"
     android:logo="@drawable/ic_logo_wide"
-    android:name=".app.App"
-    android:backupAgent=".app.BackupAgent">
+    android:theme="@style/Theme.GDG">
     <meta-data
       android:name="com.google.android.maps.v2.API_KEY"
       android:value="@string/android_simple_api_access_key" />
@@ -68,15 +69,25 @@
       android:name="android.app.default_searchable"
       android:value=".activity.SearchActivity" />
 
-    <activity android:name=".activity.MainActivity" />
-    <activity android:name=".activity.GdeActivity" />
-    <activity android:name=".activity.AboutActivity" />
-    <activity android:name=".eventseries.TaggedEventSeriesActivity" />
-    <activity android:name=".activity.SettingsActivity" />
+    <activity
+      android:name=".activity.MainActivity"
+      android:theme="@style/GDG.NoActionBar" />
+    <activity
+      android:name=".activity.GdeActivity"
+      android:theme="@style/GDG.NoActionBar" />
+    <activity
+      android:name=".activity.AboutActivity"
+      android:theme="@style/GDG.NoActionBar" />
+    <activity android:name=".eventseries.TaggedEventSeriesActivity"
+      android:theme="@style/GDG.NoActionBar" />
+    <activity
+      android:name=".activity.SettingsActivity"
+      android:theme="@style/GDG.NoActionBar" />
     <activity
       android:name=".activity.ArrowActivity"
-      android:screenOrientation="portrait">
-      <intent-filter>
+      android:screenOrientation="portrait"
+      android:theme="@style/GDG.NoActionBar">
+    <intent-filter>
         <action android:name="android.nfc.action.NDEF_DISCOVERED" />
         <category android:name="android.intent.category.DEFAULT" />
         <data android:mimeType="application/vnd.org.gdgx.frisbee.arrow" />
@@ -85,21 +96,22 @@
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
         <data
-          android:scheme="gdgx"
-          android:host="arrow" />
+          android:host="arrow"
+          android:scheme="gdgx" />
       </intent-filter>
     </activity>
     <activity
       android:name=".activity.ArrowTaggedActivity"
-      android:screenOrientation="portrait" />
+      android:screenOrientation="portrait"
+      android:theme="@style/GDG.NoActionBar" />
     <activity
       android:name=".activity.FirstStartActivity"
       android:theme="@style/GDG.NoActionBar" />
     <activity
       android:name=".activity.YoutubeActivity"
-      android:theme="@style/GDG.SeeTrough"
+      android:configChanges="keyboardHidden|orientation|screenSize"
       android:screenOrientation="sensor"
-      android:configChanges="keyboardHidden|orientation|screenSize" />
+      android:theme="@style/GDG.SeeTrough" />
     <activity
       android:name=".activity.StartActivity"
       android:theme="@style/GDG.NoActionBar">
@@ -108,7 +120,9 @@
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
-    <activity android:name=".activity.PulseActivity" />
+    <activity
+      android:name=".activity.PulseActivity"
+      android:theme="@style/GDG.NoActionBar" />
     <activity android:name=".activity.ParseDeepLinkActivity">
       <intent-filter>
         <action android:name="com.google.android.apps.plus.VIEW_DEEP_LINK" />
@@ -140,8 +154,8 @@
     <provider
       android:name=".provider.GdgProvider"
       android:authorities="org.gdg.frisbee.android.provider.GdgProvider"
-      android:syncable="false"
-      android:exported="true" />
+      android:exported="true"
+      android:syncable="false" />
 
     <receiver
       android:name=".widget.UpcomingEventWidgetProvider"

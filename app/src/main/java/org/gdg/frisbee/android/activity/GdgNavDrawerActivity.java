@@ -18,13 +18,10 @@ package org.gdg.frisbee.android.activity;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -39,6 +36,7 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.OrganizerChecker;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeriesActivity;
+import org.gdg.frisbee.android.utils.PrefUtils;
 
 import java.util.ArrayList;
 
@@ -53,24 +51,16 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     protected ActionBarDrawerToggle mDrawerToggle;
     @InjectView(R.id.drawer)
     DrawerLayout mDrawerLayout;
-    @InjectView(R.id.left_drawer)
+    @InjectView(R.id.navdrawer)
     ListView mDrawerContent;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public void setContentView(int layoutResId) {
         super.setContentView(layoutResId);
 
         initNavigationDrawer();
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
     }
- 
+
     private void initNavigationDrawer() {
         mDrawerAdapter = new DrawerAdapter(this);
         mDrawerContent.setAdapter(mDrawerAdapter);
@@ -86,9 +76,8 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
              * Called when a drawer has settled in a completely closed state.
              */
             public void onDrawerClosed(View view) {
-                //getActionBar().setTitle(mTitle);
-                if (mPreferences.getBoolean(Const.SETTINGS_OPEN_DRAWER_ON_START, Const.SETTINGS_OPEN_DRAWER_ON_START_DEFAULT)) {
-                    mPreferences.edit().putBoolean(Const.SETTINGS_OPEN_DRAWER_ON_START, !Const.SETTINGS_OPEN_DRAWER_ON_START_DEFAULT).apply();
+                if (PrefUtils.shouldOpenDrawerOnStart(GdgNavDrawerActivity.this)) {
+                    PrefUtils.setShouldNotOpenDrawerOnStart(GdgNavDrawerActivity.this);
                 }
             }
 
@@ -104,13 +93,13 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     @SuppressWarnings("unused")
-    @OnItemClick(R.id.left_drawer)
+    @OnItemClick(R.id.navdrawer)
     public void onDrawerItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         DrawerAdapter.DrawerItem item = (DrawerAdapter.DrawerItem) mDrawerAdapter.getItem(i);
 
         switch (item.getId()) {
             case Const.DRAWER_ACHIEVEMENTS:
-                if (mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false) && getGoogleApiClient().isConnected()) {
+                if (PrefUtils.isSignedIn(this) && getGoogleApiClient().isConnected()) {
                     startActivityForResult(Games.Achievements.getAchievementsIntent(getGoogleApiClient()), 0);
                 } else {
                     Crouton.makeText(GdgNavDrawerActivity.this, getString(R.string.achievements_need_signin), Style.INFO).show();
@@ -129,11 +118,16 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 navigateTo(PulseActivity.class, null);
                 break;
             case Const.DRAWER_ARROW:
-                if (mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false) && getGoogleApiClient().isConnected()) {
+                if (PrefUtils.isSignedIn(this) && getGoogleApiClient().isConnected()) {
                     navigateTo(ArrowActivity.class, null);
                 } else {
                     Crouton.makeText(GdgNavDrawerActivity.this, getString(R.string.arrow_need_games), Style.INFO).show();
                 }
+            case Const.DRAWER_SETTINGS:
+                navigateTo(SettingsActivity.class, null);
+                break;
+            case Const.DRAWER_ABOUT:
+                navigateTo(AboutActivity.class, null);
                 break;
         }
     }
@@ -181,44 +175,18 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-        return true;
-
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Pass the event to ActionBarDrawerToggle, if it returns
         // true, then it has handled the app icon touch event
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        // Handle your other action bar items...
-
-        switch (item.getItemId()) {
-            case R.id.settings:
-                startActivity(new Intent(this, SettingsActivity.class));
-                return true;
-            case R.id.help:
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Const.URL_HELP)));
-                return true;
-            case R.id.about:
-                startActivity(new Intent(this, AboutActivity.class));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
+        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        if (mPreferences.getBoolean(Const.SETTINGS_OPEN_DRAWER_ON_START, Const.SETTINGS_OPEN_DRAWER_ON_START_DEFAULT)) {
-            mDrawerLayout.openDrawer(Gravity.LEFT);
+        if (PrefUtils.shouldOpenDrawerOnStart(this)) {
+            mDrawerLayout.openDrawer(Gravity.START);
         }
     }
 
