@@ -60,7 +60,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
         initNavigationDrawer();
     }
- 
+
     private void initNavigationDrawer() {
         mDrawerAdapter = new DrawerAdapter(this);
         mDrawerContent.setAdapter(mDrawerAdapter);
@@ -93,13 +93,13 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     @SuppressWarnings("unused")
-    @OnItemClick(R.id.left_drawer)
+    @OnItemClick(R.id.navdrawer)
     public void onDrawerItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         DrawerAdapter.DrawerItem item = (DrawerAdapter.DrawerItem) mDrawerAdapter.getItem(i);
 
         switch (item.getId()) {
             case Const.DRAWER_ACHIEVEMENTS:
-                if (mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false) && getGoogleApiClient().isConnected()) {
+                if (PrefUtils.isSignedIn(this) && getGoogleApiClient().isConnected()) {
                     startActivityForResult(Games.Achievements.getAchievementsIntent(getGoogleApiClient()), 0);
                 } else {
                     Crouton.makeText(GdgNavDrawerActivity.this, getString(R.string.achievements_need_signin), Style.INFO).show();
@@ -118,7 +118,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 navigateTo(PulseActivity.class, null);
                 break;
             case Const.DRAWER_ARROW:
-                if (mPreferences.getBoolean(Const.SETTINGS_SIGNED_IN, false) && getGoogleApiClient().isConnected()) {
+                if (PrefUtils.isSignedIn(this) && getGoogleApiClient().isConnected()) {
                     navigateTo(ArrowActivity.class, null);
                 } else {
                     Crouton.makeText(GdgNavDrawerActivity.this, getString(R.string.arrow_need_games), Style.INFO).show();
@@ -129,7 +129,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             case Const.DRAWER_ABOUT:
                 navigateTo(AboutActivity.class, null);
                 break;
-            break;
         }
     }
 
