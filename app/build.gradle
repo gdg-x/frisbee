@@ -3,6 +3,9 @@ apply plugin: 'io.fabric'
 apply plugin: 'versions'
 apply plugin: 'play'
 
+Properties local_properties = new Properties()
+local_properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
 def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone("UTC"))
 
@@ -39,6 +42,17 @@ android {
         resConfigs "en", "cs", "de", "es", "fr", "hi", "ko", "lt", "nl", "pl", "pt-rBR", "ru", "sk", "th", "tr", "uk", "zh-rCN", "zh-rHK", "zh-rTW"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "ANDROID_SIMPLE_API_ACCESS_KEY", "\"" + (local_properties.android_simple_api_access_key ?: "") + "\""
+        buildConfigField "String", "BROWSER_SIMPLE_API_ACCESS_KEY", "\"" + (local_properties.browser_simple_api_access_key ?: "") + "\""
+        buildConfigField "String", "IP_SIMPLE_API_ACCESS_KEY", "\"" + (local_properties.ip_simple_api_access_key ?: "") + "\""
+        buildConfigField "String", "HUB_CLIENT_ID", "\"" + (local_properties.hub_client_id ?: "") + "\""
+        buildConfigField "String", "PLAY_APP_ID", "\"" + (local_properties.play_app_id ?: "") + "\""
+        buildConfigField "String", "GCM_SENDER_ID", "\"" + (local_properties.gcm_sender_id ?: "") + "\""
+
+        resValue "string", "play_app_id", "\"" + (local_properties.play_app_id ?: "") + "\""
+        resValue "string", "android_backup_key", local_properties.android_backup_key ?: ""
+        resValue "string", "android_simple_api_access_key", local_properties.android_simple_api_access_key ?: ""
     }
 
     signingConfigs {

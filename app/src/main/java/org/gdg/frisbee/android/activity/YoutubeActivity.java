@@ -17,7 +17,6 @@
 package org.gdg.frisbee.android.activity;
 
 import android.content.pm.ActivityInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -25,13 +24,13 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
+import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.R;
 
 /**
  * @author maui
  */
 public class YoutubeActivity extends GdgActivity implements YouTubePlayer.OnInitializedListener {
-    private YouTubePlayerSupportFragment mPlayerFragment;
 
     private static final int PORTRAIT_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;
 
@@ -45,9 +44,10 @@ public class YoutubeActivity extends GdgActivity implements YouTubePlayer.OnInit
 
         setContentView(R.layout.activity_youtube);
 
-        mPlayerFragment =
-                (YouTubePlayerSupportFragment) getSupportFragmentManager().findFragmentById(R.id.youtube_fragment);
-        mPlayerFragment.initialize(getString(R.string.android_simple_api_access_key), this);
+        YouTubePlayerSupportFragment mPlayerFragment = 
+                (YouTubePlayerSupportFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.youtube_fragment);
+        mPlayerFragment.initialize(BuildConfig.ANDROID_SIMPLE_API_ACCESS_KEY, this);
 
         setRequestedOrientation(PORTRAIT_ORIENTATION);
     }

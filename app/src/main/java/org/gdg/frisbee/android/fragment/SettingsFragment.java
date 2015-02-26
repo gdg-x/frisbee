@@ -40,6 +40,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.plus.Plus;
 
+import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgActivity;
@@ -114,13 +115,13 @@ public class SettingsFragment extends PreferenceFragment {
                                 );
                                 req.execute();
                             } else {
-                                final String regid = mGcm.register(getString(R.string.gcm_sender_id));
-                                ApiRequest req = mXClient.registerGcm(regid, new Response.Listener<GcmRegistrationResponse>() {
+                                final String regId = mGcm.register(BuildConfig.GCM_SENDER_ID);
+                                ApiRequest req = mXClient.registerGcm(regId, new Response.Listener<GcmRegistrationResponse>() {
                                             @Override
                                             public void onResponse(GcmRegistrationResponse messageResponse) {
                                                 mPreferences.edit()
                                                         .putBoolean(Const.SETTINGS_GCM, true)
-                                                        .putString(Const.SETTINGS_GCM_REG_ID, regid)
+                                                        .putString(Const.SETTINGS_GCM_REG_ID, regId)
                                                         .putString(Const.SETTINGS_GCM_NOTIFICATION_KEY, messageResponse.getNotificationKey())
                                                         .apply();
                                             }
