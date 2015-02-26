@@ -27,9 +27,9 @@ public class DrawerAdapter extends BaseAdapter {
 
     private void initAdapter() {
         mItems = new ArrayList<DrawerItem>() {{
-            add(new DrawerItem(Const.DRAWER_HOME, R.drawable.drw_ic_home_gdg, R.string.home_gdg));
-            add(new DrawerItem(Const.DRAWER_GDE, R.drawable.drw_ic_gde, R.string.gde));
-            add(new DrawerItem(Const.DRAWER_PULSE, R.drawable.drw_ic_pulse, R.string.pulse));
+            add(new DrawerItem(Const.DRAWER_HOME, R.drawable.ic_drawer_home_gdg, R.string.home_gdg));
+            add(new DrawerItem(Const.DRAWER_GDE, R.drawable.ic_drawer_gde, R.string.gde));
+            add(new DrawerItem(Const.DRAWER_PULSE, R.drawable.ic_drawer_pulse, R.string.pulse));
 
             final ArrayList<TaggedEventSeries> currentEventSeries =
                     App.getInstance().currentTaggedEventSeries();
@@ -38,10 +38,10 @@ public class DrawerAdapter extends BaseAdapter {
                         taggedEventSeries.getDrawerIconResId(), 
                         taggedEventSeries.getTitleResId()));
             }
-            add(new DrawerItem(Const.DRAWER_ACHIEVEMENTS, R.drawable.drw_ic_achievements, R.string.achievements));
-            add(new DrawerItem(Const.DRAWER_ARROW, R.drawable.drw_ic_arrow, R.string.arrow));
-            add(new DrawerItem(Const.DRAWER_SETTINGS, R.drawable.drw_ic_settings, R.string.settings));
-            add(new DrawerItem(Const.DRAWER_ABOUT, R.drawable.drw_ic_about, R.string.about));
+            add(new DrawerItem(Const.DRAWER_ACHIEVEMENTS, R.drawable.ic_drawer_achievements, R.string.achievements));
+            add(new DrawerItem(Const.DRAWER_ARROW, R.drawable.ic_drawer_arrow, R.string.arrow));
+            add(new DrawerItem(Const.DRAWER_SETTINGS, R.drawable.ic_drawer_settings, R.string.settings));
+            add(new DrawerItem(Const.DRAWER_ABOUT, R.drawable.ic_drawer_about, R.string.about));
         }};
     }
 
