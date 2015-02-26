@@ -119,7 +119,6 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.0'
 
     //Jake Wharton
-    compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.jakewharton:butterknife:6.1.0'
     compile 'com.jakewharton.timber:timber:2.5.1'
     compile 'com.jakewharton:disklrucache:2.0.2'
