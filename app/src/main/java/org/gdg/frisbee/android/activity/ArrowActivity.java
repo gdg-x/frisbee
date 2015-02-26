@@ -16,14 +16,12 @@
 
 package org.gdg.frisbee.android.activity;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
@@ -396,7 +394,6 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private class NfcArrowHandler extends BaseArrowHandler implements NfcAdapter.OnNdefPushCompleteCallback, NfcAdapter.CreateNdefMessageCallback {
         public void enablePush() {
             mNfcAdapter.setNdefPushMessageCallback(this, ArrowActivity.this);
