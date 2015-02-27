@@ -7,6 +7,8 @@
   <dimen name="navdrawer_image_height">130dp</dimen>
   <dimen name="spinner_left_padding">16dp</dimen>
 
+  <dimen name="content_padding">16dp</dimen>
+  
   <dimen name="keyline_1">16dp</dimen>
   <dimen name="keyline_1_minus_8dp">8dp</dimen>
   <dimen name="keyline_2">72dp</dimen>

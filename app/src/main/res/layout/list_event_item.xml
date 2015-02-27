@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2013-2015 The GDG Frisbee Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,82 +13,108 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:card_view="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:paddingBottom="5dip"
-  android:paddingLeft="10dip"
-  android:paddingRight="10dip"
-  android:paddingTop="5dip">
+  android:layout_height="wrap_content">
 
-  <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+  <android.support.v7.widget.CardView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dip"
-    card_view:cardCornerRadius="5dp">
+    card_view:cardCornerRadius="2dp"
+    card_view:cardUseCompatPadding="true"
+    card_view:cardElevation="4dp">
 
     <RelativeLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="horizontal">
 
-      <org.gdg.frisbee.android.view.SquaredImageView
-        android:id="@+id/icon"
-        android:layout_width="32dp"
-        android:layout_height="32dip"
-        android:layout_alignParentLeft="true"
-        android:layout_marginRight="8dip" />
+      <ImageView
+        android:id="@+id/event_image_header"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="?colorPrimary"
+        android:contentDescription="@null" />
 
-      <ImageButton
-        android:id="@+id/share_button"
+      <TextView
+        android:id="@+id/event_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_marginLeft="8dp"
-        android:background="@drawable/action_btn"
-        android:enabled="true"
-        android:src="@drawable/ic_list_share" />
+        android:layout_alignParentTop="true"
+        android:paddingRight="@dimen/keyline_1"
+        android:paddingTop="@dimen/content_padding"
+        android:textAllCaps="true"
+        android:textColor="?android:textColorPrimaryInverse"
+        tools:text="SAT, JUL 25" />
+
+      <ImageView
+        android:id="@+id/icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="@dimen/keyline_1"
+        android:layout_marginRight="@dimen/keyline_1"
+        android:layout_marginTop="24dp"
+        android:contentDescription="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/icon" />
 
       <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/share_button"
+        android:layout_below="@id/event_image_header"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_toLeftOf="@+id/past"
+        android:layout_marginBottom="@dimen/keyline_1"
+        android:layout_marginTop="@dimen/keyline_1"
         android:layout_toRightOf="@+id/icon"
         android:orientation="vertical">
 
         <TextView
-          android:id="@+id/title"
+          android:id="@+id/event_title"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:text="New Text"
-          android:textStyle="bold" />
+          android:textAppearance="@style/TextAppearance.AppCompat.Title"
+          tools:text="DevFest 2014" />
 
-        <LinearLayout
+        <TextView
+          android:id="@+id/event_time"
           android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:orientation="horizontal">
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:singleLine="true"
+          android:textColor="@color/line_2"
+          tools:text="Cumartesi gunu" />
 
-          <TextView
-            android:id="@+id/line2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="New Text"
-            android:textColor="@color/line_2" />
-
-          <TextView
-            android:id="@+id/past"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:gravity="right"
-            android:text="@string/past_event"
-            android:textStyle="bold"
-            android:visibility="visible" />
-        </LinearLayout>
+        <TextView
+          android:id="@+id/event_location"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:singleLine="true"
+          android:textColor="@color/line_2"
+          tools:text="Istanbul ITU" />
       </LinearLayout>
+
+
+      <TextView
+        android:id="@+id/past"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:gravity="end"
+        android:paddingLeft="8dp"
+        android:paddingRight="@dimen/keyline_1"
+        android:paddingTop="48dp"
+        android:text="@string/past_event"
+        android:textStyle="bold"
+        android:visibility="gone"
+        tools:visibility="visible" />
     </RelativeLayout>
   </android.support.v7.widget.CardView>
-</LinearLayout>
+</RelativeLayout>

@@ -255,16 +255,21 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (mEvent != null && mEvent.getEventUrl() != null) {
+        if (mEvent != null) {
             inflater.inflate(R.menu.event_menu, menu);
-            MenuItem item = menu.findItem(R.id.share);
+            MenuItem shareMenuitem = menu.findItem(R.id.share);
 
-            mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
-            Intent shareIntent = new Intent(Intent.ACTION_SEND);
-            shareIntent.setType("text/plain");
-            shareIntent.putExtra(Intent.EXTRA_TEXT, mEvent.getEventUrl());
-            if (mShareActionProvider != null) {
-                mShareActionProvider.setShareIntent(shareIntent);
+            if (mEvent.getEventUrl() != null) {
+                mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareMenuitem);
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, mEvent.getEventUrl());
+                if (mShareActionProvider != null) {
+                    mShareActionProvider.setShareIntent(shareIntent);
+                }
+            } else {
+                shareMenuitem.setVisible(false);
+                menu.findItem(R.id.view_event_url).setVisible(false);
             }
         }
     }
@@ -272,12 +277,15 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.add_calendar: addEventToCalendar();return true;
-            case R.id.navigate_to: launchNavigation();return true;
-            case R.id.view_event_url: if (mEvent.getEventUrl() != null) {
+            case R.id.add_calendar: 
+                addEventToCalendar();
+                return true;
+            case R.id.navigate_to: 
+                launchNavigation();
+                return true;
+            case R.id.view_event_url: 
                 launchUrl(mEvent.getEventUrl());
                 return true;
-            }
             default:
                 return false;
         }

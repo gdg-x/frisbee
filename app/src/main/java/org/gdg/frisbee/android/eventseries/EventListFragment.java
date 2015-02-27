@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.android.volley.Response;
@@ -39,6 +40,7 @@ import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.adapter.EventAdapter;
 import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.SimpleEvent;
+import org.gdg.frisbee.android.event.EventActivity;
 import org.gdg.frisbee.android.fragment.GdgListFragment;
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
@@ -57,7 +59,7 @@ import de.keyboardsurfer.android.widget.crouton.Style;
  * Date: 22.04.13
  * Time: 23:10
  */
-public abstract class EventListFragment extends GdgListFragment implements View.OnClickListener {
+public abstract class EventListFragment extends GdgListFragment {
 
     
     protected GroupDirectory mClient;
@@ -108,7 +110,7 @@ public abstract class EventListFragment extends GdgListFragment implements View.
         registerForContextMenu(getListView());
 
 
-        mAdapter = new EventAdapter(getActivity(), this);
+        mAdapter = new EventAdapter(getActivity());
         setListAdapter(mAdapter);
         mEvents = new ArrayList<>();
 
@@ -144,6 +146,17 @@ public abstract class EventListFragment extends GdgListFragment implements View.
         }
     }
 
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        final ListView listView = (ListView) getListView();
+        SimpleEvent event = mAdapter.getItem(position - listView.getHeaderViewsCount());
+        
+        Intent intent = new Intent(getActivity(), EventActivity.class);
+        intent.putExtra(Const.EXTRA_EVENT_ID, event.getId());
+        startActivity(intent);
+    }
 
     private void launchNavigation(SimpleEvent event) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -188,48 +201,5 @@ public abstract class EventListFragment extends GdgListFragment implements View.
         View v = inflater.inflate(R.layout.fragment_events, container, false);
         ButterKnife.inject(this, v);
         return v;
-    }
-
-    @Override
-    public void onClick(View view) {
-        SimpleEvent event = (SimpleEvent) view.getTag();
-        shareOnGplus(event);
-    }
-
-    private void shareOnGplus(SimpleEvent event) {
-        if (mPlusClient != null && mPlusClient.isConnected()) {
-            PlusShare.Builder builder = new PlusShare.Builder(this.getActivity());
-
-            Uri eventUri = Uri.parse(Const.URL_DEVELOPERS_GOOGLE_COM + "/events/" + event.getId() + "/");
-
-            final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID);
-            if(!TextUtils.isEmpty(plusId)) {
-                String eventDeepLinkId = plusId + "/events/" + event.getId();
-
-                // Set call-to-action metadata.
-                builder.addCallToAction(
-                        "JOIN", /** call-to-action button label */
-                        eventUri, /** call-to-action url (for desktop use) */
-                        eventDeepLinkId +"/join" /** call to action deep-link ID (for mobile use), 512 characters or fewer */);
-
-                // Set the target deep-link ID (for mobile use).
-                builder.setContentDeepLinkId(eventDeepLinkId);
-            } else {
-                // Set call-to-action metadata.
-                builder.addCallToAction(
-                        "JOIN", /** call-to-action button label */
-                        eventUri, /** call-to-action url (for desktop use) */
-                        eventUri +"join" /** call to action deep-link ID (for mobile use), 512 characters or fewer */);
-            }
-            // Set the content url (for desktop use).
-            builder.setContentUrl(eventUri);
-
-            // Set the share text.
-            builder.setText(getString(R.string.join_me));
-
-            startActivityForResult(builder.getIntent(), 0);
-        } else {
-            Crouton.makeText(getActivity(), R.string.signin_first, Style.INFO).show();
-        }
     }
 }
