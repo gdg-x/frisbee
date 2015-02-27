@@ -38,17 +38,20 @@
     <item name="windowActionBar">false</item>
     <item name="android:windowNoTitle">true</item>
   </style>
-  
+
   <style name="Theme.GDG.Special.Wtm" parent="Theme.GDG.NoActionBar">
-    <item name="colorPrimary">@color/color_wtm</item>
+    <item name="colorPrimary">@color/color_primary_wtm</item>
+    <item name="colorPrimaryDark">@color/color_primary_dark_wtm</item>
   </style>
 
   <style name="Theme.GDG.Special.StudyJams" parent="Theme.GDG.NoActionBar">
-    <item name="colorPrimary">@color/color_studyjams</item>
+    <item name="colorPrimary">@color/color_primary_studyjams</item>
+    <item name="colorPrimaryDark">@color/color_primary_dark_studyjams</item>
   </style>
 
   <style name="Theme.GDG.Special.IOExtended" parent="Theme.GDG.NoActionBar">
-    <item name="colorPrimary">@color/color_ioextended</item>
+    <item name="colorPrimary">@color/color_primary_ioextended</item>
+    <item name="colorPrimaryDark">@color/color_primary_dark_ioextended</item>
   </style>
 
   <style name="Theme.GDG" parent="Theme.GDG.Base">
