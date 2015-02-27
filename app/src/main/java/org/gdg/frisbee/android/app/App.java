@@ -170,8 +170,8 @@ public class App extends Application implements LocationListener {
     
     private void addTaggedEventSeriesIfDateFits(@NonNull TaggedEventSeries taggedEventSeries) {
         DateTime now = DateTime.now();
-        if (now.isAfter(taggedEventSeries.getStartDateInMillis())
-                && now.isBefore(taggedEventSeries.getEndDateInMillis())) {
+        if (BuildConfig.DEBUG || (now.isAfter(taggedEventSeries.getStartDateInMillis())
+                && now.isBefore(taggedEventSeries.getEndDateInMillis()))) {
             mTaggedEventSeriesList.add(taggedEventSeries);
         }
     }
