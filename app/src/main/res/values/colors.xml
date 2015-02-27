@@ -39,4 +39,8 @@
   <color name="theme_primary">@color/material_blue_500</color>
   <color name="theme_accent_1">@color/white</color>
   <color name="navdrawer_background">#ffffffff</color>
+  
+  <color name="color_studyjams">#7161CE</color>
+  <color name="color_wtm">#1CE9B6</color>
+  <color name="color_ioextended">#50B8D0</color>
 </resources>
