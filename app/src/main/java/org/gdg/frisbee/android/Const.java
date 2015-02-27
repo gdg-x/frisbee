@@ -84,18 +84,7 @@ public class Const {
 
     public static final int ARROW_DONE_STATE_KEY = 2;
 
-    public static final class LogLevel {
-        public static final int NONE    = 0;
-        public static final int ERROR   = 1;
-        public static final int INFO    = 2;
-        public static final int DEBUG   = 3;
-    }
-
-    public static final int LOG_LEVEL = LogLevel.DEBUG;
-    public static final boolean DEVELOPER_MODE = false;
-
     public static final String TRUSTSTORE_PW = "VU%&ibkr45pnq39v53x";
-    public static final boolean ALPHA = false;
 
     public static final DateTime START_TIME_IOEXTENDED =    new DateTime(2015, 5, 1, 0, 0);
     public static final DateTime START_TIME_STUDY_JAMS =    new DateTime(2015, 2, 1, 0, 0);

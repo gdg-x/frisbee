@@ -69,7 +69,6 @@ public class App extends Application implements LocationListener {
     private ModelCache mModelCache;
     private Picasso mPicasso;
     private SharedPreferences mPreferences;
-    private GoogleAnalytics mGaInstance;
     private Tracker mTracker;
     private GingerbreadLastLocationFinder mLocationFinder;
     private Location mLastLocation;
@@ -178,12 +177,11 @@ public class App extends Application implements LocationListener {
 
     private void migrate(int oldVersion, int newVersion) {
 
-        if (oldVersion < 11100 || Const.ALPHA) {
+        if (oldVersion < 11100 || BuildConfig.ALPHA) {
             mPreferences.edit().remove(Const.SETTINGS_GCM_REG_ID).apply();
 
             mPreferences.edit().clear().apply();
             mPreferences.edit().putBoolean(Const.SETTINGS_FIRST_START, true);
-            String rootDir = null;
             if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
                 // SD-card available
                 String rootDirExt = Environment.getExternalStorageDirectory().getAbsolutePath()
@@ -192,10 +190,9 @@ public class App extends Application implements LocationListener {
             }
 
             File internalCacheDir = getCacheDir();
-            rootDir = internalCacheDir.getAbsolutePath();
-            deleteDirectory(new File(rootDir));
+            deleteDirectory(new File(internalCacheDir.getAbsolutePath()));
 
-            if (Const.ALPHA) {
+            if (BuildConfig.ALPHA) {
                 Toast.makeText(getApplicationContext(), "Alpha version always resets Preferences on update.", Toast.LENGTH_LONG).show();
             }
         }
@@ -224,7 +221,7 @@ public class App extends Application implements LocationListener {
     public Tracker getTracker() {
         if (mTracker == null) {
             // Initialize GA
-            mGaInstance = GoogleAnalytics.getInstance(getApplicationContext());
+            GoogleAnalytics mGaInstance = GoogleAnalytics.getInstance(getApplicationContext());
             mTracker = mGaInstance.newTracker(getString(R.string.ga_trackingId));
 
             mTracker.setAppName(getString(R.string.app_name));
@@ -237,7 +234,7 @@ public class App extends Application implements LocationListener {
     public ModelCache getModelCache() {
         if (mModelCache == null) {
 
-            File rootDir = null;
+            final File rootDir;
             if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
                 // SD-card available
                 rootDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
@@ -247,25 +244,25 @@ public class App extends Application implements LocationListener {
                 rootDir = new File(internalCacheDir.getAbsolutePath() + "/model_cache/");
             }
 
-            rootDir.mkdirs();
-
+            if (rootDir.mkdirs() || rootDir.isDirectory()) {
             mModelCache = new ModelCache.Builder(getApplicationContext())
                     .setMemoryCacheEnabled(true)
                     .setDiskCacheEnabled(true)
                     .setDiskCacheLocation(rootDir)
                     .build();
         }
+        }
         return mModelCache;
     }
 
-    private void deleteDirectory(File dir) {
+    private boolean deleteDirectory(File dir) {
         if (dir.isDirectory()) {
             for (File child : dir.listFiles()) {
                 deleteDirectory(child);
             }
         }
 
-        dir.delete();
+        return dir.delete();
     }
 
     @Override

@@ -35,6 +35,7 @@ import java.security.GeneralSecurityException;
 import java.util.Map;
 
 import org.apache.http.HttpResponse;
+import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.app.App;
 
@@ -68,7 +69,7 @@ public class OkStack extends HurlStack {
     @Override
     public HttpResponse performRequest(Request<?> request, Map<String, String> additionalHeaders) throws IOException, AuthFailureError {
         long startTime = System.currentTimeMillis();
-        if(Const.DEVELOPER_MODE) {
+        if(BuildConfig.DEVELOPER_MODE) {
             TrafficStats.setThreadStatsTag(0xF00D);
             try {
                 HttpResponse res = super.performRequest(request, additionalHeaders);

@@ -20,6 +20,8 @@ def versionMajor = 1
 def versionMinor = 2
 def versionPatch = 5
 def versionBuild = 0 // bump for dogfood builds, public betas, etc.
+def isAlpha = false
+def isDeveloperMode = false
 
 android {
     compileSdkVersion 21
@@ -46,6 +48,11 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+        //CONFIGURATION
+        buildConfigField "Boolean", "ALPHA", String.valueOf(isAlpha)
+        buildConfigField "Boolean", "DEVELOPER_MODE", String.valueOf(isDeveloperMode)
+        
+        //KEYS
         buildConfigField "String", "ANDROID_SIMPLE_API_ACCESS_KEY", "\"" + (local_properties.android_simple_api_access_key ?: "") + "\""
         buildConfigField "String", "BROWSER_SIMPLE_API_ACCESS_KEY", "\"" + (local_properties.browser_simple_api_access_key ?: "") + "\""
         buildConfigField "String", "IP_SIMPLE_API_ACCESS_KEY", "\"" + (local_properties.ip_simple_api_access_key ?: "") + "\""
