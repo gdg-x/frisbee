@@ -16,7 +16,6 @@
 
 package org.gdg.frisbee.android.eventseries;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
@@ -50,20 +49,18 @@ public class TaggedEventSeriesActivity extends GdgNavDrawerActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mTaggedEventSeries = getIntent().getParcelableExtra(Const.EXTRA_TAGGED_EVENT);
+        if (mTaggedEventSeries == null) {
+            throw new IllegalArgumentException("Special Event must be provided with "
+                    + Const.EXTRA_TAGGED_EVENT + " key as an Intent extra.");
+        }
+        setTheme(mTaggedEventSeries.getColorResPrimary());
         
         setContentView(R.layout.activity_special);
 
         Toolbar toolbar = getActionBarToolbar();
-        toolbar.setTitle(R.string.devfest);
 
-        mTaggedEventSeries = getIntent().getParcelableExtra(Const.EXTRA_TAGGED_EVENT);
-        if (mTaggedEventSeries == null) {
-            throw new IllegalArgumentException("Special Event must be provided with " 
-                    + Const.EXTRA_TAGGED_EVENT + " key as an Intent extra.");
-        }
-        
-        getSupportActionBar().setLogo(mTaggedEventSeries.getLogoResId());
-
+        toolbar.setTitle(mTaggedEventSeries.getTitleResId());
         mDescription.setText(mTaggedEventSeries.getDescriptionResId());
 
         if (mLogo != null) {

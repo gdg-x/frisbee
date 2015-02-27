@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
+import android.support.annotation.StyleRes;
 
 import org.joda.time.DateTime;
 
@@ -24,7 +25,7 @@ public class TaggedEventSeries implements Parcelable {
                              @StringRes int titleResId, 
                              @StringRes int descriptionResId, 
                              @DrawableRes int logoResId,
-                             @ColorRes int colorPrimary,
+                             @StyleRes int colorPrimary,
                              DateTime startDateInMillis,
                              DateTime endDateInMillis) {
         mTag = tag;
@@ -55,6 +56,10 @@ public class TaggedEventSeries implements Parcelable {
 
     public int getLogoResId() {
         return mLogoResId;
+    }
+
+    public int getColorResPrimary() {
+        return mColorPrimary;
     }
 
     public DateTime getStartDateInMillis() {

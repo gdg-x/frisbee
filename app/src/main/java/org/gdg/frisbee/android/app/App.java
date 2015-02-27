@@ -145,7 +145,7 @@ public class App extends Application implements LocationListener {
                 R.string.wtm,
                 R.string.wtm_description,
                 R.drawable.ic_wtm,
-                R.color.color_wtm,
+                R.style.Theme_GDG_Special_Wtm,
                 Const.START_TIME_WTM,
                 Const.END_TIME_WTM));
         //Add Android Fundamentals Study Jams
@@ -154,7 +154,7 @@ public class App extends Application implements LocationListener {
                 R.string.studyjams,
                 R.string.studyjams_description,
                 R.drawable.ic_studyjams,
-                R.color.color_studyjams,
+                R.style.Theme_GDG_Special_StudyJams,
                 Const.START_TIME_STUDY_JAMS,
                 Const.END_TIME_STUDY_JAMS));
         //Add IO Extended
@@ -163,7 +163,7 @@ public class App extends Application implements LocationListener {
                 R.string.ioextended,
                 R.string.ioextended_description,
                 R.drawable.ic_ioextended,
-                R.color.color_ioextended,
+                R.style.Theme_GDG_Special_IOExtended,
                 Const.START_TIME_IOEXTENDED,
                 Const.END_TIME_IOEXTENDED));
     }
