@@ -44,6 +44,9 @@ import org.gdg.frisbee.android.view.SquaredImageView;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 /**
  * GDG Aachen
  * org.gdg.frisbee.android.adapter
@@ -105,19 +108,16 @@ public class EventAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View convertView, ViewGroup viewGroup) {
-        View rowView = convertView;
-        if (rowView == null) {
-            rowView = mInflater.inflate(R.layout.list_event_item, null);
-            ViewHolder viewHolder = new ViewHolder();
-            viewHolder.title = (TextView) rowView.findViewById(R.id.title);
-            viewHolder.line2 = (TextView) rowView.findViewById(R.id.line2);
-            viewHolder.shareButton = (ImageButton) rowView.findViewById(R.id.share_button);
-            viewHolder.past = (TextView) rowView.findViewById(R.id.past);
-            viewHolder.icon = (SquaredImageView) rowView.findViewById(R.id.icon);
-            rowView.setTag(viewHolder);
+        
+        ViewHolder holder;
+        if (convertView != null && convertView.getTag() != null) {
+            holder = (ViewHolder) convertView.getTag();
+        } else {
+            convertView = mInflater.inflate(R.layout.list_event_item, viewGroup, false);
+            holder = new ViewHolder(convertView);
+            convertView.setTag(holder);
         }
-        ViewHolder holder = (ViewHolder) rowView.getTag();
-        Item item = (Item) getItemInternal(i);
+        Item item = getItemInternal(i);
         final SimpleEvent event = item.getEvent();
 
         if (event.getIconUrl() != null){
@@ -143,7 +143,7 @@ public class EventAdapter extends BaseAdapter {
             holder.shareButton.setVisibility(View.VISIBLE);
         }
 
-        rowView.setOnClickListener(new View.OnClickListener() {
+        convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, EventActivity.class);
@@ -152,8 +152,8 @@ public class EventAdapter extends BaseAdapter {
             }
         });
 
-        rowView.setLongClickable(true);
-        rowView.setOnLongClickListener(new View.OnLongClickListener() {
+        convertView.setLongClickable(true);
+        convertView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 view.showContextMenu();
@@ -166,11 +166,10 @@ public class EventAdapter extends BaseAdapter {
             item.setConsumed(true);
             // In which case we magically instantiate our effect and launch it directly on the view
             Animation animation = AnimationUtils.makeInChildBottomAnimation(mContext);
-            rowView.startAnimation(animation);
+            convertView.startAnimation(animation);
         }
 
-
-        return rowView;
+        return convertView;
     }
 
     private void openEventLink(SimpleEvent event) {
@@ -229,8 +228,14 @@ public class EventAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        public TextView title, line2, past;
-        public ImageButton shareButton;
-        public SquaredImageView icon;
+        @InjectView(R.id.title) TextView title;
+        @InjectView(R.id.line2) TextView line2;
+        @InjectView(R.id.past) TextView past;
+        @InjectView(R.id.share_button) ImageButton shareButton;
+        @InjectView(R.id.icon) SquaredImageView icon;
+
+        ViewHolder(View view) {
+            ButterKnife.inject(this, view);
+        }
     }
 }
