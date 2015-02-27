@@ -22,7 +22,9 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -76,6 +78,18 @@ public class Utils {
         }
     }
 
+    /**
+     * Converts dp value to px value.
+     *
+     * @param res Resources objects to get displayMetrics.
+     * @param dp original dp value.
+     * @return px value.
+     */
+    public static int dpToPx(@NonNull Resources res, int dp) {
+        return (int) TypedValue
+                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, res.getDisplayMetrics());
+    }
+    
     public static float convertPixelsToDp(float px, Context context){
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();

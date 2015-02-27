@@ -23,6 +23,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.Space;
+import android.widget.TextView;
 
 import com.android.volley.Response;
 
@@ -36,28 +41,36 @@ import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.EventDateComparator;
 import org.gdg.frisbee.android.utils.TaggedEventDistanceComparator;
 import org.gdg.frisbee.android.utils.Utils;
+import org.gdg.frisbee.android.view.ResizableImageView;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 
 import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.Optional;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class TaggedEventSeriesFragment extends EventListFragment {
 
+    private static final String ARGS_IS_PORTRAIT = "is_portrait";
+    
     private String mCacheKey = "";
     private TaggedEventSeries mTaggedEventSeries;
     private Comparator<EventAdapter.Item> mLocationComparator = new TaggedEventDistanceComparator();
     private Comparator<EventAdapter.Item> mDateComparator = new EventDateComparator();
     private Comparator<EventAdapter.Item> mCurrentComparator = mLocationComparator;
 
-    public static TaggedEventSeriesFragment newInstance(String cacheKey, TaggedEventSeries taggedEventSeries) {
+    public static TaggedEventSeriesFragment newInstance(String cacheKey, 
+                                                        TaggedEventSeries taggedEventSeries, 
+                                                        boolean isPortrait) {
         TaggedEventSeriesFragment frag = new TaggedEventSeriesFragment();
         Bundle args = new Bundle();
         args.putString(Const.EXTRA_TAGGED_EVENT_CACHEKEY, cacheKey);
         args.putParcelable(Const.EXTRA_TAGGED_EVENT, taggedEventSeries);
+        args.putBoolean(ARGS_IS_PORTRAIT, isPortrait);
         frag.setArguments(args);
         return frag;
     }
@@ -74,10 +87,27 @@ public class TaggedEventSeriesFragment extends EventListFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_events, container, false);
-        ButterKnife.inject(this, v);
-        return v;
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if (getArguments() != null && getArguments().getBoolean(ARGS_IS_PORTRAIT, false)) {
+            View header = getLayoutInflater(null)
+                    .inflate(R.layout.header_list_special_event_series, (ViewGroup) getView(), false);
+            
+            TextView mDescription = ButterKnife.findById(header, R.id.special_description);
+            ImageView mLogo = ButterKnife.findById(header, R.id.special_logo);
+            mDescription.setText(mTaggedEventSeries.getDescriptionResId());
+            mLogo.setImageResource(mTaggedEventSeries.getLogoResId());
+            
+            ListView list = (ListView) getListView();
+            list.addHeaderView(header, null, false);
+            final Space space = new Space(getActivity());
+            space.setLayoutParams(
+                    new AbsListView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 
+                            Utils.dpToPx(getResources(), 16)));
+            list.addHeaderView(space, null, false);
+            
+        }
     }
 
     @Override

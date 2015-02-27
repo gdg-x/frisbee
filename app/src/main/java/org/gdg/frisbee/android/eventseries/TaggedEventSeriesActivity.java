@@ -18,27 +18,26 @@ package org.gdg.frisbee.android.eventseries;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.text.TextUtils;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgNavDrawerActivity;
-import org.gdg.frisbee.android.view.ResizableImageView;
 
 import butterknife.InjectView;
 import butterknife.Optional;
 
 public class TaggedEventSeriesActivity extends GdgNavDrawerActivity {
 
-    @InjectView(R.id.special_logo)
-    @Optional
-    ResizableImageView mLogo;
+    @Optional @InjectView(R.id.special_logo)
+    ImageView mLogo;
 
-    @InjectView(R.id.special_description)
+    @Optional @InjectView(R.id.special_description)
     TextView mDescription;
-    
+
     private TaggedEventSeries mTaggedEventSeries;
 
     protected String getTrackedViewName() {
@@ -61,8 +60,9 @@ public class TaggedEventSeriesActivity extends GdgNavDrawerActivity {
         Toolbar toolbar = getActionBarToolbar();
 
         toolbar.setTitle(mTaggedEventSeries.getTitleResId());
-        mDescription.setText(mTaggedEventSeries.getDescriptionResId());
-
+        if (mDescription != null) {
+            mDescription.setText(mTaggedEventSeries.getDescriptionResId());
+        }
         if (mLogo != null) {
             mLogo.setImageResource(mTaggedEventSeries.getLogoResId());
         }
@@ -71,7 +71,8 @@ public class TaggedEventSeriesActivity extends GdgNavDrawerActivity {
         final String cacheExtra = getIntent().getStringExtra(Const.EXTRA_TAGGED_EVENT_CACHEKEY);
         trans.replace(R.id.content_fragment, TaggedEventSeriesFragment.newInstance(
                 cacheExtra != null ? cacheExtra : "specialevent",
-                mTaggedEventSeries));
+                mTaggedEventSeries,
+                /* isPortrait */ mDescription == null));
         trans.commit();
     }
 

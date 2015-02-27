@@ -5,6 +5,10 @@
   <dimen name="text_size_large">18sp</dimen>
   <dimen name="navdrawer_width">260dp</dimen>
   <dimen name="navdrawer_image_height">130dp</dimen>
-  <dimen name="keyline_1">16dp</dimen>
   <dimen name="spinner_left_padding">16dp</dimen>
+
+  <dimen name="keyline_1">16dp</dimen>
+  <dimen name="keyline_1_minus_8dp">8dp</dimen>
+  <dimen name="keyline_2">72dp</dimen>
+  <dimen name="keyline_2_minus_16dp">56dp</dimen>
 </resources>
