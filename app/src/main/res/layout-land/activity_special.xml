@@ -48,29 +48,37 @@
         android:layout_height="match_parent"
         android:layout_weight="2"
         android:orientation="vertical"
-        android:padding="10dip">
+        android:paddingLeft="@dimen/keyline_1"
+        android:paddingRight="@dimen/keyline_1"
+        android:paddingBottom="@dimen/keyline_1">
 
         <ImageView
           android:id="@+id/special_logo"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="center_horizontal"
-          android:paddingTop="24dp"
+          android:padding="24dp"
           tools:src="@drawable/ic_ioextended" />
 
-        <LinearLayout
+        <ScrollView
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:background="@drawable/card_bg"
-          android:orientation="vertical">
-
-          <TextView
-            android:id="@+id/special_description"
-            android:layout_width="wrap_content"
+          android:layout_height="match_parent">
+          
+          <FrameLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dip"
-            tools:text="@string/ioextended_description" />
-        </LinearLayout>
+            android:background="@drawable/card_bg"
+            android:orientation="vertical">
+
+            <TextView
+              android:id="@+id/special_description"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:padding="@dimen/keyline_1"
+              tools:text="@string/ioextended_description" />
+          </FrameLayout>
+          
+        </ScrollView>
       </LinearLayout>
 
     </LinearLayout>
