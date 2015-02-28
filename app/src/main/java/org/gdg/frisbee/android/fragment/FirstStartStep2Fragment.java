@@ -48,9 +48,11 @@ public class FirstStartStep2Fragment extends Fragment implements GoogleApiClient
     private static final int DIALOG_PLAY_SERVICES_ERROR = 0;
 
     private static final String SAVED_PROGRESS = "sign_in_progress";
-
+    @InjectView(R.id.googleSignin)
+    Button mSignInButton;
+    @InjectView(R.id.skipSignin)
+    Button mSkipSignin;
     private GoogleApiClient mGoogleApiClient;
-
     // We use mSignInProgress to track whether user has clicked sign in.
     // mSignInProgress can be one of three values:
     //
@@ -67,16 +69,9 @@ public class FirstStartStep2Fragment extends Fragment implements GoogleApiClient
     //                      resolve an error, and so we should not start further
     //                      intents until the current intent completes.
     private int mSignInProgress;
-
     // Used to store the PendingIntent most recently returned by Google Play
     // services until the user clicks 'sign in'.
     private PendingIntent mSignInIntent;
-
-    @InjectView(R.id.googleSignin)
-    Button mSignInButton;
-
-    @InjectView(R.id.skipSignin)
-    Button mSkipSignin;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

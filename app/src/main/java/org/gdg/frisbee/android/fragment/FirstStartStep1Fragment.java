@@ -16,8 +16,6 @@
 
 package org.gdg.frisbee.android.fragment;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -40,6 +38,7 @@ import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.ChapterComparator;
+import org.gdg.frisbee.android.utils.PrefUtils;
 import org.joda.time.DateTime;
 
 import java.util.Collections;
@@ -86,8 +85,7 @@ public class FirstStartStep1Fragment extends Fragment {
 
         super.onActivityCreated(savedInstanceState);
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("gdg", Context.MODE_PRIVATE);
-        mLocationComparator = new ChapterComparator(sharedPreferences);
+        mLocationComparator = new ChapterComparator(PrefUtils.getHomeChapterId(getActivity()));
 
         GroupDirectory client = new GroupDirectory();
         mSpinnerAdapter = new ChapterAdapter(getActivity(), android.R.layout.simple_list_item_1);
