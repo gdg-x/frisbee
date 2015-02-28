@@ -72,10 +72,10 @@ android {
             keyPassword "android"
         }
         release {
-            storeFile file("../settings/" + (local_properties.release_keystore_name ?: ""))
-            keyAlias(local_properties.release_keystore_alias ?: "")
-            storePassword(local_properties.release_keystore_pwd ?: "")
-            keyPassword(local_properties.release_keystore_pwd2 ?: "")
+            storeFile file("../settings/" + (local_properties.release_keystore_name ?: "debug.keystore"))
+            keyAlias(local_properties.release_keystore_alias ?: "androiddebugkey")
+            storePassword(local_properties.release_keystore_pwd ?: "android")
+            keyPassword(local_properties.release_keystore_pwd2 ?: "android")
         }
     }
 
