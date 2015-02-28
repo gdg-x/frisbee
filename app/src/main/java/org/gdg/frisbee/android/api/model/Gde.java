@@ -3,13 +3,17 @@ package org.gdg.frisbee.android.api.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
+public class Gde implements Parcelable {
 
-/**
- * Created by maui on 29.05.2014.
- */
-public class Gde implements Parcelable{
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public Gde createFromParcel(Parcel in) {
+            return new Gde(in);
+        }
 
+        public Gde[] newArray(int size) {
+            return new Gde[size];
+        }
+    };
     private String product, name, address, email, socialUrl;
     private double lat, lng;
 
@@ -34,18 +38,8 @@ public class Gde implements Parcelable{
         parcel.writeString(socialUrl);
     }
 
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public Gde createFromParcel(Parcel in) {
-            return new Gde(in);
-        }
-
-        public Gde[] newArray(int size) {
-            return new Gde[size];
-        }
-    };
-
     public String getProduct() {
-        return product;
+        return product.trim();
     }
 
     public String getName() {
