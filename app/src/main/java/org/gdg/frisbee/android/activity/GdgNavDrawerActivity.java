@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Gravity;
@@ -112,7 +111,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        String homeChapterId = PreferenceManager.getDefaultSharedPreferences(this).getString(Const.SETTINGS_HOME_GDG, null);
+        String homeChapterId = getSharedPreferences("gdg", MODE_PRIVATE).getString(Const.SETTINGS_HOME_GDG, null);
         if (homeChapterId != null) {
             new Builder<String, Person>(String.class, Person.class)
                     .addParameter(homeChapterId)
@@ -126,7 +125,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                         @Override
                         public void onPostExecute(String[] params, Person person) {
                             if (person != null) {
-                                App.getInstance().getPicasso().load(person.getImage().getUrl())
+                                App.getInstance().getPicasso().load(person.getCover().getCoverPhoto().getUrl())
                                         .into(mDrawerImage);
                             }
                         }
