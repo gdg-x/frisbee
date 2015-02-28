@@ -16,13 +16,24 @@
   ~ limitations under the License.
 -->
 
-<ListView
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/navdrawer"
-  xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="@dimen/navdrawer_width"
   android:layout_height="match_parent"
+  android:orientation="vertical"
   android:layout_gravity="start"
-  android:background="@color/navdrawer_background"
-  android:choiceMode="singleChoice"
-  android:divider="@android:color/transparent"
-  android:dividerHeight="0dp" />
+  android:background="@color/navdrawer_background">
+  <ImageView
+    android:layout_width="@dimen/navdrawer_width"
+    android:layout_height="@dimen/navdrawer_image_height"
+    android:id="@+id/navdrawer_image"
+    android:src="@drawable/ic_logo_wide"
+    android:scaleType="centerCrop"/>
+  <ListView
+    android:id="@+id/navdrawer_list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:choiceMode="singleChoice"
+    android:divider="@android:color/transparent"
+    android:dividerHeight="0dp" />
+</LinearLayout>

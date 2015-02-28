@@ -3,5 +3,6 @@
   <dimen name="logo_size">50dip</dimen>
   <dimen name="text_size_small">12sp</dimen>
   <dimen name="navdrawer_width">260dp</dimen>
+  <dimen name="navdrawer_image_height">130dp</dimen>
   <dimen name="keyline_1">16dp</dimen>
 </resources>
