@@ -18,26 +18,41 @@ package org.gdg.frisbee.android.activity;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.google.android.gms.games.Games;
+import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.plus.Plus;
+import com.google.api.services.plus.model.Person;
 
+import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.DrawerAdapter;
+import org.gdg.frisbee.android.api.GapiOkTransport;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.OrganizerChecker;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeriesActivity;
+import org.gdg.frisbee.android.task.Builder;
+import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.PrefUtils;
+import org.joda.time.DateTime;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.InjectView;
@@ -47,12 +62,19 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 
 public abstract class GdgNavDrawerActivity extends GdgActivity {
 
+    private final HttpTransport mTransport = new GapiOkTransport();
+    private final JsonFactory mJsonFactory = new GsonFactory();
+    private Plus mClient;
+
     protected DrawerAdapter mDrawerAdapter;
     protected ActionBarDrawerToggle mDrawerToggle;
     @InjectView(R.id.drawer)
     DrawerLayout mDrawerLayout;
-    @InjectView(R.id.navdrawer)
+    @InjectView(R.id.navdrawer_list)
     ListView mDrawerContent;
+    @InjectView(R.id.navdrawer_image)
+    ImageView mDrawerImage;
+
 
     @Override
     public void setContentView(int layoutResId) {
@@ -90,10 +112,50 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
+        String homeChapterId = PreferenceManager.getDefaultSharedPreferences(this).getString(Const.SETTINGS_HOME_GDG, null);
+        if (homeChapterId != null) {
+            new Builder<String, Person>(String.class, Person.class)
+                    .addParameter(homeChapterId)
+                    .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person>() {
+                        @Override
+                        public Person doInBackground(String... params) {
+                            return getPerson(params);
+                        }
+                    })
+                    .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person>() {
+                        @Override
+                        public void onPostExecute(String[] params, Person person) {
+                            if (person != null) {
+                                App.getInstance().getPicasso().load(person.getImage().getUrl())
+                                        .into(mDrawerImage);
+                            }
+                        }
+                    })
+                    .buildAndExecute();
+        }
+
+    }
+
+    private Person getPerson(final String[] params) {
+        try {
+            Person person = (Person) App.getInstance().getModelCache().get("person_" + params[0]);
+
+            if (person == null) {
+                Plus.People.Get request = mClient.people().get(params[0]);
+                request.setFields("aboutMe,circledByCount,cover/coverPhoto/url,currentLocation,displayName,plusOneCount,tagline,urls");
+                person = request.execute();
+
+                App.getInstance().getModelCache().put("person_" + params[0], person, DateTime.now().plusDays(2));
+            }
+            return person;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @SuppressWarnings("unused")
-    @OnItemClick(R.id.navdrawer)
+    @OnItemClick(R.id.navdrawer_list)
     public void onDrawerItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         DrawerAdapter.DrawerItem item = (DrawerAdapter.DrawerItem) mDrawerAdapter.getItem(i);
 
@@ -125,6 +187,9 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 }
             case Const.DRAWER_SETTINGS:
                 navigateTo(SettingsActivity.class, null);
+                break;
+            case Const.DRAWER_HELP:
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Const.URL_HELP)));
                 break;
             case Const.DRAWER_ABOUT:
                 navigateTo(AboutActivity.class, null);
@@ -159,6 +224,16 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
         startActivity(i);
         mDrawerLayout.closeDrawers();
+    }
+
+    @Override
+    public void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mClient = new Plus.Builder(mTransport, mJsonFactory, null)
+                .setGoogleClientRequestInitializer(
+                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.IP_SIMPLE_API_ACCESS_KEY))
+                .setApplicationName("GDG Frisbee")
+                .build();
     }
 
     @Override

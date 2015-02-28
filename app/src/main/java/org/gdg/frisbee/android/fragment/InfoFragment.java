@@ -179,52 +179,14 @@ public class InfoFragment extends Fragment {
                 .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person>() {
                     @Override
                     public Person doInBackground(String... params) {
-                        try {
-                            Person person = (Person) App.getInstance().getModelCache().get("person_"+params[0]);
-
-                            if(person == null) {
-                                Plus.People.Get request = mClient.people().get(params[0]);
-                                request.setFields("aboutMe,circledByCount,cover/coverPhoto/url,currentLocation,displayName,plusOneCount,tagline,urls");
-                                person = request.execute();
-
-                                App.getInstance().getModelCache().put("person_" + params[0], person, DateTime.now().plusDays(2));
-                            }
-                            return person;
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        return null;
+                        return getPerson(params);
                     }
                 })
                 .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person>() {
                     @Override
                     public void onPostExecute(String[] params, Person person) {
-                        if(person != null && person.getUrls() != null) {
-                            mTagline.setText(person.getTagline());
-                            mAbout.setText(Html.fromHtml(person.getAboutMe()));
-
-                            for(Person.Urls url: person.getUrls()) {
-                                if(url.getValue().contains("plus.google.com/")){
-                                    if(url.getValue().contains("communities")) {
-                                        // TODO
-                                    } else {
-                                        String org = url.getValue();
-                                        try {
-                                            String organizerParameter = getUrlFromPersonUrl(url);
-                                            mFetchOrganizerInfo.addParameter(organizerParameter);
-                                        } catch(Exception ex) {
-                                            if(isAdded())
-                                                Crouton.makeText(getActivity(), String.format(getString(R.string.bogus_organizer), org), Style.ALERT);
-                                        }
-                                    }
-                                } else {
-                                    TextView tv = (TextView) mInflater.inflate(R.layout.list_resource_item, null);
-                                    tv.setText(Html.fromHtml("<a href='" + url.getValue() + "'>" + url.get("label") + "</a>"));
-                                    mResourcesBox.addView(tv);
-                                }
-
-                            }
-                            mFetchOrganizerInfo.buildAndExecute();
+                        if(person != null) {
+                            updateChapterUIFromPerson(person);
                         }
                     }
                 })
@@ -234,34 +196,35 @@ public class InfoFragment extends Fragment {
             App.getInstance().getModelCache().getAsync("person_" + plusId, false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
-                    final Person chachedChapter = (Person)item;
-
-                    mAbout.setText(Html.fromHtml(chachedChapter.getAboutMe()));
+                    final Person chachedChapter = (Person) item;
                     Crouton.makeText(getActivity(), getString(R.string.cached_content), Style.INFO).show();
+                    updateChapterUIFromPerson(chachedChapter);
+                    mAbout.setText(Html.fromHtml(chachedChapter.getAboutMe()));
 
-                    for(int i = 0; i < chachedChapter.getUrls().size(); i++) {
-                        Person.Urls url = chachedChapter.getUrls().get(i);
-                        if(url.getValue().contains("plus.google.com/") && !url.getValue().contains("communities")) {
+
+                    for (int chapterIndex = 0; chapterIndex < chachedChapter.getUrls().size(); chapterIndex++) {
+                        Person.Urls url = chachedChapter.getUrls().get(chapterIndex);
+                        if (url.getValue().contains("plus.google.com/") && !url.getValue().contains("communities")) {
                             String org = url.getValue();
                             try {
-                                String id = url.getValue().replace("plus.google.com/", "").replace("posts","").replace("/","").replace("about","").replace("u1","").replace("u0","").replace("https:","").replace("http:","").replace(plusId, "").replaceAll("[^\\d.]", "").substring(0,21);
+                                String id = getGPlusIdFromPersonUrl(url);
 
-                                final int finalI = i;
-                                App.getInstance().getModelCache().getAsync("person_"+ id, false, new ModelCache.CacheListener() {
+                                final int indexAsFinal = chapterIndex;
+                                App.getInstance().getModelCache().getAsync("person_" + id, false, new ModelCache.CacheListener() {
                                     @Override
                                     public void onGet(Object item) {
-                                        final Person person = (Person)item;
+                                        final Person person = (Person) item;
                                         View v = getOrganizerView(person);
                                         v.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View view) {
-                                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/"+person.getId()+"/posts")));
+                                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/" + person.getId() + "/posts")));
                                             }
                                         });
                                         registerForContextMenu(v);
                                         mOrganizerBox.addView(v);
 
-                                        if( finalI == chachedChapter.getUrls().size()) {
+                                        if (indexAsFinal == chachedChapter.getUrls().size()) {
                                             setIsLoading(false);
                                         }
                                     }
@@ -270,12 +233,12 @@ public class InfoFragment extends Fragment {
                                     public void onNotFound(String key) {
                                         View v = getUnknownOrganizerView();
                                         mOrganizerBox.addView(v);
-                                        if (finalI == chachedChapter.getUrls().size()) {
+                                        if (indexAsFinal == chachedChapter.getUrls().size()) {
                                             setIsLoading(false);
                                         }
                                     }
                                 });
-                            } catch(Exception ex) {
+                            } catch (Exception ex) {
                                 Crouton.makeText(getActivity(), String.format(getString(R.string.bogus_organizer), org), Style.ALERT);
                             }
                         }
@@ -290,7 +253,55 @@ public class InfoFragment extends Fragment {
         }
     }
 
-    private String getUrlFromPersonUrl(Person.Urls personUrl) {
+    private void updateChapterUIFromPerson(final Person person) {
+        mTagline.setText(person.getTagline());
+        mAbout.setText(Html.fromHtml(person.getAboutMe()));
+
+        if (person.getUrls() != null) {
+            for (Person.Urls url : person.getUrls()) {
+                if (url.getValue().contains("plus.google.com/")) {
+                    if (url.getValue().contains("communities")) {
+                        // TODO
+                    } else {
+                        String org = url.getValue();
+                        try {
+                            String organizerParameter = getGPlusIdFromPersonUrl(url);
+                            mFetchOrganizerInfo.addParameter(organizerParameter);
+                        } catch (Exception ex) {
+                            if (isAdded())
+                                Crouton.makeText(getActivity(), String.format(getString(R.string.bogus_organizer), org), Style.ALERT);
+                        }
+                    }
+                } else {
+                    TextView tv = (TextView) mInflater.inflate(R.layout.list_resource_item, null);
+                    tv.setText(Html.fromHtml("<a href='" + url.getValue() + "'>" + url.get("label") + "</a>"));
+                    mResourcesBox.addView(tv);
+                }
+
+            }
+            mFetchOrganizerInfo.buildAndExecute();
+        }
+    }
+
+    private Person getPerson(final String[] params) {
+        try {
+            Person person = (Person) App.getInstance().getModelCache().get("person_"+params[0]);
+
+            if(person == null) {
+                Plus.People.Get request = mClient.people().get(params[0]);
+                request.setFields("aboutMe,circledByCount,cover/coverPhoto/url,currentLocation,displayName,plusOneCount,tagline,urls");
+                person = request.execute();
+
+                App.getInstance().getModelCache().put("person_" + params[0], person, DateTime.now().plusDays(2));
+            }
+            return person;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private String getGPlusIdFromPersonUrl(Person.Urls personUrl) {
         final String plus_id = getArguments().getString(Const.EXTRA_PLUS_ID);
         if (personUrl.getValue().contains("+")) {
             try {
