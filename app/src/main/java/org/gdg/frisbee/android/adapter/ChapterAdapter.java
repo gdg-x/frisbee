@@ -76,4 +76,14 @@ public class ChapterAdapter extends ArrayAdapter<Chapter> {
         else
             return 0;
     }
+
+    public Chapter findById(final String chapterId) {
+        for (int i = 0; i < getCount(); i++) {
+            Chapter chapter = getItem(i);
+            if (chapter.getGplusId().equals(chapterId)){
+                return chapter;
+            }
+        }
+        return null;
+    }
 }
