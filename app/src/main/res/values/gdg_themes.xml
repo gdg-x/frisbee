@@ -41,13 +41,5 @@
 
   <style name="Theme.GDG" parent="Theme.GDG.Base">
     <item name="android:windowBackground">@color/default_bg</item>
-
-    <item name="android:checkboxStyle">@style/CheckBoxGDG</item>
-
-    <item name="android:buttonStyle">@style/ButtonGDG</item>
-
-    <item name="android:imageButtonStyle">@style/ImageButtonGDG</item>
-
-    <item name="android:buttonStyleToggle">@style/ToggleGDG</item>
   </style>
 </resources>

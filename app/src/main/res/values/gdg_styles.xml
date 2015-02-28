@@ -26,20 +26,4 @@
     <item name="android:textSize">18sp</item>
   </style>
 
-  <style name="CheckBoxGDG" parent="android:Widget.CompoundButton.CheckBox">
-    <item name="android:button">@drawable/btn_check_holo_light</item>
-  </style>
-
-  <style name="ButtonGDG" parent="android:Widget.Holo.Light.Button">
-    <item name="android:background">@drawable/btn_default_holo_light</item>
-  </style>
-
-  <style name="ImageButtonGDG" parent="android:Widget.Holo.Light.ImageButton">
-    <item name="android:background">@drawable/btn_default_holo_light</item>
-  </style>
-
-  <style name="ToggleGDG" parent="android:Widget.Holo.Light.Button.Toggle">
-    <item name="android:background">@drawable/btn_toggle_holo_light</item>
-  </style>
-
 </resources>
