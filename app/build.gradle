@@ -16,11 +16,10 @@ def isTravis = "true".equals(System.getenv("TRAVIS"))
 def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
 
 // Manifest version information!
-def versionMajor = 1
-def versionMinor = 2
-def versionPatch = 5
+def versionMajor = 2
+def versionMinor = 0
+def versionPatch = 0
 def versionBuild = 0 // bump for dogfood builds, public betas, etc.
-def isAlpha = false
 def isDeveloperMode = false
 
 android {
@@ -49,7 +48,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         //CONFIGURATION
-        buildConfigField "Boolean", "ALPHA", String.valueOf(isAlpha)
+        buildConfigField "Boolean", "ALPHA", "false"
         buildConfigField "Boolean", "DEVELOPER_MODE", String.valueOf(isDeveloperMode)
         
         //KEYS
@@ -72,6 +71,12 @@ android {
             storePassword "android"
             keyPassword "android"
         }
+        release {
+            storeFile file("../settings/" + (local_properties.release_keystore_name ?: ""))
+            keyAlias(local_properties.release_keystore_alias ?: "")
+            storePassword(local_properties.release_keystore_pwd ?: "")
+            keyPassword(local_properties.release_keystore_pwd2 ?: "")
+        }
     }
 
     buildTypes {
@@ -81,6 +86,11 @@ android {
             zipAlignEnabled true
             shrinkResources true
             debuggable false
+            signingConfig signingConfigs.release
+        }
+        alpha.initWith(release)
+        alpha {
+            buildConfigField "Boolean", "ALPHA", "true"
         }
         debug {
             debuggable true
@@ -105,8 +115,9 @@ android {
 }
 
 play {
-    serviceAccountEmail = 'your-service-account-email'
-    pk12File = file('key.p12')
+    serviceAccountEmail = local_properties.play_service_account ?: ''
+    pk12File = file(local_properties.play_key_file?:'')
+    track = 'alpha'
 }
 
 dependencies {
