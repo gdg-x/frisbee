@@ -27,6 +27,7 @@ import android.widget.ListView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.MainActivity;
 import org.gdg.frisbee.android.adapter.PulseAdapter;
@@ -172,7 +173,7 @@ public class PulseFragment extends GdgListFragment {
             mListener.openPulse(pulse.getKey());
         } else {
             Intent chapterIntent = new Intent(getActivity(), MainActivity.class);
-            chapterIntent.putExtra("org.gdg.frisbee.CHAPTER", pulse.getValue().getId());
+            chapterIntent.putExtra(Const.EXTRA_CHAPTER_ID, pulse.getValue().getId());
             startActivity(chapterIntent);
         }
     }

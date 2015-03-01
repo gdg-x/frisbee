@@ -17,7 +17,6 @@
 package org.gdg.frisbee.android.activity;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -35,6 +34,7 @@ import android.widget.Spinner;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.ApiRequest;
 import org.gdg.frisbee.android.api.GroupDirectory;
@@ -87,7 +87,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
                 new Response.Listener<Pulse>() {
                     @Override
                     public void onResponse(final Pulse pulse) {
-                        App.getInstance().getModelCache().putAsync("pulse_global", pulse, DateTime.now().plusDays(1), new ModelCache.CachePutListener() {
+                        App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_PULSE_GLOBAL, pulse, DateTime.now().plusDays(1), new ModelCache.CachePutListener() {
                             @Override
                             public void onPutIntoCache() {
                                 mPulseTargets.addAll(pulse.keySet());
@@ -104,7 +104,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
                 }
         );
 
-        App.getInstance().getModelCache().getAsync("pulse_global", true, new ModelCache.CacheListener() {
+        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PULSE_GLOBAL, true, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 Pulse pulse = (Pulse) item;

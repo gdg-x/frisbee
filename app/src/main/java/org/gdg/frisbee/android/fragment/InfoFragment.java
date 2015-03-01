@@ -303,21 +303,21 @@ public class InfoFragment extends Fragment {
         }
     }
 
-    public View createOrganizerView(Person item) {
+    public View createOrganizerView(Person person) {
         View convertView = mInflater.inflate(R.layout.list_organizer_item, null);
 
         ImageView picture = (ImageView) convertView.findViewById(R.id.icon);
 
-        if (item != null) {
-            if (item.getImage() != null) {
+        if (person != null) {
+            if (person.getImage() != null) {
                 App.getInstance().getPicasso()
-                        .load(item.getImage().getUrl())
+                        .load(person.getImage().getUrl())
                         .placeholder(R.drawable.ic_no_avatar)
                         .into(picture);
             }
 
             TextView title = (TextView) convertView.findViewById(R.id.title);
-            title.setText(item.getDisplayName());
+            title.setText(person.getDisplayName());
         }
 
         return convertView;

@@ -54,6 +54,7 @@ public class Const {
     public static final String EVENTS = "events";
     public static final String EXTRA_CHAPTER_ID = "org.gdg.frisbee.CHAPTER";
     public static final String CACHE_KEY_CHAPTER_LIST_HUB = "chapter_list_hub";
+    public static final String CACHE_KEY_PULSE_GLOBAL = "pulse_global";
 
     // Location
     public static int MAX_DISTANCE = 50000; // 50KM

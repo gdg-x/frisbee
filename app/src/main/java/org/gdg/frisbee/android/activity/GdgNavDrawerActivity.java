@@ -72,8 +72,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     @InjectView(R.id.navdrawer_image)
     ImageView mDrawerImage;
     private Plus plusClient;
-    private String mChapterId;
-
+    protected String mStoredHomeChapterId;
 
     @Override
     public void setContentView(int layoutResId) {
@@ -227,7 +226,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     private void maybeUpdateChapterImage() {
-        final String homeChapterId = getHomeChapterId();
+        final String homeChapterId = getCurrentHomeChapterId();
         if (isHomeChapterOutdated(homeChapterId)) {
             new Builder<String, Person>(String.class, Person.class)
                     .addParameter(homeChapterId)
@@ -241,7 +240,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                         @Override
                         public void onPostExecute(String[] params, Person person) {
                             if (person != null) {
-                                mChapterId = homeChapterId;
+                                mStoredHomeChapterId = homeChapterId;
                                 App.getInstance().getPicasso().load(person.getCover().getCoverPhoto().getUrl())
                                         .into(mDrawerImage);
                             }
@@ -251,12 +250,12 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         }
     }
 
-    protected String getHomeChapterId() {
+    protected String getCurrentHomeChapterId() {
         return PrefUtils.getHomeChapterId(this);
     }
 
-    protected boolean isHomeChapterOutdated(final String homeChapterId) {
-        return homeChapterId != null && (mChapterId == null || !mChapterId.equals(homeChapterId));
+    protected boolean isHomeChapterOutdated(final String currentHomeChapterId) {
+        return currentHomeChapterId != null && (mStoredHomeChapterId == null || !mStoredHomeChapterId.equals(currentHomeChapterId));
     }
 
 
@@ -266,7 +265,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
             if (person == null) {
                 Plus.People.Get request = plusClient.people().get(gplusId);
-                request.setFields("aboutMe,circledByCount,cover/coverPhoto/url,currentLocation,displayName,plusOneCount,tagline,urls");
+                request.setFields("aboutMe,circledByCount,cover/coverPhoto/url,image/url,currentLocation,displayName,plusOneCount,tagline,urls");
                 person = request.execute();
 
                 App.getInstance().getModelCache().put("person_" + gplusId, person, DateTime.now().plusDays(2));

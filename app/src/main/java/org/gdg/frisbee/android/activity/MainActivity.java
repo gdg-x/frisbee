@@ -187,13 +187,24 @@ public class MainActivity extends GdgNavDrawerActivity {
         if (ConnectionResult.SUCCESS != playServiceStatus) {
             GooglePlayServicesUtil.getErrorDialog(playServiceStatus, this, PLAY_SERVICE_DIALOG_REQUEST_CODE).show();
         }
-        String homeChapterId = getHomeChapterId();
-        if (isHomeChapterOutdated(homeChapterId)){
+        checkHomeChapterValid();
+    }
+
+    private void checkHomeChapterValid() {
+        String homeChapterId = getCurrentHomeChapterId();
+        if (isHomeChapterOutdated(homeChapterId) &&
+                isShowingStoredHomeChapter()){
             Chapter chapter = mChapterAdapter.findById(homeChapterId);
             if (chapter != null) {
                 updateSelectionFor(chapter);
             }
         }
+    }
+
+    private boolean isShowingStoredHomeChapter() {
+        if (mStoredHomeChapterId == null) return false;
+        Chapter chapterShown = mViewPagerAdapter.getSelectedChapter();
+        return chapterShown != null && chapterShown.getGplusId().equals(mStoredHomeChapterId);
     }
 
     /**
@@ -344,6 +355,7 @@ public class MainActivity extends GdgNavDrawerActivity {
     private void updateSelectionFor(final Chapter chapter) {
         Chapter previous = mViewPagerAdapter.getSelectedChapter();
         mViewPagerAdapter.setSelectedChapter(chapter);
+        mSpinner.setSelection(mChapterAdapter.getPosition(chapter));
         if (previous == null || !previous.equals(chapter)) {
             Timber.d("Switching chapter!");
             mViewPagerAdapter.notifyDataSetChanged();
