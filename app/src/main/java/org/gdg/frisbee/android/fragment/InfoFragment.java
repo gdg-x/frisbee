@@ -75,7 +75,34 @@ public class InfoFragment extends Fragment {
 
     private LayoutInflater mInflater;
 
-    private Builder<String, Person[]> mFetchOrganizerInfo;
+    private Builder<String, Person[]> mFetchOrganizerInfo = new Builder<String, Person[]>(String.class, Person[].class)
+            .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person[]>() {
+                @Override
+                public Person[] doInBackground(String... params) {
+                    if (params == null) {
+                        return null;
+                    }
+
+                    Person[] people = new Person[params.length];
+                    for (int i = 0; i < params.length; i++) {
+                        Timber.d("Get Organizer " + params[i]);
+                        if (isAdded()) {
+                            people[i] = ((GdgNavDrawerActivity) getActivity()).getPerson(params[i]);
+                        } else {
+                            // fragment is not used anymore
+                            people[i] = null;
+                        }
+                    }
+                    return people;
+                }
+            })
+            .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person[]>() {
+                @Override
+                public void onPostExecute(String[] params, final Person[] person) {
+                    addOrganizersToUI(person);
+                    setIsLoading(false);
+                }
+            });
 
     public static InfoFragment newInstance(String plusId) {
         InfoFragment fragment = new InfoFragment();
@@ -92,36 +119,17 @@ public class InfoFragment extends Fragment {
         mInflater = LayoutInflater.from(getActivity());
 
         if (Utils.isOnline(getActivity())) {
-            mFetchOrganizerInfo = new Builder<String, Person[]>(String.class, Person[].class)
-                    .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person[]>() {
-                        @Override
-                        public Person[] doInBackground(String... params) {
-                            if (params == null) {
-                                return null;
-                            }
-
-                            Person[] people = new Person[params.length];
-                            for (int i = 0; i < params.length; i++) {
-                                Timber.d("Get Organizer " + params[i]);
-                                people[i] = ((GdgNavDrawerActivity) getActivity()).getPerson(params[i]);
-                            }
-                            return people;
-                        }
-                    })
-                    .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person[]>() {
-                        @Override
-                        public void onPostExecute(String[] params, final Person[] person) {
-                            addOrganizersToUI(person);
-                            setIsLoading(false);
-                        }
-                    });
-
             new Builder<String, Person>(String.class, Person.class)
                     .addParameter(getArguments().getString(Const.EXTRA_PLUS_ID))
                     .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person>() {
                         @Override
                         public Person doInBackground(String... params) {
-                            return ((GdgNavDrawerActivity)getActivity()).getPerson(params[0]);
+                            if (isAdded()) {
+                                return ((GdgNavDrawerActivity) getActivity()).getPerson(params[0]);
+                            } else {
+                                // fragment is not used anymore
+                                return null;
+                            }
                         }
                     })
                     .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person>() {
@@ -330,46 +338,5 @@ public class InfoFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_chapter_info, null);
         ButterKnife.inject(this, v);
         return v;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-
     }
 }
