@@ -25,9 +25,9 @@
     android:id="@android:id/list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/keyline_1_minus_8dp"
+    android:paddingLeft="@dimen/keyline_1_minus_12dp"
     android:paddingTop="@dimen/keyline_1"
-    android:paddingRight="@dimen/keyline_1_minus_8dp"
+    android:paddingRight="@dimen/keyline_1_minus_12dp"
     android:clipToPadding="false"
     android:scrollbarStyle="outsideOverlay"
     android:drawSelectorOnTop="true" />

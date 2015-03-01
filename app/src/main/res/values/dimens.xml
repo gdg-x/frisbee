@@ -11,6 +11,9 @@
   
   <dimen name="keyline_1">16dp</dimen>
   <dimen name="keyline_1_minus_8dp">8dp</dimen>
+  <dimen name="keyline_1_minus_12dp">4dp</dimen>
   <dimen name="keyline_2">72dp</dimen>
   <dimen name="keyline_2_minus_16dp">56dp</dimen>
+  
+  <dimen name="icon_width_event">48dp</dimen>
 </resources>

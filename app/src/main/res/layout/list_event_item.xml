@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:paddingRight="@dimen/keyline_1"
+        android:paddingRight="8dp"
         android:paddingTop="@dimen/content_padding"
         android:textAllCaps="true"
         android:textColor="?android:textColorPrimaryInverse"
@@ -52,11 +52,11 @@
 
       <ImageView
         android:id="@+id/icon"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="@dimen/icon_width_event"
+        android:layout_height="@dimen/icon_width_event"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="@dimen/keyline_1"
-        android:layout_marginRight="@dimen/keyline_1"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="24dp"
         android:contentDescription="@null"
         android:scaleType="fitXY"
@@ -72,6 +72,7 @@
         android:layout_marginBottom="@dimen/keyline_1"
         android:layout_marginTop="@dimen/keyline_1"
         android:layout_toRightOf="@+id/icon"
+        android:paddingLeft="8dp"
         android:orientation="vertical">
 
         <TextView
@@ -109,7 +110,7 @@
         android:layout_centerVertical="true"
         android:gravity="end"
         android:paddingLeft="8dp"
-        android:paddingRight="@dimen/keyline_1"
+        android:paddingRight="8dp"
         android:paddingTop="48dp"
         android:text="@string/past_event"
         android:textStyle="bold"
