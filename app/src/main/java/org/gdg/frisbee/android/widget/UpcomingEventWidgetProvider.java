@@ -23,18 +23,13 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
-import android.os.Build;
 import android.os.IBinder;
-import android.view.View;
 import android.widget.RemoteViews;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-
-import java.util.ArrayList;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -46,15 +41,17 @@ import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.event.EventActivity;
+import org.gdg.frisbee.android.utils.PrefUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
+
+import java.util.ArrayList;
 
 import timber.log.Timber;
 
 public class UpcomingEventWidgetProvider extends AppWidgetProvider {
 
     public static class UpdateService extends Service {
-        private SharedPreferences mPreferences;
         private GroupDirectory mDirectory;
         private ArrayList<Chapter> mChapters;
 
@@ -62,7 +59,6 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
         public void onStart(Intent intent, int startId) {
             Timber.d("onStart()");
 
-            mPreferences = getSharedPreferences("gdg", MODE_PRIVATE);
             mDirectory = new GroupDirectory();
 
             ComponentName thisWidget = new ComponentName(this, UpcomingEventWidgetProvider.class);
@@ -98,7 +94,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                 @Override
                 public void onGet(Object item) {
                     mChapters = ((Directory) item).getGroups();
-                    final Chapter homeGdg = findChapter(mPreferences.getString(Const.SETTINGS_HOME_GDG, null));
+                    final Chapter homeGdg = findChapter(PrefUtils.getHomeChapterId(UpdateService.this));
 
                     if(homeGdg == null) {
                         Timber.d("Got no Home GDG");

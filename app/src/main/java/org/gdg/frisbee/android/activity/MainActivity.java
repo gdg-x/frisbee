@@ -102,7 +102,7 @@ public class MainActivity extends GdgNavDrawerActivity {
 
         GroupDirectory client = new GroupDirectory();
 
-        mLocationComparator = new ChapterComparator(mPreferences);
+        mLocationComparator = new ChapterComparator(getHomeChapterId());
 
         mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
         mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.tab_selected_strip));
@@ -170,11 +170,7 @@ public class MainActivity extends GdgNavDrawerActivity {
             }
         }
 
-        DateTime now = DateTime.now();
-
-        if (mPreferences.getInt(Const.SETTINGS_SEASONS_GREETINGS, now.getYear() - 1) < now.getYear()
-                && (now.getDayOfYear() >= 354 && now.getDayOfYear() <= 366)) {
-            mPreferences.edit().putInt(Const.SETTINGS_SEASONS_GREETINGS, now.getYear()).apply();
+        if (PrefUtils.shouldShowSeasonsGreetings(this)) {
             SeasonsGreetingsFragment seasonsGreetings = new SeasonsGreetingsFragment();
             seasonsGreetings.show(getSupportFragmentManager(), "dialog");
         }
@@ -239,8 +235,12 @@ public class MainActivity extends GdgNavDrawerActivity {
     private void initChapters(@NonNull ArrayList<Chapter> chapters,
                               @NonNull Chapter selectedChapter) {
         addChapters(chapters);
-        updateSelectionFor(selectedChapter);
+        mViewPagerAdapter = new ChapterFragmentPagerAdapter(this,
+                getSupportFragmentManager(), selectedChapter);
+        mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.setOffscreenPageLimit(2);
+        updateSelectionFor(selectedChapter);
+
         mSlidingTabLayout.setViewPager(mViewPager);
 
         if (SECTION_EVENTS.equals(getIntent().getStringExtra(Const.EXTRA_SECTION))) {
@@ -293,7 +293,7 @@ public class MainActivity extends GdgNavDrawerActivity {
         super.onStart();
         Timber.d("onStart()");
 
-        if (mPreferences.getBoolean(Const.SETTINGS_FIRST_START, Const.SETTINGS_FIRST_START_DEFAULT)) {
+        if (PrefUtils.isFirstStart(this)) {
             startActivityForResult(new Intent(this, FirstStartActivity.class), REQUEST_FIRST_START_WIZARD);
         }
     }

@@ -20,7 +20,6 @@ import android.app.ActivityManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.Toolbar;
@@ -50,7 +49,6 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
     private static final int RC_SIGN_IN = 0;
     private static final int DIALOG_PLAY_SERVICES_ERROR = 0;
     private final ScopedBus scopedBus = new ScopedBus();
-    SharedPreferences mPreferences;
     private AchievementActionHandler mAchievementActionHandler;
     private Handler mHandler = new Handler();
 
@@ -109,8 +107,6 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mPreferences = getSharedPreferences("gdg", MODE_PRIVATE);
-
         if (!Utils.isEmulator()) {
 
             mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -126,7 +122,7 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
         }
 
         mAchievementActionHandler =
-                new AchievementActionHandler(getHandler(), mGoogleApiClient, mPreferences);
+                new AchievementActionHandler(getHandler(), mGoogleApiClient, this);
     }
 
     @Override

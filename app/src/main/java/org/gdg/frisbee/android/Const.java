@@ -26,21 +26,6 @@ import org.joda.time.DateTime;
  */
 public class Const {
 
-    // Settings
-    public static final String SETTINGS_FIRST_START = "gdg_first_start";
-    public static final String SETTINGS_GCM_REG_ID = "gdg_registration_id";
-    public static final String SETTINGS_VERSION_CODE = "gdg_version_code";
-    public static final String SETTINGS_HOME_GDG = "gdg_home";
-    public static final String SETTINGS_APP_STARTS = "gdg_app_starts";
-    public static final String SETTINGS_VIDEOS_PLAYED = "gdg_app_videos_played";
-    public static final String SETTINGS_GDL_VIDEOS_PLAYED = "gdg_app_gdl_video_played";
-    public static final String SETTINGS_ANALYTICS = "analytics";
-    public static final String SETTINGS_GCM = "gcm";
-    public static final String SETTINGS_GCM_NOTIFICATION_KEY = "gcm_notification_key";
-    public static final String SETTINGS_SEASONS_GREETINGS = "seasons_greetings";
-
-    public static final boolean SETTINGS_FIRST_START_DEFAULT = true;
-
     public static final String GITHUB_ORGA = "gdg-x";
     public static final String GITHUB_REPO = "frisbee";
 

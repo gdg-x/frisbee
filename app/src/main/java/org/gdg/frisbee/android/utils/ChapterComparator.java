@@ -1,6 +1,7 @@
 package org.gdg.frisbee.android.utils;
 
 import android.location.Location;
+import android.support.annotation.Nullable;
 
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.app.App;
@@ -17,6 +18,7 @@ import java.util.Comparator;
 public class ChapterComparator implements Comparator<Chapter> {
 
     private static final float MAX_DISTANCE = 500000;
+    @Nullable
     private final String mHomeChapterId;
 
     public ChapterComparator(String homeChapterId) {

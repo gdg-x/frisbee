@@ -16,38 +16,34 @@
 
 package org.gdg.frisbee.android.achievements;
 
-import android.content.SharedPreferences;
+import android.content.Context;
 import android.os.Handler;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 
-import org.gdg.frisbee.android.Const;
+import org.gdg.frisbee.android.utils.PrefUtils;
 
 import java.util.ArrayList;
 
 /**
- *
  * Simple Achievements action handler used not to clutter activity code with achievements unlocking.
  *
  * @author Bartek Przybylski <bart.p.pl@gmail.com>
  */
 public class AchievementActionHandler {
-    private Handler mHandler;
-    private GoogleApiClient mGoogleApi;
-    private SharedPreferences mPreferences;
-
-    private ArrayList<String> mPending;
-
     private static final int ONE_SEC_IN_MILLISECONDS = 1000;
+    private final Context mContext;
+    private final Handler mHandler;
+    private final GoogleApiClient mGoogleApi;
+    private final ArrayList<String> mPending;
 
     public AchievementActionHandler(Handler handler,
-                                    GoogleApiClient googleApiClient,
-                                    SharedPreferences preferences) {
+                                    GoogleApiClient googleApiClient, Context context) {
         mPending = new ArrayList<>();
         mHandler = handler;
         mGoogleApi = googleApiClient;
-        mPreferences = preferences;
+        mContext = context;
     }
 
     public void handleSignIn() {
@@ -55,7 +51,7 @@ public class AchievementActionHandler {
     }
 
     public void handleAppStarted() {
-        int appStartedCounter = mPreferences.getInt(Const.SETTINGS_APP_STARTS, 0);
+        int appStartedCounter = PrefUtils.getAppStarts(mContext);
 
         if (appStartedCounter >= 10)
             postAchievementUnlockedEvent(Achievements.ACHIEVEMENT_RETURN);
@@ -65,31 +61,14 @@ public class AchievementActionHandler {
     }
 
     public void handleVideoViewed() {
-        int videoPlayed = updateVideoViewedCounter(Const.SETTINGS_VIDEOS_PLAYED);
+        int videoPlayed = PrefUtils.increaseVideoViewed(mContext);
 
-        if(videoPlayed >= 10)
+        if (videoPlayed >= 10)
             postAchievementUnlockedEvent(Achievements.ACHIEVEMENT_CINEPHILE);
     }
 
-    public void handleGDLVideoViewed() {
-        int videoPlayed = updateVideoViewedCounter(Const.SETTINGS_GDL_VIDEOS_PLAYED);
-
-        if(videoPlayed >= 5)
-            postAchievementUnlockedEvent(Achievements.ACHIEVEMENT_GDL_ADDICT);
-    }
-
-    private int updateVideoViewedCounter(String videoCategoryName) {
-        SharedPreferences.Editor editor = mPreferences.edit();
-        int videoPlayed = mPreferences.getInt(videoCategoryName, 0);
-        videoPlayed++;
-
-        editor.putInt(videoCategoryName, videoPlayed);
-        editor.apply();
-        return videoPlayed;
-    }
-
     private void postAchievementUnlockedEvent(final String achievementName) {
-        if(!mGoogleApi.isConnected())       {
+        if (!mGoogleApi.isConnected()) {
             mPending.add(achievementName);
         } else {
             mHandler.postDelayed(new Runnable() {
@@ -102,7 +81,7 @@ public class AchievementActionHandler {
     }
 
     public void onConnected() {
-        for(String achievement : mPending) {
+        for (String achievement : mPending) {
             postAchievementUnlockedEvent(achievement);
         }
         mPending.clear();

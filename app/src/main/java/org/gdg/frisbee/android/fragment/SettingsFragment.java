@@ -17,13 +17,11 @@
 package org.gdg.frisbee.android.fragment;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceManager;
 import android.support.v4.preference.PreferenceFragment;
 import android.view.View;
 import android.view.animation.Animation;
@@ -41,7 +39,6 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.plus.Plus;
 
 import org.gdg.frisbee.android.BuildConfig;
-import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.api.ApiRequest;
@@ -62,7 +59,6 @@ public class SettingsFragment extends PreferenceFragment {
 
     private GdgX mXClient;
     private GoogleCloudMessaging mGcm;
-    private SharedPreferences mPreferences;
 
     private GoogleApiClient mGoogleApiClient;
 
@@ -71,7 +67,7 @@ public class SettingsFragment extends PreferenceFragment {
         public boolean onPreferenceChange(Preference preference, Object o) {
             final String homeGdg = (String) o;
 
-            if (mGoogleApiClient.isConnected() && mPreferences.getBoolean("gcm", true)) {
+            if (mGoogleApiClient.isConnected() && PrefUtils.isGcmEnabled(getActivity())) {
                 setHomeGdg(homeGdg);
             }
             // Update widgets to show newest chosen GdgHome events
@@ -99,13 +95,10 @@ public class SettingsFragment extends PreferenceFragment {
                             mXClient.setToken(token);
 
                             if (!enableGcm) {
-                                ApiRequest req = mXClient.unregisterGcm(mPreferences.getString(Const.SETTINGS_GCM_REG_ID, ""), new Response.Listener<GcmRegistrationResponse>() {
+                                ApiRequest req = mXClient.unregisterGcm(PrefUtils.getRegistrationId(getActivity()), new Response.Listener<GcmRegistrationResponse>() {
                                             @Override
                                             public void onResponse(GcmRegistrationResponse messageResponse) {
-                                                mPreferences.edit()
-                                                        .putBoolean(Const.SETTINGS_GCM, false)
-                                                        .remove(Const.SETTINGS_GCM_REG_ID)
-                                                        .apply();
+                                                PrefUtils.setGcmSettings(getActivity(), false, null, null);
                                             }
                                         }, new Response.ErrorListener() {
                                             @Override
@@ -120,11 +113,7 @@ public class SettingsFragment extends PreferenceFragment {
                                 ApiRequest req = mXClient.registerGcm(regId, new Response.Listener<GcmRegistrationResponse>() {
                                             @Override
                                             public void onResponse(GcmRegistrationResponse messageResponse) {
-                                                mPreferences.edit()
-                                                        .putBoolean(Const.SETTINGS_GCM, true)
-                                                        .putString(Const.SETTINGS_GCM_REG_ID, regId)
-                                                        .putString(Const.SETTINGS_GCM_NOTIFICATION_KEY, messageResponse.getNotificationKey())
-                                                        .apply();
+                                                PrefUtils.setGcmSettings(getActivity(), true, regId, messageResponse.getNotificationKey());
                                             }
                                         }, new Response.ErrorListener() {
                                             @Override
@@ -135,7 +124,7 @@ public class SettingsFragment extends PreferenceFragment {
                                 );
                                 req.execute();
 
-                                setHomeGdg(mPreferences.getString(Const.SETTINGS_HOME_GDG, ""));
+                                setHomeGdg(PrefUtils.getHomeChapterId(getActivity()));
                             }
                         } catch (IOException e) {
                             Timber.e("(Un)Register GCM gailed (IO)", e);
@@ -194,16 +183,11 @@ public class SettingsFragment extends PreferenceFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        PreferenceManager preferenceManager = getPreferenceManager();
-        preferenceManager.setSharedPreferencesName("gdg");
-
         mXClient = new GdgX();
         mGcm = GoogleCloudMessaging.getInstance(getActivity());
 
-        mPreferences = preferenceManager.getSharedPreferences();
-
+        getPreferenceManager().setSharedPreferencesName(PrefUtils.PREF_NAME);
         addPreferencesFromResource(R.xml.settings);
-
         initPreferences();
     }
 
@@ -214,7 +198,7 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void initPreferences() {
-        final ListPreference prefHomeGdgList = (ListPreference) findPreference(Const.SETTINGS_HOME_GDG);
+        final ListPreference prefHomeGdgList = (ListPreference) findPreference(PrefUtils.SETTINGS_HOME_GDG);
         if (prefHomeGdgList != null) {
             App.getInstance().getModelCache().getAsync("chapter_list_hub", false, new ModelCache.CacheListener() {
                 @Override
@@ -243,12 +227,12 @@ public class SettingsFragment extends PreferenceFragment {
             prefHomeGdgList.setOnPreferenceChangeListener(mOnHomeGdgPreferenceChange);
         }
 
-        CheckBoxPreference prefGcm = (CheckBoxPreference) findPreference(Const.SETTINGS_GCM);
+        CheckBoxPreference prefGcm = (CheckBoxPreference) findPreference(PrefUtils.SETTINGS_GCM);
         if (prefGcm != null) {
             prefGcm.setOnPreferenceChangeListener(mOnGcmPreferenceChange);
         }
 
-        CheckBoxPreference prefGoogleSignIn = (CheckBoxPreference) findPreference("gdg_signed_in");
+        CheckBoxPreference prefGoogleSignIn = (CheckBoxPreference) findPreference(PrefUtils.SETTINGS_SIGNED_IN);
         if (prefGoogleSignIn != null) {
             prefGoogleSignIn.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
@@ -273,7 +257,7 @@ public class SettingsFragment extends PreferenceFragment {
             });
         }
 
-        CheckBoxPreference prefAnalytics = (CheckBoxPreference) findPreference("analytics");
+        CheckBoxPreference prefAnalytics = (CheckBoxPreference) findPreference(PrefUtils.SETTINGS_ANALYTICS);
         if (prefAnalytics != null) {
             prefAnalytics.setOnPreferenceChangeListener(mOnAnalyticsPreferenceChange);
         }

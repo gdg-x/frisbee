@@ -16,11 +16,9 @@
 
 package org.gdg.frisbee.android.fragment;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -28,22 +26,11 @@ import android.view.View;
 
 import org.gdg.frisbee.android.R;
 
-/**
- * Created with IntelliJ IDEA.
- * User: maui
- * Date: 18.12.13
- * Time: 19:28
- * To change this template use File | Settings | File Templates.
- */
 public class SeasonsGreetingsFragment extends DialogFragment {
-
-    private SharedPreferences mPreferences;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        mPreferences = getActivity().getSharedPreferences("gdg", Activity.MODE_PRIVATE);
     }
 
     @Override

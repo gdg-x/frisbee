@@ -17,7 +17,6 @@
 package org.gdg.frisbee.android.app;
 
 import android.app.Application;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -43,6 +42,7 @@ import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.utils.CrashlyticsTree;
 import org.gdg.frisbee.android.utils.GingerbreadLastLocationFinder;
+import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
 
@@ -68,7 +68,6 @@ public class App extends Application implements LocationListener {
 
     private ModelCache mModelCache;
     private Picasso mPicasso;
-    private SharedPreferences mPreferences;
     private Tracker mTracker;
     private GingerbreadLastLocationFinder mLocationFinder;
     private Location mLastLocation;
@@ -97,13 +96,12 @@ public class App extends Application implements LocationListener {
 
         mInstance = this;
 
-        mPreferences = getSharedPreferences("gdg", MODE_PRIVATE);
-
         try {
             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
 
-            if (mPreferences.getInt(Const.SETTINGS_VERSION_CODE, 0) < pInfo.versionCode)
-                migrate(mPreferences.getInt(Const.SETTINGS_VERSION_CODE, 0), pInfo.versionCode);
+            int versionCode = PrefUtils.getVersionCode(this);
+            if (versionCode < pInfo.versionCode)
+                migrate(versionCode, pInfo.versionCode);
 
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -113,7 +111,7 @@ public class App extends Application implements LocationListener {
         getModelCache();
         GdgVolley.init(this);
 
-        mPreferences.edit().putInt(Const.SETTINGS_APP_STARTS, mPreferences.getInt(Const.SETTINGS_APP_STARTS, 0) + 1).apply();
+        PrefUtils.increaseAppStartCount(this);
 
         // Initialize Picasso
         mPicasso = new Picasso.Builder(this)
@@ -122,9 +120,9 @@ public class App extends Application implements LocationListener {
                 .build();
         mPicasso.setIndicatorsEnabled(BuildConfig.DEBUG);
 
-        mOrganizerChecker = new OrganizerChecker(mPreferences);
+        mOrganizerChecker = new OrganizerChecker(PrefUtils.prefs(this));
 
-        GoogleAnalytics.getInstance(this).setAppOptOut(mPreferences.getBoolean("analytics", false));
+        GoogleAnalytics.getInstance(this).setAppOptOut(PrefUtils.isAnalyticsEnabled(this));
 
         // Init LastLocationFinder
         mLocationFinder = new GingerbreadLastLocationFinder(this);
@@ -178,10 +176,7 @@ public class App extends Application implements LocationListener {
     private void migrate(int oldVersion, int newVersion) {
 
         if (oldVersion < 11100 || BuildConfig.ALPHA) {
-            mPreferences.edit().remove(Const.SETTINGS_GCM_REG_ID).apply();
-
-            mPreferences.edit().clear().apply();
-            mPreferences.edit().putBoolean(Const.SETTINGS_FIRST_START, true);
+            PrefUtils.resetInitalSettings(this);
             if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
                 // SD-card available
                 String rootDirExt = Environment.getExternalStorageDirectory().getAbsolutePath()
@@ -196,7 +191,7 @@ public class App extends Application implements LocationListener {
                 Toast.makeText(getApplicationContext(), "Alpha version always resets Preferences on update.", Toast.LENGTH_LONG).show();
             }
         }
-        mPreferences.edit().putInt(Const.SETTINGS_VERSION_CODE, newVersion).apply();
+        PrefUtils.setVersionCode(this, newVersion);
     }
 
     public void updateLastLocation() {
