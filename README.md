@@ -10,9 +10,11 @@ active chapter listed in the Google Developer Group Directory
 
 ###Features:
 * GDG Pulse
-* Google Developers Live Videos
+* Google Developer Experts Directory
 * Chapter News and Events
-* Upcoming Event Widget
+* Upcoming Event Dashclock extension and Widget
+* Featured Special Event Series Section
+* Arrow (Find you fellow organizers worldwide and earn points.)
 
 Frisbee is a community effort and we appreciate the help of everyone who wants to help improve the App.
 
