@@ -276,4 +276,8 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
             //}
         }
     }
+
+    public void setToolbarTitle(final String title) {
+        getActionBarToolbar().setTitle(title);
+    }
 }
