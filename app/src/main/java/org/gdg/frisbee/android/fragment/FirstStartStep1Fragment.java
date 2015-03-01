@@ -52,20 +52,15 @@ import timber.log.Timber;
 
 public class FirstStartStep1Fragment extends Fragment {
 
-    private ApiRequest mFetchChaptersTask;
-    private ChapterAdapter mSpinnerAdapter;
-
-    private Chapter mSelectedChapter;
-
     @InjectView(R.id.chapter_spinner)
     Spinner mChapterSpinner;
-
     @InjectView(R.id.confirm)
     Button mConfirm;
-
     @InjectView(R.id.viewSwitcher)
     ViewSwitcher mLoadSwitcher;
-
+    private ApiRequest mFetchChaptersTask;
+    private ChapterAdapter mSpinnerAdapter;
+    private Chapter mSelectedChapter;
     private ChapterComparator mLocationComparator;
 
     @Override
@@ -88,7 +83,7 @@ public class FirstStartStep1Fragment extends Fragment {
         mLocationComparator = new ChapterComparator(PrefUtils.getHomeChapterId(getActivity()));
 
         GroupDirectory client = new GroupDirectory();
-        mSpinnerAdapter = new ChapterAdapter(getActivity(), android.R.layout.simple_list_item_1);
+        mSpinnerAdapter = new ChapterAdapter(getActivity(), false /* black text */);
 
         if (savedInstanceState != null) {
             mSelectedChapter = savedInstanceState.getParcelable("selected_chapter");
