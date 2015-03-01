@@ -111,10 +111,10 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
         mClient.getEvent(eventId, this, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                if (getActivity() != null) {
-                    Timber.d(volleyError, "error while retrieving event %s", eventId);
+                if (isAdded()) {
                     Crouton.makeText(getActivity(), R.string.server_error, Style.ALERT).show();
                 }
+                Timber.d(volleyError, "error while retrieving event %s", eventId);
             }
         }).execute();
     }
@@ -174,7 +174,9 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
-                            Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
+                            if (isAdded()) {
+                                Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
+                            }
                             Timber.e("Could'nt fetch chapter list", volleyError);
                         }
                     }).execute();
@@ -215,7 +217,7 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
                         }
                     }
                 });
-        ((GdgActivity) getActivity()).getSupportActionBar().setTitle(group.getShortName());
+        ((GdgActivity) getActivity()).setToolbarTitle(group.getShortName());
         mGroupLogo.setVisibility(View.INVISIBLE);
     }
 

@@ -46,11 +46,7 @@ public class EventActivity extends GdgActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_event);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
-        getSupportActionBar().setTitle(R.string.event);
+        getActionBarToolbar().setTitle(R.string.event);
 
         mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
         mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.tab_selected_strip));
@@ -68,7 +64,7 @@ public class EventActivity extends GdgActivity {
     }
 
     protected String getTrackedViewName() {
-        return "Event/" + getResources().getStringArray(R.array.about_tabs)[getCurrentPage()];
+        return "Event/" + getResources().getStringArray(R.array.event_tabs)[getCurrentPage()] + "/" + getIntent().getStringExtra(Const.EXTRA_EVENT_ID);
     }
 
     @Override
