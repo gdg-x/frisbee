@@ -143,6 +143,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 } else {
                     Crouton.makeText(GdgNavDrawerActivity.this, getString(R.string.arrow_need_games), Style.INFO).show();
                 }
+                break;
             case Const.DRAWER_SETTINGS:
                 navigateTo(SettingsActivity.class, null);
                 break;
