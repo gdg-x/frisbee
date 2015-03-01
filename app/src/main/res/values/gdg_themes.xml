@@ -19,7 +19,7 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <style name="Theme.GDG.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+  <style name="Theme.GDG.Base" parent="Theme.AppCompat.Light">
     <item name="android:windowContentOverlay">@null</item>
     <item name="colorPrimary">@color/material_blue_500</item>
     <item name="colorPrimaryDark">@color/material_blue_700</item>

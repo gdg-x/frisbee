@@ -17,7 +17,6 @@
 package org.gdg.frisbee.android.activity;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -31,6 +30,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -59,7 +59,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
     ViewPager mViewPager;
     @InjectView(R.id.sliding_tabs)
     SlidingTabLayout mSlidingTabLayout;
-    private ArrayAdapter<String> mSpinnerAdapter;
+    private CountriesSpinnerAdapter mSpinnerAdapter;
     private MyAdapter mViewPagerAdapter;
     private ArrayList<String> mPulseTargets;
     private ApiRequest mFetchGlobalPulseTask;
@@ -81,7 +81,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
         mPulseTargets = new ArrayList<>();
 
         mViewPagerAdapter = new MyAdapter(this, getSupportFragmentManager());
-        mSpinnerAdapter = new ArrayAdapter<>(PulseActivity.this, android.R.layout.simple_list_item_1);
+        mSpinnerAdapter = new CountriesSpinnerAdapter(this);
 
         mFetchGlobalPulseTask = mClient.getPulse(
                 new Response.Listener<Pulse>() {
@@ -239,6 +239,26 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
                 trackView();
 
             mSelectedPulseTarget = pulseTarget;
+        }
+    }
+
+    private class CountriesSpinnerAdapter extends ArrayAdapter<String> {
+        private final LayoutInflater mInflater;
+
+        public CountriesSpinnerAdapter(Context context) {
+            super(context, android.R.layout.simple_list_item_1, android.R.id.text1);
+            mInflater = LayoutInflater.from(context);
+        }
+
+        @Override
+        public View getView(final int position, final View convertView, final ViewGroup parent) {
+            View view = convertView;
+            if (view == null) {
+                view = mInflater.inflate(R.layout.spinner_item_actionbar, parent, false);
+            }
+            TextView textView = (TextView) view.findViewById(android.R.id.text1);
+            textView.setText(getItem(position));
+            return view;
         }
     }
 }
