@@ -17,7 +17,6 @@
 package org.gdg.frisbee.android.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
@@ -25,6 +24,7 @@ import android.widget.Toast;
 
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
+import org.gdg.frisbee.android.utils.PrefUtils;
 
 public class StartActivity extends ActionBarActivity {
 
@@ -36,16 +36,13 @@ public class StartActivity extends ActionBarActivity {
             Toast.makeText(this, "no API keys defined!", Toast.LENGTH_SHORT).show();
         }
 
-        SharedPreferences preferences = getSharedPreferences("gdg", MODE_PRIVATE);
-
         Intent intentForStart;
-        if (preferences.getBoolean(Const.SETTINGS_FIRST_START, true)) {
+        if (PrefUtils.isFirstStart(this)) {
             intentForStart = new Intent(StartActivity.this, FirstStartActivity.class);
         } else {
             intentForStart = new Intent(StartActivity.this, MainActivity.class);
 
-            final String selectedChapterGplusId = 
-                    preferences.getString(Const.SETTINGS_HOME_GDG, null);
+            final String selectedChapterGplusId = PrefUtils.getHomeChapterId(this);
             if (selectedChapterGplusId != null) {
                 intentForStart.putExtra(Const.EXTRA_CHAPTER_ID, selectedChapterGplusId);
             }

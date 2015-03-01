@@ -1,8 +1,8 @@
 package org.gdg.frisbee.android.utils;
 
-import android.content.SharedPreferences;
 import android.location.Location;
-import org.gdg.frisbee.android.Const;
+import android.support.annotation.Nullable;
+
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.app.App;
 
@@ -18,10 +18,11 @@ import java.util.Comparator;
 public class ChapterComparator implements Comparator<Chapter> {
 
     private static final float MAX_DISTANCE = 500000;
-    private final String mHomeGdg;
+    @Nullable
+    private final String mHomeChapterId;
 
-    public ChapterComparator(SharedPreferences prefs) {
-        mHomeGdg = prefs.getString(Const.SETTINGS_HOME_GDG, "");
+    public ChapterComparator(String homeChapterId) {
+        mHomeChapterId = homeChapterId;
     }
 
     @Override
@@ -29,11 +30,11 @@ public class ChapterComparator implements Comparator<Chapter> {
         float[] results = new float[1];
         float[] results2 = new float[1];
 
-        if (chapter.getGplusId().equals(mHomeGdg)) {
+        if (chapter.getGplusId().equals(mHomeChapterId)) {
             return -1;
         }
 
-        if (chapter2.getGplusId().equals(mHomeGdg)) {
+        if (chapter2.getGplusId().equals(mHomeChapterId)) {
             return 1;
         }
 

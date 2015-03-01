@@ -63,8 +63,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
     private final HttpTransport mTransport = new GapiOkTransport();
     private final JsonFactory mJsonFactory = new GsonFactory();
-    private Plus mClient;
-
     protected DrawerAdapter mDrawerAdapter;
     protected ActionBarDrawerToggle mDrawerToggle;
     @InjectView(R.id.drawer)
@@ -73,7 +71,8 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     ListView mDrawerContent;
     @InjectView(R.id.navdrawer_image)
     ImageView mDrawerImage;
-
+    private Plus plusClient;
+    protected String mStoredHomeChapterId;
 
     @Override
     public void setContentView(int layoutResId) {
@@ -111,46 +110,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        String homeChapterId = getSharedPreferences("gdg", MODE_PRIVATE).getString(Const.SETTINGS_HOME_GDG, null);
-        if (homeChapterId != null) {
-            new Builder<String, Person>(String.class, Person.class)
-                    .addParameter(homeChapterId)
-                    .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person>() {
-                        @Override
-                        public Person doInBackground(String... params) {
-                            return getPerson(params);
-                        }
-                    })
-                    .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person>() {
-                        @Override
-                        public void onPostExecute(String[] params, Person person) {
-                            if (person != null) {
-                                App.getInstance().getPicasso().load(person.getCover().getCoverPhoto().getUrl())
-                                        .into(mDrawerImage);
-                            }
-                        }
-                    })
-                    .buildAndExecute();
-        }
-
-    }
-
-    private Person getPerson(final String[] params) {
-        try {
-            Person person = (Person) App.getInstance().getModelCache().get("person_" + params[0]);
-
-            if (person == null) {
-                Plus.People.Get request = mClient.people().get(params[0]);
-                request.setFields("aboutMe,circledByCount,cover/coverPhoto/url,currentLocation,displayName,plusOneCount,tagline,urls");
-                person = request.execute();
-
-                App.getInstance().getModelCache().put("person_" + params[0], person, DateTime.now().plusDays(2));
-            }
-            return person;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     @SuppressWarnings("unused")
@@ -228,7 +187,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mClient = new Plus.Builder(mTransport, mJsonFactory, null)
+        plusClient = new Plus.Builder(mTransport, mJsonFactory, null)
                 .setGoogleClientRequestInitializer(
                         new CommonGoogleJsonClientRequestInitializer(BuildConfig.IP_SIMPLE_API_ACCESS_KEY))
                 .setApplicationName("GDG Frisbee")
@@ -262,6 +221,64 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         if (PrefUtils.shouldOpenDrawerOnStart(this)) {
             mDrawerLayout.openDrawer(Gravity.START);
         }
+
+        maybeUpdateChapterImage();
+    }
+
+    private void maybeUpdateChapterImage() {
+        final String homeChapterId = getCurrentHomeChapterId();
+        if (isHomeChapterOutdated(homeChapterId)) {
+            new Builder<String, Person>(String.class, Person.class)
+                    .addParameter(homeChapterId)
+                    .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person>() {
+                        @Override
+                        public Person doInBackground(String... params) {
+                            return getPerson(params[0]);
+                        }
+                    })
+                    .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person>() {
+                        @Override
+                        public void onPostExecute(String[] params, Person person) {
+                            if (person != null) {
+                                mStoredHomeChapterId = homeChapterId;
+                                App.getInstance().getPicasso().load(person.getCover().getCoverPhoto().getUrl())
+                                        .into(mDrawerImage);
+                            }
+                        }
+                    })
+                    .buildAndExecute();
+        }
+    }
+
+    protected String getCurrentHomeChapterId() {
+        return PrefUtils.getHomeChapterId(this);
+    }
+
+    protected boolean isHomeChapterOutdated(final String currentHomeChapterId) {
+        return currentHomeChapterId != null && (mStoredHomeChapterId == null || !mStoredHomeChapterId.equals(currentHomeChapterId));
+    }
+
+
+    public Person getPerson(final String gplusId) {
+        try {
+            Person person = (Person) App.getInstance().getModelCache().get("person_" + gplusId);
+
+            if (person == null) {
+                Plus.People.Get request = plusClient.people().get(gplusId);
+                request.setFields("aboutMe,circledByCount,cover/coverPhoto/url,image/url,currentLocation,displayName,plusOneCount,tagline,urls");
+                person = request.execute();
+
+                App.getInstance().getModelCache().put("person_" + gplusId, person, DateTime.now().plusDays(2));
+            }
+            return person;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Plus getPlusClient() {
+        return plusClient;
     }
 
     public boolean isOrganizer() {

@@ -79,7 +79,7 @@ public class MainActivity extends GdgNavDrawerActivity {
 
     private Handler mHandler = new Handler();
 
-    private ChapterAdapter mSpinnerAdapter;
+    private ChapterAdapter mChapterAdapter;
     private ChapterFragmentPagerAdapter mViewPagerAdapter;
     private ApiRequest mFetchChaptersTask;
 
@@ -102,14 +102,14 @@ public class MainActivity extends GdgNavDrawerActivity {
 
         GroupDirectory client = new GroupDirectory();
 
-        mLocationComparator = new ChapterComparator(mPreferences);
+        mLocationComparator = new ChapterComparator(PrefUtils.getHomeChapterIdNotNull(this));
 
         mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
         mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.tab_selected_strip));
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setOnPageChangeListener(this);
 
-        mSpinnerAdapter = new ChapterAdapter(MainActivity.this, android.R.layout.simple_list_item_1);
+        mChapterAdapter = new ChapterAdapter(MainActivity.this, android.R.layout.simple_list_item_1);
         initSpinner();
 
         mFetchChaptersTask = client.getDirectory(new Response.Listener<Directory>() {
@@ -170,11 +170,7 @@ public class MainActivity extends GdgNavDrawerActivity {
             }
         }
 
-        DateTime now = DateTime.now();
-
-        if (mPreferences.getInt(Const.SETTINGS_SEASONS_GREETINGS, now.getYear() - 1) < now.getYear()
-                && (now.getDayOfYear() >= 354 && now.getDayOfYear() <= 366)) {
-            mPreferences.edit().putInt(Const.SETTINGS_SEASONS_GREETINGS, now.getYear()).apply();
+        if (PrefUtils.shouldShowSeasonsGreetings(this)) {
             SeasonsGreetingsFragment seasonsGreetings = new SeasonsGreetingsFragment();
             seasonsGreetings.show(getSupportFragmentManager(), "dialog");
         }
@@ -191,8 +187,26 @@ public class MainActivity extends GdgNavDrawerActivity {
         if (ConnectionResult.SUCCESS != playServiceStatus) {
             GooglePlayServicesUtil.getErrorDialog(playServiceStatus, this, PLAY_SERVICE_DIALOG_REQUEST_CODE).show();
         }
+        checkHomeChapterValid();
     }
-    
+
+    private void checkHomeChapterValid() {
+        String homeChapterId = getCurrentHomeChapterId();
+        if (isHomeChapterOutdated(homeChapterId) &&
+                isShowingStoredHomeChapter()){
+            Chapter chapter = mChapterAdapter.findById(homeChapterId);
+            if (chapter != null) {
+                updateSelectionFor(chapter);
+            }
+        }
+    }
+
+    private boolean isShowingStoredHomeChapter() {
+        if (mStoredHomeChapterId == null) return false;
+        Chapter chapterShown = mViewPagerAdapter.getSelectedChapter();
+        return chapterShown != null && chapterShown.getGplusId().equals(mStoredHomeChapterId);
+    }
+
     /**
      * Initializes ViewPager, SlidingTabLayout, and Spinner Navigation.
      * <p/>
@@ -232,13 +246,12 @@ public class MainActivity extends GdgNavDrawerActivity {
     private void initChapters(@NonNull ArrayList<Chapter> chapters,
                               @NonNull Chapter selectedChapter) {
         addChapters(chapters);
-
-        mSpinner.setSelection(mSpinnerAdapter.getPosition(selectedChapter));
-
         mViewPagerAdapter = new ChapterFragmentPagerAdapter(this,
                 getSupportFragmentManager(), selectedChapter);
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.setOffscreenPageLimit(2);
+        updateSelectionFor(selectedChapter);
+
         mSlidingTabLayout.setViewPager(mViewPager);
 
         if (SECTION_EVENTS.equals(getIntent().getStringExtra(Const.EXTRA_SECTION))) {
@@ -282,8 +295,8 @@ public class MainActivity extends GdgNavDrawerActivity {
 
     private void addChapters(List<Chapter> chapterList) {
         Collections.sort(chapterList, mLocationComparator);
-        mSpinnerAdapter.clear();
-        mSpinnerAdapter.addAll(chapterList);
+        mChapterAdapter.clear();
+        mChapterAdapter.addAll(chapterList);
     }
 
     @Override
@@ -291,7 +304,7 @@ public class MainActivity extends GdgNavDrawerActivity {
         super.onStart();
         Timber.d("onStart()");
 
-        if (mPreferences.getBoolean(Const.SETTINGS_FIRST_START, Const.SETTINGS_FIRST_START_DEFAULT)) {
+        if (PrefUtils.isFirstStart(this)) {
             startActivityForResult(new Intent(this, FirstStartActivity.class), REQUEST_FIRST_START_WIZARD);
         }
     }
@@ -306,8 +319,8 @@ public class MainActivity extends GdgNavDrawerActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        if (mSpinnerAdapter.getCount() > 0) {
-            outState.putParcelableArrayList("chapters", mSpinnerAdapter.getAll());
+        if (mChapterAdapter.getCount() > 0) {
+            outState.putParcelableArrayList("chapters", mChapterAdapter.getAll());
         }
         if (mViewPagerAdapter != null && mViewPagerAdapter.getSelectedChapter() != null) {
             outState.putParcelable("selected_chapter", mViewPagerAdapter.getSelectedChapter());
@@ -322,16 +335,13 @@ public class MainActivity extends GdgNavDrawerActivity {
         toolbar.addView(spinnerContainer, lp);
 
         mSpinner = (Spinner) spinnerContainer.findViewById(R.id.actionbar_spinner);
-        mSpinner.setAdapter(mSpinnerAdapter);
+        mSpinner.setAdapter(mChapterAdapter);
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
-                Chapter previous = mViewPagerAdapter.getSelectedChapter();
-                mViewPagerAdapter.setSelectedChapter(mSpinnerAdapter.getItem(position));
-                if (previous == null || !previous.equals(mSpinnerAdapter.getItem(position))) {
-                    Timber.d("Switching chapter!");
-                    mViewPagerAdapter.notifyDataSetChanged();
-                }
+
+                Chapter selectedChapter = mChapterAdapter.getItem(position);
+                updateSelectionFor(selectedChapter);
             }
 
             @Override
@@ -339,6 +349,16 @@ public class MainActivity extends GdgNavDrawerActivity {
                 // Nothing to do.
             }
         });
+    }
+
+    private void updateSelectionFor(final Chapter chapter) {
+        Chapter previous = mViewPagerAdapter.getSelectedChapter();
+        mViewPagerAdapter.setSelectedChapter(chapter);
+        mSpinner.setSelection(mChapterAdapter.getPosition(chapter));
+        if (previous == null || !previous.equals(chapter)) {
+            Timber.d("Switching chapter!");
+            mViewPagerAdapter.notifyDataSetChanged();
+        }
     }
 
     public class ChapterFragmentPagerAdapter extends FragmentStatePagerAdapter {

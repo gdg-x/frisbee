@@ -31,25 +31,17 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Person;
 
-import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.GapiOkTransport;
+import org.gdg.frisbee.android.activity.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.Utils;
-import org.joda.time.DateTime;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
@@ -59,20 +51,7 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import timber.log.Timber;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.fragment
- * <p/>
- * User: maui
- * Date: 22.04.13
- * Time: 04:57
- */
 public class InfoFragment extends Fragment {
-
-    final HttpTransport mTransport = new GapiOkTransport();
-    final JsonFactory mJsonFactory = new GsonFactory();
-
-    private Plus mClient;
 
     @InjectView(R.id.about)
     TextView mAbout;
@@ -96,7 +75,34 @@ public class InfoFragment extends Fragment {
 
     private LayoutInflater mInflater;
 
-    private Builder<String, Person[]> mFetchOrganizerInfo;
+    private Builder<String, Person[]> mFetchOrganizerInfo = new Builder<String, Person[]>(String.class, Person[].class)
+            .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person[]>() {
+                @Override
+                public Person[] doInBackground(String... params) {
+                    if (params == null) {
+                        return null;
+                    }
+
+                    Person[] people = new Person[params.length];
+                    for (int i = 0; i < params.length; i++) {
+                        Timber.d("Get Organizer " + params[i]);
+                        if (isAdded()) {
+                            people[i] = ((GdgNavDrawerActivity) getActivity()).getPerson(params[i]);
+                        } else {
+                            // fragment is not used anymore
+                            people[i] = null;
+                        }
+                    }
+                    return people;
+                }
+            })
+            .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person[]>() {
+                @Override
+                public void onPostExecute(String[] params, final Person[] person) {
+                    addOrganizersToUI(person);
+                    setIsLoading(false);
+                }
+            });
 
     public static InfoFragment newInstance(String plusId) {
         InfoFragment fragment = new InfoFragment();
@@ -112,85 +118,30 @@ public class InfoFragment extends Fragment {
 
         mInflater = LayoutInflater.from(getActivity());
 
-        mClient = new Plus.Builder(mTransport, mJsonFactory, null)
-                .setGoogleClientRequestInitializer(
-                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.IP_SIMPLE_API_ACCESS_KEY))
-                .setApplicationName("GDG Frisbee")
-                .build();
-
-        if(Utils.isOnline(getActivity())) {
-        mFetchOrganizerInfo = new Builder<String, Person[]>(String.class, Person[].class)
-                .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person[]>() {
-                    @Override
-                    public Person[] doInBackground(String... params) {
-                        if(params == null)
-                            return null;
-                        try {
-                            Person[] people = new Person[params.length];
-                            for(int i = 0; i < params.length; i++) {
-                                Person person = (Person) App.getInstance().getModelCache().get("person_"+params[i]);
-
-                                Timber.d("Get Organizer " + params[i]);
-                                if(person == null) {
-                                    Plus.People.Get request = mClient.people().get(params[i]);
-                                    request.setFields("displayName,image,id");
-                                    person = request.execute();
-
-                                    App.getInstance().getModelCache().put("person_" + params[i], person, DateTime.now().plusDays(2));
-                                }
-                                people[i] = person;
+        if (Utils.isOnline(getActivity())) {
+            new Builder<String, Person>(String.class, Person.class)
+                    .addParameter(getArguments().getString(Const.EXTRA_PLUS_ID))
+                    .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person>() {
+                        @Override
+                        public Person doInBackground(String... params) {
+                            if (isAdded()) {
+                                return ((GdgNavDrawerActivity) getActivity()).getPerson(params[0]);
+                            } else {
+                                // fragment is not used anymore
+                                return null;
                             }
-                            return people;
-                        } catch (IOException e) {
-                            e.printStackTrace();
                         }
-                        return null;
-                    }
-                })
-                .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person[]>() {
-                    @Override
-                    public void onPostExecute(String[] params, final Person[] person) {
-                        if(person == null) {
-                            Timber.d("null person");
-                            View v = getUnknownOrganizerView();
-                            mOrganizerBox.addView(v);
-                            setIsLoading(false);
-                            return;
+                    })
+                    .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person>() {
+                        @Override
+                        public void onPostExecute(String[] params, Person person) {
+                            if (person != null) {
+                                updateChapterUIFrom(person);
+                                updateOrganizersOnline(person);
+                            }
                         }
-
-                        for(int i = 0; i < person.length; i++) {
-                            View v = getOrganizerView(person[i]);
-                            final int myi = i;
-                            v.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/"+person[myi].getId()+"/posts")));
-                                }
-                            });
-                            registerForContextMenu(v);
-                            mOrganizerBox.addView(v);
-                        }
-                        setIsLoading(false);
-                    }
-                });
-
-        new Builder<String, Person>(String.class, Person.class)
-                .addParameter(getArguments().getString(Const.EXTRA_PLUS_ID))
-                .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person>() {
-                    @Override
-                    public Person doInBackground(String... params) {
-                        return getPerson(params);
-                    }
-                })
-                .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person>() {
-                    @Override
-                    public void onPostExecute(String[] params, Person person) {
-                        if(person != null) {
-                            updateChapterUIFromPerson(person);
-                        }
-                    }
-                })
-                .buildAndExecute();
+                    })
+                    .buildAndExecute();
         } else {
             final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID);
             App.getInstance().getModelCache().getAsync("person_" + plusId, false, new ModelCache.CacheListener() {
@@ -198,9 +149,7 @@ public class InfoFragment extends Fragment {
                 public void onGet(Object item) {
                     final Person chachedChapter = (Person) item;
                     Crouton.makeText(getActivity(), getString(R.string.cached_content), Style.INFO).show();
-                    updateChapterUIFromPerson(chachedChapter);
-                    mAbout.setText(Html.fromHtml(chachedChapter.getAboutMe()));
-
+                    updateChapterUIFrom(chachedChapter);
 
                     for (int chapterIndex = 0; chapterIndex < chachedChapter.getUrls().size(); chapterIndex++) {
                         Person.Urls url = chachedChapter.getUrls().get(chapterIndex);
@@ -208,22 +157,11 @@ public class InfoFragment extends Fragment {
                             String org = url.getValue();
                             try {
                                 String id = getGPlusIdFromPersonUrl(url);
-
                                 final int indexAsFinal = chapterIndex;
                                 App.getInstance().getModelCache().getAsync("person_" + id, false, new ModelCache.CacheListener() {
                                     @Override
                                     public void onGet(Object item) {
-                                        final Person person = (Person) item;
-                                        View v = getOrganizerView(person);
-                                        v.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/" + person.getId() + "/posts")));
-                                            }
-                                        });
-                                        registerForContextMenu(v);
-                                        mOrganizerBox.addView(v);
-
+                                        addOrganizerToUI((Person) item);
                                         if (indexAsFinal == chachedChapter.getUrls().size()) {
                                             setIsLoading(false);
                                         }
@@ -231,8 +169,7 @@ public class InfoFragment extends Fragment {
 
                                     @Override
                                     public void onNotFound(String key) {
-                                        View v = getUnknownOrganizerView();
-                                        mOrganizerBox.addView(v);
+                                        addUnknowOrganizerToUI();
                                         if (indexAsFinal == chachedChapter.getUrls().size()) {
                                             setIsLoading(false);
                                         }
@@ -253,10 +190,44 @@ public class InfoFragment extends Fragment {
         }
     }
 
-    private void updateChapterUIFromPerson(final Person person) {
+    private void addOrganizersToUI(final Person[] person) {
+        if (person == null) {
+            addUnknowOrganizerToUI();
+        } else {
+            for (int i = 0; i < person.length; i++) {
+                addOrganizerToUI(person[i]);
+            }
+        }
+    }
+
+    private void addUnknowOrganizerToUI() {
+        Timber.d("null person");
+        View v = getUnknownOrganizerView();
+        mOrganizerBox.addView(v);
+    }
+
+    private void addOrganizerToUI(final Person organizer) {
+        if (organizer == null) {
+            addUnknowOrganizerToUI();
+        } else {
+            View v = createOrganizerView(organizer);
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/" + organizer.getId() + "/posts")));
+                }
+            });
+            registerForContextMenu(v);
+            mOrganizerBox.addView(v);
+        }
+    }
+
+    private void updateChapterUIFrom(final Person person) {
         mTagline.setText(person.getTagline());
         mAbout.setText(Html.fromHtml(person.getAboutMe()));
+    }
 
+    private void updateOrganizersOnline(final Person person) {
         if (person.getUrls() != null) {
             for (Person.Urls url : person.getUrls()) {
                 if (url.getValue().contains("plus.google.com/")) {
@@ -283,24 +254,6 @@ public class InfoFragment extends Fragment {
         }
     }
 
-    private Person getPerson(final String[] params) {
-        try {
-            Person person = (Person) App.getInstance().getModelCache().get("person_"+params[0]);
-
-            if(person == null) {
-                Plus.People.Get request = mClient.people().get(params[0]);
-                request.setFields("aboutMe,circledByCount,cover/coverPhoto/url,currentLocation,displayName,plusOneCount,tagline,urls");
-                person = request.execute();
-
-                App.getInstance().getModelCache().put("person_" + params[0], person, DateTime.now().plusDays(2));
-            }
-            return person;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     private String getGPlusIdFromPersonUrl(Person.Urls personUrl) {
         final String plus_id = getArguments().getString(Const.EXTRA_PLUS_ID);
         if (personUrl.getValue().contains("+")) {
@@ -317,12 +270,12 @@ public class InfoFragment extends Fragment {
 
     public void setIsLoading(boolean isLoading) {
 
-        if(isLoading == mLoading || getActivity() == null)
+        if (isLoading == mLoading || getActivity() == null)
             return;
 
         mLoading = isLoading;
 
-        if(isLoading) {
+        if (isLoading) {
             mContainer.setVisibility(View.GONE);
             mProgressContainer.startAnimation(AnimationUtils.loadAnimation(
                     getActivity(), android.R.anim.fade_in));
@@ -331,7 +284,8 @@ public class InfoFragment extends Fragment {
             Animation fadeOut = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out);
             fadeOut.setAnimationListener(new Animation.AnimationListener() {
                 @Override
-                public void onAnimationStart(Animation animation) {}
+                public void onAnimationStart(Animation animation) {
+                }
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
@@ -342,27 +296,28 @@ public class InfoFragment extends Fragment {
                 }
 
                 @Override
-                public void onAnimationRepeat(Animation animation) {}
+                public void onAnimationRepeat(Animation animation) {
+                }
             });
             mProgressContainer.startAnimation(fadeOut);
         }
     }
 
-    public View getOrganizerView(Person item) {
+    public View createOrganizerView(Person person) {
         View convertView = mInflater.inflate(R.layout.list_organizer_item, null);
 
         ImageView picture = (ImageView) convertView.findViewById(R.id.icon);
 
-        if(item != null) {
-            if(item.getImage() != null) {
+        if (person != null) {
+            if (person.getImage() != null) {
                 App.getInstance().getPicasso()
-                        .load(item.getImage().getUrl())
+                        .load(person.getImage().getUrl())
                         .placeholder(R.drawable.ic_no_avatar)
                         .into(picture);
             }
 
             TextView title = (TextView) convertView.findViewById(R.id.title);
-            title.setText(item.getDisplayName());
+            title.setText(person.getDisplayName());
         }
 
         return convertView;
@@ -383,46 +338,5 @@ public class InfoFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_chapter_info, null);
         ButterKnife.inject(this, v);
         return v;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-
     }
 }

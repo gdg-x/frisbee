@@ -1,15 +1,13 @@
 package org.gdg.frisbee.android.widget;
 
-import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
-import android.util.Log;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.android.apps.dashclock.api.DashClockExtension;
 import com.google.android.apps.dashclock.api.ExtensionData;
-import org.gdg.frisbee.android.Const;
+
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.Chapter;
@@ -17,15 +15,16 @@ import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.utils.PrefUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
-import timber.log.Timber;
 
 import java.util.ArrayList;
 
+import timber.log.Timber;
+
 public class GdgDashClockExtension extends DashClockExtension {
 
-    private SharedPreferences mPreferences;
     private GroupDirectory mDirectory;
     private ArrayList<Chapter> mChapters;
 
@@ -42,21 +41,18 @@ public class GdgDashClockExtension extends DashClockExtension {
 
     @Override
     protected void onUpdateData(int i) {
-
-        mPreferences = getSharedPreferences("gdg", MODE_PRIVATE);
         mDirectory = new GroupDirectory();
 
         App.getInstance().getModelCache().getAsync("chapter_list_hub",false, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 mChapters = ((Directory) item).getGroups();
-                final Chapter homeGdg = findChapter(mPreferences.getString(Const.SETTINGS_HOME_GDG, null));
+                final Chapter homeGdg = findChapter(PrefUtils.getHomeChapterId(GdgDashClockExtension.this));
 
                 if(homeGdg == null) {
                     Timber.d("Got no Home GDG");
                 } else {
                     Timber.d("Fetching events");
-                    String groupName = homeGdg.getName().replaceAll("GDG ","");
                     mDirectory.getChapterEventList(new DateTime(), new DateTime().plusMonths(1), homeGdg.getGplusId(), new Response.Listener<ArrayList<Event>>() {
                                 @Override
                                 public void onResponse(ArrayList<Event> events) {

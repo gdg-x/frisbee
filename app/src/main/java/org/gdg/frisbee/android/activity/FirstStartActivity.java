@@ -18,7 +18,6 @@ package org.gdg.frisbee.android.activity;
 
 import android.app.backup.BackupManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -74,7 +73,6 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
     @InjectView(R.id.loading)
     LinearLayout mLoading;
 
-    private SharedPreferences mPreferences;
     private Chapter mSelectedChapter;
     private FirstStartPageAdapter mViewPagerAdapter;
 
@@ -89,7 +87,6 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
         setContentView(R.layout.activity_first_start);
 
         App.getInstance().updateLastLocation();
-        mPreferences = getSharedPreferences("gdg", MODE_PRIVATE);
 
         ButterKnife.inject(this);
 
@@ -167,9 +164,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
     @Override
     public void onConfirmedChapter(Chapter chapter) {
         mSelectedChapter = chapter;
-        mPreferences.edit()
-                .putString(Const.SETTINGS_HOME_GDG, chapter.getGplusId())
-                .apply();
+        PrefUtils.setHomeChapterId(this, chapter.getGplusId());
 
         if (mGoogleApiClient == null) {
             mViewPager.setCurrentItem(1, true);
@@ -276,14 +271,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
                             @Override
                             public void onResponse(GcmRegistrationResponse messageResponse) {
                                 setLoadingScreen(false);
-                                mPreferences.edit()
-                                        .putBoolean(Const.SETTINGS_GCM, enableGcm)
-                                        .putBoolean(Const.SETTINGS_ANALYTICS, enableAnalytics)
-                                        .putString(Const.SETTINGS_GCM_REG_ID, regid)
-                                        .putBoolean(Const.SETTINGS_FIRST_START, false)
-                                        .putString(Const.SETTINGS_GCM_NOTIFICATION_KEY, messageResponse.getNotificationKey())
-                                        .apply();
-
+                                PrefUtils.setInitialSettings(FirstStartActivity.this, enableGcm, enableAnalytics, regid, messageResponse.getNotificationKey());
                                 finish();
                             }
                         }, new Response.ErrorListener() {
@@ -296,7 +284,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
                         });
                         req.execute();
 
-                        client.setHomeGdg(mPreferences.getString(Const.SETTINGS_HOME_GDG, ""), null, null).execute();
+                        client.setHomeGdg(PrefUtils.getHomeChapterIdNotNull(FirstStartActivity.this), null, null).execute();
 
                     } catch (IOException e) {
                         Timber.e("Token fail. %s", e);
@@ -304,18 +292,13 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
                         Timber.e("Auth fail. %s", e);
                     }
                 } else {
-                    mPreferences.edit()
-                            .putBoolean("gcm", enableGcm)
-                            .putBoolean("analytics", enableAnalytics)
-                            .putBoolean(Const.SETTINGS_FIRST_START, false)
-                            .apply();
-
+                    PrefUtils.setInitialSettings(FirstStartActivity.this, enableGcm, enableAnalytics, null, null);
                     finish();
                 }
 
-                return null;  //To change body of implemented methods use File | Settings | File Templates.
+                return null;
             }
-        }.execute(null, null, null);
+        }.execute();
     }
 
     public class FirstStartPageAdapter extends FragmentStatePagerAdapter {
