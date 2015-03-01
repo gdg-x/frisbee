@@ -124,7 +124,7 @@ public class SettingsFragment extends PreferenceFragment {
                                 );
                                 req.execute();
 
-                                setHomeGdg(PrefUtils.getHomeChapterId(getActivity()));
+                                setHomeGdg(PrefUtils.getHomeChapterIdNotNull(getActivity()));
                             }
                         } catch (IOException e) {
                             Timber.e("(Un)Register GCM gailed (IO)", e);

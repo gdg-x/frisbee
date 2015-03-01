@@ -55,6 +55,11 @@ public final class PrefUtils {
                 .getString(SETTINGS_HOME_GDG, null);
     }
 
+    public static String getHomeChapterIdNotNull(final Context context) {
+        return prefs(context)
+                .getString(SETTINGS_HOME_GDG, "");
+    }
+
     public static void setHomeChapterId(final Context context, final String chapterGplusId) {
         prefs(context).edit()
                 .putString(SETTINGS_HOME_GDG, chapterGplusId)

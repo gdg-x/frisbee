@@ -102,7 +102,7 @@ public class MainActivity extends GdgNavDrawerActivity {
 
         GroupDirectory client = new GroupDirectory();
 
-        mLocationComparator = new ChapterComparator(getHomeChapterId());
+        mLocationComparator = new ChapterComparator(PrefUtils.getHomeChapterIdNotNull(this));
 
         mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
         mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.tab_selected_strip));

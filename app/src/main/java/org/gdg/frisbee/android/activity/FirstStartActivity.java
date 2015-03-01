@@ -284,7 +284,7 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
                         });
                         req.execute();
 
-                        client.setHomeGdg(PrefUtils.getHomeChapterId(FirstStartActivity.this), null, null).execute();
+                        client.setHomeGdg(PrefUtils.getHomeChapterIdNotNull(FirstStartActivity.this), null, null).execute();
 
                     } catch (IOException e) {
                         Timber.e("Token fail. %s", e);
