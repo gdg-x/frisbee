@@ -72,7 +72,6 @@
         android:layout_marginBottom="@dimen/keyline_1"
         android:layout_marginTop="@dimen/keyline_1"
         android:layout_toRightOf="@+id/icon"
-        android:paddingLeft="8dp"
         android:orientation="vertical">
 
         <TextView

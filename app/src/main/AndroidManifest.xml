@@ -71,7 +71,7 @@
 
     <activity
       android:name=".activity.MainActivity"
-      android:theme="@style/Theme.GDG.NoActionBar" />
+      android:theme="@style/Theme.GDG.NoActionBar.Main" />
     <activity
       android:name=".activity.GdeActivity"
       android:theme="@style/Theme.GDG.NoActionBar" />
@@ -145,7 +145,7 @@
     </activity>
     <activity
       android:name=".event.EventActivity"
-      android:theme="@style/GDG.NoActionBar"
+      android:theme="@style/Theme.GDG.NoActionBar"
       android:parentActivityName=".activity.MainActivity">
     </activity>
 

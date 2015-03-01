@@ -20,6 +20,8 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
   <style name="Theme.GDG.Base" parent="Theme.AppCompat.Light">
+    <item name="actionBarInsetStart">@dimen/keyline_2</item>
+    <item name="spinnerBarInsetStart">@dimen/keyline_2_minus_16dp</item>
     <item name="android:windowContentOverlay">@null</item>
     <item name="colorPrimary">@color/material_blue_500</item>
     <item name="colorPrimaryDark">@color/material_blue_700</item>
@@ -37,6 +39,10 @@
   <style name="Theme.GDG.NoActionBar" parent="Theme.GDG">
     <item name="windowActionBar">false</item>
     <item name="android:windowNoTitle">true</item>
+  </style>
+  
+  <style name="Theme.GDG.NoActionBar.Main">
+    <item name="actionBarInsetStart">@dimen/keyline_2_minus_16dp</item>
   </style>
 
   <style name="Theme.GDG.Special.Wtm" parent="Theme.GDG.NoActionBar">
