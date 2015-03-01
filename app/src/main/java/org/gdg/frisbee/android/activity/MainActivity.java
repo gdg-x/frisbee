@@ -109,7 +109,7 @@ public class MainActivity extends GdgNavDrawerActivity {
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setOnPageChangeListener(this);
 
-        mChapterAdapter = new ChapterAdapter(MainActivity.this, android.R.layout.simple_list_item_1);
+        mChapterAdapter = new ChapterAdapter(MainActivity.this, true /* white text */);
         initSpinner();
 
         mFetchChaptersTask = client.getDirectory(new Response.Listener<Directory>() {
