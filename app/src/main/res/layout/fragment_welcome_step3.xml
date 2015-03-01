@@ -3,7 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@color/cloud"
+  android:background="@color/theme_primary"
   android:orientation="vertical">
 
   <LinearLayout
@@ -43,7 +43,7 @@
       android:singleLine="false"
       android:text="@string/step3_text"
       android:textAppearance="@android:style/TextAppearance.Large"
-      android:textColor="@color/asbestos"
+      android:textColor="@color/theme_accent_1"
       android:textIsSelectable="false" />
 
     <LinearLayout
@@ -58,7 +58,7 @@
         android:layout_height="match_parent"
         android:checked="true"
         android:text="@string/allow_analytics"
-        android:textColor="@color/asbestos"
+        android:textColor="@color/theme_accent_1"
         android:textSize="18sp" />
     </LinearLayout>
 
@@ -75,7 +75,7 @@
         android:layout_height="match_parent"
         android:checked="true"
         android:text="@string/enable_gcm"
-        android:textColor="@color/asbestos"
+        android:textColor="@color/theme_accent_1"
         android:textSize="18sp" />
     </LinearLayout>
 

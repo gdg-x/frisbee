@@ -3,7 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@color/cloud"
+  android:background="@color/theme_primary"
   android:orientation="vertical">
 
   <LinearLayout
@@ -24,7 +24,7 @@
       android:singleLine="false"
       android:text="@string/signin_description"
       android:textAppearance="@android:style/TextAppearance.Large"
-      android:textColor="@color/asbestos"
+      android:textColor="@color/theme_accent_1"
       android:textIsSelectable="false" />
 
     <Button
@@ -49,7 +49,7 @@
       android:singleLine="false"
       android:text="@string/or"
       android:textAppearance="@android:style/TextAppearance.Large"
-      android:textColor="@color/asbestos"
+      android:textColor="@color/theme_accent_1"
       android:textIsSelectable="false" />
 
     <Button
