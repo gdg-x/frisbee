@@ -18,23 +18,18 @@ package org.gdg.frisbee.android.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
+import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.adapter
- * <p/>
- * User: maui
- * Date: 24.04.13
- * Time: 00:39
- */
 public class ChapterAdapter extends ArrayAdapter<Chapter> {
 
     private LayoutInflater mInflater;
@@ -44,21 +39,27 @@ public class ChapterAdapter extends ArrayAdapter<Chapter> {
         mInflater = LayoutInflater.from(context);
     }
 
-    public ChapterAdapter(Context context, int textViewResourceId, List<Chapter> objects) {
-        super(context, textViewResourceId, objects);
-        mInflater = LayoutInflater.from(context);
+    @Override
+    public View getView(final int position, final View convertView, final ViewGroup parent) {
+        View view = convertView;
+        if (view == null) {
+            view = mInflater.inflate(R.layout.spinner_item_actionbar, parent, false);
+        }
+        TextView textView = (TextView) view.findViewById(android.R.id.text1);
+        textView.setText(getItem(position).getShortName());
+        return view;
     }
 
     @Override
     public void addAll(Collection<? extends Chapter> chapters) {
-        for(Chapter c : chapters) {
+        for (Chapter c : chapters) {
             add(c);
         }
     }
 
     public ArrayList<Chapter> getAll() {
         ArrayList<Chapter> chapters = new ArrayList<Chapter>();
-        for(int i = 0; i < getCount(); i++) {
+        for (int i = 0; i < getCount(); i++) {
             chapters.add(getItem(i));
         }
         return chapters;
@@ -71,7 +72,7 @@ public class ChapterAdapter extends ArrayAdapter<Chapter> {
 
     @Override
     public long getItemId(int position) {
-        if(position > 0 && position < getCount())
+        if (position > 0 && position < getCount())
             return Utils.stringToLong(getItem(position).getGplusId());
         else
             return 0;

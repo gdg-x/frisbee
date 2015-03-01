@@ -196,6 +196,7 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
             if (mActionBarToolbar != null) {
                 mActionBarToolbar.setNavigationIcon(R.drawable.ic_drawer);
                 setSupportActionBar(mActionBarToolbar);
+                getSupportActionBar().setDisplayShowTitleEnabled(false);
             }
         }
         return mActionBarToolbar;
