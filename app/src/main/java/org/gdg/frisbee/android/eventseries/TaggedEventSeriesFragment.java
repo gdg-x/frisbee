@@ -17,16 +17,12 @@
 package org.gdg.frisbee.android.eventseries;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Space;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -41,21 +37,18 @@ import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.EventDateComparator;
 import org.gdg.frisbee.android.utils.TaggedEventDistanceComparator;
 import org.gdg.frisbee.android.utils.Utils;
-import org.gdg.frisbee.android.view.ResizableImageView;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.Optional;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class TaggedEventSeriesFragment extends EventListFragment {
 
-    private static final String ARGS_IS_PORTRAIT = "is_portrait";
+    private static final String ARGS_ADD_DESCRIPTION_AS_HEADER = "add_description";
     
     private String mCacheKey = "";
     private TaggedEventSeries mTaggedEventSeries;
@@ -65,12 +58,12 @@ public class TaggedEventSeriesFragment extends EventListFragment {
 
     public static TaggedEventSeriesFragment newInstance(String cacheKey, 
                                                         TaggedEventSeries taggedEventSeries, 
-                                                        boolean isPortrait) {
+                                                        boolean addDescriptionAsHeader) {
         TaggedEventSeriesFragment frag = new TaggedEventSeriesFragment();
         Bundle args = new Bundle();
         args.putString(Const.EXTRA_TAGGED_EVENT_CACHEKEY, cacheKey);
         args.putParcelable(Const.EXTRA_TAGGED_EVENT, taggedEventSeries);
-        args.putBoolean(ARGS_IS_PORTRAIT, isPortrait);
+        args.putBoolean(ARGS_ADD_DESCRIPTION_AS_HEADER, addDescriptionAsHeader);
         frag.setArguments(args);
         return frag;
     }
@@ -92,7 +85,7 @@ public class TaggedEventSeriesFragment extends EventListFragment {
 
         ListView list = (ListView) getListView();
         
-        if (getArguments() != null && getArguments().getBoolean(ARGS_IS_PORTRAIT, false)) {
+        if (getArguments() != null && getArguments().getBoolean(ARGS_ADD_DESCRIPTION_AS_HEADER, false)) {
             View header = getLayoutInflater(null)
                     .inflate(R.layout.header_list_special_event_series, (ViewGroup) getView(), false);
             

@@ -72,7 +72,7 @@ public class TaggedEventSeriesActivity extends GdgNavDrawerActivity {
         trans.replace(R.id.content_fragment, TaggedEventSeriesFragment.newInstance(
                 cacheExtra != null ? cacheExtra : "specialevent",
                 mTaggedEventSeries,
-                /* isPortrait */ mDescription == null));
+                /* addDescriptonAsHeader */ mDescription == null));
         trans.commit();
     }
 
