@@ -16,30 +16,28 @@
 
 package org.gdg.frisbee.android.eventseries;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.text.TextUtils;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgNavDrawerActivity;
-import org.gdg.frisbee.android.view.ResizableImageView;
 
 import butterknife.InjectView;
 import butterknife.Optional;
 
 public class TaggedEventSeriesActivity extends GdgNavDrawerActivity {
 
-    @InjectView(R.id.special_logo)
-    @Optional
-    ResizableImageView mLogo;
+    @Optional @InjectView(R.id.special_logo)
+    ImageView mLogo;
 
-    @InjectView(R.id.special_description)
+    @Optional @InjectView(R.id.special_description)
     TextView mDescription;
-    
+
     private TaggedEventSeries mTaggedEventSeries;
 
     protected String getTrackedViewName() {
@@ -49,23 +47,22 @@ public class TaggedEventSeriesActivity extends GdgNavDrawerActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        mTaggedEventSeries = getIntent().getParcelableExtra(Const.EXTRA_TAGGED_EVENT);
+        if (mTaggedEventSeries == null) {
+            throw new IllegalArgumentException("Special Event must be provided with "
+                    + Const.EXTRA_TAGGED_EVENT + " key as an Intent extra.");
+        }
+        setTheme(mTaggedEventSeries.getColorResPrimary());
         super.onCreate(savedInstanceState);
         
         setContentView(R.layout.activity_special);
 
         Toolbar toolbar = getActionBarToolbar();
-        toolbar.setTitle(R.string.devfest);
 
-        mTaggedEventSeries = getIntent().getParcelableExtra(Const.EXTRA_TAGGED_EVENT);
-        if (mTaggedEventSeries == null) {
-            throw new IllegalArgumentException("Special Event must be provided with " 
-                    + Const.EXTRA_TAGGED_EVENT + " key as an Intent extra.");
+        toolbar.setTitle(mTaggedEventSeries.getTitleResId());
+        if (mDescription != null) {
+            mDescription.setText(mTaggedEventSeries.getDescriptionResId());
         }
-        
-        getSupportActionBar().setLogo(mTaggedEventSeries.getLogoResId());
-
-        mDescription.setText(mTaggedEventSeries.getDescriptionResId());
-
         if (mLogo != null) {
             mLogo.setImageResource(mTaggedEventSeries.getLogoResId());
         }
@@ -74,7 +71,8 @@ public class TaggedEventSeriesActivity extends GdgNavDrawerActivity {
         final String cacheExtra = getIntent().getStringExtra(Const.EXTRA_TAGGED_EVENT_CACHEKEY);
         trans.replace(R.id.content_fragment, TaggedEventSeriesFragment.newInstance(
                 cacheExtra != null ? cacheExtra : "specialevent",
-                mTaggedEventSeries));
+                mTaggedEventSeries,
+                /* addDescriptonAsHeader */ mDescription == null));
         trans.commit();
     }
 

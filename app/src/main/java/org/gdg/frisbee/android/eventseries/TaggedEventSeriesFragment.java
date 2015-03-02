@@ -17,12 +17,13 @@
 package org.gdg.frisbee.android.eventseries;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.Response;
 
@@ -47,17 +48,22 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class TaggedEventSeriesFragment extends EventListFragment {
 
+    private static final String ARGS_ADD_DESCRIPTION_AS_HEADER = "add_description";
+    
     private String mCacheKey = "";
     private TaggedEventSeries mTaggedEventSeries;
     private Comparator<EventAdapter.Item> mLocationComparator = new TaggedEventDistanceComparator();
     private Comparator<EventAdapter.Item> mDateComparator = new EventDateComparator();
     private Comparator<EventAdapter.Item> mCurrentComparator = mLocationComparator;
 
-    public static TaggedEventSeriesFragment newInstance(String cacheKey, TaggedEventSeries taggedEventSeries) {
+    public static TaggedEventSeriesFragment newInstance(String cacheKey, 
+                                                        TaggedEventSeries taggedEventSeries, 
+                                                        boolean addDescriptionAsHeader) {
         TaggedEventSeriesFragment frag = new TaggedEventSeriesFragment();
         Bundle args = new Bundle();
         args.putString(Const.EXTRA_TAGGED_EVENT_CACHEKEY, cacheKey);
         args.putParcelable(Const.EXTRA_TAGGED_EVENT, taggedEventSeries);
+        args.putBoolean(ARGS_ADD_DESCRIPTION_AS_HEADER, addDescriptionAsHeader);
         frag.setArguments(args);
         return frag;
     }
@@ -74,10 +80,27 @@ public class TaggedEventSeriesFragment extends EventListFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_events, container, false);
-        ButterKnife.inject(this, v);
-        return v;
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        ListView list = (ListView) getListView();
+        
+        if (getArguments() != null && getArguments().getBoolean(ARGS_ADD_DESCRIPTION_AS_HEADER, false)) {
+            View header = getLayoutInflater(null)
+                    .inflate(R.layout.header_list_special_event_series, (ViewGroup) getView(), false);
+            
+            TextView mDescription = ButterKnife.findById(header, R.id.special_description);
+            mDescription.setText(mTaggedEventSeries.getDescriptionResId());
+            mDescription.setCompoundDrawablesWithIntrinsicBounds(0, 
+                    mTaggedEventSeries.getLogoResId(), 0, 0);
+
+            list.addHeaderView(header, null, false);
+        }
+        
+        final ViewGroup.LayoutParams listLayoutParams = list.getLayoutParams();
+        if (getView() != null && listLayoutParams.width > getView().getWidth()) {
+            listLayoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        }
     }
 
     @Override

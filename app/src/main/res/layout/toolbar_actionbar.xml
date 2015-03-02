@@ -21,6 +21,7 @@
   android:layout_width="match_parent"
   android:layout_height="?attr/actionBarSize"
   android:background="?attr/colorPrimary"
+  app:contentInsetStart="?actionBarInsetStart"
   app:theme="@style/ActionBarThemeOverlay"
   app:titleTextAppearance="@style/ActionBar.TitleText" />
 

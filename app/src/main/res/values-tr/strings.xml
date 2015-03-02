@@ -85,7 +85,6 @@
     <string name="pulse_circlers">Takipçiler</string>
     <string name="home_gdg">Bulunduğunuz GDG</string>
     <string name="home_gdg_summary">Bulunduğunuz GDG\'yi seçiniz</string>
-    <string name="special_event">Dart Flight School</string>
     <string name="analytics">Analytics</string>
     <string name="analytics_summary_on">Uygulamanın gelişimine yardımcı olan anonim kullanım datası paylaşımı açık</string>
     <string name="analytics_summary_off">Anonim kullanım datası paylaşımı kapalı</string>
@@ -108,14 +107,11 @@
     <string name="server_error">Hata oluştu. Tekrar Deneyin.</string>
     <string name="search_hint">GDG Şubesi Ara</string>
     <string name="dashclock_description">Bulunduğunuz GDG\'de düzenlenecek etkinlikler hakkında bilgi gösterir.</string>
-    <string name="special_description">GDG DevFest\'ler GDG toplulukları tarafından düzenlenen ve farklı ürünler hakkında çeşitli sunumlardan, tüm gün süren hackathonlardan, kod workshoplarından oluşan organizasyonlardır.\n\nHer bir GDG DevFest bulunduğu topluluktan ilham alır ve bu topluluğun ihtiyaçlarına göre şekillenir. Hiçbir etkinlik birbirinin aynısı olmamakla birlikte, çekirdeğinde şu bilinç etrafında şekillenir: Geliştiriciler fikirlerini paylaşmak adına bir araya geldiklerinde, harika şeyler ortaya çıkar.</string>
+    <string name="devfest_description">GDG DevFest\'ler GDG toplulukları tarafından düzenlenen ve farklı ürünler hakkında çeşitli sunumlardan, tüm gün süren hackathonlardan, kod workshoplarından oluşan organizasyonlardır.\n\nHer bir GDG DevFest bulunduğu topluluktan ilham alır ve bu topluluğun ihtiyaçlarına göre şekillenir. Hiçbir etkinlik birbirinin aynısı olmamakla birlikte, çekirdeğinde şu bilinç etrafında şekillenir: Geliştiriciler fikirlerini paylaşmak adına bir araya geldiklerinde, harika şeyler ortaya çıkar.</string>
     <string name="order_by_date">Tarihe göre sırala</string>
     <string name="order_by_distance">Uzaklığa göre sırala</string>
     <string name="gcm_event_ticker">Bulunduğunuz GDG\'de yeni bir etkinlik düzenleniyor.</string>
-    <string name="flightschool">Dart Flight School</string>
-    <string name="flightschool_description">Dart 1.0\'e ulaştı ve uçuşa hazır! Geliştirici toplulukları 2014 Şubat ayı boyunca dünya çapında Dart Flight School etkinlikleri düzenliyorlar. Web geliştirme kanatlarınızı Dart ve Angular ile kazanın!</string>
     <string name="ioextended_description">Google I/O Extended etkinlikleri sayesinde yerel gruplarınız ile Google konferansına katılma deneyimi yaşarsınız.</string>
-    <string name="ioextended">Extended 2014</string>
     <string name="media_route_menu_title">Oturumu Cast et</string>
     <string name="navigate_to">Etkiliğe yol tarifi al</string>
 </resources>

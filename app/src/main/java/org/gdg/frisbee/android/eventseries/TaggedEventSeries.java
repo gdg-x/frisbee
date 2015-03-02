@@ -2,8 +2,10 @@ package org.gdg.frisbee.android.eventseries;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
+import android.support.annotation.StyleRes;
 
 import org.joda.time.DateTime;
 
@@ -14,6 +16,7 @@ public class TaggedEventSeries implements Parcelable {
     private int mTitleResId;
     private int mDescriptionResId;
     private int mLogoResId;
+    private int mColorPrimary;
     private DateTime mStartDateInMillis;
     private DateTime mEndDateInMillis;
 
@@ -22,6 +25,7 @@ public class TaggedEventSeries implements Parcelable {
                              @StringRes int titleResId, 
                              @StringRes int descriptionResId, 
                              @DrawableRes int logoResId,
+                             @StyleRes int colorPrimary,
                              DateTime startDateInMillis,
                              DateTime endDateInMillis) {
         mTag = tag;
@@ -29,6 +33,7 @@ public class TaggedEventSeries implements Parcelable {
         mTitleResId = titleResId;
         mDescriptionResId = descriptionResId;
         mLogoResId = logoResId;
+        mColorPrimary = colorPrimary;
         mStartDateInMillis = startDateInMillis;
         mEndDateInMillis = endDateInMillis;
     }
@@ -53,6 +58,10 @@ public class TaggedEventSeries implements Parcelable {
         return mLogoResId;
     }
 
+    public int getColorResPrimary() {
+        return mColorPrimary;
+    }
+
     public DateTime getStartDateInMillis() {
         return mStartDateInMillis;
     }
@@ -73,6 +82,7 @@ public class TaggedEventSeries implements Parcelable {
         dest.writeInt(mTitleResId);
         dest.writeInt(mDescriptionResId);
         dest.writeInt(mLogoResId);
+        dest.writeInt(mColorPrimary);
         dest.writeLong(mStartDateInMillis.getMillis());
         dest.writeLong(mEndDateInMillis.getMillis());
     }
@@ -83,6 +93,7 @@ public class TaggedEventSeries implements Parcelable {
         mTitleResId = in.readInt();
         mDescriptionResId = in.readInt();
         mLogoResId = in.readInt();
+        mColorPrimary = in.readInt();
         mStartDateInMillis = new DateTime(in.readLong());
         mEndDateInMillis = new DateTime(in.readLong());
     }

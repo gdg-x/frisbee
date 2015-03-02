@@ -1,6 +1,8 @@
 package org.gdg.frisbee.android.eventseries;
 
+import android.app.ActionBar;
 import android.os.Bundle;
+import android.view.ViewGroup;
 
 import com.android.volley.Response;
 
@@ -27,7 +29,7 @@ public class GdgEventListFragment extends EventListFragment {
         fragment.setArguments(arguments);
         return fragment;
     }
-    
+
     @Override
     void fetchEvents() {
         final DateTime now = new DateTime();
