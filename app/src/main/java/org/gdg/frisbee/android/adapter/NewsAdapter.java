@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -29,21 +30,13 @@ import android.text.style.URLSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.PlusOneButton;
+import com.google.android.gms.plus.PlusShare;
 import com.google.api.services.plus.model.Activity;
-
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.YoutubeActivity;
@@ -51,6 +44,15 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ResizableImageView;
 import org.joda.time.DateTime;
+
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 
 /**
@@ -61,8 +63,14 @@ import org.joda.time.DateTime;
  * Date: 22.04.13
  * Time: 02:48
  */
-public class NewsAdapter extends BaseAdapter {
+public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
+    private static final int VIEWTYPE_ARTICLE= 1;
+    private static final int VIEWTYPE_VIDEO= 2;
+    private static final int VIEWTYPE_PHOTO= 3;
+    private static final int VIEWTYPE_ALBUM= 4;
+    private static final int VIEWTYPE_EVENT= 5;
+    
     private Context mContext;
     private LayoutInflater mInflater;
     private ArrayList<Item> mActivities;
@@ -72,7 +80,9 @@ public class NewsAdapter extends BaseAdapter {
         mContext = ctx;
         mPlusClient = client;
         mInflater = LayoutInflater.from(mContext);
-        mActivities = new ArrayList<Item>();
+        mActivities = new ArrayList<>();
+        
+        setHasStableIds(true);
     }
 
     public void addAll(Collection<Activity> items) {
@@ -112,13 +122,8 @@ public class NewsAdapter extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return mActivities.size();
-    }
-
-    @Override
-    public Object getItem(int i) {
-        return mActivities.get(i).getActivity();
     }
 
     public Item getItemInternal(int i) {
@@ -130,38 +135,42 @@ public class NewsAdapter extends BaseAdapter {
         return Utils.stringToLong(getItemInternal(i).getActivity().getId());
     }
 
-    @Override
-    public boolean hasStableIds() {
-        return true;
-    }
-
-    @Override
-    public int getViewTypeCount() {
-        // nothing, article, video, photo, album, event
-        return 6;
-    }
+//    @Override
+//    public int getViewTypeCount() {
+//        // nothing, article, video, photo, album, event
+//        return 6;
+//    }
 
     @Override
     public int getItemViewType(int position) {
-        Item item = getItemInternal(position);
-        Activity activity = item.getActivity();
 
-        if(activity.getObject().getAttachments() == null || activity.getObject().getAttachments().isEmpty())
-            return 0;
-        else {
-            Activity.PlusObject.Attachments attachment = activity.getObject().getAttachments().get(0);
-            String objectType = attachment.getObjectType();
+        if (position >=0) {
+            if (position >= getItemCount()) {
+                position = position % getItemCount();
+            }
+            Item item = getItemInternal(position);
+            Activity activity = item.getActivity();
 
-            if(objectType.equals("article"))
-                return 1;
-            else if(objectType.equals("video"))
-                return 2;
-            else if(objectType.equals("photo"))
-                return 3;
-            else if(objectType.equals("album"))
-                return 4;
-            else if(objectType.equals("event"))
-                return 5;
+            if (activity.getObject().getAttachments() == null 
+                    || activity.getObject().getAttachments().isEmpty()) {
+                return 0;
+            } else {
+                Activity.PlusObject.Attachments attachment = activity.getObject().getAttachments().get(0);
+                String objectType = attachment.getObjectType();
+
+                switch (objectType) {
+                    case "article":
+                        return VIEWTYPE_ARTICLE;
+                    case "video":
+                        return VIEWTYPE_VIDEO;
+                    case "photo":
+                        return VIEWTYPE_PHOTO;
+                    case "album":
+                        return VIEWTYPE_ALBUM;
+                    case "event":
+                        return VIEWTYPE_EVENT;
+                }
+            }
         }
         return 0;
     }
@@ -178,50 +187,43 @@ public class NewsAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        ViewHolder mViewHolder;
-        if (view == null) {
-            view = mInflater.inflate(R.layout.news_item_base, null);
+    public NewsAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        View v =  mInflater.inflate(R.layout.news_item_base, viewGroup, false);
 
-            mViewHolder = new ViewHolder();
-            mViewHolder.plusButton = (PlusOneButton) view.findViewById(R.id.plus_one_button);
-            mViewHolder.container = (ViewGroup) view.findViewById(R.id.attachmentContainer);
-            mViewHolder.timeStamp = (TextView) view.findViewById(R.id.timestamp);
-            mViewHolder.content =  (TextView) view.findViewById(R.id.content);
-            mViewHolder.shareContent =  (TextView) view.findViewById(R.id.shareContent);
-            mViewHolder.shareContainer =  (ViewGroup) view.findViewById(R.id.shareContainer);
-            mViewHolder.content.setMovementMethod(LinkMovementMethod.getInstance());
-            mViewHolder.shareContent.setMovementMethod(LinkMovementMethod.getInstance());
-            view.setTag(mViewHolder);
-        } else {
-            mViewHolder = (ViewHolder) view.getTag();
-        }
+        final ViewHolder viewHolder = new ViewHolder(v);
+        viewHolder.content.setMovementMethod(LinkMovementMethod.getInstance());
+        viewHolder.shareContent.setMovementMethod(LinkMovementMethod.getInstance());
+        
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int i) {
 
         Item item = getItemInternal(i);
         final Activity activity = item.getActivity();
 
-        mViewHolder.url = activity.getUrl();
+        holder.url = activity.getUrl();
 
-        PlusOneButton plusButton = (PlusOneButton) view.findViewById(R.id.plus_one_button);
         if(mPlusClient != null && mPlusClient.isConnected()) {
-            mViewHolder.plusButton.setVisibility(View.VISIBLE);
-            mViewHolder.plusButton.initialize(activity.getUrl(), 1);
+            holder.plusButton.setVisibility(View.VISIBLE);
+            holder.plusButton.initialize(activity.getUrl(), 1);
         } else {
-            mViewHolder.plusButton.setVisibility(View.GONE);
+            holder.plusButton.setVisibility(View.GONE);
         }
 
         if(activity.getPublished() != null) {
-            mViewHolder.timeStamp.setVisibility(View.VISIBLE);
-            mViewHolder.timeStamp.setText(Utils.toHumanTimePeriod(mContext,new DateTime(activity.getPublished().getValue()), DateTime.now()));
+            holder.timeStamp.setVisibility(View.VISIBLE);
+            holder.timeStamp.setText(Utils.toHumanTimePeriod(mContext,new DateTime(activity.getPublished().getValue()), DateTime.now()));
         } else {
-            mViewHolder.timeStamp.setVisibility(View.GONE);
+            holder.timeStamp.setVisibility(View.GONE);
         }
 
         if (activity.getVerb().equals("share"))
-            populateShare(activity, mViewHolder);
+            populateShare(activity, holder);
         else {
-            mViewHolder.shareContainer.setVisibility(View.GONE);
-            populatePost(activity, mViewHolder.content);
+            holder.shareContainer.setVisibility(View.GONE);
+            populatePost(activity, holder.content);
         }
 
         if(activity.getObject().getAttachments() != null && activity.getObject().getAttachments().size() > 0) {
@@ -229,38 +231,36 @@ public class NewsAdapter extends BaseAdapter {
             final Activity.PlusObject.Attachments attachment = activity.getObject().getAttachments().get(0);
 
             switch(getItemViewType(i)) {
-                case 1:
+                case VIEWTYPE_ARTICLE:
                     // Article
-                    populateArticle(mViewHolder, mViewHolder.container, attachment);
+                    populateArticle(holder, holder.container, attachment);
                     break;
-                case 2:
+                case VIEWTYPE_VIDEO:
                     // Video
-                    populateVideo(mViewHolder, mViewHolder.container, attachment);
+                    populateVideo(holder, holder.container, attachment);
                     break;
-                case 3:
+                case VIEWTYPE_PHOTO:
                     // Photo
-                    populatePhoto(mViewHolder, mViewHolder.container, attachment);
+                    populatePhoto(holder, holder.container, attachment);
                     break;
-                case 4:
+                case VIEWTYPE_ALBUM:
                     // Album
-                    populateAlbum(mViewHolder, mViewHolder.container, attachment);
+                    populateAlbum(holder, holder.container, attachment);
                     break;
-                case 5:
+                case VIEWTYPE_EVENT:
                     // Event
-                    populateEvent(mViewHolder, mViewHolder.container, attachment);
+                    populateEvent(holder, holder.container, attachment);
                     break;
             }
         }
 
         // That item will contain a special property that tells if it was freshly retrieved
-        if (!item.isConsumed()) {
-            item.setConsumed(true);
-            // In which case we magically instantiate our effect and launch it directly on the view
-            Animation animation = AnimationUtils.makeInChildBottomAnimation(mContext);
-            view.startAnimation(animation);
-        }
-
-        return view;
+//        if (!item.isConsumed()) {
+//            item.setConsumed(true);
+//            // In which case we magically instantiate our effect and launch it directly on the view
+//            Animation animation = AnimationUtils.makeInChildBottomAnimation(mContext);
+//            view.startAnimation(animation);
+//        }
     }
 
     private View createAttachmentView(ViewHolder mViewHolder, ViewGroup container, int layout, int type) {
@@ -318,18 +318,26 @@ public class NewsAdapter extends BaseAdapter {
             e.printStackTrace();
         }
 
-        if(attachment.getImage() == null && attachment.getFullImage() == null)
+        if (attachment.getImage() == null && attachment.getFullImage() == null) {
             mViewHolder.articleImage.setVisibility(View.GONE);
-        else {
-            String imageUrl = attachment.getImage().getUrl();
-            if(attachment.getFullImage() != null)
+        } else {
+            String imageUrl = null;
+            if (attachment.getFullImage() != null) {
                 imageUrl = attachment.getFullImage().getUrl();
+            }
+            if (attachment.getImage() != null) {
+                imageUrl = attachment.getImage().getUrl();
+            }
 
             mViewHolder.articleImage.setImageDrawable(null);
-            mViewHolder.articleImage.setVisibility(View.VISIBLE);
-            App.getInstance().getPicasso()
-                    .load(imageUrl)
-                    .into(mViewHolder.articleImage);
+            if (imageUrl != null) {
+                mViewHolder.articleImage.setVisibility(View.VISIBLE);
+                App.getInstance().getPicasso()
+                        .load(imageUrl)
+                        .into(mViewHolder.articleImage);
+            } else {
+                mViewHolder.articleImage.setVisibility(View.GONE);
+            }
         }
 
         attachmentView.setOnClickListener(new View.OnClickListener() {
@@ -363,9 +371,7 @@ public class NewsAdapter extends BaseAdapter {
                     Intent playVideoIntent = new Intent(mContext, YoutubeActivity.class);
                     playVideoIntent.putExtra("video_id", Utils.splitQuery(new URL(attachment.getUrl())).get("v"));
                     mContext.startActivity(playVideoIntent);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                } catch (MalformedURLException e) {
+                } catch (UnsupportedEncodingException | MalformedURLException e) {
                     e.printStackTrace();
                 }
             }
@@ -470,8 +476,7 @@ public class NewsAdapter extends BaseAdapter {
             SpannableStringBuilder ssb = (SpannableStringBuilder) spanned;
 
             URLSpan[] urlspans = ssb.getSpans(0, ssb.length()-1, URLSpan.class);
-            for(int i = 0; i < urlspans.length; i++) {
-                URLSpan span = urlspans[i];
+            for (URLSpan span : urlspans) {
                 int start = ssb.getSpanStart(span);
                 int end = ssb.getSpanEnd(span);
                 final String url = span.getURL();
@@ -517,22 +522,37 @@ public class NewsAdapter extends BaseAdapter {
         }
     }
 
-    private class ViewHolder {
-        PlusOneButton plusButton;
-        ViewGroup container;
-        ViewGroup shareContainer;
-        TextView timeStamp;
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        @InjectView(R.id.plus_one_button) PlusOneButton plusButton;
+        @InjectView(R.id.attachmentContainer) ViewGroup container;
+        @InjectView(R.id.shareContainer) ViewGroup shareContainer;
+        @InjectView(R.id.timestamp) TextView timeStamp;
+        @InjectView(R.id.content) TextView content;
+        @InjectView(R.id.shareContent) TextView shareContent;
+        
         ImageView articleImage;
         TextView title;
         ResizableImageView poster;
         ResizableImageView photo;
         TextView attachmentContent;
-        TextView content;
-        TextView shareContent;
         ImageView pic1;
         ImageView pic2;
         ImageView pic3;
         String url;
         public TextView attachmentTitle;
+
+        private ViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.inject(this, itemView);
+        }
+    }
+
+    private void shareWithGooglePlus(Activity activity) {
+        Intent shareIntent = new PlusShare.Builder(mContext)
+                .setType("text/plain")
+                .setContentUrl(Uri.parse(activity.getUrl()))
+                .getIntent();
+
+        mContext.startActivity(shareIntent);
     }
 }

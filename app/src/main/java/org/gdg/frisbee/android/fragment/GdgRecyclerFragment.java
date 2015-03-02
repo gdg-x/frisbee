@@ -16,33 +16,23 @@
 
 package org.gdg.frisbee.android.fragment;
 
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 
 import org.gdg.frisbee.android.R;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.app
- * <p/>
- * User: maui
- * Date: 23.04.13
- * Time: 19:03
- */
-public class GdgListFragment extends Fragment {
+
+public class GdgRecyclerFragment extends Fragment {
 
     final private Handler mHandler = new Handler();
 
@@ -52,16 +42,9 @@ public class GdgListFragment extends Fragment {
         }
     };
 
-    final private AdapterView.OnItemClickListener mOnClickListener
-            = new AdapterView.OnItemClickListener() {
-        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-            onListItemClick(null, v, position, id);
-        }
-    };
+    RecyclerView.Adapter mAdapter;
 
-    ListAdapter mAdapter;
-
-    AdapterView<ListAdapter> mList;
+    RecyclerView mList;
 
     @InjectView(R.id.empty)
     View mEmptyView;
@@ -74,7 +57,7 @@ public class GdgListFragment extends Fragment {
 
     boolean mLoading;
 
-    public GdgListFragment() {
+    public GdgRecyclerFragment() {
     }
 
     /**
@@ -93,7 +76,7 @@ public class GdgListFragment extends Fragment {
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_list, container, false);
+        View v = inflater.inflate(R.layout.fragment_recycler_view, container, false);
         ButterKnife.inject(this, v);
         return v;
     }
@@ -104,7 +87,7 @@ public class GdgListFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ensureList();
+        ensureRecyclerView();
     }
 
     /**
@@ -120,23 +103,9 @@ public class GdgListFragment extends Fragment {
     }
 
     /**
-     * This method will be called when an item in the list is selected.
-     * Subclasses should override. Subclasses can call
-     * getListView().getItemAtPosition(position) if they need to access the
-     * data associated with the selected item.
-     *
-     * @param l The ListView where the click happened
-     * @param v The view that was clicked within the ListView
-     * @param position The position of the view in the list
-     * @param id The row id of the item that was clicked
-     */
-    public void onListItemClick(ListView l, View v, int position, long id) {
-    }
-
-    /**
      * Provide the cursor for the list view.
      */
-    public void setListAdapter(ListAdapter adapter) {
+    public void setRecyclerAdapter(RecyclerView.Adapter adapter) {
         boolean hadAdapter = mAdapter != null;
         mAdapter = adapter;
         if (mList != null) {
@@ -148,7 +117,8 @@ public class GdgListFragment extends Fragment {
             }
         }
         updateEmpty();
-        mAdapter.registerDataSetObserver(new DataSetObserver() {
+        mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+
             @Override
             public void onChanged() {
                 super.onChanged();
@@ -156,19 +126,19 @@ public class GdgListFragment extends Fragment {
                 updateEmpty();
             }
 
-            @Override
-            public void onInvalidated() {
-                super.onInvalidated();
-
-                updateEmpty();
-            }
+//            @Override
+//            public void onInvalidated() {
+//                super.onInvalidated();
+//
+//                updateEmpty();
+//            }
 
         });
     }
 
     private void updateEmpty() {
         if(!mLoading && getActivity() != null) {
-            if(mAdapter == null || mAdapter.getCount() == 0) {
+            if(mAdapter == null || mAdapter.getItemCount() == 0) {
                 setListShown(false, true);
                 mEmptyView.startAnimation(AnimationUtils.loadAnimation(
                         getActivity(), android.R.anim.fade_in));
@@ -215,38 +185,12 @@ public class GdgListFragment extends Fragment {
         }
     }
 
-    /**
-     * Set the currently selected list item to the specified
-     * position with the adapter's data
-     *
-     * @param position
-     */
-    public void setSelection(int position) {
-        ensureList();
-        mList.setSelection(position);
-    }
-
-    /**
-     * Get the position of the currently selected list item.
-     */
-    public int getSelectedItemPosition() {
-        ensureList();
-        return mList.getSelectedItemPosition();
-    }
-
-    /**
-     * Get the cursor row ID of the currently selected list item.
-     */
-    public long getSelectedItemId() {
-        ensureList();
-        return mList.getSelectedItemId();
-    }
 
     /**
      * Get the activity's list view widget.
      */
-    public AdapterView<ListAdapter> getListView() {
-        ensureList();
+    public RecyclerView getListView() {
+        ensureRecyclerView();
         return mList;
     }
 
@@ -257,7 +201,7 @@ public class GdgListFragment extends Fragment {
      *
      * <p>Applications do not normally need to use this themselves.  The default
      * behavior of ListFragment is to start with the list not being shown, only
-     * showing it once an adapter is given with {@link #setListAdapter(ListAdapter)}.
+     * showing it once an adapter is given with .
      * If the list at that point had not been shown, when it does get shown
      * it will be do without the user ever seeing the hidden state.
      *
@@ -287,7 +231,7 @@ public class GdgListFragment extends Fragment {
      * new state.
      */
     private void setListShown(boolean shown, boolean animate) {
-        ensureList();
+        ensureRecyclerView();
         if (mProgressContainer == null) {
             throw new IllegalStateException("Can't be used with a custom content view");
         }
@@ -319,11 +263,11 @@ public class GdgListFragment extends Fragment {
     /**
      * Get the ListAdapter associated with this activity's ListView.
      */
-    public ListAdapter getListAdapter() {
+    public RecyclerView.Adapter getAdapter() {
         return mAdapter;
     }
 
-    private void ensureList() {
+    private void ensureRecyclerView() {
         if (mList != null) {
             return;
         }
@@ -350,25 +294,24 @@ public class GdgListFragment extends Fragment {
 
         if (rawList == null) {
             throw new RuntimeException(
-                    "Your content must have a ListView whose id attribute is " +
+                    "Your content must have a RecyclerView whose id attribute is " +
                             "'R.id.list'");
         }
 
-        if (!(rawList instanceof AdapterView)) {
+        if (!(rawList instanceof RecyclerView)) {
             throw new RuntimeException(
                     "Content has view with id attribute 'R.id.list' "
-                            + "that is not a ListView class");
+                            + "that is not a RecyclerView class");
         }
 
-        mList = (AdapterView<ListAdapter>) rawList;
+        mList = (RecyclerView) rawList;
 
         mListShown = true;
-        mList.setOnItemClickListener(mOnClickListener);
 
         if (mAdapter != null) {
-            ListAdapter adapter = mAdapter;
+            RecyclerView.Adapter adapter = mAdapter;
             mAdapter = null;
-            setListAdapter(adapter);
+            setRecyclerAdapter(adapter);
         } else {
             // We are starting without an adapter, so assume we won't
             // have our data right away and start with the progress indicator.
