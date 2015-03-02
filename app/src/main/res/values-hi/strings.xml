@@ -65,13 +65,6 @@
         <item quantity="one">1 दिन पहले</item>
         <item quantity="other">%d दिन पहले</item>
     </plurals>
-    <string-array name="about_tabs">
-        <item>एप्प के बारे में</item>
-        <item>सहयोगी</item>
-        <item>परिवर्तन दैनिकी</item>
-        <item>शामिल होँ</item>
-        <item>मुक्त स्रोत  Libraries</item>
-    </string-array>
     <string name="contributors">यह जी डी जी एप्प सामुदायिक प्रयास है और इसका स्रोत मुक्त रूप से उपलब्ध है। निम्न लोगों ने इस एप्प में अपना सहयोग प्रदान किया है :</string>
     <string name="get_involved">शामिल होँ!</string>
     <string name="get_involved_text">यह जी डी जी एप्प सामुदायिक प्रयास है और इसका स्रोत मुक्त रूप से उपलब्ध है। आप सभी आमंत्रित हैं इस एप्प को बेहतर बनाने में। \n\nबस GitHub पर जाएँ और एप्प के स्रोत को हासिल करें।\n\nhttps://github.com/gdg-x</string>

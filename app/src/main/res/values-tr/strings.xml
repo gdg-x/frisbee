@@ -65,13 +65,6 @@
         <item quantity="one">1 gün önce</item>
         <item quantity="other">%d gün önce</item>
     </plurals>
-    <string-array name="about_tabs">
-        <item>Hakkında</item>
-        <item>Katkıda Bulunanlar</item>
-        <item>Change Log</item>
-        <item>Dahil Ol</item>
-        <item>3. Parti Kütüphaneler</item>
-    </string-array>
     <string name="contributors">GDG uygulaması açık kaynaklıdır ve topluluk çabalarıyla geliştirilmektedir. Katkıda bulunan kişiler aşağıda:</string>
     <string name="get_involved">Dahil Ol!</string>
     <string name="get_involved_text">GDG uygulaması açık kaynaklıdır ve topluluk çabalarıyla geliştirilmektedir. Herkes uygulamaya dahil olabilir ve gelişmesine katkıda bulunabilir.\n\nBunun için GitHub\'ı açın ve kodumuzu checkout edin.\n\nhttps://github.com/gdg-x</string>

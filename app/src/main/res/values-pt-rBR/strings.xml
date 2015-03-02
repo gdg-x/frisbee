@@ -62,13 +62,6 @@
         <item quantity="one">"1 dia atrás"</item>
         <item quantity="other">"%d dias atrás"</item>
     </plurals>
-    <string-array name="about_tabs">
-        <item>"Sobre"</item>
-        <item>"Colaboradores"</item>
-        <item>"Changelog"</item>
-        <item>"Participe"</item>
-        <item>"Bibliotecas de Terceiros"</item>
-    </string-array>
     <string name="contributors">"O app GDG é um esforço da comunidade e possui código aberto. As seguintes pessoas contribuíram para o app:"</string>
     <string name="get_involved">"Envolva-se"</string>
     <string name="get_involved_text">"O app GDG é um esforço da comunidade e possui código aberto. Todos estão convidados a participar e melhorar este app. \n\nVisite o GitHub e faça o checkout do nosso código."</string>

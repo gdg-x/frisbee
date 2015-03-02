@@ -65,13 +65,6 @@
         <item quantity="one">včera</item>
         <item quantity="other">před %d dny</item>
     </plurals>
-    <string-array name="about_tabs">
-        <item>O aplikaci</item>
-        <item>Borci</item>
-        <item>Seznam změn</item>
-        <item>Zapoj se</item>
-        <item>Knihovny třetích stran</item>
-    </string-array>
     <string name="contributors">GDG appka je vytvořena komunitou a je open-source. Tito lidé přispěli:</string>
     <string name="get_involved">Zapoj se!</string>
     <string name="get_involved_text">GDG appka je vytvořena komunitou a je open-source. Každý se může zapojit a rozvíjet appku.\n\nProstě běž na GitHub a stáhni si kód.\n\nhttps://github.com/gdg-x</string>

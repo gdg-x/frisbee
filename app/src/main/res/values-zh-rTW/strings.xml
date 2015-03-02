@@ -65,13 +65,6 @@
         <item quantity="one">1 天前</item>
         <item quantity="other">%d 天前</item>
     </plurals>
-    <string-array name="about_tabs">
-        <item>關於</item>
-        <item>貢獻者</item>
-        <item>修改記錄</item>
-        <item>參與貢獻</item>
-        <item>第三方庫</item>
-    </string-array>
     <string name="contributors">本 GDG 應用程式為社群貢獻的成果並開放原始碼。以下為參與貢獻的人士：</string>
     <string name="get_involved">參與貢獻！</string>
     <string name="get_involved_text">本 GDG 應用程式為社群貢獻的成果並開放原始碼，任何人都歡迎參與編修及改善本應用程式。\n\n請直接前往 Github 提取代碼。\n\nhttps://github.com/gdg-x</string>

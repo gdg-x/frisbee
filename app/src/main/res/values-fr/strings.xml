@@ -66,13 +66,6 @@
     <item quantity="one">il y a un jour</item>
     <item quantity="other">il y a %d jours</item>
   </plurals>
-  <string-array name="about_tabs">
-    <item>À propos</item>
-    <item>Contributeurs</item>
-    <item>Modifications</item>
-    <item>Contribuer</item>
-    <item>Bibliothèques utilisées</item>
-  </string-array>
   <string name="contributors">L\'application GDG est un effort communautaire et open source. Les personnes suivantes ont
     contribué à l\'application:
   </string>

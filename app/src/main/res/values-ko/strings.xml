@@ -65,13 +65,6 @@
         <item quantity="one">"1일 전"</item>
         <item quantity="other">"%d 일 전"</item>
     </plurals>
-    <string-array name="about_tabs">
-        <item>"정보"</item>
-        <item>"도움 주신 분들"</item>
-        <item>"변경사항"</item>
-        <item>"참여하기"</item>
-        <item>"오픈소스 라이브러리"</item>
-    </string-array>
     <string name="contributors">"GDG 앱은 커뮤니티의 노력으로 만들어졌으면 오픈소스로 공개되어 있습니다. 아래의 분들이 앱에 기여해 주셨습니다."</string>
     <string name="get_involved">"참여하기!"</string>
     <string name="get_involved_text">"GDG 앱은 커뮤니티의 노력으로 만들어졌으면 오픈소스로 공개되어 있습니다.  이 앱의 개발과 개선에는 누구나 참여할 수 있습니다.\n\n소스코드는 Github에서 체크 아웃할 수 있습니다.\n\nhttps://github.com/gdg-x"</string>

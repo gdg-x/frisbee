@@ -65,13 +65,6 @@
         <item quantity="one">prieš dieną</item>
         <item quantity="other">prieš %d dienas</item>
     </plurals>
-    <string-array name="about_tabs">
-        <item>Apie</item>
-        <item>Dalyviai</item>
-        <item>Pakeitimų žurnalas</item>
-        <item>Prisijunk</item>
-        <item>Trečios šalies bibliotekos</item>
-    </string-array>
     <string name="contributors">GDG programėlė yra atvirojo kodo. Štai šie žmonės prisidėjo:</string>
     <string name="get_involved">Prisijunk ir Tu!</string>
     <string name="get_involved_text">GDG programėlė yra atvirojo kodo. Visi yra kviečiami prisijungti ir patobulinti šią programėlę.\n\nTiesiog atsidarykite GitHub ir parsisiųskite kodą.\n\nhttps://github.com/gdg-x</string>

@@ -65,13 +65,6 @@
         <item quantity="one">1 วันที่ผ่านมา</item>
         <item quantity="other">%d วันที่ผ่านมา</item>
     </plurals>
-    <string-array name="about_tabs">
-        <item>เกี่ยวกับ</item>
-        <item>ผู้มีส่วนช่วย</item>
-        <item>ข้อมูลการเปลี่ยนแปลง</item>
-        <item>เข้าร่วมกับเรา</item>
-        <item>ไลบรารีอื่นๆ</item>
-    </string-array>
     <string name="contributors">แอพพลิเคชัน GDG เป็นผลงานส่วนหนึ่งของชุมชนนักพัฒนา โดยเปิดให้มีการเข้าถึงที่มาและยำไปใช้ได้โดยเสรี(Open source) โดยบุคคลเหล่านี้คือผู้ที่มีส่วนช่วยในการพัฒนา:</string>
     <string name="get_involved">เข้าร่วมกับเรา</string>
     <string name="get_involved_text">แอพพลิเคชัน GDG  เป็นผลงานส่วนหนึ่งของชุมชนนักพัฒนา โดยเปิดให้มีการเข้าถึงที่มาและยำไปใช้ได้โดยเสรี(Open source) ทุกคนสามารถร่วมเป็นส่วนหนึ่งในการเข้าร่วมและพัฒนาแอพพลิเคชันนี้ เพียงไปที่ Github แล้ว checkout ซอร์สโค้ดจาก \n\nhttps://github.com/gdg-x</string>

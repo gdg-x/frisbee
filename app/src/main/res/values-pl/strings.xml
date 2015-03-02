@@ -67,13 +67,6 @@
         <item quantity="one">1 dzień wcześniej</item>
         <item quantity="other">%d dni wcześniej</item>
     </plurals>
-    <string-array name="about_tabs">
-        <item>O aplikacji</item>
-        <item>Twórcy</item>
-        <item>Zmiany</item>
-        <item>Wesprzyj nas</item>
-        <item>Użyte biblioteki</item>
-    </string-array>
     <string name="contributors">Aplikacja GDG jest rozwijana przez społeczność na zasadach open source. W jej tworzeniu brały udział następujące osoby:</string>
     <string name="get_involved">Wesprzyj nas!</string>
     <string name="get_involved_text">Aplikacja GDG jest projektem rozwijanym przez społeczność na zasadach open source. Każdy udział i każda pomoc w rozwoju aplikacji jest mile widziana.\n\nOdwiedź stronę projektu na GitHub i uzyskaj dostęp do kodu aplikacji.\n\nhttps://github.com/gdg-x</string>
