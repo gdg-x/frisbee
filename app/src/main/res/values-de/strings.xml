@@ -65,14 +65,6 @@
         <item quantity="one">vor einem Tag</item>
         <item quantity="other">vor %d Tagen</item>
     </plurals>
-    <string-array name="about_tabs">
-        <item>Über</item>
-        <item>Entwickler</item>
-        <item>Übersetzer</item>
-        <item>Änderungen</item>
-        <item>Mach mit</item>
-        <item>Drittlizenzen</item>
-    </string-array>
     <string name="contributors">Die GDG App ist Open Source. Folgende Personen sind an der Entwicklung beteiligt:</string>
     <string name="get_involved">Mach mit!</string>
     <string name="get_involved_text">Die GDG App ist Open Source. Wir freuen uns über jeden der uns bei der Entwicklung unterstützen möchte.\n\nGehe zu GitHub uns sehe dir unseren Code an.\n\nhttps://github.com/gdg-x</string>

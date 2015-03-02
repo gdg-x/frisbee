@@ -65,13 +65,6 @@
         <item quantity="one">1 dag geleden</item>
         <item quantity="other">%d dagen geleden</item>
     </plurals>
-    <string-array name="about_tabs">
-        <item>Over</item>
-        <item>Bijdragers</item>
-        <item>Changelog</item>
-        <item>Meedoen</item>
-        <item>3rd Party Bibliotheken</item>
-    </string-array>
     <string name="contributors">De GDG app is een community moeite en open sourced. De volgende personen hebben eraan meegewerkt:</string>
     <string name="get_involved">Meedoen!</string>
     <string name="get_involved_text">De GDG app is een community moeite en open sourced. Iedereen is uitgenodigd om eraan meetewerken en deze app te verbeteren.\n\nGa naar GitHub en checkout onze code.</string>

@@ -68,13 +68,6 @@
         <item quantity="one">1 день тому</item>
         <item quantity="other">%d днів тому</item>
     </plurals>
-    <string-array name="about_tabs">
-        <item>Про програму</item>
-        <item>Розробники</item>
-        <item>Зміни</item>
-        <item>Долучитися</item>
-        <item>Сторонні бібліотеки</item>
-    </string-array>
     <string name="contributors">GDG додаток є результатом колективної роботи з відкритим кодом.
         Наступні люди внесли свій внесок у програму:
     </string>

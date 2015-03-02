@@ -65,13 +65,6 @@
         <item quantity="one">hace 1 día</item>
         <item quantity="other">hace %d días</item>
     </plurals>
-    <string-array name="about_tabs">
-        <item>Acerca de</item>
-        <item>Colaboradores</item>
-        <item>Cambios</item>
-        <item>Colaborar</item>
-        <item>3rd Party Libraries</item>
-    </string-array>
     <string name="contributors">La aplicación de GDG es un esfuerzo comunitario y de código abierto -del ingles "open source"-. Estas son algunas de las personas que colaboraron con la aplicación:</string>
     <string name="get_involved">Colabora!</string>
     <string name="get_involved_text">La aplicación de GDG es un esfuerzo comunitario y de código abierto. Todos son bienvenidos a participar y mejorar esta aplicacion.\n\nSolo diríjanse a GitHub y bájense el código.\n\nhttps://github.com/gdg-x</string>

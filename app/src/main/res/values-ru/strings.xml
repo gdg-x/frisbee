@@ -65,13 +65,6 @@
         <item quantity="one">1 день назад</item>
         <item quantity="other">%d дней назад</item>
     </plurals>
-    <string-array name="about_tabs">
-        <item>О приложении</item>
-        <item>Разработчики</item>
-        <item>Изменения</item>
-        <item>Прими участие</item>
-        <item>Сторонние библиотеки</item>
-    </string-array>
     <string name="contributors">Приложение GDG создано усилиями сообщества и имеет открытый исходный код. Следуюшие разработчики приняли участие в создании приложения:</string>
     <string name="get_involved">Прими участие!</string>
     <string name="get_involved_text">Приложение GDG создано усилиями сообщества и имеет открытый исходный код. Все желающие могут участвовать и улучшать это приложение.\n\nОтправляйтесь на GitHub и сделайте checkout нашего кода.\n\nhttps://github.com/gdg-x</string>

@@ -65,13 +65,6 @@
         <item quantity="one">pred 1 dňom</item>
         <item quantity="other">pred %d dňami</item>
     </plurals>
-    <string-array name="about_tabs">
-        <item>O aplikácii</item>
-        <item>Autori</item>
-        <item>Zoznam zmien</item>
-        <item>Zapoj sa</item>
-        <item>Knižnice tretích strán</item>
-    </string-array>
     <string name="contributors">GDG aplikácia je komunitný projekt a je open source. Tímto ľudom vďačíme za jej funkčnosť:</string>
     <string name="get_involved">Zapoj sa!</string>
     <string name="get_involved_text">GDG aplikácia je komunitný projekt a je open source. Každý môže prispieť do jej vývoja. \n\nChoď na GitHub a sťahuj kód. \n\nhttps://github.com/gdg-x</string>
