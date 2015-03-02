@@ -5,9 +5,11 @@
 
   <style name="ActionBarThemeOverlay" parent="">
     <item name="android:textColorPrimary">@color/theme_accent_1</item>
+    <item name="android:textColorSecondary">@color/theme_accent_1</item>
     <item name="colorControlNormal">@color/theme_accent_1</item>
     <item name="colorControlHighlight">#3fff</item>
-    <item name="android:background">@color/theme_primary</item>
+    <item name="android:textAppearanceLargePopupMenu">@style/TextAppearance.GDG.PopupMenu.Large</item>
+    <item name="android:textAppearanceSmallPopupMenu">@style/TextAppearance.GDG.PopupMenu.Small</item>
   </style>
 
   <style name="Widget.GDG.Spinner" parent="Widget.AppCompat.Light.Spinner.DropDown.ActionBar" />
@@ -17,4 +19,11 @@
     <item name="android:textSize">18sp</item>
   </style>
 
+  <style name="TextAppearance.GDG.PopupMenu.Small" parent="TextAppearance.AppCompat.Light.Widget.PopupMenu.Small">
+    <item name="android:textColor">@color/asbestos</item>
+  </style>
+
+  <style name="TextAppearance.GDG.PopupMenu.Large" parent="TextAppearance.AppCompat.Light.Widget.PopupMenu.Large">
+    <item name="android:textColor">@color/asbestos</item>
+  </style>
 </resources>
