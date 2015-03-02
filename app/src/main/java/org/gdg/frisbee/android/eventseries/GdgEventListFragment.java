@@ -1,5 +1,6 @@
 package org.gdg.frisbee.android.eventseries;
 
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.view.ViewGroup;
 
@@ -27,14 +28,6 @@ public class GdgEventListFragment extends EventListFragment {
         arguments.putString(Const.EXTRA_PLUS_ID, plusId);
         fragment.setArguments(arguments);
         return fragment;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        final ViewGroup.LayoutParams layoutParams = getListView().getLayoutParams();
-        layoutParams.width = (int) getResources().getDimension(R.dimen.responsive_width);
     }
 
     @Override

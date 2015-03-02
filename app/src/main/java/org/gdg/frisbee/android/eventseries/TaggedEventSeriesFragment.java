@@ -90,23 +90,23 @@ public class TaggedEventSeriesFragment extends EventListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        ListView list = (ListView) getListView();
+        
         if (getArguments() != null && getArguments().getBoolean(ARGS_IS_PORTRAIT, false)) {
             View header = getLayoutInflater(null)
                     .inflate(R.layout.header_list_special_event_series, (ViewGroup) getView(), false);
             
             TextView mDescription = ButterKnife.findById(header, R.id.special_description);
-            ImageView mLogo = ButterKnife.findById(header, R.id.special_logo);
             mDescription.setText(mTaggedEventSeries.getDescriptionResId());
-            mLogo.setImageResource(mTaggedEventSeries.getLogoResId());
-            
-            ListView list = (ListView) getListView();
+            mDescription.setCompoundDrawablesWithIntrinsicBounds(0, 
+                    mTaggedEventSeries.getLogoResId(), 0, 0);
+
             list.addHeaderView(header, null, false);
-            final Space space = new Space(getActivity());
-            space.setLayoutParams(
-                    new AbsListView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 
-                            Utils.dpToPx(getResources(), 16)));
-            list.addHeaderView(space, null, false);
-            
+        }
+        
+        final ViewGroup.LayoutParams listLayoutParams = list.getLayoutParams();
+        if (getView() != null && listLayoutParams.width > getView().getWidth()) {
+            listLayoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
         }
     }
 
