@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
@@ -65,12 +66,12 @@ import butterknife.InjectView;
  */
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
-    private static final int VIEWTYPE_ARTICLE= 1;
-    private static final int VIEWTYPE_VIDEO= 2;
-    private static final int VIEWTYPE_PHOTO= 3;
-    private static final int VIEWTYPE_ALBUM= 4;
-    private static final int VIEWTYPE_EVENT= 5;
-    
+    private static final int VIEWTYPE_ARTICLE = 1;
+    private static final int VIEWTYPE_VIDEO = 2;
+    private static final int VIEWTYPE_PHOTO = 3;
+    private static final int VIEWTYPE_ALBUM = 4;
+    private static final int VIEWTYPE_EVENT = 5;
+
     private Context mContext;
     private LayoutInflater mInflater;
     private ArrayList<Item> mActivities;
@@ -81,22 +82,22 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         mPlusClient = client;
         mInflater = LayoutInflater.from(mContext);
         mActivities = new ArrayList<>();
-        
+
         setHasStableIds(true);
     }
 
     public void addAll(Collection<Activity> items) {
-        for(Activity a : items) {
+        for (Activity a : items) {
             mActivities.add(new Item(a));
         }
         notifyDataSetChanged();
     }
 
     public void replaceAll(Collection<Activity> items, int start) {
-        for(Activity a : items) {
+        for (Activity a : items) {
 
-            if(start < mActivities.size()) {
-                if(a.getId().equals(mActivities.get(start).getActivity().getId())) {
+            if (start < mActivities.size()) {
+                if (a.getId().equals(mActivities.get(start).getActivity().getId())) {
                     mActivities.set(start, new Item(a));
                 } else {
                     mActivities.add(start, new Item(a));
@@ -144,14 +145,14 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     @Override
     public int getItemViewType(int position) {
 
-        if (position >=0) {
+        if (position >= 0) {
             if (position >= getItemCount()) {
                 position = position % getItemCount();
             }
             Item item = getItemInternal(position);
             Activity activity = item.getActivity();
 
-            if (activity.getObject().getAttachments() == null 
+            if (activity.getObject().getAttachments() == null
                     || activity.getObject().getAttachments().isEmpty()) {
                 return 0;
             } else {
@@ -176,10 +177,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     }
 
     public void updatePlusOne(View v) {
-        if(v != null && v.getTag() != null) {
+        if (v != null && v.getTag() != null) {
             ViewHolder viewHolder = (ViewHolder) v.getTag();
 
-            if(mPlusClient != null && mPlusClient.isConnected()) {
+            if (mPlusClient != null && mPlusClient.isConnected()) {
                 viewHolder.plusButton.setVisibility(View.VISIBLE);
                 viewHolder.plusButton.initialize(viewHolder.url, 1);
             }
@@ -188,12 +189,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     @Override
     public NewsAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v =  mInflater.inflate(R.layout.news_item_base, viewGroup, false);
+        View v = mInflater.inflate(R.layout.news_item_base, viewGroup, false);
 
         final ViewHolder viewHolder = new ViewHolder(v);
         viewHolder.content.setMovementMethod(LinkMovementMethod.getInstance());
         viewHolder.shareContent.setMovementMethod(LinkMovementMethod.getInstance());
-        
+
         return viewHolder;
     }
 
@@ -205,16 +206,16 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
         holder.url = activity.getUrl();
 
-        if(mPlusClient != null && mPlusClient.isConnected()) {
+        if (mPlusClient != null && mPlusClient.isConnected()) {
             holder.plusButton.setVisibility(View.VISIBLE);
             holder.plusButton.initialize(activity.getUrl(), 1);
         } else {
             holder.plusButton.setVisibility(View.GONE);
         }
 
-        if(activity.getPublished() != null) {
+        if (activity.getPublished() != null) {
             holder.timeStamp.setVisibility(View.VISIBLE);
-            holder.timeStamp.setText(Utils.toHumanTimePeriod(mContext,new DateTime(activity.getPublished().getValue()), DateTime.now()));
+            holder.timeStamp.setText(Utils.toHumanTimePeriod(mContext, new DateTime(activity.getPublished().getValue()), DateTime.now()));
         } else {
             holder.timeStamp.setVisibility(View.GONE);
         }
@@ -226,11 +227,11 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             populatePost(activity, holder.content);
         }
 
-        if(activity.getObject().getAttachments() != null && activity.getObject().getAttachments().size() > 0) {
+        if (activity.getObject().getAttachments() != null && activity.getObject().getAttachments().size() > 0) {
 
             final Activity.PlusObject.Attachments attachment = activity.getObject().getAttachments().get(0);
 
-            switch(getItemViewType(i)) {
+            switch (getItemViewType(i)) {
                 case VIEWTYPE_ARTICLE:
                     // Article
                     populateArticle(holder, holder.container, attachment);
@@ -270,12 +271,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             attachmentView = mInflater.inflate(layout, null);
             container.addView(attachmentView);
 
-            switch(type) {
+            switch (type) {
                 case 1:
                     // Article
                     mViewHolder.articleImage = (ImageView) attachmentView.findViewById(R.id.image);
-                    mViewHolder.title =  (TextView) attachmentView.findViewById(R.id.displayName);
-                    mViewHolder.attachmentContent =  (TextView) attachmentView.findViewById(R.id.content);
+                    mViewHolder.title = (TextView) attachmentView.findViewById(R.id.displayName);
+                    mViewHolder.attachmentContent = (TextView) attachmentView.findViewById(R.id.content);
                     break;
                 case 2:
                     // Video
@@ -293,7 +294,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                     break;
                 case 5:
                     // Event
-                    mViewHolder.attachmentContent =  (TextView) attachmentView.findViewById(R.id.content);
+                    mViewHolder.attachmentContent = (TextView) attachmentView.findViewById(R.id.content);
                     mViewHolder.attachmentTitle = (TextView) attachmentView.findViewById(R.id.title);
                     mViewHolder.articleImage = (ImageView) attachmentView.findViewById(R.id.image);
                     break;
@@ -306,7 +307,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     }
 
     private void populateArticle(ViewHolder mViewHolder, ViewGroup container, final Activity.PlusObject.Attachments attachment) {
-        if(attachment == null)
+        if (attachment == null)
             return;
 
         View attachmentView = createAttachmentView(mViewHolder, container, R.layout.news_item_article, 1);
@@ -321,15 +322,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         if (attachment.getImage() == null && attachment.getFullImage() == null) {
             mViewHolder.articleImage.setVisibility(View.GONE);
         } else {
-            String imageUrl = null;
-            if (attachment.getFullImage() != null) {
-                imageUrl = attachment.getFullImage().getUrl();
-            }
-            if (attachment.getImage() != null) {
-                imageUrl = attachment.getImage().getUrl();
-            }
-
             mViewHolder.articleImage.setImageDrawable(null);
+
+            String imageUrl = getAttachmentImageUrl(attachment);
             if (imageUrl != null) {
                 mViewHolder.articleImage.setVisibility(View.VISIBLE);
                 App.getInstance().getPicasso()
@@ -350,8 +345,18 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         });
     }
 
+    @Nullable
+    private String getAttachmentImageUrl(final Activity.PlusObject.Attachments attachment) {
+        if (attachment.getFullImage() != null) {
+            return attachment.getFullImage().getUrl();
+        } else if (attachment.getImage() != null) {
+            return attachment.getImage().getUrl();
+        }
+        return null;
+    }
+
     private void populateVideo(ViewHolder mViewHolder, ViewGroup container, final Activity.PlusObject.Attachments attachment) {
-        if(attachment == null)
+        if (attachment == null)
             return;
 
         View attachmentView = createAttachmentView(mViewHolder, container, R.layout.news_item_video, 2);
@@ -379,13 +384,13 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     }
 
     private void populatePhoto(ViewHolder mViewHolder, ViewGroup container, Activity.PlusObject.Attachments attachment) {
-        if(attachment == null)
+        if (attachment == null)
             return;
 
         createAttachmentView(mViewHolder, container, R.layout.news_item_photo, 3);
 
         // Precalc Image Size
-        if(attachment.getImage() != null && attachment.getImage().getUrl() != null && attachment.getImage().getWidth() != null)
+        if (attachment.getImage() != null && attachment.getImage().getUrl() != null && attachment.getImage().getWidth() != null)
             mViewHolder.photo.setDimensions(attachment.getImage().getWidth(), attachment.getImage().getHeight(), attachment.getImage().getUrl());
 
         mViewHolder.photo.setImageDrawable(null);
@@ -397,7 +402,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     }
 
     private void populateAlbum(ViewHolder mViewHolder, ViewGroup container, Activity.PlusObject.Attachments attachment) {
-        if(attachment == null)
+        if (attachment == null)
             return;
 
         createAttachmentView(mViewHolder, container, R.layout.news_item_album, 4);
@@ -406,12 +411,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                 .load(attachment.getThumbnails().get(0).getImage().getUrl())
                 .into(mViewHolder.pic1);
 
-        if(attachment.getThumbnails().size() > 1)
+        if (attachment.getThumbnails().size() > 1)
             App.getInstance().getPicasso()
                     .load(attachment.getThumbnails().get(1).getImage().getUrl())
                     .into(mViewHolder.pic2);
 
-        if(attachment.getThumbnails().size() > 2)
+        if (attachment.getThumbnails().size() > 2)
             App.getInstance().getPicasso()
                     .load(attachment.getThumbnails().get(2).getImage().getUrl())
                     .into(mViewHolder.pic3);
@@ -422,7 +427,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
         TextView title = mViewHolder.attachmentTitle;
         String name = attachment.getDisplayName();
-        if (TextUtils.isEmpty(name)){
+        if (TextUtils.isEmpty(name)) {
             title.setVisibility(View.GONE);
         } else {
             title.setText(name);
@@ -456,8 +461,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     private void populateShare(Activity item, ViewHolder holder) {
         String originallyShared = "";
 
-        if(item.getObject().getActor() != null && mContext != null)
-            originallyShared = "<b><a href=\""+item.getObject().getActor().getUrl()+"\">"+ item.getObject().getActor().getDisplayName() +"</a></b> "+ mContext.getString(R.string.originally_shared)+"<br/><br/>";
+        if (item.getObject().getActor() != null && mContext != null)
+            originallyShared = "<b><a href=\"" + item.getObject().getActor().getUrl() + "\">" + item.getObject().getActor().getDisplayName() + "</a></b> " + mContext.getString(R.string.originally_shared) + "<br/><br/>";
 
         if (item.getAnnotation() != null) {
             holder.content.setText(fromHtml(item.getAnnotation()));
@@ -472,10 +477,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     private Spanned fromHtml(String html) {
         Spanned spanned = Html.fromHtml(html);
 
-        if(spanned instanceof SpannableStringBuilder) {
+        if (spanned instanceof SpannableStringBuilder) {
             SpannableStringBuilder ssb = (SpannableStringBuilder) spanned;
 
-            URLSpan[] urlspans = ssb.getSpans(0, ssb.length()-1, URLSpan.class);
+            URLSpan[] urlspans = ssb.getSpans(0, ssb.length() - 1, URLSpan.class);
             for (URLSpan span : urlspans) {
                 int start = ssb.getSpanStart(span);
                 int end = ssb.getSpanEnd(span);
@@ -495,6 +500,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         }
         return spanned;
     }
+
 
     public class Item {
         private Activity mActivity;
@@ -522,14 +528,22 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         }
     }
 
+    iv
+
     public class ViewHolder extends RecyclerView.ViewHolder {
-        @InjectView(R.id.plus_one_button) PlusOneButton plusButton;
-        @InjectView(R.id.attachmentContainer) ViewGroup container;
-        @InjectView(R.id.shareContainer) ViewGroup shareContainer;
-        @InjectView(R.id.timestamp) TextView timeStamp;
-        @InjectView(R.id.content) TextView content;
-        @InjectView(R.id.shareContent) TextView shareContent;
-        
+        public TextView attachmentTitle;
+        @InjectView(R.id.plus_one_button)
+        PlusOneButton plusButton;
+        @InjectView(R.id.attachmentContainer)
+        ViewGroup container;
+        @InjectView(R.id.shareContainer)
+        ViewGroup shareContainer;
+        @InjectView(R.id.timestamp)
+        TextView timeStamp;
+        @InjectView(R.id.content)
+        TextView content;
+        @InjectView(R.id.shareContent)
+        TextView shareContent;
         ImageView articleImage;
         TextView title;
         ResizableImageView poster;
@@ -539,7 +553,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         ImageView pic2;
         ImageView pic3;
         String url;
-        public TextView attachmentTitle;
 
         private ViewHolder(View itemView) {
             super(itemView);
@@ -547,7 +560,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         }
     }
 
-    private void shareWithGooglePlus(Activity activity) {
+    prate
+
+    void shareWithGooglePlus(Activity activity) {
         Intent shareIntent = new PlusShare.Builder(mContext)
                 .setType("text/plain")
                 .setContentUrl(Uri.parse(activity.getUrl()))
