@@ -30,12 +30,8 @@
 # Volley
 -keep class android.support.v4.app.** { *; }
 -keep interface android.support.v4.app.** { *; }
--keep class com.actionbarsherlock.** { *; }
--keep interface com.actionbarsherlock.** { *; }
 -keep class com.android.volley.** { *; }
 -keep interface com.android.volley.** { *; }
-
--keepattributes *Annotation*
 
 -dontwarn org.apache.**
 
@@ -55,12 +51,11 @@
     @com.squareup.otto.Produce public *;
 }
 
-# VPI
--keep class com.viewpagerindicator.** { *; }
--keep interface com.viewpagerindicator.** { *; }
-
 # Jodatime
 -dontwarn org.joda.convert.**
+-dontwarn org.joda.time.**
+-keep class org.joda.time.** { *; }
+-keep interface org.joda.time.** { *; }
 
 # ButterKnife
 -dontwarn butterknife.internal.**
@@ -77,12 +72,6 @@
 # file in the SDK. If it is, then you don't need to duplicate it. See your
 # "project.properties" file to get the path to the default "proguard-android-optimize.txt".
 -keepattributes *Annotation*
-
-# keep this class so that logging will show 'ACRA' and not a obfuscated name like 'a'.
-# Note: if you are removing log messages elsewhere in this file then this isn't necessary
--keep class org.acra.ACRA {
-    *;
-}
 
 # keep this around for some enums that ACRA needs
 -keep class org.acra.ReportingInteractionMode {
