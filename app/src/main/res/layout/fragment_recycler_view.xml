@@ -14,26 +14,19 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
--->
+  -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:staggered="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:orientation="vertical">
 
-  <android.support.v4.widget.SwipeRefreshLayout
-    android:id="@+id/news_fragment_swipe_refresh_layout"
+  <android.support.v7.widget.RecyclerView
+    android:id="@android:id/list"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <org.gdg.frisbee.android.view.MyView
-      android:id="@android:id/list"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      staggered:numColumns="2" />
-
-  </android.support.v4.widget.SwipeRefreshLayout>
+    android:layout_height="match_parent"
+    android:drawSelectorOnTop="true" />
 
   <LinearLayout
     android:id="@+id/loading"
@@ -42,16 +35,24 @@
     android:gravity="center_vertical|center_horizontal"
     android:orientation="vertical">
 
-    <org.gdg.frisbee.android.view.AnimationImageView
-      android:id="@+id/imageView"
-      android:layout_width="match_parent"
+    <ProgressBar
+      android:id="@+id/progressBar"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:src="@drawable/gdg_load" />
+      android:indeterminate="true" />
   </LinearLayout>
 
   <LinearLayout
     android:id="@+id/empty"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" />
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/textView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      tools:text="New Text" />
+  </LinearLayout>
 </LinearLayout>

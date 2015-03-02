@@ -20,13 +20,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
 
 import com.google.android.gms.plus.PlusShare;
 import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
@@ -53,17 +53,14 @@ import org.joda.time.DateTime;
 import java.io.IOException;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
-public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class NewsFragment extends SwipeRefreshRecyclerViewFragment 
+        implements SwipeRefreshLayout.OnRefreshListener {
 
     final HttpTransport mTransport = new GapiOkTransport();
     final JsonFactory mJsonFactory = new GsonFactory();
-
-    @InjectView(R.id.news_fragment_swipe_refresh_layout)
-    SwipeRefreshLayout mPullToRefreshLayout;
 
     private Plus mClient;
 
@@ -95,18 +92,16 @@ public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.
                         new CommonGoogleJsonClientRequestInitializer(BuildConfig.IP_SIMPLE_API_ACCESS_KEY))
                 .build();
 
+        StaggeredGridLayoutManager layoutManager = 
+                new StaggeredGridLayoutManager(
+                        getResources().getInteger(R.integer.news_fragment_column_count), 
+                        StaggeredGridLayoutManager.VERTICAL);
+        getListView().setLayoutManager(layoutManager);
+        
         mAdapter = new NewsAdapter(getActivity(), ((GdgActivity) getActivity()).getGoogleApiClient());
-        setListAdapter(mAdapter);
+        setRecyclerAdapter(mAdapter);
 
-        registerForContextMenu(getListView());
-
-        mPullToRefreshLayout.setOnRefreshListener(this);
-
-        if (getListView() instanceof ListView) {
-            ListView listView = (ListView) getListView();
-            listView.setDivider(null);
-            listView.setDividerHeight(0);
-        }
+        setOnRefreshListener(this);
 
         final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID);
         if (Utils.isOnline(getActivity())) {
@@ -184,31 +179,24 @@ public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        Activity activity = (Activity) mAdapter.getItem(info.position);
-
-        switch (item.getItemId()) {
-            case R.id.share_with_googleplus:
-                shareWithGooglePlus(activity);
-                return true;
-            default:
+//        NewsAdapter.Item selectedItem = mAdapter.getItem(info.position);
+//
+//        switch (item.getItemId()) {
+//            case R.id.share_with_googleplus:
+//                if (selectedItem != null) {
+//                    shareWithGooglePlus(selectedItem.getActivity());
+//                }
+//                return true;
+//            default:
                 return super.onContextItemSelected(item);
-        }
-    }
-
-    private void shareWithGooglePlus(Activity activity) {
-        Intent shareIntent = new PlusShare.Builder(getActivity())
-                .setType("text/plain")
-                .setContentUrl(Uri.parse(activity.getUrl()))
-                .getIntent();
-
-        startActivityForResult(shareIntent, 0);
+//        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_news, container, false);
         ButterKnife.inject(this, v);
-        return v;
+        return createSwipeRefresh(v);
     }
 
     @Override
@@ -240,9 +228,10 @@ public class NewsFragment extends GdgListFragment implements SwipeRefreshLayout.
                         public void onPostExecute(String[] params, ActivityFeed activityFeed) {
                             if (activityFeed != null) {
                                 mAdapter.replaceAll(activityFeed.getItems(), 0);
+                                mAdapter.notifyDataSetChanged();
 
                                 if (getActivity() != null) {
-                                    mPullToRefreshLayout.setRefreshing(false);
+                                    setRefreshing(false);
                                 }
                             }
                         }
