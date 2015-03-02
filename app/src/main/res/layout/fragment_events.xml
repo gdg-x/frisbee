@@ -25,6 +25,7 @@
     android:id="@android:id/list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal"
     android:paddingLeft="@dimen/keyline_1_minus_12dp"
     android:paddingTop="@dimen/keyline_1_minus_12dp"
     android:paddingRight="@dimen/keyline_1_minus_12dp"

@@ -1,6 +1,7 @@
 package org.gdg.frisbee.android.eventseries;
 
 import android.os.Bundle;
+import android.view.ViewGroup;
 
 import com.android.volley.Response;
 
@@ -27,7 +28,15 @@ public class GdgEventListFragment extends EventListFragment {
         fragment.setArguments(arguments);
         return fragment;
     }
-    
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        final ViewGroup.LayoutParams layoutParams = getListView().getLayoutParams();
+        layoutParams.width = (int) getResources().getDimension(R.dimen.responsive_width);
+    }
+
     @Override
     void fetchEvents() {
         final DateTime now = new DateTime();
