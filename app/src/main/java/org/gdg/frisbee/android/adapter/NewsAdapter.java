@@ -55,15 +55,6 @@ import java.util.Collection;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-
-/**
- * GDG Aachen
- * org.gdg.frisbee.android
- * <p/>
- * User: maui
- * Date: 22.04.13
- * Time: 02:48
- */
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     private static final int VIEWTYPE_ARTICLE = 1;
@@ -528,8 +519,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         }
     }
 
-    iv
-
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView attachmentTitle;
         @InjectView(R.id.plus_one_button)
@@ -558,16 +547,5 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             super(itemView);
             ButterKnife.inject(this, itemView);
         }
-    }
-
-    prate
-
-    void shareWithGooglePlus(Activity activity) {
-        Intent shareIntent = new PlusShare.Builder(mContext)
-                .setType("text/plain")
-                .setContentUrl(Uri.parse(activity.getUrl()))
-                .getIntent();
-
-        mContext.startActivity(shareIntent);
     }
 }
