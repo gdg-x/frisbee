@@ -94,7 +94,7 @@ public class TaggedEventSeries implements Parcelable {
         return mLogoResId;
     }
 
-    public int getColorResPrimary() {
+    public int getSpecialEventTheme() {
         return mSpecialEventTheme;
     }
 
