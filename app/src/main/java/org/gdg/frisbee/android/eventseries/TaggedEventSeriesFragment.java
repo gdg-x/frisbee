@@ -83,6 +83,7 @@ public class TaggedEventSeriesFragment extends EventListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mAdapter.setDeafultIcon(mTaggedEventSeries.getDefaultIconResId());
         ListView list = (ListView) getListView();
         
         if (getArguments() != null && getArguments().getBoolean(ARGS_ADD_DESCRIPTION_AS_HEADER, false)) {
