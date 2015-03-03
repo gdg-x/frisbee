@@ -2,6 +2,11 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'versions'
 apply plugin: 'play'
+apply plugin: 'checkstyle'
+
+preBuild.dependsOn('checkstyle')
+assemble.dependsOn('lint')
+check.dependsOn('checkstyle')
 
 Properties local_properties = new Properties()
 File localPropertiesFile = project.rootProject.file('local.properties')
