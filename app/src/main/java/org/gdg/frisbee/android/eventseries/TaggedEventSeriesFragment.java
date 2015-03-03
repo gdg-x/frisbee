@@ -83,7 +83,6 @@ public class TaggedEventSeriesFragment extends EventListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mAdapter.setDeafultIcon(mTaggedEventSeries.getDefaultIconResId());
         ListView list = (ListView) getListView();
         
         if (getArguments() != null && getArguments().getBoolean(ARGS_ADD_DESCRIPTION_AS_HEADER, false)) {
@@ -102,6 +101,11 @@ public class TaggedEventSeriesFragment extends EventListFragment {
         if (getView() != null && listLayoutParams.width > getView().getWidth()) {
             listLayoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
         }
+    }
+
+    @Override
+    EventAdapter createEventAdapter() {
+        return new EventAdapter(getActivity(), mTaggedEventSeries.getDefaultIconResId());
     }
 
     @Override

@@ -60,7 +60,7 @@ public class EventAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater mInflater;
     private ArrayList<Item> mEvents;
-    private int mDeafultIcon;
+    private final int mDefaultIcon;
 
     public EventAdapter(Context ctx) {
         this(ctx, R.drawable.icon);
@@ -70,14 +70,7 @@ public class EventAdapter extends BaseAdapter {
         mContext = ctx;
         mInflater = LayoutInflater.from(mContext);
         mEvents = new ArrayList<>();
-        mDeafultIcon = defaultIcon;
-    }
-
-    /**
-     * The default icon is used if there is no icon for an event.
-     */
-    public void setDeafultIcon(@DrawableRes int mDeafultIcon) {
-        this.mDeafultIcon = mDeafultIcon;
+        mDefaultIcon = defaultIcon;
     }
 
     public void addAll(Collection<? extends SimpleEvent> items) {
@@ -136,7 +129,7 @@ public class EventAdapter extends BaseAdapter {
                 .load(Const.URL_DEVELOPERS_GOOGLE_COM + event.getIconUrl())
                 .into(holder.icon);
         } else {
-            holder.icon.setImageResource(mDeafultIcon);
+            holder.icon.setImageResource(mDefaultIcon);
         }
 
         holder.eventTitle.setText(event.getTitle());

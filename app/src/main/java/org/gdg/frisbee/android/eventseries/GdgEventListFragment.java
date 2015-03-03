@@ -6,6 +6,7 @@ import com.android.volley.Response;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.adapter.EventAdapter;
 import org.gdg.frisbee.android.api.ApiRequest;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.app.App;
@@ -26,6 +27,11 @@ public class GdgEventListFragment extends EventListFragment {
         arguments.putString(Const.EXTRA_PLUS_ID, plusId);
         fragment.setArguments(arguments);
         return fragment;
+    }
+
+    @Override
+    EventAdapter createEventAdapter() {
+        return new EventAdapter(getActivity());
     }
 
     @Override
