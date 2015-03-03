@@ -58,6 +58,7 @@ public class Const {
     public static final String EXTRA_CHAPTER_ID = "org.gdg.frisbee.CHAPTER";
     public static final String CACHE_KEY_CHAPTER_LIST_HUB = "chapter_list_hub";
     public static final String CACHE_KEY_PULSE_GLOBAL = "pulse_global";
+    public static final String CACHE_KEY_GDE_MAP = "gde_map";
 
     public static final String GOOGLE_DEVELOPERS_YT_ID = "UC_x5XG1OV2P6uZZ5FSM9Ttw";
     public static final String ANDROID_DEVELOPERS_YT_ID = "UCVHFbqXqoYvEWM1Ddxl0QDg";
