@@ -107,6 +107,11 @@ public class TaggedEventSeriesFragment extends EventListFragment {
     }
 
     @Override
+    EventAdapter createEventAdapter() {
+        return new EventAdapter(getActivity(), mTaggedEventSeries.getDefaultIconResId());
+    }
+
+    @Override
     void fetchEvents() {
         setIsLoading(true);
 

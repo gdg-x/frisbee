@@ -80,17 +80,6 @@ public abstract class EventListFragment extends GdgListFragment {
     };
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
@@ -107,13 +96,14 @@ public abstract class EventListFragment extends GdgListFragment {
 
         registerForContextMenu(getListView());
 
-
-        mAdapter = new EventAdapter(getActivity());
+        mAdapter = createEventAdapter();
         setListAdapter(mAdapter);
         mEvents = new ArrayList<>();
 
         fetchEvents();
     }
+
+    abstract EventAdapter createEventAdapter();
 
     abstract void fetchEvents();
 

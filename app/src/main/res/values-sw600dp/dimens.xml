@@ -7,8 +7,6 @@
   <dimen name="keyline_2">80dp</dimen>
   <dimen name="keyline_2_minus_16dp">64dp</dimen>
 
-  <dimen name="icon_width_event">56dp</dimen>
-
   <dimen name="responsive_width">600dp</dimen>
 
 </resources>

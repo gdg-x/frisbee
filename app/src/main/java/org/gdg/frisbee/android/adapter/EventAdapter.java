@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.DrawableRes;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,11 +60,17 @@ public class EventAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater mInflater;
     private ArrayList<Item> mEvents;
+    private final int mDefaultIcon;
 
     public EventAdapter(Context ctx) {
+        this(ctx, R.drawable.icon);
+    }
+    
+    public EventAdapter(Context ctx, @DrawableRes int defaultIcon) {
         mContext = ctx;
         mInflater = LayoutInflater.from(mContext);
         mEvents = new ArrayList<>();
+        mDefaultIcon = defaultIcon;
     }
 
     public void addAll(Collection<? extends SimpleEvent> items) {
@@ -118,13 +125,11 @@ public class EventAdapter extends BaseAdapter {
         final SimpleEvent event = item.getEvent();
 
         if (event.getIconUrl() != null) {
-//            holder.icon.setVisibility(View.VISIBLE);
             App.getInstance().getPicasso()
                 .load(Const.URL_DEVELOPERS_GOOGLE_COM + event.getIconUrl())
                 .into(holder.icon);
         } else {
-//            holder.icon.setVisibility(View.GONE);
-            holder.icon.setImageResource(R.drawable.icon);
+            holder.icon.setImageResource(mDefaultIcon);
         }
 
         holder.eventTitle.setText(event.getTitle());
@@ -137,12 +142,8 @@ public class EventAdapter extends BaseAdapter {
 
         if (event.getStart().isBefore(DateTime.now())) {
             holder.past.setVisibility(View.VISIBLE);
-//            holder.shareButton.setVisibility(View.GONE);
         } else {
-//            holder.shareButton.setOnClickListener(shareClickListener);
-//            holder.shareButton.setTag(event);
             holder.past.setVisibility(View.GONE);
-//            holder.shareButton.setVisibility(View.VISIBLE);
         }
 
         // That item will contain a special property that tells if it was freshly retrieved
