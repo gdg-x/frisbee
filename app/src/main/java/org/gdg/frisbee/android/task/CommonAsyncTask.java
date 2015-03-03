@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,8 +17,8 @@
 package org.gdg.frisbee.android.task;
 
 import android.os.AsyncTask;
+
 import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -57,21 +57,23 @@ public class CommonAsyncTask<Params, Result> extends AsyncTask<Params, Void, Res
     protected void onPreExecute() {
         super.onPreExecute();
 
-        if(mPreListener != null)
+        if (mPreListener != null) {
             mPreListener.onPreExecute();
+        }
     }
 
     @Override
     protected final Result doInBackground(Params... params) {
-        if(params != null && params.length == 0 && mBackgroundListener != null)
-            return mBackgroundListener.doInBackground((Params[])null);
+        if (params != null && params.length == 0 && mBackgroundListener != null) {
+            return mBackgroundListener.doInBackground((Params[]) null);
+        }
 
 
         mParams = (Params[]) Array.newInstance(mParamsType, params.length);
-        for(int i = 0; i < params.length; i++) {
+        for (int i = 0; i < params.length; i++) {
             mParams[i] = params[i];
         }
-        if(mBackgroundListener != null) {
+        if (mBackgroundListener != null) {
             return mBackgroundListener.doInBackground(mParams);
         }
 
@@ -82,7 +84,7 @@ public class CommonAsyncTask<Params, Result> extends AsyncTask<Params, Void, Res
     protected final void onPostExecute(Result success) {
         super.onPostExecute(success);
 
-        if(mPostListener != null) {
+        if (mPostListener != null) {
             mPostListener.onPostExecute(mParams, success);
         }
     }

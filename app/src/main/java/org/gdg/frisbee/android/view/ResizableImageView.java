@@ -16,41 +16,40 @@ import android.widget.ImageView;
 public class ResizableImageView extends ImageView {
 
     private int mWidth = -1, mHeight = -1;
-    private String mUri;
 
     public ResizableImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setAdjustViewBounds(true);
     }
 
-    public void setDimensions(long width, long height, String uri) {
-        mWidth = (int)width;
-        mHeight = (int)height;
-        mUri = uri;
+    public void setDimensions(long width, long height) {
+        mWidth = (int) width;
+        mHeight = (int) height;
         requestLayout();
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         //super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         Drawable d = getBackground();
 
-        if(d == null)
+        if (d == null) {
             d = getDrawable();
+        }
 
-        if(d != null && d.getIntrinsicWidth() != -1){
+        if (d != null && d.getIntrinsicWidth() != -1) {
             int width = MeasureSpec.getSize(widthMeasureSpec);
             int height = width * d.getIntrinsicHeight() / d.getIntrinsicWidth();
             setMeasuredDimension(width, height);
-        } else if(mWidth != -1) {
+        } else if (mWidth != -1) {
             int width = MeasureSpec.getSize(widthMeasureSpec);
-            float ratio = (float)mHeight / (float)mWidth;
-            int height = (int)(width * ratio);
+            float ratio = (float) mHeight / (float) mWidth;
+            int height = (int) (width * ratio);
 
             //Timber.d("Measured Width: "+ width+", Computed Height: "+ height+", Pic W: "+ mWidth+", H: "+ mHeight+", Ratio: "+ ratio +", "+mUri);
             setMeasuredDimension(width, height);
-        } else{
+        } else {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         }
     }

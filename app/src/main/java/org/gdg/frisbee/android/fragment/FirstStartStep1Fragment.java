@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -92,13 +92,16 @@ public class FirstStartStep1Fragment extends Fragment {
         mFetchChaptersTask = client.getDirectory(new Response.Listener<Directory>() {
             @Override
             public void onResponse(final Directory directory) {
-                App.getInstance().getModelCache().putAsync("chapter_list_hub", directory, DateTime.now().plusDays(4), new ModelCache.CachePutListener() {
-                    @Override
-                    public void onPutIntoCache() {
-                        addChapters(directory.getGroups());
-                        mLoadSwitcher.setDisplayedChild(1);
-                    }
-                });
+                App.getInstance().getModelCache().putAsync("chapter_list_hub", 
+                        directory, 
+                        DateTime.now().plusDays(4), 
+                        new ModelCache.CachePutListener() {
+                            @Override
+                            public void onPutIntoCache() {
+                                addChapters(directory.getGroups());
+                                mLoadSwitcher.setDisplayedChild(1);
+                            }
+                        });
 
             }
         }, new Response.ErrorListener() {

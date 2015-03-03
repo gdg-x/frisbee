@@ -19,17 +19,15 @@ public class ParseDeepLinkActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-    String deepLinkId = PlusShare.getDeepLinkId(this.getIntent());
-    Intent target = parseDeepLinkId(deepLinkId);
-    if(target!=null)
+        String deepLinkId = PlusShare.getDeepLinkId(this.getIntent());
+        Intent target = parseDeepLinkId(deepLinkId);
+        if (target != null) {
+            startActivity(target);
+        }
 
-    {
-        startActivity(target);
+        finish();
+
     }
-
-    finish();
-
-}
 
     /**
      * Get the intent for an activity corresponding to the deep-link ID.

@@ -32,17 +32,17 @@
 
         <!-- Checks for Javadoc comments.                     -->
         <!-- See http://checkstyle.sf.net/config_javadoc.html -->
-        <module name="JavadocMethod">
-            <property name="allowUndeclaredRTE" value="true"/>
-        </module>
-        <module name="JavadocType" />
+        <!--<module name="JavadocMethod">-->
+            <!--<property name="allowUndeclaredRTE" value="true"/>-->
+        <!--</module>-->
+        <!--<module name="JavadocType" />-->
         <!--module name="JavadocVariable"/-->
-        <module name="JavadocStyle" />
+        <!--<module name="JavadocStyle" />-->
 
 
         <!-- Checks for Naming Conventions.                  -->
         <!-- See http://checkstyle.sf.net/config_naming.html -->
-        <module name="ConstantName" />
+        <!--<module name="ConstantName" />-->
         <module name="LocalFinalVariableName" />
         <module name="LocalVariableName" />
         <module name="MemberName">
@@ -71,7 +71,7 @@
         <!-- Checks for Size Violations.                    -->
         <!-- See http://checkstyle.sf.net/config_sizes.html -->
         <module name="LineLength">
-            <property name="max" value="100" />
+            <property name="max" value="150" />
             <property name="tabWidth" value="4" />
         </module>
         <module name="MethodLength" />
@@ -85,29 +85,30 @@
         <module name="GenericWhitespace" />
         <!--<module name="EmptyForIteratorPad"/>-->
         <module name="MethodParamPad" />
-        <module name="NoWhitespaceAfter">
-            <property name="tokens" value="BNOT, DEC, DOT, INC, LNOT, UNARY_MINUS, UNARY_PLUS" />
-        </module>
-        <module name="NoWhitespaceBefore" />
+        <!--<module name="NoWhitespaceAfter">-->
+            <!--<property name="tokens" value="BNOT, DEC, DOT, INC, LNOT, UNARY_MINUS, UNARY_PLUS" />-->
+        <!--</module>-->
+        <!--<module name="NoWhitespaceBefore" />-->
         <module name="OperatorWrap" />
         <module name="ParenPad" />
         <module name="TypecastParenPad" />
-        <module name="WhitespaceAfter" />
-        <module name="WhitespaceAround">
-            <property name="tokens" value="ASSIGN, BAND, BAND_ASSIGN, BOR, BOR_ASSIGN, BSR, BSR_ASSIGN, BXOR, BXOR_ASSIGN, COLON, DIV, DIV_ASSIGN, DO_WHILE, EQUAL, GE, GT, LAND, LCURLY, LE, LITERAL_ASSERT, LITERAL_CATCH, LITERAL_DO, LITERAL_ELSE, LITERAL_FINALLY, LITERAL_FOR, LITERAL_IF, LITERAL_RETURN, LITERAL_SWITCH, LITERAL_SYNCHRONIZED, LITERAL_TRY, LITERAL_WHILE, LOR, LT, MINUS, MINUS_ASSIGN, MOD, MOD_ASSIGN, NOT_EQUAL, PLUS, PLUS_ASSIGN, QUESTION, SL, SLIST, SL_ASSIGN, SR, SR_ASSIGN, STAR, STAR_ASSIGN, TYPE_EXTENSION_AND"/>
-        </module>
+        <!--<module name="WhitespaceAfter" />-->
+        <!--<module name="WhitespaceAround">-->
+            <!--<property name="tokens" value="ASSIGN, BAND, BAND_ASSIGN, BOR, BOR_ASSIGN, BSR, BSR_ASSIGN, BXOR, BXOR_ASSIGN, COLON, DIV, DIV_ASSIGN, DO_WHILE, EQUAL, GE, GT, LAND, LCURLY, LE, LITERAL_ASSERT, LITERAL_CATCH, LITERAL_DO, LITERAL_ELSE, LITERAL_FINALLY, LITERAL_FOR, LITERAL_IF, LITERAL_RETURN, LITERAL_SWITCH, LITERAL_SYNCHRONIZED, LITERAL_TRY, LITERAL_WHILE, LOR, LT, MINUS, MINUS_ASSIGN, MOD, MOD_ASSIGN, NOT_EQUAL, PLUS, PLUS_ASSIGN, QUESTION, SL, SLIST, SL_ASSIGN, SR, SR_ASSIGN, STAR, STAR_ASSIGN, TYPE_EXTENSION_AND"/>-->
+        <!--</module>-->
 
 
         <!-- Modifier Checks                                    -->
         <!-- See http://checkstyle.sf.net/config_modifiers.html -->
         <module name="ModifierOrder" />
-        <module name="RedundantModifier" />
+        <!--<module name="RedundantModifier" />-->
 
 
-        <!-- Checks for blocks. You know, those {}'s         -->
+        <!-- Checks for blocks. You know, those {
+            }'s         -->
         <!-- See http://checkstyle.sf.net/config_blocks.html -->
         <module name="AvoidNestedBlocks" />
-        <module name="EmptyBlock" />
+        <!--<module name="EmptyBlock" />-->
         <module name="LeftCurly" />
         <module name="NeedBraces" />
         <module name="RightCurly" />
@@ -119,25 +120,25 @@
         <module name="CovariantEquals" />
         <module name="EmptyStatement" />
         <!--<module name="EqualsAvoidNull"/>-->
-        <module name="EqualsHashCode" />
+        <!--<module name="EqualsHashCode" />-->
         <!--<module name="HiddenField"/>-->
         <module name="IllegalInstantiation" />
         <!--module name="InnerAssignment"/-->
-        <module name="MagicNumber">
-            <property name="ignoreNumbers" value="-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9" />
-        </module>
+        <!--<module name="MagicNumber">-->
+            <!--<property name="ignoreNumbers" value="-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9" />-->
+        <!--</module>-->
         <!--module name="MissingSwitchDefault"/-->
-        <module name="RedundantThrows">
-            <property name="allowUnchecked" value="true"/>
-            <property name="allowSubclasses" value="true"/>
-        </module>
+        <!--<module name="RedundantThrows">-->
+            <!--<property name="allowUnchecked" value="true"/>-->
+            <!--<property name="allowSubclasses" value="true"/>-->
+        <!--</module>-->
         <module name="SimplifyBooleanExpression" />
         <module name="SimplifyBooleanReturn" />
         <module name="StringLiteralEquality" />
-        <module name="IllegalCatch" />
+        <!--<module name="IllegalCatch" />-->
         <module name="IllegalThrows" />
         <module name="FallThrough" />
-        <module name="MultipleStringLiterals" />
+        <!--<module name="MultipleStringLiterals" />-->
         <module name="UnnecessaryParentheses" />
         <!--<module name="DeclarationOrder"/>-->
 
@@ -148,10 +149,10 @@
         <module name="HideUtilityClassConstructor" />
         <module name="InterfaceIsType" />
         <!--module name="VisibilityModifier"/-->
-        <module name="MutableException">
+        <!--<module name="MutableException">-->
             <!-- Extend MutableException to enforce immutable events as well -->
-            <property name="format" value="^.*Exception$|^.*Error$|^.*Event$" />
-        </module>
+            <!--<property name="format" value="^.*Exception$|^.*Error$|^.*Event$" />-->
+        <!--</module>-->
 
         <!-- Miscellaneous other checks.                   -->
         <!-- See http://checkstyle.sf.net/config_misc.html -->
@@ -162,6 +163,6 @@
         <module name="Indentation">
             <property name="caseIndent" value="4" />
         </module>
-        <module name="TrailingComment" />
+        <!--<module name="TrailingComment" />-->
     </module>
 </module>

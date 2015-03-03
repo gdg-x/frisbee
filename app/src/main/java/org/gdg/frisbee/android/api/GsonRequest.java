@@ -23,14 +23,18 @@ import com.android.volley.Response;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.google.gson.*;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonSyntaxException;
+
+import org.gdg.frisbee.android.api.deserializer.DateTimeDeserializer;
+import org.joda.time.DateTime;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.Map;
-
-import org.gdg.frisbee.android.api.deserializer.DateTimeDeserializer;
-import org.joda.time.DateTime;
 
 
 public class GsonRequest<Input, Output> extends GdgRequest<Output> {
@@ -87,45 +91,49 @@ public class GsonRequest<Input, Output> extends GdgRequest<Output> {
 
     @Override
     protected void deliverResponse(Output response) {
-        if(mListener != null)
+        if (mListener != null) {
             mListener.onResponse(response);
+        }
     }
 
     @Override
     public String getBodyContentType() {
-        if(mInput != null)
+        if (mInput != null) {
             return "application/json";
-        else
+        } else {
             return super.getBodyContentType();
+        }
     }
 
     @Override
     public byte[] getBody() throws AuthFailureError {
-        if(mInput != null)
+        if (mInput != null) {
             return mGson.toJson(mInput).getBytes();
-        else
+        } else {
             return super.getBody();
+        }
     }
 
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
         Map<String, String> headers = super.getHeaders();
 
-        if(mToken != null)
-            headers.put("Authorization","Bearer "+ mToken);
+        if (mToken != null) {
+            headers.put("Authorization", "Bearer " + mToken);
+        }
 
         return headers;
     }
 
     @Override
     protected Response<Output> parseNetworkResponse(NetworkResponse response) {
-        if(mClazz.equals(Void.class)) {
+        if (mClazz.equals(Void.class)) {
             return Response.success(null,
                     HttpHeaderParser.parseCacheHeaders(response));
         }
         try {
             String json = new String(response.data, "UTF-8");
-            return (Response<Output>)Response.success(mGson.fromJson(json, mClazz),
+            return (Response<Output>) Response.success(mGson.fromJson(json, mClazz),
                     HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {
             return Response.error(new ParseError(e));

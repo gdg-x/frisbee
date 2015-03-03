@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -53,18 +53,21 @@ public class AchievementActionHandler {
     public void handleAppStarted() {
         int appStartedCounter = PrefUtils.getAppStarts(mContext);
 
-        if (appStartedCounter >= 10)
+        if (appStartedCounter >= 10) {
             postAchievementUnlockedEvent(Achievements.ACHIEVEMENT_RETURN);
+        }
 
-        if (appStartedCounter >= 50)
+        if (appStartedCounter >= 50) {
             postAchievementUnlockedEvent(Achievements.ACHIEVEMENT_KING_OF_THE_HILL);
+        }
     }
 
     public void handleVideoViewed() {
         int videoPlayed = PrefUtils.increaseVideoViewed(mContext);
 
-        if (videoPlayed >= 10)
+        if (videoPlayed >= 10) {
             postAchievementUnlockedEvent(Achievements.ACHIEVEMENT_CINEPHILE);
+        }
     }
 
     private void postAchievementUnlockedEvent(final String achievementName) {

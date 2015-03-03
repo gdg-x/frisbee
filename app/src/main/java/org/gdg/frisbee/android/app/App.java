@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -102,8 +102,9 @@ public class App extends Application implements LocationListener {
             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
 
             int versionCode = PrefUtils.getVersionCode(this);
-            if (versionCode < pInfo.versionCode)
+            if (versionCode < pInfo.versionCode) {
                 migrate(versionCode, pInfo.versionCode);
+            }
 
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -123,7 +124,7 @@ public class App extends Application implements LocationListener {
         mPicasso.setIndicatorsEnabled(BuildConfig.DEBUG);
 
         JodaTimeAndroid.init(this);
-        
+
         mOrganizerChecker = new OrganizerChecker(PrefUtils.prefs(this));
 
         GoogleAnalytics.getInstance(this).setAppOptOut(PrefUtils.isAnalyticsEnabled(this));
@@ -136,7 +137,7 @@ public class App extends Application implements LocationListener {
         initTaggedEventSeries();
     }
 
-    
+
     /**
      * Init TaggedEventSeries.
      */
@@ -171,7 +172,7 @@ public class App extends Application implements LocationListener {
                 Const.START_TIME_IOEXTENDED,
                 Const.END_TIME_IOEXTENDED));
     }
-    
+
     private void addTaggedEventSeriesIfDateFits(@NonNull TaggedEventSeries taggedEventSeries) {
         DateTime now = DateTime.now();
         if (BuildConfig.DEBUG || (now.isAfter(taggedEventSeries.getStartDateInMillis())
@@ -202,8 +203,9 @@ public class App extends Application implements LocationListener {
     }
 
     public void updateLastLocation() {
-        if (Utils.isEmulator())
+        if (Utils.isEmulator()) {
             return;
+        }
 
         Location loc = mLocationFinder.getLastBestLocation(5000, 60 * 60 * 1000);
 
@@ -247,12 +249,12 @@ public class App extends Application implements LocationListener {
             }
 
             if (rootDir.mkdirs() || rootDir.isDirectory()) {
-            mModelCache = new ModelCache.Builder(getApplicationContext())
-                    .setMemoryCacheEnabled(true)
-                    .setDiskCacheEnabled(true)
-                    .setDiskCacheLocation(rootDir)
-                    .build();
-        }
+                mModelCache = new ModelCache.Builder(getApplicationContext())
+                        .setMemoryCacheEnabled(true)
+                        .setDiskCacheEnabled(true)
+                        .setDiskCacheLocation(rootDir)
+                        .build();
+            }
         }
         return mModelCache;
     }

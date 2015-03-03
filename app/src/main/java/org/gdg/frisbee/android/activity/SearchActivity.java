@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -48,10 +48,10 @@ public class SearchActivity extends GdgNavDrawerActivity {
         if (Intent.ACTION_SEARCH.equals(action)) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             doSearch(query);
-        } else if(ACTION_FOUND.equals(action)) {
+        } else if (ACTION_FOUND.equals(action)) {
             String id = intent.getDataString();
             Intent chapterIntent = new Intent(this, MainActivity.class);
-            chapterIntent.putExtra("org.gdg.frisbee.CHAPTER", id.replace("item/",""));
+            chapterIntent.putExtra("org.gdg.frisbee.CHAPTER", id.replace("item/", ""));
             startActivity(chapterIntent);
             finish();
         }

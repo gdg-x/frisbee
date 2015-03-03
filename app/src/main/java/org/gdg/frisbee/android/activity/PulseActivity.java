@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -88,13 +88,17 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
                 new Response.Listener<Pulse>() {
                     @Override
                     public void onResponse(final Pulse pulse) {
-                        App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_PULSE_GLOBAL, pulse, DateTime.now().plusDays(1), new ModelCache.CachePutListener() {
-                            @Override
-                            public void onPutIntoCache() {
-                                mPulseTargets.addAll(pulse.keySet());
-                                initSpinner();
-                            }
-                        });
+                        App.getInstance().getModelCache().putAsync(
+                                Const.CACHE_KEY_PULSE_GLOBAL, 
+                                pulse, 
+                                DateTime.now().plusDays(1), 
+                                new ModelCache.CachePutListener() {
+                                    @Override
+                                    public void onPutIntoCache() {
+                                        mPulseTargets.addAll(pulse.keySet());
+                                        initSpinner();
+                                    }
+                                });
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -121,8 +125,9 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
     }
 
     protected String getTrackedViewName() {
-        if (mViewPager == null || mViewPagerAdapter.getSelectedPulseTarget() == null)
+        if (mViewPager == null || mViewPagerAdapter.getSelectedPulseTarget() == null) {
             return "Pulse";
+        }
 
         final String[] pagesNames = {"EventStats", "AtendeeStats", "CircleStats"};
         String pageName;
@@ -132,8 +137,8 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
             pageName = "";
         }
 
-        return "Pulse/" + mViewPagerAdapter.getSelectedPulseTarget().replaceAll(" ", "-") +
-                "/" + pageName;
+        return "Pulse/" + mViewPagerAdapter.getSelectedPulseTarget().replaceAll(" ", "-")
+                + "/" + pageName;
     }
 
     private void initSpinner() {
@@ -199,10 +204,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
 
         @Override
         public int getCount() {
-            if (mSelectedPulseTarget == null)
-                return 0;
-            else
-                return 3;
+            return mSelectedPulseTarget == null ? 0 : 3;
         }
 
         @Override
@@ -236,8 +238,9 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
         }
 
         public void setSelectedPulseTarget(String pulseTarget) {
-            if (mSelectedPulseTarget != null)
+            if (mSelectedPulseTarget != null) {
                 trackView();
+            }
 
             mSelectedPulseTarget = pulseTarget;
         }

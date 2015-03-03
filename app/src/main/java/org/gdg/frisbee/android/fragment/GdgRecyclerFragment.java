@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -34,9 +34,9 @@ import butterknife.InjectView;
 
 public class GdgRecyclerFragment extends Fragment {
 
-    final private Handler mHandler = new Handler();
+    private final Handler mHandler = new Handler();
 
-    final private Runnable mRequestFocus = new Runnable() {
+    private final Runnable mRequestFocus = new Runnable() {
         public void run() {
             getListView().focusableViewAvailable(mList);
         }
@@ -137,8 +137,8 @@ public class GdgRecyclerFragment extends Fragment {
     }
 
     private void updateEmpty() {
-        if(!mLoading && getActivity() != null) {
-            if(mAdapter == null || mAdapter.getItemCount() == 0) {
+        if (!mLoading && getActivity() != null) {
+            if (mAdapter == null || mAdapter.getItemCount() == 0) {
                 setListShown(false, true);
                 mEmptyView.startAnimation(AnimationUtils.loadAnimation(
                         getActivity(), android.R.anim.fade_in));
@@ -155,12 +155,13 @@ public class GdgRecyclerFragment extends Fragment {
 
     public void setIsLoading(boolean isLoading) {
 
-        if(isLoading == mLoading || getActivity() == null)
+        if (isLoading == mLoading || getActivity() == null) {
             return;
+        }
 
         mLoading = isLoading;
 
-        if(isLoading) {
+        if (isLoading) {
             setListShown(false, true);
             mProgressContainer.startAnimation(AnimationUtils.loadAnimation(
                     getActivity(), android.R.anim.fade_in));
@@ -169,17 +170,20 @@ public class GdgRecyclerFragment extends Fragment {
             Animation fadeOut = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out);
             fadeOut.setAnimationListener(new Animation.AnimationListener() {
                 @Override
-                public void onAnimationStart(Animation animation) {}
+                public void onAnimationStart(Animation animation) {
+                }
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
-                    if(mProgressContainer != null)
+                    if (mProgressContainer != null) {
                         mProgressContainer.setVisibility(View.GONE);
+                    }
                     updateEmpty();
                 }
 
                 @Override
-                public void onAnimationRepeat(Animation animation) {}
+                public void onAnimationRepeat(Animation animation) {
+                }
             });
             mProgressContainer.startAnimation(fadeOut);
         }
@@ -281,27 +285,23 @@ public class GdgRecyclerFragment extends Fragment {
 
         if (mEmptyView == null) {
             throw new RuntimeException(
-                    "Your content must have a View whose id attribute is " +
-                            "'R.id.empty'");
+                    "Your content must have a View whose id attribute is 'R.id.empty'");
         }
 
         if (mProgressContainer == null) {
             throw new RuntimeException(
-                    "Your content must have a View whose id attribute is " +
-                            "'R.id.loading'");
+                    "Your content must have a View whose id attribute is 'R.id.loading'");
         }
         mProgressContainer.setVisibility(View.GONE);
 
         if (rawList == null) {
             throw new RuntimeException(
-                    "Your content must have a RecyclerView whose id attribute is " +
-                            "'R.id.list'");
+                    "Your content must have a RecyclerView whose id attribute is 'R.id.list'");
         }
 
         if (!(rawList instanceof RecyclerView)) {
             throw new RuntimeException(
-                    "Content has view with id attribute 'R.id.list' "
-                            + "that is not a RecyclerView class");
+                    "Content has view with id attribute 'R.id.list' that is not a RecyclerView class");
         }
 
         mList = (RecyclerView) rawList;

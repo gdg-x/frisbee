@@ -46,8 +46,7 @@ import timber.log.Timber;
  */
 public class GingerbreadLastLocationFinder implements ILastLocationFinder {
 
-    protected static String TAG = "LastLocationFinder";
-    protected static String SINGLE_LOCATION_UPDATE_ACTION = "org.gdg.frisbee.actions.SINGLE_LOCATION_UPDATE_ACTION";
+    protected static final String SINGLE_LOCATION_UPDATE_ACTION = "org.gdg.frisbee.actions.SINGLE_LOCATION_UPDATE_ACTION";
 
     protected PendingIntent singleUpatePI;
     protected LocationListener locationListener;
@@ -61,7 +60,7 @@ public class GingerbreadLastLocationFinder implements ILastLocationFinder {
      */
     public GingerbreadLastLocationFinder(Context context) {
         this.context = context;
-        locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         // Coarse accuracy is specified here to get the fastest possible result.
         // The calling Activity will likely (or have already) request ongoing
         // updates using the Fine location provider.
@@ -92,18 +91,17 @@ public class GingerbreadLastLocationFinder implements ILastLocationFinder {
         // note of the most accurate result within the acceptable time limit.
         // If no result is found within maxTime, return the newest Location.
         List<String> matchingProviders = locationManager.getAllProviders();
-        for (String provider: matchingProviders) {
+        for (String provider : matchingProviders) {
             Location location = locationManager.getLastKnownLocation(provider);
             if (location != null) {
                 float accuracy = location.getAccuracy();
                 long time = location.getTime();
 
-                if ((time > minTime && accuracy < bestAccuracy)) {
+                if (time > minTime && accuracy < bestAccuracy) {
                     bestResult = location;
                     bestAccuracy = accuracy;
                     bestTime = time;
-                }
-                else if (time < minTime && bestAccuracy == Float.MAX_VALUE && time > bestTime) {
+                } else if (time < minTime && bestAccuracy == Float.MAX_VALUE && time > bestTime) {
                     bestResult = location;
                     bestTime = time;
                 }
@@ -117,16 +115,16 @@ public class GingerbreadLastLocationFinder implements ILastLocationFinder {
         if (locationListener != null && (bestTime < minTime || bestAccuracy > minDistance)) {
             List<String> providers = locationManager.getProviders(criteria, true);
             try {
-                if (providers != null && providers.size() > 0){
+                if (providers != null && providers.size() > 0) {
 
-                        IntentFilter locIntentFilter = new IntentFilter(SINGLE_LOCATION_UPDATE_ACTION);
-                        context.registerReceiver(singleUpdateReceiver, locIntentFilter);
-                        locationManager.requestSingleUpdate(criteria, singleUpatePI);
+                    IntentFilter locIntentFilter = new IntentFilter(SINGLE_LOCATION_UPDATE_ACTION);
+                    context.registerReceiver(singleUpdateReceiver, locIntentFilter);
+                    locationManager.requestSingleUpdate(criteria, singleUpatePI);
                 }
             } catch (SecurityException ex) {
-                Timber.e(TAG, "fail to request location update, ignore", ex);
+                Timber.e(ex, "fail to request location update, ignore");
             } catch (IllegalArgumentException ex) {
-                Timber.d(TAG, "provider does not exist " + ex.getMessage());
+                Timber.d("provider does not exist " + ex.getMessage());
             }
         }
 
@@ -145,10 +143,11 @@ public class GingerbreadLastLocationFinder implements ILastLocationFinder {
             context.unregisterReceiver(singleUpdateReceiver);
 
             String key = LocationManager.KEY_LOCATION_CHANGED;
-            Location location = (Location)intent.getExtras().get(key);
+            Location location = (Location) intent.getExtras().get(key);
 
-            if (locationListener != null && location != null)
+            if (locationListener != null && location != null) {
                 locationListener.onLocationChanged(location);
+            }
 
             locationManager.removeUpdates(singleUpatePI);
         }

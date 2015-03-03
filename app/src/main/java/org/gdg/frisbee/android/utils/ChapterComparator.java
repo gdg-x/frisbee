@@ -50,8 +50,10 @@ public class ChapterComparator implements Comparator<Chapter> {
             return -1;
         }
 
-        Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(), chapter.getGeo().getLat(), chapter.getGeo().getLng(), results);
-        Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(), chapter2.getGeo().getLat(), chapter2.getGeo().getLng(), results2);
+        Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(), 
+                chapter.getGeo().getLat(), chapter.getGeo().getLng(), results);
+        Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(), 
+                chapter2.getGeo().getLat(), chapter2.getGeo().getLng(), results2);
 
         final boolean closeEnough = results[0] <= MAX_DISTANCE;
         final boolean closeEnough2 = results2[0] <= MAX_DISTANCE;

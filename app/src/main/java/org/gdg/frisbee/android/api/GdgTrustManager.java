@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,11 +17,9 @@
 package org.gdg.frisbee.android.api;
 
 import android.content.Context;
-import android.util.Log;
+
 import org.gdg.frisbee.android.Const;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.TrustManagerFactory;
-import javax.net.ssl.X509TrustManager;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
@@ -30,6 +28,10 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 
 /**
  * Created with IntelliJ IDEA.
@@ -94,10 +96,10 @@ public class GdgTrustManager implements X509TrustManager {
     }
 
     private X509TrustManager findX509TrustManager(TrustManagerFactory tmf) {
-        TrustManager tms[] = tmf.getTrustManagers();
-        for (int i = 0; i < tms.length; i++) {
-            if (tms[i] instanceof X509TrustManager) {
-                return (X509TrustManager) tms[i];
+        TrustManager[] tms = tmf.getTrustManagers();
+        for (TrustManager tm : tms) {
+            if (tm instanceof X509TrustManager) {
+                return (X509TrustManager) tm;
             }
         }
 

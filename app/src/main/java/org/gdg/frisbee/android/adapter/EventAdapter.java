@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -34,7 +34,6 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.api.model.SimpleEvent;
 import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.event.EventActivity;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -68,7 +67,7 @@ public class EventAdapter extends BaseAdapter {
     }
 
     public void addAll(Collection<? extends SimpleEvent> items) {
-        for(SimpleEvent a : items) {
+        for (SimpleEvent a : items) {
             mEvents.add(new Item(a));
         }
         notifyDataSetChanged();
@@ -118,7 +117,7 @@ public class EventAdapter extends BaseAdapter {
         Item item = getItemInternal(i);
         final SimpleEvent event = item.getEvent();
 
-        if (event.getIconUrl() != null){
+        if (event.getIconUrl() != null) {
 //            holder.icon.setVisibility(View.VISIBLE);
             App.getInstance().getPicasso()
                 .load(Const.URL_DEVELOPERS_GOOGLE_COM + event.getIconUrl())
@@ -136,7 +135,7 @@ public class EventAdapter extends BaseAdapter {
         
         holder.eventLocation.setText(event.getLocation());
 
-        if(event.getStart().isBefore(DateTime.now())) {
+        if (event.getStart().isBefore(DateTime.now())) {
             holder.past.setVisibility(View.VISIBLE);
 //            holder.shareButton.setVisibility(View.GONE);
         } else {
@@ -159,8 +158,8 @@ public class EventAdapter extends BaseAdapter {
 
     private void openEventLink(SimpleEvent event) {
         String link = event.getGPlusEventLink();
-        if (!TextUtils.isEmpty(link)){
-            if (!link.startsWith("http")){
+        if (!TextUtils.isEmpty(link)) {
+            if (!link.startsWith("http")) {
                 link = "https://" + link;
             }
             openEventInExternalApp(link);
@@ -181,7 +180,7 @@ public class EventAdapter extends BaseAdapter {
         mContext.startActivity(i);
     }
 
-    public void sort(Comparator<Item> eventComparator){
+    public void sort(Comparator<Item> eventComparator) {
         Collections.sort(mEvents, eventComparator);
         notifyDataSetChanged();
     }

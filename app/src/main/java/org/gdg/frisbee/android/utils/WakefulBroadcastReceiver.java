@@ -60,8 +60,7 @@ import timber.log.Timber;
 public abstract class WakefulBroadcastReceiver extends BroadcastReceiver {
     private static final String EXTRA_WAKE_LOCK_ID = "android.support.content.wakelockid";
 
-    private static final SparseArray<PowerManager.WakeLock> mActiveWakeLocks
-            = new SparseArray<PowerManager.WakeLock>();
+    private static final SparseArray<PowerManager.WakeLock> mActiveWakeLocks = new SparseArray<>();
     private static int mNextId = 1;
 
     /**
@@ -92,11 +91,11 @@ public abstract class WakefulBroadcastReceiver extends BroadcastReceiver {
                 return null;
             }
 
-            PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
+            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
             PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
                     "wake:" + comp.flattenToShortString());
             wl.setReferenceCounted(false);
-            wl.acquire(60*1000);
+            wl.acquire(60 * 1000);
             mActiveWakeLocks.put(id, wl);
             return comp;
         }

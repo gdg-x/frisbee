@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -249,8 +249,9 @@ public class InfoFragment extends Fragment {
                             String organizerParameter = getGPlusIdFromPersonUrl(url);
                             mFetchOrganizerInfo.addParameter(organizerParameter);
                         } catch (Exception ex) {
-                            if (isAdded())
+                            if (isAdded()) {
                                 Crouton.makeText(getActivity(), String.format(getString(R.string.bogus_organizer), org), Style.ALERT);
+                            }
                         }
                     }
                 } else {
@@ -265,23 +266,42 @@ public class InfoFragment extends Fragment {
     }
 
     private String getGPlusIdFromPersonUrl(Person.Urls personUrl) {
-        final String plus_id = getArguments().getString(Const.EXTRA_PLUS_ID);
+        final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID);
         if (personUrl.getValue().contains("+")) {
             try {
-                return "+" + URLDecoder.decode(personUrl.getValue().replace("plus.google.com/", "").replace("posts", "").replace("/", "").replace("about", "").replace("u1", "").replace("u0", "").replace("https:", "").replace("http:", "").replace(plus_id, ""), "UTF-8").trim();
+                return "+" + URLDecoder.decode(personUrl.getValue()
+                        .replace("plus.google.com/", "")
+                        .replace("posts", "")
+                        .replace("/", "")
+                        .replace("about", "")
+                        .replace("u1", "")
+                        .replace("u0", "")
+                        .replace("https:", "")
+                        .replace("http:", "")
+                        .replace(plusId, ""), "UTF-8").trim();
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
                 return personUrl.getValue();
             }
         } else {
-            return personUrl.getValue().replace("plus.google.com/", "").replace("posts", "").replace("/", "").replace("about", "").replace("u1", "").replace("u0", "").replace("https:", "").replace("http:", "").replace(plus_id, "").replaceAll("[^\\d.]", "").substring(0, 21);
+            return personUrl.getValue()
+                    .replace("plus.google.com/", "")
+                    .replace("posts", "")
+                    .replace("/", "")
+                    .replace("about", "")
+                    .replace("u1", "")
+                    .replace("u0", "")
+                    .replace("https:", "")
+                    .replace("http:", "")
+                    .replace(plusId, "").replaceAll("[^\\d.]", "").substring(0, 21);
         }
     }
 
     public void setIsLoading(boolean isLoading) {
 
-        if (isLoading == mLoading || getActivity() == null)
+        if (isLoading == mLoading || getActivity() == null) {
             return;
+        }
 
         mLoading = isLoading;
 

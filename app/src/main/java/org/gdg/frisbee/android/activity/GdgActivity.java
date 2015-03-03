@@ -1,11 +1,12 @@
 /*
  * Copyright 2013-2015 The GDG Frisbee Project
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under 
+ * * the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -41,7 +42,8 @@ import java.util.List;
 import butterknife.ButterKnife;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 
-public abstract class GdgActivity extends TrackableActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public abstract class GdgActivity extends TrackableActivity implements 
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final int STATE_DEFAULT = 0;
     private static final int STATE_SIGN_IN = 1;
@@ -247,8 +249,8 @@ public abstract class GdgActivity extends TrackableActivity implements GoogleApi
 
         List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
 
-        return taskList.get(0).numActivities == 1 &&
-                taskList.get(0).topActivity.getClassName().equals(this.getClass().getName());
+        return taskList.get(0).numActivities == 1
+                && taskList.get(0).topActivity.getClassName().equals(this.getClass().getName());
     }
 
     @Override

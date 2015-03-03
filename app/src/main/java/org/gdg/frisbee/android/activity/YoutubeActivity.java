@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -59,16 +59,20 @@ public class YoutubeActivity extends GdgActivity implements YouTubePlayer.OnInit
         youTubePlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_ALWAYS_FULLSCREEN_IN_LANDSCAPE);
         youTubePlayer.setPlayerStateChangeListener(new YouTubePlayer.PlayerStateChangeListener() {
             @Override
-            public void onLoading() {}
+            public void onLoading() {
+            }
 
             @Override
-            public void onLoaded(String s) {}
+            public void onLoaded(String s) {
+            }
 
             @Override
-            public void onAdStarted() {}
+            public void onAdStarted() {
+            }
 
             @Override
-            public void onVideoStarted() {}
+            public void onVideoStarted() {
+            }
 
             @Override
             public void onVideoEnded() {
@@ -76,11 +80,13 @@ public class YoutubeActivity extends GdgActivity implements YouTubePlayer.OnInit
             }
 
             @Override
-            public void onError(YouTubePlayer.ErrorReason errorReason) {}
+            public void onError(YouTubePlayer.ErrorReason errorReason) {
+            }
         });
 
-        if(!wasRestored)
+        if (!wasRestored) {
             youTubePlayer.loadVideo(getIntent().getStringExtra("video_id"));
+        }
     }
 
     @Override
