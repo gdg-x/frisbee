@@ -193,7 +193,7 @@ public class FirstStartStep2Fragment extends Fragment implements GoogleApiClient
                     mSignInProgress = STATE_DEFAULT;
                 }
 
-                if (!mGoogleApiClient.isConnecting()) {
+                if (mGoogleApiClient != null && !mGoogleApiClient.isConnecting()) {
                     // If Google Play services resolved the issue with a dialog then
                     // onStart is not called so we need to re-attempt connection here.
                     mGoogleApiClient.connect();
