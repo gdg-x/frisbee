@@ -48,16 +48,37 @@
   <style name="Theme.GDG.Special.Wtm" parent="Theme.GDG.NoActionBar">
     <item name="colorPrimary">@color/color_primary_wtm</item>
     <item name="colorPrimaryDark">@color/color_primary_dark_wtm</item>
+    
+    <item name="specialEventDrawerIcon">@drawable/ic_drawer_wtm</item>
+    <item name="specialEventDefaultIcon">@drawable/ic_wtm</item>
+    <item name="specialEventLogo">@drawable/ic_logo_wtm</item>
+
+    <item name="specialEventTitle">@string/wtm</item>
+    <item name="specialEventDescription">@string/wtm_description</item>
   </style>
 
   <style name="Theme.GDG.Special.StudyJams" parent="Theme.GDG.NoActionBar">
     <item name="colorPrimary">@color/color_primary_studyjams</item>
     <item name="colorPrimaryDark">@color/color_primary_dark_studyjams</item>
+    
+    <item name="specialEventDrawerIcon">@drawable/ic_drawer_studyjams</item>
+    <item name="specialEventDefaultIcon">@drawable/ic_studyjams</item>
+    <item name="specialEventLogo">@drawable/ic_logo_studyjams</item>
+
+    <item name="specialEventTitle">@string/studyjams</item>
+    <item name="specialEventDescription">@string/studyjams_description</item>
   </style>
 
   <style name="Theme.GDG.Special.IOExtended" parent="Theme.GDG.NoActionBar">
     <item name="colorPrimary">@color/color_primary_ioextended</item>
     <item name="colorPrimaryDark">@color/color_primary_dark_ioextended</item>
+    
+    <item name="specialEventDrawerIcon">@drawable/ic_drawer_ioextended</item>
+    <item name="specialEventDefaultIcon">@drawable/ic_ioextended</item>
+    <item name="specialEventLogo">@drawable/ic_logo_ioextended</item>
+
+    <item name="specialEventTitle">@string/ioextended</item>
+    <item name="specialEventDescription">@string/ioextended_description</item>
   </style>
 
   <style name="Theme.GDG" parent="Theme.GDG.Base">
