@@ -108,6 +108,8 @@ android {
     lintOptions {
         abortOnError true
         checkReleaseBuilds false
+
+        warning 'InvalidPackage'
     }
 
     compileOptions {
