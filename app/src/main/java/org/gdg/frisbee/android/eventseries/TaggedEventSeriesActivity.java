@@ -52,7 +52,7 @@ public class TaggedEventSeriesActivity extends GdgNavDrawerActivity {
             throw new IllegalArgumentException("Special Event must be provided with "
                     + Const.EXTRA_TAGGED_EVENT + " key as an Intent extra.");
         }
-        setTheme(mTaggedEventSeries.getColorResPrimary());
+        setTheme(mTaggedEventSeries.getSpecialEventTheme());
         super.onCreate(savedInstanceState);
         
         setContentView(R.layout.activity_special);

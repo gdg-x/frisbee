@@ -2,5 +2,6 @@
 <resources>
   <integer name="qr_code_size">400</integer>
   <integer name="news_fragment_column_count">1</integer>
-  <integer name="gde_fragment_column_count">2</integer>
+  <integer name="gde_fragment_column_count">3</integer>
+
 </resources>

@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.eventseries;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -80,27 +81,34 @@ public class TaggedEventSeriesFragment extends EventListFragment {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = super.onCreateView(inflater, container, savedInstanceState);
 
-        ListView list = (ListView) getListView();
-        
+        ListView list = ButterKnife.findById(v, android.R.id.list);
+
         if (getArguments() != null && getArguments().getBoolean(ARGS_ADD_DESCRIPTION_AS_HEADER, false)) {
             View header = getLayoutInflater(null)
                     .inflate(R.layout.header_list_special_event_series, (ViewGroup) getView(), false);
-            
+
             TextView mDescription = ButterKnife.findById(header, R.id.special_description);
             mDescription.setText(mTaggedEventSeries.getDescriptionResId());
-            mDescription.setCompoundDrawablesWithIntrinsicBounds(0, 
+            mDescription.setCompoundDrawablesWithIntrinsicBounds(0,
                     mTaggedEventSeries.getLogoResId(), 0, 0);
 
             list.addHeaderView(header, null, false);
         }
-        
+
         final ViewGroup.LayoutParams listLayoutParams = list.getLayoutParams();
         if (getView() != null && listLayoutParams.width > getView().getWidth()) {
             listLayoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
         }
+
+        return v;
+    }
+
+    @Override
+    EventAdapter createEventAdapter() {
+        return new EventAdapter(getActivity(), mTaggedEventSeries.getDefaultIconResId());
     }
 
     @Override
