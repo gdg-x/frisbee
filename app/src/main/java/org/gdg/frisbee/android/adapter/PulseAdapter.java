@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,13 +22,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import com.google.android.gms.plus.PlusOneButton;
+
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Pulse;
 import org.gdg.frisbee.android.api.model.PulseEntry;
-import org.gdg.frisbee.android.view.ResizableImageView;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Map;
 
 public class PulseAdapter extends BaseAdapter {
 
@@ -75,21 +77,21 @@ public class PulseAdapter extends BaseAdapter {
         ViewHolder holder = (ViewHolder) rowView.getTag();
         Map.Entry<String, PulseEntry> entry = (Map.Entry<String, PulseEntry>) getItem(i);
 
-        if(i > 0) {
-            Map.Entry<String, PulseEntry> prevEntry = (Map.Entry<String, PulseEntry>) getItem(i-1);
+        if (i > 0) {
+            Map.Entry<String, PulseEntry> prevEntry = (Map.Entry<String, PulseEntry>) getItem(i - 1);
             int z = 2;
 
-            while(entry.getValue().compareTo(mMode, prevEntry.getValue()) == 0 && (i-z) >= 0) {
-                prevEntry = (Map.Entry<String, PulseEntry>) getItem(i-z);
+            while (entry.getValue().compareTo(mMode, prevEntry.getValue()) == 0 && (i - z) >= 0) {
+                prevEntry = (Map.Entry<String, PulseEntry>) getItem(i - z);
                 z++;
             }
-            if(z > 2) {
-                mPosition[i] = mPosition[mPulse.indexOf(prevEntry)]+1;
+            if (z > 2) {
+                mPosition[i] = mPosition[mPulse.indexOf(prevEntry)] + 1;
             } else {
-                mPosition[i] = (mPosition[i-1]+1);
+                mPosition[i] = mPosition[i - 1] + 1;
 
             }
-            holder.position.setText(mPosition[i]+".");
+            holder.position.setText(mPosition[i] + ".");
 
         } else {
             mPosition[i] = 1;
@@ -98,15 +100,15 @@ public class PulseAdapter extends BaseAdapter {
 
         holder.key.setText(entry.getKey());
 
-        switch(mMode) {
+        switch (mMode) {
             case 0:
-                holder.value.setText("("+entry.getValue().getMeetings()+")");
+                holder.value.setText("(" + entry.getValue().getMeetings() + ")");
                 break;
             case 1:
-                holder.value.setText("("+entry.getValue().getAttendees()+")");
+                holder.value.setText("(" + entry.getValue().getAttendees() + ")");
                 break;
             case 2:
-                holder.value.setText("("+entry.getValue().getPlusMembers()+")");
+                holder.value.setText("(" + entry.getValue().getPlusMembers() + ")");
                 break;
         }
 
@@ -125,13 +127,13 @@ public class PulseAdapter extends BaseAdapter {
                 PulseEntry value = entry.getValue();
                 PulseEntry value2 = entry2.getValue();
 
-                switch(mode) {
+                switch (mode) {
                     case 0:
-                        return (value.getMeetings()-value2.getMeetings())*-1;
+                        return (value.getMeetings() - value2.getMeetings()) * -1;
                     case 1:
-                        return (value.getAttendees()-value2.getAttendees())*-1;
+                        return (value.getAttendees() - value2.getAttendees()) * -1;
                     case 2:
-                        return (value.getPlusMembers()-value2.getPlusMembers())*-1;
+                        return (value.getPlusMembers() - value2.getPlusMembers()) * -1;
                 }
                 return 0;
             }

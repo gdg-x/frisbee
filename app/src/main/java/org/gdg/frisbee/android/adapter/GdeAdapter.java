@@ -50,8 +50,7 @@ public class GdeAdapter extends BaseAdapter {
     final JsonFactory mJsonFactory = new GsonFactory();
     private Plus mClient;
 
-    private HashMap<Integer,Object> mConsumedMap;
-    private GoogleApiClient mPlusClient;
+    private HashMap<Integer, Object> mConsumedMap;
 
     private Pattern mPlusPattern;
 
@@ -59,15 +58,14 @@ public class GdeAdapter extends BaseAdapter {
         mContext = ctx;
         mInflater = LayoutInflater.from(mContext);
         mGdes = new ArrayList<Gde>();
-        mPlusClient = client;
-        mConsumedMap = new HashMap<Integer, Object>();
+        mConsumedMap = new HashMap<>();
 
         mClient = new Plus.Builder(mTransport, mJsonFactory, null)
                 .setGoogleClientRequestInitializer(
                         new CommonGoogleJsonClientRequestInitializer(BuildConfig.IP_SIMPLE_API_ACCESS_KEY))
                 .setApplicationName("GDG Frisbee")
                 .build();
-        mPlusPattern = Pattern.compile("http[s]?:\\/\\/plus\\..*google\\.com.*(\\+[a-zA-Z]+|[0-9]{21}).*");
+        mPlusPattern = Pattern.compile("http[s]?:\\/\\/plus\\..*google\\.com.*(\\+[a-zA-Z] +|[0-9]{21}).*");
     }
 
     public void clear() {
@@ -103,7 +101,7 @@ public class GdeAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View convertView, ViewGroup viewGroup) {
         View rowView = convertView;
-        if(rowView == null) {
+        if (rowView == null) {
             rowView = mInflater.inflate(R.layout.gde_item, null);
             ViewHolder viewHolder = new ViewHolder();
             viewHolder.thumbnailView = (SquaredImageView) rowView.findViewById(R.id.thumb);
@@ -136,7 +134,7 @@ public class GdeAdapter extends BaseAdapter {
 
                         Person gde = null;
 
-                        if(matcher.matches()) {
+                        if (matcher.matches()) {
                             String plusId = matcher.group(1);
                             gde = (Person) App.getInstance().getModelCache().get("gde_" + plusId, !Utils.isOnline(mContext));
 
@@ -160,8 +158,11 @@ public class GdeAdapter extends BaseAdapter {
                 .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<ViewHolder, Person>() {
                     @Override
                     public void onPostExecute(ViewHolder[] p, Person person) {
-                        if(person != null && p[0].thumbnailView.equals(holder.thumbnailView))
-                            Picasso.with(mContext).load(person.getImage().getUrl().replace("sz=50", "sz=196")).into(p[0].thumbnailView);
+                        if (person != null && p[0].thumbnailView.equals(holder.thumbnailView)) {
+                            Picasso.with(mContext)
+                                    .load(person.getImage().getUrl().replace("sz=50", "sz=196"))
+                                    .into(p[0].thumbnailView);
+                        }
                     }
                 }).build();
 

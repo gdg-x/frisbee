@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,20 +19,17 @@ package org.gdg.frisbee.android.eventseries;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.plus.PlusShare;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -61,7 +58,7 @@ import de.keyboardsurfer.android.widget.crouton.Style;
  */
 public abstract class EventListFragment extends GdgListFragment {
 
-    
+
     protected GroupDirectory mClient;
 
     protected EventAdapter mAdapter;
@@ -76,8 +73,9 @@ public abstract class EventListFragment extends GdgListFragment {
         public void onErrorResponse(VolleyError volleyError) {
             setIsLoading(false);
             volleyError.printStackTrace();
-            if(isAdded())
+            if (isAdded()) {
                 Crouton.makeText(getActivity(), getString(R.string.fetch_events_failed), Style.ALERT).show();
+            }
         }
     };
 
@@ -101,7 +99,7 @@ public abstract class EventListFragment extends GdgListFragment {
         mPlusClient = null;
         mPlusClient = ((GdgActivity) getActivity()).getGoogleApiClient();
 
-        if(getListView() instanceof ListView) {
+        if (getListView() instanceof ListView) {
             ListView listView = (ListView) getListView();
             listView.setDivider(null);
             listView.setDividerHeight(0);
@@ -134,7 +132,7 @@ public abstract class EventListFragment extends GdgListFragment {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         SimpleEvent event = mAdapter.getItem(info.position);
 
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.add_calendar:
                 addEventToCalendar(event);
                 return true;
@@ -152,7 +150,7 @@ public abstract class EventListFragment extends GdgListFragment {
 
         final ListView listView = (ListView) getListView();
         SimpleEvent event = mAdapter.getItem(position - listView.getHeaderViewsCount());
-        
+
         Intent intent = new Intent(getActivity(), EventActivity.class);
         intent.putExtra(Const.EXTRA_EVENT_ID, event.getId());
         startActivity(intent);
@@ -173,7 +171,7 @@ public abstract class EventListFragment extends GdgListFragment {
         intent.putExtra("title", event.getTitle());
 
         String location = event.getLocation();
-        if (location != null){
+        if (location != null) {
             intent.putExtra("eventLocation", location);
         }
 

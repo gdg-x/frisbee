@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -115,13 +115,17 @@ public class MainActivity extends GdgNavDrawerActivity {
         mFetchChaptersTask = client.getDirectory(new Response.Listener<Directory>() {
             @Override
             public void onResponse(final Directory directory) {
-                App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, directory, DateTime.now().plusDays(1), new ModelCache.CachePutListener() {
-                    @Override
-                    public void onPutIntoCache() {
-                        ArrayList<Chapter> chapters = directory.getGroups();
-                        initChapters(chapters);
-                    }
-                });
+                App.getInstance().getModelCache().putAsync(
+                        Const.CACHE_KEY_CHAPTER_LIST_HUB,
+                        directory,
+                        DateTime.now().plusDays(1),
+                        new ModelCache.CachePutListener() {
+                            @Override
+                            public void onPutIntoCache() {
+                                ArrayList<Chapter> chapters = directory.getGroups();
+                                initChapters(chapters);
+                            }
+                        });
             }
         }, new Response.ErrorListener() {
             @Override
@@ -192,17 +196,19 @@ public class MainActivity extends GdgNavDrawerActivity {
 
     private void checkHomeChapterValid() {
         String homeChapterId = getCurrentHomeChapterId();
-        if (isHomeChapterOutdated(homeChapterId) &&
-                isShowingStoredHomeChapter()){
+        if (isHomeChapterOutdated(homeChapterId)
+                && isShowingStoredHomeChapter()) {
             Chapter chapter = mChapterAdapter.findById(homeChapterId);
             if (chapter != null) {
-                updateSelectionFor(chapter);
+                updateSelectionfor(chapter);
             }
         }
     }
 
     private boolean isShowingStoredHomeChapter() {
-        if (mStoredHomeChapterId == null) return false;
+        if (mStoredHomeChapterId == null) {
+            return false;
+        }
         Chapter chapterShown = mViewPagerAdapter.getSelectedChapter();
         return chapterShown != null && chapterShown.getGplusId().equals(mStoredHomeChapterId);
     }
@@ -250,7 +256,7 @@ public class MainActivity extends GdgNavDrawerActivity {
                 getSupportFragmentManager(), selectedChapter);
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.setOffscreenPageLimit(2);
-        updateSelectionFor(selectedChapter);
+        updateSelectionfor(selectedChapter);
 
         mSlidingTabLayout.setViewPager(mViewPager);
 
@@ -265,8 +271,8 @@ public class MainActivity extends GdgNavDrawerActivity {
     }
 
     protected String getTrackedViewName() {
-        if (mViewPager == null 
-                || mViewPagerAdapter == null 
+        if (mViewPager == null
+                || mViewPagerAdapter == null
                 || mViewPagerAdapter.getSelectedChapter() == null) {
             return "Main";
         }
@@ -277,8 +283,8 @@ public class MainActivity extends GdgNavDrawerActivity {
         } catch (IndexOutOfBoundsException e) {
             pageName = "";
         }
-        return "Main/" + mViewPagerAdapter.getSelectedChapter().getName().replaceAll(" ", "-") +
-                "/" + pageName;
+        return "Main/" + mViewPagerAdapter.getSelectedChapter().getName().replaceAll(" ", "-")
+                + "/" + pageName;
     }
 
     @Override
@@ -341,7 +347,7 @@ public class MainActivity extends GdgNavDrawerActivity {
             public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
 
                 Chapter selectedChapter = mChapterAdapter.getItem(position);
-                updateSelectionFor(selectedChapter);
+                updateSelectionfor(selectedChapter);
             }
 
             @Override
@@ -351,7 +357,7 @@ public class MainActivity extends GdgNavDrawerActivity {
         });
     }
 
-    private void updateSelectionFor(final Chapter chapter) {
+    private void updateSelectionfor(final Chapter chapter) {
         Chapter previous = mViewPagerAdapter.getSelectedChapter();
         mViewPagerAdapter.setSelectedChapter(chapter);
         mSpinner.setSelection(mChapterAdapter.getPosition(chapter));

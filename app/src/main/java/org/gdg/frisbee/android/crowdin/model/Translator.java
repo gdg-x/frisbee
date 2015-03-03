@@ -6,7 +6,7 @@ public class Translator extends Contributor {
     public Translator(String login, String avatarUrl, int contributions) {
         super();
         setLogin(login);
-        setHtmlUrl("https://crowdin.com/profile/"+login);
+        setHtmlUrl("https://crowdin.com/profile/" + login);
         setAvatarUrl(avatarUrl);
         setContributions(contributions);
     }

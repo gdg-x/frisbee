@@ -1,8 +1,6 @@
 package org.gdg.frisbee.android.eventseries;
 
-import android.app.ActionBar;
 import android.os.Bundle;
-import android.view.ViewGroup;
 
 import com.android.volley.Response;
 

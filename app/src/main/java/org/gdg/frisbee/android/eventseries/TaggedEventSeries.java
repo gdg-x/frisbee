@@ -2,7 +2,6 @@ package org.gdg.frisbee.android.eventseries;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.annotation.StyleRes;

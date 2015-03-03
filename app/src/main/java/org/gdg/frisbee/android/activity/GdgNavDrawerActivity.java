@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -41,6 +41,7 @@ import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.DrawerAdapter;
+import org.gdg.frisbee.android.adapter.DrawerItem;
 import org.gdg.frisbee.android.api.GapiOkTransport;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.OrganizerChecker;
@@ -115,7 +116,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     @SuppressWarnings("unused")
     @OnItemClick(R.id.navdrawer_list)
     public void onDrawerItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        DrawerAdapter.DrawerItem item = (DrawerAdapter.DrawerItem) mDrawerAdapter.getItem(i);
+        DrawerItem item = (DrawerItem) mDrawerAdapter.getItem(i);
 
         switch (item.getId()) {
             case Const.DRAWER_ACHIEVEMENTS:
@@ -159,7 +160,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         }
     }
 
-    public void onDrawerSpecialItemClick(DrawerAdapter.DrawerItem item) {
+    public void onDrawerSpecialItemClick(DrawerItem item) {
 
         final ArrayList<TaggedEventSeries> currentEventSeries =
                 App.getInstance().currentTaggedEventSeries();

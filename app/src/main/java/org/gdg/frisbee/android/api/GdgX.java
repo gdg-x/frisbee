@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,7 +19,11 @@ package org.gdg.frisbee.android.api;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.google.gson.FieldNamingPolicy;
-import org.gdg.frisbee.android.api.model.*;
+
+import org.gdg.frisbee.android.api.model.GcmRegistrationRequest;
+import org.gdg.frisbee.android.api.model.GcmRegistrationResponse;
+import org.gdg.frisbee.android.api.model.HomeGdgRequest;
+import org.gdg.frisbee.android.api.model.OrganizerCheckResponse;
 
 /**
  * Created with IntelliJ IDEA.
@@ -48,7 +52,7 @@ public class GdgX {
         GcmRegistrationRequest request =  new GcmRegistrationRequest();
         request.setRegistrationId(regId);
 
-        GsonRequest<GcmRegistrationRequest, GcmRegistrationResponse> gcmReq = new GsonRequest<GcmRegistrationRequest, GcmRegistrationResponse>(Request.Method.POST,
+        GsonRequest<GcmRegistrationRequest, GcmRegistrationResponse> gcmReq = new GsonRequest<>(Request.Method.POST,
                 GCM_REGISTER_URL,
                 request,
                 GcmRegistrationResponse.class,
@@ -59,9 +63,11 @@ public class GdgX {
         return new ApiRequest(gcmReq);
     }
 
-    public ApiRequest checkOrganizer(String gplusId, Response.Listener<OrganizerCheckResponse> successListener, Response.ErrorListener errorListener) {
-        GsonRequest<Void, OrganizerCheckResponse> organizerReq = new GsonRequest<Void, OrganizerCheckResponse>(Request.Method.GET,
-                "http://hub.gdgx.io/api/v1/organizer/"+gplusId,
+    public ApiRequest checkOrganizer(String gplusId, 
+                                     Response.Listener<OrganizerCheckResponse> successListener, 
+                                     Response.ErrorListener errorListener) {
+        GsonRequest<Void, OrganizerCheckResponse> organizerReq = new GsonRequest<>(Request.Method.GET,
+                "http://hub.gdgx.io/api/v1/organizer/" + gplusId,
                 OrganizerCheckResponse.class,
                 successListener,
                 errorListener,
@@ -69,11 +75,13 @@ public class GdgX {
         return new ApiRequest(organizerReq);
     }
 
-    public ApiRequest unregisterGcm(String regId, Response.Listener<GcmRegistrationResponse> successListener, Response.ErrorListener errorListener) {
+    public ApiRequest unregisterGcm(String regId, 
+                                    Response.Listener<GcmRegistrationResponse> successListener, 
+                                    Response.ErrorListener errorListener) {
         GcmRegistrationRequest request =  new GcmRegistrationRequest();
         request.setRegistrationId(regId);
 
-        GsonRequest<GcmRegistrationRequest, GcmRegistrationResponse> gcmReq = new GsonRequest<GcmRegistrationRequest, GcmRegistrationResponse>(Request.Method.POST,
+        GsonRequest<GcmRegistrationRequest, GcmRegistrationResponse> gcmReq = new GsonRequest<>(Request.Method.POST,
                 GCM_UNREGISTER_URL,
                 request,
                 GcmRegistrationResponse.class,
@@ -84,11 +92,13 @@ public class GdgX {
         return new ApiRequest(gcmReq);
     }
 
-    public ApiRequest setHomeGdg(String homeGdg, Response.Listener<Void> successListener, Response.ErrorListener errorListener) {
+    public ApiRequest setHomeGdg(String homeGdg, 
+                                 Response.Listener<Void> successListener, 
+                                 Response.ErrorListener errorListener) {
         HomeGdgRequest request =  new HomeGdgRequest();
         request.setHomeGdg(homeGdg);
 
-        GsonRequest<HomeGdgRequest, Void> gcmReq = new GsonRequest<HomeGdgRequest, Void>(Request.Method.PUT,
+        GsonRequest<HomeGdgRequest, Void> gcmReq = new GsonRequest<>(Request.Method.PUT,
                 GDGX_HOME_GDG_URL,
                 request,
                 Void.class,

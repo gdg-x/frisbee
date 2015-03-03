@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,7 +17,6 @@
 package org.gdg.frisbee.android.api;
 
 import android.net.TrafficStats;
-import android.os.Build;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -26,18 +25,18 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.OkUrlFactory;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
+import org.apache.http.HttpResponse;
+import org.gdg.frisbee.android.BuildConfig;
+import org.gdg.frisbee.android.app.App;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.util.Map;
 
-import org.apache.http.HttpResponse;
-import org.gdg.frisbee.android.BuildConfig;
-import org.gdg.frisbee.android.Const;
-import org.gdg.frisbee.android.app.App;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
 
 /**
  * GDG Aachen
@@ -69,13 +68,13 @@ public class OkStack extends HurlStack {
     @Override
     public HttpResponse performRequest(Request<?> request, Map<String, String> additionalHeaders) throws IOException, AuthFailureError {
         long startTime = System.currentTimeMillis();
-        if(BuildConfig.DEVELOPER_MODE) {
+        if (BuildConfig.DEVELOPER_MODE) {
             TrafficStats.setThreadStatsTag(0xF00D);
             try {
                 HttpResponse res = super.performRequest(request, additionalHeaders);
                 App.getInstance().getTracker().send(new HitBuilders.TimingBuilder()
                         .setCategory("net")
-                        .setValue(System.currentTimeMillis()-startTime)
+                        .setValue(System.currentTimeMillis() - startTime)
                         .setVariable("okhttp")
                         .setLabel("okhttp")
                         .build());
@@ -87,7 +86,7 @@ public class OkStack extends HurlStack {
             HttpResponse response = super.performRequest(request, additionalHeaders);
             App.getInstance().getTracker().send(new HitBuilders.TimingBuilder()
                     .setCategory("net")
-                    .setValue(System.currentTimeMillis()-startTime)
+                    .setValue(System.currentTimeMillis() - startTime)
                     .setVariable("okhttp")
                     .setLabel("okhttp")
                     .build());

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -99,8 +99,9 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arrow);
 
-        if (!PrefUtils.isSignedIn(this))
+        if (!PrefUtils.isSignedIn(this)) {
             finish();
+        }
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (mNfcAdapter == null) {
@@ -241,16 +242,16 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         AppStateManager.load(getGoogleApiClient(), Const.ARROW_DONE_STATE_KEY).setResultCallback(new ResultCallback<AppStateManager.StateResult>() {
             @Override
             public void onResult(AppStateManager.StateResult stateResult) {
-                AppStateManager.StateConflictResult conflictResult
-                        = stateResult.getConflictResult();
-                AppStateManager.StateLoadedResult loadedResult
-                        = stateResult.getLoadedResult();
+                AppStateManager.StateConflictResult conflictResult = stateResult.getConflictResult();
+                AppStateManager.StateLoadedResult loadedResult = stateResult.getLoadedResult();
 
                 if (loadedResult != null) {
-                    if (loadedResult.getStatus().getStatusCode() == AppStateStatusCodes.STATUS_OK || loadedResult.getStatus().getStatusCode() == AppStateStatusCodes.STATUS_STATE_KEY_NOT_FOUND) {
+                    final int statusCode = loadedResult.getStatus().getStatusCode();
+                    if (statusCode == AppStateStatusCodes.STATUS_OK
+                            || statusCode == AppStateStatusCodes.STATUS_STATE_KEY_NOT_FOUND) {
                         previous = "";
 
-                        if (loadedResult.getStatus().getStatusCode() == AppStateStatusCodes.STATUS_OK) {
+                        if (statusCode == AppStateStatusCodes.STATUS_OK) {
                             previous = new String(loadedResult.getLocalData());
 
                             if (previous.contains(id)) {
@@ -305,8 +306,10 @@ public class ArrowActivity extends GdgNavDrawerActivity {
 
 
     private String getEncryptedMessage() throws Exception {
-        return CryptoUtils.encrypt(Const.ARROW_K, Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getId() +
-                ID_SPLIT_CHAR + getNow());
+        return CryptoUtils.encrypt(Const.ARROW_K, 
+                Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getId()
+                + ID_SPLIT_CHAR
+                + getNow());
     }
 
     @Override

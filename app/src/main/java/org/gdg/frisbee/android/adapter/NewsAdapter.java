@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -36,7 +36,6 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.PlusOneButton;
-import com.google.android.gms.plus.PlusShare;
 import com.google.api.services.plus.model.Activity;
 
 import org.gdg.frisbee.android.R;
@@ -211,9 +210,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             holder.timeStamp.setVisibility(View.GONE);
         }
 
-        if (activity.getVerb().equals("share"))
+        if (activity.getVerb().equals("share")) {
             populateShare(activity, holder);
-        else {
+        } else {
             holder.shareContainer.setVisibility(View.GONE);
             populatePost(activity, holder.content);
         }
@@ -298,8 +297,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     }
 
     private void populateArticle(ViewHolder mViewHolder, ViewGroup container, final Activity.PlusObject.Attachments attachment) {
-        if (attachment == null)
+        if (attachment == null) {
             return;
+        }
 
         View attachmentView = createAttachmentView(mViewHolder, container, R.layout.news_item_article, 1);
 
@@ -347,13 +347,14 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     }
 
     private void populateVideo(ViewHolder mViewHolder, ViewGroup container, final Activity.PlusObject.Attachments attachment) {
-        if (attachment == null)
+        if (attachment == null) {
             return;
+        }
 
         View attachmentView = createAttachmentView(mViewHolder, container, R.layout.news_item_video, 2);
 
         // Precalc Image Size
-        mViewHolder.poster.setDimensions(attachment.getImage().getWidth(), attachment.getImage().getHeight(), attachment.getImage().getUrl());
+        mViewHolder.poster.setDimensions(attachment.getImage().getWidth(), attachment.getImage().getHeight());
         mViewHolder.poster.setImageDrawable(null);
 
         App.getInstance().getPicasso()
@@ -375,14 +376,16 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     }
 
     private void populatePhoto(ViewHolder mViewHolder, ViewGroup container, Activity.PlusObject.Attachments attachment) {
-        if (attachment == null)
+        if (attachment == null) {
             return;
+        }
 
         createAttachmentView(mViewHolder, container, R.layout.news_item_photo, 3);
 
         // Precalc Image Size
-        if (attachment.getImage() != null && attachment.getImage().getUrl() != null && attachment.getImage().getWidth() != null)
-            mViewHolder.photo.setDimensions(attachment.getImage().getWidth(), attachment.getImage().getHeight(), attachment.getImage().getUrl());
+        if (attachment.getImage() != null && attachment.getImage().getUrl() != null && attachment.getImage().getWidth() != null) {
+            mViewHolder.photo.setDimensions(attachment.getImage().getWidth(), attachment.getImage().getHeight());
+        }
 
         mViewHolder.photo.setImageDrawable(null);
 
@@ -393,8 +396,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     }
 
     private void populateAlbum(ViewHolder mViewHolder, ViewGroup container, Activity.PlusObject.Attachments attachment) {
-        if (attachment == null)
+        if (attachment == null) {
             return;
+        }
 
         createAttachmentView(mViewHolder, container, R.layout.news_item_album, 4);
 
@@ -402,15 +406,17 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                 .load(attachment.getThumbnails().get(0).getImage().getUrl())
                 .into(mViewHolder.pic1);
 
-        if (attachment.getThumbnails().size() > 1)
+        if (attachment.getThumbnails().size() > 1) {
             App.getInstance().getPicasso()
                     .load(attachment.getThumbnails().get(1).getImage().getUrl())
                     .into(mViewHolder.pic2);
+        }
 
-        if (attachment.getThumbnails().size() > 2)
+        if (attachment.getThumbnails().size() > 2) {
             App.getInstance().getPicasso()
                     .load(attachment.getThumbnails().get(2).getImage().getUrl())
                     .into(mViewHolder.pic3);
+        }
     }
 
     private void populateEvent(ViewHolder mViewHolder, ViewGroup container, final Activity.PlusObject.Attachments attachment) {
@@ -452,8 +458,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     private void populateShare(Activity item, ViewHolder holder) {
         String originallyShared = "";
 
-        if (item.getObject().getActor() != null && mContext != null)
-            originallyShared = "<b><a href=\"" + item.getObject().getActor().getUrl() + "\">" + item.getObject().getActor().getDisplayName() + "</a></b> " + mContext.getString(R.string.originally_shared) + "<br/><br/>";
+        if (item.getObject().getActor() != null && mContext != null) {
+            originallyShared = "<b><a href=\"" 
+                    + item.getObject().getActor().getUrl() + "\">" 
+                    + item.getObject().getActor().getDisplayName() 
+                    + "</a></b> " + mContext.getString(R.string.originally_shared) + "<br/><br/>";
+        }
 
         if (item.getAnnotation() != null) {
             holder.content.setText(fromHtml(item.getAnnotation()));

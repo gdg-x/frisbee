@@ -30,4 +30,14 @@ allprojects {
         maven { url "https://github.com/ben-manes/gradle-versions-plugin/raw/mvnrepo" }
         maven { url 'https://maven.fabric.io/public' }
     }
+
+    task checkstyle(type: Checkstyle) {
+        showViolations = true
+        configFile file("../settings/checkstyle.xml")
+
+        source 'src/main/java'
+        include '**/*.java'
+        exclude '**/gen/**'
+        classpath = files()
+    }
 }

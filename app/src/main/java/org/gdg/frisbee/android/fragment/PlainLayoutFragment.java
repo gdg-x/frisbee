@@ -27,7 +27,7 @@ public class PlainLayoutFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(getArguments() != null) {
+        if (getArguments() != null) {
             Bundle bndl = getArguments();
 
             mLayoutRes = bndl.containsKey("layout_res") ? bndl.getInt("layout_res") : R.layout.empty;

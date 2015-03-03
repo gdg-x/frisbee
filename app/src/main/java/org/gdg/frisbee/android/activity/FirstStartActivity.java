@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -63,7 +63,10 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import timber.log.Timber;
 
-public class FirstStartActivity extends ActionBarActivity implements FirstStartStep1Fragment.Step1Listener, FirstStartStep2Fragment.Step2Listener, FirstStartStep3Fragment.Step3Listener {
+public class FirstStartActivity extends ActionBarActivity implements 
+        FirstStartStep1Fragment.Step1Listener, 
+        FirstStartStep2Fragment.Step2Listener, 
+        FirstStartStep3Fragment.Step3Listener {
 
     private GoogleCloudMessaging mGcm;
 
@@ -271,7 +274,12 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
                             @Override
                             public void onResponse(GcmRegistrationResponse messageResponse) {
                                 setLoadingScreen(false);
-                                PrefUtils.setInitialSettings(FirstStartActivity.this, enableGcm, enableAnalytics, regid, messageResponse.getNotificationKey());
+                                PrefUtils.setInitialSettings(
+                                        FirstStartActivity.this, 
+                                        enableGcm, 
+                                        enableAnalytics, 
+                                        regid, 
+                                        messageResponse.getNotificationKey());
                                 finish();
                             }
                         }, new Response.ErrorListener() {
@@ -306,10 +314,10 @@ public class FirstStartActivity extends ActionBarActivity implements FirstStartS
 
         public FirstStartPageAdapter(FragmentManager fm) {
             super(fm);
-            mFragments = new Fragment[]{
-                    new FirstStartStep1Fragment(),
-                    new FirstStartStep2Fragment(),
-                    new FirstStartStep3Fragment()
+            mFragments = new Fragment[] {
+                new FirstStartStep1Fragment(),
+                new FirstStartStep2Fragment(),
+                new FirstStartStep3Fragment()
             };
         }
 

@@ -59,7 +59,7 @@ public class GcmIntentService extends IntentService {
 
                 Timber.i("Received: " + extras.toString());
 
-                if(UPCOMING_EVENT.equals(extras.getString(EXTRA_TYPE))) {
+                if (UPCOMING_EVENT.equals(extras.getString(EXTRA_TYPE))) {
                     sendEventNotification(extras);
                 }
             }
@@ -95,6 +95,8 @@ public class GcmIntentService extends IntentService {
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, eventIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
+        final String contentText = 
+                start.toLocalDateTime().toString(DateTimeFormat.patternForStyle("MS", getResources().getConfiguration().locale));
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_stat_gdg)
@@ -105,8 +107,8 @@ public class GcmIntentService extends IntentService {
                         .setOnlyAlertOnce(true)
                         .setSound(alarmSound, AudioManager.STREAM_NOTIFICATION)
                         .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(start.toLocalDateTime().toString(DateTimeFormat.patternForStyle("MS",getResources().getConfiguration().locale))))
-                        .setContentText(start.toLocalDateTime().toString(DateTimeFormat.patternForStyle("MS",getResources().getConfiguration().locale)));
+                                .bigText(contentText))
+                        .setContentText(contentText);
 
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,9 +24,6 @@ import com.google.api.client.util.SslUtils;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.OkUrlFactory;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -36,6 +33,10 @@ import java.net.URLConnection;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.util.Arrays;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
 
 /**
  * GDG Aachen
@@ -52,12 +53,13 @@ public class GapiOkTransport extends HttpTransport {
      * ascending alphabetical order.
      */
     private static final String[] SUPPORTED_METHODS = {HttpMethods.DELETE,
-            HttpMethods.GET,
-            HttpMethods.HEAD,
-            HttpMethods.OPTIONS,
-            HttpMethods.POST,
-            HttpMethods.PUT,
-            HttpMethods.TRACE};
+        HttpMethods.GET,
+        HttpMethods.HEAD,
+        HttpMethods.OPTIONS,
+        HttpMethods.POST,
+        HttpMethods.PUT,
+        HttpMethods.TRACE
+    };
     static {
         Arrays.sort(SUPPORTED_METHODS);
     }
@@ -121,8 +123,9 @@ public class GapiOkTransport extends HttpTransport {
         }
         client.setSslSocketFactory(sslContext.getSocketFactory());
 
-        if(proxy != null)
+        if (proxy != null) {
             client.setProxy(proxy);
+        }
 
         URLConnection conn = factory.open(connUrl);
         HttpURLConnection connection = (HttpURLConnection) conn;
@@ -190,7 +193,7 @@ public class GapiOkTransport extends HttpTransport {
          * @since 1.14
          */
         public Builder trustCertificatesFromJavaKeyStore(InputStream keyStoreStream, String storePass)
-                throws GeneralSecurityException, IOException {
+            throws GeneralSecurityException, IOException {
             KeyStore trustStore = SecurityUtils.getJavaKeyStore();
             SecurityUtils.loadKeyStore(trustStore, keyStoreStream, storePass);
             return trustCertificates(trustStore);
@@ -211,7 +214,7 @@ public class GapiOkTransport extends HttpTransport {
          * @since 1.14
          */
         public Builder trustCertificatesFromStream(InputStream certificateStream)
-                throws GeneralSecurityException, IOException {
+            throws GeneralSecurityException, IOException {
             KeyStore trustStore = SecurityUtils.getJavaKeyStore();
             trustStore.load(null, null);
             SecurityUtils.loadKeyStoreFromCertificates(

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -91,11 +91,14 @@ public class SettingsFragment extends PreferenceFragment {
                     @Override
                     protected Void doInBackground(Void... voids) {
                         try {
-                            String token = GoogleAuthUtil.getToken(getActivity(), Plus.AccountApi.getAccountName(mGoogleApiClient), "oauth2: " + Scopes.PLUS_LOGIN);
+                            String token = GoogleAuthUtil.getToken(getActivity(), 
+                                    Plus.AccountApi.getAccountName(mGoogleApiClient), 
+                                    "oauth2: " + Scopes.PLUS_LOGIN);
                             mXClient.setToken(token);
 
                             if (!enableGcm) {
-                                ApiRequest req = mXClient.unregisterGcm(PrefUtils.getRegistrationId(getActivity()), new Response.Listener<GcmRegistrationResponse>() {
+                                ApiRequest req = mXClient.unregisterGcm(PrefUtils.getRegistrationId(getActivity()), 
+                                        new Response.Listener<GcmRegistrationResponse>() {
                                             @Override
                                             public void onResponse(GcmRegistrationResponse messageResponse) {
                                                 PrefUtils.setGcmSettings(getActivity(), false, null, null);
@@ -110,7 +113,8 @@ public class SettingsFragment extends PreferenceFragment {
                                 req.execute();
                             } else {
                                 final String regId = mGcm.register(BuildConfig.GCM_SENDER_ID);
-                                ApiRequest req = mXClient.registerGcm(regId, new Response.Listener<GcmRegistrationResponse>() {
+                                ApiRequest req = mXClient.registerGcm(regId, 
+                                        new Response.Listener<GcmRegistrationResponse>() {
                                             @Override
                                             public void onResponse(GcmRegistrationResponse messageResponse) {
                                                 PrefUtils.setGcmSettings(getActivity(), true, regId, messageResponse.getNotificationKey());
@@ -205,8 +209,8 @@ public class SettingsFragment extends PreferenceFragment {
                 public void onGet(Object item) {
                     Directory directory = (Directory) item;
 
-                    CharSequence entries[] = new String[directory.getGroups().size()];
-                    CharSequence entryValues[] = new String[directory.getGroups().size()];
+                    CharSequence[] entries = new String[directory.getGroups().size()];
+                    CharSequence[] entryValues = new String[directory.getGroups().size()];
 
                     int i = 0;
                     for (Chapter chapter : directory.getGroups()) {

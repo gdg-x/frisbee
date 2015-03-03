@@ -24,7 +24,7 @@ public class OrganizerChecker {
         mCheckedId = mPreferences.getString("organizer_check_id", null);
     }
 
-    public long getLastOrganizerCheckTime(){
+    public long getLastOrganizerCheckTime() {
         return mLastOrganizerCheck;
     }
 
@@ -39,7 +39,9 @@ public class OrganizerChecker {
     public void checkOrganizer(GoogleApiClient apiClient, final OrganizerResponseHandler responseHandler) {
         final String currentId = Plus.PeopleApi.getCurrentPerson(apiClient).getId();
 
-        if (currentId == null || !currentId.equals(mCheckedId)  || System.currentTimeMillis() > mLastOrganizerCheck + Const.ORGANIZER_CHECK_MAX_TIME) {
+        if (currentId == null 
+                || !currentId.equals(mCheckedId)  
+                || System.currentTimeMillis() > mLastOrganizerCheck + Const.ORGANIZER_CHECK_MAX_TIME) {
             mIsOrganizer = false;
             GdgX xClient = new GdgX();
             xClient.checkOrganizer(currentId, new Response.Listener<OrganizerCheckResponse>() {

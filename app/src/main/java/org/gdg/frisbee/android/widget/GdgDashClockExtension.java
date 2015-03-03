@@ -29,9 +29,9 @@ public class GdgDashClockExtension extends DashClockExtension {
     private ArrayList<Chapter> mChapters;
 
     private Chapter findChapter(String chapterId) {
-        if(chapterId != null) {
-            for(Chapter chapter : mChapters) {
-                if(chapter.getGplusId().equals(chapterId)) {
+        if (chapterId != null) {
+            for (Chapter chapter : mChapters) {
+                if (chapter.getGplusId().equals(chapterId)) {
                     return chapter;
                 }
             }
@@ -43,17 +43,21 @@ public class GdgDashClockExtension extends DashClockExtension {
     protected void onUpdateData(int i) {
         mDirectory = new GroupDirectory();
 
-        App.getInstance().getModelCache().getAsync("chapter_list_hub",false, new ModelCache.CacheListener() {
+        App.getInstance().getModelCache().getAsync("chapter_list_hub", false, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 mChapters = ((Directory) item).getGroups();
                 final Chapter homeGdg = findChapter(PrefUtils.getHomeChapterId(GdgDashClockExtension.this));
 
-                if(homeGdg == null) {
+                if (homeGdg == null) {
                     Timber.d("Got no Home GDG");
                 } else {
                     Timber.d("Fetching events");
-                    mDirectory.getChapterEventList(new DateTime(), new DateTime().plusMonths(1), homeGdg.getGplusId(), new Response.Listener<ArrayList<Event>>() {
+                    mDirectory.getChapterEventList(
+                            new DateTime(), 
+                            new DateTime().plusMonths(1), 
+                            homeGdg.getGplusId(), 
+                            new Response.Listener<ArrayList<Event>>() {
                                 @Override
                                 public void onResponse(ArrayList<Event> events) {
 
@@ -62,12 +66,18 @@ public class GdgDashClockExtension extends DashClockExtension {
 
                                             Event event = events.get(0);
 
+                                            String expandedBody =
+                                                    event.getStart()
+                                                            .toLocalDateTime()
+                                                            .toString(DateTimeFormat.patternForStyle("MS",
+                                                                            getResources().getConfiguration().locale)
+                                                    );
                                             publishUpdate(new ExtensionData()
                                                     .visible(true)
                                                     .icon(R.drawable.ic_dashclock)
                                                     .status("GDG")
                                                     .expandedTitle(event.getTitle())
-                                                    .expandedBody(event.getStart().toLocalDateTime().toString(DateTimeFormat.patternForStyle("MS",getResources().getConfiguration().locale)))
+                                                    .expandedBody(expandedBody)
                                                     .clickIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(event.getGPlusEventLink()))));
                                         }
                                     } else {
@@ -75,13 +85,10 @@ public class GdgDashClockExtension extends DashClockExtension {
                                                 .visible(false));
                                     }
                                 }
-                            }
-
-                            ,new Response.ErrorListener()
-
-                            {
+                            },
+                            new Response.ErrorListener() {
                                 @Override
-                                public void onErrorResponse (VolleyError volleyError){
+                                public void onErrorResponse(VolleyError volleyError) {
                                     Timber.e("Error updating Widget", volleyError);
                                 }
                             }

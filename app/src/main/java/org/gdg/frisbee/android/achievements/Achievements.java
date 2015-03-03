@@ -8,6 +8,9 @@ package org.gdg.frisbee.android.achievements;
  */
 public class Achievements {
 
+    private Achievements() {
+    }
+    
     // Achievements
     public static final String ACHIEVEMENT_SIGNIN = "CgkIh5yNxL8MEAIQAA";
     public static final String ACHIEVEMENT_CINEPHILE = "CgkIh5yNxL8MEAIQAQ";

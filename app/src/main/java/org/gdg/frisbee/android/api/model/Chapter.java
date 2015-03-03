@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,6 +18,7 @@ package org.gdg.frisbee.android.api.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -104,7 +105,7 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
         return getShortName();
     }
 
-    public String getShortName(){
+    public String getShortName() {
         return name.replaceAll("GDG ", "");
     }
 
@@ -126,7 +127,7 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
         parcel.writeString(gplusId);
         parcel.writeString(state);
         parcel.writeParcelable(country, 0);
-        parcel.writeParcelable(geo,0);
+        parcel.writeParcelable(geo, 0);
         parcel.writeStringList(organizers);
     }
 
@@ -142,15 +143,25 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
 
     @Override
     public boolean equals(Object o) {
-       if(o == null)
-           return false;
+        if (o == null) {
+            return false;
+        }
 
-        if(o instanceof Chapter) {
-            Chapter other = (Chapter)o;
+        if (o instanceof Chapter) {
+            Chapter other = (Chapter) o;
 
             return other.getGplusId().equals(getGplusId());
         }
 
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        if (getGplusId() != null) {
+            return getGplusId().hashCode();
+        } else {
+            return super.hashCode();
+        }
     }
 }

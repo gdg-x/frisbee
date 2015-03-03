@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -65,15 +65,15 @@ public class Builder<Params, Result> {
 
     public CommonAsyncTask<Params, Result> build() {
         Params[] p = (Params[]) Array.newInstance(mTask.getParamsType(), 0);
-        mTask.setParameters((Params[])mParams.toArray(p));
+        mTask.setParameters((Params[]) mParams.toArray(p));
         return mTask;
     }
 
     public void buildAndExecute() {
-        build().execute((Params[])mParams.toArray());
+        build().execute((Params[]) mParams.toArray());
     }
 
     public void buildAndExecuteOnExecutor(Executor executor) {
-        build().executeOnExecutor(executor, (Params[])mParams.toArray());
+        build().executeOnExecutor(executor, (Params[]) mParams.toArray());
     }
 }

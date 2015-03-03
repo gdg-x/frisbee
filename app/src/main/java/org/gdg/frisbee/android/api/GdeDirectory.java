@@ -3,13 +3,8 @@ package org.gdg.frisbee.android.api;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.google.gson.FieldNamingPolicy;
-import com.google.gson.reflect.TypeToken;
-import org.gdg.frisbee.android.api.model.Gde;
-import org.gdg.frisbee.android.api.model.GdeList;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
+import org.gdg.frisbee.android.api.model.GdeList;
 
 /**
  * Created by maui on 28.05.2014.

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -71,8 +71,8 @@ public class PulseFragment extends GdgListFragment {
         if (activity instanceof Pulse) {
             mListener = (Pulse) activity;
         } else {
-            throw new ClassCastException("Activity " + activity.getClass().getSimpleName() +
-                    " must implement " + Pulse.class.getSimpleName() + " interface.");
+            throw new ClassCastException("Activity " + activity.getClass().getSimpleName()
+                    + " must implement " + Pulse.class.getSimpleName() + " interface.");
         }
     }
 
@@ -97,41 +97,53 @@ public class PulseFragment extends GdgListFragment {
         setIsLoading(true);
 
         if (mTarget.equals("Global")) {
-            mFetchPulseTask = client.getPulse(new Response.Listener<org.gdg.frisbee.android.api.model.Pulse>() {
-                                                  @Override
-                                                  public void onResponse(final org.gdg.frisbee.android.api.model.Pulse pulse) {
-                                                      App.getInstance().getModelCache().putAsync("pulse_" + mTarget.toLowerCase(), pulse, DateTime.now().plusDays(1), new ModelCache.CachePutListener() {
-                                                          @Override
-                                                          public void onPutIntoCache() {
-                                                              initAdapter(pulse);
-                                                          }
-                                                      });
-                                                  }
-                                              }, new Response.ErrorListener() {
-                                                  @Override
-                                                  public void onErrorResponse(VolleyError volleyError) {
-                                                      if (isAdded())
-                                                          Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
-                                                      Timber.e("Couldn't fetch pulse", volleyError);
-                                                  }
-                                              }
-            );
-        } else {
-            mFetchPulseTask = client.getCountryPulse(mTarget, new Response.Listener<org.gdg.frisbee.android.api.model.Pulse>() {
+            mFetchPulseTask = client.getPulse(
+                    new Response.Listener<org.gdg.frisbee.android.api.model.Pulse>() {
                         @Override
                         public void onResponse(final org.gdg.frisbee.android.api.model.Pulse pulse) {
-                            App.getInstance().getModelCache().putAsync("pulse_" + mTarget.toLowerCase().replace(" ", "-"), pulse, DateTime.now().plusDays(1), new ModelCache.CachePutListener() {
-                                @Override
-                                public void onPutIntoCache() {
-                                    initAdapter(pulse);
-                                }
-                            });
+                            App.getInstance().getModelCache().putAsync(
+                                    "pulse_" + mTarget.toLowerCase(),
+                                    pulse,
+                                    DateTime.now().plusDays(1),
+                                    new ModelCache.CachePutListener() {
+                                        @Override
+                                        public void onPutIntoCache() {
+                                            initAdapter(pulse);
+                                        }
+                                    });
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
-                            if (isAdded())
+                            if (isAdded()) {
                                 Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
+                            }
+                            Timber.e("Couldn't fetch pulse", volleyError);
+                        }
+                    }
+            );
+        } else {
+            mFetchPulseTask = client.getCountryPulse(mTarget,
+                    new Response.Listener<org.gdg.frisbee.android.api.model.Pulse>() {
+                        @Override
+                        public void onResponse(final org.gdg.frisbee.android.api.model.Pulse pulse) {
+                            App.getInstance().getModelCache().putAsync(
+                                    "pulse_" + mTarget.toLowerCase().replace(" ", "-"),
+                                    pulse,
+                                    DateTime.now().plusDays(1),
+                                    new ModelCache.CachePutListener() {
+                                        @Override
+                                        public void onPutIntoCache() {
+                                            initAdapter(pulse);
+                                        }
+                                    });
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError volleyError) {
+                            if (isAdded()) {
+                                Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
+                            }
                             Timber.e("Couldn't fetch pulse", volleyError);
                         }
                     }

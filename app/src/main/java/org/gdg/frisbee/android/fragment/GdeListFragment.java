@@ -65,16 +65,16 @@ public class GdeListFragment extends GdgListFragment implements GdeActivity.List
         super.onActivityCreated(savedInstanceState);
         Timber.d("onActivityCreated()");
 
-        mAdapter = new GdeAdapter(getActivity(), ((GdgActivity)getActivity()).getGoogleApiClient());
+        mAdapter = new GdeAdapter(getActivity(), ((GdgActivity) getActivity()).getGoogleApiClient());
 
-        if(getArguments().containsKey("gdes")) {
+        if (getArguments().containsKey("gdes")) {
             ArrayList<Gde> gdes = getArguments().getParcelableArrayList("gdes");
             mAdapter.addAll(gdes);
         }
 
         setListAdapter(mAdapter);
 
-        if(getArguments().getBoolean("active")) {
+        if (getArguments().getBoolean("active")) {
             onPageSelected();
         }
     }

@@ -16,22 +16,23 @@
 
 package org.gdg.frisbee.android.api;
 
-import android.net.http.AndroidHttpClient;
-import android.os.Build;
-import android.util.Log;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.toolbox.*;
-import org.apache.http.*;
+import com.android.volley.toolbox.HttpStack;
+import com.android.volley.toolbox.StringRequest;
+
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.protocol.HTTP;
-import timber.log.Timber;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import timber.log.Timber;
 
 /**
  * An HttpStack that performs request over an {@link HttpClient}.
@@ -57,32 +58,31 @@ public class GdgStack implements HttpStack {
         try {
             HttpResponse response = performRequest(csrfRequest, additionalHeaders);
 
-            if(response.getStatusLine().getStatusCode() == 200) {
+            if (response.getStatusLine().getStatusCode() == 200) {
                 Header csrfCookie = response.getFirstHeader("Set-Cookie");
-                if(csrfCookie != null && csrfCookie.getValue().contains("csrftoken")) {
+                if (csrfCookie != null && csrfCookie.getValue().contains("csrftoken")) {
                     Pattern pattern = Pattern.compile("csrftoken=([a-z0-9]{32})");
                     Matcher matcher = pattern.matcher(csrfCookie.getValue());
-                    if(matcher.find()) {
+                    if (matcher.find()) {
                         mCsrfToken = matcher.group(1);
                         Timber.d("Got csrf token: " + mCsrfToken);
                     }
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException | AuthFailureError e) {
             e.printStackTrace();
-        } catch (AuthFailureError authFailureError) {
-            authFailureError.printStackTrace();
         }
     }
 
     @Override
     public HttpResponse performRequest(Request<?> request, Map<String, String> additionalHeaders) throws IOException, AuthFailureError {
 
-        if(request.getMethod() == Request.Method.POST) {
-            if(mCsrfToken == null)
+        if (request.getMethod() == Request.Method.POST) {
+            if (mCsrfToken == null) {
                 acquireCsrfToken();
+            }
 
-            additionalHeaders.put("Cookie", "csrftoken="+ mCsrfToken);
+            additionalHeaders.put("Cookie", "csrftoken=" + mCsrfToken);
             additionalHeaders.put("X-CSRFToken", mCsrfToken);
         }
 

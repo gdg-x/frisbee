@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -74,9 +74,9 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
         }
 
         private Chapter findChapter(String chapterId) {
-            if(chapterId != null) {
-                for(Chapter chapter : mChapters) {
-                    if(chapter.getGplusId().equals(chapterId)) {
+            if (chapterId != null) {
+                for (Chapter chapter : mChapters) {
+                    if (chapter.getGplusId().equals(chapterId)) {
                         return chapter;
                     }
                 }
@@ -90,13 +90,13 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
 
             final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_upcoming_event);
 
-            App.getInstance().getModelCache().getAsync("chapter_list_hub",false, new ModelCache.CacheListener() {
+            App.getInstance().getModelCache().getAsync("chapter_list_hub", false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
                     mChapters = ((Directory) item).getGroups();
                     final Chapter homeGdg = findChapter(PrefUtils.getHomeChapterId(UpdateService.this));
 
-                    if(homeGdg == null) {
+                    if (homeGdg == null) {
                         Timber.d("Got no Home GDG");
                         showErrorChild(views, R.string.loading_data_failed, context);
                     } else {
@@ -104,56 +104,58 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                         String groupName = homeGdg.getShortName();
                         views.setTextViewText(R.id.groupName, groupName);
                         views.setTextViewText(R.id.groupName2, groupName);
-                        mDirectory.getChapterEventList(new DateTime(), new DateTime().plusMonths(1), homeGdg.getGplusId(), new Response.Listener<ArrayList<Event>>() {
-                            @Override
-                            public void onResponse(ArrayList<Event> events) {
-                                Timber.d("Got events");
-                                if (events.size() > 0) {
-                                    Event firstEvent = events.get(0);
-                                    views.setTextViewText(R.id.title, firstEvent.getTitle());
-                                    views.setTextViewText(R.id.location, firstEvent.getLocation());
-                                    views.setTextViewText(R.id.startDate, firstEvent.getStart().toLocalDateTime().toString(DateTimeFormat.patternForStyle("MS", res.getConfiguration().locale)));
-                                    showChild(views, 1);
+                        mDirectory.getChapterEventList(new DateTime(),
+                                new DateTime().plusMonths(1),
+                                homeGdg.getGplusId(),
+                                new Response.Listener<ArrayList<Event>>() {
+                                    @Override
+                                    public void onResponse(ArrayList<Event> events) {
+                                        Timber.d("Got events");
+                                        if (events.size() > 0) {
+                                            Event firstEvent = events.get(0);
+                                            views.setTextViewText(R.id.title, firstEvent.getTitle());
+                                            views.setTextViewText(R.id.location, firstEvent.getLocation());
+                                            views.setTextViewText(R.id.startDate,
+                                                    firstEvent.getStart().toLocalDateTime()
+                                                            .toString(DateTimeFormat.patternForStyle("MS", res.getConfiguration().locale)));
+                                            showChild(views, 1);
 
-                                    if (firstEvent.getGPlusEventLink() != null) {
+                                            if (firstEvent.getGPlusEventLink() != null) {
 
-                                        String url = firstEvent.getGPlusEventLink();
+                                                String url = firstEvent.getGPlusEventLink();
 
-                                        if (!url.startsWith("http")) {
-                                            url = "https://" + url;
+                                                if (!url.startsWith("http")) {
+                                                    url = "https://" + url;
+                                                }
+
+                                                Intent i = new Intent(Intent.ACTION_VIEW);
+                                                i.setData(Uri.parse(url));
+                                                views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(context, 0, i, 0));
+                                            } else {
+                                                Intent i = new Intent(context, EventActivity.class);
+                                                i.putExtra(Const.EXTRA_EVENT_ID, firstEvent.getId());
+                                                views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(context, 0, i, 0));
+                                            }
+                                        } else {
+                                            showErrorChild(views, R.string.no_scheduled_events, context);
                                         }
-
-                                        Intent i = new Intent(Intent.ACTION_VIEW);
-                                        i.setData(Uri.parse(url));
-                                        views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(context, 0, i, 0));
-                                    }  else {
-                                        Intent i = new Intent(context, EventActivity.class);
-                                        i.putExtra(Const.EXTRA_EVENT_ID, firstEvent.getId());
-                                        views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(context, 0, i, 0));
+                                        manager.updateAppWidget(thisWidget, views);
                                     }
-                                } else {
-                                    showErrorChild(views, R.string.no_scheduled_events, context);
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError volleyError) {
+                                        Timber.e("Error updating Widget", volleyError);
+                                        showErrorChild(views, R.string.loading_data_failed, context);
+                                        manager.updateAppWidget(thisWidget, views);
+                                    }
                                 }
-                                manager.updateAppWidget(thisWidget, views);
-                            }
-                        }
 
-                            ,new Response.ErrorListener()
+                        ).
 
-                            {
-                                @Override
-                                public void onErrorResponse (VolleyError volleyError){
-                                Timber.e("Error updating Widget", volleyError);
-                                showErrorChild(views, R.string.loading_data_failed, context);
-                                manager.updateAppWidget(thisWidget, views);
-                            }
-                            }
-
-                            ).
-
-                            execute();
-                        }
+                                execute();
                     }
+                }
 
                 @Override
                 public void onNotFound(String key) {
@@ -171,7 +173,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
         }
 
         private void showChild(RemoteViews views, int i) {
-            if (i == 1){
+            if (i == 1) {
                 views.setDisplayedChild(R.id.viewFlipper, 1);
             } else {
                 views.setDisplayedChild(R.id.viewFlipper, 0);
@@ -181,18 +183,6 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, final AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-
-        context.startService(new Intent(context, UpdateService.class));
-
-        final int N = appWidgetIds.length;
-
-
-        // Perform this loop procedure for each App Widget that belongs to this provider
-        for (int i=0; i<N; i++) {
-            final int appWidgetId = appWidgetIds[i];
-
-
-        }
 
         context.startService(new Intent(context, UpdateService.class));
     }
