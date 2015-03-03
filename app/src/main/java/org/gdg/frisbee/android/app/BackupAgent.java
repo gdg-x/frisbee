@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,13 +21,12 @@ import android.app.backup.BackupDataInput;
 import android.app.backup.BackupDataOutput;
 import android.app.backup.SharedPreferencesBackupHelper;
 import android.os.ParcelFileDescriptor;
-import android.util.Log;
 
 import com.google.android.gms.analytics.HitBuilders;
 
-import timber.log.Timber;
-
 import java.io.IOException;
+
+import timber.log.Timber;
 
 /**
  * Created with IntelliJ IDEA.
@@ -54,7 +53,7 @@ public class BackupAgent extends BackupAgentHelper {
         App.getInstance().getTracker().send(new HitBuilders.EventBuilder()
                 .setCategory("backup")
                 .setAction("restore")
-                .setLabel(""+appVersionCode)
+                .setLabel("" + appVersionCode)
                 .build());
     }
 

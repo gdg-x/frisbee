@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -64,7 +64,8 @@ public class EventActivity extends GdgActivity {
     }
 
     protected String getTrackedViewName() {
-        return "Event/" + getResources().getStringArray(R.array.event_tabs)[getCurrentPage()] + "/" + getIntent().getStringExtra(Const.EXTRA_EVENT_ID);
+        return "Event/" + getResources().getStringArray(R.array.event_tabs)[getCurrentPage()] 
+                + "/" + getIntent().getStringExtra(Const.EXTRA_EVENT_ID);
     }
 
     @Override
@@ -101,7 +102,7 @@ public class EventActivity extends GdgActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return EventOverviewFragment.createFor(mEventId);
+                    return EventOverviewFragment.createfor(mEventId);
                 case 1:
                     return new AgendaFragment();
                 case 2:

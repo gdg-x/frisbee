@@ -36,7 +36,7 @@ public class TaggedEvent implements SimpleEvent {
 
     @Override
     public String getId() {
-       return _id;
+        return _id;
     }
 
     @Override
@@ -49,7 +49,7 @@ public class TaggedEvent implements SimpleEvent {
         return eventUrl;
     }
 
-    public String getLocation(){
+    public String getLocation() {
         return location;
     }
 

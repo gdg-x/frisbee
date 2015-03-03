@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,22 +20,31 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Looper;
+import android.os.Process;
 import android.support.v4.util.LruCache;
-import android.util.Log;
+
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.gson.Gson;
-import android.os.Process;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.jakewharton.disklrucache.DiskLruCache;
+
 import org.gdg.frisbee.android.api.deserializer.DateTimeDeserializer;
 import org.gdg.frisbee.android.api.deserializer.DateTimeSerializer;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
-import timber.log.Timber;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -46,6 +55,8 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
+
+import timber.log.Timber;
 
 /**
  * GDG Aachen
@@ -265,7 +276,7 @@ public class ModelCache {
     }
 
     public void getAsync(final String url, final boolean checkExpiration, final CacheListener mListener) {
-        new AsyncTask<Void,Void,Object>() {
+        new AsyncTask<Void, Void, Object>() {
 
             @Override
             protected Object doInBackground(Void... voids) {
@@ -274,31 +285,34 @@ public class ModelCache {
 
             @Override
             protected void onPostExecute(Object o) {
-                if(o != null)
+                if (o != null) {
                     mListener.onGet(o);
-                else
+                } else {
                     mListener.onNotFound(url);
+                }
             }
         }.execute();
     }
 
     public void getAsync(final String url, final boolean checkExpiration, final boolean forceFetch, final CacheListener mListener) {
-        new AsyncTask<Void,Void,Object>() {
+        new AsyncTask<Void, Void, Object>() {
 
             @Override
             protected Object doInBackground(Void... voids) {
-                if(!forceFetch)
+                if (!forceFetch) {
                     return ModelCache.this.get(url, checkExpiration);
-                else
+                } else {
                     return null;
+                }
             }
 
             @Override
             protected void onPostExecute(Object o) {
-                if(o != null)
+                if (o != null) {
                     mListener.onGet(o);
-                else
+                } else {
                     mListener.onNotFound(url);
+                }
             }
         }.execute();
     }
@@ -319,10 +333,11 @@ public class ModelCache {
             result = getFromDiskCache(url, checkExpiration);
         }
 
-        if(result != null)
+        if (result != null) {
             return result.getValue();
-        else
+        } else {
             return null;
+        }
     }
 
     public CacheItem getFromDiskCache(final String url, boolean checkExpiration) {
@@ -341,7 +356,7 @@ public class ModelCache {
 
                     if (value != null && expiresAt != null) {
 
-                        if(checkExpiration && expiresAt.isBeforeNow()) {
+                        if (checkExpiration && expiresAt.isBeforeNow()) {
                             mDiskCache.remove(key);
                             scheduleDiskCacheFlush();
                         } else {
@@ -401,7 +416,7 @@ public class ModelCache {
     }
 
     public void putAsync(final String url, final Object obj, final DateTime expiresAt, final CachePutListener onDoneListener) {
-        new AsyncTask<Void,Void,Void>() {
+        new AsyncTask<Void, Void, Void>() {
 
             @Override
             protected Void doInBackground(Void... voids) {
@@ -412,7 +427,7 @@ public class ModelCache {
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-                if(onDoneListener != null) {
+                if (onDoneListener != null) {
                     onDoneListener.onPutIntoCache();
                 }
             }
@@ -421,8 +436,9 @@ public class ModelCache {
 
     public CacheItem put(final String url, final Object obj, DateTime expiresAt) {
 
-        if(obj == null)
+        if (obj == null) {
             return null;
+        }
 
         Timber.d(String.format("put(%s)", url));
         CacheItem d = new CacheItem(obj, expiresAt);
@@ -518,9 +534,9 @@ public class ModelCache {
 
 
     private String parseArrayList(Object o) {
-        ArrayList d = (ArrayList)o;
+        ArrayList d = (ArrayList) o;
         String className = "";
-        if(d.size() > 0) {
+        if (d.size() > 0) {
             className = className + "<" + d.get(0).getClass().getCanonicalName() + ">";
         }
         return className;
@@ -532,24 +548,28 @@ public class ModelCache {
 
         String className = o.getClass().getCanonicalName();
 
-        if(o instanceof ArrayList) {
+        if (o instanceof ArrayList) {
             className = parseArrayList(o);
-        } else if(o instanceof HashMap) {
-            HashMap d = (HashMap)o;
-            if(d.size() > 0) {
+        } else if (o instanceof HashMap) {
+            HashMap d = (HashMap) o;
+            if (d.size() > 0) {
                 Map.Entry entry = (Map.Entry) d.entrySet().iterator().next();
 
-                if(entry.getValue() instanceof ArrayList) {
-                    className = className + "<"+ entry.getKey().getClass().getCanonicalName()+",java.util.ArrayList"+parseArrayList(entry.getValue())+">";
+                if (entry.getValue() instanceof ArrayList) {
+                    className = className 
+                            + "<" + entry.getKey().getClass().getCanonicalName() + ",java.util.ArrayList"
+                            + parseArrayList(entry.getValue()) + ">";
                 } else {
-                    className = className + "<"+ entry.getKey().getClass().getCanonicalName()+","+entry.getValue().getClass().getCanonicalName()+">";
+                    className = className 
+                            + "<" + entry.getKey().getClass().getCanonicalName() + ", " 
+                            + entry.getValue().getClass().getCanonicalName() + ">";
                 }
             }
         }
 
-        out.write(className+"\n");
+        out.write(className + "\n");
 
-        if(className.contains("google")) {
+        if (className.contains("google")) {
             mJsonFactory.createJsonGenerator(out).serialize(o);
         } else {
             String json = mGson.toJson(o);
@@ -575,8 +595,8 @@ public class ModelCache {
         }
 
         Type type = null;
-        if(className.startsWith("java.util.ArrayList")) {
-            String inner = className.substring("java.util.ArrayList<".length(), className.length()-1);
+        if (className.startsWith("java.util.ArrayList")) {
+            String inner = className.substring("java.util.ArrayList<".length(), className.length() - 1);
             Class innerClass = null;
             try {
                 innerClass = Class.forName(inner);
@@ -584,14 +604,14 @@ public class ModelCache {
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
-        } else if(className.startsWith("java.util.HashMap")) {
-            String[] inner = className.substring("java.util.HashMap<".length(), className.length()-1).split(",");
+        } else if (className.startsWith("java.util.HashMap")) {
+            String[] inner = className.substring("java.util.HashMap<".length(), className.length() - 1).split(", ");
 
             try {
                 Class keyClass = Class.forName(inner[0]);
 
                 Class valueClass = null;
-                if(inner[1].startsWith("java.util.ArrayList")) {
+                if (inner[1].startsWith("java.util.ArrayList")) {
                     String innterT = inner[1].substring("java.util.ArrayList<".length(), inner[1].length() - 1);
                     try {
                         Class innerClass = Class.forName(innterT);
@@ -620,20 +640,19 @@ public class ModelCache {
 
         Class<?> clazz;
         try {
-
-            if(className.contains("google")) {
+            if (className.contains("google")) {
                 clazz = Class.forName(className);
                 return mJsonFactory.createJsonParser(content).parseAndClose(clazz, null);
-            } else if(type != null) {
+            } else if (type != null) {
                 return mGson.fromJson(content, type);
             } else {
                 clazz = Class.forName(className);
                 return mGson.fromJson(content, clazz);
             }
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             Timber.e("Deserializing from disk failed", e);
             return null;
-        } catch(ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             throw new IOException(e.getMessage());
         }
     }
@@ -643,12 +662,13 @@ public class ModelCache {
             // Create MD5 Hash
             MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
             digest.update(url.getBytes());
-            byte messageDigest[] = digest.digest();
+            byte[] messageDigest = digest.digest();
 
             // Create Hex String
             StringBuffer hexString = new StringBuffer();
-            for (int i=0; i<messageDigest.length; i++)
+            for (int i = 0; i < messageDigest.length; i++) {
                 hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
+            }
             return hexString.toString();
 
         } catch (NoSuchAlgorithmException e) {
@@ -697,6 +717,7 @@ public class ModelCache {
 
     public interface CacheListener {
         public void onGet(Object item);
+
         public void onNotFound(String key);
     }
 

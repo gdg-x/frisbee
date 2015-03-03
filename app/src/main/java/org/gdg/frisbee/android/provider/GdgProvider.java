@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -36,9 +36,11 @@ public class GdgProvider extends ContentProvider {
 
     public static final String AUTHORITY = "org.gdg.frisbee.android.provider.GdgProvider";
 
-    private static final String[] CHAPTER_COLUMNS = new String[]{BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1,
-            SearchManager.SUGGEST_COLUMN_TEXT_2, SearchManager.SUGGEST_COLUMN_INTENT_ACTION,
-            SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID};
+    private static final String[] CHAPTER_COLUMNS = new String[] {
+        BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1,
+        SearchManager.SUGGEST_COLUMN_TEXT_2, SearchManager.SUGGEST_COLUMN_INTENT_ACTION,
+        SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID
+    };
 
     private static final int SEARCH_SUGGEST = 0;
 
@@ -83,7 +85,13 @@ public class GdgProvider extends ContentProvider {
 
         for (Chapter chapter : mDirectory.getGroups()) {
             if (chapter.getName().toLowerCase().contains(query.toLowerCase())) {
-                cursor.addRow(new Object[]{chapter.getGplusId(), chapter.getName(), chapter.getCity() + ", " + chapter.getCountry(), SearchActivity.ACTION_FOUND, chapter.getGplusId()});
+                cursor.addRow(new Object[] {
+                    chapter.getGplusId(),
+                    chapter.getName(),
+                    chapter.getCity() + ", " + chapter.getCountry(),
+                    SearchActivity.ACTION_FOUND,
+                    chapter.getGplusId()
+                });
             }
         }
         return cursor;

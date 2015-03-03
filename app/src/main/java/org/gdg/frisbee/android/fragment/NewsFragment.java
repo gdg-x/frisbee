@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,8 +16,6 @@
 
 package org.gdg.frisbee.android.fragment;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -28,13 +26,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
-import com.google.android.gms.plus.PlusShare;
 import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.plus.Plus;
-import com.google.api.services.plus.model.Activity;
 import com.google.api.services.plus.model.ActivityFeed;
 
 import org.gdg.frisbee.android.BuildConfig;
@@ -123,7 +119,10 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
                                 if (feed == null) {
                                     Plus.Activities.List request = mClient.activities().list(params[0], "public");
                                     request.setMaxResults(10L);
-                                    request.setFields("nextPageToken,items(id,published,url,object/content,verb,object/attachments,object/actor,annotation,object(plusoners,replies,resharers))");
+                                    request.setFields(
+                                            "nextPageToken,"
+                                                    + "items(id,published,url,object/content,verb,"
+                                                    + "object/attachments,object/actor,annotation,object(plusoners,replies,resharers))");
                                     feed = request.execute();
 
                                     App.getInstance().getModelCache().put("news_" + params[0], feed, DateTime.now().plusHours(1));
@@ -188,7 +187,7 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
 //                }
 //                return true;
 //            default:
-                return super.onContextItemSelected(item);
+        return super.onContextItemSelected(item);
 //        }
     }
 
@@ -211,7 +210,10 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
 
                                 Plus.Activities.List request = mClient.activities().list(params[0], "public");
                                 request.setMaxResults(10L);
-                                request.setFields("nextPageToken,items(id,published,url,object/content,verb,object/attachments,annotation,object(plusoners,replies,resharers))");
+                                request.setFields(
+                                        "nextPageToken,"
+                                                + "items(id,published,url,object/content,verb,"
+                                                + "object/attachments,annotation,object(plusoners,replies,resharers))");
                                 ActivityFeed feed = request.execute();
 
                                 App.getInstance().getModelCache().put("news_" + params[0], feed, DateTime.now().plusHours(1));

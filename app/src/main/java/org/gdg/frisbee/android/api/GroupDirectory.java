@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,16 +22,20 @@ import com.android.volley.Response;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.reflect.TypeToken;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.gdg.frisbee.android.api.deserializer.ZuluDateTimeDeserializer;
+import org.gdg.frisbee.android.api.model.Directory;
+import org.gdg.frisbee.android.api.model.Event;
+import org.gdg.frisbee.android.api.model.EventFullDetails;
+import org.gdg.frisbee.android.api.model.Pulse;
+import org.gdg.frisbee.android.api.model.TaggedEvent;
+import org.joda.time.DateTime;
+
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.gdg.frisbee.android.api.deserializer.ZuluDateTimeDeserializer;
-import org.gdg.frisbee.android.api.model.*;
-import org.joda.time.DateTime;
 
 import timber.log.Timber;
 
@@ -61,7 +65,7 @@ public class GroupDirectory {
     }
 
     public ApiRequest getDirectory(Response.Listener<Directory> successListener, Response.ErrorListener errorListener) {
-        GsonRequest<Void, Directory> dirReq = new GsonRequest<Void, Directory>(Request.Method.GET,
+        GsonRequest<Void, Directory> dirReq = new GsonRequest<>(Request.Method.GET,
                 DIRECTORY_URL,
                 Directory.class,
                 successListener,
@@ -71,7 +75,7 @@ public class GroupDirectory {
     }
 
     public ApiRequest getPulse(Response.Listener<Pulse> successListener, Response.ErrorListener errorListener) {
-        GsonRequest<Void, Pulse> pulseReq = new GsonRequest<Void, Pulse>(Request.Method.GET,
+        GsonRequest<Void, Pulse> pulseReq = new GsonRequest<>(Request.Method.GET,
                 PULSE_URL,
                 Pulse.class,
                 successListener,
@@ -84,8 +88,8 @@ public class GroupDirectory {
         GsonRequest<Void, Pulse> pulseReq = null;
         try {
             Timber.d(String.format(COUNTRY_PULSE_URL, URLEncoder.encode(country, "utf-8")));
-            pulseReq = new GsonRequest<Void, Pulse>(Request.Method.GET,
-                    String.format(COUNTRY_PULSE_URL, country.replaceAll(" ","%20")),
+            pulseReq = new GsonRequest<>(Request.Method.GET,
+                    String.format(COUNTRY_PULSE_URL, country.replaceAll(" ", "%20")),
                     Pulse.class,
                     successListener,
                     errorListener,
@@ -97,7 +101,7 @@ public class GroupDirectory {
     }
 
     public ApiRequest getEvent(String eventId, Response.Listener<EventFullDetails> successListener, Response.ErrorListener errorListener) {
-        GsonRequest<Void, EventFullDetails> eventReq = new GsonRequest<Void, EventFullDetails>(Request.Method.GET,
+        GsonRequest<Void, EventFullDetails> eventReq = new GsonRequest<>(Request.Method.GET,
                 EVENT_DETAIL_URL + eventId,
                 EventFullDetails.class,
                 successListener,
@@ -110,9 +114,13 @@ public class GroupDirectory {
         return new ApiRequest(eventReq);
     }
 
-    public ApiRequest getChapterEventList(final DateTime start, final DateTime end, final String chapterId, Response.Listener<ArrayList<Event>> successListener, Response.ErrorListener errorListener) {
+    public ApiRequest getChapterEventList(final DateTime start, 
+                                          final DateTime end, 
+                                          final String chapterId, 
+                                          Response.Listener<ArrayList<Event>> successListener, 
+                                          Response.ErrorListener errorListener) {
 
-        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        ArrayList<NameValuePair> params = new ArrayList<>();
         params.add(new NameValuePair() {
             @Override
             public String getName() {
@@ -133,11 +141,11 @@ public class GroupDirectory {
 
             @Override
             public String getValue() {
-                return ""+(int)(start.getMillis()/1000);
+                return "" + (int) (start.getMillis() / 1000);
             }
         });
 
-        if(end != null) {
+        if (end != null) {
             params.add(new NameValuePair() {
                 @Override
                 public String getName() {
@@ -146,7 +154,7 @@ public class GroupDirectory {
 
                 @Override
                 public String getValue() {
-                    return ""+(int)(end.getMillis()/1000);
+                    return "" + (int) (end.getMillis() / 1000);
                 }
             });
         }
@@ -158,15 +166,16 @@ public class GroupDirectory {
 
             @Override
             public String getValue() {
-                return ""+(int)(new DateTime().getMillis()/1000);
+                return "" + (int) (new DateTime().getMillis() / 1000);
             }
         });
-        Type type = new TypeToken<ArrayList<Event>>() {}.getType();
+        Type type = new TypeToken<ArrayList<Event>>() {
+            }.getType();
 
         String url = CHAPTER_CALENDAR_URL;
-        url += "?"+URLEncodedUtils.format(params, "UTF-8");
+        url += "?" + URLEncodedUtils.format(params, "UTF-8");
 
-        GsonRequest<Void, ArrayList<Event>> eventReq = new GsonRequest<Void, ArrayList<Event>>(Request.Method.GET,
+        GsonRequest<Void, ArrayList<Event>> eventReq = new GsonRequest<>(Request.Method.GET,
                 url,
                 type,
                 successListener,
@@ -176,9 +185,13 @@ public class GroupDirectory {
         return new ApiRequest(eventReq);
     }
 
-    public ApiRequest getTaggedEventList(final DateTime start, final DateTime end, final String tag, Response.Listener<PagedList<TaggedEvent>> successListener, Response.ErrorListener errorListener) {
+    public ApiRequest getTaggedEventList(final DateTime start, 
+                                         final DateTime end, 
+                                         final String tag, 
+                                         Response.Listener<PagedList<TaggedEvent>> successListener, 
+                                         Response.ErrorListener errorListener) {
 
-        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        ArrayList<NameValuePair> params = new ArrayList<>();
 
         params.add(new NameValuePair() {
             @Override
@@ -226,7 +239,7 @@ public class GroupDirectory {
 
             @Override
             public String getValue() {
-                return "1000" ;
+                return "1000";
             }
         });
 
@@ -236,7 +249,7 @@ public class GroupDirectory {
         String url = TAGGED_EVENTS_URL + tag;
         url += "?" + URLEncodedUtils.format(params, "UTF-8");
 
-         GsonRequest<Void, PagedList<TaggedEvent>> eventReq = new GsonRequest<Void, PagedList<TaggedEvent>>(Request.Method.GET,
+        GsonRequest<Void, PagedList<TaggedEvent>> eventReq = new GsonRequest<>(Request.Method.GET,
                 url,
                 type,
                 successListener,
@@ -246,9 +259,11 @@ public class GroupDirectory {
 
     }
 
-    public ApiRequest getTaggedEventUpcomingList(final String tag, Response.Listener<PagedList<TaggedEvent>> successListener, Response.ErrorListener errorListener) {
+    public ApiRequest getTaggedEventUpcomingList(final String tag, 
+                                                 Response.Listener<PagedList<TaggedEvent>> successListener, 
+                                                 Response.ErrorListener errorListener) {
 
-        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+        ArrayList<NameValuePair> params = new ArrayList<>();
 
         params.add(new NameValuePair() {
             @Override
@@ -270,17 +285,17 @@ public class GroupDirectory {
 
             @Override
             public String getValue() {
-                return "1000" ;
+                return "1000";
             }
         });
 
         Type type = new TypeToken<PagedList<TaggedEvent>>() {
         }.getType();
 
-        String url = String.format(TAGGED_EVENTS_URL_UPCOMING,tag);
+        String url = String.format(TAGGED_EVENTS_URL_UPCOMING, tag);
         url += "?" + URLEncodedUtils.format(params, "UTF-8");
 
-        GsonRequest<Void, PagedList<TaggedEvent>> eventReq = new GsonRequest<Void, PagedList<TaggedEvent>>(Request.Method.GET,
+        GsonRequest<Void, PagedList<TaggedEvent>> eventReq = new GsonRequest<>(Request.Method.GET,
                 url,
                 type,
                 successListener,

@@ -1,8 +1,8 @@
 package org.gdg.frisbee.android.api.model;
 
-import java.util.ArrayList;
-
 import org.joda.time.DateTime;
+
+import java.util.ArrayList;
 
 public class EventFullDetails {
     String id, about, chapter, eventUrl, location, title;

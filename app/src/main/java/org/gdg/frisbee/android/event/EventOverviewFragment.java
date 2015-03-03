@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * 	http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,7 +26,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
 import android.text.Html;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -145,7 +150,7 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
 
     @Override
     public void onResponse(final EventFullDetails eventFullDetails) {
-        if (getActivity() == null){
+        if (getActivity() == null) {
             return;
         }
         mEvent = eventFullDetails;
@@ -188,17 +193,17 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
     }
 
     private void updateGroupDetails(Chapter group) {
-        Plus.PeopleApi.load(((GdgActivity)getActivity()).getGoogleApiClient(), group.getGplusId())
+        Plus.PeopleApi.load(((GdgActivity) getActivity()).getGoogleApiClient(), group.getGplusId())
                 .setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
                     @Override
                     public void onResult(People.LoadPeopleResult loadPeopleResult) {
-                        if (loadPeopleResult.getStatus().getStatusCode() == CommonStatusCodes.SUCCESS ) {
+                        if (loadPeopleResult.getStatus().getStatusCode() == CommonStatusCodes.SUCCESS) {
                             Person gplusChapter = loadPeopleResult.getPersonBuffer().get(0);
                             if (gplusChapter.getImage().hasUrl()) {
                                 Picasso.with(getActivity()).load(gplusChapter.getImage().getUrl()).into(new Target() {
                                     @Override
                                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
-                                        BitmapDrawable logo = new BitmapDrawable(getResources(), bitmap );
+                                        BitmapDrawable logo = new BitmapDrawable(getResources(), bitmap);
                                         mGroupLogo.setVisibility(View.VISIBLE);
                                         mGroupLogo.setImageDrawable(logo);
                                     }
@@ -223,8 +228,9 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
 
     public void setIsLoading(boolean isLoading) {
 
-        if (isLoading == mLoading || getActivity() == null)
+        if (isLoading == mLoading || getActivity() == null) {
             return;
+        }
 
         mLoading = isLoading;
 
@@ -241,8 +247,9 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
-                    if (mProgressContainer != null)
+                    if (mProgressContainer != null) {
                         mProgressContainer.setVisibility(View.GONE);
+                    }
                 }
 
                 @Override
@@ -276,14 +283,14 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.add_calendar: 
+        switch (item.getItemId()) {
+            case R.id.add_calendar:
                 addEventToCalendar();
                 return true;
-            case R.id.navigate_to: 
+            case R.id.navigate_to:
                 launchNavigation();
                 return true;
-            case R.id.view_event_url: 
+            case R.id.view_event_url:
                 launchUrl(mEvent.getEventUrl());
                 return true;
             default:
@@ -319,7 +326,7 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
         startActivity(intent);
     }
 
-    public static Fragment createFor(String eventId) {
+    public static Fragment createfor(String eventId) {
         EventOverviewFragment fragment = new EventOverviewFragment();
         Bundle args = new Bundle();
         args.putString(Const.EXTRA_EVENT_ID, eventId);
