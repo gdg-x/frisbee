@@ -21,6 +21,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
+import android.text.Spanned;
+import android.text.SpannedString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -224,7 +226,15 @@ public class InfoFragment extends Fragment {
 
     private void updateChapterUIFrom(final Person person) {
         mTagline.setText(person.getTagline());
-        mAbout.setText(Html.fromHtml(person.getAboutMe()));
+        mAbout.setText(getAboutText(person));
+    }
+
+    private Spanned getAboutText(Person person) {
+        String aboutText = person.getAboutMe();
+        if (aboutText == null) {
+            return SpannedString.valueOf("");
+        }
+        return Html.fromHtml(aboutText);
     }
 
     private void updateOrganizersOnline(final Person person) {
