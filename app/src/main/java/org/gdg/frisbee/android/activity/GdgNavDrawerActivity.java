@@ -150,6 +150,9 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             case Const.DRAWER_HELP:
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Const.URL_HELP)));
                 break;
+            case Const.DRAWER_FEEDBACK:
+                showFeedbackDialog();
+                break;
             case Const.DRAWER_ABOUT:
                 navigateTo(AboutActivity.class, null);
                 break;

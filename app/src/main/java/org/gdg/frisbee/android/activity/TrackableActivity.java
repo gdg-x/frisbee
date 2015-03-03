@@ -23,7 +23,10 @@ import android.support.v7.app.ActionBarActivity;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.app.App;
+
+import io.doorbell.android.Doorbell;
 
 /**
  * Activity which provides handy mechanism for google analytics.
@@ -86,5 +89,19 @@ public abstract class TrackableActivity extends ActionBarActivity implements Vie
             // Send a screen view.
             t.send(new HitBuilders.AppViewBuilder().build());
         }
+    }
+
+    protected void showFeedbackDialog() {
+        Doorbell doorbellDialog = new Doorbell(this, BuildConfig.DOORBELL_ID, BuildConfig.DOORBELL_APP_KEY); // Create the Doorbell object
+
+        // Callback for when the dialog is shown
+        doorbellDialog.setOnShowCallback(new io.doorbell.android.callbacks.OnShowCallback() {
+            @Override
+            public void handle() {
+                trackView("Feedback/" + getTrackedViewName());
+            }
+        });
+
+        doorbellDialog.show();
     }
 }

@@ -42,6 +42,7 @@ public class DrawerAdapter extends BaseAdapter {
             add(new DrawerItem(Const.DRAWER_ARROW, R.drawable.ic_drawer_arrow, R.string.arrow));
             add(new DrawerItem(Const.DRAWER_SETTINGS, R.drawable.ic_drawer_settings, R.string.settings));
             add(new DrawerItem(Const.DRAWER_HELP, R.drawable.ic_drawer_help, R.string.help));
+            add(new DrawerItem(Const.DRAWER_FEEDBACK, android.R.drawable.ic_dialog_email, R.string.feedback));
             add(new DrawerItem(Const.DRAWER_ABOUT, R.drawable.ic_drawer_about, R.string.about));
         }};
     }
