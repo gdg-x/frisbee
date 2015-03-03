@@ -129,11 +129,11 @@ public class PulseAdapter extends BaseAdapter {
 
                 switch (mode) {
                     case 0:
-                        return (value.getMeetings() - value2.getMeetings()) *- 1;
+                        return (value.getMeetings() - value2.getMeetings()) * -1;
                     case 1:
-                        return (value.getAttendees() - value2.getAttendees()) *- 1;
+                        return (value.getAttendees() - value2.getAttendees()) * -1;
                     case 2:
-                        return (value.getPlusMembers() - value2.getPlusMembers()) *- 1;
+                        return (value.getPlusMembers() - value2.getPlusMembers()) * -1;
                 }
                 return 0;
             }
