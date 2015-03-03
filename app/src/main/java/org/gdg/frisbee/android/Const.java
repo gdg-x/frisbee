@@ -45,7 +45,8 @@ public class Const {
     public static final int DRAWER_ARROW = 99;
     public static final int DRAWER_SETTINGS = 100;
     public static final int DRAWER_HELP = 101;
-    public static final int DRAWER_ABOUT = 102;
+    public static final int DRAWER_FEEDBACK = 102;
+    public static final int DRAWER_ABOUT = 103;
     public static final String QR_MSG_PREFIX = "gdgx://arrow?m=";
     public static final String PREF_ORGANIZER_CHECK_TIME = "pref_organizer_check_time";
     public static final String PREF_ORGANIZER_CHECK_ID = "pref_organizer_check_id";

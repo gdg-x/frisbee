@@ -41,6 +41,7 @@ import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.DrawerAdapter;
+import org.gdg.frisbee.android.adapter.DrawerAdapter.DrawerItem;
 import org.gdg.frisbee.android.api.GapiOkTransport;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.OrganizerChecker;
@@ -65,6 +66,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     private final JsonFactory mJsonFactory = new GsonFactory();
     protected DrawerAdapter mDrawerAdapter;
     protected ActionBarDrawerToggle mDrawerToggle;
+    protected String mStoredHomeChapterId;
     @InjectView(R.id.drawer)
     DrawerLayout mDrawerLayout;
     @InjectView(R.id.navdrawer_list)
@@ -72,7 +74,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     @InjectView(R.id.navdrawer_image)
     ImageView mDrawerImage;
     private Plus plusClient;
-    protected String mStoredHomeChapterId;
 
     @Override
     public void setContentView(int layoutResId) {
@@ -115,7 +116,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     @SuppressWarnings("unused")
     @OnItemClick(R.id.navdrawer_list)
     public void onDrawerItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        DrawerAdapter.DrawerItem item = (DrawerAdapter.DrawerItem) mDrawerAdapter.getItem(i);
+        DrawerItem item = (DrawerItem) mDrawerAdapter.getItem(i);
 
         switch (item.getId()) {
             case Const.DRAWER_ACHIEVEMENTS:
@@ -150,13 +151,16 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             case Const.DRAWER_HELP:
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Const.URL_HELP)));
                 break;
+            case Const.DRAWER_FEEDBACK:
+                showFeedbackDialog();
+                break;
             case Const.DRAWER_ABOUT:
                 navigateTo(AboutActivity.class, null);
                 break;
         }
     }
 
-    public void onDrawerSpecialItemClick(DrawerAdapter.DrawerItem item) {
+    public void onDrawerSpecialItemClick(DrawerItem item) {
 
         final ArrayList<TaggedEventSeries> currentEventSeries =
                 App.getInstance().currentTaggedEventSeries();
