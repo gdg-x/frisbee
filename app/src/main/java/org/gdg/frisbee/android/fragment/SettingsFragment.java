@@ -204,6 +204,8 @@ public class SettingsFragment extends PreferenceFragment {
     private void initPreferences() {
         final ListPreference prefHomeGdgList = (ListPreference) findPreference(PrefUtils.SETTINGS_HOME_GDG);
         if (prefHomeGdgList != null) {
+            prefHomeGdgList.setEnabled(false);
+
             App.getInstance().getModelCache().getAsync("chapter_list_hub", false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
@@ -220,6 +222,7 @@ public class SettingsFragment extends PreferenceFragment {
                     }
                     prefHomeGdgList.setEntries(entries);
                     prefHomeGdgList.setEntryValues(entryValues);
+                    prefHomeGdgList.setEnabled(true);
                 }
 
                 @Override
