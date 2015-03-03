@@ -159,7 +159,7 @@ public class App extends Application implements LocationListener {
         //Add IO Extended
         addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
                 R.style.Theme_GDG_Special_IOExtended,
-                "wtm",
+                "io-extended",
                 Const.START_TIME_IOEXTENDED,
                 Const.END_TIME_IOEXTENDED));
     }
