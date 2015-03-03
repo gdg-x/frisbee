@@ -12,6 +12,7 @@ import android.util.SparseArray;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.ApiRequest;
 import org.gdg.frisbee.android.api.GdeDirectory;
@@ -64,12 +65,15 @@ public class GdeActivity extends GdgNavDrawerActivity {
         final ApiRequest mFetchGdesTask = gdeDirectory.getDirectory(new Response.Listener<GdeList>() {
             @Override
             public void onResponse(final GdeList directory) {
-                App.getInstance().getModelCache().putAsync("gde_map", directory, DateTime.now().plusDays(4), new ModelCache.CachePutListener() {
-                    @Override
-                    public void onPutIntoCache() {
-                        addGdes(directory);
-                    }
-                });
+                App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_GDE_MAP, 
+                        directory, 
+                        DateTime.now().plusDays(4), 
+                        new ModelCache.CachePutListener() {
+                            @Override
+                            public void onPutIntoCache() {
+                                addGdes(directory);
+                            }
+                        });
 
             }
         }, new Response.ErrorListener() {
@@ -80,7 +84,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
             }
         });
 
-        App.getInstance().getModelCache().getAsync("gde_map", new ModelCache.CacheListener() {
+        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_GDE_MAP, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 GdeList directory = (GdeList) item;
@@ -165,7 +169,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
             if (position == 0) {
                 return PlainLayoutFragment.newInstance(R.layout.fragment_gde_about);
             } else {
-                String key = mGdeMap.keySet().toArray(new String[0])[position - 1];
+                String key = mGdeMap.keySet().toArray(new String[mGdeMap.size()])[position - 1];
                 Fragment frag = GdeListFragment.newInstance(mGdeMap.get(key), position == mViewPager.getCurrentItem());
                 mFragments.append(position, new WeakReference<>(frag));
 
@@ -178,7 +182,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
             if (position == 0) {
                 return getString(R.string.about);
             } else if (position > -1 && position - 1 < mGdeMap.keySet().size()) {
-                String title = mGdeMap.keySet().toArray(new String[0])[position - 1];
+                String title = mGdeMap.keySet().toArray(new String[mGdeMap.size()])[position - 1];
                 title = title.length() > 14 ? Utils.getUppercaseLetters(title) : title;
                 return title;
             } else {
@@ -195,7 +199,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
             if (position == 0) {
                 trackView("GDE/About");
             } else {
-                String key = mGdeMap.keySet().toArray(new String[0])[position - 1];
+                String key = mGdeMap.keySet().toArray(new String[mGdeMap.size()])[position - 1];
                 trackView("GDE/" + key);
 
                 WeakReference<Fragment> ref = mFragments.get(position - 1);
