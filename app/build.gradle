@@ -58,7 +58,8 @@ android {
         buildConfigField "String", "HUB_CLIENT_ID", "\"" + (local_properties.hub_client_id ?: "") + "\""
         buildConfigField "String", "PLAY_APP_ID", "\"" + (local_properties.play_app_id ?: "") + "\""
         buildConfigField "String", "GCM_SENDER_ID", "\"" + (local_properties.gcm_sender_id ?: "") + "\""
-
+        buildConfigField "long", "DOORBELL_ID", (local_properties.doorbell_id ?: "0")
+        buildConfigField "String", "DOORBELL_APP_KEY", "\"" + (local_properties.doorbell_app_key ?: "") + "\""
         resValue "string", "play_app_id", "\"" + (local_properties.play_app_id ?: "") + "\""
         resValue "string", "android_backup_key", local_properties.android_backup_key ?: ""
         resValue "string", "android_simple_api_access_key", local_properties.android_simple_api_access_key ?: ""
