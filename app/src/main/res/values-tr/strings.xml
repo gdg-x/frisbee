@@ -68,7 +68,7 @@
     <string name="contributors">GDG uygulaması açık kaynaklıdır ve topluluk çabalarıyla geliştirilmektedir. Katkıda bulunan kişiler aşağıda:</string>
     <string name="get_involved">Dahil Ol!</string>
     <string name="get_involved_text">GDG uygulaması açık kaynaklıdır ve topluluk çabalarıyla geliştirilmektedir. Herkes uygulamaya dahil olabilir ve gelişmesine katkıda bulunabilir.\n\nBunun için GitHub\'ı açın ve kodumuzu checkout edin.\n\nhttps://github.com/gdg-x</string>
-    <string name="about_license">(c) 2013 The GDG Frisbee Project\nTüm Hakları Gizlidir.\n\nAşağıdaki lisans ile lisanslıdır\nthe Apache 2.0 License</string>
+    <string name="about_license">© 2013 The GDG Frisbee Project\nTüm Hakları Gizlidir.\n\nAşağıdaki lisans ile lisanslıdır\nthe Apache 2.0 License</string>
     <string name="past_event">GEÇMİŞ</string>
     <string name="upcoming_widget">GDG - Bir Sonraki Etkinlik</string>
     <string name="global">Global</string>
@@ -91,7 +91,7 @@
     <string name="done">Bitti</string>
     <string name="allow_analytics">Uygulamayı geliştirmemize yardımcı olmak için anonim kullanım bilgisi toplamamıza izin verin.</string>
     <string name="enable_gcm">GDG Bildirimlerini Aktifleştir (yeni etkinliklerden haberin olsun.)</string>
-    <string name="step3_text">Başlamadan önce son bir şey...</string>
+    <string name="step3_text">Başlamadan önce son bir şey…</string>
     <string name="share_on_gplus">Arkadaşlarını Davet Et</string>
     <string name="join_me">Bu etkinlikle bana katıl!</string>
     <string name="name_not_known">İsim bilinmiyor.</string>

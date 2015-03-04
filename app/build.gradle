@@ -106,8 +106,13 @@ android {
     }
 
     lintOptions {
-        abortOnError false
+        abortOnError true
         checkReleaseBuilds false
+
+        warning 'InvalidPackage'
+        warning 'ImpliedQuantity'
+        warning 'MissingQuantity'
+        warning 'MissingTranslation'
     }
 
     compileOptions {

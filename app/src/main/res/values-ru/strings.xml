@@ -21,7 +21,6 @@
     <string name="drawer_close">Закрыть Drawer</string>
     <string name="info">Информация</string>
     <string name="events">Мероприятия</string>
-    <string name="app_name">GDG</string>
     <string name="add_to_calendar">Добавить в календарь</string>
     <string name="share_with_googleplus">Поделиться в Google+</string>
     <string name="no_scheduled_events">Нет мероприятий, запранированных на следующие 30 дней</string>
@@ -68,7 +67,7 @@
     <string name="contributors">Приложение GDG создано усилиями сообщества и имеет открытый исходный код. Следуюшие разработчики приняли участие в создании приложения:</string>
     <string name="get_involved">Прими участие!</string>
     <string name="get_involved_text">Приложение GDG создано усилиями сообщества и имеет открытый исходный код. Все желающие могут участвовать и улучшать это приложение.\n\nОтправляйтесь на GitHub и сделайте checkout нашего кода.\n\nhttps://github.com/gdg-x</string>
-    <string name="about_license">(c) 2013 Проект GDG Frisbee\nВсе права защищены.\n\nРаспространяется под лицензией Apache 2.0</string>
+    <string name="about_license">© 2013 Проект GDG Frisbee\nВсе права защищены.\n\nРаспространяется под лицензией Apache 2.0</string>
     <string name="past_event">ПРОШЛОЕ</string>
     <string name="upcoming_widget">GDG - Предстоящее мероприятие</string>
     <string name="global">Весь мир</string>
@@ -91,7 +90,7 @@
     <string name="done">Готово</string>
     <string name="allow_analytics">Разреши нам собирать анонимные данные об использовании, которые помогают нам улучшать приложение</string>
     <string name="enable_gcm">Включить GDG Cloud-уведомления (получать уведомления о новых мероприятиях)</string>
-    <string name="step3_text">Ещё одна вещь, прежде чем мы начнём...</string>
+    <string name="step3_text">Ещё одна вещь, прежде чем мы начнём…</string>
 
     <string name="share_on_gplus">Пригласите друзей</string>
     <string name="join_me">Присоединяйся ко мне на этом мероприятии!</string>

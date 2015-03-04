@@ -21,7 +21,6 @@
     <string name="drawer_close">ड्रावर बंद करें</string>
     <string name="info">सूचना</string>
     <string name="events">कार्यक्रम</string>
-    <string name="app_name">जीडीजी </string>
     <string name="add_to_calendar">कैलेंडर में दर्ज करें </string>
     <string name="share_with_googleplus">गूगल+ पर शेयर करें </string>
     <string name="no_scheduled_events">अगले ३० दिनो में \n कोई कार्यक्रम आयोजित नहीं है </string>
@@ -68,7 +67,7 @@
     <string name="contributors">यह जी डी जी एप्प सामुदायिक प्रयास है और इसका स्रोत मुक्त रूप से उपलब्ध है। निम्न लोगों ने इस एप्प में अपना सहयोग प्रदान किया है :</string>
     <string name="get_involved">शामिल होँ!</string>
     <string name="get_involved_text">यह जी डी जी एप्प सामुदायिक प्रयास है और इसका स्रोत मुक्त रूप से उपलब्ध है। आप सभी आमंत्रित हैं इस एप्प को बेहतर बनाने में। \n\nबस GitHub पर जाएँ और एप्प के स्रोत को हासिल करें।\n\nhttps://github.com/gdg-x</string>
-    <string name="about_license">(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\n\Apache 2.0 अनुज्ञप्ति की शर्तों और अनुबंधों के अनुसार </string>
+    <string name="about_license">© 2013 The GDG Frisbee Project\nAll Rights reserved.\n\n\Apache 2.0 अनुज्ञप्ति की शर्तों और अनुबंधों के अनुसार </string>
     <string name="past_event">पुराना</string>
     <string name="upcoming_widget">जी डी जी - आने वाले कार्यक्रम</string>
     <string name="global">विश्वस्तर </string>
@@ -91,7 +90,7 @@
     <string name="done">कर लिया गया</string>
     <string name="allow_analytics">हमें गुमनाम रूप से प्रयोग की जानकारी एकत्र करने की अनुमति दें</string>
     <string name="enable_gcm">जी डी जी Cloud सूचनाएँ शुरू करें  (नए कार्यक्रमों के बारे में जानें)</string>
-    <string name="step3_text">शुरू करने से पहले...</string>
+    <string name="step3_text">शुरू करने से पहले…</string>
     <string name="share_on_gplus">दोस्तों को आमंत्रित करें</string>
     <string name="join_me">मेरे साथ इस कार्यक्रम में शामिल होँ!</string>
     <string name="name_not_known">अज्ञात नाम</string>

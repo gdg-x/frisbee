@@ -195,7 +195,7 @@ public class ArrowTaggedActivity extends GdgNavDrawerActivity {
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = inflater.inflate(R.layout.list_tagged_organizer_item, null);
+                convertView = inflater.inflate(R.layout.list_tagged_organizer_item, parent, false);
             }
 
             Organizer o = getItem(position);

@@ -18,10 +18,9 @@ import java.util.Comparator;
 public class ChapterComparator implements Comparator<Chapter> {
 
     private static final float MAX_DISTANCE = 500000;
-    @Nullable
     private final String mHomeChapterId;
 
-    public ChapterComparator(String homeChapterId) {
+    public ChapterComparator(@Nullable String homeChapterId) {
         mHomeChapterId = homeChapterId;
     }
 

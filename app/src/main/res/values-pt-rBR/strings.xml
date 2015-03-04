@@ -18,7 +18,6 @@
     <string name="drawer_close">"Fechar menu"</string>
     <string name="info">"Info"</string>
     <string name="events">"Eventos"</string>
-    <string name="app_name">"GDG"</string>
     <string name="add_to_calendar">"Adicionar ao calendário"</string>
     <string name="share_with_googleplus">"Compartilhar no Google+"</string>
     <string name="no_scheduled_events">"Não há eventos programados\nnos próximos 30 dias"</string>
@@ -65,7 +64,7 @@
     <string name="contributors">"O app GDG é um esforço da comunidade e possui código aberto. As seguintes pessoas contribuíram para o app:"</string>
     <string name="get_involved">"Envolva-se"</string>
     <string name="get_involved_text">"O app GDG é um esforço da comunidade e possui código aberto. Todos estão convidados a participar e melhorar este app. \n\nVisite o GitHub e faça o checkout do nosso código."</string>
-    <string name="about_license">"(C) 2013 The GDG Frisbee Project\nTodos os direitos reservados.\n\nLicenciado nos termos\nda Licença Apache 2.0"</string>
+    <string name="about_license">"© 2013 The GDG Frisbee Project\nTodos os direitos reservados.\n\nLicenciado nos termos\nda Licença Apache 2.0"</string>
     <string name="past_event">"Passado"</string>
     <string name="upcoming_widget">"GDG - Eventos por vir"</string>
     <string name="global">"Global"</string>
@@ -75,7 +74,6 @@
     <string name="pulse_circlers">"Seguidores do grupo"</string>
     <string name="home_gdg">"Meu GDG "</string>
     <string name="home_gdg_summary">"Selecione o seu GDG primário"</string>
-    <string name="devfest">"DevFest 2013"</string>
     <string name="analytics">"Analytics"</string>
     <string name="analytics_summary_on">"O aplicativo está transmitindo os dados anônimos de utilização, o que nos permite melhorar o mesmo"</string>
     <string name="analytics_summary_off">"O aplicativo não está transmitindo todos os dados anônimos de utilização"</string>
@@ -89,7 +87,7 @@
     <string name="done">"Feito"</string>
     <string name="allow_analytics">"Permita-nos coletar dados anônimos de utilização, o que nos ajudará a melhorar o aplicativo"</string>
     <string name="enable_gcm">"Ativar Notificação GDG de Nuvem (ser notificado sobre novos eventos)"</string>
-    <string name="step3_text">"Uma coisinha antes de começarmos ..."</string>
+    <string name="step3_text">"Uma coisinha antes de começarmos …"</string>
     <string name="share_on_gplus">"Convidar Amigos"</string>
     <string name="join_me">"Junte-se a mim neste evento!"</string>
     <string name="name_not_known">"Nome não conhecido"</string>

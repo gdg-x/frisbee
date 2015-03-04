@@ -48,7 +48,8 @@
         android:paddingTop="@dimen/content_padding"
         android:textAllCaps="true"
         android:textColor="?android:textColorPrimaryInverse"
-        tools:text="SAT, JUL 25" />
+        tools:text="SAT, JUL 25"
+        tools:ignore="RelativeOverlap" />
 
       <ImageView
         android:id="@+id/icon"

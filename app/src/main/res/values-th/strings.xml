@@ -21,7 +21,6 @@
     <string name="drawer_close">ปิดลิ้นชัก</string>
     <string name="info">ข้อมูลพื้นฐาน</string>
     <string name="events">กิจกรรม</string>
-    <string name="app_name">GDG</string>
     <string name="add_to_calendar">เพึ่มในปฏิทิน</string>
     <string name="share_with_googleplus">แบ่งปันใน Google +</string>
     <string name="no_scheduled_events">ไม่พบกิจกรรมภายในระยะเวลา 30 วัน</string>
@@ -68,7 +67,7 @@
     <string name="contributors">แอพพลิเคชัน GDG เป็นผลงานส่วนหนึ่งของชุมชนนักพัฒนา โดยเปิดให้มีการเข้าถึงที่มาและยำไปใช้ได้โดยเสรี(Open source) โดยบุคคลเหล่านี้คือผู้ที่มีส่วนช่วยในการพัฒนา:</string>
     <string name="get_involved">เข้าร่วมกับเรา</string>
     <string name="get_involved_text">แอพพลิเคชัน GDG  เป็นผลงานส่วนหนึ่งของชุมชนนักพัฒนา โดยเปิดให้มีการเข้าถึงที่มาและยำไปใช้ได้โดยเสรี(Open source) ทุกคนสามารถร่วมเป็นส่วนหนึ่งในการเข้าร่วมและพัฒนาแอพพลิเคชันนี้ เพียงไปที่ Github แล้ว checkout ซอร์สโค้ดจาก \n\nhttps://github.com/gdg-x</string>
-    <string name="about_license">(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof the Apache 2.0 License</string>
+    <string name="about_license">© 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof the Apache 2.0 License</string>
     <string name="past_event">ที่ผ่านมา</string>
     <string name="upcoming_widget">GDG - กิจกรรมที่กำลังจะมีขึ้น</string>
     <string name="global">รอบโลก</string>
@@ -91,7 +90,7 @@
     <string name="done">เรียบร้อยแล้ว</string>
     <string name="allow_analytics">อนุญาตให้เราเก็บข้อมูลการใช้ในลักษณะไม่เปิดเผยตัวตนผู้ใช้ เพื่อช่วยในการพัฒนาแอพพลิเคชัน</string>
     <string name="enable_gcm">เปิดการแจ้งเตือนผ่านระบบคลาวด์ (รับการแจ้งเตือนเกี่ยวกับกิจกรรมใหม่)</string>
-    <string name="step3_text">ข้อตกลงก่อนเริ่มใช้งาน...</string>
+    <string name="step3_text">ข้อตกลงก่อนเริ่มใช้งาน…</string>
     <string name="share_on_gplus">เชิญเพื่อนเข้าใช้งาน</string>
     <string name="join_me">เข้าร่วมกิจกรรมนี้กับฉัน</string>
     <string name="name_not_known">ไม่ทราบชื่อ</string>

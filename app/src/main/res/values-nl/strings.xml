@@ -21,7 +21,6 @@
     <string name="drawer_close">Sluit Drawer</string>
     <string name="info">Info</string>
     <string name="events">Events</string>
-    <string name="app_name">GDG</string>
     <string name="add_to_calendar">Aan de kalender toevoegen</string>
     <string name="share_with_googleplus">Met Google+ delen</string>
     <string name="no_scheduled_events">Geen events binnen de folgende 30 dagen</string>
@@ -68,7 +67,7 @@
     <string name="contributors">De GDG app is een community moeite en open sourced. De volgende personen hebben eraan meegewerkt:</string>
     <string name="get_involved">Meedoen!</string>
     <string name="get_involved_text">De GDG app is een community moeite en open sourced. Iedereen is uitgenodigd om eraan meetewerken en deze app te verbeteren.\n\nGa naar GitHub en checkout onze code.</string>
-    <string name="about_license">(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof the Apache 2.0 License</string>
+    <string name="about_license">© 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof the Apache 2.0 License</string>
     <string name="past_event">Verleden</string>
     <string name="originally_shared">heeft oorspronkelijk gedeeld:</string>
 </resources>

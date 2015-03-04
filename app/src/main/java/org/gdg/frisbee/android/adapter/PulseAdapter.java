@@ -63,10 +63,10 @@ public class PulseAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View convertView, ViewGroup viewGroup) {
+    public View getView(int i, View convertView, ViewGroup parent) {
         View rowView = convertView;
         if (rowView == null) {
-            rowView = mInflater.inflate(R.layout.list_pulse_item, null);
+            rowView = mInflater.inflate(R.layout.list_pulse_item, parent, false);
             ViewHolder viewHolder = new ViewHolder();
             viewHolder.position = (TextView) rowView.findViewById(R.id.position);
             viewHolder.key = (TextView) rowView.findViewById(R.id.key);

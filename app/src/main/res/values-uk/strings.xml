@@ -21,7 +21,6 @@
     <string name="drawer_close">Закрити меню</string>
     <string name="info">Про групу</string>
     <string name="events">Події</string>
-    <string name="app_name">GDG</string>
     <string name="add_to_calendar">Додати в календар</string>
     <string name="share_with_googleplus">Розповісти в Google+</string>
     <string name="no_scheduled_events">На найближчих 30 днів подій немає</string>
@@ -46,7 +45,7 @@
     <string name="youtube_init_failed">Не вдалося ініціалізувати програвач YouTube.</string>
     <string name="achievements">Досягнення</string>
     <string name="settings">Налаштування</string>
-    <string name="about">Про...</string>
+    <string name="about">Про…</string>
     <string name="gdl">Google Developers Live</string>
     <plurals name="seconds_ago">
         <item quantity="zero">зараз</item>
@@ -76,7 +75,7 @@
         вихідним кодом. Всі бажаючі можуть взяти участь у розвитку додатку.\n\nФоркайте нас на
         GitHub.\n\nhttps://github.com/gdg-x
     </string>
-    <string name="about_license">(c) 2013 Проект GDG Frisbee\nВсі права захищені.\n\nПоширюється під
+    <string name="about_license">© 2013 Проект GDG Frisbee\nВсі права захищені.\n\nПоширюється під
         ліцензією Apache 2.0
     </string>
     <string name="past_event">ВІДБУЛАСЬ</string>
@@ -88,7 +87,6 @@
     <string name="pulse_circlers">В колах Google+</string>
     <string name="home_gdg">Головна GDG</string>
     <string name="home_gdg_summary">Виберіть GDG поряд з вами</string>
-    <string name="devfest">DevFest 2013</string>
     <string name="analytics">Аналітика</string>
     <string name="analytics_summary_on">На даний час, програма передає анонімні дані про
         використання, що дозволяє нам покращити додаток
@@ -111,7 +109,7 @@
     </string>
     <string name="enable_gcm">Включити сповіщення GDG (отримувати сповіщення про нові події)
     </string>
-    <string name="step3_text">Ще одна річ, перш ніж ми почнемо...</string>
+    <string name="step3_text">Ще одна річ, перш ніж ми почнемо…</string>
     <string name="share_on_gplus">Запросити друзів</string>
     <string name="join_me">Приєднуйтесь до мене на цій події!</string>
     <string name="name_not_known">Невідоме ім\'я</string>

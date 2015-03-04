@@ -21,7 +21,6 @@
     <string name="drawer_close">Zatvoriť zásuvku</string>
     <string name="info">Info</string>
     <string name="events">Udalosti</string>
-    <string name="app_name">GDG</string>
     <string name="add_to_calendar">Pridať do kalendára</string>
     <string name="share_with_googleplus">Zdieľať na Google+</string>
     <string name="no_scheduled_events">Žiadne udalosti\najbližších 30 dní</string>
@@ -68,7 +67,7 @@
     <string name="contributors">GDG aplikácia je komunitný projekt a je open source. Tímto ľudom vďačíme za jej funkčnosť:</string>
     <string name="get_involved">Zapoj sa!</string>
     <string name="get_involved_text">GDG aplikácia je komunitný projekt a je open source. Každý môže prispieť do jej vývoja. \n\nChoď na GitHub a sťahuj kód. \n\nhttps://github.com/gdg-x</string>
-    <string name="about_license">(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicencované pod\n Apache 2.0 License</string>
+    <string name="about_license">© 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicencované pod\n Apache 2.0 License</string>
     <string name="past_event">UPLYNULÝ</string>
     <string name="upcoming_widget">GDG - nadchadzajúce udalosti</string>
     <string name="global">Globálne</string>
@@ -91,7 +90,7 @@
     <string name="done">Hotovo</string>
     <string name="allow_analytics">Povoľe aplikácii zasielať anonýmmne dáta používania pre zlepšienie aplikácie</string>
     <string name="enable_gcm">Zapnite GDG cloudové notifikácie (dostávajte notifikácie o nových udalostiach)</string>
-    <string name="step3_text">Jedna vec pred tým než začneme...</string>
+    <string name="step3_text">Jedna vec pred tým než začneme…</string>
 
     <string name="share_on_gplus">Pozvite priateľov</string>
     <string name="join_me">Pridajte sa na tento event</string>

@@ -20,7 +20,6 @@
   <string name="drawer_close">Fermez le menu de navigation</string>
   <string name="info">Détails</string>
   <string name="events">Events</string>
-  <string name="app_name">GDG</string>
   <string name="add_to_calendar">Ajouter au calendrier</string>
   <string name="share_with_googleplus">partager sur Google+</string>
   <string name="no_scheduled_events">Pas d\'event prévue\ndans les 30 prochains jours</string>
@@ -74,7 +73,7 @@
     bienvenu à
     participer et améliorer cette application.\n\nVisitez GitHub a github.com/gdg-x et explorez notre code.
   </string>
-  <string name="about_license">(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof
+  <string name="about_license">© 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof
     the Apache 2.0 License
   </string>
   <string name="past_event">PASSÉ</string>

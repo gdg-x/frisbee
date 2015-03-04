@@ -8,7 +8,7 @@
 
   <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="0dp"
     android:layout_weight="1"
     android:gravity="center_vertical|center_horizontal"
     android:orientation="vertical"
@@ -42,10 +42,8 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginBottom="15dip"
-      android:autoText="false"
       android:gravity="center_horizontal"
       android:linksClickable="false"
-      android:phoneNumber="false"
       android:singleLine="false"
       android:text="@string/or"
       android:textAppearance="@android:style/TextAppearance.Large"
@@ -63,5 +61,6 @@
     android:id="@+id/imageView"
     android:layout_width="match_parent"
     android:layout_height="15dip"
+    android:contentDescription="@null"
     android:background="@drawable/googly_bar" />
 </LinearLayout>
