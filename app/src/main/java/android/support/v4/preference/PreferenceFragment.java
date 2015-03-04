@@ -1,6 +1,5 @@
 package android.support.v4.preference;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
@@ -31,22 +31,35 @@ public abstract class PreferenceFragment extends Fragment {
     private static final int MSG_REQUEST_FOCUS = 2;
     private static final String PREFERENCES_TAG = "android:preferences";
     private static final float HC_HORIZONTAL_PADDING = 16;
+    
+    private Handler mHandler;
+    
+    static class PreferenceHandler extends Handler {
+        private final WeakReference<PreferenceScreen> mPreferenceScreenReference;
+        private final WeakReference<ListView> mListReference;
 
-    @SuppressLint("HandlerLeak")
-    private final Handler mHandler = new Handler() {
+        PreferenceHandler(PreferenceScreen preferenceScreen, ListView listView) {
+            mPreferenceScreenReference = new WeakReference<>(preferenceScreen);
+            mListReference = new WeakReference<>(listView);
+        }
+        
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MSG_BIND_PREFERENCES:
-                    bindPreferences();
-                    break;
-                case MSG_REQUEST_FOCUS:
-                    mList.focusableViewAvailable(mList);
-                    break;
+            final ListView listView = mListReference.get();
+            final PreferenceScreen preferenceScreen = mPreferenceScreenReference.get();
+            if (listView != null && preferenceScreen != null) {
+                switch (msg.what) {
+                    case MSG_BIND_PREFERENCES:
+                        bindPreferences(preferenceScreen, listView);
+                        break;
+                    case MSG_REQUEST_FOCUS:
+                        listView.focusableViewAvailable(listView);
+                        break;
+                }
             }
         }
-    };
-
+    }
+    
     private boolean mHavePrefs;
     private boolean mInitDone;
     private ListView mList;
@@ -75,9 +88,11 @@ public abstract class PreferenceFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        
+        mHandler = new PreferenceHandler(getPreferenceScreen(), getListView());
 
         if (mHavePrefs) {
-            bindPreferences();
+            bindPreferences(getPreferenceScreen(), getListView());
         }
 
         mInitDone = true;
@@ -209,10 +224,9 @@ public abstract class PreferenceFragment extends Fragment {
         }
     }
 
-    private void bindPreferences() {
-        final PreferenceScreen preferenceScreen = getPreferenceScreen();
+    private static void bindPreferences(PreferenceScreen preferenceScreen, ListView listView) {
         if (preferenceScreen != null) {
-            preferenceScreen.bind(getListView());
+            preferenceScreen.bind(listView);
         }
     }
 
