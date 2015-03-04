@@ -21,7 +21,6 @@
     <string name="drawer_close">Sluit Drawer</string>
     <string name="info">Info</string>
     <string name="events">Events</string>
-    <string name="app_name">GDG</string>
     <string name="add_to_calendar">Aan de kalender toevoegen</string>
     <string name="share_with_googleplus">Met Google+ delen</string>
     <string name="no_scheduled_events">Geen events binnen de folgende 30 dagen</string>

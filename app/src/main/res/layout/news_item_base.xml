@@ -17,6 +17,7 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content">
 
@@ -48,7 +49,7 @@
           android:autoLink="email|map|web"
           android:linksClickable="true"
           android:padding="10dip"
-          android:text="New Text" />
+          tools:text="Content" />
 
         <LinearLayout
           android:id="@+id/shareContainer"
@@ -72,7 +73,7 @@
             android:autoLink="all"
             android:linksClickable="true"
             android:padding="10dip"
-            android:text="New Text" />
+            tools:text="Share Content" />
         </LinearLayout>
       </LinearLayout>
 
@@ -106,7 +107,7 @@
           android:layout_height="wrap_content"
           android:gravity="right"
           android:paddingTop="2dip"
-          android:text="New Text"
+          tools:text="01.01.2000"
           android:textColor="@color/asbestos" />
       </LinearLayout>
     </LinearLayout>

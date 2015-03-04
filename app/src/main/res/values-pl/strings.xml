@@ -21,7 +21,6 @@
     <string name="drawer_close">Zamknij Menu</string>
     <string name="info">Informacje</string>
     <string name="events">Wydarzenia</string>
-    <string name="app_name">GDG</string>
     <string name="add_to_calendar">Dodaj do kalendarza</string>
     <string name="share_with_googleplus">Udostępnij w Google+</string>
     <string name="no_scheduled_events">Brak zaplanowanych wydarzeń\nw najbliższych 30 dniach</string>
@@ -93,7 +92,7 @@
     <string name="done">Gotowe</string>
     <string name="allow_analytics">Pozwól nam na zbieranie anonimowych statystyk o użyciu aplikacji w celu jej ulepszania</string>
     <string name="enable_gcm">Włącz powiadomienia o nowych wydarzeniach GDG</string>
-    <string name="step3_text">Ostatnia informacja zanim zaczniesz...</string>
+    <string name="step3_text">Ostatnia informacja zanim zaczniesz…</string>
     <string name="share_on_gplus">Zaproś znajomych</string>
     <string name="join_me">Wybierz się ze mną na to wydarzenie!</string>
     <string name="name_not_known">nie znaleziono osoby</string>

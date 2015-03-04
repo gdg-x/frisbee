@@ -24,6 +24,7 @@
   <include layout="@layout/toolbar_actionbar" />
 
   <fragment
+    android:id="@+id/settings_fragment"
     android:name="org.gdg.frisbee.android.fragment.SettingsFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />

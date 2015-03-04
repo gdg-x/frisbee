@@ -91,7 +91,7 @@
     <string name="done">Bitti</string>
     <string name="allow_analytics">Uygulamayı geliştirmemize yardımcı olmak için anonim kullanım bilgisi toplamamıza izin verin.</string>
     <string name="enable_gcm">GDG Bildirimlerini Aktifleştir (yeni etkinliklerden haberin olsun.)</string>
-    <string name="step3_text">Başlamadan önce son bir şey...</string>
+    <string name="step3_text">Başlamadan önce son bir şey…</string>
     <string name="share_on_gplus">Arkadaşlarını Davet Et</string>
     <string name="join_me">Bu etkinlikle bana katıl!</string>
     <string name="name_not_known">İsim bilinmiyor.</string>

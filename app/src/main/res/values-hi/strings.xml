@@ -21,7 +21,6 @@
     <string name="drawer_close">ड्रावर बंद करें</string>
     <string name="info">सूचना</string>
     <string name="events">कार्यक्रम</string>
-    <string name="app_name">जीडीजी </string>
     <string name="add_to_calendar">कैलेंडर में दर्ज करें </string>
     <string name="share_with_googleplus">गूगल+ पर शेयर करें </string>
     <string name="no_scheduled_events">अगले ३० दिनो में \n कोई कार्यक्रम आयोजित नहीं है </string>
@@ -91,7 +90,7 @@
     <string name="done">कर लिया गया</string>
     <string name="allow_analytics">हमें गुमनाम रूप से प्रयोग की जानकारी एकत्र करने की अनुमति दें</string>
     <string name="enable_gcm">जी डी जी Cloud सूचनाएँ शुरू करें  (नए कार्यक्रमों के बारे में जानें)</string>
-    <string name="step3_text">शुरू करने से पहले...</string>
+    <string name="step3_text">शुरू करने से पहले…</string>
     <string name="share_on_gplus">दोस्तों को आमंत्रित करें</string>
     <string name="join_me">मेरे साथ इस कार्यक्रम में शामिल होँ!</string>
     <string name="name_not_known">अज्ञात नाम</string>

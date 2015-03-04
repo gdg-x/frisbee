@@ -21,7 +21,6 @@
     <string name="drawer_close">Cerrar Drawer</string>
     <string name="info">Información</string>
     <string name="events">Eventos</string>
-    <string name="app_name">GDG</string>
     <string name="add_to_calendar">Agregar al calendario</string>
     <string name="share_with_googleplus">Compartir con Google+</string>
     <string name="no_scheduled_events">No hay eventos programados\nen los próximos 30 días</string>
@@ -78,7 +77,6 @@
     <string name="pulse_circlers">Circulos</string>
     <string name="home_gdg">GDG</string>
     <string name="home_gdg_summary">Selecciona tu GDG principal</string>
-    <string name="devfest">DevFest 2014</string>
     <string name="analytics">Analytics</string>
     <string name="analytics_summary_on">La aplicación actualmente transmite datos de uso anónimos que nos permite mejorarla</string>
     <string name="analytics_summary_off">La aplicación actualmente no transmite los datos anónimos sobre el uso </string>
@@ -92,7 +90,7 @@
     <string name="done">Hecho</string>
     <string name="allow_analytics">Permitenos recoger datos anónimos sobre el uso que nos ayudan a mejorar la aplicación</string>
     <string name="enable_gcm">Habilitar Notificaciones GDG desde la Nube (ser notificado sobre los nuevos eventos)</string>
-    <string name="step3_text">Una cosa más antes de empezar ...</string>
+    <string name="step3_text">Una cosa más antes de empezar …</string>
     <string name="share_on_gplus">Invitar amigos</string>
     <string name="join_me">Acompáñame en este evento!</string>
     <string name="name_not_known">Nombre desconocido</string>
@@ -106,7 +104,6 @@
     <string name="order_by_distance">Ordenar por distancia</string>
     <string name="gcm_event_ticker">Un nuevo evento de su GDG principal ha sido agendado</string>
     <string name="ioextended_description">Google I/O Extended se trata de unirte a la conferencia de Google IO en tu grupo local.</string>
-    <string name="ioextended">Extended 2014</string>
     <string name="media_route_menu_title">Cast session</string>
     <string name="navigate_to">Dirección del evento</string>
 </resources>

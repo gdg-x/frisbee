@@ -21,7 +21,6 @@
     <string name="drawer_close">Close Drawer</string>
     <string name="info">Info</string>
     <string name="events">Events</string>
-    <string name="app_name">GDG</string>
     <string name="add_to_calendar">Zum Kalender hinzufügen</string>
     <string name="share_with_googleplus">Mit Google+ teilen</string>
     <string name="no_scheduled_events">Keine Events\nin den nächsten 30 Tagen</string>
@@ -91,7 +90,7 @@
     <string name="done">Fertig</string>
     <string name="allow_analytics">Erlaube uns anonyme Nutzungsdaten zur Verbesserung der App zu sammeln</string>
     <string name="enable_gcm">Aktiviere GDG Cloud Benachrichtigungen (werde über neue Events benachrichtigt)</string>
-    <string name="step3_text">Eine Sache noch...</string>
+    <string name="step3_text">Eine Sache noch…</string>
     <string name="share_on_gplus">Freunde einladen</string>
     <string name="join_me">Begleitet mich zu diesem Event!</string>
     <string name="name_not_known">Unbekannt</string>

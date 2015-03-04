@@ -21,7 +21,6 @@
     <string name="drawer_close">關閉側欄</string>
     <string name="info">資訊</string>
     <string name="events">活動</string>
-    <string name="app_name">GDG</string>
     <string name="add_to_calendar">新增至月曆</string>
     <string name="share_with_googleplus">透過 Google+ 分享</string>
     <string name="no_scheduled_events">未來 30 天內無安排活動</string>
@@ -77,7 +76,6 @@
     <string name="pulse_circlers">分會圈選人</string>
     <string name="home_gdg">所在地 GDG</string>
     <string name="home_gdg_summary">設定您主要的 GDG</string>
-    <string name="devfest">DevFest 2013</string>
     <string name="analytics">分析</string>
     <string name="analytics_summary_on">應用程式目前會傳送匿名使用資料作為改善參考</string>
     <string name="analytics_summary_off">應用程式目前不會傳送任何匿名使用資料</string>

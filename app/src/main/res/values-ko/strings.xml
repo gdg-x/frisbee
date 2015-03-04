@@ -21,7 +21,6 @@
     <string name="drawer_close">"서랍 닫기"</string>
     <string name="info">"정보"</string>
     <string name="events">"이벤트"</string>
-    <string name="app_name">"GDG"</string>
     <string name="add_to_calendar">"일정에 추가"</string>
     <string name="share_with_googleplus">"Google+에 공유"</string>
     <string name="no_scheduled_events">"30일 안에 예정된\n이벤트가 없습니다."</string>

@@ -110,6 +110,7 @@ android {
         checkReleaseBuilds false
 
         warning 'InvalidPackage'
+        warning 'ImpliedQuantity'
     }
 
     compileOptions {

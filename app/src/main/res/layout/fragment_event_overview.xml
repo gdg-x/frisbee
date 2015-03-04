@@ -39,6 +39,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_margin="8dip"
+        android:contentDescription="@null"
         android:scaleType="fitCenter"
         android:src="@drawable/icon" />
 
@@ -106,7 +107,7 @@
           android:id="@+id/event_description"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:autoLink="all"/>
+          android:autoLink="all" />
       </LinearLayout>
 
     </RelativeLayout>

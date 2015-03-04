@@ -255,7 +255,7 @@ public class InfoFragment extends Fragment {
                         }
                     }
                 } else {
-                    TextView tv = (TextView) mInflater.inflate(R.layout.list_resource_item, null);
+                    TextView tv = (TextView) mInflater.inflate(R.layout.list_resource_item, (ViewGroup) getView(), false);
                     tv.setText(Html.fromHtml("<a href='" + url.getValue() + "'>" + url.get("label") + "</a>"));
                     mResourcesBox.addView(tv);
                 }
@@ -334,7 +334,7 @@ public class InfoFragment extends Fragment {
     }
 
     public View createOrganizerView(Person person) {
-        View convertView = mInflater.inflate(R.layout.list_organizer_item, null);
+        View convertView = mInflater.inflate(R.layout.list_organizer_item, (ViewGroup) getView(), false);
 
         ImageView picture = (ImageView) convertView.findViewById(R.id.icon);
 
@@ -354,7 +354,7 @@ public class InfoFragment extends Fragment {
     }
 
     private View getUnknownOrganizerView() {
-        View convertView = mInflater.inflate(R.layout.list_organizer_item, null);
+        View convertView = mInflater.inflate(R.layout.list_organizer_item, (ViewGroup) getView(), false);
 
         ImageView picture = (ImageView) convertView.findViewById(R.id.icon);
         picture.setImageResource(R.drawable.ic_no_avatar);
@@ -365,7 +365,7 @@ public class InfoFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_chapter_info, null);
+        View v = inflater.inflate(R.layout.fragment_chapter_info, container, false);
         ButterKnife.inject(this, v);
         return v;
     }

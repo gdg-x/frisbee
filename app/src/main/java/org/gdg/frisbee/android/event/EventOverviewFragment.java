@@ -93,8 +93,8 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
     private ShareActionProvider mShareActionProvider;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_event_overview, null);
+    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_event_overview, parent, false);
         ButterKnife.inject(this, v);
 
         setHasOptionsMenu(true);

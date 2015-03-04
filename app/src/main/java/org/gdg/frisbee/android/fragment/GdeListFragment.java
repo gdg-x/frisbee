@@ -43,7 +43,7 @@ public class GdeListFragment extends GdgListFragment implements GdeActivity.List
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Timber.d("onCreateView()");
-        View v = inflater.inflate(R.layout.fragment_gde_list, null);
+        View v = inflater.inflate(R.layout.fragment_gde_list, container, false);
         ButterKnife.inject(this, v);
         return v;
     }
