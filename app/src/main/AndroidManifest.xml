@@ -46,6 +46,7 @@
     android:backupAgent=".app.BackupAgent"
     android:hardwareAccelerated="true"
     android:icon="@drawable/icon"
+    android:allowBackup="true"
     android:label="@string/app_name"
     android:largeHeap="true"
     android:logo="@drawable/ic_logo_wide"

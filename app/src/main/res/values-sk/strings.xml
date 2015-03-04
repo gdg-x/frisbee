@@ -67,7 +67,7 @@
     <string name="contributors">GDG aplikácia je komunitný projekt a je open source. Tímto ľudom vďačíme za jej funkčnosť:</string>
     <string name="get_involved">Zapoj sa!</string>
     <string name="get_involved_text">GDG aplikácia je komunitný projekt a je open source. Každý môže prispieť do jej vývoja. \n\nChoď na GitHub a sťahuj kód. \n\nhttps://github.com/gdg-x</string>
-    <string name="about_license">(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicencované pod\n Apache 2.0 License</string>
+    <string name="about_license">© 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicencované pod\n Apache 2.0 License</string>
     <string name="past_event">UPLYNULÝ</string>
     <string name="upcoming_widget">GDG - nadchadzajúce udalosti</string>
     <string name="global">Globálne</string>

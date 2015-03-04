@@ -67,7 +67,7 @@
     <string name="contributors">GDG appka je vytvořena komunitou a je open-source. Tito lidé přispěli:</string>
     <string name="get_involved">Zapoj se!</string>
     <string name="get_involved_text">GDG appka je vytvořena komunitou a je open-source. Každý se může zapojit a rozvíjet appku.\n\nProstě běž na GitHub a stáhni si kód.\n\nhttps://github.com/gdg-x</string>
-    <string name="about_license">(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicencováno pod\nApache 2.0</string>
+    <string name="about_license">© 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicencováno pod\nApache 2.0</string>
     <string name="past_event">MINULÁ</string>
     <string name="upcoming_widget">GDG - Nadcházející eventy</string>
     <string name="global">Globalní</string>

@@ -67,7 +67,7 @@
     <string name="contributors">"GDG 앱은 커뮤니티의 노력으로 만들어졌으면 오픈소스로 공개되어 있습니다. 아래의 분들이 앱에 기여해 주셨습니다."</string>
     <string name="get_involved">"참여하기!"</string>
     <string name="get_involved_text">"GDG 앱은 커뮤니티의 노력으로 만들어졌으면 오픈소스로 공개되어 있습니다.  이 앱의 개발과 개선에는 누구나 참여할 수 있습니다.\n\n소스코드는 Github에서 체크 아웃할 수 있습니다.\n\nhttps://github.com/gdg-x"</string>
-    <string name="about_license">"(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nApache 2.0 라이센스에 따라 \n사용이 허가됩니다."</string>
+    <string name="about_license">"© 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nApache 2.0 라이센스에 따라 \n사용이 허가됩니다."</string>
     <string name="past_event">"종료"</string>
     <string name="upcoming_widget">"GDG - 예정된 이벤트"</string>
     <string name="global">"전세계"</string>

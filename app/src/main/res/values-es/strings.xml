@@ -67,7 +67,7 @@
     <string name="contributors">La aplicación de GDG es un esfuerzo comunitario y de código abierto -del ingles "open source"-. Estas son algunas de las personas que colaboraron con la aplicación:</string>
     <string name="get_involved">Colabora!</string>
     <string name="get_involved_text">La aplicación de GDG es un esfuerzo comunitario y de código abierto. Todos son bienvenidos a participar y mejorar esta aplicacion.\n\nSolo diríjanse a GitHub y bájense el código.\n\nhttps://github.com/gdg-x</string>
-    <string name="about_license">(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof the Apache 2.0 License</string>
+    <string name="about_license">© 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof the Apache 2.0 License</string>
     <string name="past_event">Ocurridos</string>
     <string name="upcoming_widget">GDG - Próximos eventos</string>
     <string name="global">Global</string>

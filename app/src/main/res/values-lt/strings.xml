@@ -67,7 +67,7 @@
     <string name="contributors">GDG programėlė yra atvirojo kodo. Štai šie žmonės prisidėjo:</string>
     <string name="get_involved">Prisijunk ir Tu!</string>
     <string name="get_involved_text">GDG programėlė yra atvirojo kodo. Visi yra kviečiami prisijungti ir patobulinti šią programėlę.\n\nTiesiog atsidarykite GitHub ir parsisiųskite kodą.\n\nhttps://github.com/gdg-x</string>
-    <string name="about_license">(c) 2013 GDG Frisbee Projektas\nVisos teisės saugomos.\n\nApache 2.0 Licenzija</string>
+    <string name="about_license">© 2013 GDG Frisbee Projektas\nVisos teisės saugomos.\n\nApache 2.0 Licenzija</string>
     <string name="past_event">PRAĖJĘ</string>
     <string name="upcoming_widget">GDG - Artėjantys renginiai</string>
     <string name="global">Globalus</string>

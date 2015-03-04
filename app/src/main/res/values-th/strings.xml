@@ -67,7 +67,7 @@
     <string name="contributors">แอพพลิเคชัน GDG เป็นผลงานส่วนหนึ่งของชุมชนนักพัฒนา โดยเปิดให้มีการเข้าถึงที่มาและยำไปใช้ได้โดยเสรี(Open source) โดยบุคคลเหล่านี้คือผู้ที่มีส่วนช่วยในการพัฒนา:</string>
     <string name="get_involved">เข้าร่วมกับเรา</string>
     <string name="get_involved_text">แอพพลิเคชัน GDG  เป็นผลงานส่วนหนึ่งของชุมชนนักพัฒนา โดยเปิดให้มีการเข้าถึงที่มาและยำไปใช้ได้โดยเสรี(Open source) ทุกคนสามารถร่วมเป็นส่วนหนึ่งในการเข้าร่วมและพัฒนาแอพพลิเคชันนี้ เพียงไปที่ Github แล้ว checkout ซอร์สโค้ดจาก \n\nhttps://github.com/gdg-x</string>
-    <string name="about_license">(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof the Apache 2.0 License</string>
+    <string name="about_license">© 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof the Apache 2.0 License</string>
     <string name="past_event">ที่ผ่านมา</string>
     <string name="upcoming_widget">GDG - กิจกรรมที่กำลังจะมีขึ้น</string>
     <string name="global">รอบโลก</string>

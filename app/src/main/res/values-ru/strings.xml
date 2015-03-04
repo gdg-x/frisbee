@@ -67,7 +67,7 @@
     <string name="contributors">Приложение GDG создано усилиями сообщества и имеет открытый исходный код. Следуюшие разработчики приняли участие в создании приложения:</string>
     <string name="get_involved">Прими участие!</string>
     <string name="get_involved_text">Приложение GDG создано усилиями сообщества и имеет открытый исходный код. Все желающие могут участвовать и улучшать это приложение.\n\nОтправляйтесь на GitHub и сделайте checkout нашего кода.\n\nhttps://github.com/gdg-x</string>
-    <string name="about_license">(c) 2013 Проект GDG Frisbee\nВсе права защищены.\n\nРаспространяется под лицензией Apache 2.0</string>
+    <string name="about_license">© 2013 Проект GDG Frisbee\nВсе права защищены.\n\nРаспространяется под лицензией Apache 2.0</string>
     <string name="past_event">ПРОШЛОЕ</string>
     <string name="upcoming_widget">GDG - Предстоящее мероприятие</string>
     <string name="global">Весь мир</string>

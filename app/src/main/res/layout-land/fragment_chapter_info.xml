@@ -44,7 +44,8 @@
     <LinearLayout
       android:id="@+id/scrollView"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
+      android:layout_height="wrap_content"
+      android:baselineAligned="false"
       android:orientation="horizontal"
       android:paddingBottom="5dip"
       android:paddingLeft="10dip"

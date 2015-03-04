@@ -20,9 +20,11 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import org.gdg.frisbee.android.R;
 
@@ -34,8 +36,9 @@ public class SeasonsGreetingsFragment extends DialogFragment {
     }
 
     @Override
+    @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        View seasonView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_seasons_greetings, null);
+        View seasonView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_seasons_greetings, (ViewGroup) getView(), false);
         return new AlertDialog.Builder(getActivity())
                 .setView(seasonView)
                 .setNeutralButton(R.string.done, new DialogInterface.OnClickListener() {
