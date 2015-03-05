@@ -55,18 +55,6 @@ public final class PrefUtils {
     }
 
     @Nullable
-    public static Chapter getHomeChapter(final Context context) {
-        final String homeChapterId = getHomeChapterId(context);
-        if (homeChapterId != null) {
-            return new Chapter(
-                    prefs(context).getString(SETTINGS_HOME_GDG_NAME, null),
-                    homeChapterId);
-        } else {
-            return null;
-        }
-    }
-
-    @Nullable
     public static String getHomeChapterId(final Context context) {
         return prefs(context)
                 .getString(SETTINGS_HOME_GDG, null);

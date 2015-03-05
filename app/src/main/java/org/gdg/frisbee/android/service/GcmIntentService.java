@@ -16,7 +16,6 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.event.EventActivity;
 import org.gdg.frisbee.android.receiver.GCMReceiver;
@@ -80,7 +79,7 @@ public class GcmIntentService extends IntentService {
                 .build());
 
         eventIntent.setClass(getApplicationContext(), EventActivity.class);
-        eventIntent.putExtra(Const.EXTRA_CHAPTER, new Chapter("", extras.getString("chapter")));
+        eventIntent.putExtra(Const.EXTRA_CHAPTER_ID, extras.getString("chapter"));
         eventIntent.putExtra(Const.EXTRA_EVENT_ID, extras.getString("id"));
         eventIntent.putExtra(Const.EXTRA_SECTION, EventActivity.EventPagerAdapter.SECTION_OVERVIEW);
 

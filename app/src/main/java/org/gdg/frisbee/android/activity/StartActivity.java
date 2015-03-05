@@ -24,7 +24,6 @@ import android.widget.Toast;
 
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
-import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.utils.PrefUtils;
 
 public class StartActivity extends ActionBarActivity {
@@ -43,9 +42,9 @@ public class StartActivity extends ActionBarActivity {
         } else {
             intentForStart = new Intent(StartActivity.this, MainActivity.class);
 
-            final Chapter selectedChapter = PrefUtils.getHomeChapter(this);
-            if (selectedChapter != null) {
-                intentForStart.putExtra(Const.EXTRA_CHAPTER, selectedChapter);
+            final String selectedChapterGplusId = PrefUtils.getHomeChapterId(this);
+            if (selectedChapterGplusId != null) {
+                intentForStart.putExtra(Const.EXTRA_CHAPTER_ID, selectedChapterGplusId);
             }
         }
 

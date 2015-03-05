@@ -236,7 +236,7 @@ public class FirstStartActivity extends ActionBarActivity implements
 
         Intent resultData = new Intent(this, MainActivity.class);
         resultData.setAction("finish_first_start");
-        resultData.putExtra(Const.EXTRA_CHAPTER, mSelectedChapter);
+        resultData.putExtra(Const.EXTRA_CHAPTER_ID, mSelectedChapter.getGplusId());
         startActivity(resultData);
 
         super.finish();

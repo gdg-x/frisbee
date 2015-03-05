@@ -29,14 +29,25 @@ public class Const {
     private Const() {
     }
 
+    //GitHub
     public static final String GITHUB_ORGA = "gdg-x";
     public static final String GITHUB_REPO = "frisbee";
 
+    //Special Events
     public static final String EXTRA_TAGGED_EVENT = "org.gdg.frisbee.TAGGED_EVENT";
     public static final String EXTRA_TAGGED_EVENT_CACHEKEY = "org.gdg.frisbee.TAGGED_EVENT_CACHEKEY";
+    //Special Events Dates
+    public static final DateTime START_TIME_IOEXTENDED =    new DateTime(2015, 5, 1, 0, 0);
+    public static final DateTime START_TIME_STUDY_JAMS =    new DateTime(2015, 2, 1, 0, 0);
+    public static final DateTime START_TIME_WTM =           new DateTime(2015, 2, 1, 0, 0);
+
+    public static final DateTime END_TIME_IOEXTENDED =      new DateTime(2015, 6, 1, 0, 0);
+    public static final DateTime END_TIME_STUDY_JAMS =      new DateTime(2015, 5, 1, 0, 0);
+    public static final DateTime END_TIME_WTM =             new DateTime(2015, 4, 1, 0, 0);
 
     public static final String EXTRA_PLUS_ID = "plus_id";
 
+    //Navigation Drawer
     public static final int DRAWER_HOME = 0;
     public static final int DRAWER_PULSE = 2;
     public static final int DRAWER_SPECIAL = 3;
@@ -47,16 +58,27 @@ public class Const {
     public static final int DRAWER_HELP = 101;
     public static final int DRAWER_FEEDBACK = 102;
     public static final int DRAWER_ABOUT = 103;
+
+    //Arrow
     public static final String QR_MSG_PREFIX = "gdgx://arrow?m=";
     public static final String PREF_ORGANIZER_CHECK_TIME = "pref_organizer_check_time";
     public static final String PREF_ORGANIZER_CHECK_ID = "pref_organizer_check_id";
     public static final long ORGANIZER_CHECK_MAX_TIME = 2592000000L; // 30 days
+    public static final String ARROW_MIME = "application/vnd.org.gdgx.frisbee.arrow";
+    public static final String ARROW_LB = "CgkIh5yNxL8MEAIQBw";
+    public static final String ARROW_K = "XXXX111122223333";
+    public static final int ARROW_STATE_KEY = 1;
+
+    public static final int ARROW_DONE_STATE_KEY = 2;
+
     public static final String EXTRA_EVENT_ID = "EXTRA_EVENT_ID";
     public static final String EXTRA_SECTION = "EXTRA_SECTION";
     public static final String URL_DEVELOPERS_GOOGLE_COM = "https://developers.google.com";
     public static final String URL_HELP = "https://support.google.com/developergroups";
     public static final String EVENTS = "events";
-    public static final String EXTRA_CHAPTER = "org.gdg.frisbee.CHAPTER";
+
+    //Keys
+    public static final String EXTRA_CHAPTER_ID = "org.gdg.frisbee.CHAPTER";
     public static final String CACHE_KEY_CHAPTER_LIST_HUB = "chapter_list_hub";
     public static final String CACHE_KEY_PULSE_GLOBAL = "pulse_global";
     public static final String CACHE_KEY_GDE_MAP = "gde_map";
@@ -65,20 +87,6 @@ public class Const {
     public static final String ANDROID_DEVELOPERS_YT_ID = "UCVHFbqXqoYvEWM1Ddxl0QDg";
     public static final String YOUTUBE_DEVELOPERS_YT_ID = "UCtVd0c0tGXuTSbU5d8cSBUg";
 
-    public static final String ARROW_MIME = "application/vnd.org.gdgx.frisbee.arrow";
-    public static final String ARROW_LB = "CgkIh5yNxL8MEAIQBw";
-    public static final String ARROW_K = "XXXX111122223333";
-    public static final int ARROW_STATE_KEY = 1;
-
-    public static final int ARROW_DONE_STATE_KEY = 2;
 
     public static final String TRUSTSTORE_PW = "VU%&ibkr45pnq39v53x";
-
-    public static final DateTime START_TIME_IOEXTENDED =    new DateTime(2015, 5, 1, 0, 0);
-    public static final DateTime START_TIME_STUDY_JAMS =    new DateTime(2015, 2, 1, 0, 0);
-    public static final DateTime START_TIME_WTM =           new DateTime(2015, 2, 1, 0, 0);
-    
-    public static final DateTime END_TIME_IOEXTENDED =      new DateTime(2015, 6, 1, 0, 0);
-    public static final DateTime END_TIME_STUDY_JAMS =      new DateTime(2015, 5, 1, 0, 0);
-    public static final DateTime END_TIME_WTM =             new DateTime(2015, 4, 1, 0, 0);
 }
