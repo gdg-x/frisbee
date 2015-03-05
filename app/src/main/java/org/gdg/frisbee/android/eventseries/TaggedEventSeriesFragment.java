@@ -30,6 +30,7 @@ import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.EventAdapter;
 import org.gdg.frisbee.android.api.PagedList;
+import org.gdg.frisbee.android.api.model.TaggedEvent;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.EventDateComparator;
@@ -114,10 +115,10 @@ public class TaggedEventSeriesFragment extends EventListFragment {
     void fetchEvents() {
         setIsLoading(true);
 
-        Callback<PagedList<org.gdg.frisbee.android.api.model.TaggedEvent>> listener = new Callback<PagedList<org.gdg.frisbee.android.api.model.TaggedEvent>>() {
+        Callback<PagedList<TaggedEvent>> listener = new Callback<PagedList<TaggedEvent>>() {
 
             @Override
-            public void success(final PagedList<org.gdg.frisbee.android.api.model.TaggedEvent> taggedEventPagedList, final retrofit.client.Response response) {
+            public void success(final PagedList<TaggedEvent> taggedEventPagedList, final retrofit.client.Response response) {
                 mEvents.addAll(taggedEventPagedList.getItems());
 
                 
@@ -148,7 +149,7 @@ public class TaggedEventSeriesFragment extends EventListFragment {
             App.getInstance().getModelCache().getAsync(mCacheKey, false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
-                    ArrayList<org.gdg.frisbee.android.api.model.TaggedEvent> events = (ArrayList<org.gdg.frisbee.android.api.model.TaggedEvent>) item;
+                    ArrayList<TaggedEvent> events = (ArrayList<TaggedEvent>) item;
 
                     mAdapter.addAll(events);
                     sortEvents();

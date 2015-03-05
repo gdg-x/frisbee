@@ -63,18 +63,18 @@ public class GroupDirectory {
     private static final String SHOWCASE_NEXT_URL = BASE_URL + "/showcase/next";
     private static final String PULSE_URL = BASE_URL + "/groups/pulse_stats/";
     private static final String COUNTRY_PULSE_URL = BASE_URL + "/groups/pulse_stats/%s/";
-    private static Hub _hubInstance;
+    private static Hub hubInstance;
 
     public GroupDirectory() {
     }
 
     public Hub getHub() {
-        if (_hubInstance == null) {
-            _hubInstance = new RestAdapter.Builder()
+        if (hubInstance == null) {
+            hubInstance = new RestAdapter.Builder()
                     .setEndpoint("https://hub.gdgx.io/api/v1")
                     .build().create(Hub.class);
         }
-        return _hubInstance;
+        return hubInstance;
     }
 
     public static interface Hub {
