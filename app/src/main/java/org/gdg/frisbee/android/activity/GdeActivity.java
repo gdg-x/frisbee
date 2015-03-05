@@ -9,15 +9,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.SparseArray;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
+import com.google.gson.FieldNamingPolicy;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.ApiRequest;
 import org.gdg.frisbee.android.api.GdeDirectory;
+import org.gdg.frisbee.android.api.GsonRequest;
 import org.gdg.frisbee.android.api.model.Gde;
-import org.gdg.frisbee.android.api.model.GdeList;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.fragment.GdeListFragment;
@@ -27,12 +25,17 @@ import org.gdg.frisbee.android.view.SlidingTabLayout;
 import org.joda.time.DateTime;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.InjectView;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.converter.GsonConverter;
 import timber.log.Timber;
 
 public class GdeActivity extends GdgNavDrawerActivity {
@@ -61,55 +64,63 @@ public class GdeActivity extends GdgNavDrawerActivity {
 
         mViewPagerAdapter = new GdeCategoryAdapter(getSupportFragmentManager());
 
-        final GdeDirectory gdeDirectory = new GdeDirectory();
-        final ApiRequest mFetchGdesTask = gdeDirectory.getDirectory(new Response.Listener<GdeList>() {
+
+        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_GDE_MAP, new ModelCache.CacheListener() {
             @Override
-            public void onResponse(final GdeList directory) {
-                App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_GDE_MAP, 
-                        directory, 
-                        DateTime.now().plusDays(4), 
+            public void onGet(Object item) {
+                ArrayList<Gde> directory = (ArrayList<Gde>) item;
+                addGdes(directory);
+            }
+
+            @Override
+            public void onNotFound(String key) {
+                fetchGdeDirectory();
+            }
+        });
+    }
+    
+    private void fetchGdeDirectory() {
+
+        GdeDirectory gdeDirectoryClient = new RestAdapter.Builder()
+                .setEndpoint("https://gde-map.appspot.com")
+                .setConverter(new GsonConverter(GsonRequest.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)))
+                .build().create(GdeDirectory.class);
+        
+        gdeDirectoryClient.getDirectory(new Callback<ArrayList<Gde>>() {
+            @Override
+            public void success(final ArrayList<Gde> directory, retrofit.client.Response response) {
+                App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_GDE_MAP,
+                        directory,
+                        DateTime.now().plusDays(4),
                         new ModelCache.CachePutListener() {
                             @Override
                             public void onPutIntoCache() {
                                 addGdes(directory);
                             }
                         });
-
             }
-        }, new Response.ErrorListener() {
+
             @Override
-            public void onErrorResponse(VolleyError volleyError) {
+            public void failure(RetrofitError error) {
+
                 try {
                     Crouton.makeText(GdeActivity.this, R.string.fetch_gde_failed, Style.ALERT).show();
                 } catch (IllegalStateException exception) {
                 }
-                Timber.e("Could'nt fetch GDE list", volleyError);
-            }
-        });
-
-        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_GDE_MAP, new ModelCache.CacheListener() {
-            @Override
-            public void onGet(Object item) {
-                GdeList directory = (GdeList) item;
-                addGdes(directory);
-            }
-
-            @Override
-            public void onNotFound(String key) {
-                mFetchGdesTask.execute();
+                Timber.e(error, "Could'nt fetch GDE list");
             }
         });
     }
 
-    private void addGdes(final GdeList directory) {
+    private void addGdes(final ArrayList<Gde> directory) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                HashMap<String, GdeList> gdeMap = new HashMap<>();
+                HashMap<String, ArrayList<Gde>> gdeMap = new HashMap<>();
 
                 for (Gde gde : directory) {
                     if (!gdeMap.containsKey(gde.getProduct())) {
-                        gdeMap.put(gde.getProduct(), new GdeList());
+                        gdeMap.put(gde.getProduct(), new ArrayList<Gde>());
                     }
 
                     gdeMap.get(gde.getProduct()).add(gde);
@@ -128,37 +139,16 @@ public class GdeActivity extends GdgNavDrawerActivity {
         return null;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Timber.d("onResume()");
-
-        //mSlidingTabLayout.setOnPageChangeListener(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Timber.d("onPause()");
-    }
-
-    public interface Listener {
-        /**
-         * Called when the item has been selected in the ViewPager.
-         */
-        void onPageSelected();
-    }
-
     public class GdeCategoryAdapter extends FragmentStatePagerAdapter implements ViewPager.OnPageChangeListener {
         private final SparseArray<WeakReference<Fragment>> mFragments = new SparseArray<>();
-        private HashMap<String, GdeList> mGdeMap;
+        private HashMap<String, ArrayList<Gde>> mGdeMap;
 
         public GdeCategoryAdapter(FragmentManager fm) {
             super(fm);
             mGdeMap = new HashMap<>();
         }
 
-        public void addMap(Map<String, GdeList> collection) {
+        public void addMap(Map<String, ArrayList<Gde>> collection) {
             mGdeMap.putAll(collection);
         }
 
@@ -204,14 +194,6 @@ public class GdeActivity extends GdgNavDrawerActivity {
             } else {
                 String key = mGdeMap.keySet().toArray(new String[mGdeMap.size()])[position - 1];
                 trackView("GDE/" + key);
-
-                WeakReference<Fragment> ref = mFragments.get(position - 1);
-                Fragment frag = null != ref ? ref.get() : null;
-
-                // We need to notify the fragment that it is selected
-                if (frag != null && frag instanceof Listener) {
-                    ((Listener) frag).onPageSelected();
-                }
             }
         }
 
