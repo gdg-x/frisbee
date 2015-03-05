@@ -16,7 +16,7 @@ public interface GdgXHub {
     void getDirectory(Callback<Directory> callback);
 
     @GET("/events/{id}")
-    void getEvent(@Path("id") String eventId, Callback<EventFullDetails> callback);
+    void getEventDetail(@Path("id") String eventId, Callback<EventFullDetails> callback);
 
     @GET("/events/tag/{tag}/upcoming?perPage=1000")
     void getTaggedEventUpcomingList(@Path("tag") String tag, @Query("_") DateTime now, Callback<PagedList<TaggedEvent>> callback);

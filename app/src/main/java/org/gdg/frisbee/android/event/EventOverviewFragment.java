@@ -37,8 +37,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.plus.People;
@@ -50,7 +48,6 @@ import com.squareup.picasso.Target;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgActivity;
-import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.EventFullDetails;
@@ -68,7 +65,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import timber.log.Timber;
 
-public class EventOverviewFragment extends Fragment implements Response.Listener<EventFullDetails> {
+public class EventOverviewFragment extends Fragment {
 
     @InjectView(R.id.title)
     TextView mTitle;
@@ -111,15 +108,20 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         final String eventId = getArguments().getString(Const.EXTRA_EVENT_ID);
-        GroupDirectory.getEvent(eventId, this, new Response.ErrorListener() {
+        App.getInstance().getGdgXHub().getEventDetail(eventId, new Callback<EventFullDetails>() {
             @Override
-            public void onErrorResponse(VolleyError volleyError) {
+            public void success(EventFullDetails eventFullDetails, retrofit.client.Response response) {
+                onResponse(eventFullDetails);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
                 if (isAdded()) {
                     Crouton.makeText(getActivity(), R.string.server_error, Style.ALERT).show();
                 }
-                Timber.d(volleyError, "error while retrieving event %s", eventId);
+                Timber.d(error, "error while retrieving event %s", eventId);
             }
-        }).execute();
+        });
     }
 
     public void updateWithDetails(EventFullDetails eventFullDetails) {
@@ -146,7 +148,6 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
         return fmt.print(eventFullDetails.getStart());
     }
 
-    @Override
     public void onResponse(final EventFullDetails eventFullDetails) {
         if (getActivity() == null) {
             return;

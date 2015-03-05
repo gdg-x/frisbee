@@ -16,7 +16,6 @@
 
 package org.gdg.frisbee.android.api;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.google.gson.FieldNamingPolicy;
@@ -24,9 +23,7 @@ import com.google.gson.reflect.TypeToken;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
-import org.gdg.frisbee.android.api.deserializer.ZuluDateTimeDeserializer;
 import org.gdg.frisbee.android.api.model.Event;
-import org.gdg.frisbee.android.api.model.EventFullDetails;
 import org.gdg.frisbee.android.api.model.Pulse;
 import org.joda.time.DateTime;
 
@@ -51,7 +48,6 @@ public class GroupDirectory {
     private static final String ALL_CALENDAR_URL = BASE_URL + "/events/calendar/fc?start=1366581600&end=1367186400&_=1366664352089";
     private static final String GDL_CALENDAR_URL = BASE_URL + "/events/calendar/fc?calendar=gdl&start=1366581600&end=1367186400&_=1366664644691";
     private static final String CHAPTER_CALENDAR_URL = BASE_URL + "/events/feed/json";
-    private static final String EVENT_DETAIL_URL = "https://hub.gdgx.io/api/v1/events/";
     private static final String SHOWCASE_NEXT_URL = BASE_URL + "/showcase/next";
     private static final String PULSE_URL = BASE_URL + "/groups/pulse_stats/";
     private static final String COUNTRY_PULSE_URL = BASE_URL + "/groups/pulse_stats/%s/";
@@ -84,20 +80,6 @@ public class GroupDirectory {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
         return new ApiRequest(pulseReq);
-    }
-
-    public static ApiRequest getEvent(String eventId, Response.Listener<EventFullDetails> successListener, Response.ErrorListener errorListener) {
-        GsonRequest<Void, EventFullDetails> eventReq = new GsonRequest<>(Request.Method.GET,
-                EVENT_DETAIL_URL + eventId,
-                EventFullDetails.class,
-                successListener,
-                errorListener,
-                GsonRequest.getGson(FieldNamingPolicy.IDENTITY, new ZuluDateTimeDeserializer()));
-        eventReq.setRetryPolicy(new DefaultRetryPolicy(
-                60000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        return new ApiRequest(eventReq);
     }
 
     public static ApiRequest getChapterEventList(final DateTime start,
