@@ -64,6 +64,8 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
+import retrofit.Callback;
+import retrofit.RetrofitError;
 import timber.log.Timber;
 
 public class EventOverviewFragment extends Fragment implements Response.Listener<EventFullDetails> {
@@ -89,7 +91,6 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
     private boolean mLoading;
     private Directory mDirectory;
     private EventFullDetails mEvent;
-    private ShareActionProvider mShareActionProvider;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -165,21 +166,22 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
             @Override
             public void onNotFound(String key) {
                 if (Utils.isOnline(getActivity())) {
-                    GroupDirectory.getDirectory(new Response.Listener<Directory>() {
+                    App.getInstance().getGdgXHub().getDirectory(new Callback<Directory>() {
                         @Override
-                        public void onResponse(final Directory directory) {
+                        public void success(Directory directory, retrofit.client.Response response) {
+
                             mDirectory = directory;
                             updateGroupDetails(mDirectory.getGroupById(eventFullDetails.getChapter()));
                         }
-                    }, new Response.ErrorListener() {
+
                         @Override
-                        public void onErrorResponse(VolleyError volleyError) {
+                        public void failure(RetrofitError error) {
                             if (isAdded()) {
                                 Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
                             }
-                            Timber.e("Could'nt fetch chapter list", volleyError);
+                            Timber.e(error, "Could'nt fetch chapter list");
                         }
-                    }).execute();
+                    });
                 } else {
                     Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
                 }
@@ -262,7 +264,8 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
             MenuItem shareMenuitem = menu.findItem(R.id.share);
 
             if (mEvent.getEventUrl() != null) {
-                mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareMenuitem);
+                ShareActionProvider mShareActionProvider = 
+                        (ShareActionProvider) MenuItemCompat.getActionProvider(shareMenuitem);
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
                 shareIntent.putExtra(Intent.EXTRA_TEXT, mEvent.getEventUrl());
