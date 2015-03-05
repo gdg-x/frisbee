@@ -24,6 +24,8 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
 
+import timber.log.Timber;
+
 /**
  * Subclass of {@link android.support.v4.app.ListFragment} which provides automatic support for
  * providing the 'swipe-to-refresh' UX gesture by wrapping the the content view in a
@@ -140,17 +142,21 @@ public class SwipeRefreshRecyclerViewFragment extends GdgRecyclerFragment {
      * needed.
      */
     private static boolean canListViewScrollUp(RecyclerView recyclerView) {
-        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-        if (layoutManager instanceof LinearLayoutManager) {
-            int position = ((LinearLayoutManager) layoutManager).findFirstCompletelyVisibleItemPosition();
-            return position != 0;
-        } else if (layoutManager instanceof StaggeredGridLayoutManager) {
-            int[] positions = ((StaggeredGridLayoutManager) layoutManager).findFirstCompletelyVisibleItemPositions(null);
-            for (int i = 0; i < positions.length; i++) {
-                if (positions[i] == 0) {
-                    return false;
+        try {
+            RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+            if (layoutManager instanceof LinearLayoutManager) {
+                int position = ((LinearLayoutManager) layoutManager).findFirstCompletelyVisibleItemPosition();
+                return position != 0;
+            } else if (layoutManager instanceof StaggeredGridLayoutManager) {
+                int[] positions = ((StaggeredGridLayoutManager) layoutManager).findFirstCompletelyVisibleItemPositions(null);
+                for (int i = 0; i < positions.length; i++) {
+                    if (positions[i] == 0) {
+                        return false;
+                    }
                 }
             }
+        } catch (NullPointerException exception) {
+            Timber.e(exception, "Exception in RecyclerView canListViewScrollUp.");
         }
         return true;
     }
