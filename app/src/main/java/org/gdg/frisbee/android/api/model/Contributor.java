@@ -8,8 +8,16 @@ package org.gdg.frisbee.android.api.model;
  * To change this template use File | Settings | File Templates.
  */
 public class Contributor {
-    private String login, avatarUrl, url, htmlUrl;
+    private String name, login, avatarUrl, url, htmlUrl;
     private int contributions;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getLogin() {
         return login;
