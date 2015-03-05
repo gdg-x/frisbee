@@ -29,7 +29,6 @@ import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.api.model.EventFullDetails;
 import org.gdg.frisbee.android.api.model.Pulse;
-import org.gdg.frisbee.android.api.model.TaggedEvent;
 import org.joda.time.DateTime;
 
 import java.io.UnsupportedEncodingException;
@@ -37,11 +36,6 @@ import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.http.GET;
-import retrofit.http.Path;
-import retrofit.http.Query;
 import timber.log.Timber;
 
 /**
@@ -63,34 +57,12 @@ public class GroupDirectory {
     private static final String SHOWCASE_NEXT_URL = BASE_URL + "/showcase/next";
     private static final String PULSE_URL = BASE_URL + "/groups/pulse_stats/";
     private static final String COUNTRY_PULSE_URL = BASE_URL + "/groups/pulse_stats/%s/";
-    private static Hub hubInstance;
-
-    public GroupDirectory() {
-    }
-
-    public Hub getHub() {
-        if (hubInstance == null) {
-            hubInstance = new RestAdapter.Builder()
-                    .setEndpoint("https://hub.gdgx.io/api/v1")
-                    .build().create(Hub.class);
-        }
-        return hubInstance;
-    }
-
-    public static interface Hub {
-
-        @GET("/chapters?perpage=-1")
-        void getDirectory(Callback<Directory> callback);
-
-        @GET("/events/{id}")
-        void getEvent(@Path("id") String eventId, Callback<EventFullDetails> callback);
-
-        @GET("/events/tag/{tag}/upcoming?perPage=1000")
-        void getTaggedEventUpcomingList(@Path("tag") String tag, @Query("_") DateTime now, Callback<PagedList<TaggedEvent>> callback);
+    
+    private GroupDirectory() {
 
     }
 
-    public ApiRequest getDirectory(Response.Listener<Directory> successListener, Response.ErrorListener errorListener) {
+    public static ApiRequest getDirectory(Response.Listener<Directory> successListener, Response.ErrorListener errorListener) {
         GsonRequest<Void, Directory> dirReq = new GsonRequest<>(Request.Method.GET,
                 DIRECTORY_URL,
                 Directory.class,
@@ -100,7 +72,7 @@ public class GroupDirectory {
         return new ApiRequest(dirReq);
     }
 
-    public ApiRequest getPulse(Response.Listener<Pulse> successListener, Response.ErrorListener errorListener) {
+    public static ApiRequest getPulse(Response.Listener<Pulse> successListener, Response.ErrorListener errorListener) {
         GsonRequest<Void, Pulse> pulseReq = new GsonRequest<>(Request.Method.GET,
                 PULSE_URL,
                 Pulse.class,
@@ -110,7 +82,7 @@ public class GroupDirectory {
         return new ApiRequest(pulseReq);
     }
 
-    public ApiRequest getCountryPulse(String country, Response.Listener<Pulse> successListener, Response.ErrorListener errorListener) {
+    public static ApiRequest getCountryPulse(String country, Response.Listener<Pulse> successListener, Response.ErrorListener errorListener) {
         GsonRequest<Void, Pulse> pulseReq = null;
         try {
             Timber.d(String.format(COUNTRY_PULSE_URL, URLEncoder.encode(country, "utf-8")));
@@ -126,7 +98,7 @@ public class GroupDirectory {
         return new ApiRequest(pulseReq);
     }
 
-    public ApiRequest getEvent(String eventId, Response.Listener<EventFullDetails> successListener, Response.ErrorListener errorListener) {
+    public static ApiRequest getEvent(String eventId, Response.Listener<EventFullDetails> successListener, Response.ErrorListener errorListener) {
         GsonRequest<Void, EventFullDetails> eventReq = new GsonRequest<>(Request.Method.GET,
                 EVENT_DETAIL_URL + eventId,
                 EventFullDetails.class,
@@ -140,7 +112,7 @@ public class GroupDirectory {
         return new ApiRequest(eventReq);
     }
 
-    public ApiRequest getChapterEventList(final DateTime start, 
+    public static ApiRequest getChapterEventList(final DateTime start,
                                           final DateTime end, 
                                           final String chapterId, 
                                           Response.Listener<ArrayList<Event>> successListener, 

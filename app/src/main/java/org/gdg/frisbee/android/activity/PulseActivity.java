@@ -73,8 +73,6 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
         Timber.i("onCreate");
         setContentView(R.layout.activity_pulse);
 
-        final GroupDirectory mClient = new GroupDirectory();
-
         mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
         mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.tab_selected_strip));
         mSlidingTabLayout.setOnPageChangeListener(this);
@@ -84,7 +82,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
         mViewPagerAdapter = new MyAdapter(this, getSupportFragmentManager());
         mSpinnerAdapter = new CountriesSpinnerAdapter(this);
 
-        mFetchGlobalPulseTask = mClient.getPulse(
+        mFetchGlobalPulseTask = GroupDirectory.getPulse(
                 new Response.Listener<Pulse>() {
                     @Override
                     public void onResponse(final Pulse pulse) {

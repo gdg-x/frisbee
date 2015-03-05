@@ -52,14 +52,10 @@ import timber.log.Timber;
 public class UpcomingEventWidgetProvider extends AppWidgetProvider {
 
     public static class UpdateService extends Service {
-        private GroupDirectory mDirectory;
         private ArrayList<Chapter> mChapters;
 
         @Override
         public void onStart(Intent intent, int startId) {
-            Timber.d("onStart()");
-
-            mDirectory = new GroupDirectory();
 
             ComponentName thisWidget = new ComponentName(this, UpcomingEventWidgetProvider.class);
             AppWidgetManager manager = AppWidgetManager.getInstance(this);
@@ -104,7 +100,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                         String groupName = homeGdg.getShortName();
                         views.setTextViewText(R.id.groupName, groupName);
                         views.setTextViewText(R.id.groupName2, groupName);
-                        mDirectory.getChapterEventList(new DateTime(),
+                        GroupDirectory.getChapterEventList(new DateTime(),
                                 new DateTime().plusMonths(1),
                                 homeGdg.getGplusId(),
                                 new Response.Listener<ArrayList<Event>>() {

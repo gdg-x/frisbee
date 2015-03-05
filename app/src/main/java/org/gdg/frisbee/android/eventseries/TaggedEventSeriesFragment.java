@@ -137,13 +137,12 @@ public class TaggedEventSeriesFragment extends EventListFragment {
             
             @Override
             public void failure(final RetrofitError error) {
-
+                onError(error);
             }
-
         };
 
         if (Utils.isOnline(getActivity())) {
-            mClient.getHub()
+            App.getInstance().getGdgXHub()
                     .getTaggedEventUpcomingList(mTaggedEventSeries.getTag(), DateTime.now(), listener);
         } else {
             App.getInstance().getModelCache().getAsync(mCacheKey, false, new ModelCache.CacheListener() {

@@ -40,9 +40,9 @@ import com.squareup.picasso.Picasso;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
+import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.PrefUtils;
 
 import java.util.Arrays;
@@ -62,7 +62,6 @@ public class ArrowTaggedActivity extends GdgNavDrawerActivity {
     @InjectView(R.id.taggedList)
     ListView taggedList;
     String taggedOrganizers = "";
-    private GroupDirectory groupDirectory;
     private OrganizerAdapter adapter;
 
     @Override
@@ -74,8 +73,6 @@ public class ArrowTaggedActivity extends GdgNavDrawerActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arrow_tagged);
-
-        groupDirectory = new GroupDirectory();
 
         adapter = new OrganizerAdapter(this, 0);
 
@@ -118,7 +115,7 @@ public class ArrowTaggedActivity extends GdgNavDrawerActivity {
                     taggedOrganizers = mergeIds(new String(conflictResult.getLocalData()), new String(conflictResult.getServerData()));
                 }
 
-                groupDirectory.getHub().getDirectory(new Callback<Directory>() {
+                App.getInstance().getGdgXHub().getDirectory(new Callback<Directory>() {
 
                     @Override
                     public void success(final Directory directory, final retrofit.client.Response response) {

@@ -80,8 +80,6 @@ public class PulseFragment extends GdgListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        final GroupDirectory client = new GroupDirectory();
-
         mTarget = getArguments().getString(ARG_TARGET);
         mMode = getArguments().getInt(ARG_MODE);
 
@@ -97,7 +95,7 @@ public class PulseFragment extends GdgListFragment {
         setIsLoading(true);
 
         if (mTarget.equals("Global")) {
-            mFetchPulseTask = client.getPulse(
+            mFetchPulseTask = GroupDirectory.getPulse(
                     new Response.Listener<org.gdg.frisbee.android.api.model.Pulse>() {
                         @Override
                         public void onResponse(final org.gdg.frisbee.android.api.model.Pulse pulse) {
@@ -123,7 +121,7 @@ public class PulseFragment extends GdgListFragment {
                     }
             );
         } else {
-            mFetchPulseTask = client.getCountryPulse(mTarget,
+            mFetchPulseTask = GroupDirectory.getCountryPulse(mTarget,
                     new Response.Listener<org.gdg.frisbee.android.api.model.Pulse>() {
                         @Override
                         public void onResponse(final org.gdg.frisbee.android.api.model.Pulse pulse) {

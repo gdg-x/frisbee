@@ -87,7 +87,6 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
     ImageView mGroupLogo;
 
     private boolean mLoading;
-    private GroupDirectory mClient;
     private Directory mDirectory;
     private EventFullDetails mEvent;
     private ShareActionProvider mShareActionProvider;
@@ -98,8 +97,6 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
         ButterKnife.inject(this, v);
 
         setHasOptionsMenu(true);
-
-        mClient = new GroupDirectory();
         return v;
     }
 
@@ -113,7 +110,7 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         final String eventId = getArguments().getString(Const.EXTRA_EVENT_ID);
-        mClient.getEvent(eventId, this, new Response.ErrorListener() {
+        GroupDirectory.getEvent(eventId, this, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 if (isAdded()) {
@@ -156,8 +153,6 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
         mEvent = eventFullDetails;
 
         getActivity().supportInvalidateOptionsMenu();
-
-
         updateWithDetails(eventFullDetails);
 
         App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
@@ -170,7 +165,7 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
             @Override
             public void onNotFound(String key) {
                 if (Utils.isOnline(getActivity())) {
-                    mClient.getDirectory(new Response.Listener<Directory>() {
+                    GroupDirectory.getDirectory(new Response.Listener<Directory>() {
                         @Override
                         public void onResponse(final Directory directory) {
                             mDirectory = directory;

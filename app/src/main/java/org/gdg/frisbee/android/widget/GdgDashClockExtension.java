@@ -25,7 +25,6 @@ import timber.log.Timber;
 
 public class GdgDashClockExtension extends DashClockExtension {
 
-    private GroupDirectory mDirectory;
     private ArrayList<Chapter> mChapters;
 
     private Chapter findChapter(String chapterId) {
@@ -41,7 +40,6 @@ public class GdgDashClockExtension extends DashClockExtension {
 
     @Override
     protected void onUpdateData(int i) {
-        mDirectory = new GroupDirectory();
 
         App.getInstance().getModelCache().getAsync("chapter_list_hub", false, new ModelCache.CacheListener() {
             @Override
@@ -53,7 +51,7 @@ public class GdgDashClockExtension extends DashClockExtension {
                     Timber.d("Got no Home GDG");
                 } else {
                     Timber.d("Fetching events");
-                    mDirectory.getChapterEventList(
+                    GroupDirectory.getChapterEventList(
                             new DateTime(), 
                             new DateTime().plusMonths(1), 
                             homeGdg.getGplusId(), 

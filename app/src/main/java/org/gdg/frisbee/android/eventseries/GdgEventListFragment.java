@@ -8,6 +8,7 @@ import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.EventAdapter;
 import org.gdg.frisbee.android.api.ApiRequest;
+import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
@@ -59,9 +60,8 @@ public class GdgEventListFragment extends EventListFragment {
             }
         };
 
-        ApiRequest fetchEvents = mClient.getChapterEventList(mStart, mEnd, plusId, listener, mErrorListener);
-
         if (Utils.isOnline(getActivity())) {
+            ApiRequest fetchEvents = GroupDirectory.getChapterEventList(mStart, mEnd, plusId, listener, mErrorListener);
             fetchEvents.execute();
         } else {
             App.getInstance().getModelCache().getAsync(cacheKey, false, new ModelCache.CacheListener() {

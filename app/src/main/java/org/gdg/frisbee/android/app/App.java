@@ -31,6 +31,7 @@ import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.gson.FieldNamingPolicy;
 import com.squareup.picasso.LruCache;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
@@ -40,6 +41,9 @@ import net.danlew.android.joda.JodaTimeAndroid;
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.GdgXHub;
+import org.gdg.frisbee.android.api.GsonRequest;
+import org.gdg.frisbee.android.api.deserializer.ZuluDateTimeDeserializer;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.utils.CrashlyticsTree;
@@ -52,6 +56,8 @@ import java.io.File;
 import java.util.ArrayList;
 
 import io.fabric.sdk.android.Fabric;
+import retrofit.RestAdapter;
+import retrofit.converter.GsonConverter;
 import timber.log.Timber;
 
 /**
@@ -68,6 +74,7 @@ public class App extends Application implements LocationListener {
         return mInstance;
     }
 
+    private GdgXHub hubInstance;
     private ModelCache mModelCache;
     private Picasso mPicasso;
     private Tracker mTracker;
@@ -294,5 +301,15 @@ public class App extends Application implements LocationListener {
     @NonNull
     public ArrayList<TaggedEventSeries> currentTaggedEventSeries() {
         return mTaggedEventSeriesList;
+    }
+
+    public GdgXHub getGdgXHub() {
+        if (hubInstance == null) {
+            hubInstance = new RestAdapter.Builder()
+                    .setEndpoint("https://hub.gdgx.io/api/v1")
+                    .setConverter(new GsonConverter(GsonRequest.getGson(FieldNamingPolicy.IDENTITY, new ZuluDateTimeDeserializer())))
+                    .build().create(GdgXHub.class);
+        }
+        return hubInstance;
     }
 }

@@ -39,7 +39,6 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.ChapterAdapter;
-import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
@@ -70,7 +69,7 @@ public class MainActivity extends GdgNavDrawerActivity {
     public static final String SECTION_EVENTS = "events";
     public static final int REQUEST_FIRST_START_WIZARD = 100;
     private static final int PLAY_SERVICE_DIALOG_REQUEST_CODE = 200;
-    private final GroupDirectory client = new GroupDirectory();
+
     @InjectView(R.id.pager)
     ViewPager mViewPager;
     @InjectView(R.id.sliding_tabs)
@@ -213,13 +212,13 @@ public class MainActivity extends GdgNavDrawerActivity {
     }
 
     public void fetchChapters() {
-        client.getHub().getDirectory(new Callback<Directory>() {
+        App.getInstance().getGdgXHub().getDirectory(new Callback<Directory>() {
 
             public void success(final Directory directory, retrofit.client.Response response) {
                 App.getInstance().getModelCache().putAsync(
-                        Const.CACHE_KEY_CHAPTER_LIST_HUB, 
-                        directory, 
-                        DateTime.now().plusDays(1), 
+                        Const.CACHE_KEY_CHAPTER_LIST_HUB,
+                        directory,
+                        DateTime.now().plusDays(1),
                         new ModelCache.CachePutListener() {
                             @Override
                             public void onPutIntoCache() {
