@@ -65,7 +65,6 @@ public class FirstStartStep1Fragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        Timber.d("onSaveInstanceState");
         super.onSaveInstanceState(outState);
 
         if (mSpinnerAdapter != null && mSpinnerAdapter.getCount() > 0) {
@@ -76,7 +75,6 @@ public class FirstStartStep1Fragment extends Fragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        Timber.d("onActivityCreated()");
 
         super.onActivityCreated(savedInstanceState);
 
@@ -120,8 +118,8 @@ public class FirstStartStep1Fragment extends Fragment {
             @Override
             public void onGet(Object item) {
                 Directory directory = (Directory) item;
-                mLoadSwitcher.setDisplayedChild(1);
                 addChapters(directory.getGroups());
+                mLoadSwitcher.setDisplayedChild(1);
             }
 
             @Override

@@ -225,13 +225,11 @@ public class MainActivity extends GdgNavDrawerActivity {
     private void initChapters(@NonNull ArrayList<Chapter> chapters) {
 
         Chapter selectedChapter = null;
-        if (getIntent().hasExtra(Const.EXTRA_CHAPTER_ID)) {
-            final String chapterId = getIntent().getStringExtra(Const.EXTRA_CHAPTER_ID);
-            for (Chapter c : chapters) {
-                if (c.getGplusId().equals(chapterId)) {
-                    selectedChapter = c;
-                    break;
-                }
+        if (getIntent().hasExtra(Const.EXTRA_CHAPTER)) {
+            final Chapter chapter = getIntent().getParcelableExtra(Const.EXTRA_CHAPTER);
+            int indexOfChapter = chapters.indexOf(chapter);
+            if (indexOfChapter >= 0) {
+                selectedChapter = chapters.get(indexOfChapter);
             }
         }
 

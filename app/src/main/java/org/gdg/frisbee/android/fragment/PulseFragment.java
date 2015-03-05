@@ -33,6 +33,7 @@ import org.gdg.frisbee.android.activity.MainActivity;
 import org.gdg.frisbee.android.adapter.PulseAdapter;
 import org.gdg.frisbee.android.api.ApiRequest;
 import org.gdg.frisbee.android.api.GroupDirectory;
+import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.PulseEntry;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
@@ -179,13 +180,14 @@ public class PulseFragment extends GdgListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Map.Entry<String, PulseEntry> pulse = (Map.Entry<String, PulseEntry>) mAdapter.getItem(position);
+        Map.Entry<String, PulseEntry> pulse = mAdapter.getItem(position);
 
         if (mTarget.equals("Global")) {
             mListener.openPulse(pulse.getKey());
         } else {
             Intent chapterIntent = new Intent(getActivity(), MainActivity.class);
-            chapterIntent.putExtra(Const.EXTRA_CHAPTER_ID, pulse.getValue().getId());
+            Chapter selectedChapter = new Chapter("", pulse.getValue().getId());
+            chapterIntent.putExtra(Const.EXTRA_CHAPTER, selectedChapter);
             startActivity(chapterIntent);
         }
     }

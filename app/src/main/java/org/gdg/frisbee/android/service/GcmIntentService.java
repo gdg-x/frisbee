@@ -16,6 +16,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.event.EventActivity;
 import org.gdg.frisbee.android.receiver.GCMReceiver;
@@ -37,9 +38,6 @@ public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
     public static final String UPCOMING_EVENT = "upcoming_event";
     public static final String EXTRA_TYPE = "type";
-
-    private NotificationManager mNotificationManager;
-    NotificationCompat.Builder builder;
 
     public GcmIntentService() {
         super("GcmIntentService");
@@ -70,7 +68,7 @@ public class GcmIntentService extends IntentService {
     }
 
     private void sendEventNotification(Bundle extras) {
-        mNotificationManager = (NotificationManager)
+        NotificationManager mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Intent eventIntent = new Intent();
@@ -82,7 +80,7 @@ public class GcmIntentService extends IntentService {
                 .build());
 
         eventIntent.setClass(getApplicationContext(), EventActivity.class);
-        eventIntent.putExtra(Const.EXTRA_CHAPTER_ID, extras.getString("chapter"));
+        eventIntent.putExtra(Const.EXTRA_CHAPTER, new Chapter("", extras.getString("chapter")));
         eventIntent.putExtra(Const.EXTRA_EVENT_ID, extras.getString("id"));
         eventIntent.putExtra(Const.EXTRA_SECTION, EventActivity.EventPagerAdapter.SECTION_OVERVIEW);
 
@@ -90,7 +88,7 @@ public class GcmIntentService extends IntentService {
                 .forPattern("YYYY-MM-dd'T'HH:mm:ss.SSS'Z'");
 
         DateTime start = df.parseDateTime(extras.getString("start"));
-        DateTime end = df.parseDateTime(extras.getString("end"));
+//        DateTime end = df.parseDateTime(extras.getString("end"));
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, eventIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);

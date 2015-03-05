@@ -34,7 +34,6 @@ import java.util.Map;
 
 public class PulseAdapter extends BaseAdapter {
 
-    private Context mContext;
     private LayoutInflater mInflater;
     private ArrayList<Map.Entry<String, PulseEntry>> mPulse;
     private int[] mPosition;
@@ -42,9 +41,8 @@ public class PulseAdapter extends BaseAdapter {
     private int mMode;
 
     public PulseAdapter(Context ctx) {
-        mContext = ctx;
-        mInflater = LayoutInflater.from(mContext);
-        mPulse = new ArrayList<Map.Entry<String, PulseEntry>>();
+        mInflater = LayoutInflater.from(ctx);
+        mPulse = new ArrayList<>();
     }
 
     @Override
@@ -53,7 +51,7 @@ public class PulseAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int i) {
+    public Map.Entry<String, PulseEntry> getItem(int i) {
         return mPulse.get(i);
     }
 
@@ -75,14 +73,14 @@ public class PulseAdapter extends BaseAdapter {
         }
 
         ViewHolder holder = (ViewHolder) rowView.getTag();
-        Map.Entry<String, PulseEntry> entry = (Map.Entry<String, PulseEntry>) getItem(i);
+        Map.Entry<String, PulseEntry> entry = getItem(i);
 
         if (i > 0) {
-            Map.Entry<String, PulseEntry> prevEntry = (Map.Entry<String, PulseEntry>) getItem(i - 1);
+            Map.Entry<String, PulseEntry> prevEntry = getItem(i - 1);
             int z = 2;
 
             while (entry.getValue().compareTo(mMode, prevEntry.getValue()) == 0 && (i - z) >= 0) {
-                prevEntry = (Map.Entry<String, PulseEntry>) getItem(i - z);
+                prevEntry = getItem(i - z);
                 z++;
             }
             if (z > 2) {
