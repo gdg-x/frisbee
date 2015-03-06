@@ -130,7 +130,10 @@ public class MainActivity extends GdgNavDrawerActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Crouton.makeText(MainActivity.this, getString(R.string.fetch_chapters_failed), Style.ALERT).show();
+                try {
+                    Crouton.makeText(MainActivity.this, R.string.fetch_chapters_failed, Style.ALERT).show();
+                } catch (IllegalStateException exception) {
+                }
                 Timber.e("Couldn't fetch chapter list", volleyError);
             }
         });

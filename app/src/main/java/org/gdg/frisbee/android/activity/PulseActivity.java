@@ -103,7 +103,10 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        Crouton.makeText(PulseActivity.this, getString(R.string.fetch_chapters_failed), Style.ALERT).show();
+                        try {
+                            Crouton.makeText(PulseActivity.this, R.string.fetch_chapters_failed, Style.ALERT).show();
+                        } catch (IllegalStateException exception) {
+                        }
                         Timber.e("Couldn't fetch chapter list", volleyError);
                     }
                 }

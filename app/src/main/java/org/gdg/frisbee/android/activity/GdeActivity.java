@@ -79,7 +79,10 @@ public class GdeActivity extends GdgNavDrawerActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Crouton.makeText(GdeActivity.this, getString(R.string.fetch_gde_failed), Style.ALERT).show();
+                try {
+                    Crouton.makeText(GdeActivity.this, R.string.fetch_gde_failed, Style.ALERT).show();
+                } catch (IllegalStateException exception) {
+                }
                 Timber.e("Could'nt fetch GDE list", volleyError);
             }
         });
