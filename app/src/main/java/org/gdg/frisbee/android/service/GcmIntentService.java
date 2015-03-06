@@ -38,9 +38,6 @@ public class GcmIntentService extends IntentService {
     public static final String UPCOMING_EVENT = "upcoming_event";
     public static final String EXTRA_TYPE = "type";
 
-    private NotificationManager mNotificationManager;
-    NotificationCompat.Builder builder;
-
     public GcmIntentService() {
         super("GcmIntentService");
     }
@@ -70,7 +67,7 @@ public class GcmIntentService extends IntentService {
     }
 
     private void sendEventNotification(Bundle extras) {
-        mNotificationManager = (NotificationManager)
+        NotificationManager mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Intent eventIntent = new Intent();
@@ -90,7 +87,7 @@ public class GcmIntentService extends IntentService {
                 .forPattern("YYYY-MM-dd'T'HH:mm:ss.SSS'Z'");
 
         DateTime start = df.parseDateTime(extras.getString("start"));
-        DateTime end = df.parseDateTime(extras.getString("end"));
+//        DateTime end = df.parseDateTime(extras.getString("end"));
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, eventIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);

@@ -19,6 +19,8 @@ import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
+import timber.log.Timber;
+
 /**
  * A PreferenceFragment for the support library. Based on the platform's code with some removed features and a basic ListView layout.
  *
@@ -28,7 +30,6 @@ public abstract class PreferenceFragment extends Fragment {
 
     private static final int FIRST_REQUEST_CODE = 100;
     private static final int MSG_BIND_PREFERENCES = 1;
-    private static final int MSG_REQUEST_FOCUS = 2;
     private static final String PREFERENCES_TAG = "android:preferences";
     private static final float HC_HORIZONTAL_PADDING = 16;
     
@@ -52,9 +53,6 @@ public abstract class PreferenceFragment extends Fragment {
                     case MSG_BIND_PREFERENCES:
                         bindPreferences(preferenceScreen, listView);
                         break;
-                    case MSG_REQUEST_FOCUS:
-                        listView.focusableViewAvailable(listView);
-                        break;
                 }
             }
         }
@@ -73,26 +71,27 @@ public abstract class PreferenceFragment extends Fragment {
             c.setAccessible(true);
             mPreferenceManager = c.newInstance(this.getActivity(), FIRST_REQUEST_CODE);
         } catch (Exception e) {
+            Timber.e(e, "Exception while trying to do reflection.");
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle savedInstanceState) {
-        ListView listView = new ListView(getActivity());
-        listView.setId(android.R.id.list);
+        mList = new ListView(getActivity());
+        mList.setId(android.R.id.list);
         final int horizontalPadding = (int) (HC_HORIZONTAL_PADDING * getResources().getDisplayMetrics().density);
-        listView.setPadding(horizontalPadding, 0, horizontalPadding, 0);
-        return listView;
+        mList.setPadding(horizontalPadding, 0, horizontalPadding, 0);
+        return mList;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         
-        mHandler = new PreferenceHandler(getPreferenceScreen(), getListView());
+        mHandler = new PreferenceHandler(getPreferenceScreen(), mList);
 
         if (mHavePrefs) {
-            bindPreferences(getPreferenceScreen(), getListView());
+            bindPreferences(getPreferenceScreen(), mList);
         }
 
         mInitDone = true;
@@ -115,6 +114,7 @@ public abstract class PreferenceFragment extends Fragment {
             m.setAccessible(true);
             m.invoke(mPreferenceManager);
         } catch (Exception e) {
+            Timber.e(e, "Exception while trying to do reflection.");
         }
     }
 
@@ -131,6 +131,7 @@ public abstract class PreferenceFragment extends Fragment {
             m.setAccessible(true);
             m.invoke(mPreferenceManager);
         } catch (Exception e) {
+            Timber.e(e, "Exception while trying to do reflection.");
         }
     }
 
@@ -151,6 +152,7 @@ public abstract class PreferenceFragment extends Fragment {
             m.setAccessible(true);
             m.invoke(mPreferenceManager, requestCode, resultCode, data);
         } catch (Exception e) {
+            Timber.e(e, "Exception while trying to do reflection.");
         }
     }
 
@@ -170,6 +172,7 @@ public abstract class PreferenceFragment extends Fragment {
                 }
             }
         } catch (Exception e) {
+            Timber.e(e, "Exception while trying to do reflection.");
         }
     }
 
@@ -179,10 +182,12 @@ public abstract class PreferenceFragment extends Fragment {
             m.setAccessible(true);
             return (PreferenceScreen) m.invoke(mPreferenceManager);
         } catch (Exception e) {
+            Timber.e(e, "Exception while trying to do reflection.");
             return null;
         }
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public void addPreferencesFromIntent(Intent intent) {
         requirePreferenceManager();
         try {
@@ -191,6 +196,7 @@ public abstract class PreferenceFragment extends Fragment {
             PreferenceScreen screen = (PreferenceScreen) m.invoke(mPreferenceManager, intent, getPreferenceScreen());
             setPreferenceScreen(screen);
         } catch (Exception e) {
+            Timber.e(e, "Exception while trying to do reflection.");
         }
     }
 
@@ -202,6 +208,7 @@ public abstract class PreferenceFragment extends Fragment {
             PreferenceScreen screen = (PreferenceScreen) m.invoke(mPreferenceManager, getActivity(), resId, getPreferenceScreen());
             setPreferenceScreen(screen);
         } catch (Exception e) {
+            Timber.e(e, "Exception while trying to do reflection.");
         }
     }
 
@@ -228,29 +235,5 @@ public abstract class PreferenceFragment extends Fragment {
         if (preferenceScreen != null) {
             preferenceScreen.bind(listView);
         }
-    }
-
-    public ListView getListView() {
-        ensureList();
-        return mList;
-    }
-
-    private void ensureList() {
-        if (mList != null) {
-            return;
-        }
-        View root = getView();
-        if (root == null) {
-            throw new IllegalStateException("Content view not yet created");
-        }
-        View rawListView = root.findViewById(android.R.id.list);
-        if (!(rawListView instanceof ListView)) {
-            throw new RuntimeException("Content has view with id attribute 'android.R.id.list' that is not a ListView class");
-        }
-        mList = (ListView) rawListView;
-        if (mList == null) {
-            throw new RuntimeException("Your content must have a ListView whose id attribute is 'android.R.id.list'");
-        }
-        mHandler.sendEmptyMessage(MSG_REQUEST_FOCUS);
     }
 }

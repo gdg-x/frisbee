@@ -167,7 +167,7 @@ public class FirstStartActivity extends ActionBarActivity implements
     @Override
     public void onConfirmedChapter(Chapter chapter) {
         mSelectedChapter = chapter;
-        PrefUtils.setHomeChapterId(this, chapter.getGplusId());
+        PrefUtils.setHomeChapter(this, chapter);
 
         if (mGoogleApiClient == null) {
             mViewPager.setCurrentItem(1, true);
@@ -180,7 +180,6 @@ public class FirstStartActivity extends ActionBarActivity implements
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mViewPagerAdapter.getItem(mViewPager.getCurrentItem()).onActivityResult(requestCode, resultCode, data);
-        Timber.d("onActivityResult");
     }
 
     @Override
@@ -235,9 +234,9 @@ public class FirstStartActivity extends ActionBarActivity implements
 
         requestBackup();
 
-        Intent resultData = new Intent(FirstStartActivity.this, MainActivity.class);
+        Intent resultData = new Intent(this, MainActivity.class);
         resultData.setAction("finish_first_start");
-        resultData.putExtra(Const.EXTRA_CHAPTER_ID, mSelectedChapter);
+        resultData.putExtra(Const.EXTRA_CHAPTER_ID, mSelectedChapter.getGplusId());
         startActivity(resultData);
 
         super.finish();

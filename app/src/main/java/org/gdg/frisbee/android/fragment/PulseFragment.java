@@ -179,7 +179,7 @@ public class PulseFragment extends GdgListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Map.Entry<String, PulseEntry> pulse = (Map.Entry<String, PulseEntry>) mAdapter.getItem(position);
+        Map.Entry<String, PulseEntry> pulse = mAdapter.getItem(position);
 
         if (mTarget.equals("Global")) {
             mListener.openPulse(pulse.getKey());

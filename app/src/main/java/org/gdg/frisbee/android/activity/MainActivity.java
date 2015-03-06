@@ -308,17 +308,10 @@ public class MainActivity extends GdgNavDrawerActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Timber.d("onStart()");
 
         if (PrefUtils.isFirstStart(this)) {
             startActivityForResult(new Intent(this, FirstStartActivity.class), REQUEST_FIRST_START_WIZARD);
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Timber.d("onPause()");
     }
 
     @Override
