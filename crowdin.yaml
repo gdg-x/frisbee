@@ -1,6 +1,5 @@
 ---
-project_identifier: gdgx-frisbee 
-base_path: /Users/taso/Documents/workspace/frisbee/
+project_identifier: gdgx-frisbee
 
 files:
   -
@@ -8,23 +7,23 @@ files:
     translation: '/app/src/main/res/values-%android_code%/strings.xml'
     languages_mapping:
       android_code:
-         cs: cs
-         de: de
+        cs: cs
+        de: de
         es-ES: es
-         fr: fr
-         hi: hi
+        fr: fr
+        hi: hi
         it: it
-         ko: ko
-         lt: lt
-         nl: nl
-         pl: pl
+        ko: ko
+        lt: lt
+        nl: nl
+        pl: pl
         pt-PT: pt-rPT
         pt-BR: pt-rBR
-         ru: ru
-         sk: sk
-         th: th
-         tr: tr
-         uk: uk
+        ru: ru
+        sk: sk
+        th: th
+        tr: tr
+        uk: uk
         zh-CN: zh-rCN
         zh-HK: zh-rHK
         zh-TW: zh-rTW
