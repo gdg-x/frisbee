@@ -82,7 +82,7 @@
   <string name="done">完成</string>
   <string name="allow_analytics">允許我們收集匿名使用資料以改進應用程式</string>
   <string name="enable_gcm">啟用 GDG 雲端通知 (當有新活動時會通知)</string>
-  <string name="step3_text">開始之前還有一件事…</string>
+  <string name="step3_text">開始之前還有一件事&#8230;</string>
   <string name="share_on_gplus">邀請朋友</string>
   <string name="join_me">跟我一同參加本次活動！</string>
   <string name="name_not_known">未知的名稱</string>
@@ -138,4 +138,5 @@
   <string name="event_agenda">Agenda</string>
   <string name="event_more">More</string>
   <string name="help">Help</string>
+  <string name="feedback">Feedback</string>
 </resources>

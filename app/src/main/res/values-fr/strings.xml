@@ -78,7 +78,6 @@
   <string name="pulse_circlers">Chapitre Circlers</string>
   <string name="home_gdg">Accueil GDG</string>
   <string name="home_gdg_summary">Sélectionnez votre GDG primaire</string>
-  <string name="special_event">Dart Flight School</string>
   <string name="analytics">Analytics</string>
   <string name="analytics_summary_on">L\'application transmet actuellement les données d\'utilisation anonymes qui nous permettent d\'améliorer l\'application</string>
   <string name="analytics_summary_off">Actuellement, l\'app ne transmet pas les données d\'utilisation anonymes</string>
@@ -148,4 +147,5 @@
   <string name="event_agenda">Calendrier</string>
   <string name="event_more">Plus</string>
   <string name="help">Aide</string>
+  <string name="feedback">Feedback</string>
 </resources>

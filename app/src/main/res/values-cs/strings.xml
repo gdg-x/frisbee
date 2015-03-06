@@ -67,7 +67,7 @@
   <string name="contributors">GDG appka je vytvořena komunitou a je open-source. Tito lidé přispěli:</string>
   <string name="get_involved">Zapoj se!</string>
   <string name="get_involved_text">GDG appka je vytvořena komunitou a je open-source. Každý se může zapojit a rozvíjet appku.\n\nProstě běž na GitHub a stáhni si kód.\n\nhttps://github.com/gdg-x</string>
-    <string name="about_license">© 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicencováno pod\nApache 2.0</string>
+  <string name="about_license">© 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicencováno pod\nApache 2.0</string>
   <string name="past_event">MINULÁ</string>
   <string name="upcoming_widget">GDG - Nadcházející eventy</string>
   <string name="global">Globalní</string>
@@ -90,7 +90,7 @@
   <string name="done">Hotovo</string>
   <string name="allow_analytics">Dovol nám odesílat anonymní statistiky, pomůže to při tunění appky</string>
   <string name="enable_gcm">Zapni GDG cloudové notifikace (a dozvíš se o nových eventech)</string>
-    <string name="step3_text">Poslední věc než začneme …</string>
+  <string name="step3_text">Poslední věc než začneme &#8230;</string>
   <string name="share_on_gplus">Pozvi kámoše</string>
   <string name="join_me">Pojď se mnou na event!</string>
   <string name="name_not_known">Neznámé jméno</string>
@@ -99,12 +99,9 @@
   <string name="server_error">Nastala chyba. Ale BSOD to není :)</string>
   <string name="search_hint">Search GDG Chapter</string>
   <string name="dashclock_description">Display information about the next upcoming event at your Home GDG</string>
-  <string name="special_description">GDG DevFests are large, community-run events that can offer speaker sessions across multiple product areas, all-day hack-a-thons, code labs, and more.\n\nEach GDG DevFest will be inspired by and uniquely tailored to the needs of the developer community that hosts it. While no two events will be exactly alike, each GDG DevFest will, at its core, be powered by a shared belief that when developers come together to exchange ideas, amazing things can happen.</string>
   <string name="order_by_date">Sort by date</string>
   <string name="order_by_distance">Sort by distance</string>
   <string name="gcm_event_ticker">A new event at your home GDG has been scheduled.</string>
-  <string name="flightschool">Dart Flight School</string>
-  <string name="flightschool_description">Dart hit 1.0 and is now Flight Ready! Developer communities around the world are hosting Dart Flight School events during the month of February 2014. Get your web development wings with Dart and Angular!</string>
   <string name="ioextended_description">Google I/O Extended is about joining the Google conference at your local group.</string>
   <string name="devfest_description">GDG DevFests are large, community-run events that can offer speaker sessions across multiple product areas, all-day hack-a-thons, code labs, and more.\n\nEach GDG DevFest will be inspired by and uniquely tailored to the needs of the developer community that hosts it. While no two events will be exactly alike, each GDG DevFest will, at its core, be powered by a shared belief that when developers come together to exchange ideas, amazing things can happen.</string>
   <string name="studyjams_description">Google Developers Study Jams is a free series of global, community-run, in-person study groups. The first Study Jams series is presented in partnership with Udacity and will follow their Android Fundamentals curriculum. Google Developer Group facilitators certified in the course will lead the Study Jams that meet once weekly for 8 - 9 weeks.</string>
@@ -149,4 +146,5 @@
   <string name="event_agenda">Agenda</string>
   <string name="event_more">More</string>
   <string name="help">Help</string>
+  <string name="feedback">Feedback</string>
 </resources>

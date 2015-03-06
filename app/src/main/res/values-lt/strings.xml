@@ -102,8 +102,6 @@
   <string name="order_by_date">Sort by date</string>
   <string name="order_by_distance">Sort by distance</string>
   <string name="gcm_event_ticker">A new event at your home GDG has been scheduled.</string>
-  <string name="flightschool">Dart Flight School</string>
-  <string name="flightschool_description">Dart hit 1.0 and is now Flight Ready! Developer communities around the world are hosting Dart Flight School events during the month of February 2014. Get your web development wings with Dart and Angular!</string>
   <string name="ioextended_description">Google I/O Extended is about joining the Google conference at your local group.</string>
   <string name="devfest_description">GDG DevFests are large, community-run events that can offer speaker sessions across multiple product areas, all-day hack-a-thons, code labs, and more.\n\nEach GDG DevFest will be inspired by and uniquely tailored to the needs of the developer community that hosts it. While no two events will be exactly alike, each GDG DevFest will, at its core, be powered by a shared belief that when developers come together to exchange ideas, amazing things can happen.</string>
   <string name="studyjams_description">Google Developers Study Jams is a free series of global, community-run, in-person study groups. The first Study Jams series is presented in partnership with Udacity and will follow their Android Fundamentals curriculum. Google Developer Group facilitators certified in the course will lead the Study Jams that meet once weekly for 8 - 9 weeks.</string>
@@ -148,4 +146,5 @@
   <string name="event_agenda">Agenda</string>
   <string name="event_more">More</string>
   <string name="help">Help</string>
+  <string name="feedback">Feedback</string>
 </resources>

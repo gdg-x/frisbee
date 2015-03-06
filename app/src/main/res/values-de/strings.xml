@@ -63,7 +63,7 @@
   <string name="contributors">Die GDG App ist Open Source. Folgende Personen sind an der Entwicklung beteiligt:</string>
   <string name="get_involved">Mach mit!</string>
   <string name="get_involved_text">Die GDG App ist Open Source. Wir freuen uns über jeden der uns bei der Entwicklung unterstützen möchte.\n\nGehe zu GitHub uns sehe dir unseren Code an.\n\nhttps://github.com/gdg-x</string>
-    <string name="about_license">© 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLizensiert unter der\nApache 2.0 Lizenz</string>
+  <string name="about_license">© 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLizensiert unter der\nApache 2.0 Lizenz</string>
   <string name="past_event">VORBEI</string>
   <string name="upcoming_widget">GDG - Event</string>
   <string name="global">Global</string>
@@ -86,7 +86,7 @@
   <string name="done">Fertig</string>
   <string name="allow_analytics">Erlaube uns anonyme Nutzungsdaten zur Verbesserung der App zu sammeln</string>
   <string name="enable_gcm">Aktiviere GDG Cloud Benachrichtigungen (werde über neue Events benachrichtigt)</string>
-    <string name="step3_text">Eine Sache noch…</string>
+  <string name="step3_text">Eine Sache noch&#8230;</string>
   <string name="share_on_gplus">Freunde einladen</string>
   <string name="join_me">Begleitet mich zu diesem Event!</string>
   <string name="name_not_known">Unbekannt</string>
@@ -142,4 +142,5 @@
   <string name="event_agenda">Agenda</string>
   <string name="event_more">More</string>
   <string name="help">Help</string>
+  <string name="feedback">Feedback</string>
 </resources>
