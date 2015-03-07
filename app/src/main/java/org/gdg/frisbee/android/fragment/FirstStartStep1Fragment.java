@@ -105,10 +105,10 @@ public class FirstStartStep1Fragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                if (isDetached()) {
+                try {
+                    Crouton.makeText(getActivity(), R.string.fetch_chapters_failed, Style.ALERT).show();
+                } catch (IllegalStateException exception) {
                     Toast.makeText(getActivity(), R.string.fetch_chapters_failed, Toast.LENGTH_SHORT).show();
-                } else {
-                    Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
                 }
                 Timber.e("Could'nt fetch chapter list", volleyError);
             }
