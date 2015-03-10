@@ -7,16 +7,17 @@ buildscript {
         maven {
             url "http://m2-gdgx.cloud.gdgx.io/m2/"
         }
-        maven { url "https://github.com/ben-manes/gradle-versions-plugin/raw/mvnrepo" }
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.1.0'
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.5-beta-2'
         classpath 'io.fabric.tools:gradle:1.14.4'
         classpath 'com.github.triplet.gradle:play-publisher:1.0.2'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.8'
     }
 }
+
+apply plugin: 'com.github.ben-manes.versions'
 
 allprojects {
     repositories {
@@ -27,7 +28,6 @@ allprojects {
         maven {
             url "http://m2-gdgx.cloud.gdgx.io/m2/"
         }
-        maven { url "https://github.com/ben-manes/gradle-versions-plugin/raw/mvnrepo" }
         maven { url 'https://maven.fabric.io/public' }
     }
 

@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
-apply plugin: 'versions'
 apply plugin: 'play'
 apply plugin: 'checkstyle'
 
