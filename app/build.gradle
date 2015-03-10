@@ -111,6 +111,7 @@ android {
         warning 'InvalidPackage'
         warning 'ImpliedQuantity'
         warning 'MissingQuantity'
+        warning 'GradleCompatible'
     }
 
     compileOptions {
