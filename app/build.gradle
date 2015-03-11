@@ -47,7 +47,7 @@ android {
         buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
         buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
 
-        resConfigs "en", "cs", "de", "es", "fr", "hi", "ko", "lt", "nl", "pl", "pt-rBR", "ru", "sk", "th", "tr", "uk", "zh-rCN", "zh-rHK", "zh-rTW"
+        resConfigs "en", "cs", "de", "es", "fr", "hi", "it", "ko", "lt", "nl", "pl", "pt-rBR", "pt-rPT", "ru", "sk", "th", "tr", "uk", "zh-rCN", "zh-rHK", "zh-rTW"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -111,7 +111,6 @@ android {
         warning 'InvalidPackage'
         warning 'ImpliedQuantity'
         warning 'MissingQuantity'
-        warning 'MissingTranslation'
     }
 
     compileOptions {
