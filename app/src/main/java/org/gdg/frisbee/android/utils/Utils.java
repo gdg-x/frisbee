@@ -116,6 +116,10 @@ public class Utils {
     public static Map<String, String> splitQuery(URL url) throws UnsupportedEncodingException {
         Map<String, String> queryPairs = new HashMap<>();
         String query = url.getQuery();
+        if (query == null) {
+            return queryPairs;
+        }
+
         String[] pairs = query.split("&");
         for (String pair : pairs) {
             int idx = pair.indexOf("=");
