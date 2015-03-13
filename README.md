@@ -1,4 +1,5 @@
-# Project Frisbee
+Project Frisbee
+===============
 ### Powered by GDG[x]
 
 [![Join the chat at https://gitter.im/gdg-x/frisbee](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/gdg-x/frisbee?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -8,6 +9,8 @@
 All GDG content in one place. Project Frisbee is the result of GDG[x]'s coordinated efforts to build an applications that makes it easier to discover Google Developer Group content while being on the go.
 The GDG App features the Google+ Newsfeed, Upcoming Events and general information on every
 active chapter listed in the Google Developer Group Directory
+
+###[Download the application](https://play.google.com/store/apps/details?id=org.gdg.frisbee.android)
 
 ###Features:
 * GDG Pulse
@@ -21,6 +24,44 @@ Frisbee is a community effort and we appreciate the help of everyone who wants t
 
 Check http://github.com/gdg-x for more information.
 
+Development
+-----------
+
+Check out project and import it to Android Studio. 
+
+This project enforces a checkstyle. The checkstyle configuration is available in `settings/checkstyle.xml` file. Please respect to the configuration. Because of the line ending difference between Unix systems and Windows, you may get checkstyle errors. If you do, please check this [help page](https://www.jetbrains.com/idea/help/handling-lf-and-crlf-line-endings.html)
+
+Image optimization is encourged for new images. You can use the [image_optim](https://github.com/toy/image_optim) tool to do it easily. Use the following to install it. 
+```
+gem install image_optim image_optim_pack
+```
+
+###API Keys
+`local.properties` file is used for storing API keys since it is already ignored in the `.gitignore` file. 
+
+The file looks like:
+```
+android_simple_api_access_key=
+browser_simple_api_access_key=
+ip_simple_api_access_key=
+android_backup_key=
+play_app_id=
+gcm_sender_id=
+hub_client_id=
+```
+
+The first 3 (`android_simple_api_access_key`, `browser_simple_api_access_key`, `ip_simple_api_access_key`) are regular API access keys which can be gotten by creating a new project at [Google Developer Console](https://console.developers.google.com/project). `android_backup_key` is not necessary but can be obtained at this [page](http://developer.android.com/google/backup/signup.html). `play_app_id` is the Google Developer Console project id and lastly `hub_client_id` is the client id used for oAuth with Google.
+
+
+###Contributors
+* [Sebastian Mauer](https://github.com/mauimauer)
+* [Friedger Müffke](https://github.com/friedger)
+* [Henrique Rocha](https://github.com/HenriqueRocha)
+* [Said Tahsin Dane](https://github.com/tasomaniac)
+* [Stefan Hoth](https://github.com/stefanhoth)
+* [Bartek](https://github.com/przybylski)
+* [Jerrell Mardis](https://github.com/jerrellmardis)
+
 ###Translation
 
 There are GDG communities all over the world, so we want Frisbee to be available in every language there is.
@@ -29,4 +70,19 @@ https://crowdin.com/project/gdgx-frisbee
 
 ######The GDG App, GDG[x] are not endorsed and/or supported by Google, the corporation.
 
-&copy; 2013-2015 GDG[x]
+License
+--------
+
+    © 2013-2015 GDG[x]
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
