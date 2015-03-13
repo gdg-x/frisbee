@@ -37,7 +37,7 @@ gem install image_optim image_optim_pack
 ```
 
 ###API Keys
-`local_properties` file is used for storing API keys since it is already ignored in the `.gitignore` file. 
+`local.properties` file is used for storing API keys since it is already ignored in the `.gitignore` file. 
 
 The file looks like:
 ```
