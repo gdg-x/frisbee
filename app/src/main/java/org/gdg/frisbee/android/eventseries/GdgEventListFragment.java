@@ -2,13 +2,9 @@ package org.gdg.frisbee.android.eventseries;
 
 import android.os.Bundle;
 
-import com.android.volley.Response;
-
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.EventAdapter;
-import org.gdg.frisbee.android.api.ApiRequest;
-import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
@@ -19,6 +15,8 @@ import java.util.ArrayList;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
+import retrofit.Callback;
+import retrofit.RetrofitError;
 
 public class GdgEventListFragment extends EventListFragment {
 
@@ -37,32 +35,35 @@ public class GdgEventListFragment extends EventListFragment {
 
     @Override
     void fetchEvents() {
-        final DateTime now = new DateTime();
-        mStart = now.minusMonths(2).dayOfMonth().withMinimumValue();
-        mEnd = now.plusYears(1).dayOfMonth().withMaximumValue();
+        final DateTime now = DateTime.now();
+        int mStart = (int) (now.minusMonths(2).dayOfMonth().withMinimumValue().getMillis() / 1000);
+        int mEnd = (int) (now.plusYears(1).dayOfMonth().withMaximumValue().getMillis() / 1000);
 
         setIsLoading(true);
         final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID);
         final String cacheKey = "event_" + plusId;
 
-        Response.Listener<ArrayList<Event>> listener = new Response.Listener<ArrayList<Event>>() {
-            @Override
-            public void onResponse(final ArrayList<Event> events) {
-                mEvents.addAll(events);
-
-                App.getInstance().getModelCache().putAsync(cacheKey, mEvents, DateTime.now().plusHours(2), new ModelCache.CachePutListener() {
-                    @Override
-                    public void onPutIntoCache() {
-                        mAdapter.addAll(mEvents);
-                        setIsLoading(false);
-                    }
-                });
-            }
-        };
 
         if (Utils.isOnline(getActivity())) {
-            ApiRequest fetchEvents = GroupDirectory.getChapterEventList(mStart, mEnd, plusId, listener, mErrorListener);
-            fetchEvents.execute();
+            App.getInstance().getGroupDirectory().getChapterEventList(mStart, mEnd, plusId, new Callback<ArrayList<Event>>() {
+                @Override
+                public void success(ArrayList<Event> events, retrofit.client.Response response) {
+                    mEvents.addAll(events);
+
+                    App.getInstance().getModelCache().putAsync(cacheKey, mEvents, DateTime.now().plusHours(2), new ModelCache.CachePutListener() {
+                        @Override
+                        public void onPutIntoCache() {
+                            mAdapter.addAll(mEvents);
+                            setIsLoading(false);
+                        }
+                    });
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    onError(error);
+                }
+            });
         } else {
             App.getInstance().getModelCache().getAsync(cacheKey, false, new ModelCache.CacheListener() {
                 @Override

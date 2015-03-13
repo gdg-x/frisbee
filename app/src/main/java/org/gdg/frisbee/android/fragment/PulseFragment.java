@@ -24,15 +24,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.MainActivity;
 import org.gdg.frisbee.android.adapter.PulseAdapter;
-import org.gdg.frisbee.android.api.ApiRequest;
-import org.gdg.frisbee.android.api.GroupDirectory;
+import org.gdg.frisbee.android.api.model.Pulse;
 import org.gdg.frisbee.android.api.model.PulseEntry;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
@@ -43,6 +39,8 @@ import java.util.Map;
 import butterknife.ButterKnife;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
+import retrofit.Callback;
+import retrofit.RetrofitError;
 import timber.log.Timber;
 
 public class PulseFragment extends GdgListFragment {
@@ -53,8 +51,7 @@ public class PulseFragment extends GdgListFragment {
     private int mMode;
     private String mTarget;
     private PulseAdapter mAdapter;
-    private ApiRequest mFetchPulseTask;
-    private Pulse mListener;
+    private Callbacks mListener;
 
     public static PulseFragment newInstance(int mode, String target) {
         PulseFragment fragment = new PulseFragment();
@@ -68,8 +65,8 @@ public class PulseFragment extends GdgListFragment {
     @Override
     public void onAttach(final Activity activity) {
         super.onAttach(activity);
-        if (activity instanceof Pulse) {
-            mListener = (Pulse) activity;
+        if (activity instanceof Callbacks) {
+            mListener = (Callbacks) activity;
         } else {
             throw new ClassCastException("Activity " + activity.getClass().getSimpleName()
                     + " must implement " + Pulse.class.getSimpleName() + " interface.");
@@ -94,75 +91,73 @@ public class PulseFragment extends GdgListFragment {
 
         setIsLoading(true);
 
-        if (mTarget.equals("Global")) {
-            mFetchPulseTask = GroupDirectory.getPulse(
-                    new Response.Listener<org.gdg.frisbee.android.api.model.Pulse>() {
-                        @Override
-                        public void onResponse(final org.gdg.frisbee.android.api.model.Pulse pulse) {
-                            App.getInstance().getModelCache().putAsync(
-                                    "pulse_" + mTarget.toLowerCase(),
-                                    pulse,
-                                    DateTime.now().plusDays(1),
-                                    new ModelCache.CachePutListener() {
-                                        @Override
-                                        public void onPutIntoCache() {
-                                            initAdapter(pulse);
-                                        }
-                                    });
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError volleyError) {
-                            if (isAdded()) {
-                                Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
-                            }
-                            Timber.e("Couldn't fetch pulse", volleyError);
-                        }
-                    }
-            );
-        } else {
-            mFetchPulseTask = GroupDirectory.getCountryPulse(mTarget,
-                    new Response.Listener<org.gdg.frisbee.android.api.model.Pulse>() {
-                        @Override
-                        public void onResponse(final org.gdg.frisbee.android.api.model.Pulse pulse) {
-                            App.getInstance().getModelCache().putAsync(
-                                    "pulse_" + mTarget.toLowerCase().replace(" ", "-"),
-                                    pulse,
-                                    DateTime.now().plusDays(1),
-                                    new ModelCache.CachePutListener() {
-                                        @Override
-                                        public void onPutIntoCache() {
-                                            initAdapter(pulse);
-                                        }
-                                    });
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError volleyError) {
-                            if (isAdded()) {
-                                Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
-                            }
-                            Timber.e("Couldn't fetch pulse", volleyError);
-                        }
-                    }
-            );
-        }
-
         App.getInstance().getModelCache().getAsync("pulse_" + mTarget.toLowerCase().replace(" ", "-"), true, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
-                org.gdg.frisbee.android.api.model.Pulse pulse = (org.gdg.frisbee.android.api.model.Pulse) item;
+                Pulse pulse = (Pulse) item;
                 initAdapter(pulse);
             }
 
             @Override
             public void onNotFound(String key) {
-                mFetchPulseTask.execute();
+                fetchPulseTask();
             }
         });
     }
 
-    private void initAdapter(org.gdg.frisbee.android.api.model.Pulse pulse) {
+    private void fetchPulseTask() {
+        if (mTarget.equals("Global")) {
+            App.getInstance().getGroupDirectory().getPulse(new Callback<Pulse>() {
+                @Override
+                public void success(final Pulse pulse, retrofit.client.Response response) {
+                    App.getInstance().getModelCache().putAsync(
+                            "pulse_" + mTarget.toLowerCase(),
+                            pulse,
+                            DateTime.now().plusDays(1),
+                            new ModelCache.CachePutListener() {
+                                @Override
+                                public void onPutIntoCache() {
+                                    initAdapter(pulse);
+                                }
+                            });
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    if (isAdded()) {
+                        Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
+                    }
+                    Timber.e(error, "Couldn't fetch pulse");
+                }
+            });
+        } else {
+            App.getInstance().getGroupDirectory().getCountryPulse(mTarget, new Callback<Pulse>() {
+                @Override
+                public void success(final Pulse pulse, retrofit.client.Response response) {
+                    App.getInstance().getModelCache().putAsync(
+                            "pulse_" + mTarget.toLowerCase().replace(" ", "-"),
+                            pulse,
+                            DateTime.now().plusDays(1),
+                            new ModelCache.CachePutListener() {
+                                @Override
+                                public void onPutIntoCache() {
+                                    initAdapter(pulse);
+                                }
+                            });
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    if (isAdded()) {
+                        Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
+                    }
+                    Timber.e(error, "Couldn't fetch pulse");
+                }
+            });
+        }
+    }
+
+    private void initAdapter(Pulse pulse) {
         mAdapter.setPulse(mMode, pulse);
         mAdapter.notifyDataSetChanged();
         setIsLoading(false);
@@ -188,7 +183,7 @@ public class PulseFragment extends GdgListFragment {
         }
     }
 
-    public interface Pulse {
+    public interface Callbacks {
         void openPulse(String key);
     }
 }

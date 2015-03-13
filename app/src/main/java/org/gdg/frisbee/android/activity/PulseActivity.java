@@ -32,13 +32,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.ApiRequest;
-import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.Pulse;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
@@ -52,9 +47,12 @@ import java.util.Collections;
 import butterknife.InjectView;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import timber.log.Timber;
 
-public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment.Pulse {
+public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment.Callbacks {
 
     @InjectView(R.id.pager)
     ViewPager mViewPager;
@@ -63,14 +61,12 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
     private CountriesSpinnerAdapter mSpinnerAdapter;
     private MyAdapter mViewPagerAdapter;
     private ArrayList<String> mPulseTargets;
-    private ApiRequest mFetchGlobalPulseTask;
     private Spinner mSpinner;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Timber.i("onCreate");
         setContentView(R.layout.activity_pulse);
 
         mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
@@ -82,33 +78,6 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
         mViewPagerAdapter = new MyAdapter(this, getSupportFragmentManager());
         mSpinnerAdapter = new CountriesSpinnerAdapter(this);
 
-        mFetchGlobalPulseTask = GroupDirectory.getPulse(
-                new Response.Listener<Pulse>() {
-                    @Override
-                    public void onResponse(final Pulse pulse) {
-                        App.getInstance().getModelCache().putAsync(
-                                Const.CACHE_KEY_PULSE_GLOBAL, 
-                                pulse, 
-                                DateTime.now().plusDays(1), 
-                                new ModelCache.CachePutListener() {
-                                    @Override
-                                    public void onPutIntoCache() {
-                                        mPulseTargets.addAll(pulse.keySet());
-                                        initSpinner();
-                                    }
-                                });
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        try {
-                            Crouton.makeText(PulseActivity.this, R.string.fetch_chapters_failed, Style.ALERT).show();
-                        } catch (IllegalStateException exception) {
-                        }
-                        Timber.e("Couldn't fetch chapter list", volleyError);
-                    }
-                }
-        );
 
         App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PULSE_GLOBAL, true, new ModelCache.CacheListener() {
             @Override
@@ -120,7 +89,35 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
 
             @Override
             public void onNotFound(String key) {
-                mFetchGlobalPulseTask.execute();
+                fetchPulse();
+            }
+        });
+    }
+
+    private void fetchPulse() {
+        App.getInstance().getGroupDirectory().getPulse(new Callback<Pulse>() {
+            @Override
+            public void success(final Pulse pulse, Response response) {
+                App.getInstance().getModelCache().putAsync(
+                        Const.CACHE_KEY_PULSE_GLOBAL,
+                        pulse,
+                        DateTime.now().plusDays(1),
+                        new ModelCache.CachePutListener() {
+                            @Override
+                            public void onPutIntoCache() {
+                                mPulseTargets.addAll(pulse.keySet());
+                                initSpinner();
+                            }
+                        });
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                try {
+                    Crouton.makeText(PulseActivity.this, R.string.fetch_chapters_failed, Style.ALERT).show();
+                } catch (IllegalStateException exception) {
+                }
+                Timber.e(error, "Couldn't fetch chapter list");
             }
         });
     }

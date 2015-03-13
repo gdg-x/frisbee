@@ -42,6 +42,7 @@ import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.GdgXHub;
+import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.GsonRequest;
 import org.gdg.frisbee.android.api.deserializer.ZuluDateTimeDeserializer;
 import org.gdg.frisbee.android.cache.ModelCache;
@@ -74,6 +75,7 @@ public class App extends Application implements LocationListener {
         return mInstance;
     }
 
+    private GroupDirectory groupDirectoryInstance;
     private GdgXHub hubInstance;
     private ModelCache mModelCache;
     private Picasso mPicasso;
@@ -311,5 +313,15 @@ public class App extends Application implements LocationListener {
                     .build().create(GdgXHub.class);
         }
         return hubInstance;
+    }
+
+    public GroupDirectory getGroupDirectory() {
+        if (groupDirectoryInstance == null) {
+            groupDirectoryInstance = new RestAdapter.Builder()
+                    .setEndpoint(GroupDirectory.BASE_URL)
+                    .setConverter(new GsonConverter(GsonRequest.getGson()))
+                    .build().create(GroupDirectory.class);
+        }
+        return groupDirectoryInstance;
     }
 }

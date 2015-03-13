@@ -54,6 +54,7 @@ import java.io.IOException;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
+import retrofit.client.Response;
 import timber.log.Timber;
 
 public class SettingsFragment extends PreferenceFragment {
@@ -275,8 +276,18 @@ public class SettingsFragment extends PreferenceFragment {
                             Plus.AccountApi.getAccountName(activity.getGoogleApiClient()),
                             "oauth2: " + Scopes.PLUS_LOGIN);
 
-                    App.getInstance().getGdgXHub()
-                            .setHomeGdg("Bearer " + token, new HomeGdgRequest(homeGdg), null);
+                    App.getInstance().getGdgXHub().setHomeGdg("Bearer " + token,
+                            new HomeGdgRequest(homeGdg),
+                            new Callback<Void>() {
+                                @Override
+                                public void success(Void aVoid, Response response) {
+                                }
+
+                                @Override
+                                public void failure(RetrofitError error) {
+                                    Timber.e(error, "Setting Home failed.");
+                                }
+                            });
                 } catch (IOException | GoogleAuthException e) {
                     e.printStackTrace();
                 }

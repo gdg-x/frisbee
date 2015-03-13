@@ -16,24 +16,38 @@
 
 package org.gdg.frisbee.android.api.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class PulseEntry {
-    private int plusMembers, meetings, attendees;
-    private String id;
+
+    private static final String FIELD_PLUS_MEMBERS = "plus_members";
+    private static final String FIELD_ATTENDEES = "attendees";
+    private static final String FIELD_MEETINGS = "meetings";
+    private static final String FIELD_ID = "id";
+
+    @SerializedName(FIELD_PLUS_MEMBERS)
+    private int mPlusMembers;
+    @SerializedName(FIELD_ATTENDEES)
+    private int mAttendees;
+    @SerializedName(FIELD_MEETINGS)
+    private int mMeetings;
+    @SerializedName(FIELD_ID)
+    private String mId;
 
     public int getPlusMembers() {
-        return plusMembers;
-    }
-
-    public int getMeetings() {
-        return meetings;
+        return mPlusMembers;
     }
 
     public int getAttendees() {
-        return attendees;
+        return mAttendees;
+    }
+
+    public int getMeetings() {
+        return mMeetings;
     }
 
     public String getId() {
-        return id;
+        return mId;
     }
 
     public int compareTo(int mode, PulseEntry pulseEntry) {

@@ -62,6 +62,7 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import retrofit.Callback;
 import retrofit.RetrofitError;
+import retrofit.client.Response;
 import timber.log.Timber;
 
 public class FirstStartActivity extends ActionBarActivity implements 
@@ -291,7 +292,18 @@ public class FirstStartActivity extends ActionBarActivity implements
                             }
                         });
 
-                        client.setHomeGdg("Bearer " + token, new HomeGdgRequest(PrefUtils.getHomeChapterIdNotNull(FirstStartActivity.this)), null);
+                        client.setHomeGdg("Bearer " + token,
+                                new HomeGdgRequest(PrefUtils.getHomeChapterIdNotNull(FirstStartActivity.this)),
+                                new Callback<Void>() {
+                                    @Override
+                                    public void success(Void aVoid, Response response) {
+                                    }
+
+                                    @Override
+                                    public void failure(RetrofitError error) {
+                                        Timber.e(error, "Setting Home failed.");
+                                    }
+                                });
 
                     } catch (IOException e) {
                         Timber.e("Token fail. %s", e);

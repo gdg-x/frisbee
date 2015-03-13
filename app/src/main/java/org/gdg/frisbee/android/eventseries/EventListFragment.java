@@ -27,9 +27,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.EventAdapter;
@@ -59,15 +56,6 @@ public abstract class EventListFragment extends GdgListFragment {
     protected EventAdapter mAdapter;
 
     protected ArrayList<SimpleEvent> mEvents;
-    protected DateTime mStart;
-    protected DateTime mEnd;
-
-    Response.ErrorListener mErrorListener = new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError volleyError) {
-            onError(volleyError);
-        }
-    };
     
     protected void onError(Throwable e) {
         setIsLoading(false);

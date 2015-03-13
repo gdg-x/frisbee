@@ -16,140 +16,29 @@
 
 package org.gdg.frisbee.android.api;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.reflect.TypeToken;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.api.model.Pulse;
-import org.joda.time.DateTime;
 
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Type;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 
-import timber.log.Timber;
+import retrofit.Callback;
+import retrofit.http.GET;
+import retrofit.http.Path;
+import retrofit.http.Query;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.api
- * <p/>
- * User: maui
- * Date: 21.04.13
- * Time: 22:08
- */
-public class GroupDirectory {
+public interface GroupDirectory {
 
-    private static final String BASE_URL = "https://developers.google.com";
-    private static final String ALL_CALENDAR_URL = BASE_URL + "/events/calendar/fc?start=1366581600&end=1367186400&_=1366664352089";
-    private static final String GDL_CALENDAR_URL = BASE_URL + "/events/calendar/fc?calendar=gdl&start=1366581600&end=1367186400&_=1366664644691";
-    private static final String CHAPTER_CALENDAR_URL = BASE_URL + "/events/feed/json";
-    private static final String SHOWCASE_NEXT_URL = BASE_URL + "/showcase/next";
-    private static final String PULSE_URL = BASE_URL + "/groups/pulse_stats/";
-    private static final String COUNTRY_PULSE_URL = BASE_URL + "/groups/pulse_stats/%s/";
-    
-    private GroupDirectory() {
+    String BASE_URL = "https://developers.google.com";
 
-    }
+    @GET("/groups/pulse_stats/")
+    void getPulse(Callback<Pulse> callback);
 
-    public static ApiRequest getPulse(Response.Listener<Pulse> successListener, Response.ErrorListener errorListener) {
-        GsonRequest<Void, Pulse> pulseReq = new GsonRequest<>(Request.Method.GET,
-                PULSE_URL,
-                Pulse.class,
-                successListener,
-                errorListener,
-                GsonRequest.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES));
-        return new ApiRequest(pulseReq);
-    }
+    @GET("/groups/pulse_stats/{country}/")
+    void getCountryPulse(@Path("country") String country, Callback<Pulse> callback);
 
-    public static ApiRequest getCountryPulse(String country, Response.Listener<Pulse> successListener, Response.ErrorListener errorListener) {
-        GsonRequest<Void, Pulse> pulseReq = null;
-        try {
-            Timber.d(String.format(COUNTRY_PULSE_URL, URLEncoder.encode(country, "utf-8")));
-            pulseReq = new GsonRequest<>(Request.Method.GET,
-                    String.format(COUNTRY_PULSE_URL, country.replaceAll(" ", "%20")),
-                    Pulse.class,
-                    successListener,
-                    errorListener,
-                    GsonRequest.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        return new ApiRequest(pulseReq);
-    }
-
-    public static ApiRequest getChapterEventList(final DateTime start,
-                                          final DateTime end, 
-                                          final String chapterId, 
-                                          Response.Listener<ArrayList<Event>> successListener, 
-                                          Response.ErrorListener errorListener) {
-
-        ArrayList<NameValuePair> params = new ArrayList<>();
-        params.add(new NameValuePair() {
-            @Override
-            public String getName() {
-                return "group";
-            }
-
-            @Override
-            public String getValue() {
-                return chapterId;
-            }
-        });
-
-        params.add(new NameValuePair() {
-            @Override
-            public String getName() {
-                return "start";
-            }
-
-            @Override
-            public String getValue() {
-                return "" + (int) (start.getMillis() / 1000);
-            }
-        });
-
-        if (end != null) {
-            params.add(new NameValuePair() {
-                @Override
-                public String getName() {
-                    return "end";
-                }
-
-                @Override
-                public String getValue() {
-                    return "" + (int) (end.getMillis() / 1000);
-                }
-            });
-        }
-        params.add(new NameValuePair() {
-            @Override
-            public String getName() {
-                return "_";
-            }
-
-            @Override
-            public String getValue() {
-                return "" + (int) (new DateTime().getMillis() / 1000);
-            }
-        });
-        Type type = new TypeToken<ArrayList<Event>>() {
-            }.getType();
-
-        String url = CHAPTER_CALENDAR_URL;
-        url += "?" + URLEncodedUtils.format(params, "UTF-8");
-
-        GsonRequest<Void, ArrayList<Event>> eventReq = new GsonRequest<>(Request.Method.GET,
-                url,
-                type,
-                successListener,
-                errorListener,
-                GsonRequest.getGson(FieldNamingPolicy.IDENTITY));
-
-        return new ApiRequest(eventReq);
-    }
+    @GET("/events/feed/json")
+    void getChapterEventList(@Query("start") final int start,
+                             @Query("end") final int end,
+                             @Query("group") final String chapterId,
+                             Callback<ArrayList<Event>> callback);
 }
