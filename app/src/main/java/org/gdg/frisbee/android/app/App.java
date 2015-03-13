@@ -306,7 +306,7 @@ public class App extends Application implements LocationListener {
     public GdgXHub getGdgXHub() {
         if (hubInstance == null) {
             hubInstance = new RestAdapter.Builder()
-                    .setEndpoint("https://hub.gdgx.io/api/v1")
+                    .setEndpoint(GdgXHub.BASE_URL)
                     .setConverter(new GsonConverter(GsonRequest.getGson(FieldNamingPolicy.IDENTITY, new ZuluDateTimeDeserializer())))
                     .build().create(GdgXHub.class);
         }

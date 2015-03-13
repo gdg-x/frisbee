@@ -2,14 +2,14 @@ package org.gdg.frisbee.android.app;
 
 import android.content.SharedPreferences;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 
 import org.gdg.frisbee.android.Const;
-import org.gdg.frisbee.android.api.GdgX;
 import org.gdg.frisbee.android.api.model.OrganizerCheckResponse;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
 
 public class OrganizerChecker {
     private boolean mIsOrganizer = false;
@@ -43,10 +43,9 @@ public class OrganizerChecker {
                 || !currentId.equals(mCheckedId)  
                 || System.currentTimeMillis() > mLastOrganizerCheck + Const.ORGANIZER_CHECK_MAX_TIME) {
             mIsOrganizer = false;
-            GdgX xClient = new GdgX();
-            xClient.checkOrganizer(currentId, new Response.Listener<OrganizerCheckResponse>() {
+            App.getInstance().getGdgXHub().checkOrganizer(currentId, new Callback<OrganizerCheckResponse>() {
                 @Override
-                public void onResponse(OrganizerCheckResponse organizerCheckResponse) {
+                public void success(OrganizerCheckResponse organizerCheckResponse, retrofit.client.Response response) {
                     mLastOrganizerCheck = System.currentTimeMillis();
                     mCheckedId = currentId;
                     savePreferences();
@@ -59,13 +58,13 @@ public class OrganizerChecker {
                         responseHandler.onOrganizerResponse(false);
                     }
                 }
-            }, new Response.ErrorListener() {
+
                 @Override
-                public void onErrorResponse(VolleyError volleyError) {
+                public void failure(RetrofitError error) {
                     mIsOrganizer = false;
                     responseHandler.onErrorResponse();
                 }
-            }).execute();
+            });
         } else {
             responseHandler.onOrganizerResponse(mIsOrganizer);
         }
@@ -78,9 +77,9 @@ public class OrganizerChecker {
         editor.apply();
     }
 
-    public static interface OrganizerResponseHandler {
-        public void onOrganizerResponse(boolean isOrganizer);
+    public interface OrganizerResponseHandler {
+        void onOrganizerResponse(boolean isOrganizer);
 
-        public void onErrorResponse();
+        void onErrorResponse();
     }
 }

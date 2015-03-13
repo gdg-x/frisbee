@@ -31,8 +31,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.auth.GoogleAuthException;
@@ -44,10 +42,11 @@ import com.google.android.gms.plus.Plus;
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.ApiRequest;
-import org.gdg.frisbee.android.api.GdgX;
+import org.gdg.frisbee.android.api.GdgXHub;
 import org.gdg.frisbee.android.api.model.Chapter;
+import org.gdg.frisbee.android.api.model.GcmRegistrationRequest;
 import org.gdg.frisbee.android.api.model.GcmRegistrationResponse;
+import org.gdg.frisbee.android.api.model.HomeGdgRequest;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.fragment.FirstStartStep1Fragment;
 import org.gdg.frisbee.android.fragment.FirstStartStep2Fragment;
@@ -61,6 +60,8 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
+import retrofit.Callback;
+import retrofit.RetrofitError;
 import timber.log.Timber;
 
 public class FirstStartActivity extends ActionBarActivity implements 
@@ -262,36 +263,35 @@ public class FirstStartActivity extends ActionBarActivity implements
                         }
                     });
                     try {
-                        String token = GoogleAuthUtil.getToken(FirstStartActivity.this, 
+                        String token = GoogleAuthUtil.getToken(FirstStartActivity.this,
                                 Plus.AccountApi.getAccountName(mGoogleApiClient),
                                 "audience:server:client_id:" + BuildConfig.HUB_CLIENT_ID);
                         final String regid = mGcm.register(BuildConfig.GCM_SENDER_ID);
 
-                        GdgX client = new GdgX(token);
 
-                        ApiRequest req = client.registerGcm(regid, new Response.Listener<GcmRegistrationResponse>() {
+                        final GdgXHub client = App.getInstance().getGdgXHub();
+                        client.registerGcm("Bearer " + token, new GcmRegistrationRequest(regid), new Callback<GcmRegistrationResponse>() {
                             @Override
-                            public void onResponse(GcmRegistrationResponse messageResponse) {
+                            public void success(GcmRegistrationResponse gcmRegistrationResponse, retrofit.client.Response response) {
                                 setLoadingScreen(false);
                                 PrefUtils.setInitialSettings(
-                                        FirstStartActivity.this, 
-                                        enableGcm, 
-                                        enableAnalytics, 
-                                        regid, 
-                                        messageResponse.getNotificationKey());
+                                        FirstStartActivity.this,
+                                        /* enableGcm */ true,
+                                        enableAnalytics,
+                                        regid,
+                                        gcmRegistrationResponse.getNotificationKey());
                                 finish();
                             }
-                        }, new Response.ErrorListener() {
+
                             @Override
-                            public void onErrorResponse(VolleyError volleyError) {
+                            public void failure(RetrofitError error) {
                                 setLoadingScreen(false);
                                 Crouton.showText(FirstStartActivity.this, getString(R.string.server_error), Style.ALERT);
-                                Timber.e("Fail", volleyError);
+                                Timber.e(error, "Fail");
                             }
                         });
-                        req.execute();
 
-                        client.setHomeGdg(PrefUtils.getHomeChapterIdNotNull(FirstStartActivity.this), null, null).execute();
+                        client.setHomeGdg("Bearer " + token, new HomeGdgRequest(PrefUtils.getHomeChapterIdNotNull(FirstStartActivity.this)), null);
 
                     } catch (IOException e) {
                         Timber.e("Token fail. %s", e);

@@ -26,11 +26,7 @@ package org.gdg.frisbee.android.api.model;
 public class GcmRegistrationRequest {
     private String registrationId;
 
-    public String getRegistrationId() {
-        return registrationId;
-    }
-
-    public void setRegistrationId(String registrationId) {
+    public GcmRegistrationRequest(String registrationId) {
         this.registrationId = registrationId;
     }
 }
