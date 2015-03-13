@@ -14,7 +14,6 @@ import com.google.gson.FieldNamingPolicy;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.GdeDirectory;
-import org.gdg.frisbee.android.api.GsonRequest;
 import org.gdg.frisbee.android.api.model.Gde;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
@@ -83,7 +82,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
 
         GdeDirectory gdeDirectoryClient = new RestAdapter.Builder()
                 .setEndpoint("https://gde-map.appspot.com")
-                .setConverter(new GsonConverter(GsonRequest.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)))
+                .setConverter(new GsonConverter(Utils.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)))
                 .build().create(GdeDirectory.class);
         
         gdeDirectoryClient.getDirectory(new Callback<ArrayList<Gde>>() {

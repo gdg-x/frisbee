@@ -30,7 +30,6 @@ import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.ContributorAdapter;
 import org.gdg.frisbee.android.api.GitHub;
-import org.gdg.frisbee.android.api.GsonRequest;
 import org.gdg.frisbee.android.api.model.Contributor;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
@@ -99,7 +98,7 @@ public class ContributorsFragment extends GdgListFragment {
     private void fetchGitHubContributors() {
         GitHub gitHubClient = new RestAdapter.Builder()
                 .setEndpoint("https://api.github.com")
-                .setConverter(new GsonConverter(GsonRequest.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)))
+                .setConverter(new GsonConverter(Utils.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)))
                 .build().create(GitHub.class);
         
         gitHubClient.getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO, new Callback<ArrayList<Contributor>>() {

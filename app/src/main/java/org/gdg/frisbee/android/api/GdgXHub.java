@@ -6,6 +6,7 @@ import org.gdg.frisbee.android.api.model.GcmRegistrationRequest;
 import org.gdg.frisbee.android.api.model.GcmRegistrationResponse;
 import org.gdg.frisbee.android.api.model.HomeGdgRequest;
 import org.gdg.frisbee.android.api.model.OrganizerCheckResponse;
+import org.gdg.frisbee.android.api.model.PagedList;
 import org.gdg.frisbee.android.api.model.TaggedEvent;
 import org.joda.time.DateTime;
 

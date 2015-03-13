@@ -43,7 +43,6 @@ import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.GdgXHub;
 import org.gdg.frisbee.android.api.GroupDirectory;
-import org.gdg.frisbee.android.api.GsonRequest;
 import org.gdg.frisbee.android.api.deserializer.ZuluDateTimeDeserializer;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
@@ -57,6 +56,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import io.fabric.sdk.android.Fabric;
+import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
 import timber.log.Timber;
@@ -121,7 +121,6 @@ public class App extends Application implements LocationListener {
 
         // Initialize ModelCache and Volley
         getModelCache();
-        GdgVolley.init(this);
 
         PrefUtils.increaseAppStartCount(this);
 
@@ -309,7 +308,7 @@ public class App extends Application implements LocationListener {
         if (hubInstance == null) {
             hubInstance = new RestAdapter.Builder()
                     .setEndpoint(GdgXHub.BASE_URL)
-                    .setConverter(new GsonConverter(GsonRequest.getGson(FieldNamingPolicy.IDENTITY, new ZuluDateTimeDeserializer())))
+                    .setConverter(new GsonConverter(Utils.getGson(FieldNamingPolicy.IDENTITY, new ZuluDateTimeDeserializer())))
                     .build().create(GdgXHub.class);
         }
         return hubInstance;
@@ -319,7 +318,17 @@ public class App extends Application implements LocationListener {
         if (groupDirectoryInstance == null) {
             groupDirectoryInstance = new RestAdapter.Builder()
                     .setEndpoint(GroupDirectory.BASE_URL)
-                    .setConverter(new GsonConverter(GsonRequest.getGson()))
+                    .setConverter(new GsonConverter(Utils.getGson()))
+                    .setRequestInterceptor(new RequestInterceptor() {
+                        @Override
+                        public void intercept(RequestFacade request) {
+                            request.addHeader("User-Agent", "GDG-Frisbee/0.1 (Android)");
+                            request.addHeader("Referer", "https://developers.google.com/groups/directory/");
+                            request.addHeader("X-Requested-With", "XMLHttpRequest");
+                            request.addHeader("Cache-Control", "no-cache");
+                            request.addHeader("DNT", "1");
+                        }
+                    })
                     .build().create(GroupDirectory.class);
         }
         return groupDirectoryInstance;
