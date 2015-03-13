@@ -27,11 +27,21 @@
 -dontwarn com.squareup.okhttp.**
 -dontwarn okio.**
 
-# Volley
+#retrofit
+-keep class com.squareup.okhttp.** { *; }
+-keep interface com.squareup.okhttp.** { *; }
+-dontwarn com.squareup.okhttp.**
+
+-dontwarn rx.**
+-dontwarn retrofit.**
+-dontwarn okio.**
+-keep class retrofit.** { *; }
+-keepclasseswithmembers class * {
+    @retrofit.http.* <methods>;
+}
+
 -keep class android.support.v4.app.** { *; }
 -keep interface android.support.v4.app.** { *; }
--keep class com.android.volley.** { *; }
--keep interface com.android.volley.** { *; }
 
 -dontwarn org.apache.**
 
