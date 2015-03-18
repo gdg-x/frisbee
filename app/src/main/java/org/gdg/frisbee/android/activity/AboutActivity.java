@@ -50,6 +50,7 @@ public class AboutActivity extends GdgActivity {
         setContentView(R.layout.activity_about);
 
         getActionBarToolbar().setTitle(R.string.about);
+        getActionBarToolbar().setNavigationIcon(R.drawable.ic_up);
 
         mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
         mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.tab_selected_strip));
