@@ -71,7 +71,8 @@
           android:layout_height="match_parent"
           android:layout_gravity="center"
           android:layout_marginBottom="10dip"
-          android:orientation="vertical">
+          android:orientation="vertical"
+          android:padding="10dip">
 
           <TextView
             android:id="@+id/about"
