@@ -47,6 +47,7 @@ public class EventActivity extends GdgActivity {
 
         setContentView(R.layout.activity_event);
         getActionBarToolbar().setTitle(R.string.event);
+        getActionBarToolbar().setNavigationIcon(R.drawable.ic_up);
 
         mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
         mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.tab_selected_strip));
