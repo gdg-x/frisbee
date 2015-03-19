@@ -33,6 +33,9 @@ public class SettingsActivity extends GdgActivity {
 
         setContentView(R.layout.activity_settings);
 
+        getActionBarToolbar().setTitle(R.string.settings);
+        getActionBarToolbar().setNavigationIcon(R.drawable.ic_up);
+
         Tracker t = App.getInstance().getTracker();
         // Set screen name.
         // Where path is a String representing the screen name.
