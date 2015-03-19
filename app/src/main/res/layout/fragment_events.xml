@@ -33,19 +33,7 @@
     android:scrollbarStyle="outsideOverlay"
     android:drawSelectorOnTop="true" />
 
-  <LinearLayout
-    android:id="@+id/loading"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_vertical|center_horizontal"
-    android:orientation="vertical">
-
-    <org.gdg.frisbee.android.view.AnimationImageView
-      android:id="@+id/imageView"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:src="@drawable/gdg_load" />
-  </LinearLayout>
+  <include layout="@layout/loading_animated_view" />
 
   <LinearLayout
     android:id="@+id/empty"
