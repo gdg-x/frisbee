@@ -33,16 +33,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.ChapterAdapter;
-import org.gdg.frisbee.android.api.ApiRequest;
-import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
@@ -64,6 +60,8 @@ import java.util.List;
 import butterknife.InjectView;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
+import retrofit.Callback;
+import retrofit.RetrofitError;
 import timber.log.Timber;
 
 public class MainActivity extends GdgNavDrawerActivity {
@@ -71,17 +69,14 @@ public class MainActivity extends GdgNavDrawerActivity {
     public static final String SECTION_EVENTS = "events";
     public static final int REQUEST_FIRST_START_WIZARD = 100;
     private static final int PLAY_SERVICE_DIALOG_REQUEST_CODE = 200;
+
     @InjectView(R.id.pager)
     ViewPager mViewPager;
-
     @InjectView(R.id.sliding_tabs)
     SlidingTabLayout mSlidingTabLayout;
-
     private Handler mHandler = new Handler();
-
     private ChapterAdapter mChapterAdapter;
     private ChapterFragmentPagerAdapter mViewPagerAdapter;
-    private ApiRequest mFetchChaptersTask;
 
     private boolean mFirstStart = false;
 
@@ -100,8 +95,6 @@ public class MainActivity extends GdgNavDrawerActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        GroupDirectory client = new GroupDirectory();
-
         mLocationComparator = new ChapterComparator(PrefUtils.getHomeChapterIdNotNull(this));
 
         mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
@@ -111,32 +104,6 @@ public class MainActivity extends GdgNavDrawerActivity {
 
         mChapterAdapter = new ChapterAdapter(MainActivity.this, true /* white text */);
         initSpinner();
-
-        mFetchChaptersTask = client.getDirectory(new Response.Listener<Directory>() {
-            @Override
-            public void onResponse(final Directory directory) {
-                App.getInstance().getModelCache().putAsync(
-                        Const.CACHE_KEY_CHAPTER_LIST_HUB,
-                        directory,
-                        DateTime.now().plusDays(1),
-                        new ModelCache.CachePutListener() {
-                            @Override
-                            public void onPutIntoCache() {
-                                ArrayList<Chapter> chapters = directory.getGroups();
-                                initChapters(chapters);
-                            }
-                        });
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                try {
-                    Crouton.makeText(MainActivity.this, R.string.fetch_chapters_failed, Style.ALERT).show();
-                } catch (IllegalStateException exception) {
-                }
-                Timber.e("Couldn't fetch chapter list", volleyError);
-            }
-        });
 
         if (savedInstanceState == null) {
 
@@ -159,7 +126,7 @@ public class MainActivity extends GdgNavDrawerActivity {
                 @Override
                 public void onNotFound(String key) {
                     if (Utils.isOnline(MainActivity.this)) {
-                        mFetchChaptersTask.execute();
+                        fetchChapters();
                     } else {
                         Crouton.makeText(MainActivity.this, getString(R.string.offline_alert), Style.ALERT).show();
                     }
@@ -173,7 +140,7 @@ public class MainActivity extends GdgNavDrawerActivity {
                 Chapter selectedChapter = savedInstanceState.getParcelable("selected_chapter");
                 initChapters(chapters, selectedChapter);
             } else {
-                mFetchChaptersTask.execute();
+                fetchChapters();
             }
         }
 
@@ -242,6 +209,33 @@ public class MainActivity extends GdgNavDrawerActivity {
             selectedChapter = chapters.get(0);
         }
         initChapters(chapters, selectedChapter);
+    }
+
+    public void fetchChapters() {
+        App.getInstance().getGdgXHub().getDirectory(new Callback<Directory>() {
+
+            public void success(final Directory directory, retrofit.client.Response response) {
+                App.getInstance().getModelCache().putAsync(
+                        Const.CACHE_KEY_CHAPTER_LIST_HUB,
+                        directory,
+                        DateTime.now().plusDays(1),
+                        new ModelCache.CachePutListener() {
+                            @Override
+                            public void onPutIntoCache() {
+                                ArrayList<Chapter> chapters = directory.getGroups();
+                                initChapters(chapters);
+                            }
+                        });
+            }
+
+            public void failure(RetrofitError error) {
+                try {
+                    Crouton.makeText(MainActivity.this, R.string.fetch_chapters_failed, Style.ALERT).show();
+                } catch (IllegalStateException exception) {
+                }
+                Timber.e(error, "Couldn't fetch chapter list");
+            }
+        });
     }
 
     /**

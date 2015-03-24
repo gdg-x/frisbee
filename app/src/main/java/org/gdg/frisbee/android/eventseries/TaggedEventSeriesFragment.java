@@ -26,13 +26,11 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.Response;
-
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.EventAdapter;
-import org.gdg.frisbee.android.api.ApiRequest;
-import org.gdg.frisbee.android.api.PagedList;
+import org.gdg.frisbee.android.api.model.PagedList;
+import org.gdg.frisbee.android.api.model.TaggedEvent;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.EventDateComparator;
@@ -46,6 +44,8 @@ import java.util.Comparator;
 import butterknife.ButterKnife;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
+import retrofit.Callback;
+import retrofit.RetrofitError;
 
 public class TaggedEventSeriesFragment extends EventListFragment {
 
@@ -54,8 +54,8 @@ public class TaggedEventSeriesFragment extends EventListFragment {
     private String mCacheKey = "";
     private TaggedEventSeries mTaggedEventSeries;
     private Comparator<EventAdapter.Item> mLocationComparator = new TaggedEventDistanceComparator();
-    private Comparator<EventAdapter.Item> mDateComparator = new EventDateComparator();
     private Comparator<EventAdapter.Item> mCurrentComparator = mLocationComparator;
+    private Comparator<EventAdapter.Item> mDateComparator = new EventDateComparator();
 
     public static TaggedEventSeriesFragment newInstance(String cacheKey, 
                                                         TaggedEventSeries taggedEventSeries, 
@@ -115,36 +115,40 @@ public class TaggedEventSeriesFragment extends EventListFragment {
     void fetchEvents() {
         setIsLoading(true);
 
-        Response.Listener<PagedList<org.gdg.frisbee.android.api.model.TaggedEvent>> listener = 
-                new Response.Listener<PagedList<org.gdg.frisbee.android.api.model.TaggedEvent>>() {
-                    @Override
-                    public void onResponse(final PagedList<org.gdg.frisbee.android.api.model.TaggedEvent> events) {
-                        mEvents.addAll(events.getItems());
+        Callback<PagedList<TaggedEvent>> listener = new Callback<PagedList<TaggedEvent>>() {
 
-                        App.getInstance().getModelCache().putAsync(mCacheKey, 
-                                mEvents, 
-                                DateTime.now().plusHours(2), 
-                                new ModelCache.CachePutListener() {
-                                    @Override
-                                    public void onPutIntoCache() {
-                                        mAdapter.addAll(mEvents);
-                                        sortEvents();
-                                        setIsLoading(false);
-                                    }
-                                });
-                    }
-                };
+            @Override
+            public void success(final PagedList<TaggedEvent> taggedEventPagedList, final retrofit.client.Response response) {
+                mEvents.addAll(taggedEventPagedList.getItems());
 
-        ApiRequest fetchEvents = mClient
-                .getTaggedEventUpcomingList(mTaggedEventSeries.getTag(), listener, mErrorListener);
+                
+                App.getInstance().getModelCache().putAsync(mCacheKey, 
+                        mEvents, 
+                        DateTime.now().plusHours(2), 
+                        new ModelCache.CachePutListener() {
+                            @Override
+                            public void onPutIntoCache() {
+                                mAdapter.addAll(mEvents);
+                                sortEvents();
+                                setIsLoading(false);
+                            }
+                        });
+            }
+            
+            @Override
+            public void failure(final RetrofitError error) {
+                onError(error);
+            }
+        };
 
         if (Utils.isOnline(getActivity())) {
-            fetchEvents.execute();
+            App.getInstance().getGdgXHub()
+                    .getTaggedEventUpcomingList(mTaggedEventSeries.getTag(), DateTime.now(), listener);
         } else {
             App.getInstance().getModelCache().getAsync(mCacheKey, false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
-                    ArrayList<org.gdg.frisbee.android.api.model.TaggedEvent> events = (ArrayList<org.gdg.frisbee.android.api.model.TaggedEvent>) item;
+                    ArrayList<TaggedEvent> events = (ArrayList<TaggedEvent>) item;
 
                     mAdapter.addAll(events);
                     sortEvents();

@@ -26,13 +26,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.ChapterAdapter;
-import org.gdg.frisbee.android.api.ApiRequest;
-import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
@@ -48,6 +43,9 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import timber.log.Timber;
 
 public class FirstStartStep1Fragment extends Fragment {
@@ -58,7 +56,6 @@ public class FirstStartStep1Fragment extends Fragment {
     Button mConfirm;
     @InjectView(R.id.viewSwitcher)
     ViewSwitcher mLoadSwitcher;
-    private ApiRequest mFetchChaptersTask;
     private ChapterAdapter mSpinnerAdapter;
     private Chapter mSelectedChapter;
     private ChapterComparator mLocationComparator;
@@ -80,39 +77,11 @@ public class FirstStartStep1Fragment extends Fragment {
 
         mLocationComparator = new ChapterComparator(PrefUtils.getHomeChapterId(getActivity()));
 
-        GroupDirectory client = new GroupDirectory();
         mSpinnerAdapter = new ChapterAdapter(getActivity(), false /* black text */);
 
         if (savedInstanceState != null) {
             mSelectedChapter = savedInstanceState.getParcelable("selected_chapter");
         }
-
-        mFetchChaptersTask = client.getDirectory(new Response.Listener<Directory>() {
-            @Override
-            public void onResponse(final Directory directory) {
-                App.getInstance().getModelCache().putAsync("chapter_list_hub", 
-                        directory, 
-                        DateTime.now().plusDays(4), 
-                        new ModelCache.CachePutListener() {
-                            @Override
-                            public void onPutIntoCache() {
-                                addChapters(directory.getGroups());
-                                mLoadSwitcher.setDisplayedChild(1);
-                            }
-                        });
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                try {
-                    Crouton.makeText(getActivity(), R.string.fetch_chapters_failed, Style.ALERT).show();
-                } catch (IllegalStateException exception) {
-                    Toast.makeText(getActivity(), R.string.fetch_chapters_failed, Toast.LENGTH_SHORT).show();
-                }
-                Timber.e("Could'nt fetch chapter list", volleyError);
-            }
-        });
 
         App.getInstance().getModelCache().getAsync("chapter_list_hub", new ModelCache.CacheListener() {
             @Override
@@ -124,7 +93,7 @@ public class FirstStartStep1Fragment extends Fragment {
 
             @Override
             public void onNotFound(String key) {
-                mFetchChaptersTask.execute();
+                fetchChapters();
             }
         });
 
@@ -136,6 +105,37 @@ public class FirstStartStep1Fragment extends Fragment {
                 if (getActivity() instanceof Step1Listener) {
                     ((Step1Listener) getActivity()).onConfirmedChapter(selectedChapter);
                 }
+            }
+        });
+    }
+    
+    private void fetchChapters() {
+
+        App.getInstance().getGdgXHub().getDirectory(new Callback<Directory>() {
+
+            @Override
+            public void success(final Directory directory, Response response) {
+
+                App.getInstance().getModelCache().putAsync("chapter_list_hub",
+                        directory,
+                        DateTime.now().plusDays(4),
+                        new ModelCache.CachePutListener() {
+                            @Override
+                            public void onPutIntoCache() {
+                                addChapters(directory.getGroups());
+                                mLoadSwitcher.setDisplayedChild(1);
+                            }
+                        });
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                try {
+                    Crouton.makeText(getActivity(), R.string.fetch_chapters_failed, Style.ALERT).show();
+                } catch (IllegalStateException exception) {
+                    Toast.makeText(getActivity(), R.string.fetch_chapters_failed, Toast.LENGTH_SHORT).show();
+                }
+                Timber.e(error, "Could'nt fetch chapter list");
             }
         });
     }

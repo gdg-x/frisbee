@@ -28,7 +28,13 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
+
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.deserializer.DateTimeDeserializer;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.joda.time.format.DateTimeFormat;
@@ -196,5 +202,26 @@ public class Utils {
             }
         }
         return views;
+    }
+
+    public static Gson getGson() {
+        return new GsonBuilder()
+                .registerTypeAdapter(DateTime.class, new DateTimeDeserializer())
+                .create();
+    }
+
+    public static Gson getGson(FieldNamingPolicy policy) {
+        return new GsonBuilder()
+                .setFieldNamingPolicy(policy)
+                .registerTypeAdapter(DateTime.class, new DateTimeDeserializer())
+                .create();
+    }
+
+    public static Gson getGson(FieldNamingPolicy policy, JsonDeserializer<DateTime> dateTimeDeserializer) {
+        return new GsonBuilder()
+                .setFieldNamingPolicy(policy)
+                .registerTypeAdapter(DateTime.class, dateTimeDeserializer)
+                .create();
+
     }
 }

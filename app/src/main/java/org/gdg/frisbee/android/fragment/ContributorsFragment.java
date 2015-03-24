@@ -24,13 +24,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
+import com.google.gson.FieldNamingPolicy;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.ContributorAdapter;
-import org.gdg.frisbee.android.api.ApiRequest;
 import org.gdg.frisbee.android.api.GitHub;
 import org.gdg.frisbee.android.api.model.Contributor;
 import org.gdg.frisbee.android.app.App;
@@ -43,6 +41,10 @@ import java.util.ArrayList;
 import butterknife.ButterKnife;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.converter.GsonConverter;
 import timber.log.Timber;
 
 public class ContributorsFragment extends GdgListFragment {
@@ -73,30 +75,8 @@ public class ContributorsFragment extends GdgListFragment {
     }
 
     protected void loadContributors() {
-        GitHub githubClient = new GitHub();
-        final ApiRequest mFetchContent = githubClient.getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO,
-                new Response.Listener<ArrayList<Contributor>>() {
-                    @Override
-                    public void onResponse(final ArrayList<Contributor> contributors) {
-                        App.getInstance().getModelCache().putAsync("frisbee_contributors", 
-                                contributors, 
-                                DateTime.now().plusDays(1), 
-                                new ModelCache.CachePutListener() {
-                                    @Override
-                                    public void onPutIntoCache() {
-                                        mAdapter.addAll(contributors);
-                                    }
-                                });
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                    }
-                });
-
         if (Utils.isOnline(getActivity())) {
-            mFetchContent.execute();
+            fetchGitHubContributors();
         } else {
             App.getInstance().getModelCache().getAsync("frisbee_contributors", false, new ModelCache.CacheListener() {
                 @Override
@@ -114,19 +94,39 @@ public class ContributorsFragment extends GdgListFragment {
             });
         }
     }
+    
+    private void fetchGitHubContributors() {
+        GitHub gitHubClient = new RestAdapter.Builder()
+                .setEndpoint("https://api.github.com")
+                .setConverter(new GsonConverter(Utils.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)))
+                .build().create(GitHub.class);
+        
+        gitHubClient.getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO, new Callback<ArrayList<Contributor>>() {
+            @Override
+            public void success(final ArrayList<Contributor> contributors, retrofit.client.Response response) {
+                App.getInstance().getModelCache().putAsync("frisbee_contributors",
+                        contributors,
+                        DateTime.now().plusDays(1),
+                        new ModelCache.CachePutListener() {
+                            @Override
+                            public void onPutIntoCache() {
+                                mAdapter.addAll(contributors);
+                            }
+                        });
+            }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Timber.d("onCreateView()");
-        View v = inflater.inflate(R.layout.fragment_gde_list, container, false);
-        ButterKnife.inject(this, v);
-        return v;
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        Timber.d("onStart()");
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_gde_list, container, false);
+        ButterKnife.inject(this, v);
+        return v;
     }
 
     @Override

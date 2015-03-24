@@ -1,28 +1,14 @@
 package org.gdg.frisbee.android.api;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.google.gson.FieldNamingPolicy;
+import org.gdg.frisbee.android.api.model.Gde;
 
-import org.gdg.frisbee.android.api.model.GdeList;
+import java.util.ArrayList;
 
-/**
- * Created by maui on 28.05.2014.
- */
-public class GdeDirectory {
+import retrofit.Callback;
+import retrofit.http.GET;
 
-    private static final String DIRECTORY_URL = "https://gde-map.appspot.com/gde/list";
-
-    public GdeDirectory() {
-    }
-
-    public ApiRequest getDirectory(final Response.Listener<GdeList> successListener, Response.ErrorListener errorListener) {
-        GsonRequest<Void, GdeList> dirReq = new GsonRequest<Void, GdeList>(Request.Method.GET,
-                DIRECTORY_URL,
-                GdeList.class,
-                successListener,
-                errorListener,
-                GsonRequest.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES));
-        return new ApiRequest(dirReq);
-    }
+public interface GdeDirectory {
+    
+    @GET("/gde/list")
+    void getDirectory(Callback<ArrayList<Gde>> callback);
 }

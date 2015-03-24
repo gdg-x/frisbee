@@ -30,8 +30,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.google.android.gms.appstate.AppStateManager;
 import com.google.android.gms.appstate.AppStateStatusCodes;
 import com.google.android.gms.common.api.ResultCallback;
@@ -42,9 +40,9 @@ import com.squareup.picasso.Picasso;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
+import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.PrefUtils;
 
 import java.util.Arrays;
@@ -52,6 +50,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import butterknife.InjectView;
+import retrofit.Callback;
+import retrofit.RetrofitError;
 import timber.log.Timber;
 
 public class ArrowTaggedActivity extends GdgNavDrawerActivity {
@@ -62,7 +62,6 @@ public class ArrowTaggedActivity extends GdgNavDrawerActivity {
     @InjectView(R.id.taggedList)
     ListView taggedList;
     String taggedOrganizers = "";
-    private GroupDirectory groupDirectory;
     private OrganizerAdapter adapter;
 
     @Override
@@ -74,8 +73,6 @@ public class ArrowTaggedActivity extends GdgNavDrawerActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arrow_tagged);
-
-        groupDirectory = new GroupDirectory();
 
         adapter = new OrganizerAdapter(this, 0);
 
@@ -118,9 +115,10 @@ public class ArrowTaggedActivity extends GdgNavDrawerActivity {
                     taggedOrganizers = mergeIds(new String(conflictResult.getLocalData()), new String(conflictResult.getServerData()));
                 }
 
-                groupDirectory.getDirectory(new Response.Listener<Directory>() {
+                App.getInstance().getGdgXHub().getDirectory(new Callback<Directory>() {
+
                     @Override
-                    public void onResponse(Directory directory) {
+                    public void success(final Directory directory, final retrofit.client.Response response) {
                         String[] orgas = taggedOrganizers.split("\\|");
                         for (String orga : orgas) {
                             Chapter orgaChapter = null;
@@ -151,13 +149,12 @@ public class ArrowTaggedActivity extends GdgNavDrawerActivity {
 
                         }
                     }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        Timber.e("Error", volleyError);
-                    }
-                }).execute();
 
+                    @Override
+                    public void failure(final RetrofitError error) {
+                        Timber.e("Error", error);
+                    }
+                });
             }
         });
     }

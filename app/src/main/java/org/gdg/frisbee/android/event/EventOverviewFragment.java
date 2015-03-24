@@ -37,8 +37,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.plus.People;
@@ -50,7 +48,6 @@ import com.squareup.picasso.Target;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgActivity;
-import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.EventFullDetails;
@@ -64,9 +61,11 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
+import retrofit.Callback;
+import retrofit.RetrofitError;
 import timber.log.Timber;
 
-public class EventOverviewFragment extends Fragment implements Response.Listener<EventFullDetails> {
+public class EventOverviewFragment extends Fragment {
 
     @InjectView(R.id.title)
     TextView mTitle;
@@ -87,10 +86,8 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
     ImageView mGroupLogo;
 
     private boolean mLoading;
-    private GroupDirectory mClient;
     private Directory mDirectory;
     private EventFullDetails mEvent;
-    private ShareActionProvider mShareActionProvider;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -98,8 +95,6 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
         ButterKnife.inject(this, v);
 
         setHasOptionsMenu(true);
-
-        mClient = new GroupDirectory();
         return v;
     }
 
@@ -113,15 +108,20 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         final String eventId = getArguments().getString(Const.EXTRA_EVENT_ID);
-        mClient.getEvent(eventId, this, new Response.ErrorListener() {
+        App.getInstance().getGdgXHub().getEventDetail(eventId, new Callback<EventFullDetails>() {
             @Override
-            public void onErrorResponse(VolleyError volleyError) {
+            public void success(EventFullDetails eventFullDetails, retrofit.client.Response response) {
+                onResponse(eventFullDetails);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
                 if (isAdded()) {
                     Crouton.makeText(getActivity(), R.string.server_error, Style.ALERT).show();
                 }
-                Timber.d(volleyError, "error while retrieving event %s", eventId);
+                Timber.d(error, "error while retrieving event %s", eventId);
             }
-        }).execute();
+        });
     }
 
     public void updateWithDetails(EventFullDetails eventFullDetails) {
@@ -148,7 +148,6 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
         return fmt.print(eventFullDetails.getStart());
     }
 
-    @Override
     public void onResponse(final EventFullDetails eventFullDetails) {
         if (getActivity() == null) {
             return;
@@ -156,8 +155,6 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
         mEvent = eventFullDetails;
 
         getActivity().supportInvalidateOptionsMenu();
-
-
         updateWithDetails(eventFullDetails);
 
         App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
@@ -170,21 +167,22 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
             @Override
             public void onNotFound(String key) {
                 if (Utils.isOnline(getActivity())) {
-                    mClient.getDirectory(new Response.Listener<Directory>() {
+                    App.getInstance().getGdgXHub().getDirectory(new Callback<Directory>() {
                         @Override
-                        public void onResponse(final Directory directory) {
+                        public void success(Directory directory, retrofit.client.Response response) {
+
                             mDirectory = directory;
                             updateGroupDetails(mDirectory.getGroupById(eventFullDetails.getChapter()));
                         }
-                    }, new Response.ErrorListener() {
+
                         @Override
-                        public void onErrorResponse(VolleyError volleyError) {
+                        public void failure(RetrofitError error) {
                             if (isAdded()) {
                                 Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
                             }
-                            Timber.e("Could'nt fetch chapter list", volleyError);
+                            Timber.e(error, "Could'nt fetch chapter list");
                         }
-                    }).execute();
+                    });
                 } else {
                     Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
                 }
@@ -267,7 +265,8 @@ public class EventOverviewFragment extends Fragment implements Response.Listener
             MenuItem shareMenuitem = menu.findItem(R.id.share);
 
             if (mEvent.getEventUrl() != null) {
-                mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareMenuitem);
+                ShareActionProvider mShareActionProvider = 
+                        (ShareActionProvider) MenuItemCompat.getActionProvider(shareMenuitem);
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
                 shareIntent.putExtra(Intent.EXTRA_TEXT, mEvent.getEventUrl());

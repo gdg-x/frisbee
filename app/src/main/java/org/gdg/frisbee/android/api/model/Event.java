@@ -16,76 +16,92 @@
 
 package org.gdg.frisbee.android.api.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import org.joda.time.DateTime;
 
-import java.util.ArrayList;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.api.model
- * <p/>
- * User: maui
- * Date: 22.04.13
- * Time: 22:44
- */
 public class Event implements GdgResponse, SimpleEvent {
-    private ArrayList<String> className;
-    private DateTime start, end;
-    private int participantsCount;
-    private String timezoneName, description, location, title, link, iconUrl, id, gPlusEventLink;
 
-    public Event() {
-        className = new ArrayList<>();
-    }
+    private static final String FIELD_TIMEZONE_NAME = "timezoneName";
+    private static final String FIELD_TEMPORAL_RELATION = "temporalRelation";
+    private static final String FIELD_START = "start";
+    private static final String FIELD_ID = "id";
+    private static final String FIELD_ICON_URL = "iconUrl";
+    private static final String FIELD_GROUP = "group";
+    private static final String FIELD_TITLE = "title";
+    private static final String FIELD_END = "end";
+    private static final String FIELD_LOCATION = "location";
+    private static final String FIELD_LINK = "link";
+    private static final String FIELD_DESCRIPTION = "description";
+    private static final String FIELD_GPLUS_EVENT_LINK = "gPlusEventLink";
 
-    public ArrayList<String> getClassName() {
-        return className;
-    }
+    @SerializedName(FIELD_START)
+    private DateTime mStart;
+    @SerializedName(FIELD_END)
+    private DateTime mEnd;
+    @SerializedName(FIELD_TIMEZONE_NAME)
+    private String mTimezoneName;
+    @SerializedName(FIELD_DESCRIPTION)
+    private String mDescription;
+    @SerializedName(FIELD_LOCATION)
+    private String mLocation;
+    @SerializedName(FIELD_TEMPORAL_RELATION)
+    private String mTemporalRelation;
+    @SerializedName(FIELD_TITLE)
+    private String mTitle;
+    @SerializedName(FIELD_LINK)
+    private String mLink;
+    @SerializedName(FIELD_ICON_URL)
+    private String mIconUrl;
+    @SerializedName(FIELD_ID)
+    private String mId;
+    @SerializedName(FIELD_GROUP)
+    private String mGroup;
+    @SerializedName(FIELD_GPLUS_EVENT_LINK)
+    private String mGplusEventLink;
 
     @Override
     public DateTime getStart() {
-        return start;
+        return mStart;
     }
 
     @Override
     public DateTime getEnd() {
-        return end;
+        return mEnd;
     }
 
     public String getLocation() {
-        return location;
+        return mLocation;
     }
 
     @Override
     public String getTitle() {
-        return title;
+        return mTitle;
     }
 
     @Override
     public String getIconUrl() {
-        return iconUrl;
+        return mIconUrl;
     }
 
     @Override
     public String getId() {
-        return id;
+        return mId;
     }
 
     @Override
     public String getGPlusEventLink() {
-        return gPlusEventLink;
+        return mGplusEventLink;
     }
 
     public String getDescription() {
-        return description;
+        return mDescription;
     }
 
-    public int getParticipantsCount() {
-        return participantsCount;
-    }
 
     @Override
     public String getLink() {
-        return link;
+        return mLink;
     }
 }

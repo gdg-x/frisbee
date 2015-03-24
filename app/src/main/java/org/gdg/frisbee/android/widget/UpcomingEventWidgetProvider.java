@@ -23,18 +23,13 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.IBinder;
 import android.widget.RemoteViews;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.MainActivity;
-import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.Event;
@@ -47,19 +42,17 @@ import org.joda.time.format.DateTimeFormat;
 
 import java.util.ArrayList;
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
 import timber.log.Timber;
 
 public class UpcomingEventWidgetProvider extends AppWidgetProvider {
 
     public static class UpdateService extends Service {
-        private GroupDirectory mDirectory;
         private ArrayList<Chapter> mChapters;
 
         @Override
         public void onStart(Intent intent, int startId) {
-            Timber.d("onStart()");
-
-            mDirectory = new GroupDirectory();
 
             ComponentName thisWidget = new ComponentName(this, UpcomingEventWidgetProvider.class);
             AppWidgetManager manager = AppWidgetManager.getInstance(this);
@@ -85,9 +78,6 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
         }
 
         public void buildUpdate(final Context context, final AppWidgetManager manager, final ComponentName thisWidget) {
-            // Pick out month names from resources
-            final Resources res = context.getResources();
-
             final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_upcoming_event);
 
             App.getInstance().getModelCache().getAsync("chapter_list_hub", false, new ModelCache.CacheListener() {
@@ -104,56 +94,8 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                         String groupName = homeGdg.getShortName();
                         views.setTextViewText(R.id.groupName, groupName);
                         views.setTextViewText(R.id.groupName2, groupName);
-                        mDirectory.getChapterEventList(new DateTime(),
-                                new DateTime().plusMonths(1),
-                                homeGdg.getGplusId(),
-                                new Response.Listener<ArrayList<Event>>() {
-                                    @Override
-                                    public void onResponse(ArrayList<Event> events) {
-                                        Timber.d("Got events");
-                                        if (events.size() > 0) {
-                                            Event firstEvent = events.get(0);
-                                            views.setTextViewText(R.id.title, firstEvent.getTitle());
-                                            views.setTextViewText(R.id.location, firstEvent.getLocation());
-                                            views.setTextViewText(R.id.startDate,
-                                                    firstEvent.getStart().toLocalDateTime()
-                                                            .toString(DateTimeFormat.patternForStyle("MS", res.getConfiguration().locale)));
-                                            showChild(views, 1);
 
-                                            if (firstEvent.getGPlusEventLink() != null) {
-
-                                                String url = firstEvent.getGPlusEventLink();
-
-                                                if (!url.startsWith("http")) {
-                                                    url = "https://" + url;
-                                                }
-
-                                                Intent i = new Intent(Intent.ACTION_VIEW);
-                                                i.setData(Uri.parse(url));
-                                                views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(context, 0, i, 0));
-                                            } else {
-                                                Intent i = new Intent(context, EventActivity.class);
-                                                i.putExtra(Const.EXTRA_EVENT_ID, firstEvent.getId());
-                                                views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(context, 0, i, 0));
-                                            }
-                                        } else {
-                                            showErrorChild(views, R.string.no_scheduled_events, context);
-                                        }
-                                        manager.updateAppWidget(thisWidget, views);
-                                    }
-                                },
-                                new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError volleyError) {
-                                        Timber.e("Error updating Widget", volleyError);
-                                        showErrorChild(views, R.string.loading_data_failed, context);
-                                        manager.updateAppWidget(thisWidget, views);
-                                    }
-                                }
-
-                        ).
-
-                                execute();
+                        fetchEvents(homeGdg, views, manager, thisWidget);
                     }
                 }
 
@@ -163,6 +105,56 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                 }
             });
 
+        }
+
+        private void fetchEvents(Chapter homeGdg, final RemoteViews views, final AppWidgetManager manager, final ComponentName thisWidget) {
+            App.getInstance().getGroupDirectory()
+                    .getChapterEventList(
+                            (int) (new DateTime().getMillis() / 1000),
+                            (int) (new DateTime().plusMonths(1).getMillis() / 1000),
+                            homeGdg.getGplusId(),
+                            new Callback<ArrayList<Event>>() {
+                                @Override
+                                public void success(ArrayList<Event> events, retrofit.client.Response response) {
+                                    Timber.d("Got events");
+                                    if (events.size() > 0) {
+                                        Event firstEvent = events.get(0);
+                                        views.setTextViewText(R.id.title, firstEvent.getTitle());
+                                        views.setTextViewText(R.id.location, firstEvent.getLocation());
+                                        views.setTextViewText(R.id.startDate,
+                                                firstEvent.getStart().toLocalDateTime()
+                                                        .toString(DateTimeFormat.patternForStyle("MS", getResources().getConfiguration().locale)));
+                                        showChild(views, 1);
+
+                                        if (firstEvent.getGPlusEventLink() != null) {
+
+                                            String url = firstEvent.getGPlusEventLink();
+
+                                            if (!url.startsWith("http")) {
+                                                url = "https://" + url;
+                                            }
+
+                                            Intent i = new Intent(Intent.ACTION_VIEW);
+                                            i.setData(Uri.parse(url));
+                                            views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(UpdateService.this, 0, i, 0));
+                                        } else {
+                                            Intent i = new Intent(UpdateService.this, EventActivity.class);
+                                            i.putExtra(Const.EXTRA_EVENT_ID, firstEvent.getId());
+                                            views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(UpdateService.this, 0, i, 0));
+                                        }
+                                    } else {
+                                        showErrorChild(views, R.string.no_scheduled_events, UpdateService.this);
+                                    }
+                                    manager.updateAppWidget(thisWidget, views);
+                                }
+
+                                @Override
+                                public void failure(RetrofitError error) {
+                                    Timber.e(error, "Error updating Widget");
+                                    showErrorChild(views, R.string.loading_data_failed, UpdateService.this);
+                                    manager.updateAppWidget(thisWidget, views);
+                                }
+                            });
         }
 
         private void showErrorChild(RemoteViews views, int errorStringResource, Context context) {

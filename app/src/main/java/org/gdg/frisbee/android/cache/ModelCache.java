@@ -17,7 +17,6 @@
 package org.gdg.frisbee.android.cache;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Looper;
 import android.os.Process;
@@ -48,9 +47,7 @@ import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -213,9 +210,6 @@ public class ModelCache {
 
     static final int DISK_CACHE_FLUSH_DELAY_SECS = 5;
 
-    private File mTempDir;
-    private Resources mResources;
-
     final JsonFactory mJsonFactory = new GsonFactory();
 
     private Gson mGson;
@@ -238,9 +232,6 @@ public class ModelCache {
         if (context != null) {
             // Make sure we have the application context
             context = context.getApplicationContext();
-
-            mTempDir = context.getCacheDir();
-            mResources = context.getResources();
         }
 
         mGson = new GsonBuilder()
@@ -354,7 +345,7 @@ public class ModelCache {
                     Object value = readValueFromDisk(snapshot.getInputStream(0));
                     DateTime expiresAt = new DateTime(readExpirationFromDisk(snapshot.getInputStream(1)));
 
-                    if (value != null && expiresAt != null) {
+                    if (value != null) {
 
                         if (checkExpiration && expiresAt.isBeforeNow()) {
                             mDiskCache.remove(key);
@@ -373,8 +364,7 @@ public class ModelCache {
                     }
                 }
             } catch (IOException e) {
-                Timber.e("getFromDiskCache failed.", e);
-                e.printStackTrace();
+                Timber.e(e, "getFromDiskCache failed.");
             }
         }
 
@@ -533,39 +523,11 @@ public class ModelCache {
     }
 
 
-    private String parseArrayList(Object o) {
-        ArrayList d = (ArrayList) o;
-        String className = "";
-        if (d.size() > 0) {
-            className = className + "<" + d.get(0).getClass().getCanonicalName() + ">";
-        }
-        return className;
-    }
-
     private void writeValueToDisk(OutputStream os, Object o) throws IOException {
 
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(os));
 
         String className = o.getClass().getCanonicalName();
-
-        if (o instanceof ArrayList) {
-            className = parseArrayList(o);
-        } else if (o instanceof HashMap) {
-            HashMap d = (HashMap) o;
-            if (d.size() > 0) {
-                Map.Entry entry = (Map.Entry) d.entrySet().iterator().next();
-
-                if (entry.getValue() instanceof ArrayList) {
-                    className = className 
-                            + "<" + entry.getKey().getClass().getCanonicalName() + ",java.util.ArrayList"
-                            + parseArrayList(entry.getValue()) + ">";
-                } else {
-                    className = className 
-                            + "<" + entry.getKey().getClass().getCanonicalName() + ", " 
-                            + entry.getValue().getClass().getCanonicalName() + ">";
-                }
-            }
-        }
 
         out.write(className + "\n");
 

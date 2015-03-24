@@ -1,4 +1,4 @@
-package org.gdg.frisbee.android.api;
+package org.gdg.frisbee.android.api.model;
 
 import java.util.ArrayList;
 

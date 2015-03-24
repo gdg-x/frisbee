@@ -27,15 +27,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.google.android.gms.common.api.GoogleApiClient;
-
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.adapter.EventAdapter;
-import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.SimpleEvent;
 import org.gdg.frisbee.android.event.EventActivity;
 import org.gdg.frisbee.android.fragment.GdgListFragment;
@@ -59,34 +53,21 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 public abstract class EventListFragment extends GdgListFragment {
 
 
-    protected GroupDirectory mClient;
-
     protected EventAdapter mAdapter;
 
     protected ArrayList<SimpleEvent> mEvents;
-    protected DateTime mStart;
-    protected DateTime mEnd;
-    private GoogleApiClient mPlusClient;
-
-    Response.ErrorListener mErrorListener = new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError volleyError) {
-            setIsLoading(false);
-            volleyError.printStackTrace();
-            if (isAdded()) {
-                Crouton.makeText(getActivity(), getString(R.string.fetch_events_failed), Style.ALERT).show();
-            }
+    
+    protected void onError(Throwable e) {
+        setIsLoading(false);
+        e.printStackTrace();
+        if (isAdded()) {
+            Crouton.makeText(getActivity(), getString(R.string.fetch_events_failed), Style.ALERT).show();
         }
-    };
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        mClient = new GroupDirectory();
-
-        mPlusClient = null;
-        mPlusClient = ((GdgActivity) getActivity()).getGoogleApiClient();
 
         if (getListView() instanceof ListView) {
             ListView listView = (ListView) getListView();

@@ -26,11 +26,7 @@ package org.gdg.frisbee.android.api.model;
 public class HomeGdgRequest {
     private String homeGdg;
 
-    public String getHomeGdg() {
-        return homeGdg;
-    }
-
-    public void setHomeGdg(String homeGdg) {
+    public HomeGdgRequest(String homeGdg) {
         this.homeGdg = homeGdg;
     }
 }

@@ -28,8 +28,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
@@ -41,11 +39,12 @@ import com.google.android.gms.plus.Plus;
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgActivity;
-import org.gdg.frisbee.android.api.ApiRequest;
-import org.gdg.frisbee.android.api.GdgX;
+import org.gdg.frisbee.android.api.GdgXHub;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
+import org.gdg.frisbee.android.api.model.GcmRegistrationRequest;
 import org.gdg.frisbee.android.api.model.GcmRegistrationResponse;
+import org.gdg.frisbee.android.api.model.HomeGdgRequest;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.PrefUtils;
@@ -53,11 +52,13 @@ import org.gdg.frisbee.android.widget.UpcomingEventWidgetProvider;
 
 import java.io.IOException;
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import timber.log.Timber;
 
 public class SettingsFragment extends PreferenceFragment {
 
-    private GdgX mXClient;
     private GoogleCloudMessaging mGcm;
 
     private GoogleApiClient mGoogleApiClient;
@@ -91,50 +92,44 @@ public class SettingsFragment extends PreferenceFragment {
                     @Override
                     protected Void doInBackground(Void... voids) {
                         try {
+                            GdgXHub client = App.getInstance().getGdgXHub();
                             String token = GoogleAuthUtil.getToken(getActivity(), 
                                     Plus.AccountApi.getAccountName(mGoogleApiClient), 
                                     "oauth2: " + Scopes.PLUS_LOGIN);
-                            mXClient.setToken(token);
 
                             if (!enableGcm) {
-                                ApiRequest req = mXClient.unregisterGcm(PrefUtils.getRegistrationId(getActivity()), 
-                                        new Response.Listener<GcmRegistrationResponse>() {
+                                client.unregisterGcm("Bearer " + token, new GcmRegistrationRequest(PrefUtils.getRegistrationId(getActivity())),
+                                        new Callback<GcmRegistrationResponse>() {
                                             @Override
-                                            public void onResponse(GcmRegistrationResponse messageResponse) {
+                                            public void success(GcmRegistrationResponse gcmRegistrationResponse, retrofit.client.Response response) {
                                                 PrefUtils.setGcmSettings(getActivity(), false, null, null);
                                             }
-                                        }, new Response.ErrorListener() {
+
                                             @Override
-                                            public void onErrorResponse(VolleyError volleyError) {
-                                                Timber.e("Fail", volleyError);
+                                            public void failure(RetrofitError error) {
+                                                Timber.e(error, "Fail");
                                             }
-                                        }
-                                );
-                                req.execute();
+                                        });
                             } else {
                                 final String regId = mGcm.register(BuildConfig.GCM_SENDER_ID);
-                                ApiRequest req = mXClient.registerGcm(regId, 
-                                        new Response.Listener<GcmRegistrationResponse>() {
+
+                                client.registerGcm("Bearer " + token, new GcmRegistrationRequest(regId),
+                                        new Callback<GcmRegistrationResponse>() {
                                             @Override
-                                            public void onResponse(GcmRegistrationResponse messageResponse) {
-                                                PrefUtils.setGcmSettings(getActivity(), true, regId, messageResponse.getNotificationKey());
+                                            public void success(GcmRegistrationResponse gcmRegistrationResponse, retrofit.client.Response response) {
+                                                PrefUtils.setGcmSettings(getActivity(), true, regId, gcmRegistrationResponse.getNotificationKey());
                                             }
-                                        }, new Response.ErrorListener() {
+
                                             @Override
-                                            public void onErrorResponse(VolleyError volleyError) {
-                                                Timber.e("Fail", volleyError);
+                                            public void failure(RetrofitError error) {
+                                                Timber.e(error, "Fail");
                                             }
-                                        }
-                                );
-                                req.execute();
+                                        });
 
                                 setHomeGdg(PrefUtils.getHomeChapterIdNotNull(getActivity()));
                             }
-                        } catch (IOException e) {
-                            Timber.e("(Un)Register GCM gailed (IO)", e);
-                            e.printStackTrace();
-                        } catch (GoogleAuthException e) {
-                            Timber.e("(Un)Register GCM gailed (Auth)", e);
+                        } catch (IOException | GoogleAuthException e) {
+                            Timber.e(e, "(Un)Register GCM failed");
                             e.printStackTrace();
                         }
                         return null;
@@ -187,7 +182,6 @@ public class SettingsFragment extends PreferenceFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mXClient = new GdgX();
         mGcm = GoogleCloudMessaging.getInstance(getActivity());
 
         getPreferenceManager().setSharedPreferencesName(PrefUtils.PREF_NAME);
@@ -281,8 +275,19 @@ public class SettingsFragment extends PreferenceFragment {
                             activity,
                             Plus.AccountApi.getAccountName(activity.getGoogleApiClient()),
                             "oauth2: " + Scopes.PLUS_LOGIN);
-                    mXClient.setToken(token);
-                    mXClient.setHomeGdg(homeGdg, null, null).execute();
+
+                    App.getInstance().getGdgXHub().setHomeGdg("Bearer " + token,
+                            new HomeGdgRequest(homeGdg),
+                            new Callback<Void>() {
+                                @Override
+                                public void success(Void aVoid, Response response) {
+                                }
+
+                                @Override
+                                public void failure(RetrofitError error) {
+                                    Timber.e(error, "Setting Home failed.");
+                                }
+                            });
                 } catch (IOException | GoogleAuthException e) {
                     e.printStackTrace();
                 }
