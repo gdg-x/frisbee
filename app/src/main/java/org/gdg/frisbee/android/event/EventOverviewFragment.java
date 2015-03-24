@@ -221,7 +221,7 @@ public class EventOverviewFragment extends Fragment {
                     }
                 });
         ((GdgActivity) getActivity()).setToolbarTitle(group.getShortName());
-        mGroupLogo.setVisibility(View.INVISIBLE);
+        //mGroupLogo.setVisibility(View.INVISIBLE);  //commented as it's making group logo invisible without any condition
     }
 
     public void setIsLoading(boolean isLoading) {
