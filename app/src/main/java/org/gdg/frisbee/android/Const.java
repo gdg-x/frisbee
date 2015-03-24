@@ -75,6 +75,7 @@ public class Const {
     public static final String EXTRA_SECTION = "EXTRA_SECTION";
     public static final String URL_DEVELOPERS_GOOGLE_COM = "https://developers.google.com";
     public static final String URL_HELP = "https://support.google.com/developergroups";
+    public static final String URL_GDG_RESOURCE_FOLDER = "https://drive.google.com/drive/#folders/0B55wxScz_BJtWW9aUnk2LUlNdEk";
     public static final String EVENTS = "events";
 
     //Keys
