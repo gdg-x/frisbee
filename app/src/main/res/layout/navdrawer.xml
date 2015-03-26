@@ -22,6 +22,7 @@
   android:layout_height="match_parent"
   android:orientation="vertical"
   android:layout_gravity="start"
+  android:clickable="true"
   android:background="@color/navdrawer_background">
   <ImageView
     android:layout_width="@dimen/navdrawer_width"
