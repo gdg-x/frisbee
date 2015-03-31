@@ -32,10 +32,6 @@
 
   <include layout="@layout/loading_animated_view" />
 
-  <LinearLayout
-    android:id="@+id/empty"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" />
+  <include layout="@layout/empty" />
 </LinearLayout>
   
