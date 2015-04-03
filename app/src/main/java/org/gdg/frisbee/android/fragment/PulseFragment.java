@@ -92,18 +92,20 @@ public class PulseFragment extends GdgListFragment {
 
         setIsLoading(true);
 
-        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"), true, new ModelCache.CacheListener() {
-            @Override
-            public void onGet(Object item) {
-                Pulse pulse = (Pulse) item;
-                initAdapter(pulse);
-            }
+        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
+                true,
+                new ModelCache.CacheListener() {
+                    @Override
+                    public void onGet(Object item) {
+                        Pulse pulse = (Pulse) item;
+                        initAdapter(pulse);
+                    }
 
-            @Override
-            public void onNotFound(String key) {
-                fetchPulseTask();
-            }
-        });
+                    @Override
+                    public void onNotFound(String key) {
+                        fetchPulseTask();
+                    }
+                });
     }
 
     private void fetchPulseTask() {
