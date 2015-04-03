@@ -70,7 +70,7 @@ public class FirstStartActivity extends ActionBarActivity implements
         FirstStartStep2Fragment.Step2Listener, 
         FirstStartStep3Fragment.Step3Listener {
 
-    public static final final String ACTION_FIRST_START = "finish_first_start";
+    public static final String ACTION_FIRST_START = "finish_first_start";
 
     private GoogleCloudMessaging mGcm;
 
@@ -90,7 +90,6 @@ public class FirstStartActivity extends ActionBarActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Timber.i("onCreate");
         setContentView(R.layout.activity_first_start);
 
         App.getInstance().updateLastLocation();
