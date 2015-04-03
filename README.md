@@ -29,9 +29,19 @@ Development
 
 Check out project and import it to Android Studio. 
 
-This project enforces a checkstyle. The checkstyle configuration is available in `settings/checkstyle.xml` file. Please respect to the configuration. Because of the line ending difference between Unix systems and Windows, you may get checkstyle errors. If you do, please check this [help page](https://www.jetbrains.com/idea/help/handling-lf-and-crlf-line-endings.html)
+###Checkstyle Integration
 
-Image optimization is encourged for new images. You can use the [image_optim](https://github.com/toy/image_optim) tool to do it easily. Use the following to install it. 
+This project enforces a checkstyle. The checkstyle configuration is available in `settings/checkstyle.xml` file. Please respect to the configuration. 
+
+**Note:** Because of the line ending difference between Unix systems and Windows, you may get checkstyle errors about line endings. If you do, please check this [help page](https://www.jetbrains.com/idea/help/handling-lf-and-crlf-line-endings.html).
+If you cannot resolve the issue, you can simply comment out the following line in the `checkstyle.xml` file.
+```
+<module name="NewlineAtEndOfFile" />
+```
+
+###Image Optimization
+
+Image optimization is encourged for new images. You can use the [image_optim](https://github.com/toy/image_optim) tool to do it easily. Use the following command to install it. 
 ```
 gem install image_optim image_optim_pack
 ```
