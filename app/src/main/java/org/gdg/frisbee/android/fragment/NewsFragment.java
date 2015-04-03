@@ -111,7 +111,7 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
                         public ActivityFeed doInBackground(String... params) {
                             try {
 
-                                ActivityFeed feed = (ActivityFeed) App.getInstance().getModelCache().get("news_" + params[0]);
+                                ActivityFeed feed = (ActivityFeed) App.getInstance().getModelCache().get(Const.CACHE_KEY_NEWS + params[0]);
 
                                 if (feed == null) {
                                     Plus.Activities.List request = mClient.activities().list(params[0], "public");
@@ -122,7 +122,7 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
                                                     + "object/attachments,object/actor,annotation,object(plusoners,replies,resharers))");
                                     feed = request.execute();
 
-                                    App.getInstance().getModelCache().put("news_" + params[0], feed, DateTime.now().plusHours(1));
+                                    App.getInstance().getModelCache().put(Const.CACHE_KEY_NEWS + params[0], feed, DateTime.now().plusHours(1));
                                 }
 
                                 return feed;
@@ -143,7 +143,7 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
                     })
                     .buildAndExecute();
         } else {
-            App.getInstance().getModelCache().getAsync("news_" + plusId, false, new ModelCache.CacheListener() {
+            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_NEWS + plusId, false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
                     ActivityFeed feed = (ActivityFeed) item;
@@ -213,7 +213,7 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
                                                 + "object/attachments,annotation,object(plusoners,replies,resharers))");
                                 ActivityFeed feed = request.execute();
 
-                                App.getInstance().getModelCache().put("news_" + params[0], feed, DateTime.now().plusHours(1));
+                                App.getInstance().getModelCache().put(Const.CACHE_KEY_NEWS + params[0], feed, DateTime.now().plusHours(1));
 
                                 return feed;
                             } catch (IOException e) {

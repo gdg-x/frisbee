@@ -6,6 +6,7 @@ import android.net.Uri;
 import com.google.android.apps.dashclock.api.DashClockExtension;
 import com.google.android.apps.dashclock.api.ExtensionData;
 
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
@@ -40,7 +41,7 @@ public class GdgDashClockExtension extends DashClockExtension {
     @Override
     protected void onUpdateData(int i) {
 
-        App.getInstance().getModelCache().getAsync("chapter_list_hub", false, new ModelCache.CacheListener() {
+        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, false, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 mChapters = ((Directory) item).getGroups();

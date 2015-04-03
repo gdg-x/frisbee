@@ -78,7 +78,7 @@ public class ContributorsFragment extends GdgListFragment {
         if (Utils.isOnline(getActivity())) {
             fetchGitHubContributors();
         } else {
-            App.getInstance().getModelCache().getAsync("frisbee_contributors", false, new ModelCache.CacheListener() {
+            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_FRISBEE_CONTRIBUTORS, false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
                     ArrayList<Contributor> contributors = (ArrayList<Contributor>) item;
@@ -104,7 +104,7 @@ public class ContributorsFragment extends GdgListFragment {
         gitHubClient.getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO, new Callback<ArrayList<Contributor>>() {
             @Override
             public void success(final ArrayList<Contributor> contributors, retrofit.client.Response response) {
-                App.getInstance().getModelCache().putAsync("frisbee_contributors",
+                App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_FRISBEE_CONTRIBUTORS,
                         contributors,
                         DateTime.now().plusDays(1),
                         new ModelCache.CachePutListener() {

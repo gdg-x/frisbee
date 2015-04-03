@@ -369,7 +369,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                     String videoId = getVideoIdFrom(attachment);
                     if (videoId != null) {
                         Intent playVideoIntent = new Intent(mContext, YoutubeActivity.class);
-                        playVideoIntent.putExtra("video_id", videoId);
+                        playVideoIntent.putExtra(YoutubeActivity.EXTRA_VIDEO_ID, videoId);
                         mContext.startActivity(playVideoIntent);
                     } else {
                         Intent viewUrlIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(attachment.getUrl()));
