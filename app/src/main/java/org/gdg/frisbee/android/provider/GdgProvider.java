@@ -75,8 +75,7 @@ public class GdgProvider extends ContentProvider {
     }
 
     private void prepareProvider() {
-        final App app = (App) getContext().getApplicationContext();
-        mDirectory = (Directory) app.getInstance().getModelCache().get("chapter_list_hub");
+        mDirectory = (Directory) App.getInstance().getModelCache().get(Const.CACHE_KEY_CHAPTER_LIST_HUB);
         Timber.d("Initialized ContentProvider");
     }
 

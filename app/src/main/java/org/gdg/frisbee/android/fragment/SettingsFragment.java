@@ -37,6 +37,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.plus.Plus;
 
 import org.gdg.frisbee.android.BuildConfig;
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.api.GdgXHub;
@@ -200,7 +201,7 @@ public class SettingsFragment extends PreferenceFragment {
         if (prefHomeGdgList != null) {
             prefHomeGdgList.setEnabled(false);
 
-            App.getInstance().getModelCache().getAsync("chapter_list_hub", false, new ModelCache.CacheListener() {
+            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
                     Directory directory = (Directory) item;
@@ -301,7 +302,7 @@ public class SettingsFragment extends PreferenceFragment {
     public void onSignInFailed() {
         Timber.d("onSignInFailed");
         PrefUtils.setLoggedOut(getActivity());
-        CheckBoxPreference prefGoogleSignIn = (CheckBoxPreference) findPreference("gdg_signed_in");
+        CheckBoxPreference prefGoogleSignIn = (CheckBoxPreference) findPreference(PrefUtils.SETTINGS_SIGNED_IN);
         if (prefGoogleSignIn != null) {
             prefGoogleSignIn.setChecked(false);
         }

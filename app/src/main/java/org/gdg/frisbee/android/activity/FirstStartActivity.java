@@ -70,6 +70,8 @@ public class FirstStartActivity extends ActionBarActivity implements
         FirstStartStep2Fragment.Step2Listener, 
         FirstStartStep3Fragment.Step3Listener {
 
+    public static final final String ACTION_FIRST_START = "finish_first_start";
+
     private GoogleCloudMessaging mGcm;
 
     @InjectView(R.id.pager)
@@ -237,7 +239,7 @@ public class FirstStartActivity extends ActionBarActivity implements
         requestBackup();
 
         Intent resultData = new Intent(this, MainActivity.class);
-        resultData.setAction("finish_first_start");
+        resultData.setAction(ACTION_FIRST_START);
         resultData.putExtra(Const.EXTRA_CHAPTER_ID, mSelectedChapter.getGplusId());
         startActivity(resultData);
 

@@ -47,6 +47,7 @@ public class PulseFragment extends GdgListFragment {
 
     private static final String ARG_MODE = "mode";
     private static final String ARG_TARGET = "target";
+    private static final String GLOBAL = "Global";
 
     private int mMode;
     private String mTarget;
@@ -91,7 +92,7 @@ public class PulseFragment extends GdgListFragment {
 
         setIsLoading(true);
 
-        App.getInstance().getModelCache().getAsync("pulse_" + mTarget.toLowerCase().replace(" ", "-"), true, new ModelCache.CacheListener() {
+        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"), true, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 Pulse pulse = (Pulse) item;
@@ -106,12 +107,12 @@ public class PulseFragment extends GdgListFragment {
     }
 
     private void fetchPulseTask() {
-        if (mTarget.equals("Global")) {
+        if (mTarget.equals(GLOBAL)) {
             App.getInstance().getGroupDirectory().getPulse(new Callback<Pulse>() {
                 @Override
                 public void success(final Pulse pulse, retrofit.client.Response response) {
                     App.getInstance().getModelCache().putAsync(
-                            "pulse_" + mTarget.toLowerCase(),
+                            Const.CACHE_KEY_PULSE + mTarget.toLowerCase(),
                             pulse,
                             DateTime.now().plusDays(1),
                             new ModelCache.CachePutListener() {
@@ -135,7 +136,7 @@ public class PulseFragment extends GdgListFragment {
                 @Override
                 public void success(final Pulse pulse, retrofit.client.Response response) {
                     App.getInstance().getModelCache().putAsync(
-                            "pulse_" + mTarget.toLowerCase().replace(" ", "-"),
+                            Const.CACHE_KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
                             pulse,
                             DateTime.now().plusDays(1),
                             new ModelCache.CachePutListener() {
@@ -174,7 +175,7 @@ public class PulseFragment extends GdgListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         Map.Entry<String, PulseEntry> pulse = mAdapter.getItem(position);
 
-        if (mTarget.equals("Global")) {
+        if (mTarget.equals(GLOBAL)) {
             mListener.openPulse(pulse.getKey());
         } else {
             Intent chapterIntent = new Intent(getActivity(), MainActivity.class);

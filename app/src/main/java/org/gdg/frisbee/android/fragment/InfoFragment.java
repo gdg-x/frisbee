@@ -146,7 +146,7 @@ public class InfoFragment extends Fragment {
                     .buildAndExecute();
         } else {
             final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID);
-            App.getInstance().getModelCache().getAsync("person_" + plusId, false, new ModelCache.CacheListener() {
+            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PERSON + plusId, false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
                     final Person chachedChapter = (Person) item;
@@ -160,7 +160,7 @@ public class InfoFragment extends Fragment {
                             try {
                                 String id = getGPlusIdFromPersonUrl(url);
                                 final int indexAsFinal = chapterIndex;
-                                App.getInstance().getModelCache().getAsync("person_" + id, false, new ModelCache.CacheListener() {
+                                App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PERSON + id, false, new ModelCache.CacheListener() {
                                     @Override
                                     public void onGet(Object item) {
                                         addOrganizerToUI((Person) item);

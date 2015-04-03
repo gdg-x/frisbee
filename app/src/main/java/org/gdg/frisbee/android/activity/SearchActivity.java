@@ -20,6 +20,7 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 
 import timber.log.Timber;
@@ -31,8 +32,6 @@ public class SearchActivity extends GdgNavDrawerActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Timber.d("Init!");
         setContentView(R.layout.activity_search);
 
         handleIntent(getIntent());
@@ -51,7 +50,7 @@ public class SearchActivity extends GdgNavDrawerActivity {
         } else if (ACTION_FOUND.equals(action)) {
             String id = intent.getDataString();
             Intent chapterIntent = new Intent(this, MainActivity.class);
-            chapterIntent.putExtra("org.gdg.frisbee.CHAPTER", id.replace("item/", ""));
+            chapterIntent.putExtra(Const.EXTRA_CHAPTER_ID, id.replace("item/", ""));
             startActivity(chapterIntent);
             finish();
         }

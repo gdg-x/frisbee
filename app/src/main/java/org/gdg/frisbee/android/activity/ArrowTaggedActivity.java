@@ -152,7 +152,7 @@ public class ArrowTaggedActivity extends GdgNavDrawerActivity {
 
                     @Override
                     public void failure(final RetrofitError error) {
-                        Timber.e("Error", error);
+                        Timber.e(error, "Error");
                     }
                 });
             }

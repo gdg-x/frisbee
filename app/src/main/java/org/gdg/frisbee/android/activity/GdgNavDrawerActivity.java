@@ -285,14 +285,14 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
     public Person getPerson(final String gplusId) {
         try {
-            Person person = (Person) App.getInstance().getModelCache().get("person_" + gplusId);
+            Person person = (Person) App.getInstance().getModelCache().get(Const.CACHE_KEY_PERSON + gplusId);
 
             if (person == null) {
                 Plus.People.Get request = plusClient.people().get(gplusId);
                 request.setFields("aboutMe,circledByCount,cover/coverPhoto/url,image/url,currentLocation,displayName,plusOneCount,tagline,urls");
                 person = request.execute();
 
-                App.getInstance().getModelCache().put("person_" + gplusId, person, DateTime.now().plusDays(2));
+                App.getInstance().getModelCache().put(Const.CACHE_KEY_PERSON + gplusId, person, DateTime.now().plusDays(2));
             }
             return person;
         } catch (IOException e) {
