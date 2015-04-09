@@ -36,6 +36,7 @@ android {
 
         incremental true
         javaMaxHeapSize "3g"
+        threadCount 1
     }
 
     defaultConfig {
