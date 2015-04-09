@@ -16,6 +16,11 @@
 #   public *;
 #}
 
+#Crashlytics 1.+
+-keep class com.crashlytics.** { *; }
+-keepattributes SourceFile,LineNumberTable
+
+#Native
 -keepclasseswithmembernames class * {
     native <methods>;
 }
@@ -24,8 +29,11 @@
 -dontwarn com.squareup.okhttp.**
 
 # OkHttp
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class com.squareup.okhttp.** { *; }
+-keep interface com.squareup.okhttp.** { *; }
 -dontwarn com.squareup.okhttp.**
--dontwarn okio.**
 
 #retrofit
 -keep class com.squareup.okhttp.** { *; }
@@ -40,6 +48,12 @@
     @retrofit.http.* <methods>;
 }
 
+# Okio
+-keep class sun.misc.Unsafe { *; }
+-dontwarn java.nio.file.*
+-dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+-dontwarn okio.**
+
 -keep class android.support.v4.app.** { *; }
 -keep interface android.support.v4.app.** { *; }
 
@@ -51,9 +65,6 @@
 -keep class org.gdg.frisbee.android.cache.** { *; }
 -keep class org.gdg.frisbee.android.utils.** { *; }
 -keep class com.google.api.** { *; }
-
--keepattributes Signature
--keep class sun.misc.Unsafe { *; }
 
 # Otto
 -keepclassmembers class ** {
@@ -68,49 +79,17 @@
 -keep interface org.joda.time.** { *; }
 
 # ButterKnife
+-keep class butterknife.** { *; }
 -dontwarn butterknife.internal.**
 -keep class **$$ViewInjector { *; }
--keepnames class * { @butterknife.InjectView *;}
-
-#ACRA specifics
-# Restore some Source file names and restore approximate line numbers in the stack traces,
-# otherwise the stack traces are pretty useless
--keepattributes SourceFile,LineNumberTable
-
-# ACRA needs "annotations" so add this...
-# Note: This may already be defined in the default "proguard-android-optimize.txt"
-# file in the SDK. If it is, then you don't need to duplicate it. See your
-# "project.properties" file to get the path to the default "proguard-android-optimize.txt".
--keepattributes *Annotation*
-
-# keep this around for some enums that ACRA needs
--keep class org.acra.ReportingInteractionMode {
-    *;
+-keepclasseswithmembernames class * {
+    @butterknife.* <fields>;
+}
+-keepclasseswithmembernames class * {
+    @butterknife.* <methods>;
 }
 
--keepnames class org.acra.sender.HttpSender$** {
-    *;
-}
-
--keepnames class org.acra.ReportField {
-    *;
-}
-
-# keep this otherwise it is removed by ProGuard
--keep public class org.acra.ErrorReporter
-{
-    public void addCustomData(java.lang.String,java.lang.String);
-    public void putCustomData(java.lang.String,java.lang.String);
-    public void removeCustomData(java.lang.String);
-}
-
-# keep this otherwise it is removed by ProGuard
--keep public class org.acra.ErrorReporter
-{
-    public void handleSilentException(java.lang.Throwable);
-}
-
-# GMS
+#GMS
 -keep class * extends java.util.ListResourceBundle {
     protected Object[][] getContents();
 }
