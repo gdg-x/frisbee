@@ -1,5 +1,7 @@
 language: android
 
+sudo: false
+
 android:
   components:
     - android-22
