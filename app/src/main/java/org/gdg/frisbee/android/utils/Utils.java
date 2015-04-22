@@ -24,6 +24,7 @@ import android.net.ConnectivityManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
+import android.util.Patterns;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -223,5 +224,15 @@ public class Utils {
                 .registerTypeAdapter(DateTime.class, dateTimeDeserializer)
                 .create();
 
+    }
+
+    /**
+     * Utility function to check if the provided String is an email or not.
+     *
+     * @param possibleEmail Given String.
+     * @return true if the given String is an email address.
+     */
+    public static boolean isEmailAddress(String possibleEmail) {
+        return Patterns.EMAIL_ADDRESS.matcher(possibleEmail).matches();
     }
 }

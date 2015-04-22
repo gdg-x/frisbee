@@ -1,4 +1,4 @@
-package org.gdg.frisbee.android.widget;/*
+/*
  * Copyright 2014 Chris Banes
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,6 +13,7 @@ package org.gdg.frisbee.android.widget;/*
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.gdg.frisbee.android.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -133,10 +134,10 @@ public class FloatLabelLayout extends LinearLayout {
             }
  
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
  
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
         });
  
         // Add focus listener to the EditText so that we can notify the label that it is activated.

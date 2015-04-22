@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  android:padding="20dp">
+
+  <org.gdg.frisbee.android.widget.FloatLabelLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <EditText
+      android:id="@+id/feedback_message_text"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="@string/doorbell_message_hint"
+      android:inputType="textMultiLine|textCapSentences"
+      android:maxLines="6"
+      android:minLines="2"/>
+
+  </org.gdg.frisbee.android.widget.FloatLabelLayout>
+
+  <org.gdg.frisbee.android.widget.FloatLabelLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <AutoCompleteTextView
+      android:id="@+id/feedback_email_text"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="@string/doorbell_email_hint"
+      android:imeOptions="actionDone"
+      android:inputType="textEmailAddress"
+      android:singleLine="true"/>
+
+  </org.gdg.frisbee.android.widget.FloatLabelLayout>
+
+</LinearLayout>
