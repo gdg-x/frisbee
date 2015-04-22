@@ -19,7 +19,7 @@ package org.gdg.frisbee.android.activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -45,7 +45,7 @@ import io.doorbell.android.Doorbell;
  *
  * @author Bartosz Przybylski <bart.p.pl@gmail.com>
  */
-public abstract class TrackableActivity extends ActionBarActivity implements ViewPager.OnPageChangeListener {
+public abstract class TrackableActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
     private int mCurrentPage = 0;
 
