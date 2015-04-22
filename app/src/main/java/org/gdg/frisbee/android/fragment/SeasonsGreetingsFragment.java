@@ -31,11 +31,6 @@ import org.gdg.frisbee.android.R;
 public class SeasonsGreetingsFragment extends DialogFragment {
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
     @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         View seasonView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_seasons_greetings, (ViewGroup) getView(), false);

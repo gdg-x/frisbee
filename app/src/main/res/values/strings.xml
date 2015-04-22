@@ -152,4 +152,10 @@
     <string name="event_more">More</string>
     <string name="help">Help</string>
     <string name="feedback">Feedback</string>
+
+    <string name="feedback_cancel">Cancel</string>
+    <string name="feedback_email_hint">Your email address</string>
+    <string name="feedback_message_hint">What\'s on your mind?</string>
+    <string name="feedback_send">Send</string>
+    <string name="feedback_sending">Sending…</string>
 </resources>
