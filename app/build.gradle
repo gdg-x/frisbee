@@ -186,6 +186,7 @@ dependencies {
     compile 'com.jakewharton:disklrucache:2.0.2'
 
     //Others
+    compile 'io.doorbell:android-sdk:0.2.1@aar'
     compile 'org.jsoup:jsoup:1.8.2'
     compile 'net.danlew:android.joda:2.7.2'
     compile 'com.google.code.findbugs:jsr305:2.0.1'
