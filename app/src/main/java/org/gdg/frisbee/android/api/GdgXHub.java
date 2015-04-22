@@ -29,7 +29,7 @@ public interface GdgXHub {
     void getEventDetail(@Path("id") String eventId,
                         Callback<EventFullDetails> callback);
 
-    @GET("/events/tag/{tag}/upcoming?perPage=1000")
+    @GET("/events/tag/{tag}/upcoming?perpage=-1")
     void getTaggedEventUpcomingList(@Path("tag") String tag,
                                     @Query("_") DateTime now,
                                     Callback<PagedList<TaggedEvent>> callback);
