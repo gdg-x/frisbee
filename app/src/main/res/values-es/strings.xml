@@ -63,7 +63,7 @@
   <string name="contributors">La App GDG es un esfuerzo de la comunidad y es open source. Las siguientes personas contribuyeron:</string>
   <string name="get_involved">¡Involúcrate!</string>
   <string name="get_involved_text">La App GDG es un esfuerzo de la comunidad y es open source. Todos son bienvenidos a participar y mejorarla.\n\nSolo dirígete a GitHub y haz checkout a nuestro código.\n\nhttps://github.com/gdg-x</string>
-  <string name="about_license">(c) 2013 GDG Frisbee Project\nTodos los derechos reservados.\n\nLicenciado bajo los términos\ndel Apache 2.0 License</string>
+  <string name="about_license">© 2013 GDG Frisbee Project\nTodos los derechos reservados.\n\nLicenciado bajo los términos\ndel Apache 2.0 License</string>
   <string name="past_event">PASADO</string>
   <string name="upcoming_widget">GDG - Evento Próximo</string>
   <string name="global">Global</string>
@@ -100,7 +100,7 @@
   <string name="gcm_event_ticker">Un nuevo evento de su GDG principal ha sido agendado.</string>
   <string name="ioextended_description">Google I/O Extended se trata de unirte a la conferencia de Google en tu grupo local.</string>
   <string name="devfest_description">Los GDG DevFests son eventos grandes, conducidos por la comunidad que pueden ofrecer sesiones con presentadores en múltiples áreas, hackatones de todo el día, laboratorios de programación, etcétera.\n\nCada GDG DevFest estará inspirado y hecho a la medida de las necesidades de la comunidad de desarrolladores que lo organiza. Aunque no haya dos eventos exactamente iguales, cada GDG DevFest estará, en su esencia, potenciado por la convicción compartida de que cuando los desarrolladores se reúnen para intercambiar ideas, cosas increíbles pueden suceder.</string>
-  <string name="studyjams_description">Los Google Developers Study Jams son una serie de grupos de estudio globales, llevados por la comunidad y presenciales. La primera serie de Study Jams es presentada en asociación con Udacity y seguirá la currícula de Android Fundamentals. Facilitadores de los Google Developer Groups certificados en el curso liderarán los Study Jams, quienes se reunirán una vez a la semana por 8-9 semanas.</string>
+  <string name="studyjams_description">Los Google Developers Study Jams son una serie de grupos de estudio globales, llevados por la comunidad y de forma presencial. La primera serie de Study Jams es presentada en asociación con Udacity y seguirá la currícula de Android Fundamentals. Facilitadores de los Google Developer Groups, debidamente certificados en el curso, liderarán los Study Jams, quienes se reunirán una vez a la semana por 8 - 9 semanas.</string>
   <string name="wtm_description">Women Techmakers es el programa y marca global de Google para las mujeres en tecnología. Iniciada en 2012 por la entonces VP de Google[x] Megan Smith, Women Techmakers es ahora liderada por Natalie Villalobos, Women in Technology Advocate, y un equipo global de Googlers quienes son apasionados acerca del empoderamiento de muejeres en tecnología a través del incremento en visibilidad, comunidad y recursos.\n\nEn nuestras cumbres y meetups serán provistos a las comunidades locales de mujeres en tecnología. Estas cumbres y meetups alrededor del mundo podrán contar con talleres prácticos de programación, ponentes inspiradoras y oportunidades de networking.\n\nTodos los eventos ocurrirán dentro del mes de Marzo.</string>
   <string name="media_route_menu_title">Sesión de Cast</string>
   <string name="navigate_to">Dirección del evento</string>
@@ -143,4 +143,18 @@
   <string name="event_more">Más</string>
   <string name="help">Ayuda</string>
   <string name="feedback">Comentarios</string>
+  <string name="feedback_cancel">Cancel</string>
+  <string name="feedback_email_hint">Your email address</string>
+  <string name="feedback_message_hint">What\'s on your mind?</string>
+  <string name="feedback_send">Send</string>
+  <string name="feedback_sending">Sending&#8230;</string>
+  <string name="for_leads">For Leads</string>
+  <string name="leads_welcome">Congrats for being a GDG organizer!</string>
+  <string name="leads_resources">You should check the GDG resource at public Google Drive folder. Click to browse documentation, graphics, code labs and more.</string>
+  <string name="leads_wisdom">The GDG Wisdom book at http://gdg-wisdom.gitbooks.io contains more general information. Feel free to contribute and edit pages. Click to read the book.</string>
+  <string name="leads_welcome_title">Welcome</string>
+  <string name="leads_resources_title">GDG Resources</string>
+  <string name="leads_wisdom_title">GDG Wisdom</string>
+  <string name="message">Message</string>
+  <string name="resource">Resource</string>
 </resources>

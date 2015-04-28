@@ -86,7 +86,7 @@
   <string name="done">Bitti</string>
   <string name="allow_analytics">Uygulamayı geliştirmemize yardımcı olmak için anonim kullanım bilgisi toplamamıza izin verin.</string>
   <string name="enable_gcm">GDG Bildirimlerini Aktifleştir (yeni etkinliklerden haberin olsun.)</string>
-  <string name="step3_text">Başlamadan önce son bir şey...</string>
+  <string name="step3_text">Başlamadan önce son bir şey&#8230;</string>
   <string name="share_on_gplus">Arkadaşlarını Davet Et</string>
   <string name="join_me">Bu etkinlikle bana katıl!</string>
   <string name="name_not_known">İsim bilinmiyor.</string>
@@ -100,12 +100,12 @@
   <string name="gcm_event_ticker">Bulunduğunuz GDG\'de yeni bir etkinlik düzenleniyor.</string>
   <string name="ioextended_description">Google I/O Extended etkinlikleri sayesinde yerel gruplarınız ile Google konferansına katılma deneyimi yaşarsınız.</string>
   <string name="devfest_description">GDG DevFest etkinlikleri büyük ve topluluk tarafından yürütülen etkinliklerdir. Birçok ürün hakkında konuşmacılar, tüm gün süren hackathon\'lar, code lab\'lar ve daha fazlasını içerirler.\n\nHer bir GDG DevFest birbirinden farklıdır ve bulunduğu yerdeki geliştirici topluluğunun ihtiyaçlarına göre şekillenir. İki etkinlik birbirine benzemediği gibi; herbir GDG DevFest etkinliği, geliştiricilerin bir araya gelmesi ve bilgi paylaşımlarıyla inanılmaz şeylerin ortaya çıkacağı düşüncesinden güç alır.</string>
-  <string name="studyjams_description">Google Developers Study Jams is a free series of global, community-run, in-person study groups. The first Study Jams series is presented in partnership with Udacity and will follow their Android Fundamentals curriculum. Google Developer Group facilitators certified in the course will lead the Study Jams that meet once weekly for 8 - 9 weeks.</string>
+  <string name="studyjams_description">Google Developers Study Jams etkinliği topluluklar tarafından yürütülen, küresel ve bedava etkinlik serisidir. İlk Study Jams serisi Udacity iş birliği ile düzenlenmekte ve onların Android Fundamentals ders planını takip etmektedir. Udacity dersinde sertifikalı olan Google Developer Group organizatörleri öncülüğünde gerçekleşen Study Jams haftalık düzenlenip, 8 - 9 hafta sürmektedir.</string>
   <string name="wtm_description">Women Techmakers, Google\'ın  teknolojide kadınlarla ilgili küresel bir markası ve programıdır. Google[x] in başkan yardımcısı Megan Smith tarafından 2012\'de kurulmuş olup, artık Women in Technology Advocate\'ı Natalie Villalobos ve Google çalışanlarından oluşan küresel bir grup tarafından yürütülmektedir. Bu grup özellikle görünebilirliği, toplulukları ve kaynakları artırarak teknolojideki kadınların gücünü artırırlar.\n\nTüm toplantılar ve buluşmalar lokal teknoloji kadınları çevresinde olmaktadır. Bu buluşmalar ve etkinliklerde canlı kodlama yapılan çalıştaylar, ilham veren konuşmacıların yanı sıra networking imkanları da bulunur.\n\nTüm etkinlikler Mart ayı içerisinde gerçekleşecektir.</string>
   <string name="media_route_menu_title">Oturumu Cast et</string>
   <string name="navigate_to">Etkiliğe yol tarifi al</string>
   <string name="gde">Google Developer Experts</string>
-  <string name="fetch_gde_failed">GDE dizinine ulaşılamıyor...</string>
+  <string name="fetch_gde_failed">GDE dizinine ulaşılamıyor&#8230;</string>
   <string name="gde_who_title">Google Developer Experts kimler?</string>
   <string name="gde_who_desc">Google Developer Experts (GDE\'ler), Google geliştirici teknolojilerinden birinde veya birkaçında uzman olan kişilerdir. GDE programı rock star geliştiricileri büyümekte olan GDE topluluğuna davet ederek, bu kişilerin yaptıkları işlerin farkına varılmasına yardımcı olur. GDE\'ler gurulari mentorlar ve arkadaşlardan oluşur; ve bu kişiler sizler gibi birer geliştiricidir.\n\nGDE\'ler lokal ve global etkinliklerde konuşma yaparlar, online etkinlikleri fazladır ve alanlarında inanılmaz bir teknik bilgi birikimine sahiptirler. Bu bağımsız geliştiriciler gerçek dünya tecrübelerini ve bilgi birikimlerini dünya genelindeki topluluklar ile paylaşırlar.</string>
   <string name="gde_what_title">GDE\'ler nasıl faaliyetler yaparlar?</string>
@@ -143,4 +143,18 @@
   <string name="event_more">Daha Fazla</string>
   <string name="help">Yardım</string>
   <string name="feedback">Geri Bildirim</string>
+  <string name="feedback_cancel">İptal</string>
+  <string name="feedback_email_hint">Eposta adresiniz</string>
+  <string name="feedback_message_hint">Aklında ne var?</string>
+  <string name="feedback_send">Gönder</string>
+  <string name="feedback_sending">Gönderiliyor&#8230;</string>
+  <string name="for_leads">Organizatörler İçin</string>
+  <string name="leads_welcome">GDG organizatörü olduğunuz için tebrik ederiz!</string>
+  <string name="leads_resources">Herkese açık Google Drive klasöründeki GDG kaynaklarına bakmalısın. Dokümantasyon, grafikler, code lab\'lar ve daha fazlası için tıklayın.</string>
+  <string name="leads_wisdom">http://gdg-wisdom.gitbooks.io adresindeki GDG Wisdom kitabı daha fazla bilgi içermektedir. Lütfen katkıda bulunmak ve sayfalarını düzenlemek için çekinmeyin. Kitabı okumak için tıklayın.</string>
+  <string name="leads_welcome_title">Hoşgeldiniz</string>
+  <string name="leads_resources_title">GDG Kaynakları</string>
+  <string name="leads_wisdom_title">GDG Wisdom</string>
+  <string name="message">Mesaj</string>
+  <string name="resource">Kaynak</string>
 </resources>
