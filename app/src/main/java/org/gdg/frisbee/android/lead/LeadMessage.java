@@ -1,5 +1,9 @@
 package org.gdg.frisbee.android.lead;
 
+import android.support.annotation.StringRes;
+
+import org.gdg.frisbee.android.R;
+
 public class LeadMessage {
     private final String mTitle;
     private final Type mType;
@@ -42,7 +46,19 @@ public class LeadMessage {
     }
 
     public enum Type {
-        message(),
-        resource()
+        message(R.string.message),
+        resource(R.string.resource);
+
+        @StringRes
+        private final int mName;
+
+        Type(@StringRes final int name) {
+            mName = name;
+        }
+
+        @StringRes
+        public int getName() {
+            return mName;
+        }
     }
 }

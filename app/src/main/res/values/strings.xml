@@ -159,4 +159,6 @@
     <string name="leads_welcome_title">Welcome</string>
     <string name="leads_resources_title">GDG Resources</string>
     <string name="leads_wisdom_title">GDG Wisdom</string>
+    <string name="message">Message</string>
+    <string name="resource">Resource</string>
 </resources>

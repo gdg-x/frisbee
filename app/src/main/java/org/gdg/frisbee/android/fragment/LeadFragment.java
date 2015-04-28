@@ -20,6 +20,9 @@ import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.lead.LeadMessage;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 public class LeadFragment extends ListFragment {
     private LeadAnnouncementsAdapter mAdapter;
 
@@ -69,26 +72,28 @@ public class LeadFragment extends ListFragment {
         public View getView(final int position, View convertView, final ViewGroup parent) {
             if (convertView == null) {
                 convertView = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.list_announcement_item, parent, false);
-                final ViewHolder viewHolder = new ViewHolder();
-                viewHolder.title = (TextView) convertView.findViewById(R.id.msg_title);
-                viewHolder.details = (TextView) convertView.findViewById(R.id.msg_details);
-                viewHolder.icon = (ImageView) convertView.findViewById(R.id.msg_icon);
-                viewHolder.type = (TextView) convertView.findViewById(R.id.msg_type);
+                final ViewHolder viewHolder = new ViewHolder(convertView);
                 convertView.setTag(viewHolder);
             }
 
             ViewHolder viewHolder = (ViewHolder) convertView.getTag();
             viewHolder.title.setText(getItem(position).getTitle());
             viewHolder.details.setText(getItem(position).getDetails());
-
+            viewHolder.type.setText(getContext().getString(getItem(position).getType().getName()));
             return convertView;
         }
 
         private static class ViewHolder {
+            @InjectView(R.id.msg_title)
             TextView title;
+            @InjectView(R.id.msg_details)
             TextView details;
+            @InjectView(R.id.msg_type)
             TextView type;
-            ImageView icon;
+
+            public ViewHolder(View view) {
+                ButterKnife.inject(this, view);
+            }
         }
     }
 }
