@@ -6,141 +6,132 @@
 
   <uses-feature
     android:name="android.hardware.nfc"
-    android:required="false" />
+    android:required="false"/>
 
-  <uses-permission android:name="android.permission.INTERNET" />
-  <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-  <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-  <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-  <uses-permission android:name="android.permission.WAKE_LOCK" />
-  <uses-permission android:name="android.permission.NFC" />
-  <uses-permission android:name="android.permission.GET_TASKS" />
+  <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
+  <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+  <uses-permission android:name="android.permission.WAKE_LOCK"/>
+  <uses-permission android:name="android.permission.NFC"/>
+  <uses-permission android:name="android.permission.GET_TASKS"/>
 
   <permission
     android:name="org.gdg.frisbee.android.permission.MAPS_RECEIVE"
-    android:protectionLevel="signature" />
+    android:protectionLevel="signature"/>
   <permission
     android:name="org.gdg.frisbee.android.permission.C2D_MESSAGE"
-    android:protectionLevel="signature" />
+    android:protectionLevel="signature"/>
 
-  <uses-permission android:name="org.gdg.frisbee.android.permission.MAPS_RECEIVE" />
-  <uses-permission android:name="org.gdg.frisbee.android.permission.C2D_MESSAGE" />
-  <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+  <uses-permission android:name="org.gdg.frisbee.android.permission.MAPS_RECEIVE"/>
+  <uses-permission android:name="org.gdg.frisbee.android.permission.C2D_MESSAGE"/>
+  <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
 
   <uses-feature
     android:glEsVersion="0x00020000"
-    android:required="true" />
+    android:required="true"/>
 
   <application
     android:name=".app.App"
+    android:allowBackup="true"
     android:backupAgent=".app.BackupAgent"
     android:hardwareAccelerated="true"
     android:icon="@drawable/icon"
-    android:allowBackup="true"
     android:label="@string/app_name"
     android:largeHeap="true"
     android:logo="@drawable/ic_logo_wide"
     android:theme="@style/Theme.GDG">
     <meta-data
       android:name="com.google.android.maps.v2.API_KEY"
-      android:value="@string/android_simple_api_access_key" />
+      android:value="@string/android_simple_api_access_key"/>
     <meta-data
       android:name="com.google.android.gms.games.APP_ID"
-      android:value="@string/play_app_id" />
+      android:value="@string/play_app_id"/>
     <meta-data
       android:name="com.google.android.gms.appstate.APP_ID"
-      android:value="@string/play_app_id" />
+      android:value="@string/play_app_id"/>
     <meta-data
       android:name="com.google.android.backup.api_key"
-      android:value="@string/android_backup_key" />
+      android:value="@string/android_backup_key"/>
     <meta-data
       android:name="com.google.android.gms.version"
-      android:value="@integer/google_play_services_version" />
+      android:value="@integer/google_play_services_version"/>
     <meta-data
       android:name="android.app.default_searchable"
-      android:value=".activity.SearchActivity" />
+      android:value=".activity.SearchActivity"/>
 
     <activity
       android:name=".activity.MainActivity"
-      android:theme="@style/Theme.GDG.NoActionBar.Main" />
+      android:theme="@style/Theme.GDG.Main"/>
     <activity
-      android:name=".activity.GdeActivity"
-      android:theme="@style/Theme.GDG.NoActionBar" />
+      android:name=".activity.GdeActivity"/>
     <activity
-      android:name=".activity.AboutActivity"
-      android:theme="@style/Theme.GDG.NoActionBar" />
-    <activity android:name=".eventseries.TaggedEventSeriesActivity"
-      android:theme="@style/Theme.GDG.NoActionBar" />
+      android:name=".activity.AboutActivity"/>
     <activity
-      android:name=".activity.SettingsActivity"
-      android:theme="@style/Theme.GDG.NoActionBar" />
+      android:name=".eventseries.TaggedEventSeriesActivity"/>
+    <activity
+      android:name=".activity.SettingsActivity"/>
     <activity
       android:name=".activity.ArrowActivity"
-      android:screenOrientation="portrait"
-      android:theme="@style/Theme.GDG.NoActionBar">
-    <intent-filter>
-        <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <data android:mimeType="application/vnd.org.gdgx.frisbee.arrow" />
+      android:screenOrientation="portrait">
+      <intent-filter>
+        <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <data android:mimeType="application/vnd.org.gdgx.frisbee.arrow"/>
       </intent-filter>
       <intent-filter>
-        <action android:name="android.intent.action.VIEW" />
-        <category android:name="android.intent.category.DEFAULT" />
+        <action android:name="android.intent.action.VIEW"/>
+        <category android:name="android.intent.category.DEFAULT"/>
         <data
           android:host="arrow"
-          android:scheme="gdgx" />
+          android:scheme="gdgx"/>
       </intent-filter>
     </activity>
     <activity
       android:name=".activity.ArrowTaggedActivity"
-      android:screenOrientation="portrait"
-      android:theme="@style/Theme.GDG.NoActionBar" />
+      android:screenOrientation="portrait"/>
     <activity
-      android:name=".activity.FirstStartActivity"
-      android:theme="@style/Theme.GDG.NoActionBar" />
+      android:name=".activity.FirstStartActivity"/>
     <activity
       android:name=".activity.YoutubeActivity"
       android:configChanges="keyboardHidden|orientation|screenSize"
       android:screenOrientation="sensor"
-      android:theme="@style/GDG.SeeTrough" />
+      android:theme="@style/GDG.SeeTrough"/>
     <activity
-      android:name=".activity.StartActivity"
-      android:theme="@style/Theme.GDG.NoActionBar">
+      android:name=".activity.StartActivity">
       <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
-        <category android:name="android.intent.category.LAUNCHER" />
+        <action android:name="android.intent.action.MAIN"/>
+        <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
     <activity
-      android:name=".activity.PulseActivity"
-      android:theme="@style/Theme.GDG.NoActionBar" />
+      android:name=".activity.PulseActivity"/>
     <activity android:name=".activity.ParseDeepLinkActivity">
       <intent-filter>
-        <action android:name="com.google.android.apps.plus.VIEW_DEEP_LINK" />
-        <data android:scheme="vnd.google.deeplink" />
+        <action android:name="com.google.android.apps.plus.VIEW_DEEP_LINK"/>
+        <data android:scheme="vnd.google.deeplink"/>
 
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.BROWSABLE" />
+        <category android:name="android.intent.category.DEFAULT"/>
+        <category android:name="android.intent.category.BROWSABLE"/>
       </intent-filter>
     </activity>
     <activity
       android:name=".activity.SearchActivity"
       android:launchMode="singleTop">
       <intent-filter>
-        <action android:name="android.intent.action.SEARCH" />
-        <category android:name="android.intent.category.DEFAULT" />
+        <action android:name="android.intent.action.SEARCH"/>
+        <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
       <meta-data
         android:name="android.app.searchable"
-        android:resource="@xml/searchable" />
+        android:resource="@xml/searchable"/>
     </activity>
     <activity
       android:name=".event.EventActivity"
-      android:theme="@style/Theme.GDG.NoActionBar"
       android:parentActivityName=".activity.MainActivity">
     </activity>
 
@@ -148,52 +139,52 @@
       android:name=".provider.GdgProvider"
       android:authorities="org.gdg.frisbee.android.provider.GdgProvider"
       android:exported="true"
-      android:syncable="false" />
+      android:syncable="false"/>
 
     <receiver
       android:name=".widget.UpcomingEventWidgetProvider"
       android:label="@string/upcoming_widget">
       <intent-filter>
-        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
       </intent-filter>
       <meta-data
         android:name="android.appwidget.provider"
-        android:resource="@xml/upcoming_event_appwidget_info" />
+        android:resource="@xml/upcoming_event_appwidget_info"/>
     </receiver>
     <receiver
       android:name=".receiver.GCMReceiver"
       android:permission="com.google.android.c2dm.permission.SEND">
       <intent-filter>
-        <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-        <category android:name="org.gdg.frisbee.android" />
+        <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+        <category android:name="org.gdg.frisbee.android"/>
       </intent-filter>
     </receiver>
 
-    <service android:name=".service.GcmIntentService" />
-    <service android:name=".widget.UpcomingEventWidgetProvider$UpdateService" />
+    <service android:name=".service.GcmIntentService"/>
+    <service android:name=".widget.UpcomingEventWidgetProvider$UpdateService"/>
     <service
       android:name=".widget.GdgDashClockExtension"
       android:icon="@drawable/ic_dashclock"
       android:label="@string/upcoming_widget"
       android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA">
       <intent-filter>
-        <action android:name="com.google.android.apps.dashclock.Extension" />
+        <action android:name="com.google.android.apps.dashclock.Extension"/>
       </intent-filter>
 
       <meta-data
         android:name="protocolVersion"
-        android:value="2" />
+        android:value="2"/>
       <meta-data
         android:name="worldReadable"
-        android:value="true" />
+        android:value="true"/>
       <meta-data
         android:name="description"
-        android:value="@string/dashclock_description" />
+        android:value="@string/dashclock_description"/>
     </service>
 
     <meta-data
       android:name="com.crashlytics.ApiKey"
-      android:value="39ee8135e5c4935b35bda31d7302a6d39b65570d" />
+      android:value="39ee8135e5c4935b35bda31d7302a6d39b65570d"/>
   </application>
 
 </manifest>
