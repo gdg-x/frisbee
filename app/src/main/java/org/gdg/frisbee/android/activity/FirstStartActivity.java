@@ -25,7 +25,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -65,7 +65,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 import timber.log.Timber;
 
-public class FirstStartActivity extends ActionBarActivity implements 
+public class FirstStartActivity extends AppCompatActivity implements
         FirstStartStep1Fragment.Step1Listener, 
         FirstStartStep2Fragment.Step2Listener, 
         FirstStartStep3Fragment.Step3Listener {

@@ -16,23 +16,15 @@
 
 package org.gdg.frisbee.android.activity;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
-import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
+import android.support.v7.app.AppCompatActivity;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
-import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.utils.PrefUtils;
-import org.gdg.frisbee.android.utils.Utils;
-
-import io.doorbell.android.Doorbell;
+import org.gdg.frisbee.android.widget.FeedbackFragment;
 
 /**
  * Activity which provides handy mechanism for google analytics.
@@ -45,7 +37,7 @@ import io.doorbell.android.Doorbell;
  *
  * @author Bartosz Przybylski <bart.p.pl@gmail.com>
  */
-public abstract class TrackableActivity extends ActionBarActivity implements ViewPager.OnPageChangeListener {
+public abstract class TrackableActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
     private int mCurrentPage = 0;
 
@@ -98,48 +90,7 @@ public abstract class TrackableActivity extends ActionBarActivity implements Vie
     }
 
     protected void showFeedbackDialog() {
-        Doorbell doorbellDialog = new Doorbell(this, BuildConfig.DOORBELL_ID, BuildConfig.DOORBELL_APP_KEY); // Create the Doorbell object
-
-        doorbellDialog.addProperty("loggedIn", PrefUtils.isSignedIn(this)); // Optionally add some properties
-        doorbellDialog.addProperty("appStarts", PrefUtils.getAppStarts(this));
-        doorbellDialog.addProperty("appVersionCode", PrefUtils.getVersionCode(this));
-
-
-        // Callback for when the dialog is shown
-        doorbellDialog.setOnShowCallback(new io.doorbell.android.callbacks.OnShowCallback() {
-            @Override
-            public void handle() {
-                trackView("Feedback/" + getTrackedViewName());
-            }
-        });
-
-        AlertDialog dialog = doorbellDialog.show();
-        fixAlertDialogMargins(dialog);
-    }
-
-    private void fixAlertDialogMargins(AlertDialog dialog) {
-        View customView = dialog.findViewById(android.R.id.custom);
-        if (customView != null && customView instanceof FrameLayout) {
-
-            if (customView.getLayoutParams() instanceof FrameLayout.LayoutParams) {
-                FrameLayout.LayoutParams layoutParams =
-                        (FrameLayout.LayoutParams) customView.getLayoutParams();
-                int margin = Utils.dpToPx(getResources(), 16);
-                layoutParams.setMargins(margin, margin, margin, margin);
-            }
-
-            FrameLayout frameLayout = (FrameLayout) customView;
-            for (int i = 0; i < frameLayout.getChildCount(); i++) {
-                View child = frameLayout.getChildAt(i);
-                if (child instanceof LinearLayout) {
-                    final LinearLayout linearLayout = (LinearLayout) child;
-                    for (int j = 0; j < linearLayout.getChildCount(); j++) {
-                        LinearLayout.LayoutParams childParams =
-                                (LinearLayout.LayoutParams) linearLayout.getChildAt(j).getLayoutParams();
-                        childParams.setMargins(0, 0, 0, Utils.dpToPx(getResources(), 8));
-                    }
-                }
-            }
-        }
+        trackView("Feedback/" + getTrackedViewName());
+        new FeedbackFragment().show(getSupportFragmentManager(), "FeedbackFragment");
     }
 }
