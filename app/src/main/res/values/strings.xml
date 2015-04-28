@@ -155,5 +155,8 @@
     <string name="for_leads">For Leads</string>
     <string name="leads_welcome">Congrats for being a GDG organizer!</string>
     <string name="leads_resources">You should check the GDG resource at https://drive.google.com/drive/#folders/0B55wxScz_BJtWW9aUnk2LUlNdEk</string>
-    <string name="leads_wisdom">The GDG Wisdom pages at https://sites.google.com/site/gdgwisdom/ contains more general information.</string>
+    <string name="leads_wisdom">The GDG Wisdom book at http://gdg-wisdom.gitbooks.io/gdg-wisdom-2015/content/ contains more general information. Feel free to contribute and edit pages.</string>
+    <string name="leads_welcome_title">Welcome</string>
+    <string name="leads_resources_title">GDG Resources</string>
+    <string name="leads_wisdom_title">GDG Wisdom</string>
 </resources>
