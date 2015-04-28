@@ -20,7 +20,7 @@
   
   <dimen name="icon_width_event">48dp</dimen>
   <dimen name="responsive_width">@dimen/match_parent</dimen>
-  <dimen name="navdrawer_user_picture_size">50dp</dimen>
+  <dimen name="navdrawer_user_picture_size">64dp</dimen>
   <dimen name="navdrawer_user_picture_margin">8dp</dimen>
 
 </resources>
