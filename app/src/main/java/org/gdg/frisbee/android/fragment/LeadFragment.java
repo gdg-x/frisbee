@@ -81,18 +81,18 @@ public class LeadFragment extends ListFragment {
             viewHolder.type.setText(getContext().getString(getItem(position).getType().getName()));
             return convertView;
         }
+    }
 
-        private static class ViewHolder {
-            @InjectView(R.id.msg_title)
-            TextView title;
-            @InjectView(R.id.msg_details)
-            TextView details;
-            @InjectView(R.id.msg_type)
-            TextView type;
+    public static class ViewHolder {
+        @InjectView(R.id.msg_title)
+        TextView title;
+        @InjectView(R.id.msg_details)
+        TextView details;
+        @InjectView(R.id.msg_type)
+        TextView type;
 
-            public ViewHolder(View view) {
-                ButterKnife.inject(this, view);
-            }
+        public ViewHolder(View view) {
+            ButterKnife.inject(this, view);
         }
     }
 }
