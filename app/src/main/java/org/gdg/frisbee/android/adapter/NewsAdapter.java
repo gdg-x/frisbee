@@ -259,7 +259,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         View attachmentView;
 
         if (container.getChildCount() == 0) {
-            attachmentView = mInflater.inflate(layout, null);
+            attachmentView = mInflater.inflate(layout, container, false);
             container.addView(attachmentView);
 
             switch (type) {

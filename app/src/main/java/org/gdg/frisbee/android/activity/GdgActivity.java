@@ -42,7 +42,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 
-public abstract class GdgActivity extends TrackableActivity implements 
+public abstract class GdgActivity extends TrackableActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final int STATE_DEFAULT = 0;
@@ -172,16 +172,16 @@ public abstract class GdgActivity extends TrackableActivity implements
                         // If the error resolution was successful we should continue
                         // processing errors.
                         mSignInProgress = STATE_SIGN_IN;
+
+                        if (!mGoogleApiClient.isConnecting()) {
+                            // If Google Play services resolved the issue with a dialog then
+                            // onStart is not called so we need to re-attempt connection here.
+                            mGoogleApiClient.connect();
+                        }
                     } else {
                         // If the error resolution was not successful or the user canceled,
                         // we should stop processing errors.
                         mSignInProgress = STATE_DEFAULT;
-                    }
-
-                    if (!mGoogleApiClient.isConnecting()) {
-                        // If Google Play services resolved the issue with a dialog then
-                        // onStart is not called so we need to re-attempt connection here.
-                        mGoogleApiClient.connect();
                     }
                     break;
             }

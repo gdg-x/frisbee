@@ -45,6 +45,7 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.eventseries.GdgEventListFragment;
 import org.gdg.frisbee.android.fragment.InfoFragment;
+import org.gdg.frisbee.android.fragment.LeadFragment;
 import org.gdg.frisbee.android.fragment.NewsFragment;
 import org.gdg.frisbee.android.fragment.SeasonsGreetingsFragment;
 import org.gdg.frisbee.android.utils.ChapterComparator;
@@ -69,6 +70,13 @@ public class MainActivity extends GdgNavDrawerActivity {
     public static final String SECTION_EVENTS = "events";
     private static final String ARG_SELECTED_CHAPTER = "selected_chapter";
     private static final String ARG_CHAPTERS = "chapters";
+
+    private static final int[] PAGES = {
+        R.string.news, R.string.info, R.string.events
+    };
+    private static final int[] ORGANIZER_PAGES = {
+        R.string.news, R.string.info, R.string.events, R.string.for_leads
+    };
 
     public static final int REQUEST_FIRST_START_WIZARD = 100;
     private static final int PLAY_SERVICE_DIALOG_REQUEST_CODE = 200;
@@ -363,6 +371,8 @@ public class MainActivity extends GdgNavDrawerActivity {
     }
 
     public class ChapterFragmentPagerAdapter extends FragmentStatePagerAdapter {
+
+        private final int[] mPages;
         private Context mContext;
         private Chapter mSelectedChapter;
 
@@ -370,6 +380,11 @@ public class MainActivity extends GdgNavDrawerActivity {
             super(fm);
             mContext = ctx;
             mSelectedChapter = selectedChapter;
+            if (App.getInstance().isOrganizer()) {
+                mPages = ORGANIZER_PAGES;
+            } else {
+                mPages = PAGES;
+            }
         }
 
         @Override
@@ -379,7 +394,7 @@ public class MainActivity extends GdgNavDrawerActivity {
 
         @Override
         public int getCount() {
-            return 3;
+            return mPages.length;
         }
 
         @Override
@@ -392,21 +407,19 @@ public class MainActivity extends GdgNavDrawerActivity {
                     return InfoFragment.newInstance(gplusId);
                 case 2:
                     return GdgEventListFragment.newInstance(gplusId);
+                case 3:
+                    return LeadFragment.newInstance(gplusId);
             }
             return null;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return mContext.getText(R.string.news);
-                case 1:
-                    return mContext.getText(R.string.info);
-                case 2:
-                    return mContext.getText(R.string.events);
+            if (0 < position && position < mPages.length) {
+                return mContext.getString(mPages[position]);
+            } else {
+                return "";
             }
-            return "";
         }
 
         public Chapter getSelectedChapter() {
