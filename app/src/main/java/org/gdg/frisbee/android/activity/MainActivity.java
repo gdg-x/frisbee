@@ -71,10 +71,12 @@ public class MainActivity extends GdgNavDrawerActivity {
     private static final String ARG_SELECTED_CHAPTER = "selected_chapter";
     private static final String ARG_CHAPTERS = "chapters";
 
-    private static final int[] PAGES =
-            {R.string.news, R.string.info, R.string.events};
-    private static final int[] ORGANIZER_PAGES =
-            {R.string.news, R.string.info, R.string.events, R.string.for_leads};
+    private static final int[] PAGES = {
+        R.string.news, R.string.info, R.string.events
+    };
+    private static final int[] ORGANIZER_PAGES = {
+        R.string.news, R.string.info, R.string.events, R.string.for_leads
+    };
 
     public static final int REQUEST_FIRST_START_WIZARD = 100;
     private static final int PLAY_SERVICE_DIALOG_REQUEST_CODE = 200;
