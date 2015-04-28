@@ -21,11 +21,11 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.lead.LeadMessage;
 
 public class LeadFragment extends ListFragment {
-    private LeadAnouncementAdapter mAdapter;
+    private LeadAnnouncementsAdapter mAdapter;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_for_leads, null);
+        View root = inflater.inflate(R.layout.fragment_for_leads, container, false);
         return root;
     }
 
@@ -40,16 +40,16 @@ public class LeadFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mAdapter = new LeadAnouncementAdapter(getActivity());
+        mAdapter = new LeadAnnouncementsAdapter(getActivity());
         setListAdapter(mAdapter);
         mAdapter.add(LeadMessage.newMessage(getString(R.string.leads_welcome_title),
                 getString(R.string.leads_welcome)));
         mAdapter.add(LeadMessage.newResource(getString(R.string.leads_resources_title),
                 getString(R.string.leads_resources),
-                "https://drive.google.com/drive/#folders/0B55wxScz_BJtWW9aUnk2LUlNdEk"));
+                Const.URL_GDG_RESOURCE_FOLDER));
         mAdapter.add(LeadMessage.newResource(getString(R.string.leads_wisdom_title),
                 getString(R.string.leads_wisdom),
-                "http://gdg-wisdom.gitbooks.io/gdg-wisdom-2015/content/"));
+                Const.URL_GDG_WISDOM_BOOK));
     }
 
     @Override
@@ -60,15 +60,15 @@ public class LeadFragment extends ListFragment {
         }
     }
 
-    private static class LeadAnouncementAdapter extends ArrayAdapter<LeadMessage> {
-        public LeadAnouncementAdapter(final Context context) {
+    private static class LeadAnnouncementsAdapter extends ArrayAdapter<LeadMessage> {
+        public LeadAnnouncementsAdapter(final Context context) {
             super(context, R.layout.list_announcement_item);
         }
 
         @Override
         public View getView(final int position, View convertView, final ViewGroup parent) {
             if (convertView == null) {
-                convertView = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.list_announcement_item, null);
+                convertView = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.list_announcement_item, parent, false);
                 final ViewHolder viewHolder = new ViewHolder();
                 viewHolder.title = (TextView) convertView.findViewById(R.id.msg_title);
                 viewHolder.details = (TextView) convertView.findViewById(R.id.msg_details);

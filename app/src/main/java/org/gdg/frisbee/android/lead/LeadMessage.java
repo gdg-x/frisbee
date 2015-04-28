@@ -7,13 +7,13 @@ public class LeadMessage {
     private String mLinkUrl;
 
     private LeadMessage(Type type, final String title, final String details) {
-        mTitle = title;
-        mDetails = details;
-        mType = type;
+        this(type, title, details, null);
     }
 
     private LeadMessage(final Type type, final String title, String details, final String linkUrl) {
-        this(type, title, details);
+        mTitle = title;
+        mDetails = details;
+        mType = type;
         mLinkUrl = linkUrl;
     }
 
