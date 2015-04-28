@@ -68,6 +68,9 @@ import timber.log.Timber;
 public class MainActivity extends GdgNavDrawerActivity {
 
     public static final String SECTION_EVENTS = "events";
+    private static final String ARG_SELECTED_CHAPTER = "selected_chapter";
+    private static final String ARG_CHAPTERS = "chapters";
+
     public static final int REQUEST_FIRST_START_WIZARD = 100;
     private static final int PLAY_SERVICE_DIALOG_REQUEST_CODE = 200;
 
@@ -109,7 +112,9 @@ public class MainActivity extends GdgNavDrawerActivity {
         if (savedInstanceState == null) {
 
             Intent intent = getIntent();
-            if (intent != null && intent.getAction() != null && intent.getAction().equals("finish_first_start")) {
+            if (intent != null
+                    && intent.getAction() != null
+                    && intent.getAction().equals(FirstStartActivity.ACTION_FIRST_START)) {
                 Timber.d("Completed FirstStartWizard");
 
                 if (PrefUtils.isSignedIn(this)) {
@@ -135,10 +140,10 @@ public class MainActivity extends GdgNavDrawerActivity {
             });
 
         } else {
-            if (savedInstanceState.containsKey("chapters")) {
-                ArrayList<Chapter> chapters = savedInstanceState.getParcelableArrayList("chapters");
+            if (savedInstanceState.containsKey(ARG_CHAPTERS)) {
+                ArrayList<Chapter> chapters = savedInstanceState.getParcelableArrayList(ARG_CHAPTERS);
 
-                Chapter selectedChapter = savedInstanceState.getParcelable("selected_chapter");
+                Chapter selectedChapter = savedInstanceState.getParcelable(ARG_SELECTED_CHAPTER);
                 initChapters(chapters, selectedChapter);
             } else {
                 fetchChapters();
@@ -317,10 +322,10 @@ public class MainActivity extends GdgNavDrawerActivity {
         super.onSaveInstanceState(outState);
 
         if (mChapterAdapter.getCount() > 0) {
-            outState.putParcelableArrayList("chapters", mChapterAdapter.getAll());
+            outState.putParcelableArrayList(ARG_CHAPTERS, mChapterAdapter.getAll());
         }
         if (mViewPagerAdapter != null && mViewPagerAdapter.getSelectedChapter() != null) {
-            outState.putParcelable("selected_chapter", mViewPagerAdapter.getSelectedChapter());
+            outState.putParcelable(ARG_SELECTED_CHAPTER, mViewPagerAdapter.getSelectedChapter());
         }
     }
 

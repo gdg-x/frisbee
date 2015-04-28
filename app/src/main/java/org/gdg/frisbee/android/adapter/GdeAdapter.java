@@ -19,6 +19,7 @@ import com.google.api.services.plus.model.Person;
 import com.squareup.picasso.Picasso;
 
 import org.gdg.frisbee.android.BuildConfig;
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.GapiOkTransport;
 import org.gdg.frisbee.android.api.model.Gde;
@@ -136,14 +137,14 @@ public class GdeAdapter extends BaseAdapter {
 
                         if (matcher.matches()) {
                             String plusId = matcher.group(1);
-                            gde = (Person) App.getInstance().getModelCache().get("gde_" + plusId, !Utils.isOnline(mContext));
+                            gde = (Person) App.getInstance().getModelCache().get(Const.CACHE_KEY_GDE + plusId, !Utils.isOnline(mContext));
 
                             if (gde == null && Utils.isOnline(mContext)) {
                                 try {
                                     Plus.People.Get request = mClient.people().get(plusId);
                                     request.setFields("image");
                                     gde = request.execute();
-                                    App.getInstance().getModelCache().put("gde_" + plusId, gde);
+                                    App.getInstance().getModelCache().put(Const.CACHE_KEY_GDE + plusId, gde);
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }

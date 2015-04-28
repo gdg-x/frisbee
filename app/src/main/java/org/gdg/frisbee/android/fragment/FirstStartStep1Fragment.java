@@ -26,6 +26,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.ChapterAdapter;
 import org.gdg.frisbee.android.api.model.Chapter;
@@ -50,6 +51,7 @@ import timber.log.Timber;
 
 public class FirstStartStep1Fragment extends Fragment {
 
+    private static final String ARG_SELECTED_CHAPTER = "selected_chapter";
     @InjectView(R.id.chapter_spinner)
     Spinner mChapterSpinner;
     @InjectView(R.id.confirm)
@@ -65,7 +67,7 @@ public class FirstStartStep1Fragment extends Fragment {
         super.onSaveInstanceState(outState);
 
         if (mSpinnerAdapter != null && mSpinnerAdapter.getCount() > 0) {
-            outState.putParcelable("selected_chapter", mSpinnerAdapter.getItem(mChapterSpinner.getSelectedItemPosition()));
+            outState.putParcelable(ARG_SELECTED_CHAPTER, mSpinnerAdapter.getItem(mChapterSpinner.getSelectedItemPosition()));
         }
 
     }
@@ -80,10 +82,10 @@ public class FirstStartStep1Fragment extends Fragment {
         mSpinnerAdapter = new ChapterAdapter(getActivity(), false /* black text */);
 
         if (savedInstanceState != null) {
-            mSelectedChapter = savedInstanceState.getParcelable("selected_chapter");
+            mSelectedChapter = savedInstanceState.getParcelable(ARG_SELECTED_CHAPTER);
         }
 
-        App.getInstance().getModelCache().getAsync("chapter_list_hub", new ModelCache.CacheListener() {
+        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 Directory directory = (Directory) item;
@@ -116,7 +118,7 @@ public class FirstStartStep1Fragment extends Fragment {
             @Override
             public void success(final Directory directory, Response response) {
 
-                App.getInstance().getModelCache().putAsync("chapter_list_hub",
+                App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB,
                         directory,
                         DateTime.now().plusDays(4),
                         new ModelCache.CachePutListener() {

@@ -83,6 +83,11 @@ public class Const {
     public static final String CACHE_KEY_CHAPTER_LIST_HUB = "chapter_list_hub";
     public static final String CACHE_KEY_PULSE_GLOBAL = "pulse_global";
     public static final String CACHE_KEY_GDE_MAP = "gde_map";
+    public static final String CACHE_KEY_FRISBEE_CONTRIBUTORS = "frisbee_contributors";
+    public static final String CACHE_KEY_PERSON = "person_";
+    public static final String CACHE_KEY_NEWS = "news_";
+    public static final String CACHE_KEY_PULSE = "pulse_";
+    public static final String CACHE_KEY_GDE = "gde_";
 
     public static final String GOOGLE_DEVELOPERS_YT_ID = "UC_x5XG1OV2P6uZZ5FSM9Ttw";
     public static final String ANDROID_DEVELOPERS_YT_ID = "UCVHFbqXqoYvEWM1Ddxl0QDg";

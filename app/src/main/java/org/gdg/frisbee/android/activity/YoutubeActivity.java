@@ -33,6 +33,7 @@ import org.gdg.frisbee.android.R;
 public class YoutubeActivity extends GdgActivity implements YouTubePlayer.OnInitializedListener {
 
     private static final int PORTRAIT_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;
+    public static final String EXTRA_VIDEO_ID = "video_id";
 
     protected String getTrackedViewName() {
         return "YouTube";
@@ -85,7 +86,7 @@ public class YoutubeActivity extends GdgActivity implements YouTubePlayer.OnInit
         });
 
         if (!wasRestored) {
-            youTubePlayer.loadVideo(getIntent().getStringExtra("video_id"));
+            youTubePlayer.loadVideo(getIntent().getStringExtra(EXTRA_VIDEO_ID));
         }
     }
 

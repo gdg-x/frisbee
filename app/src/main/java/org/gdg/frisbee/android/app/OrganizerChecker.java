@@ -20,8 +20,8 @@ public class OrganizerChecker {
     public OrganizerChecker(SharedPreferences preferences) {
         mPreferences = preferences;
 
-        mLastOrganizerCheck = mPreferences.getLong("organizer_check_time", 0);
-        mCheckedId = mPreferences.getString("organizer_check_id", null);
+        mLastOrganizerCheck = mPreferences.getLong(Const.PREF_ORGANIZER_CHECK_TIME, 0);
+        mCheckedId = mPreferences.getString(Const.PREF_ORGANIZER_CHECK_ID, null);
     }
 
     public long getLastOrganizerCheckTime() {

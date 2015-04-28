@@ -25,6 +25,7 @@ import android.database.MatrixCursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.activity.SearchActivity;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
@@ -75,8 +76,7 @@ public class GdgProvider extends ContentProvider {
     }
 
     private void prepareProvider() {
-        final App app = (App) getContext().getApplicationContext();
-        mDirectory = (Directory) app.getInstance().getModelCache().get("chapter_list_hub");
+        mDirectory = (Directory) App.getInstance().getModelCache().get(Const.CACHE_KEY_CHAPTER_LIST_HUB);
         Timber.d("Initialized ContentProvider");
     }
 

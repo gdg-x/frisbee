@@ -66,6 +66,7 @@ import butterknife.InjectView;
 
 public class ArrowActivity extends GdgNavDrawerActivity {
 
+    private static final Charset CHARSET = Charset.forName("US-ASCII");
     public static final String ID_SEPARATOR_FOR_SPLIT = "\\|";
     public static final String ID_SPLIT_CHAR = "|";
     private static final int REQUEST_LEADERBOARD = 1;
@@ -414,9 +415,9 @@ public class ArrowActivity extends GdgNavDrawerActivity {
                 String msg = getEncryptedMessage();
                 NdefRecord mimeRecord = new NdefRecord(
                         NdefRecord.TNF_MIME_MEDIA,
-                        Const.ARROW_MIME.getBytes(Charset.forName("US-ASCII")),
+                        Const.ARROW_MIME.getBytes(CHARSET),
                         new byte[0],
-                        msg.getBytes(Charset.forName("US-ASCII")));
+                        msg.getBytes(CHARSET));
                 return new NdefMessage(new NdefRecord[]{mimeRecord});
             } catch (Exception e) {
                 e.printStackTrace();
