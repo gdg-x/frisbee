@@ -24,12 +24,28 @@
   android:layout_gravity="start"
   android:clickable="true"
   android:background="@color/navdrawer_background">
-  <ImageView
+  <RelativeLayout
+    android:layout_width="@dimen/navdrawer_width"
+    android:layout_height="@dimen/navdrawer_image_height">
+   <ImageView
     android:layout_width="@dimen/navdrawer_width"
     android:layout_height="@dimen/navdrawer_image_height"
     android:id="@+id/navdrawer_image"
     android:src="@drawable/ic_logo_wide"
     android:scaleType="centerCrop"/>
+    <ImageView
+      android:layout_width="@dimen/navdrawer_user_picture_size"
+      android:layout_height="@dimen/navdrawer_user_picture_size"
+      android:layout_alignParentStart="true"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentBottom="true"
+      android:layout_marginBottom="@dimen/navdrawer_user_picture_margin"
+      android:layout_marginLeft="@dimen/navdrawer_user_picture_margin"
+      android:id="@+id/navdrawer_user_picture"
+      android:src="@drawable/ic_no_avatar"
+      android:scaleType="centerCrop" />
+
+  </RelativeLayout>
   <ListView
     android:id="@+id/navdrawer_list"
     android:layout_width="match_parent"

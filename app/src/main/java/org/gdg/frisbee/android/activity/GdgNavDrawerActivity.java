@@ -50,6 +50,7 @@ import org.gdg.frisbee.android.eventseries.TaggedEventSeriesActivity;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.PrefUtils;
+import org.gdg.frisbee.android.view.BitmapBorderTransformation;
 import org.joda.time.DateTime;
 
 import java.io.IOException;
@@ -73,6 +74,9 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     ListView mDrawerContent;
     @InjectView(R.id.navdrawer_image)
     ImageView mDrawerImage;
+    @InjectView(R.id.navdrawer_user_picture)
+    ImageView mDrawerUserPicture;
+
     private Plus plusClient;
 
     @Override
@@ -231,6 +235,12 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     @Override
+    public void onConnected(final Bundle bundle) {
+        super.onConnected(bundle);
+        updateUserPicture();
+    }
+
+    @Override
     public void onBackPressed() {
         if (isNavDrawerOpen()) {
             closeNavDrawer();
@@ -249,10 +259,22 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         }
     }
 
+    protected void updateUserPicture() {
+        com.google.android.gms.plus.model.people.Person user = com.google.android.gms.plus.Plus.PeopleApi.getCurrentPerson(getGoogleApiClient());
+        com.google.android.gms.plus.model.people.Person.Image userPicture = user.getImage();
+        if (userPicture != null && userPicture.hasUrl()) {
+            App.getInstance().getPicasso().load(userPicture.getUrl())
+                    .transform(new BitmapBorderTransformation(2,
+                            getResources().getDimensionPixelSize(R.dimen.navdrawer_user_picture_size) / 2,
+                            getResources().getColor(R.color.white)))
+                    .into(mDrawerUserPicture);
+        }
+    }
+
     private void maybeUpdateChapterImage() {
         final String homeChapterId = getCurrentHomeChapterId();
         if (isHomeChapterOutdated(homeChapterId)) {
-            new Builder<String, Person>(String.class, Person.class)
+            new Builder<>(String.class, Person.class)
                     .addParameter(homeChapterId)
                     .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person>() {
                         @Override
