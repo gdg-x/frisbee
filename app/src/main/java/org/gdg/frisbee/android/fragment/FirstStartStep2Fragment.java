@@ -234,6 +234,7 @@ public class FirstStartStep2Fragment extends Fragment implements GoogleApiClient
             // error types, so we show the default Google Play services error
             // dialog which may still start an intent on our behalf if the
             // user can resolve the issue.
+            //TODO: replace this with the right Dialog implementation.
             getActivity().showDialog(DIALOG_PLAY_SERVICES_ERROR);
         }
     }

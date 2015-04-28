@@ -152,6 +152,11 @@
     <string name="event_more">More</string>
     <string name="help">Help</string>
     <string name="feedback">Feedback</string>
+    <string name="feedback_cancel">Cancel</string>
+    <string name="feedback_email_hint">Your email address</string>
+    <string name="feedback_message_hint">What\'s on your mind?</string>
+    <string name="feedback_send">Send</string>
+    <string name="feedback_sending">Sending…</string>
     <string name="for_leads">For Leads</string>
     <string name="leads_welcome">Congrats for being a GDG organizer!</string>
     <string name="leads_resources">You should check the GDG resource at public Google Drive folder. Click to browse documentation, graphics, code labs and more.</string>
