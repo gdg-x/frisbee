@@ -352,6 +352,16 @@ public class MainActivity extends GdgNavDrawerActivity {
         });
     }
 
+    private Chapter findChapterForId(String chapterId) {
+        for (int index=0; index < mChapterAdapter.getCount(); index++ ){
+            final Chapter chapter = mChapterAdapter.getItem(index);
+            if (chapter.getGplusId() != null && chapter.getGplusId().equals(chapterId)){
+                return chapter;
+            }
+        }
+        return null;
+    }
+
     private void updateSelectionfor(final Chapter chapter) {
         Chapter previous = mViewPagerAdapter.getSelectedChapter();
         mViewPagerAdapter.setSelectedChapter(chapter);

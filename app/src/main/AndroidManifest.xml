@@ -66,7 +66,18 @@
 
     <activity
       android:name=".activity.MainActivity"
-      android:theme="@style/Theme.GDG.NoActionBar.Main" />
+      android:theme="@style/Theme.GDG.NoActionBar.Main">
+      <intent-filter>
+        <action android:name="ANDROID.INTENT.ACTION.VIEW"/>
+        <category android:name="android.intent.category.BROWSABLE"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <data android:host="developers.google.com"
+          android:pathPattern="/groups/chapter/[0-9]*"/>
+        <data
+          android:scheme="gdgx"
+          android:host="chapter" />
+      </intent-filter>
+    </activity>
     <activity
       android:name=".activity.GdeActivity"
       android:theme="@style/Theme.GDG.NoActionBar" />
