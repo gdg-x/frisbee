@@ -20,9 +20,10 @@ active chapter listed in the Google Developer Group Directory
 * Featured Special Event Series Section
 * Arrow (Find you fellow organizers worldwide and earn points.)
 
-Frisbee is a community effort and we appreciate the help of everyone who wants to help improve the App.
+Frisbee is a community effort and we appreciate the help of everyone who wants to help improve the App:
 
-Check http://github.com/gdg-x for more information.
+Become a tester and VIP user by joining the G+ community https://plus.google.com/communities/100423211916386801761.
+Check http://github.com/gdg-x for more information about all development activities around GDGs.
 
 Development
 -----------
