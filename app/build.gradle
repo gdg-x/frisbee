@@ -85,7 +85,22 @@ android {
 
     buildTypes {
         release {
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            //Library specific proguard files
+            //More info: https://github.com/krschultz/android-proguard-snippets
+            proguardFile '../settings/proguard/proguard-support-v7-appcompat.pro'
+            proguardFile '../settings/proguard/proguard-support-v7-cardview.pro'
+            proguardFile '../settings/proguard/proguard-google-play-services.pro'
+            proguardFile '../settings/proguard/proguard-google-analytics.pro'
+            proguardFile '../settings/proguard/proguard-gson.pro'
+            proguardFile '../settings/proguard/proguard-square-otto.pro'
+            proguardFile '../settings/proguard/proguard-square-okio.pro'
+            proguardFile '../settings/proguard/proguard-square-okhttp.pro'
+            proguardFile '../settings/proguard/proguard-square-picasso.pro'
+            proguardFile '../settings/proguard/proguard-square-retrofit.pro'
+            proguardFile '../settings/proguard/proguard-butterknife.pro'
+            proguardFile '../settings/proguard/proguard-crashlytics.pro'
+            proguardFile '../settings/proguard/proguard-joda-time.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             minifyEnabled true
             zipAlignEnabled true
             shrinkResources true
