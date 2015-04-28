@@ -1,37 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:orientation="vertical"
-  android:padding="20dp">
+  android:paddingLeft="20dp"
+  android:paddingRight="20dp">
 
   <org.gdg.frisbee.android.widget.FloatLabelLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    app:floatLabelTextAppearance="@style/TextAppearance.GDG.FloatLabel"
+    app:floatLabelPaddingTop="8dp"
+    app:floatLabelPaddingLeft="4dp"
+    app:floatLabelPaddingBottom="0dp">
 
     <EditText
       android:id="@+id/feedback_message_text"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:hint="@string/doorbell_message_hint"
+      android:hint="@string/feedback_message_hint"
+      android:gravity="top|left"
       android:inputType="textMultiLine|textCapSentences"
-      android:maxLines="6"
-      android:minLines="2"/>
+      android:maxLines="4"
+      android:minLines="1"/>
 
   </org.gdg.frisbee.android.widget.FloatLabelLayout>
 
   <org.gdg.frisbee.android.widget.FloatLabelLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    app:floatLabelTextAppearance="@style/TextAppearance.GDG.FloatLabel"
+    app:floatLabelPaddingBottom="0dp">
 
     <AutoCompleteTextView
       android:id="@+id/feedback_email_text"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:hint="@string/doorbell_email_hint"
+      android:hint="@string/feedback_email_hint"
       android:imeOptions="actionDone"
       android:inputType="textEmailAddress"
-      android:singleLine="true"/>
+      android:singleLine="true"
+      android:completionThreshold="1"/>
 
   </org.gdg.frisbee.android.widget.FloatLabelLayout>
 

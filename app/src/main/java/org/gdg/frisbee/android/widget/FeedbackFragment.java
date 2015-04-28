@@ -50,6 +50,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.Set;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -96,18 +98,7 @@ public class FeedbackFragment extends DialogFragment {
         View feedbackView = LayoutInflater.from(getActivity())
                 .inflate(R.layout.dialog_feedback, (ViewGroup) getView(), false);
         ButterKnife.inject(this, feedbackView);
-
-        //Set email AutoCompleteTextView
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
-                android.R.layout.select_dialog_item);
-        Account[] deviceAccounts = AccountManager.get(getActivity()).getAccounts();
-        for (Account account : deviceAccounts) {
-            if (Utils.isEmailAddress(account.name)) {
-                adapter.add(account.name);
-            }
-        }
-        mEmailField.setAdapter(adapter);
-
+        setupEmailAutocomplete();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setView(feedbackView)
@@ -132,6 +123,21 @@ public class FeedbackFragment extends DialogFragment {
                 });
 
         return builder.create();
+    }
+
+    private void setupEmailAutocomplete() {
+        //Set email AutoCompleteTextView
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
+                android.R.layout.select_dialog_item);
+        Set<String> accountsSet = new HashSet<>();
+        Account[] deviceAccounts = AccountManager.get(getActivity()).getAccounts();
+        for (Account account : deviceAccounts) {
+            if (Utils.isEmailAddress(account.name)) {
+                accountsSet.add(account.name);
+            }
+        }
+        adapter.addAll(accountsSet);
+        mEmailField.setAdapter(adapter);
     }
 
     private void buildProperties() {
