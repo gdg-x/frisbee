@@ -107,6 +107,7 @@ android {
         abortOnError true
         checkReleaseBuilds false
 
+        ignoreWarnings isTravis
         textReport true
         textOutput 'stdout'
 
