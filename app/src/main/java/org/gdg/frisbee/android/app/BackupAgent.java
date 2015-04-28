@@ -24,6 +24,8 @@ import android.os.ParcelFileDescriptor;
 
 import com.google.android.gms.analytics.HitBuilders;
 
+import org.gdg.frisbee.android.utils.PrefUtils;
+
 import java.io.IOException;
 
 import timber.log.Timber;
@@ -41,7 +43,7 @@ public class BackupAgent extends BackupAgentHelper {
     @Override
     public void onCreate() {
         SharedPreferencesBackupHelper helper =
-                new SharedPreferencesBackupHelper(this, "gdg");
+                new SharedPreferencesBackupHelper(this, PrefUtils.PREF_NAME);
         addHelper(PREFS_BACKUP_KEY, helper);
     }
 
