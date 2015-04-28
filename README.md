@@ -22,7 +22,8 @@ active chapter listed in the Google Developer Group Directory
 
 Frisbee is a community effort and we appreciate the help of everyone who wants to help improve the App:
 
-Become a tester and VIP user by joining the G+ community https://plus.google.com/communities/100423211916386801761.
+Become a tester and VIP user by joining the [G+ Frisbee community] (https://plus.google.com/communities/100423211916386801761).
+
 Check http://github.com/gdg-x for more information about all development activities around GDGs.
 
 Development
