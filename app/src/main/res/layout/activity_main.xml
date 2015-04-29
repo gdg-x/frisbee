@@ -31,7 +31,7 @@
 
     <include layout="@layout/toolbar_actionbar" />
 
-    <org.gdg.frisbee.android.view.SlidingTabLayout
+    <org.gdg.frisbee.android.widget.SlidingTabLayout
       android:id="@+id/sliding_tabs"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"

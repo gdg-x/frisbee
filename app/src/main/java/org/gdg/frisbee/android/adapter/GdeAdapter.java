@@ -27,7 +27,7 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.Utils;
-import org.gdg.frisbee.android.view.SquaredImageView;
+import org.gdg.frisbee.android.widget.SquaredImageView;
 
 import java.io.IOException;
 import java.util.ArrayList;

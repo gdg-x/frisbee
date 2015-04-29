@@ -143,4 +143,18 @@
   <string name="event_more">Mais</string>
   <string name="help">Ajuda</string>
   <string name="feedback">Feedback</string>
+  <string name="feedback_cancel">Cancel</string>
+  <string name="feedback_email_hint">Your email address</string>
+  <string name="feedback_message_hint">What\'s on your mind?</string>
+  <string name="feedback_send">Send</string>
+  <string name="feedback_sending">Sending&#8230;</string>
+  <string name="for_leads">For Leads</string>
+  <string name="leads_welcome">Congrats for being a GDG organizer!</string>
+  <string name="leads_resources">You should check the GDG resource at public Google Drive folder. Click to browse documentation, graphics, code labs and more.</string>
+  <string name="leads_wisdom">The GDG Wisdom book at http://gdg-wisdom.gitbooks.io contains more general information. Feel free to contribute and edit pages. Click to read the book.</string>
+  <string name="leads_welcome_title">Welcome</string>
+  <string name="leads_resources_title">GDG Resources</string>
+  <string name="leads_wisdom_title">GDG Wisdom</string>
+  <string name="message">Message</string>
+  <string name="resource">Resource</string>
 </resources>

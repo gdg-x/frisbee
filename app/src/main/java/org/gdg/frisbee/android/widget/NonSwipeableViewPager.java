@@ -1,4 +1,4 @@
-package org.gdg.frisbee.android.view;
+package org.gdg.frisbee.android.widget;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
