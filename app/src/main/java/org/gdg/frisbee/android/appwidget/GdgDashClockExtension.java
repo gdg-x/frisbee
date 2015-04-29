@@ -1,4 +1,4 @@
-package org.gdg.frisbee.android.widget;
+package org.gdg.frisbee.android.appwidget;
 
 import android.content.Intent;
 import android.net.Uri;

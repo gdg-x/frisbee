@@ -49,7 +49,7 @@ import org.gdg.frisbee.android.api.model.HomeGdgRequest;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.PrefUtils;
-import org.gdg.frisbee.android.widget.UpcomingEventWidgetProvider;
+import org.gdg.frisbee.android.appwidget.UpcomingEventWidgetProvider;
 
 import java.io.IOException;
 
