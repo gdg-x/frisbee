@@ -46,7 +46,7 @@ android {
         buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
         buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
 
-        resConfigs "en", "cs", "de", "es", "fr", "hi", "it", "ko", "lt", "nl", "pl", "pt-rBR", "pt-rPT", "ru", "sk", "th", "tr", "uk", "zh-rCN", "zh-rHK", "zh-rTW"
+        resConfigs "en", "cs", "de", "es", "fr", "hi", "hy", "it", "ko", "lt", "nl", "pl", "pt-rBR", "pt-rPT", "ru", "sk", "th", "tr", "uk", "zh-rCN", "zh-rHK", "zh-rTW"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
