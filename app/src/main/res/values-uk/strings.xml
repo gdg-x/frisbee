@@ -50,22 +50,22 @@
   <plurals name="seconds_ago">
     <item quantity="one">щойно</item>
     <item quantity="few">%d секунд тому</item>
-    <item quantity="other">%d seconds ago</item>
+    <item quantity="other">%d секунд тому</item>
   </plurals>
   <plurals name="minutes_ago">
     <item quantity="one">1 хвилина тому</item>
     <item quantity="few">%d хвилин тому</item>
-    <item quantity="other">%d minutes ago</item>
+    <item quantity="other">%d хвилин тому</item>
   </plurals>
   <plurals name="hours_ago">
     <item quantity="one">1 година тому</item>
     <item quantity="few">%d годин тому</item>
-    <item quantity="other">%d hours ago</item>
+    <item quantity="other">%d годин тому</item>
   </plurals>
   <plurals name="days_ago">
     <item quantity="one">1 день тому</item>
     <item quantity="few">%d днів тому</item>
-    <item quantity="other">%d days ago</item>
+    <item quantity="other">%d днів тому</item>
   </plurals>
   <string name="contributors">GDG додаток є результатом колективної роботи з відкритим кодом.
         Наступні люди внесли свій внесок у програму:
@@ -154,7 +154,7 @@
   <string name="arrow_leaderboard">Best of Arrow</string>
   <string name="no_nfc_use_qr_scanner">No NFC detected, use QR scanner!</string>
   <string name="event_description">Description</string>
-  <string name="event">Event</string>
+  <string name="event">Подія</string>
   <string name="no_description_available"><![CDATA[<i>No description available.</i>]]></string>
   <string name="starting_at">Starting at %1$s</string>
   <string name="loading_data_failed">Couldn\'t load event list..</string>
@@ -182,9 +182,9 @@
   <string name="leads_welcome">Congrats for being a GDG organizer!</string>
   <string name="leads_resources">You should check the GDG resource at public Google Drive folder. Click to browse documentation, graphics, code labs and more.</string>
   <string name="leads_wisdom">The GDG Wisdom book at http://gdg-wisdom.gitbooks.io contains more general information. Feel free to contribute and edit pages. Click to read the book.</string>
-  <string name="leads_welcome_title">Welcome</string>
+  <string name="leads_welcome_title">Ласкаво просимо</string>
   <string name="leads_resources_title">GDG Resources</string>
   <string name="leads_wisdom_title">GDG Wisdom</string>
-  <string name="message">Message</string>
+  <string name="message">Повідомлення</string>
   <string name="resource">Resource</string>
 </resources>
