@@ -415,7 +415,7 @@ public class MainActivity extends GdgNavDrawerActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            if (0 < position && position < mPages.length) {
+            if (0 <= position && position < mPages.length) {
                 return mContext.getString(mPages[position]);
             } else {
                 return "";
