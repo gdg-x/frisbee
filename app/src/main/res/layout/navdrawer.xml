@@ -47,8 +47,7 @@
       android:layout_marginBottom="@dimen/keyline_1"
       android:layout_marginLeft="@dimen/keyline_1"
       android:layout_marginStart="@dimen/keyline_1"
-      android:scaleType="centerCrop"
-      android:src="@drawable/ic_no_user_picture" />
+      android:scaleType="centerCrop" />
   </RelativeLayout>
 
   <ListView
