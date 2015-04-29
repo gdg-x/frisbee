@@ -68,16 +68,21 @@
       android:name=".activity.MainActivity"
       android:theme="@style/Theme.GDG.Main"/>
     <activity
-      android:name=".activity.GdeActivity"/>
+      android:name=".activity.GdeActivity"
+      android:theme="@style/Theme.GDG.GDE"/>
     <activity
-      android:name=".activity.AboutActivity"/>
+      android:name=".activity.AboutActivity"
+      android:theme="@style/Theme.GDG.About"/>
     <activity
-      android:name=".eventseries.TaggedEventSeriesActivity"/>
+      android:name=".eventseries.TaggedEventSeriesActivity"
+      android:theme="@style/Theme.GDG.Special"/>
     <activity
-      android:name=".activity.SettingsActivity"/>
+      android:name=".activity.SettingsActivity"
+      android:theme="@style/Theme.GDG.Settings"/>
     <activity
       android:name=".activity.ArrowActivity"
-      android:screenOrientation="portrait">
+      android:screenOrientation="portrait"
+      android:theme="@style/Theme.GDG.Arrow">
       <intent-filter>
         <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
         <category android:name="android.intent.category.DEFAULT"/>
@@ -93,14 +98,15 @@
     </activity>
     <activity
       android:name=".activity.ArrowTaggedActivity"
-      android:screenOrientation="portrait"/>
+      android:screenOrientation="portrait"
+      android:theme="@style/Theme.GDG.Arrow"/>
     <activity
       android:name=".activity.FirstStartActivity"/>
     <activity
       android:name=".activity.YoutubeActivity"
       android:configChanges="keyboardHidden|orientation|screenSize"
       android:screenOrientation="sensor"
-      android:theme="@style/GDG.SeeTrough"/>
+      android:theme="@style/Theme.GDG.SeeTrough"/>
     <activity
       android:name=".activity.StartActivity">
       <intent-filter>
@@ -109,7 +115,8 @@
       </intent-filter>
     </activity>
     <activity
-      android:name=".activity.PulseActivity"/>
+      android:name=".activity.PulseActivity"
+      android:theme="@style/Theme.GDG.Pulse"/>
     <activity android:name=".activity.ParseDeepLinkActivity">
       <intent-filter>
         <action android:name="com.google.android.apps.plus.VIEW_DEEP_LINK"/>
@@ -132,6 +139,7 @@
     </activity>
     <activity
       android:name=".event.EventActivity"
+      android:theme="@style/Theme.GDG.Event"
       android:parentActivityName=".activity.MainActivity">
     </activity>
 

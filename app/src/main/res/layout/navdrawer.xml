@@ -16,45 +16,55 @@
   ~ limitations under the License.
 -->
 
-<LinearLayout android:id="@+id/navdrawer"
+<org.gdg.frisbee.android.widget.ScrimInsetsFrameLayout android:id="@+id/navdrawer"
   xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="@dimen/navdrawer_width"
   android:layout_height="match_parent"
   android:layout_gravity="start"
-  android:background="@color/navdrawer_background"
-  android:clickable="true"
-  android:orientation="vertical">
+  android:fitsSystemWindows="true"
+  app:insetForeground="@color/translucent_statusbar_background"
+  tools:context=".MainActivity">
 
-  <RelativeLayout
-    android:layout_width="@dimen/navdrawer_width"
-    android:layout_height="@dimen/navdrawer_image_height">
-
-    <ImageView
-      android:id="@+id/navdrawer_image"
-      android:layout_width="@dimen/navdrawer_width"
-      android:layout_height="@dimen/navdrawer_image_height"
-      android:scaleType="centerCrop"
-      android:src="@drawable/ic_logo_wide" />
-
-    <ImageView
-      android:id="@+id/navdrawer_user_picture"
-      android:layout_width="@dimen/navdrawer_user_picture_size"
-      android:layout_height="@dimen/navdrawer_user_picture_size"
-      android:layout_alignParentBottom="true"
-      android:layout_alignParentLeft="true"
-      android:layout_alignParentStart="true"
-      android:layout_marginBottom="@dimen/keyline_1"
-      android:layout_marginLeft="@dimen/keyline_1"
-      android:layout_marginStart="@dimen/keyline_1"
-      android:scaleType="centerCrop" />
-  </RelativeLayout>
-
-  <ListView
-    android:id="@+id/navdrawer_list"
+  <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:choiceMode="singleChoice"
-    android:divider="@android:color/transparent"
-    android:dividerHeight="0dp" />
-</LinearLayout>
+    android:layout_gravity="start"
+    android:background="@color/navdrawer_background"
+    android:clickable="true"
+    android:orientation="vertical">
+
+    <RelativeLayout
+      android:layout_width="@dimen/navdrawer_width"
+      android:layout_height="@dimen/navdrawer_image_height">
+
+      <ImageView
+        android:id="@+id/navdrawer_image"
+        android:layout_width="@dimen/navdrawer_width"
+        android:layout_height="@dimen/navdrawer_image_height"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_logo_wide" />
+
+      <ImageView
+        android:id="@+id/navdrawer_user_picture"
+        android:layout_width="@dimen/navdrawer_user_picture_size"
+        android:layout_height="@dimen/navdrawer_user_picture_size"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="@dimen/keyline_1"
+        android:layout_marginLeft="@dimen/keyline_1"
+        android:layout_marginStart="@dimen/keyline_1"
+        android:scaleType="centerCrop" />
+    </RelativeLayout>
+
+    <ListView
+      android:id="@+id/navdrawer_list"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:choiceMode="singleChoice"
+      android:divider="@android:color/transparent"
+      android:dividerHeight="0dp" />
+  </LinearLayout>
+</org.gdg.frisbee.android.widget.ScrimInsetsFrameLayout>
