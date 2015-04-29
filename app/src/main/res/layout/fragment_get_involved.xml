@@ -1,73 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:card_view="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
-  <ScrollView
-    android:id="@+id/scrollView"
+  <android.support.v7.widget.CardView
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/keyline_1_minus_8dp"
+    card_view:cardCornerRadius="2dp"
+    card_view:cardUseCompatPadding="true"
+    card_view:cardElevation="4dp">
 
-    <LinearLayout
+    <ScrollView
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:orientation="vertical">
+      android:layout_height="match_parent">
 
-      <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+      <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dip"
-        android:layout_marginLeft="10dip"
-        android:layout_marginRight="10dip"
-        android:layout_marginTop="50dip"
-        android:padding="10dip"
-        card_view:cardCornerRadius="5dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dip">
 
-        <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:orientation="vertical"
-          android:padding="10dip">
+        <TextView
+          android:id="@+id/textView"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/get_involved"
+          android:textStyle="bold" />
 
-          <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/get_involved"
-            android:textStyle="bold" />
+        <TextView
+          android:id="@+id/textView1"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="10dip"
+          android:autoLink="all"
+          android:text="@string/get_involved_text" />
 
-          <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dip"
-            android:autoLink="all"
-            android:text="@string/get_involved_text" />
+        <TextView
+          android:id="@+id/textView2"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="10dip"
+          android:autoLink="all"
+          android:text="@string/get_involved_translation_text" />
+      </LinearLayout>
+    </ScrollView>
+  </android.support.v7.widget.CardView>
 
-          <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dip"
-            android:autoLink="all"
-            android:text="@string/get_involved_translation_text" />
-        </LinearLayout>
-      </android.support.v7.widget.CardView>
-    </LinearLayout>
-  </ScrollView>
-
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="right"
-    android:orientation="vertical">
-
-    <ImageView
-      android:id="@+id/forkMe"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:src="@drawable/forkme_right" />
-  </LinearLayout>
-</FrameLayout>
+  <ImageView
+    android:id="@+id/forkMe"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentRight="true"
+    android:src="@drawable/forkme_right"
+    android:elevation="4dp"/>
+</RelativeLayout>
