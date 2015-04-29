@@ -157,13 +157,13 @@ dependencies {
     compile 'com.android.support:support-annotations:22.1.1'
 
     //Play Services
-    compile 'com.google.android.gms:play-services-location:7.0.0'
-    compile 'com.google.android.gms:play-services-games:7.0.0'
-    compile 'com.google.android.gms:play-services-identity:7.0.0'
-    compile 'com.google.android.gms:play-services-plus:7.0.0'
-    compile 'com.google.android.gms:play-services-appstate:7.0.0'
-    compile 'com.google.android.gms:play-services-analytics:7.0.0'
-    compile 'com.google.android.gms:play-services-gcm:7.0.0'
+    compile 'com.google.android.gms:play-services-location:7.3.0'
+    compile 'com.google.android.gms:play-services-games:7.3.0'
+    compile 'com.google.android.gms:play-services-identity:7.3.0'
+    compile 'com.google.android.gms:play-services-plus:7.3.0'
+    compile 'com.google.android.gms:play-services-appstate:7.3.0'
+    compile 'com.google.android.gms:play-services-analytics:7.3.0'
+    compile 'com.google.android.gms:play-services-gcm:7.3.0'
 
     //Google
     compile 'com.google.code.gson:gson:2.3.1'
@@ -183,11 +183,11 @@ dependencies {
 
     //Jake Wharton
     compile 'com.jakewharton:butterknife:6.1.0'
-    compile 'com.jakewharton.timber:timber:2.7.1'
+    compile 'com.jakewharton.timber:timber:3.0.1'
     compile 'com.jakewharton:disklrucache:2.0.2'
 
     //Others
-    compile 'io.doorbell:android-sdk:0.2.1@aar'
+    compile 'io.doorbell:android-sdk:0.2.2@aar'
     compile 'org.jsoup:jsoup:1.8.2'
     compile 'net.danlew:android.joda:2.7.2'
     compile 'com.google.code.findbugs:jsr305:2.0.1'
