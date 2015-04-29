@@ -129,6 +129,7 @@ android {
         warning 'InvalidPackage'
         warning 'ImpliedQuantity'
         warning 'MissingQuantity'
+        warning 'MissingTranslation'
     }
 
     compileOptions {
