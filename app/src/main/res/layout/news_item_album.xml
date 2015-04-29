@@ -5,7 +5,7 @@
   android:layout_height="match_parent"
   android:orientation="horizontal">
 
-  <org.gdg.frisbee.android.view.SquaredImageView
+  <org.gdg.frisbee.android.widget.SquaredImageView
     android:id="@+id/pic1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -18,13 +18,13 @@
     android:layout_weight="2"
     android:orientation="vertical">
 
-    <org.gdg.frisbee.android.view.SquaredImageView
+    <org.gdg.frisbee.android.widget.SquaredImageView
       android:id="@+id/pic2"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:adjustViewBounds="true" />
 
-    <org.gdg.frisbee.android.view.SquaredImageView
+    <org.gdg.frisbee.android.widget.SquaredImageView
       android:id="@+id/pic3"
       android:layout_width="match_parent"
       android:layout_height="match_parent"

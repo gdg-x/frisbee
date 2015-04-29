@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <org.gdg.frisbee.android.view.SquaredImageView
+        <org.gdg.frisbee.android.widget.SquaredImageView
           android:id="@+id/thumb"
 
           android:layout_width="match_parent"

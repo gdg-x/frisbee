@@ -5,7 +5,7 @@
   android:layout_height="wrap_content"
   android:orientation="vertical">
 
-  <org.gdg.frisbee.android.view.ResizableImageView
+  <org.gdg.frisbee.android.widget.ResizableImageView
     android:id="@+id/videoPoster"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" />

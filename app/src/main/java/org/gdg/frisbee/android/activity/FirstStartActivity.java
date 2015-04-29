@@ -52,7 +52,7 @@ import org.gdg.frisbee.android.fragment.FirstStartStep1Fragment;
 import org.gdg.frisbee.android.fragment.FirstStartStep2Fragment;
 import org.gdg.frisbee.android.fragment.FirstStartStep3Fragment;
 import org.gdg.frisbee.android.utils.PrefUtils;
-import org.gdg.frisbee.android.view.NonSwipeableViewPager;
+import org.gdg.frisbee.android.widget.NonSwipeableViewPager;
 
 import java.io.IOException;
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.gdg.frisbee.android.view;
+package org.gdg.frisbee.android.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;

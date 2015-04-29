@@ -1,3 +1,5 @@
+package org.gdg.frisbee.android.widget;
+
 /*
  * Copyright 2014 Google Inc.
  *
@@ -14,8 +16,6 @@
  * limitations under the License.
  */
 
-package org.gdg.frisbee.android.view;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -23,32 +23,33 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
-import android.widget.ScrollView;
+import android.widget.FrameLayout;
 
 import org.gdg.frisbee.android.R;
 
+
 /**
- * A layout that draws something in the insets passed to {@link #fitSystemWindows(android.graphics.Rect)},
- * i.e. the area above UI chrome (status and navigation bars, overlay action bars).
+ * A layout that draws something in the insets passed to {@link #fitSystemWindows(Rect)}, i.e. the area above UI chrome
+ * (status and navigation bars, overlay action bars).
  */
-public class ScrimInsetsScrollView extends ScrollView {
+public class ScrimInsetsFrameLayout extends FrameLayout {
     private Drawable mInsetForeground;
 
     private Rect mInsets;
     private Rect mTempRect = new Rect();
     private OnInsetsCallback mOnInsetsCallback;
 
-    public ScrimInsetsScrollView(Context context) {
+    public ScrimInsetsFrameLayout(Context context) {
         super(context);
         init(context, null, 0);
     }
 
-    public ScrimInsetsScrollView(Context context, AttributeSet attrs) {
+    public ScrimInsetsFrameLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs, 0);
     }
 
-    public ScrimInsetsScrollView(Context context, AttributeSet attrs, int defStyle) {
+    public ScrimInsetsFrameLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context, attrs, defStyle);
     }
@@ -128,7 +129,7 @@ public class ScrimInsetsScrollView extends ScrollView {
 
     /**
      * Allows the calling container to specify a callback for custom processing when insets change (i.e. when
-     * {@link #fitSystemWindows(android.graphics.Rect)} is called. This is useful for setting padding on UI elements based on
+     * {@link #fitSystemWindows(Rect)} is called. This is useful for setting padding on UI elements based on
      * UI chrome insets (e.g. a Google Map or a ListView). When using with ListView or GridView, remember to set
      * clipToPadding to false.
      */
