@@ -142,7 +142,7 @@
       android:syncable="false"/>
 
     <receiver
-      android:name=".widget.UpcomingEventWidgetProvider"
+      android:name=".appwidget.UpcomingEventWidgetProvider"
       android:label="@string/upcoming_widget">
       <intent-filter>
         <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
@@ -161,9 +161,9 @@
     </receiver>
 
     <service android:name=".service.GcmIntentService"/>
-    <service android:name=".widget.UpcomingEventWidgetProvider$UpdateService"/>
+    <service android:name=".appwidget.UpcomingEventWidgetProvider$UpdateService"/>
     <service
-      android:name=".widget.GdgDashClockExtension"
+      android:name=".appwidget.GdgDashClockExtension"
       android:icon="@drawable/ic_dashclock"
       android:label="@string/upcoming_widget"
       android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA">

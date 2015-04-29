@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.gdg.frisbee.android.widget;
+package org.gdg.frisbee.android.appwidget;
 
 import android.app.PendingIntent;
 import android.app.Service;

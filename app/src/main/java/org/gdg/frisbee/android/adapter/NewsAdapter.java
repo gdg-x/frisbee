@@ -43,7 +43,7 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.YoutubeActivity;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.Utils;
-import org.gdg.frisbee.android.view.ResizableImageView;
+import org.gdg.frisbee.android.widget.ResizableImageView;
 import org.joda.time.DateTime;
 
 import java.io.UnsupportedEncodingException;

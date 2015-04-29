@@ -19,7 +19,7 @@
 
       <view
         android:id="@+id/view"
-        class="org.gdg.frisbee.android.view.ResizableImageView"
+        class="org.gdg.frisbee.android.widget.ResizableImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/gdg_world" />

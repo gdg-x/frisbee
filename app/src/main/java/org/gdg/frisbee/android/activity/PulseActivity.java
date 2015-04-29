@@ -38,7 +38,7 @@ import org.gdg.frisbee.android.api.model.Pulse;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.fragment.PulseFragment;
-import org.gdg.frisbee.android.view.SlidingTabLayout;
+import org.gdg.frisbee.android.widget.SlidingTabLayout;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;

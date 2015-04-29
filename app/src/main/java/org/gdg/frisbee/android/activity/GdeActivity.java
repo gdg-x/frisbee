@@ -20,7 +20,7 @@ import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.fragment.GdeListFragment;
 import org.gdg.frisbee.android.fragment.PlainLayoutFragment;
 import org.gdg.frisbee.android.utils.Utils;
-import org.gdg.frisbee.android.view.SlidingTabLayout;
+import org.gdg.frisbee.android.widget.SlidingTabLayout;
 import org.joda.time.DateTime;
 
 import java.lang.ref.WeakReference;

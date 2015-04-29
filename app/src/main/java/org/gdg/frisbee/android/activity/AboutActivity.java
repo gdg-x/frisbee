@@ -31,7 +31,7 @@ import org.gdg.frisbee.android.fragment.ContributorsFragment;
 import org.gdg.frisbee.android.fragment.ExtLibrariesFragment;
 import org.gdg.frisbee.android.fragment.GetInvolvedFragment;
 import org.gdg.frisbee.android.fragment.TranslatorsFragment;
-import org.gdg.frisbee.android.view.SlidingTabLayout;
+import org.gdg.frisbee.android.widget.SlidingTabLayout;
 
 import butterknife.InjectView;
 
