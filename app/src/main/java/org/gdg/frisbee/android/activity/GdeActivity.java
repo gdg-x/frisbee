@@ -11,17 +11,13 @@ import android.util.SparseArray;
 
 import com.google.gson.FieldNamingPolicy;
 
-import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.GdeDirectory;
 import org.gdg.frisbee.android.api.model.Gde;
-import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.fragment.GdeListFragment;
 import org.gdg.frisbee.android.fragment.PlainLayoutFragment;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.widget.SlidingTabLayout;
-import org.joda.time.DateTime;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -63,19 +59,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
 
         mViewPagerAdapter = new GdeCategoryAdapter(getSupportFragmentManager());
 
-
-        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_GDE_MAP, new ModelCache.CacheListener() {
-            @Override
-            public void onGet(Object item) {
-                ArrayList<Gde> directory = (ArrayList<Gde>) item;
-                addGdes(directory);
-            }
-
-            @Override
-            public void onNotFound(String key) {
-                fetchGdeDirectory();
-            }
-        });
+        fetchGdeDirectory();
     }
     
     private void fetchGdeDirectory() {
@@ -88,15 +72,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
         gdeDirectoryClient.getDirectory(new Callback<ArrayList<Gde>>() {
             @Override
             public void success(final ArrayList<Gde> directory, retrofit.client.Response response) {
-                App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_GDE_MAP,
-                        directory,
-                        DateTime.now().plusDays(4),
-                        new ModelCache.CachePutListener() {
-                            @Override
-                            public void onPutIntoCache() {
-                                addGdes(directory);
-                            }
-                        });
+                addGdes(directory);
             }
 
             @Override
