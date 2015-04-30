@@ -26,12 +26,10 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.jakewharton.disklrucache.DiskLruCache;
 
 import org.gdg.frisbee.android.api.deserializer.DateTimeDeserializer;
 import org.gdg.frisbee.android.api.deserializer.DateTimeSerializer;
-import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
 
 import java.io.BufferedReader;
@@ -44,10 +42,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.Type;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -528,7 +524,7 @@ public class ModelCache {
 
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(os));
 
-        String className = getClassName(o);
+        String className = o.getClass().getCanonicalName();
 
         out.write(className + "\n");
 
@@ -540,18 +536,6 @@ public class ModelCache {
         }
 
         out.close();
-    }
-
-    private String getClassName(Object o) {
-        final String canonicalName = o.getClass().getCanonicalName();
-        if (canonicalName.equals("java.util.ArrayList")) {
-            final ArrayList list = (ArrayList) o;
-            if (list.size() > 0) {
-                String componentClass = list.get(0).getClass().getCanonicalName();
-                return canonicalName + "<" + componentClass + ">";
-            }
-        }
-        return canonicalName;
     }
 
     private long readExpirationFromDisk(InputStream is) throws IOException {
@@ -569,18 +553,6 @@ public class ModelCache {
             return null;
         }
 
-        Type type = null;
-        if (className.startsWith("java.util.ArrayList<")) {
-            String inner = className.substring("java.util.ArrayList<".length(), className.length() - 1);
-            Class innerClass = null;
-            try {
-                innerClass = Class.forName(inner);
-                type = TypeToken.get(Utils.createListOfType(innerClass).getClass()).getType();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-
         String line = null;
         String content = "";
         while ((line = fss.readLine()) != null) {
@@ -594,8 +566,6 @@ public class ModelCache {
             if (className.contains("google")) {
                 clazz = Class.forName(className);
                 return mJsonFactory.createJsonParser(content).parseAndClose(clazz, null);
-            } else if (type != null) {
-                return mGson.fromJson(content, type);
             } else {
                 clazz = Class.forName(className);
                 return mGson.fromJson(content, clazz);
