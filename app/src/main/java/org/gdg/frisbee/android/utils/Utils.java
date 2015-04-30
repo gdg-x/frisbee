@@ -49,7 +49,6 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import timber.log.Timber;
@@ -66,14 +65,6 @@ public class Utils {
     
     private Utils() {
 
-    }
-    
-    public static <T> List<T> createListOfType(Class<T> type) {
-        return new ArrayList<T>();
-    }
-
-    public static <K, V> Map<K, V> createMapOfType(Class<K> keyType, Class<V> valueType) {
-        return new HashMap<K, V>();
     }
 
     /**

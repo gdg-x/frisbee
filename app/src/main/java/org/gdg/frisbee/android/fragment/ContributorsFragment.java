@@ -31,12 +31,11 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.ContributorAdapter;
 import org.gdg.frisbee.android.api.GitHub;
 import org.gdg.frisbee.android.api.model.Contributor;
+import org.gdg.frisbee.android.api.model.ContributorList;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
-
-import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -81,7 +80,7 @@ public class ContributorsFragment extends GdgListFragment {
             App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_FRISBEE_CONTRIBUTORS, false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
-                    ArrayList<Contributor> contributors = (ArrayList<Contributor>) item;
+                    ContributorList contributors = (ContributorList) item;
 
                     Crouton.makeText(getActivity(), getString(R.string.cached_content), Style.INFO).show();
                     mAdapter.addAll(contributors);
@@ -101,9 +100,9 @@ public class ContributorsFragment extends GdgListFragment {
                 .setConverter(new GsonConverter(Utils.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)))
                 .build().create(GitHub.class);
         
-        gitHubClient.getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO, new Callback<ArrayList<Contributor>>() {
+        gitHubClient.getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO, new Callback<ContributorList>() {
             @Override
-            public void success(final ArrayList<Contributor> contributors, retrofit.client.Response response) {
+            public void success(final ContributorList contributors, retrofit.client.Response response) {
                 App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_FRISBEE_CONTRIBUTORS,
                         contributors,
                         DateTime.now().plusDays(1),

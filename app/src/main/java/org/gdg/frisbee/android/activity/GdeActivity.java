@@ -15,6 +15,7 @@ import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.GdeDirectory;
 import org.gdg.frisbee.android.api.model.Gde;
+import org.gdg.frisbee.android.api.model.GdeList;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.fragment.GdeListFragment;
@@ -24,7 +25,6 @@ import org.gdg.frisbee.android.widget.SlidingTabLayout;
 import org.joda.time.DateTime;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,10 +64,10 @@ public class GdeActivity extends GdgNavDrawerActivity {
         mViewPagerAdapter = new GdeCategoryAdapter(getSupportFragmentManager());
 
 
-        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_GDE_MAP, new ModelCache.CacheListener() {
+        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_GDE_LIST, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
-                ArrayList<Gde> directory = (ArrayList<Gde>) item;
+                GdeList directory = (GdeList) item;
                 addGdes(directory);
             }
 
@@ -85,10 +85,10 @@ public class GdeActivity extends GdgNavDrawerActivity {
                 .setConverter(new GsonConverter(Utils.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)))
                 .build().create(GdeDirectory.class);
         
-        gdeDirectoryClient.getDirectory(new Callback<ArrayList<Gde>>() {
+        gdeDirectoryClient.getDirectory(new Callback<GdeList>() {
             @Override
-            public void success(final ArrayList<Gde> directory, retrofit.client.Response response) {
-                App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_GDE_MAP,
+            public void success(final GdeList directory, retrofit.client.Response response) {
+                App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_GDE_LIST,
                         directory,
                         DateTime.now().plusDays(4),
                         new ModelCache.CachePutListener() {
@@ -111,15 +111,15 @@ public class GdeActivity extends GdgNavDrawerActivity {
         });
     }
 
-    private void addGdes(final ArrayList<Gde> directory) {
+    private void addGdes(final GdeList directory) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                HashMap<String, ArrayList<Gde>> gdeMap = new HashMap<>();
+                HashMap<String, GdeList> gdeMap = new HashMap<>();
 
                 for (Gde gde : directory) {
                     if (!gdeMap.containsKey(gde.getProduct())) {
-                        gdeMap.put(gde.getProduct(), new ArrayList<Gde>());
+                        gdeMap.put(gde.getProduct(), new GdeList());
                     }
 
                     gdeMap.get(gde.getProduct()).add(gde);
@@ -140,14 +140,14 @@ public class GdeActivity extends GdgNavDrawerActivity {
 
     public class GdeCategoryAdapter extends FragmentStatePagerAdapter implements ViewPager.OnPageChangeListener {
         private final SparseArray<WeakReference<Fragment>> mFragments = new SparseArray<>();
-        private HashMap<String, ArrayList<Gde>> mGdeMap;
+        private HashMap<String, GdeList> mGdeMap;
 
         public GdeCategoryAdapter(FragmentManager fm) {
             super(fm);
             mGdeMap = new HashMap<>();
         }
 
-        public void addMap(Map<String, ArrayList<Gde>> collection) {
+        public void addMap(Map<String, GdeList> collection) {
             mGdeMap.putAll(collection);
         }
 
