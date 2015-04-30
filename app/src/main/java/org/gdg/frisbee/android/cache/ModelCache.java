@@ -47,6 +47,7 @@ import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -527,7 +528,7 @@ public class ModelCache {
 
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(os));
 
-        String className = o.getClass().getCanonicalName();
+        String className = getClassName(o);
 
         out.write(className + "\n");
 
@@ -539,6 +540,18 @@ public class ModelCache {
         }
 
         out.close();
+    }
+
+    private String getClassName(Object o) {
+        final String canonicalName = o.getClass().getCanonicalName();
+        if (canonicalName.equals("java.util.ArrayList")) {
+            final ArrayList list = (ArrayList) o;
+            if (list.size() > 0) {
+                String componentClass = list.get(0).getClass().getCanonicalName();
+                return canonicalName + "<" + componentClass + ">";
+            }
+        }
+        return canonicalName;
     }
 
     private long readExpirationFromDisk(InputStream is) throws IOException {
