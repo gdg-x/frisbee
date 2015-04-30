@@ -83,8 +83,8 @@ public class Const {
     public static final String EXTRA_CHAPTER_ID = "org.gdg.frisbee.CHAPTER";
     public static final String CACHE_KEY_CHAPTER_LIST_HUB = "chapter_list_hub";
     public static final String CACHE_KEY_PULSE_GLOBAL = "pulse_global";
-    public static final String CACHE_KEY_GDE_MAP = "gde_map";
-    public static final String CACHE_KEY_FRISBEE_CONTRIBUTORS = "frisbee_contributors";
+    public static final String CACHE_KEY_GDE_LIST = "gde_list";
+    public static final String CACHE_KEY_FRISBEE_CONTRIBUTORS = "frisbee_contributor_list";
     public static final String CACHE_KEY_PERSON = "person_";
     public static final String CACHE_KEY_NEWS = "news_";
     public static final String CACHE_KEY_PULSE = "pulse_";

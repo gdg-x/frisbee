@@ -64,7 +64,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
         mViewPagerAdapter = new GdeCategoryAdapter(getSupportFragmentManager());
 
 
-        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_GDE_MAP, new ModelCache.CacheListener() {
+        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_GDE_LIST, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 GdeList directory = (GdeList) item;
@@ -88,7 +88,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
         gdeDirectoryClient.getDirectory(new Callback<GdeList>() {
             @Override
             public void success(final GdeList directory, retrofit.client.Response response) {
-                App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_GDE_MAP,
+                App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_GDE_LIST,
                         directory,
                         DateTime.now().plusDays(4),
                         new ModelCache.CachePutListener() {
