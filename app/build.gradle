@@ -21,9 +21,9 @@ def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
 
 // Manifest version information!
 def versionMajor = 2
-def versionMinor = 0
-def versionPatch = 2
-def versionBuild = 0 // bump for dogfood builds, public betas, etc.
+def versionMinor = 1
+def versionPatch = 0
+def versionBuild = 1 // bump for dogfood builds, public betas, etc.
 def isDeveloperMode = false
 
 android {
@@ -109,6 +109,7 @@ android {
         }
         alpha.initWith(release)
         alpha {
+            debuggable true
             buildConfigField "Boolean", "ALPHA", "true"
         }
         debug {
