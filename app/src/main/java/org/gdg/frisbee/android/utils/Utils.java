@@ -67,14 +67,6 @@ public class Utils {
     private Utils() {
 
     }
-    
-    public static <T> List<T> createListOfType(Class<T> type) {
-        return new ArrayList<T>();
-    }
-
-    public static <K, V> Map<K, V> createMapOfType(Class<K> keyType, Class<V> valueType) {
-        return new HashMap<K, V>();
-    }
 
     /**
      * @return Application's version code from the {@code PackageManager}.
