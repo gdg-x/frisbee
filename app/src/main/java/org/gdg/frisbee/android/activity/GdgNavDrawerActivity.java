@@ -287,8 +287,10 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                         public void onPostExecute(String[] params, Person person) {
                             if (person != null) {
                                 mStoredHomeChapterId = homeChapterId;
-                                App.getInstance().getPicasso().load(person.getCover().getCoverPhoto().getUrl())
-                                        .into(mDrawerImage);
+                                if (person.getCover() != null) {
+                                    App.getInstance().getPicasso().load(person.getCover().getCoverPhoto().getUrl())
+                                            .into(mDrawerImage);
+                                }
                             }
                         }
                     })
