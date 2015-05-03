@@ -239,7 +239,9 @@ public class FirstStartActivity extends AppCompatActivity implements
 
         Intent resultData = new Intent(this, MainActivity.class);
         resultData.setAction(ACTION_FIRST_START);
-        resultData.putExtra(Const.EXTRA_CHAPTER_ID, mSelectedChapter.getGplusId());
+        if (mSelectedChapter != null) {
+            resultData.putExtra(Const.EXTRA_CHAPTER_ID, mSelectedChapter.getGplusId());
+        }
         startActivity(resultData);
 
         super.finish();
