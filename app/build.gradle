@@ -116,6 +116,7 @@ android {
             debuggable true
             //packageNameSuffix '.dev'
             //versionNameSuffix '-dev'
+            signingConfig signingConfigs.debug
         }
     }
 

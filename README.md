@@ -7,7 +7,7 @@ Project Frisbee
 [![Crowdin](https://d322cqt584bo4o.cloudfront.net/gdgx-frisbee/localized.png)](https://crowdin.com/project/gdgx-frisbee)
 
 All GDG content in one place. Project Frisbee is the result of GDG[x]'s coordinated efforts to build an applications that makes it easier to discover Google Developer Group content while being on the go.
-The GDG App features the Google+ Newsfeed, Upcoming Events and general information on every
+The GDG App features the Google+ news feed, Upcoming Events and general information on every
 active chapter listed in the Google Developer Group Directory
 
 ###[Download the application](https://play.google.com/store/apps/details?id=org.gdg.frisbee.android)
@@ -43,7 +43,7 @@ If you cannot resolve the issue, you can simply comment out the following line i
 
 ###Image Optimization
 
-Image optimization is encourged for new images. You can use the [image_optim](https://github.com/toy/image_optim) tool to do it easily. Use the following command to install it. 
+Image optimization is encouraged for new images. You can use the [image_optim](https://github.com/toy/image_optim) tool to do it easily. Use the following command to install it.
 ```
 gem install image_optim image_optim_pack
 ```
