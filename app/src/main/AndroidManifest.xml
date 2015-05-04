@@ -69,20 +69,20 @@
       android:theme="@style/Theme.GDG.Main"/>
     <activity
       android:name=".activity.GdeActivity"
-      android:theme="@style/Theme.GDG.GDE"/>
+      android:theme="@style/Theme.GDG.WithNavDrawer"/>
     <activity
       android:name=".activity.AboutActivity"
-      android:theme="@style/Theme.GDG.About"/>
+      android:theme="@style/Theme.GDG"/>
     <activity
       android:name=".eventseries.TaggedEventSeriesActivity"
       android:theme="@style/Theme.GDG.Special"/>
     <activity
       android:name=".activity.SettingsActivity"
-      android:theme="@style/Theme.GDG.Settings"/>
+      android:theme="@style/Theme.GDG"/>
     <activity
       android:name=".activity.ArrowActivity"
       android:screenOrientation="portrait"
-      android:theme="@style/Theme.GDG.Arrow">
+      android:theme="@style/Theme.GDG.WithNavDrawer">
       <intent-filter>
         <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
         <category android:name="android.intent.category.DEFAULT"/>
@@ -99,7 +99,7 @@
     <activity
       android:name=".activity.ArrowTaggedActivity"
       android:screenOrientation="portrait"
-      android:theme="@style/Theme.GDG.Arrow"/>
+      android:theme="@style/Theme.GDG.WithNavDrawer"/>
     <activity
       android:name=".activity.FirstStartActivity"/>
     <activity
@@ -116,7 +116,7 @@
     </activity>
     <activity
       android:name=".activity.PulseActivity"
-      android:theme="@style/Theme.GDG.Pulse"/>
+      android:theme="@style/Theme.GDG.WithNavDrawer"/>
     <activity android:name=".activity.ParseDeepLinkActivity">
       <intent-filter>
         <action android:name="com.google.android.apps.plus.VIEW_DEEP_LINK"/>
@@ -139,7 +139,7 @@
     </activity>
     <activity
       android:name=".event.EventActivity"
-      android:theme="@style/Theme.GDG.Event"
+      android:theme="@style/Theme.GDG"
       android:parentActivityName=".activity.MainActivity">
     </activity>
 
