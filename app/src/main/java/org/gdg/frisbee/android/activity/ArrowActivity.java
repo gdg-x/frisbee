@@ -51,6 +51,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.OrganizerChecker;
 import org.gdg.frisbee.android.utils.CryptoUtils;
 import org.gdg.frisbee.android.utils.PrefUtils;
@@ -320,7 +321,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         switchToSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isOrganizer()) {
+                if (App.getInstance().isOrganizer()) {
                     viewFlipper.setDisplayedChild(1);
                     mArrowHandler.enablePush();
                 }
@@ -328,22 +329,23 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         });
         mArrowHandler.disablePush();
 
-        checkOrganizer(new OrganizerChecker.OrganizerResponseHandler() {
-            @Override
-            public void onOrganizerResponse(boolean isOrganizer) {
-                if (isOrganizer) {
-                    organizerOnly.setVisibility(View.VISIBLE);
-                    setQrCode();
-                } else {
-                    organizerOnly.setVisibility(View.GONE);
-                }
-            }
+        App.getInstance().checkOrganizer(getGoogleApiClient(),
+                new OrganizerChecker.OrganizerResponseHandler() {
+                    @Override
+                    public void onOrganizerResponse(boolean isOrganizer) {
+                        if (isOrganizer) {
+                            organizerOnly.setVisibility(View.VISIBLE);
+                            setQrCode();
+                        } else {
+                            organizerOnly.setVisibility(View.GONE);
+                        }
+                    }
 
-            @Override
-            public void onErrorResponse() {
-                organizerOnly.setVisibility(View.GONE);
-            }
-        });
+                    @Override
+                    public void onErrorResponse() {
+                        organizerOnly.setVisibility(View.GONE);
+                    }
+                });
 
         if (mPendingScore != null) {
             score(mPendingScore);
