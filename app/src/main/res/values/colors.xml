@@ -39,8 +39,7 @@
   <color name="theme_primary">@color/material_blue_500</color>
   <color name="theme_accent_1">@color/white</color>
   <color name="navdrawer_background">#ffffffff</color>
-  <color name="translucent_actionbar_background">#cc2196F3</color>
-  <color name="translucent_statusbar_background">#cc2196F3</color>
+  <color name="navdrawer_inset_foreground">#4000</color>
   
   <color name="color_primary_studyjams">#7161CE</color>
   <color name="color_primary_dark_studyjams">#4C45BB</color>
