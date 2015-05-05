@@ -176,17 +176,23 @@ public class MainActivity extends GdgNavDrawerActivity {
             GooglePlayServicesUtil.getErrorDialog(playServiceStatus, this, PLAY_SERVICE_DIALOG_REQUEST_CODE).show();
         }
         checkHomeChapterValid();
+        checkOrganizer();
     }
 
     @Override
     public void onConnected(Bundle bundle) {
         super.onConnected(bundle);
+        checkOrganizer();
+    }
 
+    private void checkOrganizer() {
         App.getInstance().checkOrganizer(getGoogleApiClient(),
                 new OrganizerChecker.OrganizerResponseHandler() {
                     @Override
                     public void onOrganizerResponse(boolean isOrganizer) {
-                        mViewPagerAdapter.notifyDataSetChanged();
+                        if (mViewPagerAdapter != null) {
+                            mViewPagerAdapter.notifyDataSetChanged();
+                        }
                     }
 
                     @Override
