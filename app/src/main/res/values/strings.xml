@@ -166,4 +166,6 @@
     <string name="leads_wisdom_title">GDG Wisdom</string>
     <string name="message">Message</string>
     <string name="resource">Resource</string>
+    <string name="cd_navdrawer_image">Navigation Drawer Chapter Image</string>
+    <string name="cd_navdrawer_user_picture">User Profile Image</string>
 </resources>

@@ -33,7 +33,9 @@
 
   <style name="Theme.GDG" parent="Base.Theme.GDG"/>
 
-  <style name="GDG.SeeTrough" parent="Theme.GDG">
+  <style name="Theme.GDG.WithNavDrawer" parent="Theme.GDG" />
+
+  <style name="Theme.GDG.SeeTrough" parent="Theme.GDG">
     <item name="android:windowIsTranslucent">true</item>
     <item name="android:windowBackground">@color/semi_transparent</item>
     <item name="android:windowContentOverlay">@null</item>
@@ -42,11 +44,14 @@
     <item name="windowActionBar">false</item>
   </style>
   
-  <style name="Theme.GDG.Main">
+  <style name="Theme.GDG.Main" parent="Theme.GDG.WithNavDrawer">
     <item name="actionBarInsetStart">@dimen/keyline_2_minus_16dp</item>
   </style>
 
-  <style name="Theme.GDG.Special.Wtm" parent="Theme.GDG">
+  <!-- Special Event Series-->
+  <style name="Theme.GDG.Special" parent="Theme.GDG.WithNavDrawer"/>
+
+  <style name="Theme.GDG.Special.Wtm" parent="Theme.GDG.Special">
     <item name="colorPrimary">@color/color_primary_wtm</item>
     <item name="colorPrimaryDark">@color/color_primary_dark_wtm</item>
     
@@ -58,7 +63,7 @@
     <item name="specialEventDescription">@string/wtm_description</item>
   </style>
 
-  <style name="Theme.GDG.Special.StudyJams" parent="Theme.GDG">
+  <style name="Theme.GDG.Special.StudyJams" parent="Theme.GDG.Special">
     <item name="colorPrimary">@color/color_primary_studyjams</item>
     <item name="colorPrimaryDark">@color/color_primary_dark_studyjams</item>
     
@@ -70,7 +75,7 @@
     <item name="specialEventDescription">@string/studyjams_description</item>
   </style>
 
-  <style name="Theme.GDG.Special.IOExtended" parent="Theme.GDG">
+  <style name="Theme.GDG.Special.IOExtended" parent="Theme.GDG.Special">
     <item name="colorPrimary">@color/color_primary_ioextended</item>
     <item name="colorPrimaryDark">@color/color_primary_dark_ioextended</item>
     
