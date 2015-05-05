@@ -4,9 +4,11 @@ import android.content.SharedPreferences;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.model.people.Person;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.api.model.OrganizerCheckResponse;
+import org.gdg.frisbee.android.utils.PrefUtils;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -37,7 +39,9 @@ public class OrganizerChecker {
     }
 
     public void checkOrganizer(GoogleApiClient apiClient, final OrganizerResponseHandler responseHandler) {
-        final String currentId = Plus.PeopleApi.getCurrentPerson(apiClient).getId();
+        final Person plusPerson = PrefUtils.isSignedIn(apiClient.getContext())
+                ? Plus.PeopleApi.getCurrentPerson(apiClient) : null;
+        final String currentId = plusPerson != null ? plusPerson.getId() : null;
 
         if (currentId == null 
                 || !currentId.equals(mCheckedId)  
