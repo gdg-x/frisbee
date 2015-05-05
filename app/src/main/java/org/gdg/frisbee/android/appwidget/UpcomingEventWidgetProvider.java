@@ -23,7 +23,6 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.IBinder;
 import android.widget.RemoteViews;
 
@@ -47,18 +46,21 @@ import retrofit.RetrofitError;
 import timber.log.Timber;
 
 public class UpcomingEventWidgetProvider extends AppWidgetProvider {
+    private static final int REQUEST_CODE_LAUNCH_FRISBEE = 1000;
 
     public static class UpdateService extends Service {
+
         private ArrayList<Chapter> mChapters;
 
         @Override
-        public void onStart(Intent intent, int startId) {
+        public int onStartCommand(Intent intent, int flags, int startId) {
 
             ComponentName thisWidget = new ComponentName(this, UpcomingEventWidgetProvider.class);
             AppWidgetManager manager = AppWidgetManager.getInstance(this);
 
             // Build the widget update for today
             buildUpdate(this, manager, thisWidget);
+            return super.onStartCommand(intent, flags, startId);
         }
 
         @Override
@@ -79,6 +81,9 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
 
         public void buildUpdate(final Context context, final AppWidgetManager manager, final ComponentName thisWidget) {
             final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_upcoming_event);
+            Intent mainIntent = new Intent(context, MainActivity.class);
+            final PendingIntent pi = PendingIntent.getActivity(context, REQUEST_CODE_LAUNCH_FRISBEE, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            views.setOnClickPendingIntent(R.id.container, pi);
 
             App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, false, new ModelCache.CacheListener() {
                 @Override
@@ -89,6 +94,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                     if (homeGdg == null) {
                         Timber.d("Got no Home GDG");
                         showErrorChild(views, R.string.loading_data_failed, context);
+
                     } else {
                         Timber.d("Fetching events");
                         String groupName = homeGdg.getShortName();
@@ -126,22 +132,10 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                                                         .toString(DateTimeFormat.patternForStyle("MS", getResources().getConfiguration().locale)));
                                         showChild(views, 1);
 
-                                        if (firstEvent.getGPlusEventLink() != null) {
+                                        Intent i = new Intent(UpdateService.this, EventActivity.class);
+                                        i.putExtra(Const.EXTRA_EVENT_ID, firstEvent.getId());
+                                        views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(UpdateService.this, 0, i, 0));
 
-                                            String url = firstEvent.getGPlusEventLink();
-
-                                            if (!url.startsWith("http")) {
-                                                url = "https://" + url;
-                                            }
-
-                                            Intent i = new Intent(Intent.ACTION_VIEW);
-                                            i.setData(Uri.parse(url));
-                                            views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(UpdateService.this, 0, i, 0));
-                                        } else {
-                                            Intent i = new Intent(UpdateService.this, EventActivity.class);
-                                            i.putExtra(Const.EXTRA_EVENT_ID, firstEvent.getId());
-                                            views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(UpdateService.this, 0, i, 0));
-                                        }
                                     } else {
                                         showErrorChild(views, R.string.no_scheduled_events, UpdateService.this);
                                     }
