@@ -119,6 +119,11 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     @SuppressWarnings("unused")
     @OnItemClick(R.id.navdrawer_list)
     public void onDrawerItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+        if (PrefUtils.shouldOpenDrawerOnStart(GdgNavDrawerActivity.this)) {
+            PrefUtils.setShouldNotOpenDrawerOnStart(GdgNavDrawerActivity.this);
+        }
+
         DrawerItem item = (DrawerItem) mDrawerAdapter.getItem(i);
 
         switch (item.getId()) {
