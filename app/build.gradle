@@ -24,7 +24,6 @@ def versionMajor = 2
 def versionMinor = 1
 def versionPatch = 0
 def versionBuild = 1 // bump for dogfood builds, public betas, etc.
-def isDeveloperMode = false
 
 android {
     compileSdkVersion 22
@@ -52,7 +51,6 @@ android {
 
         //CONFIGURATION
         buildConfigField "Boolean", "ALPHA", "false"
-        buildConfigField "Boolean", "DEVELOPER_MODE", String.valueOf(isDeveloperMode)
         
         //KEYS
         buildConfigField "String", "ANDROID_SIMPLE_API_ACCESS_KEY", "\"" + (local_properties.android_simple_api_access_key ?: "") + "\""
