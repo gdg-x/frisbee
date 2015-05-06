@@ -330,7 +330,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         mArrowHandler.disablePush();
 
         App.getInstance().checkOrganizer(getGoogleApiClient(),
-                new OrganizerChecker.OrganizerResponseHandler() {
+                new OrganizerChecker.Callbacks() {
                     @Override
                     public void onOrganizerResponse(boolean isOrganizer) {
                         if (isOrganizer) {

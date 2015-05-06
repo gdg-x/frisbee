@@ -38,7 +38,7 @@ public class OrganizerChecker {
         return mIsOrganizer;
     }
 
-    public void checkOrganizer(GoogleApiClient apiClient, final OrganizerResponseHandler responseHandler) {
+    public void checkOrganizer(GoogleApiClient apiClient, final Callbacks responseHandler) {
         final Person plusPerson = PrefUtils.isSignedIn(apiClient.getContext())
                 ? Plus.PeopleApi.getCurrentPerson(apiClient) : null;
         final String currentId = plusPerson != null ? plusPerson.getId() : null;
@@ -81,9 +81,8 @@ public class OrganizerChecker {
         editor.apply();
     }
 
-    public interface OrganizerResponseHandler {
+    public interface Callbacks {
         void onOrganizerResponse(boolean isOrganizer);
-
         void onErrorResponse();
     }
 }

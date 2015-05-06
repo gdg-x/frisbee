@@ -289,7 +289,7 @@ public class App extends Application implements LocationListener {
         return mOrganizerChecker.isOrganizer();
     }
 
-    public void checkOrganizer(GoogleApiClient apiClient, OrganizerChecker.OrganizerResponseHandler responseHandler) {
+    public void checkOrganizer(GoogleApiClient apiClient, OrganizerChecker.Callbacks responseHandler) {
         mOrganizerChecker.checkOrganizer(apiClient, responseHandler);
     }
 
