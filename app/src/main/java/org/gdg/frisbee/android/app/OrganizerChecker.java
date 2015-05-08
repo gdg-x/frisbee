@@ -39,8 +39,10 @@ public class OrganizerChecker {
     }
 
     public void checkOrganizer(GoogleApiClient apiClient, final Callbacks responseHandler) {
-        final Person plusPerson = PrefUtils.isSignedIn(apiClient.getContext())
-                ? Plus.PeopleApi.getCurrentPerson(apiClient) : null;
+        Person plusPerson = null;
+        if (apiClient.isConnected() && PrefUtils.isSignedIn(apiClient.getContext())) {
+            plusPerson = Plus.PeopleApi.getCurrentPerson(apiClient);
+        }
         final String currentId = plusPerson != null ? plusPerson.getId() : null;
 
         if (currentId == null 

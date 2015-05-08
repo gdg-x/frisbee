@@ -16,12 +16,15 @@
 
 package org.gdg.frisbee.android.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,8 +60,6 @@ import java.util.ArrayList;
 
 import butterknife.InjectView;
 import butterknife.OnItemClick;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 
 public abstract class GdgNavDrawerActivity extends GdgActivity {
 
@@ -77,6 +78,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     ImageView mDrawerUserPicture;
 
     private Plus plusClient;
+    private DrawerItem drawerItemToNavigateAfterSignIn = null;
 
     @Override
     public void setContentView(int layoutResId) {
@@ -116,7 +118,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
     }
 
-    @SuppressWarnings("unused")
     @OnItemClick(R.id.navdrawer_list)
     public void onDrawerItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
@@ -125,14 +126,17 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         }
 
         DrawerItem item = (DrawerItem) mDrawerAdapter.getItem(i);
+        onDrawerItemClick(item);
+    }
 
+    private void onDrawerItemClick(final DrawerItem item) {
         switch (item.getId()) {
             case Const.DRAWER_ACHIEVEMENTS:
                 if (PrefUtils.isSignedIn(this) && getGoogleApiClient().isConnected()) {
                     startActivityForResult(Games.Achievements.getAchievementsIntent(getGoogleApiClient()), 0);
                 } else {
-                    Crouton.makeText(GdgNavDrawerActivity.this, R.string.achievements_need_signin,
-                            Style.INFO, R.id.content_frame).show();
+                    drawerItemToNavigateAfterSignIn = item;
+                    showLoginErrorDialog(R.string.achievements_need_signin);
                 }
                 break;
             case Const.DRAWER_HOME:
@@ -151,8 +155,8 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 if (PrefUtils.isSignedIn(this) && getGoogleApiClient().isConnected()) {
                     navigateTo(ArrowActivity.class, null);
                 } else {
-                    Crouton.makeText(GdgNavDrawerActivity.this, R.string.arrow_need_games,
-                            Style.INFO, R.id.content_frame).show();
+                    drawerItemToNavigateAfterSignIn = item;
+                    showLoginErrorDialog(R.string.arrow_need_games);
                 }
                 break;
             case Const.DRAWER_SETTINGS:
@@ -168,6 +172,24 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 navigateTo(AboutActivity.class, null);
                 break;
         }
+    }
+
+    private void showLoginErrorDialog(@StringRes int errorMessage) {
+
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.title_signing_needed)
+                .setMessage(errorMessage)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(R.string.signin, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        PrefUtils.setSignedIn(GdgNavDrawerActivity.this);
+                        if (!getGoogleApiClient().isConnected()) {
+                            getGoogleApiClient().connect();
+                        }
+                    }
+                })
+                .show();
     }
 
     public void onDrawerSpecialItemClick(DrawerItem item) {
@@ -244,6 +266,11 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     public void onConnected(final Bundle bundle) {
         super.onConnected(bundle);
         updateUserPicture();
+
+        if (drawerItemToNavigateAfterSignIn != null) {
+            onDrawerItemClick(drawerItemToNavigateAfterSignIn);
+            drawerItemToNavigateAfterSignIn = null;
+        }
     }
 
     @Override
