@@ -61,7 +61,8 @@ public abstract class EventListFragment extends GdgListFragment {
         setIsLoading(false);
         e.printStackTrace();
         if (isAdded()) {
-            Crouton.makeText(getActivity(), getString(R.string.fetch_events_failed), Style.ALERT).show();
+            Crouton.makeText(getActivity(), R.string.fetch_events_failed,
+                    Style.ALERT, R.id.content_frame).show();
         }
     }
 

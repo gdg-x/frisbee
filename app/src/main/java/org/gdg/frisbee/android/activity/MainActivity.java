@@ -141,7 +141,8 @@ public class MainActivity extends GdgNavDrawerActivity {
                     if (Utils.isOnline(MainActivity.this)) {
                         fetchChapters();
                     } else {
-                        Crouton.makeText(MainActivity.this, getString(R.string.offline_alert), Style.ALERT).show();
+                        Crouton.makeText(MainActivity.this, getString(R.string.offline_alert),
+                                Style.ALERT, R.id.content_frame).show();
                     }
                 }
             });
@@ -243,7 +244,8 @@ public class MainActivity extends GdgNavDrawerActivity {
 
             public void failure(RetrofitError error) {
                 try {
-                    Crouton.makeText(MainActivity.this, R.string.fetch_chapters_failed, Style.ALERT).show();
+                    Crouton.makeText(MainActivity.this, R.string.fetch_chapters_failed,
+                            Style.ALERT, R.id.content_frame).show();
                 } catch (IllegalStateException exception) {
                 }
                 Timber.e(error, "Couldn't fetch chapter list");

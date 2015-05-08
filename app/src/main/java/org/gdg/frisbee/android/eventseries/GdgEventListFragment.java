@@ -72,13 +72,15 @@ public class GdgEventListFragment extends EventListFragment {
 
                     mAdapter.addAll(events);
                     setIsLoading(false);
-                    Crouton.makeText(getActivity(), getString(R.string.cached_content), Style.INFO).show();
+                    Crouton.makeText(getActivity(), R.string.cached_content,
+                            Style.INFO, R.id.content_frame).show();
                 }
 
                 @Override
                 public void onNotFound(String key) {
                     setIsLoading(false);
-                    Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
+                    Crouton.makeText(getActivity(), R.string.offline_alert,
+                            Style.ALERT, R.id.content_frame).show();
                 }
             });
         }

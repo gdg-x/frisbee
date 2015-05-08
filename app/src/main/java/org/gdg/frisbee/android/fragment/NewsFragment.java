@@ -149,7 +149,8 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
                     ActivityFeed feed = (ActivityFeed) item;
 
                     if (isAdded()) {
-                        Crouton.makeText(getActivity(), getString(R.string.cached_content), Style.INFO).show();
+                        Crouton.makeText(getActivity(), R.string.cached_content,
+                                Style.INFO, R.id.content_frame).show();
                     }
 
                     mAdapter.addAll(feed.getItems());
@@ -159,7 +160,8 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
                 @Override
                 public void onNotFound(String key) {
                     if (isAdded()) {
-                        Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
+                        Crouton.makeText(getActivity(), R.string.offline_alert,
+                                Style.ALERT, R.id.content_frame).show();
                     }
                 }
             });

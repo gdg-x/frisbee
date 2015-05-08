@@ -25,7 +25,6 @@
   android:orientation="vertical">
 
   <LinearLayout
-    android:id="@+id/content_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -38,10 +37,16 @@
       android:layout_height="wrap_content"
       android:background="@color/theme_primary" />
 
-    <android.support.v4.view.ViewPager
-      android:id="@+id/pager"
+    <FrameLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content" />
+      android:layout_height="wrap_content"
+      android:id="@+id/content_frame">
+
+      <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    </FrameLayout>
   </LinearLayout>
 
   <include layout="@layout/navdrawer" />

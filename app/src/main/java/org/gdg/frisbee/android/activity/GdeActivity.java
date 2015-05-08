@@ -103,7 +103,8 @@ public class GdeActivity extends GdgNavDrawerActivity {
             public void failure(RetrofitError error) {
 
                 try {
-                    Crouton.makeText(GdeActivity.this, R.string.fetch_gde_failed, Style.ALERT).show();
+                    Crouton.makeText(GdeActivity.this, R.string.fetch_gde_failed,
+                            Style.ALERT, R.id.content_frame).show();
                 } catch (IllegalStateException exception) {
                 }
                 Timber.e(error, "Could'nt fetch GDE list");

@@ -117,7 +117,8 @@ public class EventOverviewFragment extends Fragment {
             @Override
             public void failure(RetrofitError error) {
                 if (isAdded()) {
-                    Crouton.makeText(getActivity(), R.string.server_error, Style.ALERT).show();
+                    Crouton.makeText(getActivity(), R.string.server_error,
+                            Style.ALERT, R.id.content_frame).show();
                 }
                 Timber.d(error, "error while retrieving event %s", eventId);
             }
@@ -178,13 +179,15 @@ public class EventOverviewFragment extends Fragment {
                         @Override
                         public void failure(RetrofitError error) {
                             if (isAdded()) {
-                                Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
+                                Crouton.makeText(getActivity(), R.string.fetch_chapters_failed,
+                                        Style.ALERT, R.id.content_frame).show();
                             }
                             Timber.e(error, "Could'nt fetch chapter list");
                         }
                     });
                 } else {
-                    Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
+                    Crouton.makeText(getActivity(), R.string.offline_alert,
+                            Style.ALERT, R.id.content_frame).show();
                 }
             }
         });

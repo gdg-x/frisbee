@@ -291,7 +291,7 @@ public class FirstStartActivity extends AppCompatActivity implements
                             public void failure(RetrofitError error) {
                                 setLoadingScreen(false);
                                 Crouton.showText(FirstStartActivity.this, getString(R.string.server_error), Style.ALERT);
-                                Timber.e(error, "Fail");
+                                Timber.e(error, "GCM Register Fail");
                             }
                         });
 

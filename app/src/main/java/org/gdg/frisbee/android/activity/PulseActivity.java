@@ -114,7 +114,8 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
             @Override
             public void failure(RetrofitError error) {
                 try {
-                    Crouton.makeText(PulseActivity.this, R.string.fetch_chapters_failed, Style.ALERT).show();
+                    Crouton.makeText(PulseActivity.this, R.string.fetch_chapters_failed,
+                            Style.ALERT, R.id.content_frame).show();
                 } catch (IllegalStateException exception) {
                 }
                 Timber.e(error, "Couldn't fetch chapter list");

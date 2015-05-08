@@ -82,13 +82,15 @@ public class ContributorsFragment extends GdgListFragment {
                 public void onGet(Object item) {
                     ContributorList contributors = (ContributorList) item;
 
-                    Crouton.makeText(getActivity(), getString(R.string.cached_content), Style.INFO).show();
+                    Crouton.makeText(getActivity(), R.string.cached_content,
+                            Style.INFO, R.id.content_frame).show();
                     mAdapter.addAll(contributors);
                 }
 
                 @Override
                 public void onNotFound(String key) {
-                    Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
+                    Crouton.makeText(getActivity(), R.string.offline_alert,
+                            Style.ALERT, R.id.content_frame).show();
                 }
             });
         }
