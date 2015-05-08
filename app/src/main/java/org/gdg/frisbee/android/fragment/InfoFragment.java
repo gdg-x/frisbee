@@ -19,7 +19,6 @@ package org.gdg.frisbee.android.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.SpannedString;
@@ -53,7 +52,7 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import timber.log.Timber;
 
-public class InfoFragment extends Fragment {
+public class InfoFragment extends BaseFragment {
 
     @InjectView(R.id.about)
     TextView mAbout;
@@ -192,12 +191,12 @@ public class InfoFragment extends Fragment {
         }
     }
 
-    private void addOrganizersToUI(final Person[] person) {
-        if (person == null) {
+    private void addOrganizersToUI(final Person[] people) {
+        if (people == null) {
             addUnknowOrganizerToUI();
         } else {
-            for (int i = 0; i < person.length; i++) {
-                addOrganizerToUI(person[i]);
+            for (Person person : people) {
+                addOrganizerToUI(person);
             }
         }
     }
@@ -220,13 +219,19 @@ public class InfoFragment extends Fragment {
                 }
             });
             registerForContextMenu(v);
-            mOrganizerBox.addView(v);
+            if (mOrganizerBox != null) {
+                mOrganizerBox.addView(v);
+            }
         }
     }
 
     private void updateChapterUIFrom(final Person person) {
-        mTagline.setText(person.getTagline());
-        mAbout.setText(getAboutText(person));
+        if (mTagline != null) {
+            mTagline.setText(person.getTagline());
+        }
+        if (mAbout != null) {
+            mAbout.setText(getAboutText(person));
+        }
     }
 
     private Spanned getAboutText(Person person) {

@@ -19,7 +19,6 @@ package org.gdg.frisbee.android.fragment;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,7 +30,7 @@ import org.gdg.frisbee.android.R;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class AboutFragment extends Fragment {
+public class AboutFragment extends BaseFragment {
 
     @InjectView(R.id.version)
     TextView mVersion;

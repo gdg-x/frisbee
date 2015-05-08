@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -225,5 +226,10 @@ public class Utils {
      */
     public static boolean isEmailAddress(String possibleEmail) {
         return Patterns.EMAIL_ADDRESS.matcher(possibleEmail).matches();
+    }
+
+
+    public static boolean canLaunch(Context context, final Intent viewUrlIntent) {
+        return context.getPackageManager().resolveActivity(viewUrlIntent, PackageManager.MATCH_DEFAULT_ONLY) != null;
     }
 }

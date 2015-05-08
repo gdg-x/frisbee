@@ -120,11 +120,14 @@ public abstract class EventListFragment extends GdgListFragment {
         super.onListItemClick(l, v, position, id);
 
         final ListView listView = (ListView) getListView();
-        SimpleEvent event = mAdapter.getItem(position - listView.getHeaderViewsCount());
+        int fixedPosition = position - listView.getHeaderViewsCount();
+        if (fixedPosition >= 0 && fixedPosition < mAdapter.getCount()) {
+            SimpleEvent event = mAdapter.getItem(fixedPosition);
 
-        Intent intent = new Intent(getActivity(), EventActivity.class);
-        intent.putExtra(Const.EXTRA_EVENT_ID, event.getId());
-        startActivity(intent);
+            Intent intent = new Intent(getActivity(), EventActivity.class);
+            intent.putExtra(Const.EXTRA_EVENT_ID, event.getId());
+            startActivity(intent);
+        }
     }
 
     private void launchNavigation(SimpleEvent event) {

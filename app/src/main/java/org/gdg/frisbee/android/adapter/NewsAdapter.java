@@ -18,7 +18,6 @@ package org.gdg.frisbee.android.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -373,7 +372,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                         mContext.startActivity(playVideoIntent);
                     } else {
                         Intent viewUrlIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(attachment.getUrl()));
-                        if (canLaunch(viewUrlIntent)) {
+                        if (Utils.canLaunch(mContext, viewUrlIntent)) {
                             mContext.startActivity(viewUrlIntent);
                         }
                     }
@@ -382,10 +381,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                 }
             }
         });
-    }
-
-    private boolean canLaunch(final Intent viewUrlIntent) {
-        return mContext.getPackageManager().resolveActivity(viewUrlIntent, PackageManager.MATCH_DEFAULT_ONLY) != null;
     }
 
     private String getVideoIdFrom(final Activity.PlusObject.Attachments attachment) throws UnsupportedEncodingException, MalformedURLException {

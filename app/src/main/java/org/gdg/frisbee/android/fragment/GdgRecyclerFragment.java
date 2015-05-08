@@ -18,7 +18,6 @@ package org.gdg.frisbee.android.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +31,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 
-public class GdgRecyclerFragment extends Fragment {
+public class GdgRecyclerFragment extends BaseFragment {
 
     private final Handler mHandler = new Handler();
 
