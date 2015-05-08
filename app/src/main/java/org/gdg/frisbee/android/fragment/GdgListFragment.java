@@ -19,7 +19,6 @@ package org.gdg.frisbee.android.fragment;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +41,7 @@ import butterknife.InjectView;
  * Date: 23.04.13
  * Time: 19:03
  */
-public class GdgListFragment extends Fragment {
+public class GdgListFragment extends BaseFragment {
 
     private final Handler mHandler = new Handler();
 

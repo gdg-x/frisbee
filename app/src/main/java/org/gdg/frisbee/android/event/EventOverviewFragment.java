@@ -191,6 +191,10 @@ public class EventOverviewFragment extends Fragment {
     }
 
     private void updateGroupDetails(Chapter group) {
+        if (getActivity() == null) {
+            return;
+        }
+
         Plus.PeopleApi.load(((GdgActivity) getActivity()).getGoogleApiClient(), group.getGplusId())
                 .setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
                     @Override
@@ -303,7 +307,9 @@ public class EventOverviewFragment extends Fragment {
     private void launchNavigation() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse("geo:0,0?q=" + mEvent.getLocation()));
-        startActivity(intent);
+        if (Utils.canLaunch(getActivity(), intent)) {
+            startActivity(intent);
+        }
     }
 
     private void launchUrl(String eventUrl) {

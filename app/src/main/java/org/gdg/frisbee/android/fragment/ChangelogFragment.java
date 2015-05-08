@@ -17,7 +17,6 @@
 package org.gdg.frisbee.android.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +33,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import timber.log.Timber;
 
-public class ChangelogFragment extends Fragment {
+public class ChangelogFragment extends BaseFragment {
 
     @InjectView(R.id.changelog)
     TextView mChangelog;

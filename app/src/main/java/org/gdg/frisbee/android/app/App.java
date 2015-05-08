@@ -32,6 +32,8 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.FieldNamingPolicy;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 import com.squareup.picasso.LruCache;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
@@ -84,6 +86,7 @@ public class App extends Application implements LocationListener {
     private Location mLastLocation;
     private OrganizerChecker mOrganizerChecker;
     private ArrayList<TaggedEventSeries> mTaggedEventSeriesList;
+    private RefWatcher refWatcher;
 
     @Override
     public void onCreate() {
@@ -132,6 +135,8 @@ public class App extends Application implements LocationListener {
         mPicasso.setIndicatorsEnabled(BuildConfig.DEBUG);
 
         JodaTimeAndroid.init(this);
+
+        refWatcher = LeakCanary.install(this);
 
         mOrganizerChecker = new OrganizerChecker(PrefUtils.prefs(this));
 
@@ -332,5 +337,9 @@ public class App extends Application implements LocationListener {
                     .build().create(GroupDirectory.class);
         }
         return groupDirectoryInstance;
+    }
+
+    public RefWatcher getRefWatcher() {
+        return refWatcher;
     }
 }

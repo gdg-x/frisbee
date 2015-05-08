@@ -17,7 +17,6 @@
 package org.gdg.frisbee.android.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +32,7 @@ import java.io.InputStream;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class ExtLibrariesFragment extends Fragment {
+public class ExtLibrariesFragment extends BaseFragment {
 
     @InjectView(R.id.external)
     TextView mExternal;
