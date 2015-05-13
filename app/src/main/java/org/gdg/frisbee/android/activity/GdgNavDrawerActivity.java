@@ -44,7 +44,6 @@ import org.gdg.frisbee.android.adapter.DrawerAdapter;
 import org.gdg.frisbee.android.adapter.DrawerAdapter.DrawerItem;
 import org.gdg.frisbee.android.api.GapiOkTransport;
 import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.app.OrganizerChecker;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeriesActivity;
 import org.gdg.frisbee.android.task.Builder;
@@ -120,6 +119,11 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     @SuppressWarnings("unused")
     @OnItemClick(R.id.navdrawer_list)
     public void onDrawerItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+        if (PrefUtils.shouldOpenDrawerOnStart(GdgNavDrawerActivity.this)) {
+            PrefUtils.setShouldNotOpenDrawerOnStart(GdgNavDrawerActivity.this);
+        }
+
         DrawerItem item = (DrawerItem) mDrawerAdapter.getItem(i);
 
         switch (item.getId()) {
@@ -323,17 +327,5 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public Plus getPlusClient() {
-        return plusClient;
-    }
-
-    public boolean isOrganizer() {
-        return App.getInstance().isOrganizer();
-    }
-
-    protected void checkOrganizer(final OrganizerChecker.OrganizerResponseHandler responseHandler) {
-        App.getInstance().checkOrganizer(getGoogleApiClient(), responseHandler);
     }
 }

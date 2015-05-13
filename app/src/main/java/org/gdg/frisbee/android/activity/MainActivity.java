@@ -42,6 +42,7 @@ import org.gdg.frisbee.android.adapter.ChapterAdapter;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.app.OrganizerChecker;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.eventseries.GdgEventListFragment;
 import org.gdg.frisbee.android.fragment.InfoFragment;
@@ -175,6 +176,29 @@ public class MainActivity extends GdgNavDrawerActivity {
             GooglePlayServicesUtil.getErrorDialog(playServiceStatus, this, PLAY_SERVICE_DIALOG_REQUEST_CODE).show();
         }
         checkHomeChapterValid();
+        updateChapterPages();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        super.onConnected(bundle);
+        updateChapterPages();
+    }
+
+    private void updateChapterPages() {
+        App.getInstance().checkOrganizer(getGoogleApiClient(),
+                new OrganizerChecker.Callbacks() {
+                    @Override
+                    public void onOrganizerResponse(boolean isOrganizer) {
+                        if (mViewPagerAdapter != null) {
+                            mViewPagerAdapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onErrorResponse() {
+                    }
+                });
     }
 
     private void checkHomeChapterValid() {
@@ -372,7 +396,7 @@ public class MainActivity extends GdgNavDrawerActivity {
 
     public class ChapterFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
-        private final int[] mPages;
+        private int[] mPages;
         private Context mContext;
         private Chapter mSelectedChapter;
 
@@ -380,11 +404,13 @@ public class MainActivity extends GdgNavDrawerActivity {
             super(fm);
             mContext = ctx;
             mSelectedChapter = selectedChapter;
-            if (App.getInstance().isOrganizer()) {
-                mPages = ORGANIZER_PAGES;
-            } else {
-                mPages = PAGES;
-            }
+            mPages = App.getInstance().isOrganizer() ? ORGANIZER_PAGES : PAGES;
+        }
+
+        @Override
+        public void notifyDataSetChanged() {
+            mPages = App.getInstance().isOrganizer() ? ORGANIZER_PAGES : PAGES;
+            super.notifyDataSetChanged();
         }
 
         @Override
