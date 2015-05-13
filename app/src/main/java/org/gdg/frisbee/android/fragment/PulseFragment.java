@@ -128,7 +128,8 @@ public class PulseFragment extends GdgListFragment {
                 @Override
                 public void failure(RetrofitError error) {
                     if (isAdded()) {
-                        Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
+                        Crouton.makeText(getActivity(), R.string.fetch_chapters_failed,
+                                Style.ALERT, R.id.content_frame).show();
                     }
                     Timber.e(error, "Couldn't fetch pulse");
                 }
@@ -152,7 +153,8 @@ public class PulseFragment extends GdgListFragment {
                 @Override
                 public void failure(RetrofitError error) {
                     if (isAdded()) {
-                        Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
+                        Crouton.makeText(getActivity(), R.string.fetch_chapters_failed,
+                                Style.ALERT, R.id.content_frame).show();
                     }
                     Timber.e(error, "Couldn't fetch pulse");
                 }

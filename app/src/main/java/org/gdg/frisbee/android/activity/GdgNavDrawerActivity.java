@@ -131,7 +131,8 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 if (PrefUtils.isSignedIn(this) && getGoogleApiClient().isConnected()) {
                     startActivityForResult(Games.Achievements.getAchievementsIntent(getGoogleApiClient()), 0);
                 } else {
-                    Crouton.makeText(GdgNavDrawerActivity.this, getString(R.string.achievements_need_signin), Style.INFO).show();
+                    Crouton.makeText(GdgNavDrawerActivity.this, R.string.achievements_need_signin,
+                            Style.INFO, R.id.content_frame).show();
                 }
                 break;
             case Const.DRAWER_HOME:
@@ -150,7 +151,8 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 if (PrefUtils.isSignedIn(this) && getGoogleApiClient().isConnected()) {
                     navigateTo(ArrowActivity.class, null);
                 } else {
-                    Crouton.makeText(GdgNavDrawerActivity.this, getString(R.string.arrow_need_games), Style.INFO).show();
+                    Crouton.makeText(GdgNavDrawerActivity.this, R.string.arrow_need_games,
+                            Style.INFO, R.id.content_frame).show();
                 }
                 break;
             case Const.DRAWER_SETTINGS:

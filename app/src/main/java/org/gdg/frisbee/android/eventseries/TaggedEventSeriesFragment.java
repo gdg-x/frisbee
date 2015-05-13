@@ -154,7 +154,8 @@ public class TaggedEventSeriesFragment extends EventListFragment {
                     sortEvents();
                     setIsLoading(false);
                     if (isAdded()) {
-                        Crouton.makeText(getActivity(), getString(R.string.cached_content), Style.INFO).show();
+                        Crouton.makeText(getActivity(), R.string.cached_content,
+                                Style.INFO, R.id.content_frame).show();
                     }
                 }
 
@@ -162,7 +163,8 @@ public class TaggedEventSeriesFragment extends EventListFragment {
                 public void onNotFound(String key) {
                     setIsLoading(false);
                     if (isAdded()) {
-                        Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
+                        Crouton.makeText(getActivity(), R.string.offline_alert,
+                                Style.ALERT, R.id.content_frame).show();
                     }
                 }
             });

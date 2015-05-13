@@ -149,7 +149,6 @@ public class InfoFragment extends BaseFragment {
                 @Override
                 public void onGet(Object item) {
                     final Person chachedChapter = (Person) item;
-                    Crouton.makeText(getActivity(), getString(R.string.cached_content), Style.INFO).show();
                     updateChapterUIFrom(chachedChapter);
 
                     for (int chapterIndex = 0; chapterIndex < chachedChapter.getUrls().size(); chapterIndex++) {
@@ -177,7 +176,8 @@ public class InfoFragment extends BaseFragment {
                                     }
                                 });
                             } catch (Exception ex) {
-                                Crouton.makeText(getActivity(), String.format(getString(R.string.bogus_organizer), org), Style.ALERT);
+                                Crouton.makeText(getActivity(), getString(R.string.bogus_organizer, org),
+                                        Style.ALERT, R.id.content_frame);
                             }
                         }
                     }
@@ -185,7 +185,8 @@ public class InfoFragment extends BaseFragment {
 
                 @Override
                 public void onNotFound(String key) {
-                    Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
+                    Crouton.makeText(getActivity(), R.string.offline_alert,
+                            Style.ALERT, R.id.content_frame).show();
                 }
             });
         }
@@ -255,7 +256,8 @@ public class InfoFragment extends BaseFragment {
                             mFetchOrganizerInfo.addParameter(organizerParameter);
                         } catch (Exception ex) {
                             if (isAdded()) {
-                                Crouton.makeText(getActivity(), String.format(getString(R.string.bogus_organizer), org), Style.ALERT);
+                                Crouton.makeText(getActivity(), getString(R.string.bogus_organizer, org),
+                                        Style.ALERT, R.id.content_frame);
                             }
                         }
                     }
