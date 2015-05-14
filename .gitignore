@@ -41,3 +41,4 @@ out/**
 .DS_Store
 app/res/values/keys.xml
 *.diff
+release.keystore
