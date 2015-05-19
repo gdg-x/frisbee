@@ -1,4 +1,4 @@
-package org.gdg.frisbee.android.fragment;
+package org.gdg.frisbee.android.gde;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.fragment.BaseFragment;
 
 /**
  * Created by maui on 03.06.2014.

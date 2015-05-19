@@ -51,6 +51,7 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.arrow.ArrowActivity;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeriesActivity;
+import org.gdg.frisbee.android.gde.GdeActivity;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.PrefUtils;

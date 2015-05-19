@@ -68,7 +68,7 @@
       android:name=".activity.MainActivity"
       android:theme="@style/Theme.GDG.Main"/>
     <activity
-      android:name=".activity.GdeActivity"
+      android:name=".gde.GdeActivity"
       android:theme="@style/Theme.GDG.WithNavDrawer"/>
     <activity
       android:name=".about.AboutActivity"

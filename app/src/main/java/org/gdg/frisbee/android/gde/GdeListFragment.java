@@ -1,4 +1,4 @@
-package org.gdg.frisbee.android.fragment;
+package org.gdg.frisbee.android.gde;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -13,6 +13,7 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.adapter.GdeAdapter;
 import org.gdg.frisbee.android.api.model.Gde;
+import org.gdg.frisbee.android.fragment.GdgListFragment;
 
 import java.util.ArrayList;
 

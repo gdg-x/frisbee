@@ -1,4 +1,4 @@
-package org.gdg.frisbee.android.activity;
+package org.gdg.frisbee.android.gde;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,13 +13,12 @@ import com.google.gson.FieldNamingPolicy;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.activity.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.api.GdeDirectory;
 import org.gdg.frisbee.android.api.model.Gde;
 import org.gdg.frisbee.android.api.model.GdeList;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
-import org.gdg.frisbee.android.fragment.GdeListFragment;
-import org.gdg.frisbee.android.fragment.PlainLayoutFragment;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.widget.SlidingTabLayout;
 import org.joda.time.DateTime;
