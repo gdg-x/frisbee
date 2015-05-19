@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.gdg.frisbee.android.activity;
+package org.gdg.frisbee.android.arrow;
 
 import android.content.Context;
 import android.content.Intent;
@@ -40,6 +40,7 @@ import com.squareup.picasso.Picasso;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.activity.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;

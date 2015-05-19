@@ -48,6 +48,7 @@ import org.gdg.frisbee.android.adapter.DrawerAdapter;
 import org.gdg.frisbee.android.adapter.DrawerAdapter.DrawerItem;
 import org.gdg.frisbee.android.api.GapiOkTransport;
 import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.arrow.ArrowActivity;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeriesActivity;
 import org.gdg.frisbee.android.task.Builder;

@@ -80,7 +80,7 @@
       android:name=".activity.SettingsActivity"
       android:theme="@style/Theme.GDG"/>
     <activity
-      android:name=".activity.ArrowActivity"
+      android:name=".arrow.ArrowActivity"
       android:screenOrientation="portrait"
       android:theme="@style/Theme.GDG.WithNavDrawer">
       <intent-filter>
@@ -97,7 +97,7 @@
       </intent-filter>
     </activity>
     <activity
-      android:name=".activity.ArrowTaggedActivity"
+      android:name=".arrow.ArrowTaggedActivity"
       android:screenOrientation="portrait"
       android:theme="@style/Theme.GDG.WithNavDrawer"/>
     <activity
