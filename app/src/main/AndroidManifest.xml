@@ -71,7 +71,7 @@
       android:name=".activity.GdeActivity"
       android:theme="@style/Theme.GDG.WithNavDrawer"/>
     <activity
-      android:name=".activity.AboutActivity"
+      android:name=".about.AboutActivity"
       android:theme="@style/Theme.GDG"/>
     <activity
       android:name=".eventseries.TaggedEventSeriesActivity"

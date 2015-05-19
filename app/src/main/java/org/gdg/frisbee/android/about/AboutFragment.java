@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.gdg.frisbee.android.fragment;
+package org.gdg.frisbee.android.about;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.fragment.BaseFragment;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

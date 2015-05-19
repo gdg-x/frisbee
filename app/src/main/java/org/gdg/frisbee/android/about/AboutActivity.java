@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.gdg.frisbee.android.activity;
+package org.gdg.frisbee.android.about;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -25,12 +25,7 @@ import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.fragment.AboutFragment;
-import org.gdg.frisbee.android.fragment.ChangelogFragment;
-import org.gdg.frisbee.android.fragment.ContributorsFragment;
-import org.gdg.frisbee.android.fragment.ExtLibrariesFragment;
-import org.gdg.frisbee.android.fragment.GetInvolvedFragment;
-import org.gdg.frisbee.android.fragment.TranslatorsFragment;
+import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.widget.SlidingTabLayout;
 
 import butterknife.InjectView;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.gdg.frisbee.android.fragment;
+package org.gdg.frisbee.android.about;
 
 import android.os.Bundle;
 import android.text.Html;
@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.fragment.BaseFragment;
 import org.gdg.frisbee.android.utils.Utils;
 
 import java.io.IOException;
@@ -31,16 +32,15 @@ import java.io.InputStream;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import timber.log.Timber;
 
-public class ChangelogFragment extends BaseFragment {
+public class ExtLibrariesFragment extends BaseFragment {
 
-    @InjectView(R.id.changelog)
-    TextView mChangelog;
+    @InjectView(R.id.external)
+    TextView mExternal;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_changelog, container, false);
+        View v = inflater.inflate(R.layout.fragment_external_libraries, container, false);
         ButterKnife.inject(this, v);
         return v;
     }
@@ -49,20 +49,11 @@ public class ChangelogFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        InputStream is = null;
         try {
-            is = getResources().getAssets().open("changelog.html");
-            mChangelog.setText(Html.fromHtml(Utils.inputStreamToString(is)));
+            InputStream is = getResources().getAssets().open("third_party.html");
+            mExternal.setText(Html.fromHtml(Utils.inputStreamToString(is)));
         } catch (IOException e) {
-            Timber.e(e, e.getMessage());
-        } finally {
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    Timber.e(e, e.getMessage());
-                }
-            }
+            e.printStackTrace();
         }
     }
 }

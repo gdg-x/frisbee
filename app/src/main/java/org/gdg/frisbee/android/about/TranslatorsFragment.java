@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package org.gdg.frisbee.android.fragment;
+package org.gdg.frisbee.android.about;
 
+import org.gdg.frisbee.android.about.ContributorsFragment;
 import org.gdg.frisbee.android.api.model.Contributor;
 import org.gdg.frisbee.android.crowdin.model.Translator;
 

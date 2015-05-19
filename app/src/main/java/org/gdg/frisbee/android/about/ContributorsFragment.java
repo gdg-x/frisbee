@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.gdg.frisbee.android.fragment;
+package org.gdg.frisbee.android.about;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -34,6 +34,7 @@ import org.gdg.frisbee.android.api.model.Contributor;
 import org.gdg.frisbee.android.api.model.ContributorList;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.fragment.GdgListFragment;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
 
