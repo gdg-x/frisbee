@@ -115,7 +115,7 @@
       </intent-filter>
     </activity>
     <activity
-      android:name=".activity.PulseActivity"
+      android:name=".pulse.PulseActivity"
       android:theme="@style/Theme.GDG.WithNavDrawer"/>
     <activity android:name=".activity.ParseDeepLinkActivity">
       <intent-filter>
