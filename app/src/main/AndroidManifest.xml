@@ -101,7 +101,7 @@
       android:screenOrientation="portrait"
       android:theme="@style/Theme.GDG.WithNavDrawer"/>
     <activity
-      android:name=".activity.FirstStartActivity"/>
+      android:name=".onboarding.FirstStartActivity"/>
     <activity
       android:name=".activity.YoutubeActivity"
       android:configChanges="keyboardHidden|orientation|screenSize"

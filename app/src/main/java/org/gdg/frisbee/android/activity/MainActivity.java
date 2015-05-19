@@ -49,6 +49,7 @@ import org.gdg.frisbee.android.fragment.InfoFragment;
 import org.gdg.frisbee.android.fragment.LeadFragment;
 import org.gdg.frisbee.android.fragment.NewsFragment;
 import org.gdg.frisbee.android.fragment.SeasonsGreetingsFragment;
+import org.gdg.frisbee.android.onboarding.FirstStartActivity;
 import org.gdg.frisbee.android.utils.ChapterComparator;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.Utils;

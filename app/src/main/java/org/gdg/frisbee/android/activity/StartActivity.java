@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
+import org.gdg.frisbee.android.onboarding.FirstStartActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
 
 public class StartActivity extends AppCompatActivity {
