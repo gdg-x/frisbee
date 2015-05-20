@@ -65,7 +65,7 @@ public class ChapterAdapter extends ArrayAdapter<Chapter> {
     }
 
     public ArrayList<Chapter> getAll() {
-        ArrayList<Chapter> chapters = new ArrayList<Chapter>();
+        ArrayList<Chapter> chapters = new ArrayList<>();
         for (int i = 0; i < getCount(); i++) {
             chapters.add(getItem(i));
         }

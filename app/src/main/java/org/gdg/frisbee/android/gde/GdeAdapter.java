@@ -121,7 +121,7 @@ class GdeAdapter extends BaseAdapter {
         holder.countryView.setText(gde.getAddress());
         holder.socialUrl = gde.getSocialUrl();
 
-        CommonAsyncTask<ViewHolder, Person> mFetchAvatarUrl = new Builder<ViewHolder, Person>(ViewHolder.class, Person.class)
+        CommonAsyncTask<ViewHolder, Person> mFetchAvatarUrl = new Builder<>(ViewHolder.class, Person.class)
                 .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<ViewHolder, Person>() {
                     @Override
                     public Person doInBackground(ViewHolder... params) {

@@ -77,7 +77,7 @@ public class InfoFragment extends BaseFragment {
 
     private LayoutInflater mInflater;
 
-    private Builder<String, Person[]> mFetchOrganizerInfo = new Builder<String, Person[]>(String.class, Person[].class)
+    private Builder<String, Person[]> mFetchOrganizerInfo = new Builder<>(String.class, Person[].class)
             .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person[]>() {
                 @Override
                 public Person[] doInBackground(String... params) {
@@ -121,7 +121,7 @@ public class InfoFragment extends BaseFragment {
         mInflater = LayoutInflater.from(getActivity());
 
         if (Utils.isOnline(getActivity())) {
-            new Builder<String, Person>(String.class, Person.class)
+            new Builder<>(String.class, Person.class)
                     .addParameter(getArguments().getString(Const.EXTRA_PLUS_ID))
                     .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person>() {
                         @Override

@@ -163,7 +163,7 @@ public class ArrowTaggedActivity extends GdgNavDrawerActivity {
     private String mergeIds(String list1, String list2) {
         String[] parts1 = list1.split(ID_SEPARATOR_FOR_SPLIT);
         String[] parts2 = list2.split(ID_SEPARATOR_FOR_SPLIT);
-        Set<String> mergedSet = new HashSet<String>(Arrays.asList(parts1));
+        Set<String> mergedSet = new HashSet<>(Arrays.asList(parts1));
         mergedSet.addAll(Arrays.asList(parts2));
         return TextUtils.join(ID_SPLIT_CHAR, mergedSet);
     }
