@@ -23,6 +23,7 @@ import android.os.Bundle;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.chapter.MainActivity;
+import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 
 import timber.log.Timber;
 

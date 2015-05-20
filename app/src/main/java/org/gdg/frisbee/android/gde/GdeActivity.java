@@ -13,7 +13,7 @@ import com.google.gson.FieldNamingPolicy;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.activity.GdgNavDrawerActivity;
+import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.api.GdeDirectory;
 import org.gdg.frisbee.android.api.model.Gde;
 import org.gdg.frisbee.android.api.model.GdeList;
