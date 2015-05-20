@@ -3,6 +3,7 @@ package org.gdg.frisbee.android.utils;
 import org.gdg.frisbee.android.adapter.EventAdapter;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.api.model.SimpleEvent;
+import org.gdg.frisbee.android.eventseries.EventDateComparator;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
