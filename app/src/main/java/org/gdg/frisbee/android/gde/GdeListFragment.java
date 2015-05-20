@@ -12,7 +12,7 @@ import android.widget.ListView;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.api.model.Gde;
-import org.gdg.frisbee.android.fragment.GdgListFragment;
+import org.gdg.frisbee.android.common.GdgListFragment;
 
 import java.util.ArrayList;
 

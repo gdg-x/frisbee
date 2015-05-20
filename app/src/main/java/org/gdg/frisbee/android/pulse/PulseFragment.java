@@ -31,7 +31,7 @@ import org.gdg.frisbee.android.api.model.Pulse;
 import org.gdg.frisbee.android.api.model.PulseEntry;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
-import org.gdg.frisbee.android.fragment.GdgListFragment;
+import org.gdg.frisbee.android.common.GdgListFragment;
 import org.joda.time.DateTime;
 
 import java.util.Map;

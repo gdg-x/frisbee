@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.gdg.frisbee.android.fragment;
+package org.gdg.frisbee.android.common;
 
 import android.database.DataSetObserver;
 import android.os.Bundle;

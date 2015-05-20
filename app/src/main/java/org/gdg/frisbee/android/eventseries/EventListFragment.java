@@ -32,7 +32,7 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.adapter.EventAdapter;
 import org.gdg.frisbee.android.api.model.SimpleEvent;
 import org.gdg.frisbee.android.event.EventActivity;
-import org.gdg.frisbee.android.fragment.GdgListFragment;
+import org.gdg.frisbee.android.common.GdgListFragment;
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
 
