@@ -32,7 +32,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
 
-public class PulseAdapter extends BaseAdapter {
+class PulseAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
     private ArrayList<Map.Entry<String, PulseEntry>> mPulse;
