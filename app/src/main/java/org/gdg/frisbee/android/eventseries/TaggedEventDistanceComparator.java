@@ -7,7 +7,7 @@ import org.gdg.frisbee.android.app.App;
 
 import java.util.Comparator;
 
-public class TaggedEventDistanceComparator implements Comparator<EventAdapter.Item> {
+class TaggedEventDistanceComparator implements Comparator<EventAdapter.Item> {
 
     public TaggedEventDistanceComparator() {
     }

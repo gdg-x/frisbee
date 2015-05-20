@@ -47,15 +47,7 @@ import java.util.Comparator;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.adapter
- * <p/>
- * User: maui
- * Date: 23.04.13
- * Time: 03:53
- */
-public class EventAdapter extends BaseAdapter {
+class EventAdapter extends BaseAdapter {
 
     private Context mContext;
     private LayoutInflater mInflater;
