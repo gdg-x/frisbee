@@ -2,7 +2,6 @@ package org.gdg.frisbee.android.eventseries;
 
 import android.location.Location;
 
-import org.gdg.frisbee.android.adapter.EventAdapter;
 import org.gdg.frisbee.android.api.model.TaggedEvent;
 import org.gdg.frisbee.android.app.App;
 

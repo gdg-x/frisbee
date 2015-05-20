@@ -1,7 +1,5 @@
 package org.gdg.frisbee.android.eventseries;
 
-import org.gdg.frisbee.android.adapter.EventAdapter;
-
 import java.util.Comparator;
 
 public class EventDateComparator implements Comparator<EventAdapter.Item> {
