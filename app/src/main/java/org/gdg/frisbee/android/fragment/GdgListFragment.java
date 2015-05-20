@@ -52,11 +52,11 @@ public class GdgListFragment extends BaseFragment {
     };
 
     private final AdapterView.OnItemClickListener mOnClickListener =
-            new AdapterView.OnItemClickListener() {
-                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                    onListItemClick(null, v, position, id);
-                }
-            };
+        new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                onListItemClick(null, v, position, id);
+            }
+        };
 
     ListAdapter mAdapter;
 
