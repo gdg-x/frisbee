@@ -27,7 +27,7 @@ import android.widget.ViewSwitcher;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.adapter.ChapterAdapter;
+import org.gdg.frisbee.android.chapter.ChapterAdapter;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;

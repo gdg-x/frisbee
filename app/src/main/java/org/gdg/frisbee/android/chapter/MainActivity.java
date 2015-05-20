@@ -39,7 +39,6 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
-import org.gdg.frisbee.android.adapter.ChapterAdapter;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
