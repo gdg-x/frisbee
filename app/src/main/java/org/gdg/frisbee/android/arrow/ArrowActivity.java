@@ -86,7 +86,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
     ImageView scanImageView;
     @InjectView(R.id.organizerPic)
     ImageView organizerPic;
-    private String previous;
+    private String taggedPeopleIds;
     private BaseArrowHandler mArrowHandler;
     private NfcAdapter mNfcAdapter;
     private String mPendingScore;
@@ -252,12 +252,12 @@ public class ArrowActivity extends GdgNavDrawerActivity {
                     final int statusCode = loadedResult.getStatus().getStatusCode();
                     if (statusCode == AppStateStatusCodes.STATUS_OK
                             || statusCode == AppStateStatusCodes.STATUS_STATE_KEY_NOT_FOUND) {
-                        previous = "";
+                        taggedPeopleIds = "";
 
                         if (statusCode == AppStateStatusCodes.STATUS_OK) {
-                            previous = new String(loadedResult.getLocalData());
+                            taggedPeopleIds = new String(loadedResult.getLocalData());
 
-                            if (previous.contains(id)) {
+                            if (taggedPeopleIds.contains(id)) {
                                 Toast.makeText(ArrowActivity.this, R.string.arrow_already_tagged, Toast.LENGTH_LONG).show();
                             } else {
                                 addTaggedPersonToCloudSave(id);
@@ -267,9 +267,9 @@ public class ArrowActivity extends GdgNavDrawerActivity {
                         }
                     }
                 } else if (conflictResult != null) {
-                    previous = mergeIds(new String(conflictResult.getLocalData()), new String(conflictResult.getServerData()));
+                    taggedPeopleIds = mergeIds(new String(conflictResult.getLocalData()), new String(conflictResult.getServerData()));
 
-                    if (previous.contains(id)) {
+                    if (taggedPeopleIds.contains(id)) {
                         Toast.makeText(ArrowActivity.this, R.string.arrow_already_tagged, Toast.LENGTH_LONG).show();
                     } else {
                         addTaggedPersonToCloudSave(id);
@@ -290,9 +290,12 @@ public class ArrowActivity extends GdgNavDrawerActivity {
     }
 
     private void addTaggedPersonToCloudSave(String id) {
-        previous = previous + ID_SPLIT_CHAR + id;
-        AppStateManager.update(getGoogleApiClient(), Const.ARROW_DONE_STATE_KEY, previous.getBytes());
-        Games.Leaderboards.submitScore(getGoogleApiClient(), Const.ARROW_LB, previous.split("\\|").length - 1);
+
+        taggedPeopleIds = taggedPeopleIds + ID_SPLIT_CHAR + id;
+        AppStateManager.update(getGoogleApiClient(), Const.ARROW_DONE_STATE_KEY, taggedPeopleIds.getBytes());
+        int score = taggedPeopleIds.split("\\|").length - 1;
+        Games.Leaderboards.submitScore(getGoogleApiClient(), Const.ARROW_LB, score);
+        getAchievementActionHandler().handleFeelingSocial(score);
 
         Plus.PeopleApi.load(getGoogleApiClient(), id).setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
             @Override

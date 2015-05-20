@@ -130,6 +130,8 @@ public class GdeActivity extends GdgNavDrawerActivity {
 
                 mViewPager.setAdapter(mViewPagerAdapter);
                 mSlidingTabLayout.setViewPager(mViewPager);
+
+                getAchievementActionHandler().handleLookingForExperts();
             }
         });
     }

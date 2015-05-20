@@ -18,6 +18,7 @@ package org.gdg.frisbee.android.widget;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -44,6 +45,7 @@ import android.widget.EditText;
 
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.Utils;
 import org.json.JSONException;
@@ -108,21 +110,31 @@ public class FeedbackFragment extends DialogFragment {
                 .setPositiveButton(R.string.feedback_send, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mApi.setLoadingMessage(getActivity().getString(R.string.feedback_sending));
-                        mApi.setCallback(new RestCallback() {
-                            public void success(Object obj) {
-                                //TODO add feedback
-//                                Toast.makeText(getActivity(), obj.toString(), Toast.LENGTH_SHORT).show();
-                                mMessageField.setText("");
-                                mProperties = new JSONObject();
-                            }
-                        });
-                        mApi.sendFeedback(mMessageField.getText().toString(),
-                                mEmailField.getText().toString(), mProperties, "");
+                        sendFeedback();
                     }
                 });
 
         return builder.create();
+    }
+
+    private void sendFeedback() {
+        mApi.setLoadingMessage(getActivity().getString(R.string.feedback_sending));
+        mApi.setCallback(new RestCallback() {
+            public void success(Object obj) {
+                //TODO add feedback
+//                                Toast.makeText(getActivity(), obj.toString(), Toast.LENGTH_SHORT).show();
+                mMessageField.setText("");
+                mProperties = new JSONObject();
+
+                Activity activity = getActivity();
+                if (activity != null && activity instanceof GdgActivity) {
+                    ((GdgActivity) activity).getAchievementActionHandler()
+                            .handleKissesFromGdgXTeam();
+                }
+            }
+        });
+        mApi.sendFeedback(mMessageField.getText().toString(),
+                mEmailField.getText().toString(), mProperties, "");
     }
 
     private void setupEmailAutocomplete() {
