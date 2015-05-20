@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.gdg.frisbee.android.adapter;
+package org.gdg.frisbee.android.chapter;
 
 import android.content.Context;
 import android.content.Intent;
