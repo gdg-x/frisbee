@@ -29,7 +29,6 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.common.BaseFragment;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
