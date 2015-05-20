@@ -1,4 +1,4 @@
-package org.gdg.frisbee.android.adapter;
+package org.gdg.frisbee.android.gde;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -37,10 +37,7 @@ import java.util.regex.Pattern;
 
 import timber.log.Timber;
 
-/**
- * Created by maui on 29.05.2014.
- */
-public class GdeAdapter extends BaseAdapter {
+class GdeAdapter extends BaseAdapter {
 
     private Context mContext;
     private LayoutInflater mInflater;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.gdg.frisbee.android.adapter;
+package org.gdg.frisbee.android.about;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -33,7 +33,7 @@ import java.util.Collection;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class ContributorAdapter extends ArrayAdapter<Contributor> {
+class ContributorAdapter extends ArrayAdapter<Contributor> {
 
     public ContributorAdapter(Context context) {
         super(context, R.layout.contributor_item);

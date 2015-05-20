@@ -27,7 +27,6 @@ import android.widget.ListView;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.MainActivity;
-import org.gdg.frisbee.android.adapter.PulseAdapter;
 import org.gdg.frisbee.android.api.model.Pulse;
 import org.gdg.frisbee.android.api.model.PulseEntry;
 import org.gdg.frisbee.android.app.App;

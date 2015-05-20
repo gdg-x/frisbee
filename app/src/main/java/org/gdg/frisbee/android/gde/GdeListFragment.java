@@ -11,7 +11,6 @@ import android.widget.ListView;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgActivity;
-import org.gdg.frisbee.android.adapter.GdeAdapter;
 import org.gdg.frisbee.android.api.model.Gde;
 import org.gdg.frisbee.android.fragment.GdgListFragment;
 

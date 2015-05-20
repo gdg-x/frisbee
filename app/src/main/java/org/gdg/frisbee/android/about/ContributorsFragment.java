@@ -28,7 +28,6 @@ import com.google.gson.FieldNamingPolicy;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.adapter.ContributorAdapter;
 import org.gdg.frisbee.android.api.GitHub;
 import org.gdg.frisbee.android.api.model.Contributor;
 import org.gdg.frisbee.android.api.model.ContributorList;
