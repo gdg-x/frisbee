@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.gdg.frisbee.android.activity;
+package org.gdg.frisbee.android.onboarding;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,7 +25,6 @@ import android.widget.Toast;
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.chapter.MainActivity;
-import org.gdg.frisbee.android.onboarding.FirstStartActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
 
 public class StartActivity extends AppCompatActivity {

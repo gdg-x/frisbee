@@ -108,7 +108,7 @@
       android:screenOrientation="sensor"
       android:theme="@style/Theme.GDG.SeeTrough"/>
     <activity
-      android:name=".activity.StartActivity">
+      android:name=".onboarding.StartActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <category android:name="android.intent.category.LAUNCHER"/>
