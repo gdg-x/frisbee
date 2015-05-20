@@ -122,15 +122,15 @@ public class CommonAsyncTask<Params, Result> extends AsyncTask<Params, Void, Res
     }
 
     public interface OnBackgroundExecuteListener<Params, Result> {
-        public Result doInBackground(Params... params);
+        Result doInBackground(Params... params);
     }
 
     public interface OnPostExecuteListener<Params, Result> {
-        public void onPostExecute(Params[] params, Result result);
+        void onPostExecute(Params[] params, Result result);
     }
 
     public interface OnPreExecuteListener {
-        public void onPreExecute();
+        void onPreExecute();
     }
 
     public CommonAsyncTask<Params, Result> execute() {

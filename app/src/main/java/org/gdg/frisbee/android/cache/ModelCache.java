@@ -633,13 +633,13 @@ public class ModelCache {
     }
 
     public interface CachePutListener {
-        public void onPutIntoCache();
+        void onPutIntoCache();
     }
 
     public interface CacheListener {
-        public void onGet(Object item);
+        void onGet(Object item);
 
-        public void onNotFound(String key);
+        void onNotFound(String key);
     }
 
     static final class DiskCacheFlushRunnable implements Runnable {
