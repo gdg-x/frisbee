@@ -187,11 +187,12 @@ public class MainActivity extends GdgNavDrawerActivity {
     }
 
     private void updateChapterPages() {
+        final boolean wasOrganizer = App.getInstance().isOrganizer();
         App.getInstance().checkOrganizer(getGoogleApiClient(),
                 new OrganizerChecker.Callbacks() {
                     @Override
                     public void onOrganizerResponse(boolean isOrganizer) {
-                        if (mViewPagerAdapter != null) {
+                        if (mViewPagerAdapter != null && wasOrganizer != isOrganizer) {
                             mViewPagerAdapter.notifyDataSetChanged();
                         }
                     }
