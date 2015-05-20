@@ -39,7 +39,6 @@ import com.google.android.gms.plus.PlusOneButton;
 import com.google.api.services.plus.model.Activity;
 
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.activity.YoutubeActivity;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.widget.ResizableImageView;

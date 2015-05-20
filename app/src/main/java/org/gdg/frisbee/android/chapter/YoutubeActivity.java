@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.gdg.frisbee.android.activity;
+package org.gdg.frisbee.android.chapter;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;

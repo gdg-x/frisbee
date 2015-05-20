@@ -103,7 +103,7 @@
     <activity
       android:name=".onboarding.FirstStartActivity"/>
     <activity
-      android:name=".activity.YoutubeActivity"
+      android:name=".chapter.YoutubeActivity"
       android:configChanges="keyboardHidden|orientation|screenSize"
       android:screenOrientation="sensor"
       android:theme="@style/Theme.GDG.SeeTrough"/>
