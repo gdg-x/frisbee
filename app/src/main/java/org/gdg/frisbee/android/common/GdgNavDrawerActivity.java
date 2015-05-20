@@ -44,7 +44,6 @@ import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.about.AboutActivity;
-import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.activity.SettingsActivity;
 import org.gdg.frisbee.android.adapter.DrawerAdapter;
 import org.gdg.frisbee.android.adapter.DrawerAdapter.DrawerItem;

@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.activity.GdgActivity;
+import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.api.model.Gde;
 import org.gdg.frisbee.android.common.GdgListFragment;
 

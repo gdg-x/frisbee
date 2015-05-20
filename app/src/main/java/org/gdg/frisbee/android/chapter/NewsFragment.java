@@ -33,7 +33,7 @@ import com.google.api.services.plus.model.ActivityFeed;
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.activity.GdgActivity;
+import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.adapter.NewsAdapter;
 import org.gdg.frisbee.android.api.GapiOkTransport;
 import org.gdg.frisbee.android.app.App;

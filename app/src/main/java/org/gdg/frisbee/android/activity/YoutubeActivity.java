@@ -26,6 +26,7 @@ import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.common.GdgActivity;
 
 /**
  * @author maui
