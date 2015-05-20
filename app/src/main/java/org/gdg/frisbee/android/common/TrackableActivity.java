@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.gdg.frisbee.android.activity;
+package org.gdg.frisbee.android.common;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
