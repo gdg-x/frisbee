@@ -33,7 +33,7 @@ import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.BaseFragment;
-import org.gdg.frisbee.android.utils.ChapterComparator;
+import org.gdg.frisbee.android.chapter.ChapterComparator;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.joda.time.DateTime;
 
