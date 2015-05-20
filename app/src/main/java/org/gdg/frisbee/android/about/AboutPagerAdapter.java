@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import org.gdg.frisbee.android.R;
 
-public class AboutPagerAdapter extends FragmentStatePagerAdapter {
+class AboutPagerAdapter extends FragmentStatePagerAdapter {
     private Context mContext;
 
     public AboutPagerAdapter(Context ctx, FragmentManager fm) {
