@@ -37,7 +37,7 @@ import org.gdg.frisbee.android.widget.FeedbackFragment;
  *
  * @author Bartosz Przybylski <bart.p.pl@gmail.com>
  */
-public abstract class TrackableActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
+abstract class TrackableActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
     private int mCurrentPage = 0;
 
