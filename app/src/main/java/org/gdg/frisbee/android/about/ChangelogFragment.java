@@ -24,7 +24,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.fragment.BaseFragment;
+import org.gdg.frisbee.android.common.BaseFragment;
 import org.gdg.frisbee.android.utils.Utils;
 
 import java.io.IOException;

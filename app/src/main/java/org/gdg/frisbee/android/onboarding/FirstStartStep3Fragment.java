@@ -25,7 +25,7 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.fragment.BaseFragment;
+import org.gdg.frisbee.android.common.BaseFragment;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.fragment.BaseFragment;
+import org.gdg.frisbee.android.common.BaseFragment;
 
 /**
  * Created by maui on 03.06.2014.

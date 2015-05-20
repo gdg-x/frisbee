@@ -39,6 +39,7 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.common.BaseFragment;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.Utils;

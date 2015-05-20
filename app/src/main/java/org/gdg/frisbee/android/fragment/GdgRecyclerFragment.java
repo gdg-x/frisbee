@@ -26,6 +26,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.common.BaseFragment;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

@@ -32,7 +32,7 @@ import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.Plus;
 
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.fragment.BaseFragment;
+import org.gdg.frisbee.android.common.BaseFragment;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

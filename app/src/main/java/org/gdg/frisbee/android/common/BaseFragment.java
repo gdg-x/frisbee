@@ -1,4 +1,4 @@
-package org.gdg.frisbee.android.fragment;
+package org.gdg.frisbee.android.common;
 
 import android.support.v4.app.Fragment;
 
