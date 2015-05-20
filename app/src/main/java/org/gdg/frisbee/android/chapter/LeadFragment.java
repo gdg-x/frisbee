@@ -1,4 +1,4 @@
-package org.gdg.frisbee.android.fragment;
+package org.gdg.frisbee.android.chapter;
 
 import android.app.Activity;
 import android.content.Context;

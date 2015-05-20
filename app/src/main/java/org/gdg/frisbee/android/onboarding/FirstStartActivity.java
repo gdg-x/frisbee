@@ -42,7 +42,7 @@ import com.google.android.gms.plus.Plus;
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.activity.MainActivity;
+import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.api.GdgXHub;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.GcmRegistrationRequest;

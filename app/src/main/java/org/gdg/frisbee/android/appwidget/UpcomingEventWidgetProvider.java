@@ -28,7 +28,7 @@ import android.widget.RemoteViews;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.activity.MainActivity;
+import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.Event;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.gdg.frisbee.android.activity;
+package org.gdg.frisbee.android.chapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -38,6 +38,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.activity.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.adapter.ChapterAdapter;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
@@ -45,10 +46,6 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.OrganizerChecker;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.eventseries.GdgEventListFragment;
-import org.gdg.frisbee.android.fragment.InfoFragment;
-import org.gdg.frisbee.android.fragment.LeadFragment;
-import org.gdg.frisbee.android.fragment.NewsFragment;
-import org.gdg.frisbee.android.fragment.SeasonsGreetingsFragment;
 import org.gdg.frisbee.android.onboarding.FirstStartActivity;
 import org.gdg.frisbee.android.utils.ChapterComparator;
 import org.gdg.frisbee.android.utils.PrefUtils;

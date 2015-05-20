@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.gdg.frisbee.android.fragment;
+package org.gdg.frisbee.android.chapter;
 
 import android.app.Dialog;
 import android.content.DialogInterface;

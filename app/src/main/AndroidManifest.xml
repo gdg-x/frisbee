@@ -65,7 +65,7 @@
       android:value=".activity.SearchActivity"/>
 
     <activity
-      android:name=".activity.MainActivity"
+      android:name=".chapter.MainActivity"
       android:theme="@style/Theme.GDG.Main"/>
     <activity
       android:name=".gde.GdeActivity"
@@ -140,7 +140,7 @@
     <activity
       android:name=".event.EventActivity"
       android:theme="@style/Theme.GDG"
-      android:parentActivityName=".activity.MainActivity">
+      android:parentActivityName=".chapter.MainActivity">
     </activity>
 
     <provider
