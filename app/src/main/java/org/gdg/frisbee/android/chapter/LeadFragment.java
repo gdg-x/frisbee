@@ -27,8 +27,7 @@ public class LeadFragment extends ListFragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_for_leads, container, false);
-        return root;
+        return inflater.inflate(R.layout.fragment_for_leads, container, false);
     }
 
     public static Fragment newInstance(final String gplusId) {

@@ -66,10 +66,6 @@ class GdeAdapter extends BaseAdapter {
         mPlusPattern = Pattern.compile("http[s]?:\\/\\/plus\\..*google\\.com.*(\\+[a-zA-Z] +|[0-9]{21}).*");
     }
 
-    public void clear() {
-        mGdes.clear();
-    }
-
     public void addAll(ArrayList<? extends Gde> list) {
         mGdes.addAll(list);
         notifyDataSetChanged();

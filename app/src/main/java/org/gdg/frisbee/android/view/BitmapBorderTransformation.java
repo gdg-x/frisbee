@@ -15,11 +15,6 @@ public class BitmapBorderTransformation implements Transformation {
     private int mCornerRadius = 0;
     private int mColor;
 
-    public BitmapBorderTransformation(int borderSize, int color) {
-        this.mBorderSize = borderSize;
-        this.mColor = color;
-    }
-
     public BitmapBorderTransformation(int borderSize, int cornerRadius, int color) {
         this.mBorderSize = borderSize;
         this.mCornerRadius = cornerRadius;

@@ -72,10 +72,6 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
         return organizers;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
     public String getCity() {
         return city;
     }
@@ -86,10 +82,6 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
 
     public String getGplusId() {
         return gplusId;
-    }
-
-    public String getState() {
-        return state;
     }
 
     public Country getCountry() {

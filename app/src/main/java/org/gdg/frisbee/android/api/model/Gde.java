@@ -50,14 +50,6 @@ public class Gde implements Parcelable {
         return address;
     }
 
-    public double getLat() {
-        return lat;
-    }
-
-    public double getLng() {
-        return lng;
-    }
-
     public String getEmail() {
         return email;
     }

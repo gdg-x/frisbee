@@ -30,14 +30,6 @@ public class Country implements Parcelable {
         isoCode = in.readString();
     }
 
-    public String getIsoCode() {
-        return isoCode;
-    }
-
-    public void setIsoCode(String isoCode) {
-        this.isoCode = isoCode;
-    }
-
     public String getName() {
         return name;
     }
