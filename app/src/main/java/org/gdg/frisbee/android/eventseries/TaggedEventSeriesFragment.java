@@ -33,7 +33,6 @@ import org.gdg.frisbee.android.api.model.PagedList;
 import org.gdg.frisbee.android.api.model.TaggedEvent;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
-import org.gdg.frisbee.android.utils.TaggedEventDistanceComparator;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
 

@@ -1,4 +1,4 @@
-package org.gdg.frisbee.android.utils;
+package org.gdg.frisbee.android.eventseries;
 
 import android.location.Location;
 
