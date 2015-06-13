@@ -18,7 +18,6 @@ package org.gdg.frisbee.android.task;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.concurrent.Executor;
 
 /**
  * GDG Aachen
@@ -40,11 +39,6 @@ public class Builder<Params, Result> {
 
     public Builder<Params, Result> addParameter(Params param) {
         mParams.add(param);
-        return this;
-    }
-
-    public Builder<Params, Result> setParameter(ArrayList<Params> params) {
-        mParams = params;
         return this;
     }
 
@@ -73,7 +67,4 @@ public class Builder<Params, Result> {
         build().execute((Params[]) mParams.toArray());
     }
 
-    public void buildAndExecuteOnExecutor(Executor executor) {
-        build().executeOnExecutor(executor, (Params[]) mParams.toArray());
-    }
 }

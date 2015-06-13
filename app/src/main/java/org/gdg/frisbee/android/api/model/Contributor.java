@@ -35,24 +35,12 @@ public class Contributor {
         this.avatarUrl = avatarUrl;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
     public String getHtmlUrl() {
         return htmlUrl;
     }
 
     public void setHtmlUrl(String htmlUrl) {
         this.htmlUrl = htmlUrl;
-    }
-
-    public int getContributions() {
-        return contributions;
     }
 
     public void setContributions(int contributions) {

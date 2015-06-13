@@ -24,9 +24,8 @@ package org.gdg.frisbee.android.api.model;
  * To change this template use File | Settings | File Templates.
  */
 public class GcmRegistrationRequest {
-    private String registrationId;
 
     public GcmRegistrationRequest(String registrationId) {
-        this.registrationId = registrationId;
+        String registrationId1 = registrationId;
     }
 }

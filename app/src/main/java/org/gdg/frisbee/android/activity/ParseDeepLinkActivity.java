@@ -9,6 +9,7 @@ import com.google.android.gms.plus.PlusShare;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.event.EventActivity;
 
 import timber.log.Timber;

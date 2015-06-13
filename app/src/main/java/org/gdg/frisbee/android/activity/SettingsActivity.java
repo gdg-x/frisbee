@@ -24,6 +24,7 @@ import com.google.android.gms.analytics.Tracker;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.common.GdgActivity;
 
 public class SettingsActivity extends GdgActivity {
 

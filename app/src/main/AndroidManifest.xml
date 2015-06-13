@@ -65,13 +65,13 @@
       android:value=".activity.SearchActivity"/>
 
     <activity
-      android:name=".activity.MainActivity"
+      android:name=".chapter.MainActivity"
       android:theme="@style/Theme.GDG.Main"/>
     <activity
-      android:name=".activity.GdeActivity"
+      android:name=".gde.GdeActivity"
       android:theme="@style/Theme.GDG.WithNavDrawer"/>
     <activity
-      android:name=".activity.AboutActivity"
+      android:name=".about.AboutActivity"
       android:theme="@style/Theme.GDG"/>
     <activity
       android:name=".eventseries.TaggedEventSeriesActivity"
@@ -80,7 +80,7 @@
       android:name=".activity.SettingsActivity"
       android:theme="@style/Theme.GDG"/>
     <activity
-      android:name=".activity.ArrowActivity"
+      android:name=".arrow.ArrowActivity"
       android:screenOrientation="portrait"
       android:theme="@style/Theme.GDG.WithNavDrawer">
       <intent-filter>
@@ -97,25 +97,25 @@
       </intent-filter>
     </activity>
     <activity
-      android:name=".activity.ArrowTaggedActivity"
+      android:name=".arrow.ArrowTaggedActivity"
       android:screenOrientation="portrait"
       android:theme="@style/Theme.GDG.WithNavDrawer"/>
     <activity
-      android:name=".activity.FirstStartActivity"/>
+      android:name=".onboarding.FirstStartActivity"/>
     <activity
-      android:name=".activity.YoutubeActivity"
+      android:name=".chapter.YoutubeActivity"
       android:configChanges="keyboardHidden|orientation|screenSize"
       android:screenOrientation="sensor"
       android:theme="@style/Theme.GDG.SeeTrough"/>
     <activity
-      android:name=".activity.StartActivity">
+      android:name=".onboarding.StartActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
     <activity
-      android:name=".activity.PulseActivity"
+      android:name=".pulse.PulseActivity"
       android:theme="@style/Theme.GDG.WithNavDrawer"/>
     <activity android:name=".activity.ParseDeepLinkActivity">
       <intent-filter>
@@ -140,7 +140,7 @@
     <activity
       android:name=".event.EventActivity"
       android:theme="@style/Theme.GDG"
-      android:parentActivityName=".activity.MainActivity">
+      android:parentActivityName=".chapter.MainActivity">
     </activity>
 
     <provider

@@ -128,11 +128,7 @@ public class SwipeRefreshRecyclerViewFragment extends GdgRecyclerFragment {
         @Override
         public boolean canChildScrollUp() {
             final RecyclerView recyclerView = getListView();
-            if (recyclerView.getVisibility() == View.VISIBLE) {
-                return canListViewScrollUp(recyclerView);
-            } else {
-                return false;
-            }
+            return recyclerView.getVisibility() == View.VISIBLE && canListViewScrollUp(recyclerView);
         }
 
     }

@@ -43,16 +43,16 @@ public interface ILastLocationFinder {
      * @param minTime Minimum time required between location updates.
      * @return The most accurate and / or timely previously detected location.
      */
-    public Location getLastBestLocation(int minDistance, long minTime);
+    Location getLastBestLocation(int minDistance, long minTime);
 
     /**
      * Set the {@link LocationListener} that may receive a one-shot current location update.
      * @param l LocationListener
      */
-    public void setChangedLocationListener(LocationListener l);
+    void setChangedLocationListener(LocationListener l);
 
     /**
      * Cancel the one-shot current location update.
      */
-    public void cancel();
+    void cancel();
 }
