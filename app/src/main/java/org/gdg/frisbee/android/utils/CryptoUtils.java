@@ -66,6 +66,13 @@ public class CryptoUtils {
         return cipher.doFinal(encrypted);
     }
 
+    public static String toHex(String txt) {
+        return toHex(txt.getBytes());
+    }
+    public static String fromHex(String hex) {
+        return new String(toByte(hex));
+    }
+
     public static byte[] toByte(String hexString) {
         int len = hexString.length() / 2;
         byte[] result = new byte[len];

@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.task;
 import android.os.AsyncTask;
 
 import java.lang.reflect.Array;
+import java.util.Arrays;
 
 /**
  * GDG Aachen
@@ -42,6 +43,10 @@ public class CommonAsyncTask<Params, Result> extends AsyncTask<Params, Void, Res
         super();
         mParamsType = paramsType;
         mResultType = resultType;
+    }
+
+    public Class<Result> getResultType() {
+        return mResultType;
     }
 
     public Class<Params> getParamsType() {
@@ -84,16 +89,32 @@ public class CommonAsyncTask<Params, Result> extends AsyncTask<Params, Void, Res
         }
     }
 
+    public OnBackgroundExecuteListener<Params, Result> getBackgroundListener() {
+        return mBackgroundListener;
+    }
+
     public void setBackgroundListener(OnBackgroundExecuteListener<Params, Result> mBackgroundListener) {
         this.mBackgroundListener = mBackgroundListener;
+    }
+
+    public OnPreExecuteListener getPreListener() {
+        return mPreListener;
     }
 
     public void setPreListener(OnPreExecuteListener mPreListener) {
         this.mPreListener = mPreListener;
     }
 
+    public OnPostExecuteListener<Params, Result> getPostListener() {
+        return mPostListener;
+    }
+
     public void setPostListener(OnPostExecuteListener<Params, Result> mPostListener) {
         this.mPostListener = mPostListener;
+    }
+
+    public Params[] getParameters() {
+        return mParams;
     }
 
     public void setParameters(Params[] mParams) {
@@ -112,4 +133,15 @@ public class CommonAsyncTask<Params, Result> extends AsyncTask<Params, Void, Res
         void onPreExecute();
     }
 
+    public CommonAsyncTask<Params, Result> execute() {
+        super.execute(mParams);
+        return this;
+    }
+
+    public CommonAsyncTask<Params, Result> executeWithAdditionalParams(Params[] p) {
+        Params[] result = Arrays.copyOf(mParams, mParams.length + p.length);
+        System.arraycopy(p, 0, result, mParams.length, p.length);
+        super.execute(result);
+        return this;
+    }
 }
