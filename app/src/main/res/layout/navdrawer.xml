@@ -15,49 +15,11 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
 -->
-
-<!--<org.gdg.frisbee.android.widget.ScrimInsetsFrameLayout android:id="@+id/navdrawer"
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:layout_width="@dimen/navdrawer_width"
-  android:layout_height="match_parent"
-  android:layout_gravity="start"
-  android:fitsSystemWindows="true"
-  android:background="@color/navdrawer_background"
-  app:insetForeground="@color/navdrawer_inset_foreground">
-
-  <LinearLayout
-    android:layout_width="match_parent"
+<android.support.design.widget.NavigationView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_view"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:layout_gravity="start"
-    android:clickable="true"
-    android:orientation="vertical">
-
-    <ListView
-      android:id="@+id/navdrawer_list"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:choiceMode="singleChoice"
-      android:divider="@android:color/transparent"
-      android:dividerHeight="0dp" />
-  </LinearLayout>
-</org.gdg.frisbee.android.widget.ScrimInsetsFrameLayout>-->
-
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/drawer_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
-
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header"/>
-
-        <!--
-        app:menu="@menu/drawer_view"  -->
-</android.support.v4.widget.DrawerLayout>
+    android:fitsSystemWindows="true"
+    app:headerLayout="@layout/nav_header" />
