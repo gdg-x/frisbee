@@ -71,7 +71,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     protected DrawerAdapter mDrawerAdapter;
     protected ActionBarDrawerToggle mDrawerToggle;
     protected String mStoredHomeChapterId;
-    @InjectView(R.id.drawer_layout)
+    @InjectView(R.id.drawer)
     DrawerLayout mDrawerLayout;
     @InjectView(R.id.navdrawer_image)
     ImageView mDrawerImage;
@@ -287,13 +287,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Pass the event to ActionBarDrawerToggle, if it returns
         // true, then it has handled the app icon touch event
-        //return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     @Override
