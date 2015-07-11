@@ -45,7 +45,6 @@ import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.about.AboutActivity;
 import org.gdg.frisbee.android.activity.SettingsActivity;
-import org.gdg.frisbee.android.common.DrawerAdapter.DrawerItem;
 import org.gdg.frisbee.android.api.GapiOkTransport;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.arrow.ArrowActivity;
@@ -82,7 +81,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     NavigationView mNavigationView;
 
     private Plus plusClient;
-    private DrawerItem drawerItemToNavigateAfterSignIn = null;
+    private MenuItem drawerItemToNavigateAfterSignIn = null;
     private static final int GROUP_ID = 1;
 
     @Override
@@ -162,14 +161,15 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 @Override
                 public boolean onNavigationItemSelected(MenuItem menuItem) {
                     menuItem.setChecked(true);
+                    onDrawerItemClick(menuItem);
                     mDrawerLayout.closeDrawers();
                     return true;
                 }
             });
     }
 
-    private void onDrawerItemClick(final DrawerItem item) {
-        switch (item.getId()) {
+    private void onDrawerItemClick(final MenuItem item) {
+        switch (item.getItemId()) {
             case Const.DRAWER_ACHIEVEMENTS:
                 if (PrefUtils.isSignedIn(this) && getGoogleApiClient().isConnected()) {
                     startActivityForResult(Games.Achievements.getAchievementsIntent(getGoogleApiClient()), 0);
@@ -231,12 +231,12 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 .show();
     }
 
-    public void onDrawerSpecialItemClick(DrawerItem item) {
+    public void onDrawerSpecialItemClick(MenuItem item) {
 
         final ArrayList<TaggedEventSeries> currentEventSeries =
                 App.getInstance().currentTaggedEventSeries();
         for (TaggedEventSeries taggedEventSeries : currentEventSeries) {
-            if (taggedEventSeries.getDrawerIconResId() == item.getIcon()) {
+            if (getString(taggedEventSeries.getTitleResId()) == item.getTitle()) {
 
                 Bundle special = new Bundle();
                 special.putString(Const.EXTRA_TAGGED_EVENT_CACHEKEY, taggedEventSeries.getTag());
