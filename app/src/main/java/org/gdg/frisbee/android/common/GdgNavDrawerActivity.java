@@ -27,6 +27,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -82,6 +83,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
     private Plus plusClient;
     private DrawerItem drawerItemToNavigateAfterSignIn = null;
+    private static final int GROUP_ID = 1;
 
     @Override
     public void setContentView(int layoutResId) {
@@ -135,6 +137,25 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 */
     private void setupDrawerContent(NavigationView navigationView) {
+
+        Menu menu = navigationView.getMenu();
+        menu.add(GROUP_ID, Const.DRAWER_HOME, Menu.NONE, R.string.home_gdg).setIcon(R.drawable.ic_drawer_home_gdg);
+        menu.add(GROUP_ID, Const.DRAWER_GDE, Menu.NONE, R.string.gde).setIcon(R.drawable.ic_drawer_gde);
+        menu.add(GROUP_ID, Const.DRAWER_PULSE, Menu.NONE, R.string.pulse).setIcon(R.drawable.ic_drawer_pulse);
+
+        //adding special events in navigation drawer
+        final ArrayList<TaggedEventSeries> currentEventSeries =
+                App.getInstance().currentTaggedEventSeries();
+        for (TaggedEventSeries taggedEventSeries : currentEventSeries) {
+            menu.add(GROUP_ID, Const.DRAWER_SPECIAL, Menu.NONE, taggedEventSeries.getTitleResId()).setIcon(taggedEventSeries.getDrawerIconResId());
+        }
+
+        menu.add(GROUP_ID, Const.DRAWER_ACHIEVEMENTS, Menu.NONE, R.string.achievements).setIcon(R.drawable.ic_drawer_achievements);
+        menu.add(GROUP_ID, Const.DRAWER_ARROW, Menu.NONE, R.string.arrow).setIcon(R.drawable.ic_drawer_arrow);
+        menu.add(GROUP_ID, Const.DRAWER_SETTINGS, Menu.NONE, R.string.settings).setIcon(R.drawable.ic_drawer_settings);
+        menu.add(GROUP_ID, Const.DRAWER_HELP, Menu.NONE, R.string.help).setIcon(R.drawable.ic_drawer_help);
+        menu.add(GROUP_ID, Const.DRAWER_FEEDBACK, Menu.NONE, R.string.feedback).setIcon(R.drawable.ic_drawer_feedback);
+        menu.add(GROUP_ID, Const.DRAWER_ABOUT, Menu.NONE, R.string.about).setIcon(R.drawable.ic_drawer_about);
 
         navigationView.setNavigationItemSelectedListener(
             new NavigationView.OnNavigationItemSelectedListener() {
