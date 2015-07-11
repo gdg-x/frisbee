@@ -22,15 +22,14 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 
 import com.google.android.gms.games.Games;
 import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
@@ -64,7 +63,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.InjectView;
-import butterknife.OnItemClick;
 
 public abstract class GdgNavDrawerActivity extends GdgActivity {
 
@@ -73,14 +71,14 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     protected DrawerAdapter mDrawerAdapter;
     protected ActionBarDrawerToggle mDrawerToggle;
     protected String mStoredHomeChapterId;
-    @InjectView(R.id.drawer)
+    @InjectView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
-    @InjectView(R.id.navdrawer_list)
-    ListView mDrawerContent;
     @InjectView(R.id.navdrawer_image)
     ImageView mDrawerImage;
     @InjectView(R.id.navdrawer_user_picture)
     ImageView mDrawerUserPicture;
+    @InjectView(R.id.nav_view)
+    NavigationView mNavigationView;
 
     private Plus plusClient;
     private DrawerItem drawerItemToNavigateAfterSignIn = null;
@@ -93,8 +91,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     private void initNavigationDrawer() {
-        mDrawerAdapter = new DrawerAdapter(this);
-        mDrawerContent.setAdapter(mDrawerAdapter);
 
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
@@ -121,8 +117,12 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
+        if (mNavigationView != null) {
+            setupDrawerContent(mNavigationView);
+        }
     }
 
+/*
     @OnItemClick(R.id.navdrawer_list)
     public void onDrawerItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
@@ -132,6 +132,19 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
         DrawerItem item = (DrawerItem) mDrawerAdapter.getItem(i);
         onDrawerItemClick(item);
+    }
+*/
+    private void setupDrawerContent(NavigationView navigationView) {
+
+        navigationView.setNavigationItemSelectedListener(
+            new NavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(MenuItem menuItem) {
+                    menuItem.setChecked(true);
+                    mDrawerLayout.closeDrawers();
+                    return true;
+                }
+            });
     }
 
     private void onDrawerItemClick(final DrawerItem item) {
@@ -253,7 +266,13 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Pass the event to ActionBarDrawerToggle, if it returns
         // true, then it has handled the app icon touch event
-        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+        //return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -261,7 +280,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         super.onResume();
 
         if (PrefUtils.shouldOpenDrawerOnStart(this)) {
-            mDrawerLayout.openDrawer(Gravity.START);
+            mDrawerLayout.openDrawer(GravityCompat.START);
         }
 
         maybeUpdateChapterImage();
@@ -288,12 +307,12 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     protected boolean isNavDrawerOpen() {
-        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(Gravity.START);
+        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START);
     }
 
     protected void closeNavDrawer() {
         if (mDrawerLayout != null) {
-            mDrawerLayout.closeDrawer(Gravity.START);
+            mDrawerLayout.closeDrawer(GravityCompat.START);
         }
     }
 

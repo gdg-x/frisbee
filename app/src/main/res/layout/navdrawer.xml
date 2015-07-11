@@ -16,7 +16,7 @@
   ~ limitations under the License.
 -->
 
-<org.gdg.frisbee.android.widget.ScrimInsetsFrameLayout android:id="@+id/navdrawer"
+<!--<org.gdg.frisbee.android.widget.ScrimInsetsFrameLayout android:id="@+id/navdrawer"
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="@dimen/navdrawer_width"
@@ -33,32 +33,6 @@
     android:clickable="true"
     android:orientation="vertical">
 
-    <RelativeLayout
-      android:layout_width="@dimen/navdrawer_width"
-      android:layout_height="@dimen/navdrawer_image_height">
-
-      <ImageView
-        android:id="@+id/navdrawer_image"
-        android:layout_width="@dimen/navdrawer_width"
-        android:layout_height="@dimen/navdrawer_image_height"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_logo_wide"
-        android:contentDescription="@string/cd_navdrawer_image"/>
-
-      <ImageView
-        android:id="@+id/navdrawer_user_picture"
-        android:layout_width="@dimen/navdrawer_user_picture_size"
-        android:layout_height="@dimen/navdrawer_user_picture_size"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="@dimen/keyline_1"
-        android:layout_marginLeft="@dimen/keyline_1"
-        android:layout_marginStart="@dimen/keyline_1"
-        android:scaleType="centerCrop"
-        android:contentDescription="@string/cd_navdrawer_user_picture"/>
-    </RelativeLayout>
-
     <ListView
       android:id="@+id/navdrawer_list"
       android:layout_width="match_parent"
@@ -67,4 +41,22 @@
       android:divider="@android:color/transparent"
       android:dividerHeight="0dp" />
   </LinearLayout>
-</org.gdg.frisbee.android.widget.ScrimInsetsFrameLayout>
+</org.gdg.frisbee.android.widget.ScrimInsetsFrameLayout>-->
+
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/drawer_view" />
+
+</android.support.v4.widget.DrawerLayout>
