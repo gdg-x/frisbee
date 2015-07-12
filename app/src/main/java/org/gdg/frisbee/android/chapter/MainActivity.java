@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -31,6 +32,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.Spinner;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -48,6 +50,7 @@ import org.gdg.frisbee.android.eventseries.GdgEventListFragment;
 import org.gdg.frisbee.android.onboarding.FirstStartActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.Utils;
+import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.gdg.frisbee.android.widget.SlidingTabLayout;
 import org.joda.time.DateTime;
 
@@ -56,8 +59,6 @@ import java.util.Collections;
 import java.util.List;
 
 import butterknife.InjectView;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import timber.log.Timber;
@@ -90,6 +91,9 @@ public class MainActivity extends GdgNavDrawerActivity {
 
     private ChapterComparator mLocationComparator;
     private Spinner mSpinner;
+
+    @InjectView(R.id.content_frame)
+    FrameLayout mContentFrameLayout;
 
     /**
      * Called when the activity is first created.
@@ -138,8 +142,9 @@ public class MainActivity extends GdgNavDrawerActivity {
                     if (Utils.isOnline(MainActivity.this)) {
                         fetchChapters();
                     } else {
-                        Crouton.makeText(MainActivity.this, getString(R.string.offline_alert),
-                                Style.ALERT, R.id.content_frame).show();
+                        Snackbar snackbar = Snackbar.make(mContentFrameLayout, getString(R.string.offline_alert),
+                                Snackbar.LENGTH_SHORT);
+                        ColoredSnackBar.alert(snackbar).show();
                     }
                 }
             });
@@ -265,8 +270,9 @@ public class MainActivity extends GdgNavDrawerActivity {
 
             public void failure(RetrofitError error) {
                 try {
-                    Crouton.makeText(MainActivity.this, R.string.fetch_chapters_failed,
-                            Style.ALERT, R.id.content_frame).show();
+                    Snackbar snackbar = Snackbar.make(mContentFrameLayout, getString(R.string.fetch_chapters_failed),
+                            Snackbar.LENGTH_SHORT);
+                    ColoredSnackBar.alert(snackbar).show();
                 } catch (IllegalStateException exception) {
                 }
                 Timber.e(error, "Couldn't fetch chapter list");

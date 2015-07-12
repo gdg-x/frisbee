@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.eventseries;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -32,14 +33,12 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.SimpleEvent;
 import org.gdg.frisbee.android.event.EventActivity;
 import org.gdg.frisbee.android.common.GdgListFragment;
+import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
-
 import java.util.ArrayList;
-
 import butterknife.ButterKnife;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
+
 
 /**
  * GDG Aachen
@@ -60,8 +59,9 @@ public abstract class EventListFragment extends GdgListFragment {
         setIsLoading(false);
         e.printStackTrace();
         if (isAdded()) {
-            Crouton.makeText(getActivity(), R.string.fetch_events_failed,
-                    Style.ALERT, R.id.content_frame).show();
+            Snackbar snackbar = Snackbar.make(getView(), R.string.fetch_events_failed,
+                    Snackbar.LENGTH_SHORT);
+            ColoredSnackBar.alert(snackbar).show();
         }
     }
 

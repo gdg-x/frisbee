@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.chapter;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.SpannedString;
@@ -43,14 +44,13 @@ import org.gdg.frisbee.android.common.BaseFragment;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.Utils;
+import org.gdg.frisbee.android.view.ColoredSnackBar;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 import timber.log.Timber;
 
 public class InfoFragment extends BaseFragment {
@@ -177,8 +177,10 @@ public class InfoFragment extends BaseFragment {
                                     }
                                 });
                             } catch (Exception ex) {
-                                Crouton.makeText(getActivity(), getString(R.string.bogus_organizer, org),
-                                        Style.ALERT, R.id.content_frame);
+
+                                Snackbar snackbar = Snackbar.make(getView(), getString(R.string.bogus_organizer, org),
+                                        Snackbar.LENGTH_SHORT);
+                                ColoredSnackBar.alert(snackbar).show();
                             }
                         }
                     }
@@ -186,8 +188,9 @@ public class InfoFragment extends BaseFragment {
 
                 @Override
                 public void onNotFound(String key) {
-                    Crouton.makeText(getActivity(), R.string.offline_alert,
-                            Style.ALERT, R.id.content_frame).show();
+                    Snackbar snackbar = Snackbar.make(getView(), R.string.offline_alert,
+                            Snackbar.LENGTH_SHORT);
+                    ColoredSnackBar.alert(snackbar).show();
                 }
             });
         }
@@ -257,8 +260,9 @@ public class InfoFragment extends BaseFragment {
                             mFetchOrganizerInfo.addParameter(organizerParameter);
                         } catch (Exception ex) {
                             if (isAdded()) {
-                                Crouton.makeText(getActivity(), getString(R.string.bogus_organizer, org),
-                                        Style.ALERT, R.id.content_frame);
+                                Snackbar snackbar = Snackbar.make(getView(), getString(R.string.bogus_organizer, org),
+                                        Snackbar.LENGTH_SHORT);
+                                ColoredSnackBar.alert(snackbar).show();
                             }
                         }
                     }
