@@ -73,6 +73,7 @@ The first 3 (`android_simple_api_access_key`, `browser_simple_api_access_key`, `
 * [Stefan Hoth](https://github.com/stefanhoth)
 * [Bartek](https://github.com/przybylski)
 * [Jerrell Mardis](https://github.com/jerrellmardis)
+* [Paresh Mayani](https://github.com/PareshMayani)
 
 ###Translation
 
