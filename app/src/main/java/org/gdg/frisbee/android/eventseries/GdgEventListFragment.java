@@ -71,7 +71,7 @@ public class GdgEventListFragment extends EventListFragment {
                     setIsLoading(false);
                     Snackbar snackbar = Snackbar.make(getView(), R.string.cached_content,
                             Snackbar.LENGTH_SHORT);
-                    ColoredSnackBar.info(snackbar).show();
+                    ColoredSnackBar.alert(snackbar).show();
                 }
 
                 @Override
