@@ -2,12 +2,14 @@ package org.gdg.frisbee.android.gde;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.SparseArray;
+import android.widget.FrameLayout;
 
 import com.google.gson.FieldNamingPolicy;
 
@@ -20,16 +22,14 @@ import org.gdg.frisbee.android.api.model.GdeList;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.Utils;
+import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.gdg.frisbee.android.widget.SlidingTabLayout;
 import org.joda.time.DateTime;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
-
 import butterknife.InjectView;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -43,6 +43,9 @@ public class GdeActivity extends GdgNavDrawerActivity {
 
     @InjectView(R.id.sliding_tabs)
     SlidingTabLayout mSlidingTabLayout;
+
+    @InjectView(R.id.content_frame)
+    FrameLayout mContentLayout;
 
     private Handler mHandler = new Handler();
 
@@ -102,8 +105,9 @@ public class GdeActivity extends GdgNavDrawerActivity {
             public void failure(RetrofitError error) {
 
                 try {
-                    Crouton.makeText(GdeActivity.this, R.string.fetch_gde_failed,
-                            Style.ALERT, R.id.content_frame).show();
+                    Snackbar snackbar = Snackbar.make(mContentLayout, R.string.fetch_gde_failed,
+                            Snackbar.LENGTH_SHORT);
+                    ColoredSnackBar.alert(snackbar).show();
                 } catch (IllegalStateException exception) {
                 }
                 Timber.e(error, "Could'nt fetch GDE list");
@@ -130,6 +134,8 @@ public class GdeActivity extends GdgNavDrawerActivity {
 
                 mViewPager.setAdapter(mViewPagerAdapter);
                 mSlidingTabLayout.setViewPager(mViewPager);
+
+                getAchievementActionHandler().handleLookingForExperts();
             }
         });
     }

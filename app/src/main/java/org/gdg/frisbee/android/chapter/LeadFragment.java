@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.lead.LeadMessage;
 
 import butterknife.ButterKnife;
@@ -58,6 +59,12 @@ public class LeadFragment extends ListFragment {
         final LeadMessage item = mAdapter.getItem(position);
         if (item.getType() == LeadMessage.Type.resource) {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(item.getLinkUrl())));
+
+            Activity activity = getActivity();
+            if (activity != null && activity instanceof GdgActivity) {
+                ((GdgActivity) activity).getAchievementActionHandler()
+                        .handleCuriousOrganizer();
+            }
         }
     }
 

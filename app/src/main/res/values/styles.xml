@@ -26,8 +26,4 @@
   <style name="TextAppearance.GDG.PopupMenu.Large" parent="TextAppearance.AppCompat.Light.Widget.PopupMenu.Large">
     <item name="android:textColor">@color/asbestos</item>
   </style>
-
-  <style name="TextAppearance.GDG.FloatLabel" parent="TextAppearance.AppCompat.Small">
-    <item name="android:textColor">?colorAccent</item>
-  </style>
 </resources>

@@ -6,11 +6,17 @@ Save this file as res/values/games-ids.xml in your project.
 <resources>
     <string name="app_id" translatable="false">429371117063</string>
     <string name="achievement_signin_palooza" translatable="false">CgkIh5yNxL8MEAIQAA</string>
-    <string name="achievement_cinephile" translatable="false">CgkIh5yNxL8MEAIQAQ</string>
     <string name="achievement_gdg_maniac" translatable="false">CgkIh5yNxL8MEAIQAg</string>
     <string name="achievement_thanks_for_coming_back." translatable="false">CgkIh5yNxL8MEAIQAw</string>
     <string name="achievement_king_of_the_hill" translatable="false">CgkIh5yNxL8MEAIQBA</string>
+    <string name="achievement_looking_for_experts" translatable="false">CgkIh5yNxL8MEAIQDw</string>
+    <string name="achievement_feeling_social__level_1" translatable="false">CgkIh5yNxL8MEAIQEA</string>
+    <string name="achievement_feeling_social__level_2" translatable="false">CgkIh5yNxL8MEAIQEQ</string>
+    <string name="achievement_feeling_popular__level_3" translatable="false">CgkIh5yNxL8MEAIQEg</string>
+    <string name="achievement_kisses_3_from_gdgx_team" translatable="false">CgkIh5yNxL8MEAIQEw</string>
+    <string name="achievement_power_user" translatable="false">CgkIh5yNxL8MEAIQFA</string>
+    <string name="achievement_curious_organizer" translatable="false">CgkIh5yNxL8MEAIQFQ</string>
+    <string name="achievement_cinephile" translatable="false">CgkIh5yNxL8MEAIQAQ</string>
     <string name="achievement_major_cinephile" translatable="false">CgkIh5yNxL8MEAIQBQ</string>
-    <string name="achievement_gdl_addict" translatable="false">CgkIh5yNxL8MEAIQBg</string>
     <string name="leaderboard_organizer_hunt" translatable="false">CgkIh5yNxL8MEAIQBw</string>
 </resources>

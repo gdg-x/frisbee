@@ -30,17 +30,13 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.Plus;
-
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.achievements.AchievementActionHandler;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.ScopedBus;
 import org.gdg.frisbee.android.utils.Utils;
-
 import java.util.List;
-
 import butterknife.ButterKnife;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
 
 public abstract class GdgActivity extends TrackableActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -233,7 +229,6 @@ public abstract class GdgActivity extends TrackableActivity implements
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Crouton.cancelAllCroutons();
     }
 
     @Override
