@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.pulse;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,13 +33,10 @@ import org.gdg.frisbee.android.api.model.PulseEntry;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.GdgListFragment;
+import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
-
 import java.util.Map;
-
 import butterknife.ButterKnife;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import timber.log.Timber;
@@ -128,8 +126,9 @@ public class PulseFragment extends GdgListFragment {
                 @Override
                 public void failure(RetrofitError error) {
                     if (isAdded()) {
-                        Crouton.makeText(getActivity(), R.string.fetch_chapters_failed,
-                                Style.ALERT, R.id.content_frame).show();
+                        Snackbar snackbar = Snackbar.make(getView(), R.string.fetch_chapters_failed,
+                                Snackbar.LENGTH_SHORT);
+                        ColoredSnackBar.alert(snackbar).show();
                     }
                     Timber.e(error, "Couldn't fetch pulse");
                 }
@@ -153,8 +152,9 @@ public class PulseFragment extends GdgListFragment {
                 @Override
                 public void failure(RetrofitError error) {
                     if (isAdded()) {
-                        Crouton.makeText(getActivity(), R.string.fetch_chapters_failed,
-                                Style.ALERT, R.id.content_frame).show();
+                        Snackbar snackbar = Snackbar.make(getView(), R.string.fetch_chapters_failed,
+                                Snackbar.LENGTH_SHORT);
+                        ColoredSnackBar.alert(snackbar).show();
                     }
                     Timber.e(error, "Couldn't fetch pulse");
                 }

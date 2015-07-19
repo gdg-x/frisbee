@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single" android:id="@+id/navigation_menu">
+
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_drawer_home_gdg"
+            android:title="@string/home_gdg" />
+
+        <item
+            android:id="@+id/nav_gde"
+            android:icon="@drawable/ic_drawer_gde"
+            android:title="@string/gde" />
+
+        <item
+            android:id="@+id/nav_pulse"
+            android:icon="@drawable/ic_drawer_pulse"
+            android:title="@string/pulse" />
+
+        <item
+            android:id="@+id/nav_achievements"
+            android:icon="@drawable/ic_drawer_achievements"
+            android:title="@string/achievements" />
+
+        <item
+            android:id="@+id/nav_arrow"
+            android:icon="@drawable/ic_drawer_arrow"
+            android:title="@string/arrow" />
+
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_drawer_settings"
+            android:title="@string/settings" />
+
+        <item
+            android:id="@+id/nav_help"
+            android:icon="@drawable/ic_drawer_help"
+            android:title="@string/help" />
+
+        <item
+            android:id="@+id/nav_feedback"
+            android:icon="@drawable/ic_drawer_feedback"
+            android:title="@string/feedback" />
+
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_drawer_about"
+            android:title="@string/about" />
+
+    </group>
+</menu>
