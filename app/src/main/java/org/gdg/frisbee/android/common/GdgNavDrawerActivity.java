@@ -22,15 +22,15 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 
 import com.google.android.gms.games.Games;
 import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
@@ -45,7 +45,6 @@ import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.about.AboutActivity;
 import org.gdg.frisbee.android.activity.SettingsActivity;
-import org.gdg.frisbee.android.common.DrawerAdapter.DrawerItem;
 import org.gdg.frisbee.android.api.GapiOkTransport;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.arrow.ArrowActivity;
@@ -64,7 +63,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.InjectView;
-import butterknife.OnItemClick;
 
 public abstract class GdgNavDrawerActivity extends GdgActivity {
 
@@ -75,15 +73,16 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     protected String mStoredHomeChapterId;
     @InjectView(R.id.drawer)
     DrawerLayout mDrawerLayout;
-    @InjectView(R.id.navdrawer_list)
-    ListView mDrawerContent;
     @InjectView(R.id.navdrawer_image)
     ImageView mDrawerImage;
     @InjectView(R.id.navdrawer_user_picture)
     ImageView mDrawerUserPicture;
+    @InjectView(R.id.nav_view)
+    NavigationView mNavigationView;
 
     private Plus plusClient;
-    private DrawerItem drawerItemToNavigateAfterSignIn = null;
+    private MenuItem drawerItemToNavigateAfterSignIn = null;
+    private static final int GROUP_ID = 1;
 
     @Override
     public void setContentView(int layoutResId) {
@@ -93,8 +92,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     private void initNavigationDrawer() {
-        mDrawerAdapter = new DrawerAdapter(this);
-        mDrawerContent.setAdapter(mDrawerAdapter);
 
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
@@ -121,21 +118,53 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
+        if (mNavigationView != null) {
+            setupDrawerContent(mNavigationView);
+        }
+
     }
 
-    @OnItemClick(R.id.navdrawer_list)
-    public void onDrawerItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+    private void setupDrawerContent(NavigationView navigationView) {
+
+        Menu menu = navigationView.getMenu();
+        menu.add(GROUP_ID, Const.DRAWER_HOME, Menu.NONE, R.string.home_gdg).setIcon(R.drawable.ic_drawer_home_gdg);
+        menu.add(GROUP_ID, Const.DRAWER_GDE, Menu.NONE, R.string.gde).setIcon(R.drawable.ic_drawer_gde);
+        menu.add(GROUP_ID, Const.DRAWER_PULSE, Menu.NONE, R.string.pulse).setIcon(R.drawable.ic_drawer_pulse);
+
+        //adding special events in navigation drawer
+        final ArrayList<TaggedEventSeries> currentEventSeries =
+                App.getInstance().currentTaggedEventSeries();
+        for (TaggedEventSeries taggedEventSeries : currentEventSeries) {
+            menu.add(GROUP_ID, Const.DRAWER_SPECIAL, Menu.NONE, taggedEventSeries.getTitleResId()).setIcon(taggedEventSeries.getDrawerIconResId());
+        }
+
+        menu.add(GROUP_ID, Const.DRAWER_ACHIEVEMENTS, Menu.NONE, R.string.achievements).setIcon(R.drawable.ic_drawer_achievements);
+        menu.add(GROUP_ID, Const.DRAWER_ARROW, Menu.NONE, R.string.arrow).setIcon(R.drawable.ic_drawer_arrow);
+        menu.add(GROUP_ID, Const.DRAWER_SETTINGS, Menu.NONE, R.string.settings).setIcon(R.drawable.ic_drawer_settings);
+        menu.add(GROUP_ID, Const.DRAWER_HELP, Menu.NONE, R.string.help).setIcon(R.drawable.ic_drawer_help);
+        menu.add(GROUP_ID, Const.DRAWER_FEEDBACK, Menu.NONE, R.string.feedback).setIcon(R.drawable.ic_drawer_feedback);
+        menu.add(GROUP_ID, Const.DRAWER_ABOUT, Menu.NONE, R.string.about).setIcon(R.drawable.ic_drawer_about);
+
+        navigationView.setNavigationItemSelectedListener(
+
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        menuItem.setChecked(true);
+                        onDrawerItemClick(menuItem);
+                        mDrawerLayout.closeDrawers();
+                        return true;
+                    }
+                });
+    }
+
+    private void onDrawerItemClick(final MenuItem item) {
 
         if (PrefUtils.shouldOpenDrawerOnStart(GdgNavDrawerActivity.this)) {
             PrefUtils.setShouldNotOpenDrawerOnStart(GdgNavDrawerActivity.this);
         }
 
-        DrawerItem item = (DrawerItem) mDrawerAdapter.getItem(i);
-        onDrawerItemClick(item);
-    }
-
-    private void onDrawerItemClick(final DrawerItem item) {
-        switch (item.getId()) {
+        switch (item.getItemId()) {
             case Const.DRAWER_ACHIEVEMENTS:
                 if (PrefUtils.isSignedIn(this) && getGoogleApiClient().isConnected()) {
                     startActivityForResult(Games.Achievements.getAchievementsIntent(getGoogleApiClient()), 0);
@@ -197,12 +226,12 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 .show();
     }
 
-    public void onDrawerSpecialItemClick(DrawerItem item) {
+    public void onDrawerSpecialItemClick(MenuItem item) {
 
         final ArrayList<TaggedEventSeries> currentEventSeries =
                 App.getInstance().currentTaggedEventSeries();
         for (TaggedEventSeries taggedEventSeries : currentEventSeries) {
-            if (taggedEventSeries.getDrawerIconResId() == item.getIcon()) {
+            if (getString(taggedEventSeries.getTitleResId()) == item.getTitle()) {
 
                 Bundle special = new Bundle();
                 special.putString(Const.EXTRA_TAGGED_EVENT_CACHEKEY, taggedEventSeries.getTag());
@@ -261,7 +290,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         super.onResume();
 
         if (PrefUtils.shouldOpenDrawerOnStart(this)) {
-            mDrawerLayout.openDrawer(Gravity.START);
+            mDrawerLayout.openDrawer(GravityCompat.START);
         }
 
         maybeUpdateChapterImage();
@@ -288,12 +317,12 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     protected boolean isNavDrawerOpen() {
-        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(Gravity.START);
+        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START);
     }
 
     protected void closeNavDrawer() {
         if (mDrawerLayout != null) {
-            mDrawerLayout.closeDrawer(Gravity.START);
+            mDrawerLayout.closeDrawer(GravityCompat.START);
         }
     }
 
