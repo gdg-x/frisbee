@@ -68,7 +68,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
     private final HttpTransport mTransport = new GapiOkTransport();
     private final JsonFactory mJsonFactory = new GsonFactory();
-    protected DrawerAdapter mDrawerAdapter;
     protected ActionBarDrawerToggle mDrawerToggle;
     protected String mStoredHomeChapterId;
     @InjectView(R.id.drawer)
@@ -140,6 +139,8 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
         menu.add(GROUP_ID, Const.DRAWER_ACHIEVEMENTS, Menu.NONE, R.string.achievements).setIcon(R.drawable.ic_drawer_achievements);
         menu.add(GROUP_ID, Const.DRAWER_ARROW, Menu.NONE, R.string.arrow).setIcon(R.drawable.ic_drawer_arrow);
+
+        menu.addSubMenu("");
         menu.add(GROUP_ID, Const.DRAWER_SETTINGS, Menu.NONE, R.string.settings).setIcon(R.drawable.ic_drawer_settings);
         menu.add(GROUP_ID, Const.DRAWER_HELP, Menu.NONE, R.string.help).setIcon(R.drawable.ic_drawer_help);
         menu.add(GROUP_ID, Const.DRAWER_FEEDBACK, Menu.NONE, R.string.feedback).setIcon(R.drawable.ic_drawer_feedback);
