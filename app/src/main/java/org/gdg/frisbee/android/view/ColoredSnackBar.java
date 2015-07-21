@@ -8,9 +8,9 @@ import android.view.View;
  */
 public class ColoredSnackBar {
 
-    private static final int red = 0xfff44336;
-    private static final int green = 0xff4caf50;
-    private static final int blue = 0xff2195f3;
+    private static final int red = 0xffff4444;
+    private static final int green = 0xff99cc00;
+    private static final int blue = 0xff33b5e5;
     private static final int orange = 0xffffc107;
 
     private ColoredSnackBar() {
