@@ -79,8 +79,6 @@ public abstract class PreferenceFragment extends Fragment {
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle savedInstanceState) {
         mList = new ListView(getActivity());
         mList.setId(android.R.id.list);
-        final int horizontalPadding = (int) (HC_HORIZONTAL_PADDING * getResources().getDisplayMetrics().density);
-        mList.setPadding(horizontalPadding, 0, horizontalPadding, 0);
         return mList;
     }
 
