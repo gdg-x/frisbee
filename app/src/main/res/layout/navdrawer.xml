@@ -16,55 +16,12 @@
   ~ limitations under the License.
 -->
 
-<org.gdg.frisbee.android.widget.ScrimInsetsFrameLayout android:id="@+id/navdrawer"
+<android.support.design.widget.NavigationView
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:layout_width="@dimen/navdrawer_width"
+  android:id="@+id/nav_view"
+  android:layout_width="wrap_content"
   android:layout_height="match_parent"
   android:layout_gravity="start"
   android:fitsSystemWindows="true"
-  android:background="@color/navdrawer_background"
-  app:insetForeground="@color/navdrawer_inset_foreground">
-
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="start"
-    android:clickable="true"
-    android:orientation="vertical">
-
-    <RelativeLayout
-      android:layout_width="@dimen/navdrawer_width"
-      android:layout_height="@dimen/navdrawer_image_height">
-
-      <ImageView
-        android:id="@+id/navdrawer_image"
-        android:layout_width="@dimen/navdrawer_width"
-        android:layout_height="@dimen/navdrawer_image_height"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_logo_wide"
-        android:contentDescription="@string/cd_navdrawer_image"/>
-
-      <ImageView
-        android:id="@+id/navdrawer_user_picture"
-        android:layout_width="@dimen/navdrawer_user_picture_size"
-        android:layout_height="@dimen/navdrawer_user_picture_size"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="@dimen/keyline_1"
-        android:layout_marginLeft="@dimen/keyline_1"
-        android:layout_marginStart="@dimen/keyline_1"
-        android:scaleType="centerCrop"
-        android:contentDescription="@string/cd_navdrawer_user_picture"/>
-    </RelativeLayout>
-
-    <ListView
-      android:id="@+id/navdrawer_list"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:choiceMode="singleChoice"
-      android:divider="@android:color/transparent"
-      android:dividerHeight="0dp" />
-  </LinearLayout>
-</org.gdg.frisbee.android.widget.ScrimInsetsFrameLayout>
+  app:headerLayout="@layout/nav_header"/>
