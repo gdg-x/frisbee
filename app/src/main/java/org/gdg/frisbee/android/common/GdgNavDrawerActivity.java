@@ -232,7 +232,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         final ArrayList<TaggedEventSeries> currentEventSeries =
                 App.getInstance().currentTaggedEventSeries();
         for (TaggedEventSeries taggedEventSeries : currentEventSeries) {
-            if (getString(taggedEventSeries.getTitleResId()) == item.getTitle()) {
+            if (getString(taggedEventSeries.getTitleResId()).equals(item.getTitle())) {
 
                 Bundle special = new Bundle();
                 special.putString(Const.EXTRA_TAGGED_EVENT_CACHEKEY, taggedEventSeries.getTag());
