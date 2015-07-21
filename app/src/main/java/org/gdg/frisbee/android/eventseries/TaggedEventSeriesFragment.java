@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.eventseries;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,14 +34,13 @@ import org.gdg.frisbee.android.api.model.TaggedEvent;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.Utils;
+import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 
 import butterknife.ButterKnife;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 
@@ -151,8 +151,9 @@ public class TaggedEventSeriesFragment extends EventListFragment {
                     sortEvents();
                     setIsLoading(false);
                     if (isAdded()) {
-                        Crouton.makeText(getActivity(), R.string.cached_content,
-                                Style.INFO, R.id.content_frame).show();
+                        Snackbar snackbar = Snackbar.make(getView(), R.string.cached_content,
+                                Snackbar.LENGTH_SHORT);
+                        ColoredSnackBar.info(snackbar).show();
                     }
                 }
 
@@ -160,8 +161,9 @@ public class TaggedEventSeriesFragment extends EventListFragment {
                 public void onNotFound(String key) {
                     setIsLoading(false);
                     if (isAdded()) {
-                        Crouton.makeText(getActivity(), R.string.offline_alert,
-                                Style.ALERT, R.id.content_frame).show();
+                        Snackbar snackbar = Snackbar.make(getView(), R.string.offline_alert,
+                                Snackbar.LENGTH_SHORT);
+                        ColoredSnackBar.alert(snackbar).show();
                     }
                 }
             });

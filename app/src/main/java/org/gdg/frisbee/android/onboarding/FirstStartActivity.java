@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -29,6 +30,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -50,14 +52,13 @@ import org.gdg.frisbee.android.api.model.GcmRegistrationResponse;
 import org.gdg.frisbee.android.api.model.HomeGdgRequest;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.PrefUtils;
+import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.gdg.frisbee.android.widget.NonSwipeableViewPager;
 
 import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -77,6 +78,9 @@ public class FirstStartActivity extends AppCompatActivity implements
 
     @InjectView(R.id.loading)
     LinearLayout mLoading;
+
+    @InjectView(R.id.contentLayout)
+    FrameLayout mContentLayout;
 
     private Chapter mSelectedChapter;
     private FirstStartPageAdapter mViewPagerAdapter;
@@ -288,7 +292,9 @@ public class FirstStartActivity extends AppCompatActivity implements
                             @Override
                             public void failure(RetrofitError error) {
                                 setLoadingScreen(false);
-                                Crouton.showText(FirstStartActivity.this, getString(R.string.server_error), Style.ALERT);
+                                Snackbar snackbar = Snackbar.make(mContentLayout, R.string.server_error,
+                                        Snackbar.LENGTH_SHORT);
+                                ColoredSnackBar.alert(snackbar).show();
                                 Timber.e(error, "GCM Register Fail");
                             }
                         });

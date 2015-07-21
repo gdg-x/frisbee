@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.onboarding;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.BaseFragment;
 import org.gdg.frisbee.android.chapter.ChapterComparator;
 import org.gdg.frisbee.android.utils.PrefUtils;
+import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
 import java.util.Collections;
@@ -42,8 +44,6 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -133,7 +133,9 @@ public class FirstStartStep1Fragment extends BaseFragment {
             @Override
             public void failure(RetrofitError error) {
                 try {
-                    Crouton.makeText(getActivity(), R.string.fetch_chapters_failed, Style.ALERT).show();
+                    Snackbar snackbar = Snackbar.make(getView(), R.string.fetch_chapters_failed,
+                            Snackbar.LENGTH_SHORT);
+                    ColoredSnackBar.alert(snackbar).show();
                 } catch (IllegalStateException exception) {
                     Toast.makeText(getActivity(), R.string.fetch_chapters_failed, Toast.LENGTH_SHORT).show();
                 }
