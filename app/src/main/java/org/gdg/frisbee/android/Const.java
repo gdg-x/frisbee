@@ -77,6 +77,7 @@ public class Const {
     public static final String URL_HELP = "https://support.google.com/developergroups";
     public static final String URL_GDG_RESOURCE_FOLDER = "https://drive.google.com/drive/#folders/0B55wxScz_BJtWW9aUnk2LUlNdEk";
     public static final String URL_GDG_WISDOM_BOOK = "http://gdg-wisdom.gitbooks.io/gdg-wisdom-2015/content/";
+    public static final String URL_GDG_LEADS_GPLUS_COMMUNITY = "https://plus.google.com/communities/101119632372181012379";
     public static final String EVENTS = "events";
 
     //Keys

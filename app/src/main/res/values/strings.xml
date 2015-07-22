@@ -170,4 +170,6 @@
     <string name="cd_navdrawer_user_picture">User Profile Image</string>
     <string name="title_signing_needed">Sign-in Needed</string>
     <string name="signin">Sign-in</string>
+    <string name="leads_gplus_community_title">G+ Community for Chapter Leads</string>
+    <string name="leads_gplus_community">This G+ community is about sharing experiences and knowledge about running a GDG chapter. Join and contribute!</string>
 </resources>
