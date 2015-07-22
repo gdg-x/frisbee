@@ -51,6 +51,8 @@ public class LeadFragment extends ListFragment {
         mAdapter.add(LeadMessage.newResource(getString(R.string.leads_wisdom_title),
                 getString(R.string.leads_wisdom),
                 Const.URL_GDG_WISDOM_BOOK));
+        mAdapter.add(LeadMessage.newResource(getString(R.string.leads_gplus_community_title), getString(R.string.leads_gplus_community),
+                Const.URL_GDG_LEADS_GPLUS_COMMUNITY));
     }
 
     @Override
