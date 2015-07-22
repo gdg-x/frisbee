@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.about;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,11 +36,10 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.GdgListFragment;
 import org.gdg.frisbee.android.utils.Utils;
+import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
 import butterknife.ButterKnife;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -82,15 +82,15 @@ public class ContributorsFragment extends GdgListFragment {
                 public void onGet(Object item) {
                     ContributorList contributors = (ContributorList) item;
 
-                    Crouton.makeText(getActivity(), R.string.cached_content,
-                            Style.INFO, R.id.content_frame).show();
+                    Snackbar snackbar = Snackbar.make(getView(), R.string.cached_content, Snackbar.LENGTH_SHORT);
+                    ColoredSnackBar.info(snackbar).show();
                     mAdapter.addAll(contributors);
                 }
 
                 @Override
                 public void onNotFound(String key) {
-                    Crouton.makeText(getActivity(), R.string.offline_alert,
-                            Style.ALERT, R.id.content_frame).show();
+                    Snackbar snackbar = Snackbar.make(getView(), R.string.offline_alert, Snackbar.LENGTH_SHORT);
+                    ColoredSnackBar.alert(snackbar).show();
                 }
             });
         }

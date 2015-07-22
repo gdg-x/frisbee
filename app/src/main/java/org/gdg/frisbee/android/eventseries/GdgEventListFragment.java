@@ -1,6 +1,7 @@
 package org.gdg.frisbee.android.eventseries;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -8,12 +9,11 @@ import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.Utils;
+import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 
@@ -71,15 +71,17 @@ public class GdgEventListFragment extends EventListFragment {
 
                     mAdapter.addAll(events);
                     setIsLoading(false);
-                    Crouton.makeText(getActivity(), R.string.cached_content,
-                            Style.INFO, R.id.content_frame).show();
+                    Snackbar snackbar = Snackbar.make(getView(), R.string.cached_content,
+                            Snackbar.LENGTH_SHORT);
+                    ColoredSnackBar.info(snackbar).show();
                 }
 
                 @Override
                 public void onNotFound(String key) {
                     setIsLoading(false);
-                    Crouton.makeText(getActivity(), R.string.offline_alert,
-                            Style.ALERT, R.id.content_frame).show();
+                    Snackbar snackbar = Snackbar.make(getView(), R.string.offline_alert,
+                            Snackbar.LENGTH_SHORT);
+                    ColoredSnackBar.alert(snackbar).show();
                 }
             });
         }

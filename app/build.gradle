@@ -200,9 +200,6 @@ dependencies {
     compile 'org.jsoup:jsoup:1.8.2'
     compile 'net.danlew:android.joda:2.7.2'
     compile 'com.google.code.findbugs:jsr305:2.0.1'
-    compile ('de.keyboardsurfer.android.widget:crouton:1.8.5') {
-        exclude module: 'support-v4'
-    }
     compile('com.crashlytics.sdk.android:crashlytics:2.2.4@aar') {
         transitive = true;
     }

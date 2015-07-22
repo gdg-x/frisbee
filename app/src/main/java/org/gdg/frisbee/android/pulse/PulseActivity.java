@@ -18,6 +18,7 @@ package org.gdg.frisbee.android.pulse;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -29,6 +30,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -38,6 +40,7 @@ import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.api.model.Pulse;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.gdg.frisbee.android.widget.SlidingTabLayout;
 import org.joda.time.DateTime;
 
@@ -45,8 +48,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import butterknife.InjectView;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -56,8 +57,13 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
 
     @InjectView(R.id.pager)
     ViewPager mViewPager;
+
     @InjectView(R.id.sliding_tabs)
     SlidingTabLayout mSlidingTabLayout;
+
+    @InjectView(R.id.content_frame)
+    FrameLayout mContentLayout;
+
     private CountriesSpinnerAdapter mSpinnerAdapter;
     private MyAdapter mViewPagerAdapter;
     private ArrayList<String> mPulseTargets;
@@ -114,8 +120,9 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
             @Override
             public void failure(RetrofitError error) {
                 try {
-                    Crouton.makeText(PulseActivity.this, R.string.fetch_chapters_failed,
-                            Style.ALERT, R.id.content_frame).show();
+                    Snackbar snackbar = Snackbar.make(mContentLayout, R.string.fetch_chapters_failed,
+                            Snackbar.LENGTH_SHORT);
+                    ColoredSnackBar.alert(snackbar).show();
                 } catch (IllegalStateException exception) {
                 }
                 Timber.e(error, "Couldn't fetch chapter list");
