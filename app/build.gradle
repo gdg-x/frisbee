@@ -116,8 +116,8 @@ android {
         debug {
             ext.enableCrashlytics = false
             debuggable true
-            //packageNameSuffix '.dev'
-            //versionNameSuffix '-dev'
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
             signingConfig signingConfigs.debug
         }
     }
