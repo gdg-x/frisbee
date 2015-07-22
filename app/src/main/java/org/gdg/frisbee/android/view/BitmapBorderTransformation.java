@@ -23,6 +23,10 @@ public class BitmapBorderTransformation implements Transformation {
 
     @Override
     public Bitmap transform(Bitmap source) {
+        if (source.getConfig() == null) {
+            return source;
+        }
+
         int width = source.getWidth();
         int height = source.getHeight();
 
