@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -40,18 +41,17 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.OrganizerChecker;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.eventseries.GdgEventListFragment;
 import org.gdg.frisbee.android.onboarding.FirstStartActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
-import org.gdg.frisbee.android.widget.SlidingTabLayout;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
@@ -81,8 +81,8 @@ public class MainActivity extends GdgNavDrawerActivity {
 
     @InjectView(R.id.pager)
     ViewPager mViewPager;
-    @InjectView(R.id.sliding_tabs)
-    SlidingTabLayout mSlidingTabLayout;
+    @InjectView(R.id.tabs)
+    TabLayout mTabLayout;
     @InjectView(R.id.content_frame)
     FrameLayout mContentFrameLayout;
 
@@ -108,11 +108,6 @@ public class MainActivity extends GdgNavDrawerActivity {
         setContentView(R.layout.activity_main);
 
         mLocationComparator = new ChapterComparator(PrefUtils.getHomeChapterIdNotNull(this));
-
-        mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
-        mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.tab_selected_strip));
-        mSlidingTabLayout.setDistributeEvenly(true);
-        mSlidingTabLayout.setOnPageChangeListener(this);
 
         mChapterAdapter = new ChapterAdapter(MainActivity.this, true /* white text */);
         initSpinner();
@@ -195,6 +190,7 @@ public class MainActivity extends GdgNavDrawerActivity {
                     public void onOrganizerResponse(boolean isOrganizer) {
                         if (mViewPagerAdapter != null && wasOrganizer != isOrganizer) {
                             mViewPagerAdapter.notifyDataSetChanged();
+                            mTabLayout.setTabsFromPagerAdapter(mViewPagerAdapter);
                         }
                     }
 
@@ -297,7 +293,7 @@ public class MainActivity extends GdgNavDrawerActivity {
         mViewPager.setOffscreenPageLimit(2);
         updateSelectionfor(selectedChapter);
 
-        mSlidingTabLayout.setViewPager(mViewPager);
+        mTabLayout.setupWithViewPager(mViewPager);
 
         if (SECTION_EVENTS.equals(getIntent().getStringExtra(Const.EXTRA_SECTION))) {
             mHandler.postDelayed(new Runnable() {
@@ -416,11 +412,6 @@ public class MainActivity extends GdgNavDrawerActivity {
         public void notifyDataSetChanged() {
             mPages = App.getInstance().isOrganizer() ? ORGANIZER_PAGES : PAGES;
             super.notifyDataSetChanged();
-        }
-
-        @Override
-        public int getItemPosition(Object object) {
-            return POSITION_NONE;
         }
 
         @Override

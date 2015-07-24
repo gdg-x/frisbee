@@ -23,11 +23,11 @@
 
   <include layout="@layout/toolbar_actionbar" />
 
-  <org.gdg.frisbee.android.widget.SlidingTabLayout
-    android:id="@+id/sliding_tabs"
+  <android.support.design.widget.TabLayout
+    android:id="@+id/tabs"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/theme_primary" />
+    style="@style/Widget.GDG.TabLayout" />
 
   <FrameLayout
     android:layout_width="match_parent"

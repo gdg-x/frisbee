@@ -18,6 +18,7 @@ package org.gdg.frisbee.android.event;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -27,7 +28,6 @@ import android.view.MenuItem;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.common.GdgActivity;
-import org.gdg.frisbee.android.widget.SlidingTabLayout;
 
 import butterknife.InjectView;
 
@@ -36,8 +36,8 @@ public class EventActivity extends GdgActivity {
     @InjectView(R.id.pager)
     ViewPager mViewPager;
 
-    @InjectView(R.id.sliding_tabs)
-    SlidingTabLayout mSlidingTabLayout;
+    @InjectView(R.id.tabs)
+    TabLayout mTabLayout;
 
     private String mEventId;
 
@@ -49,13 +49,9 @@ public class EventActivity extends GdgActivity {
         getActionBarToolbar().setTitle(R.string.event);
         getActionBarToolbar().setNavigationIcon(R.drawable.ic_up);
 
-        mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
-        mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.tab_selected_strip));
-        mSlidingTabLayout.setOnPageChangeListener(this);
-
         final EventPagerAdapter mViewPagerAdapter = new EventPagerAdapter(this, getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);
-        mSlidingTabLayout.setViewPager(mViewPager);
+        mTabLayout.setupWithViewPager(mViewPager);
 
         mEventId = getIntent().getStringExtra(Const.EXTRA_EVENT_ID);
         String section = getIntent().getStringExtra(Const.EXTRA_SECTION);

@@ -3,6 +3,7 @@ package org.gdg.frisbee.android.gde;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -15,15 +16,14 @@ import com.google.gson.FieldNamingPolicy;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.api.GdeDirectory;
 import org.gdg.frisbee.android.api.model.Gde;
 import org.gdg.frisbee.android.api.model.GdeList;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
-import org.gdg.frisbee.android.widget.SlidingTabLayout;
 import org.joda.time.DateTime;
 
 import java.lang.ref.WeakReference;
@@ -42,8 +42,8 @@ public class GdeActivity extends GdgNavDrawerActivity {
     @InjectView(R.id.pager)
     ViewPager mViewPager;
 
-    @InjectView(R.id.sliding_tabs)
-    SlidingTabLayout mSlidingTabLayout;
+    @InjectView(R.id.tabs)
+    TabLayout mTabLayout;
 
     @InjectView(R.id.content_frame)
     FrameLayout mContentLayout;
@@ -60,9 +60,6 @@ public class GdeActivity extends GdgNavDrawerActivity {
 
         Toolbar toolbar = getActionBarToolbar();
         toolbar.setTitle(R.string.gde);
-
-        mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
-        mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.tab_selected_strip));
 
         mViewPagerAdapter = new GdeCategoryAdapter(getSupportFragmentManager());
 
@@ -134,7 +131,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
                 mViewPagerAdapter.notifyDataSetChanged();
 
                 mViewPager.setAdapter(mViewPagerAdapter);
-                mSlidingTabLayout.setViewPager(mViewPager);
+                mTabLayout.setupWithViewPager(mViewPager);
             }
         });
     }
