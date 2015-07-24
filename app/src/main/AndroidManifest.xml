@@ -74,7 +74,7 @@
         <data
           android:scheme="https"
           android:host="developers.google.com"
-          android:pathPattern="/groups/chapter/[0-9]*" />
+          android:pathPrefix="/groups/chapter" />
         <data
           android:scheme="gdgx"
           android:host="chapter" />

@@ -208,6 +208,14 @@ public class MainActivity extends GdgNavDrawerActivity {
                     break;
                 }
             }
+        } else if (getIntent().getData() != null && getIntent().getData().getScheme().equals("https")) {
+            final String chapterId = getIntent().getData().getLastPathSegment();
+            for (Chapter c : chapters) {
+                if (c.getGplusId().equals(chapterId)) {
+                    selectedChapter = c;
+                    break;
+                }
+            }
         }
 
         if (selectedChapter == null) {
@@ -353,9 +361,9 @@ public class MainActivity extends GdgNavDrawerActivity {
     }
 
     private Chapter findChapterForId(String chapterId) {
-        for (int index=0; index < mChapterAdapter.getCount(); index++ ){
+        for (int index = 0; index < mChapterAdapter.getCount(); index++) {
             final Chapter chapter = mChapterAdapter.getItem(index);
-            if (chapter.getGplusId() != null && chapter.getGplusId().equals(chapterId)){
+            if (chapter.getGplusId() != null && chapter.getGplusId().equals(chapterId)) {
                 return chapter;
             }
         }
