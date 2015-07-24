@@ -19,7 +19,7 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <style name="Base.Theme.GDG" parent="Theme.AppCompat.Light">
+  <style name="Base.Theme.GDG" parent="Theme.AppCompat.Light.DarkActionBar">
     <item name="actionBarInsetStart">@dimen/keyline_2</item>
     <item name="spinnerBarInsetStart">@dimen/keyline_2_minus_16dp</item>
     <item name="android:windowContentOverlay">@null</item>

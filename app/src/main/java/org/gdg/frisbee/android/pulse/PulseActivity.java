@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.pulse;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -36,12 +37,11 @@ import android.widget.TextView;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.api.model.Pulse;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
-import org.gdg.frisbee.android.widget.SlidingTabLayout;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
@@ -58,8 +58,8 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
     @InjectView(R.id.pager)
     ViewPager mViewPager;
 
-    @InjectView(R.id.sliding_tabs)
-    SlidingTabLayout mSlidingTabLayout;
+    @InjectView(R.id.tabs)
+    TabLayout mTabLayout;
 
     @InjectView(R.id.content_frame)
     FrameLayout mContentLayout;
@@ -75,15 +75,10 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
 
         setContentView(R.layout.activity_pulse);
 
-        mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
-        mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.tab_selected_strip));
-        mSlidingTabLayout.setOnPageChangeListener(this);
-
         mPulseTargets = new ArrayList<>();
 
         mViewPagerAdapter = new MyAdapter(this, getSupportFragmentManager());
         mSpinnerAdapter = new CountriesSpinnerAdapter(this);
-
 
         App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PULSE_GLOBAL, true, new ModelCache.CacheListener() {
             @Override
@@ -182,7 +177,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
         mSpinnerAdapter.addAll(mPulseTargets);
 
         mViewPager.setAdapter(mViewPagerAdapter);
-        mSlidingTabLayout.setViewPager(mViewPager);
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 
     public ArrayList<String> getPulseTargets() {

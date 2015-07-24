@@ -17,12 +17,12 @@
 package org.gdg.frisbee.android.about;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.common.GdgActivity;
-import org.gdg.frisbee.android.widget.SlidingTabLayout;
 
 import butterknife.InjectView;
 
@@ -31,8 +31,8 @@ public class AboutActivity extends GdgActivity {
     @InjectView(R.id.pager)
     ViewPager mViewPager;
 
-    @InjectView(R.id.sliding_tabs)
-    SlidingTabLayout mSlidingTabLayout;
+    @InjectView(R.id.tabs)
+    TabLayout mTabLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,12 +43,8 @@ public class AboutActivity extends GdgActivity {
         getActionBarToolbar().setTitle(R.string.about);
         getActionBarToolbar().setNavigationIcon(R.drawable.ic_up);
 
-        mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
-        mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.tab_selected_strip));
-        mSlidingTabLayout.setOnPageChangeListener(this);
-
         mViewPager.setAdapter(new AboutPagerAdapter(this, getSupportFragmentManager()));
-        mSlidingTabLayout.setViewPager(mViewPager);
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 
     protected String getTrackedViewName() {
