@@ -54,15 +54,13 @@ gem install image_optim image_optim_pack
 The file looks like:
 ```
 android_simple_api_access_key=
-browser_simple_api_access_key=
-ip_simple_api_access_key=
 android_backup_key=
 play_app_id=
 gcm_sender_id=
 hub_client_id=
 ```
 
-The first 3 (`android_simple_api_access_key`, `browser_simple_api_access_key`, `ip_simple_api_access_key`) are regular API access keys which can be gotten by creating a new project at [Google Developer Console](https://console.developers.google.com/project). `android_backup_key` is not necessary but can be obtained at this [page](http://developer.android.com/google/backup/signup.html). `play_app_id` is the Google Developer Console project id and lastly `hub_client_id` is the client id used for oAuth with Google.
+The first one (`android_simple_api_access_key`) is a regular API access key which can be gotten by creating a new project at [Google Developer Console](https://console.developers.google.com/project). `android_backup_key` is not necessary but can be obtained at this [page](http://developer.android.com/google/backup/signup.html). `play_app_id` is the Google Developer Console project id and lastly `hub_client_id` is the client id used for oAuth with Google.
 
 
 ###Contributors

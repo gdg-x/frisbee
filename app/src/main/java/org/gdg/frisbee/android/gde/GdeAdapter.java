@@ -60,7 +60,7 @@ class GdeAdapter extends BaseAdapter {
 
         mClient = new Plus.Builder(mTransport, mJsonFactory, null)
                 .setGoogleClientRequestInitializer(
-                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.IP_SIMPLE_API_ACCESS_KEY))
+                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.ANDROID_SIMPLE_API_ACCESS_KEY))
                 .setApplicationName("GDG Frisbee")
                 .build();
         mPlusPattern = Pattern.compile("http[s]?:\\/\\/plus\\..*google\\.com.*(\\+[a-zA-Z] +|[0-9]{21}).*");

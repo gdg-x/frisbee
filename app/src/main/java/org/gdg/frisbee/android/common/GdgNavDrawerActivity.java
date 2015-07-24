@@ -261,7 +261,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         super.onCreate(savedInstanceState);
         plusClient = new Plus.Builder(mTransport, mJsonFactory, null)
                 .setGoogleClientRequestInitializer(
-                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.IP_SIMPLE_API_ACCESS_KEY))
+                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.ANDROID_SIMPLE_API_ACCESS_KEY))
                 .setApplicationName("GDG Frisbee")
                 .build();
     }

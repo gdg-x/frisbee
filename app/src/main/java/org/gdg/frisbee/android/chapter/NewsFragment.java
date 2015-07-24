@@ -82,7 +82,7 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
 
         mClient = new Plus.Builder(mTransport, mJsonFactory, null)
                 .setGoogleClientRequestInitializer(
-                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.IP_SIMPLE_API_ACCESS_KEY))
+                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.ANDROID_SIMPLE_API_ACCESS_KEY))
                 .build();
 
         StaggeredGridLayoutManager layoutManager = 
