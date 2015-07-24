@@ -474,5 +474,3 @@ public class MainActivity extends GdgNavDrawerActivity {
         }
     }
 }
-
->>>>>>> develop:app/src/main/java/org/gdg/frisbee/android/chapter/MainActivity.java
