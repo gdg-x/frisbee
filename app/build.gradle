@@ -185,6 +185,7 @@ dependencies {
 
     //Test
     testCompile 'junit:junit:4.12'
+    androidTestCompile 'org.assertj:assertj-core:1.7.1'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.0'
     androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
 }
