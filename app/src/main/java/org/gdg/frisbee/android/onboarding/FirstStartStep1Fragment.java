@@ -134,7 +134,13 @@ public class FirstStartStep1Fragment extends BaseFragment {
             public void failure(RetrofitError error) {
                 try {
                     Snackbar snackbar = Snackbar.make(getView(), R.string.fetch_chapters_failed,
-                            Snackbar.LENGTH_SHORT);
+                            Snackbar.LENGTH_INDEFINITE);
+                    snackbar.setAction("Retry", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            fetchChapters();
+                        }
+                    });
                     ColoredSnackBar.alert(snackbar).show();
                 } catch (IllegalStateException exception) {
                     Toast.makeText(getActivity(), R.string.fetch_chapters_failed, Toast.LENGTH_SHORT).show();
