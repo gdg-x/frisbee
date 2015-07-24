@@ -58,6 +58,7 @@ android {
         
         //KEYS
         buildConfigField "String", "ANDROID_SIMPLE_API_ACCESS_KEY", "\"" + (local_properties.android_simple_api_access_key ?: "") + "\""
+        buildConfigField "String", "IP_SIMPLE_API_ACCESS_KEY", "\"" + (local_properties.ip_simple_api_access_key ?: "") + "\""
         buildConfigField "String", "HUB_CLIENT_ID", "\"" + (local_properties.hub_client_id ?: "") + "\""
         buildConfigField "String", "PLAY_APP_ID", "\"" + (local_properties.play_app_id ?: "") + "\""
         buildConfigField "String", "GCM_SENDER_ID", "\"" + (local_properties.gcm_sender_id ?: "") + "\""
