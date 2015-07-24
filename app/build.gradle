@@ -213,5 +213,4 @@ dependencies {
     androidTestCompile ('com.android.support.test.espresso:espresso-core:2.1') {
         exclude module: 'support-annotations'
     }
-    androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
 }

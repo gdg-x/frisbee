@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.test.InstrumentationTestCase;
 
 import org.assertj.core.api.Condition;
+import org.gdg.frisbee.android.chapter.MainActivity;
 
 import java.util.List;
 
