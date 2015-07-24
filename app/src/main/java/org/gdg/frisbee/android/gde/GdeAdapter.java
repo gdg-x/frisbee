@@ -10,26 +10,17 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.services.plus.Plus;
-import com.google.api.services.plus.model.Person;
+import com.google.android.gms.plus.model.people.Person;
 import com.squareup.picasso.Picasso;
 
-import org.gdg.frisbee.android.BuildConfig;
-import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.GapiOkTransport;
 import org.gdg.frisbee.android.api.model.Gde;
-import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.widget.SquaredImageView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Matcher;
@@ -44,25 +35,18 @@ class GdeAdapter extends BaseAdapter {
 
     private ArrayList<Gde> mGdes;
 
-    final HttpTransport mTransport = new GapiOkTransport();
-    final JsonFactory mJsonFactory = new GsonFactory();
-    private Plus mClient;
-
     private HashMap<Integer, Object> mConsumedMap;
 
     private Pattern mPlusPattern;
+    private final GoogleApiClient mClient;
 
     public GdeAdapter(Context ctx, GoogleApiClient client) {
         mContext = ctx;
         mInflater = LayoutInflater.from(mContext);
         mGdes = new ArrayList<Gde>();
         mConsumedMap = new HashMap<>();
+        mClient = client;
 
-        mClient = new Plus.Builder(mTransport, mJsonFactory, null)
-                .setGoogleClientRequestInitializer(
-                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.ANDROID_SIMPLE_API_ACCESS_KEY))
-                .setApplicationName("GDG Frisbee")
-                .build();
         mPlusPattern = Pattern.compile("http[s]?:\\/\\/plus\\..*google\\.com.*(\\+[a-zA-Z] +|[0-9]{21}).*");
     }
 
@@ -129,21 +113,10 @@ class GdeAdapter extends BaseAdapter {
                         Person gde = null;
 
                         if (matcher.matches()) {
-                            String plusId = matcher.group(1);
-                            gde = (Person) App.getInstance().getModelCache().get(Const.CACHE_KEY_GDE + plusId, !Utils.isOnline(mContext));
-
-                            if (gde == null && Utils.isOnline(mContext)) {
-                                try {
-                                    Plus.People.Get request = mClient.people().get(plusId);
-                                    request.setFields("image");
-                                    gde = request.execute();
-                                    App.getInstance().getModelCache().put(Const.CACHE_KEY_GDE + plusId, gde);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }
+                            String gplusId = matcher.group(1);
+                            gde = GdgNavDrawerActivity.getPersonSync(mClient, gplusId);
                         } else {
-                            Timber.e(params[0].socialUrl);
+                            Timber.e("Social URL mismatch" + params[0].socialUrl);
                         }
 
                         return gde;

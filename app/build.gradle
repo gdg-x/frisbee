@@ -26,7 +26,7 @@ def versionPatch = 0
 def versionBuild = 1 // bump for dogfood builds, public betas, etc.
 
 def supportVersion = "22.2.1"
-def playServicesVersion = "7.3.0"
+def playServicesVersion = "7.5.0"
 
 android {
     compileSdkVersion 22
@@ -40,6 +40,7 @@ android {
     }
 
     defaultConfig {
+        applicationId "org.gdg.frisbee.android"
         minSdkVersion 16
         targetSdkVersion 22
         versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild

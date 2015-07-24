@@ -32,20 +32,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
-import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.services.plus.Plus;
-import com.google.api.services.plus.model.Person;
+import com.google.android.gms.plus.People;
+import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.model.people.Person;
+import com.google.android.gms.plus.model.people.PersonBuffer;
 
-import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.about.AboutActivity;
 import org.gdg.frisbee.android.activity.SettingsActivity;
-import org.gdg.frisbee.android.api.GapiOkTransport;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.arrow.ArrowActivity;
 import org.gdg.frisbee.android.chapter.MainActivity;
@@ -59,15 +57,12 @@ import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.view.BitmapBorderTransformation;
 import org.joda.time.DateTime;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.InjectView;
 
 public abstract class GdgNavDrawerActivity extends GdgActivity {
 
-    private final HttpTransport mTransport = new GapiOkTransport();
-    private final JsonFactory mJsonFactory = new GsonFactory();
     protected ActionBarDrawerToggle mDrawerToggle;
     protected String mStoredHomeChapterId;
     @InjectView(R.id.drawer)
@@ -259,11 +254,11 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        plusClient = new Plus.Builder(mTransport, mJsonFactory, null)
-                .setGoogleClientRequestInitializer(
-                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.ANDROID_SIMPLE_API_ACCESS_KEY))
-                .setApplicationName("GDG Frisbee")
-                .build();
+//        plusClient = new Plus.Builder(mTransport, mJsonFactory, null)
+//                .setGoogleClientRequestInitializer(
+//                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.ANDROID_SIMPLE_API_ACCESS_KEY))
+//                .setApplicationName("GDG Frisbee")
+//                .build();
     }
 
     @Override
@@ -347,7 +342,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                     .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person>() {
                         @Override
                         public Person doInBackground(String... params) {
-                            return getPerson(params[0]);
+                            return getPersonSync(getGoogleApiClient(), params[0]);
                         }
                     })
                     .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person>() {
@@ -375,20 +370,29 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
 
-    public Person getPerson(final String gplusId) {
-        try {
-            Person person = (Person) App.getInstance().getModelCache().get(Const.CACHE_KEY_PERSON + gplusId);
+    public static Person getPersonSync(final GoogleApiClient apiClient, final String gplusId) {
+        final String cacheUrl = Const.CACHE_KEY_PERSON + gplusId;
+        Object cachedPerson = App.getInstance().getModelCache().get(cacheUrl);
 
-            if (person == null) {
-                Plus.People.Get request = plusClient.people().get(gplusId);
-                request.setFields("aboutMe,circledByCount,cover/coverPhoto/url,image/url,currentLocation,displayName,plusOneCount,tagline,urls");
-                person = request.execute();
+        if (cachedPerson instanceof Person) {
+            return (Person) cachedPerson;
+        }
+        if (cachedPerson != null) {
+            App.getInstance().getModelCache().remove(cacheUrl);
+        }
 
-                App.getInstance().getModelCache().put(Const.CACHE_KEY_PERSON + gplusId, person, DateTime.now().plusDays(2));
+        People.LoadPeopleResult result = Plus.PeopleApi.load(apiClient, gplusId).await();
+        if (result.getStatus().getStatusCode() == CommonStatusCodes.SUCCESS) {
+            PersonBuffer personBuffer = result.getPersonBuffer();
+            try {
+                if (personBuffer.getCount() > 0) {
+                    Person person = personBuffer.get(0);
+                    App.getInstance().getModelCache().put(cacheUrl, person, DateTime.now().plusDays(2));
+                    return person;
+                }
+            } finally {
+                personBuffer.close();
             }
-            return person;
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return null;
     }

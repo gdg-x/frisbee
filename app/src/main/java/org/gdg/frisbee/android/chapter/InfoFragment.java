@@ -33,14 +33,14 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.google.api.services.plus.model.Person;
+import com.google.android.gms.plus.model.people.Person;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.BaseFragment;
+import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.Utils;
@@ -89,7 +89,7 @@ public class InfoFragment extends BaseFragment {
                     for (int i = 0; i < params.length; i++) {
                         Timber.d("Get Organizer " + params[i]);
                         if (isAdded()) {
-                            people[i] = ((GdgNavDrawerActivity) getActivity()).getPerson(params[i]);
+                            people[i] = GdgNavDrawerActivity.getPersonSync(((GdgNavDrawerActivity) getActivity()).getGoogleApiClient(), params[0]);
                         } else {
                             // fragment is not used anymore
                             people[i] = null;
@@ -127,7 +127,7 @@ public class InfoFragment extends BaseFragment {
                         @Override
                         public Person doInBackground(String... params) {
                             if (isAdded()) {
-                                return ((GdgNavDrawerActivity) getActivity()).getPerson(params[0]);
+                                return GdgNavDrawerActivity.getPersonSync(((GdgNavDrawerActivity) getActivity()).getGoogleApiClient(), params[0]);
                             } else {
                                 // fragment is not used anymore
                                 return null;
@@ -267,7 +267,7 @@ public class InfoFragment extends BaseFragment {
                     }
                 } else {
                     TextView tv = (TextView) mInflater.inflate(R.layout.list_resource_item, (ViewGroup) getView(), false);
-                    tv.setText(Html.fromHtml("<a href='" + url.getValue() + "'>" + url.get("label") + "</a>"));
+                    tv.setText(Html.fromHtml("<a href='" + url.getValue() + "'>" + url.getLabel() + "</a>"));
                     mResourcesBox.addView(tv);
                 }
 
