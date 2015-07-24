@@ -24,9 +24,8 @@ package org.gdg.frisbee.android.api.model;
  * To change this template use File | Settings | File Templates.
  */
 public class HomeGdgRequest {
-    private String homeGdg;
 
     public HomeGdgRequest(String homeGdg) {
-        this.homeGdg = homeGdg;
+        String homeGdg1 = homeGdg;
     }
 }

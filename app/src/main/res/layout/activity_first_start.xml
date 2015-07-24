@@ -19,9 +19,10 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:orientation="vertical">
+  android:orientation="vertical"
+  android:id="@+id/contentLayout">
 
-  <org.gdg.frisbee.android.view.NonSwipeableViewPager
+  <org.gdg.frisbee.android.widget.NonSwipeableViewPager
     android:id="@+id/pager"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />

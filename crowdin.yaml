@@ -7,12 +7,15 @@ files:
     translation: '/app/src/main/res/values-%android_code%/strings.xml'
     languages_mapping:
       android_code:
+        ar: ar
         cs: cs
         de: de
         es-ES: es
         fr: fr
         hi: hi
+        hy-AM: hy-rAM
         it: it
+        ja: ja
         ko: ko
         lt: lt
         nl: nl

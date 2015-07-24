@@ -25,7 +25,7 @@ import org.joda.time.DateTime;
  * Time: 12:19
  */
 public class Const {
-    
+
     private Const() {
     }
 
@@ -75,14 +75,17 @@ public class Const {
     public static final String EXTRA_SECTION = "EXTRA_SECTION";
     public static final String URL_DEVELOPERS_GOOGLE_COM = "https://developers.google.com";
     public static final String URL_HELP = "https://support.google.com/developergroups";
+    public static final String URL_GDG_RESOURCE_FOLDER = "https://drive.google.com/drive/#folders/0B55wxScz_BJtWW9aUnk2LUlNdEk";
+    public static final String URL_GDG_WISDOM_BOOK = "http://gdg-wisdom.gitbooks.io/gdg-wisdom-2015/content/";
+    public static final String URL_GDG_LEADS_GPLUS_COMMUNITY = "https://plus.google.com/communities/101119632372181012379";
     public static final String EVENTS = "events";
 
     //Keys
     public static final String EXTRA_CHAPTER_ID = "org.gdg.frisbee.CHAPTER";
     public static final String CACHE_KEY_CHAPTER_LIST_HUB = "chapter_list_hub";
     public static final String CACHE_KEY_PULSE_GLOBAL = "pulse_global";
-    public static final String CACHE_KEY_GDE_MAP = "gde_map";
-    public static final String CACHE_KEY_FRISBEE_CONTRIBUTORS = "frisbee_contributors";
+    public static final String CACHE_KEY_GDE_LIST = "gde_list";
+    public static final String CACHE_KEY_FRISBEE_CONTRIBUTORS = "frisbee_contributor_list";
     public static final String CACHE_KEY_PERSON = "person_";
     public static final String CACHE_KEY_NEWS = "news_";
     public static final String CACHE_KEY_PULSE = "pulse_";

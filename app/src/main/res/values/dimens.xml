@@ -7,7 +7,8 @@
   <dimen name="text_size_small">12sp</dimen>
   <dimen name="text_size_large">18sp</dimen>
   <dimen name="navdrawer_width">260dp</dimen>
-  <dimen name="navdrawer_image_height">130dp</dimen>
+  <dimen name="navdrawer_image_height">140dp</dimen>
+  <dimen name="navdrawer_user_picture_size">40dp</dimen>
   <dimen name="spinner_left_padding">16dp</dimen>
 
   <dimen name="content_padding">16dp</dimen>

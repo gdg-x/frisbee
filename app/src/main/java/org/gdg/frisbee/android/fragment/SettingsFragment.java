@@ -22,8 +22,11 @@ import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.support.v4.preference.PreferenceFragment;
+import android.preference.PreferenceFragment;
+import android.support.annotation.NonNull;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
@@ -39,7 +42,6 @@ import com.google.android.gms.plus.Plus;
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.api.GdgXHub;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
@@ -47,9 +49,10 @@ import org.gdg.frisbee.android.api.model.GcmRegistrationRequest;
 import org.gdg.frisbee.android.api.model.GcmRegistrationResponse;
 import org.gdg.frisbee.android.api.model.HomeGdgRequest;
 import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.appwidget.UpcomingEventWidgetProvider;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
-import org.gdg.frisbee.android.widget.UpcomingEventWidgetProvider;
 
 import java.io.IOException;
 
@@ -188,6 +191,11 @@ public class SettingsFragment extends PreferenceFragment {
         getPreferenceManager().setSharedPreferencesName(PrefUtils.PREF_NAME);
         addPreferencesFromResource(R.xml.settings);
         initPreferences();
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_simple_prefs, container, false);
     }
 
     @Override

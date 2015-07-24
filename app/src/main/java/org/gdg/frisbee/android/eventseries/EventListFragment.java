@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.eventseries;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -29,18 +30,16 @@ import android.widget.ListView;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.adapter.EventAdapter;
 import org.gdg.frisbee.android.api.model.SimpleEvent;
 import org.gdg.frisbee.android.event.EventActivity;
-import org.gdg.frisbee.android.fragment.GdgListFragment;
+import org.gdg.frisbee.android.common.GdgListFragment;
+import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
 
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 
 /**
  * GDG Aachen
@@ -52,7 +51,6 @@ import de.keyboardsurfer.android.widget.crouton.Style;
  */
 public abstract class EventListFragment extends GdgListFragment {
 
-
     protected EventAdapter mAdapter;
 
     protected ArrayList<SimpleEvent> mEvents;
@@ -61,7 +59,9 @@ public abstract class EventListFragment extends GdgListFragment {
         setIsLoading(false);
         e.printStackTrace();
         if (isAdded()) {
-            Crouton.makeText(getActivity(), getString(R.string.fetch_events_failed), Style.ALERT).show();
+            Snackbar snackbar = Snackbar.make(getView(), R.string.fetch_events_failed,
+                    Snackbar.LENGTH_SHORT);
+            ColoredSnackBar.alert(snackbar).show();
         }
     }
 
@@ -120,11 +120,14 @@ public abstract class EventListFragment extends GdgListFragment {
         super.onListItemClick(l, v, position, id);
 
         final ListView listView = (ListView) getListView();
-        SimpleEvent event = mAdapter.getItem(position - listView.getHeaderViewsCount());
+        int fixedPosition = position - listView.getHeaderViewsCount();
+        if (fixedPosition >= 0 && fixedPosition < mAdapter.getCount()) {
+            SimpleEvent event = mAdapter.getItem(fixedPosition);
 
-        Intent intent = new Intent(getActivity(), EventActivity.class);
-        intent.putExtra(Const.EXTRA_EVENT_ID, event.getId());
-        startActivity(intent);
+            Intent intent = new Intent(getActivity(), EventActivity.class);
+            intent.putExtra(Const.EXTRA_EVENT_ID, event.getId());
+            startActivity(intent);
+        }
     }
 
     private void launchNavigation(SimpleEvent event) {

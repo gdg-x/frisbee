@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -24,6 +25,7 @@ import android.net.ConnectivityManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
+import android.util.Patterns;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +50,6 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import timber.log.Timber;
@@ -65,14 +66,6 @@ public class Utils {
     
     private Utils() {
 
-    }
-    
-    public static <T> List<T> createListOfType(Class<T> type) {
-        return new ArrayList<T>();
-    }
-
-    public static <K, V> Map<K, V> createMapOfType(Class<K> keyType, Class<V> valueType) {
-        return new HashMap<K, V>();
     }
 
     /**
@@ -223,5 +216,20 @@ public class Utils {
                 .registerTypeAdapter(DateTime.class, dateTimeDeserializer)
                 .create();
 
+    }
+
+    /**
+     * Utility function to check if the provided String is an email or not.
+     *
+     * @param possibleEmail Given String.
+     * @return true if the given String is an email address.
+     */
+    public static boolean isEmailAddress(String possibleEmail) {
+        return Patterns.EMAIL_ADDRESS.matcher(possibleEmail).matches();
+    }
+
+
+    public static boolean canLaunch(Context context, final Intent viewUrlIntent) {
+        return context.getPackageManager().resolveActivity(viewUrlIntent, PackageManager.MATCH_DEFAULT_ONLY) != null;
     }
 }

@@ -16,9 +16,7 @@
 
 package org.gdg.frisbee.android.api;
 
-import org.gdg.frisbee.android.api.model.Contributor;
-
-import java.util.ArrayList;
+import org.gdg.frisbee.android.api.model.ContributorList;
 
 import retrofit.Callback;
 import retrofit.http.GET;
@@ -29,7 +27,7 @@ public interface GitHub {
     @GET("/repos/{owner}/{repo}/contributors")
     void getContributors(@Path("owner") String user, 
                          @Path("repo") String repo,
-                         Callback<ArrayList<Contributor>> callback);
+                         Callback<ContributorList> callback);
 
 //    @GET("/users/{username}")
 //    void getUserDetail(@Path("username") String username, Callback<EventFullDetails> callback);

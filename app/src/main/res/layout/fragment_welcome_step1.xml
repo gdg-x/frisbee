@@ -46,7 +46,7 @@
         android:textSize="24dip" />
     </LinearLayout>
 
-    <org.gdg.frisbee.android.view.ResizableImageView
+    <org.gdg.frisbee.android.widget.ResizableImageView
       android:id="@+id/imageView"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"

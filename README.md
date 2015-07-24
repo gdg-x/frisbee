@@ -7,7 +7,7 @@ Project Frisbee
 [![Crowdin](https://d322cqt584bo4o.cloudfront.net/gdgx-frisbee/localized.png)](https://crowdin.com/project/gdgx-frisbee)
 
 All GDG content in one place. Project Frisbee is the result of GDG[x]'s coordinated efforts to build an applications that makes it easier to discover Google Developer Group content while being on the go.
-The GDG App features the Google+ Newsfeed, Upcoming Events and general information on every
+The GDG App features the Google+ news feed, Upcoming Events and general information on every
 active chapter listed in the Google Developer Group Directory
 
 ###[Download the application](https://play.google.com/store/apps/details?id=org.gdg.frisbee.android)
@@ -20,9 +20,11 @@ active chapter listed in the Google Developer Group Directory
 * Featured Special Event Series Section
 * Arrow (Find you fellow organizers worldwide and earn points.)
 
-Frisbee is a community effort and we appreciate the help of everyone who wants to help improve the App.
+Frisbee is a community effort and we appreciate the help of everyone who wants to help improve the App:
 
-Check http://github.com/gdg-x for more information.
+Become a tester and VIP user by joining the [G+ Frisbee community] (https://plus.google.com/communities/100423211916386801761).
+
+Check http://github.com/gdg-x for more information about all development activities around GDGs.
 
 Development
 -----------
@@ -41,7 +43,7 @@ If you cannot resolve the issue, you can simply comment out the following line i
 
 ###Image Optimization
 
-Image optimization is encourged for new images. You can use the [image_optim](https://github.com/toy/image_optim) tool to do it easily. Use the following command to install it. 
+Image optimization is encouraged for new images. You can use the [image_optim](https://github.com/toy/image_optim) tool to do it easily. Use the following command to install it.
 ```
 gem install image_optim image_optim_pack
 ```
@@ -71,6 +73,7 @@ The first 3 (`android_simple_api_access_key`, `browser_simple_api_access_key`, `
 * [Stefan Hoth](https://github.com/stefanhoth)
 * [Bartek](https://github.com/przybylski)
 * [Jerrell Mardis](https://github.com/jerrellmardis)
+* [Paresh Mayani](https://github.com/PareshMayani)
 
 ###Translation
 

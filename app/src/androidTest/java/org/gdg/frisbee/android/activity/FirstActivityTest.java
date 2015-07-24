@@ -3,6 +3,7 @@ package org.gdg.frisbee.android.activity;
 import android.test.ActivityInstrumentationTestCase2;
 
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.onboarding.FirstStartActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;

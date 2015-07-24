@@ -25,7 +25,7 @@ import android.widget.TextView;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.activity.GdgNavDrawerActivity;
+import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 
 import butterknife.InjectView;
 import butterknife.Optional;
@@ -69,7 +69,7 @@ public class TaggedEventSeriesActivity extends GdgNavDrawerActivity {
 
         FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
         final String cacheExtra = getIntent().getStringExtra(Const.EXTRA_TAGGED_EVENT_CACHEKEY);
-        trans.replace(R.id.content_fragment, TaggedEventSeriesFragment.newInstance(
+        trans.replace(R.id.content_frame, TaggedEventSeriesFragment.newInstance(
                 cacheExtra != null ? cacheExtra : "specialevent",
                 mTaggedEventSeries,
                 /* addDescriptonAsHeader */ mDescription == null));

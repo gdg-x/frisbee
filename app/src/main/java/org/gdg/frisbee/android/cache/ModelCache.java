@@ -26,12 +26,10 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.jakewharton.disklrucache.DiskLruCache;
 
 import org.gdg.frisbee.android.api.deserializer.DateTimeDeserializer;
 import org.gdg.frisbee.android.api.deserializer.DateTimeSerializer;
-import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
 
 import java.io.BufferedReader;
@@ -44,7 +42,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.Type;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -556,42 +553,6 @@ public class ModelCache {
             return null;
         }
 
-        Type type = null;
-        if (className.startsWith("java.util.ArrayList")) {
-            String inner = className.substring("java.util.ArrayList<".length(), className.length() - 1);
-            Class innerClass = null;
-            try {
-                innerClass = Class.forName(inner);
-                type = TypeToken.get(Utils.createListOfType(innerClass).getClass()).getType();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        } else if (className.startsWith("java.util.HashMap")) {
-            String[] inner = className.substring("java.util.HashMap<".length(), className.length() - 1).split(", ");
-
-            try {
-                Class keyClass = Class.forName(inner[0]);
-
-                Class valueClass = null;
-                if (inner[1].startsWith("java.util.ArrayList")) {
-                    String innterT = inner[1].substring("java.util.ArrayList<".length(), inner[1].length() - 1);
-                    try {
-                        Class innerClass = Class.forName(innterT);
-                        Type t3 = TypeToken.get(Utils.createListOfType(innerClass).getClass()).getType();
-                        valueClass = (Class) t3;
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    valueClass = Class.forName(inner[1]);
-                }
-
-                type = TypeToken.get(Utils.createMapOfType(keyClass, valueClass).getClass()).getType();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-
         String line = null;
         String content = "";
         while ((line = fss.readLine()) != null) {
@@ -605,8 +566,6 @@ public class ModelCache {
             if (className.contains("google")) {
                 clazz = Class.forName(className);
                 return mJsonFactory.createJsonParser(content).parseAndClose(clazz, null);
-            } else if (type != null) {
-                return mGson.fromJson(content, type);
             } else {
                 clazz = Class.forName(className);
                 return mGson.fromJson(content, clazz);
@@ -674,13 +633,13 @@ public class ModelCache {
     }
 
     public interface CachePutListener {
-        public void onPutIntoCache();
+        void onPutIntoCache();
     }
 
     public interface CacheListener {
-        public void onGet(Object item);
+        void onGet(Object item);
 
-        public void onNotFound(String key);
+        void onNotFound(String key);
     }
 
     static final class DiskCacheFlushRunnable implements Runnable {

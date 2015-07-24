@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  android:paddingLeft="20dp"
+  android:paddingRight="20dp">
+
+  <android.support.design.widget.TextInputLayout
+    android:id="@+id/feedback_message_text_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:hintTextAppearance="@style/TextAppearance.GDG.FloatLabel"
+    android:paddingTop="8dp">
+
+    <EditText
+      android:id="@+id/feedback_message_text"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="@string/feedback_message_hint"
+      android:gravity="top|left"
+      android:inputType="textMultiLine|textCapSentences"
+      android:maxLines="4"
+      android:minLines="1"/>
+
+  </android.support.design.widget.TextInputLayout>
+
+  <android.support.design.widget.TextInputLayout
+    android:id="@+id/feedback_email_text_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:hintTextAppearance="@style/TextAppearance.GDG.FloatLabel"
+    android:paddingTop="8dp">
+
+    <AutoCompleteTextView
+      android:id="@+id/feedback_email_text"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="@string/feedback_email_hint"
+      android:imeOptions="actionDone"
+      android:inputType="textEmailAddress"
+      android:singleLine="true"
+      android:completionThreshold="1"/>
+
+  </android.support.design.widget.TextInputLayout>
+
+</LinearLayout>

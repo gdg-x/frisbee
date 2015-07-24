@@ -26,8 +26,8 @@ import android.view.MenuItem;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.activity.GdgActivity;
-import org.gdg.frisbee.android.view.SlidingTabLayout;
+import org.gdg.frisbee.android.common.GdgActivity;
+import org.gdg.frisbee.android.widget.SlidingTabLayout;
 
 import butterknife.InjectView;
 

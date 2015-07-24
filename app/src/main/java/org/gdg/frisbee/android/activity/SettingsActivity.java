@@ -24,6 +24,8 @@ import com.google.android.gms.analytics.Tracker;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.common.GdgActivity;
+import org.gdg.frisbee.android.fragment.SettingsFragment;
 
 public class SettingsActivity extends GdgActivity {
 
@@ -44,6 +46,11 @@ public class SettingsActivity extends GdgActivity {
         // Send a screen view.
         t.send(new HitBuilders.AppViewBuilder().build());
 
+        if (savedInstanceState == null) {
+            getFragmentManager().beginTransaction()
+                    .add(R.id.settings_fragment, new SettingsFragment())
+                    .commit();
+        }
     }
 
     @Override

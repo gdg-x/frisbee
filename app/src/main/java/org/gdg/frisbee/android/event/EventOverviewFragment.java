@@ -22,6 +22,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
@@ -47,20 +48,19 @@ import com.squareup.picasso.Target;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.activity.GdgActivity;
+import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.EventFullDetails;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.Utils;
+import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import timber.log.Timber;
@@ -117,7 +117,9 @@ public class EventOverviewFragment extends Fragment {
             @Override
             public void failure(RetrofitError error) {
                 if (isAdded()) {
-                    Crouton.makeText(getActivity(), R.string.server_error, Style.ALERT).show();
+                    Snackbar snackbar = Snackbar.make(getView(), R.string.server_error,
+                            Snackbar.LENGTH_SHORT);
+                    ColoredSnackBar.alert(snackbar).show();
                 }
                 Timber.d(error, "error while retrieving event %s", eventId);
             }
@@ -178,19 +180,27 @@ public class EventOverviewFragment extends Fragment {
                         @Override
                         public void failure(RetrofitError error) {
                             if (isAdded()) {
-                                Crouton.makeText(getActivity(), getString(R.string.fetch_chapters_failed), Style.ALERT).show();
+                                Snackbar snackbar = Snackbar.make(getView(), R.string.fetch_chapters_failed,
+                                        Snackbar.LENGTH_SHORT);
+                                ColoredSnackBar.alert(snackbar).show();
                             }
                             Timber.e(error, "Could'nt fetch chapter list");
                         }
                     });
                 } else {
-                    Crouton.makeText(getActivity(), getString(R.string.offline_alert), Style.ALERT).show();
+                    Snackbar snackbar = Snackbar.make(getView(), R.string.offline_alert,
+                            Snackbar.LENGTH_SHORT);
+                    ColoredSnackBar.alert(snackbar).show();
                 }
             }
         });
     }
 
     private void updateGroupDetails(Chapter group) {
+        if (getActivity() == null) {
+            return;
+        }
+
         Plus.PeopleApi.load(((GdgActivity) getActivity()).getGoogleApiClient(), group.getGplusId())
                 .setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
                     @Override
@@ -201,6 +211,9 @@ public class EventOverviewFragment extends Fragment {
                                 Picasso.with(getActivity()).load(gplusChapter.getImage().getUrl()).into(new Target() {
                                     @Override
                                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
+                                        if (isDetached()) {
+                                            return;
+                                        }
                                         BitmapDrawable logo = new BitmapDrawable(getResources(), bitmap);
                                         mGroupLogo.setVisibility(View.VISIBLE);
                                         mGroupLogo.setImageDrawable(logo);
@@ -300,7 +313,9 @@ public class EventOverviewFragment extends Fragment {
     private void launchNavigation() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse("geo:0,0?q=" + mEvent.getLocation()));
-        startActivity(intent);
+        if (Utils.canLaunch(getActivity(), intent)) {
+            startActivity(intent);
+        }
     }
 
     private void launchUrl(String eventUrl) {

@@ -18,7 +18,7 @@
 
 <resources>
 
-  <style name="Theme.GDG" parent="Theme.GDG.Base">
-    <item name="android:windowBackground">@color/default_bg</item>
+  <style name="Theme.GDG.WithNavDrawer" parent="Base.Theme.GDG">
+    <item name="android:statusBarColor">@android:color/transparent</item>
   </style>
 </resources>

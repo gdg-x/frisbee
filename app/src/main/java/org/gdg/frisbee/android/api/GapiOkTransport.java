@@ -71,12 +71,6 @@ public class GapiOkTransport extends HttpTransport {
      */
     private final Proxy proxy;
 
-    /** SSL socket factory or {@code null} for the default. */
-    private final SSLSocketFactory sslSocketFactory;
-
-    /** Host name verifier or {@code null} for the default. */
-    private final HostnameVerifier hostnameVerifier;
-
     /**
      * Constructor with the default behavior.
      *
@@ -98,8 +92,10 @@ public class GapiOkTransport extends HttpTransport {
     GapiOkTransport(
             Proxy proxy, SSLSocketFactory sslSocketFactory, HostnameVerifier hostnameVerifier) {
         this.proxy = proxy;
-        this.sslSocketFactory = sslSocketFactory;
-        this.hostnameVerifier = hostnameVerifier;
+        /* SSL socket factory or {@code null} for the default. */
+        SSLSocketFactory sslSocketFactory1 = sslSocketFactory;
+        /* Host name verifier or {@code null} for the default. */
+        HostnameVerifier hostnameVerifier1 = hostnameVerifier;
     }
 
     @Override
