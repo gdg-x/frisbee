@@ -78,7 +78,6 @@ public class Const {
     public static final String URL_GDG_RESOURCE_FOLDER = "https://drive.google.com/drive/#folders/0B55wxScz_BJtWW9aUnk2LUlNdEk";
     public static final String URL_GDG_WISDOM_BOOK = "http://gdg-wisdom.gitbooks.io/gdg-wisdom-2015/content/";
     public static final String URL_GDG_LEADS_GPLUS_COMMUNITY = "https://plus.google.com/communities/101119632372181012379";
-    public static final String EVENTS = "events";
 
     //Keys
     public static final String EXTRA_CHAPTER_ID = "org.gdg.frisbee.CHAPTER";
@@ -89,7 +88,6 @@ public class Const {
     public static final String CACHE_KEY_PERSON = "person_";
     public static final String CACHE_KEY_NEWS = "news_";
     public static final String CACHE_KEY_PULSE = "pulse_";
-    public static final String CACHE_KEY_GDE = "gde_";
 
     public static final String GOOGLE_DEVELOPERS_YT_ID = "UC_x5XG1OV2P6uZZ5FSM9Ttw";
     public static final String ANDROID_DEVELOPERS_YT_ID = "UCVHFbqXqoYvEWM1Ddxl0QDg";

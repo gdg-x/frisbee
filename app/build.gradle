@@ -26,7 +26,7 @@ def versionPatch = 0
 def versionBuild = 1 // bump for dogfood builds, public betas, etc.
 
 def supportVersion = "22.2.1"
-def playServicesVersion = "7.3.0"
+def playServicesVersion = "7.5.0"
 
 android {
     compileSdkVersion 22
@@ -40,6 +40,7 @@ android {
     }
 
     defaultConfig {
+        applicationId "org.gdg.frisbee.android"
         minSdkVersion 16
         targetSdkVersion 22
         versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
@@ -57,7 +58,6 @@ android {
         
         //KEYS
         buildConfigField "String", "ANDROID_SIMPLE_API_ACCESS_KEY", "\"" + (local_properties.android_simple_api_access_key ?: "") + "\""
-        buildConfigField "String", "BROWSER_SIMPLE_API_ACCESS_KEY", "\"" + (local_properties.browser_simple_api_access_key ?: "") + "\""
         buildConfigField "String", "IP_SIMPLE_API_ACCESS_KEY", "\"" + (local_properties.ip_simple_api_access_key ?: "") + "\""
         buildConfigField "String", "HUB_CLIENT_ID", "\"" + (local_properties.hub_client_id ?: "") + "\""
         buildConfigField "String", "PLAY_APP_ID", "\"" + (local_properties.play_app_id ?: "") + "\""
@@ -152,6 +152,10 @@ play {
     track = 'alpha'
 }
 
+configurations {
+    compile.exclude module: 'httpclient'
+}
+
 dependencies {
     //Android Support
     compile "com.android.support:support-v4:$supportVersion"
@@ -172,7 +176,6 @@ dependencies {
     compile "com.google.android.gms:play-services-gcm:$playServicesVersion"
 
     //Google
-    compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.google.http-client:google-http-client-gson:1.20.0'
     compile 'com.google.apis:google-api-services-plus:v1-rev126-1.18.0-rc'
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
