@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-  <style name="Widget.GDG.Spinner" parent="Widget.AppCompat.Light.Spinner.DropDown.ActionBar">
-    <item name="android:theme">@style/ActionBarThemeOverlay</item>
-  </style>
-
-</resources>

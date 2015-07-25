@@ -22,6 +22,7 @@
   android:layout_height="?attr/actionBarSize"
   android:background="?attr/colorPrimary"
   android:theme="@style/ActionBarThemeOverlay"
+  app:popupTheme="@style/ActionBarPopupThemeOverlay"
   app:contentInsetStart="?actionBarInsetStart"
   app:titleTextAppearance="@style/ActionBar.TitleText" />
 
