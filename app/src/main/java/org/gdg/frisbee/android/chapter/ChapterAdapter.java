@@ -17,13 +17,10 @@
 package org.gdg.frisbee.android.chapter;
 
 import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
-import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.utils.Utils;
 
@@ -32,33 +29,12 @@ import java.util.Collection;
 
 public class ChapterAdapter extends ArrayAdapter<Chapter> {
 
-    private final boolean mWhiteText;
-    private LayoutInflater mInflater;
-
-    public ChapterAdapter(Context context, boolean whiteText) {
-        super(context, android.R.layout.simple_list_item_1);
-        mInflater = LayoutInflater.from(context);
-        mWhiteText = whiteText;
+    public ChapterAdapter(Context context, @LayoutRes int layoutRes) {
+        super(context, layoutRes);
     }
 
     @Override
-    public View getView(final int position, final View convertView, final ViewGroup parent) {
-        if (!mWhiteText) {
-            return super.getView(position, convertView, parent);
-        } else {
-            View view = convertView;
-            if (view == null) {
-                view = mInflater.inflate(R.layout.spinner_item_actionbar, parent, false);
-            }
-            TextView textView = (TextView) view.findViewById(android.R.id.text1);
-            textView.setText(getItem(position).getShortName());
-            return view;
-        }
-    }
-
-
-    @Override
-    public void addAll(Collection<? extends Chapter> chapters) {
+    public void addAll(@NonNull Collection<? extends Chapter> chapters) {
         for (Chapter c : chapters) {
             add(c);
         }

@@ -109,7 +109,8 @@ public class MainActivity extends GdgNavDrawerActivity {
 
         mLocationComparator = new ChapterComparator(PrefUtils.getHomeChapterIdNotNull(this));
 
-        mChapterAdapter = new ChapterAdapter(MainActivity.this, true /* white text */);
+        mChapterAdapter = new ChapterAdapter(MainActivity.this, R.layout.spinner_item_actionbar);
+        mChapterAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         initSpinner();
 
         if (savedInstanceState == null) {
@@ -378,6 +379,7 @@ public class MainActivity extends GdgNavDrawerActivity {
         toolbar.addView(spinnerContainer, lp);
 
         mSpinner = (Spinner) spinnerContainer.findViewById(R.id.actionbar_spinner);
+
         mSpinner.setAdapter(mChapterAdapter);
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -386,7 +388,6 @@ public class MainActivity extends GdgNavDrawerActivity {
                 Chapter selectedChapter = mChapterAdapter.getItem(position);
                 updateSelectionfor(selectedChapter);
             }
-
             @Override
             public void onNothingSelected(final AdapterView<?> parent) {
                 // Nothing to do.

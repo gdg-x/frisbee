@@ -5,7 +5,7 @@
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
   android:textAppearance="@style/TextAppearance.AppCompat.Widget.TextView.SpinnerItem"
-  android:textColor="@color/white"
+  android:textColor="@color/asbestos"
   android:gravity="center_vertical"
   android:minHeight="?android:attr/listPreferredItemHeightSmall"
   android:paddingLeft="@dimen/spinner_left_padding"

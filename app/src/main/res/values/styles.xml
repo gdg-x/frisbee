@@ -1,32 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <style name="TabIndicator"/>
-
   <style name="ActionBarThemeOverlay" parent="">
-    <item name="android:textColorPrimary">@color/theme_accent_1</item>
-    <item name="android:textColorSecondary">@color/theme_accent_1</item>
-    <item name="colorControlNormal">@color/theme_accent_1</item>
+    <item name="android:textColorPrimary">@color/white</item>
+    <item name="colorControlNormal">@color/white</item>
     <item name="colorControlHighlight">#3fff</item>
-    <item name="android:textAppearanceLargePopupMenu">@style/TextAppearance.GDG.PopupMenu.Large
-    </item>
-    <item name="android:textAppearanceSmallPopupMenu">@style/TextAppearance.GDG.PopupMenu.Small
-    </item>
   </style>
 
-  <style name="Widget.GDG.Spinner" parent="Widget.AppCompat.Light.Spinner.DropDown.ActionBar"/>
+  <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+  <style name="Widget.GDG.Spinner.Base" parent="Widget.AppCompat.Light.Spinner.DropDown.ActionBar"/>
+
+  <style name="Widget.GDG.Spinner" parent="Widget.GDG.Spinner.Base">
+    <item name="android:theme">@style/ActionBarThemeOverlay</item>
+  </style>
+
+  <style name="Widget.GDG.PopupMenu" parent="Widget.AppCompat.Light.PopupMenu">
+    <item name="android:dropDownSelector">?android:selectableItemBackground</item>
+  </style>
+
+  <style name="Widget.GDG.ListView.DropDown" parent="Widget.AppCompat.Light.ListView.DropDown">
+    <item name="android:listSelector">?android:selectableItemBackground</item>
+    <item name="android:divider">@null</item>
+    <item name="android:dividerHeight">0dp</item>
+  </style>
+
+  <style name="TextAppearance.LargePopupMenu" parent="TextAppearance.AppCompat.Widget.PopupMenu.Large">
+    <item name="android:textColor">@color/asbestos</item>
+  </style>
 
   <style name="ActionBar.TitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
     <item name="android:textColor">@color/theme_accent_1</item>
     <item name="android:textSize">18sp</item>
-  </style>
-
-  <style name="TextAppearance.GDG.PopupMenu.Small" parent="TextAppearance.AppCompat.Light.Widget.PopupMenu.Small">
-    <item name="android:textColor">@color/asbestos</item>
-  </style>
-
-  <style name="TextAppearance.GDG.PopupMenu.Large" parent="TextAppearance.AppCompat.Light.Widget.PopupMenu.Large">
-    <item name="android:textColor">@color/asbestos</item>
   </style>
 
   <style name="TextAppearance.GDG.FloatLabel" parent="TextAppearance.AppCompat.Small">

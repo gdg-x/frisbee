@@ -29,6 +29,11 @@
     <item name="android:windowBackground">@color/default_bg</item>
     <item name="windowActionBar">false</item>
     <item name="windowNoTitle">true</item>
+
+    <item name="android:popupMenuStyle">@style/Widget.GDG.PopupMenu</item>
+    <item name="android:listPopupWindowStyle">@style/Widget.GDG.PopupMenu</item>
+    <item name="android:dropDownListViewStyle">@style/Widget.GDG.ListView.DropDown</item>
+    <item name="android:textAppearanceLargePopupMenu">@style/TextAppearance.LargePopupMenu</item>
   </style>
 
   <style name="Theme.GDG" parent="Base.Theme.GDG"/>
