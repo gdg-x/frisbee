@@ -27,16 +27,16 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static android.support.test.espresso.matcher.ViewMatchers.*;
+import static org.hamcrest.Matchers.allOf;
 
 @RunWith(AndroidJUnit4.class)
 public class AboutActivityTest {
     @Rule
-    ActivityTestRule<AboutActivity> rule = new ActivityTestRule<>(AboutActivity.class);
+    public ActivityTestRule<AboutActivity> rule = new ActivityTestRule<>(AboutActivity.class);
 
     @Test
     public void activityStarts() {
-        onView(withText(R.string.about)).check(matches(isDisplayed()));
+        onView(allOf(withParent(withId(R.id.toolbar_actionbar)), withText(R.string.about))).check(matches(isDisplayed()));
     }
 }
