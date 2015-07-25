@@ -30,7 +30,8 @@
     android:paddingRight="@dimen/keyline_1_minus_12dp"
     android:clipToPadding="false"
     android:scrollbarStyle="outsideOverlay"
-    android:drawSelectorOnTop="true" />
+    android:drawSelectorOnTop="true"
+    android:divider="@null" />
 
   <include layout="@layout/loading_animated_view" />
 
