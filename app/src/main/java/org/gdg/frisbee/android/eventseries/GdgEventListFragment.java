@@ -79,11 +79,16 @@ public class GdgEventListFragment extends EventListFragment {
                         ColoredSnackBar.info(snackbar).show();
                     } else {
                         App.getInstance().getModelCache().removeAsync(cacheKey);
+                        onNotFound();
                     }
                 }
 
                 @Override
                 public void onNotFound(String key) {
+                    onNotFound();
+                }
+
+                private void onNotFound() {
                     setIsLoading(false);
                     Snackbar snackbar = Snackbar.make(getView(), R.string.offline_alert,
                             Snackbar.LENGTH_SHORT);
