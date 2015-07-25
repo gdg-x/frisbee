@@ -14,7 +14,7 @@ public class OrganizerCheckResponse {
     private ArrayList<Chapter> chapters;
 
     public OrganizerCheckResponse() {
-        chapters = new ArrayList<Chapter>();
+        chapters = new ArrayList<>();
     }
 
     public String getUser() {

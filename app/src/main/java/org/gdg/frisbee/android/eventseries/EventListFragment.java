@@ -31,11 +31,9 @@ import android.widget.ListView;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.SimpleEvent;
-import org.gdg.frisbee.android.event.EventActivity;
 import org.gdg.frisbee.android.common.GdgListFragment;
+import org.gdg.frisbee.android.event.EventActivity;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
-import org.joda.time.DateTime;
-import org.joda.time.MutableDateTime;
 
 import java.util.ArrayList;
 
@@ -150,22 +148,6 @@ public abstract class EventListFragment extends GdgListFragment {
         }
 
         startActivity(intent);
-    }
-
-    private DateTime getMonthStart(int month) {
-        MutableDateTime date = new MutableDateTime();
-        date.setDayOfMonth(1);
-        date.setMillisOfDay(0);
-        date.setMonthOfYear(month);
-        return date.toDateTime();
-    }
-
-    private DateTime getMonthEnd(int month) {
-        MutableDateTime date = MutableDateTime.now();
-        date.setMillisOfDay(0);
-        date.setMonthOfYear(month);
-
-        return date.toDateTime().dayOfMonth().withMaximumValue().millisOfDay().withMaximumValue();
     }
 
     @Override

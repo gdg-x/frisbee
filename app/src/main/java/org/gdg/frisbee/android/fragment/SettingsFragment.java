@@ -305,15 +305,4 @@ public class SettingsFragment extends PreferenceFragment {
             }
         }.execute();
     }
-
-    // TODO: Re-Implement with GMS 4.3
-    public void onSignInFailed() {
-        Timber.d("onSignInFailed");
-        PrefUtils.setLoggedOut(getActivity());
-        CheckBoxPreference prefGoogleSignIn = (CheckBoxPreference) findPreference(PrefUtils.SETTINGS_SIGNED_IN);
-        if (prefGoogleSignIn != null) {
-            prefGoogleSignIn.setChecked(false);
-        }
-    }
-
 }

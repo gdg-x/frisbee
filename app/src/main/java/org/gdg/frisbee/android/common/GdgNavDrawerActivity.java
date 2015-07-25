@@ -74,7 +74,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     @InjectView(R.id.nav_view)
     NavigationView mNavigationView;
 
-    private Plus plusClient;
     private MenuItem drawerItemToNavigateAfterSignIn = null;
     private static final int GROUP_ID = 1;
 
