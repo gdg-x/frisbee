@@ -40,12 +40,12 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.OrganizerChecker;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.eventseries.GdgEventListFragment;
 import org.gdg.frisbee.android.onboarding.FirstStartActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
@@ -233,31 +233,31 @@ public class MainActivity extends GdgNavDrawerActivity {
      * @param chapters Chapter array to be initialized, never null.
      */
     private void initChapters(@NonNull ArrayList<Chapter> chapters) {
+        String chapterId = getChapterIdFromIntent(getIntent());
 
         Chapter selectedChapter = null;
-        if (getIntent().hasExtra(Const.EXTRA_CHAPTER_ID)) {
-            final String chapterId = getIntent().getStringExtra(Const.EXTRA_CHAPTER_ID);
+        if (chapterId != null) {
             for (Chapter c : chapters) {
                 if (c.getGplusId().equals(chapterId)) {
                     selectedChapter = c;
                     break;
                 }
             }
-        } else if (getIntent().getData() != null && getIntent().getData().getScheme().equals("https")) {
-            final String chapterId = getIntent().getData().getLastPathSegment();
-            for (Chapter c : chapters) {
-                if (c.getGplusId().equals(chapterId)) {
-                    selectedChapter = c;
-                    break;
-                }
-            }
-
         }
 
         if (selectedChapter == null) {
             selectedChapter = chapters.get(0);
         }
         initChapters(chapters, selectedChapter);
+    }
+
+    private String getChapterIdFromIntent(final Intent intent) {
+        if (intent.hasExtra(Const.EXTRA_CHAPTER_ID)) {
+            return intent.getStringExtra(Const.EXTRA_CHAPTER_ID);
+        } else if (intent.getData() != null && intent.getData().getScheme().equals("https")) {
+            return intent.getData().getLastPathSegment();
+        }
+        return null;
     }
 
     public void fetchChapters() {
