@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Event;
+import org.gdg.frisbee.android.api.model.SimpleEvent;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.Utils;
@@ -67,13 +68,18 @@ public class GdgEventListFragment extends EventListFragment {
             App.getInstance().getModelCache().getAsync(cacheKey, false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
-                    ArrayList<Event> events = (ArrayList<Event>) item;
 
-                    mAdapter.addAll(events);
-                    setIsLoading(false);
-                    Snackbar snackbar = Snackbar.make(getView(), R.string.cached_content,
-                            Snackbar.LENGTH_SHORT);
-                    ColoredSnackBar.info(snackbar).show();
+                    if (checkValidCache(item)) {
+                        ArrayList<Event> events = (ArrayList<Event>) item;
+
+                        mAdapter.addAll(events);
+                        setIsLoading(false);
+                        Snackbar snackbar = Snackbar.make(getView(), R.string.cached_content,
+                                Snackbar.LENGTH_SHORT);
+                        ColoredSnackBar.info(snackbar).show();
+                    } else {
+                        App.getInstance().getModelCache().removeAsync(cacheKey);
+                    }
                 }
 
                 @Override
@@ -85,5 +91,15 @@ public class GdgEventListFragment extends EventListFragment {
                 }
             });
         }
+    }
+
+    private boolean checkValidCache(Object item) {
+        if (item instanceof ArrayList) {
+            ArrayList<?> result = (ArrayList) item;
+            if (result.size() > 0) {
+                return result.get(0) instanceof SimpleEvent;
+            }
+        }
+        return false;
     }
 }

@@ -24,6 +24,7 @@ public class OrganizerChecker {
 
         mLastOrganizerCheck = mPreferences.getLong(Const.PREF_ORGANIZER_CHECK_TIME, 0);
         mCheckedId = mPreferences.getString(Const.PREF_ORGANIZER_CHECK_ID, null);
+        mIsOrganizer = mPreferences.getBoolean(Const.PREF_ORGANIZER_STATE, false);
     }
 
     public long getLastOrganizerCheckTime() {
@@ -45,24 +46,19 @@ public class OrganizerChecker {
         }
         final String currentId = plusPerson != null ? plusPerson.getId() : null;
 
-        if (currentId == null 
-                || !currentId.equals(mCheckedId)  
-                || System.currentTimeMillis() > mLastOrganizerCheck + Const.ORGANIZER_CHECK_MAX_TIME) {
+        if (currentId != null
+                && (!currentId.equals(mCheckedId)
+                || System.currentTimeMillis() > mLastOrganizerCheck + Const.ORGANIZER_CHECK_MAX_TIME)) {
             mIsOrganizer = false;
             App.getInstance().getGdgXHub().checkOrganizer(currentId, new Callback<OrganizerCheckResponse>() {
                 @Override
                 public void success(OrganizerCheckResponse organizerCheckResponse, retrofit.client.Response response) {
                     mLastOrganizerCheck = System.currentTimeMillis();
                     mCheckedId = currentId;
-                    savePreferences();
+                    mIsOrganizer = organizerCheckResponse.getChapters().size() > 0;
+                    responseHandler.onOrganizerResponse(mIsOrganizer);
 
-                    if (organizerCheckResponse.getChapters().size() > 0) {
-                        mIsOrganizer = true;
-                        responseHandler.onOrganizerResponse(true);
-                    } else {
-                        mIsOrganizer = false;
-                        responseHandler.onOrganizerResponse(false);
-                    }
+                    savePreferences();
                 }
 
                 @Override
@@ -77,14 +73,16 @@ public class OrganizerChecker {
     }
 
     private void savePreferences() {
-        SharedPreferences.Editor editor = mPreferences.edit();
-        editor.putLong(Const.PREF_ORGANIZER_CHECK_TIME, getLastOrganizerCheckTime());
-        editor.putString(Const.PREF_ORGANIZER_CHECK_ID, getLastOrganizerCheckId());
-        editor.apply();
+        mPreferences.edit()
+                .putLong(Const.PREF_ORGANIZER_CHECK_TIME, getLastOrganizerCheckTime())
+                .putString(Const.PREF_ORGANIZER_CHECK_ID, getLastOrganizerCheckId())
+                .putBoolean(Const.PREF_ORGANIZER_STATE, isOrganizer())
+                .apply();
     }
 
     public interface Callbacks {
         void onOrganizerResponse(boolean isOrganizer);
+
         void onErrorResponse();
     }
 }
