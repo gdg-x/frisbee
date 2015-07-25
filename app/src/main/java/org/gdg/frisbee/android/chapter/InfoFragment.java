@@ -89,7 +89,7 @@ public class InfoFragment extends BaseFragment {
                     for (int i = 0; i < params.length; i++) {
                         Timber.d("Get Organizer " + params[i]);
                         if (isAdded()) {
-                            people[i] = GdgNavDrawerActivity.getPersonSync(((GdgNavDrawerActivity) getActivity()).getGoogleApiClient(), params[0]);
+                            people[i] = GdgNavDrawerActivity.getPersonSync(((GdgNavDrawerActivity) getActivity()).getGoogleApiClient(), params[i]);
                         } else {
                             // fragment is not used anymore
                             people[i] = null;
@@ -120,14 +120,14 @@ public class InfoFragment extends BaseFragment {
 
         mInflater = LayoutInflater.from(getActivity());
 
+        final String chapterPlusId = getArguments().getString(Const.EXTRA_PLUS_ID);
         if (Utils.isOnline(getActivity())) {
             new Builder<>(String.class, Person.class)
-                    .addParameter(getArguments().getString(Const.EXTRA_PLUS_ID))
                     .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person>() {
                         @Override
                         public Person doInBackground(String... params) {
                             if (isAdded()) {
-                                return GdgNavDrawerActivity.getPersonSync(((GdgNavDrawerActivity) getActivity()).getGoogleApiClient(), params[0]);
+                                return GdgNavDrawerActivity.getPersonSync(((GdgNavDrawerActivity) getActivity()).getGoogleApiClient(), chapterPlusId);
                             } else {
                                 // fragment is not used anymore
                                 return null;
@@ -145,8 +145,7 @@ public class InfoFragment extends BaseFragment {
                     })
                     .buildAndExecute();
         } else {
-            final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID);
-            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PERSON + plusId, false, new ModelCache.CacheListener() {
+            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PERSON + chapterPlusId, false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
                     final Person chachedChapter = (Person) item;

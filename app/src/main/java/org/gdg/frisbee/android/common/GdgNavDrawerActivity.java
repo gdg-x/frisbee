@@ -373,9 +373,13 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     public static Person getPersonSync(final GoogleApiClient apiClient, final String gplusId) {
         final String cacheUrl = Const.CACHE_KEY_PERSON + gplusId;
         Object cachedPerson = App.getInstance().getModelCache().get(cacheUrl);
+        Person person = null;
 
         if (cachedPerson instanceof Person) {
-            return (Person) cachedPerson;
+            person = (Person) cachedPerson;
+            if (person.getId() != null) {
+                return person;
+            }
         }
         if (cachedPerson != null) {
             App.getInstance().getModelCache().remove(cacheUrl);
@@ -386,14 +390,13 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             PersonBuffer personBuffer = result.getPersonBuffer();
             try {
                 if (personBuffer.getCount() > 0) {
-                    Person person = personBuffer.get(0);
+                    person = personBuffer.get(0);
                     App.getInstance().getModelCache().put(cacheUrl, person, DateTime.now().plusDays(2));
-                    return person;
                 }
             } finally {
                 personBuffer.close();
             }
         }
-        return null;
+        return person;
     }
 }
