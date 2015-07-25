@@ -473,6 +473,17 @@ public class ModelCache {
         }
     }
 
+    public void removeAsync(final String url) {
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+                ModelCache.this.remove(url);
+                return null;
+            }
+        }.execute();
+    }
+
     synchronized void setDiskCache(DiskLruCache diskCache) {
         mDiskCache = diskCache;
 
