@@ -40,7 +40,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 
 public abstract class GdgActivity extends TrackableActivity implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.OnConnectionFailedListener {
 
     private static final int STATE_DEFAULT = 0;
     private static final int STATE_SIGN_IN = 1;
@@ -97,10 +97,7 @@ public abstract class GdgActivity extends TrackableActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        GoogleApiClient googleApiClient = getGoogleApiClient();
-        googleApiClient.registerConnectionCallbacks(this);
-        googleApiClient.registerConnectionFailedListener(this);
+        getGoogleApiClient().registerConnectionFailedListener(this);
     }
 
     @Override
@@ -228,16 +225,6 @@ public abstract class GdgActivity extends TrackableActivity implements
 
         return taskList.get(0).numActivities == 1
                 && taskList.get(0).topActivity.getClassName().equals(this.getClass().getName());
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        mAchievementActionHandler.onConnected();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        mGoogleApiClient.connect();
     }
 
     @Override

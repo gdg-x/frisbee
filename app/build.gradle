@@ -143,6 +143,7 @@ android {
 
     packagingOptions {
         exclude 'LICENSE.txt'
+        exclude '.readme'
     }
 }
 

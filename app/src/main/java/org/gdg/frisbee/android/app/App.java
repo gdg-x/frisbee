@@ -382,6 +382,6 @@ public class App extends Application implements LocationListener,
 
     @Override
     public void onConnectionSuspended(int i) {
-        getGoogleApiClient().connect();
+        mGoogleApiClient.connect();
     }
 }

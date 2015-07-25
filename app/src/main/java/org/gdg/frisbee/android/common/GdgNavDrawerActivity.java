@@ -61,7 +61,8 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 
-public abstract class GdgNavDrawerActivity extends GdgActivity {
+public abstract class GdgNavDrawerActivity extends GdgActivity implements
+        GoogleApiClient.ConnectionCallbacks {
 
     protected ActionBarDrawerToggle mDrawerToggle;
     protected String mStoredHomeChapterId;
@@ -76,6 +77,13 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
     private MenuItem drawerItemToNavigateAfterSignIn = null;
     private static final int GROUP_ID = 1;
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getGoogleApiClient().registerConnectionCallbacks(this);
+    }
 
     @Override
     public void setContentView(int layoutResId) {
@@ -283,13 +291,16 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
     @Override
     public void onConnected(final Bundle bundle) {
-        super.onConnected(bundle);
         updateUserPicture();
 
         if (drawerItemToNavigateAfterSignIn != null) {
             onDrawerItemClick(drawerItemToNavigateAfterSignIn);
             drawerItemToNavigateAfterSignIn = null;
         }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
     }
 
     @Override
