@@ -125,7 +125,10 @@ class GdeAdapter extends BaseAdapter {
                 .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<ViewHolder, Person>() {
                     @Override
                     public void onPostExecute(ViewHolder[] p, Person person) {
-                        if (person != null && p[0].thumbnailView.equals(holder.thumbnailView)) {
+                        if (person != null
+                                && person.getImage() != null
+                                && person.getImage().getUrl() != null
+                                && p[0].thumbnailView.equals(holder.thumbnailView)) {
                             Picasso.with(mContext)
                                     .load(person.getImage().getUrl().replace("sz=50", "sz=196"))
                                     .into(p[0].thumbnailView);
