@@ -229,10 +229,10 @@ public class MainActivity extends GdgNavDrawerActivity {
      * @param chapters Chapter array to be initialized, never null.
      */
     private void initChapters(@NonNull ArrayList<Chapter> chapters) {
+        String chapterId = getChapterIdFromIntent(getIntent());
 
         Chapter selectedChapter = null;
-        if (getIntent().hasExtra(Const.EXTRA_CHAPTER_ID)) {
-            final String chapterId = getIntent().getStringExtra(Const.EXTRA_CHAPTER_ID);
+        if (chapterId != null) {
             for (Chapter c : chapters) {
                 if (c.getGplusId().equals(chapterId)) {
                     selectedChapter = c;
@@ -245,6 +245,15 @@ public class MainActivity extends GdgNavDrawerActivity {
             selectedChapter = chapters.get(0);
         }
         initChapters(chapters, selectedChapter);
+    }
+
+    private String getChapterIdFromIntent(final Intent intent) {
+        if (intent.hasExtra(Const.EXTRA_CHAPTER_ID)) {
+            return intent.getStringExtra(Const.EXTRA_CHAPTER_ID);
+        } else if (intent.getData() != null && intent.getData().getScheme().equals("https")) {
+            return intent.getData().getLastPathSegment();
+        }
+        return null;
     }
 
     public void fetchChapters() {
@@ -456,4 +465,3 @@ public class MainActivity extends GdgNavDrawerActivity {
         }
     }
 }
-
