@@ -252,16 +252,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     @Override
-    public void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-//        plusClient = new Plus.Builder(mTransport, mJsonFactory, null)
-//                .setGoogleClientRequestInitializer(
-//                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.ANDROID_SIMPLE_API_ACCESS_KEY))
-//                .setApplicationName("GDG Frisbee")
-//                .build();
-    }
-
-    @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
