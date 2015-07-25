@@ -158,18 +158,18 @@
     <string name="feedback_send">Send</string>
     <string name="feedback_sending">Sending…</string>
     <string name="for_leads">For Leads</string>
-    <string name="leads_welcome">Congrats for being a GDG organizer!</string>
-    <string name="leads_resources">You should check the GDG resource at public Google Drive folder. Click to browse documentation, graphics, code labs and more.</string>
-    <string name="leads_wisdom">The GDG Wisdom book at http://gdg-wisdom.gitbooks.io contains more general information. Feel free to contribute and edit pages. Click to read the book.</string>
     <string name="leads_welcome_title">Welcome</string>
+    <string name="leads_welcome">As a GDG lead, you have access to these organizer-only resources!</string>
     <string name="leads_resources_title">GDG Resources</string>
-    <string name="leads_wisdom_title">GDG Wisdom</string>
+    <string name="leads_resources">You can find important GDG Resources in this Google Drive folder. Tap to browse slide decks, guides, graphics, code labs, and more.</string>
+    <string name="leads_wisdom_title">GDG Wisdom GitBook</string>
+    <string name="leads_wisdom">This GitBook contains a wealth of general information about running a GDG chapter. Please edit pages and contribute to this global effort. Tap to open this GitBook.</string>
+    <string name="leads_gplus_community_title">GDG Organizer Creative Sandbox</string>
+    <string name="leads_gplus_community">This global G+ community is about sharing experiences and knowledge related to running a GDG chapter. Tap to join the conversation!</string>
     <string name="message">Message</string>
     <string name="resource">Resource</string>
     <string name="cd_navdrawer_image">Navigation Drawer Chapter Image</string>
     <string name="cd_navdrawer_user_picture">User Profile Image</string>
     <string name="title_signing_needed">Sign-in Needed</string>
     <string name="signin">Sign-in</string>
-    <string name="leads_gplus_community_title">G+ Community for Chapter Leads</string>
-    <string name="leads_gplus_community">This G+ community is about sharing experiences and knowledge about running a GDG chapter. Join and contribute!</string>
 </resources>
