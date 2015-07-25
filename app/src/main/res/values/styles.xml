@@ -26,7 +26,7 @@
   </style>
 
   <style name="TextAppearance.LargePopupMenu" parent="TextAppearance.AppCompat.Widget.PopupMenu.Large">
-    <item name="android:textColor">@color/body_text_1</item>
+    <item name="android:textColor">@color/asbestos</item>
   </style>
 
   <style name="ActionBar.TitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
