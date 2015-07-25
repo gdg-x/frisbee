@@ -17,12 +17,16 @@
 package org.gdg.frisbee.android.fragment;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.lang.ref.WeakReference;
 
 import timber.log.Timber;
 
@@ -33,7 +37,7 @@ import timber.log.Timber;
  */
 public class SwipeRefreshRecyclerViewFragment extends GdgRecyclerFragment {
 
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private ListFragmentSwipeRefreshLayout mSwipeRefreshLayout;
 
     public View createSwipeRefresh(final View listFragmentView) {
 
@@ -53,6 +57,13 @@ public class SwipeRefreshRecyclerViewFragment extends GdgRecyclerFragment {
 
         // Now return the SwipeRefreshLayout as this fragment's content view
         return mSwipeRefreshLayout;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+        mSwipeRefreshLayout.setRecyclerView(getListView());
+        return view;
     }
 
     /**
@@ -113,10 +124,16 @@ public class SwipeRefreshRecyclerViewFragment extends GdgRecyclerFragment {
      * override the default behavior and properly signal when a gesture is possible. This is done by
      * overriding {@link #canChildScrollUp()}.
      */
-    private class ListFragmentSwipeRefreshLayout extends SwipeRefreshLayout {
+    private static class ListFragmentSwipeRefreshLayout extends SwipeRefreshLayout {
+
+        private WeakReference<RecyclerView> recyclerView;
 
         public ListFragmentSwipeRefreshLayout(Context context) {
             super(context);
+        }
+
+        public void setRecyclerView(RecyclerView recyclerView) {
+            this.recyclerView = new WeakReference<>(recyclerView);
         }
 
         /**
@@ -127,34 +144,38 @@ public class SwipeRefreshRecyclerViewFragment extends GdgRecyclerFragment {
          */
         @Override
         public boolean canChildScrollUp() {
-            final RecyclerView recyclerView = getListView();
-            return recyclerView.getVisibility() == View.VISIBLE && canListViewScrollUp(recyclerView);
+            RecyclerView view = recyclerView != null ? recyclerView.get() : null;
+
+            return view != null
+                    && view.getVisibility() == View.VISIBLE
+                    && canListViewScrollUp(view);
         }
 
-    }
-    /**
-     * Utility method to check whether a {@link android.widget.ListView} can scroll up from it's current position.
-     * Handles platform version differences, providing backwards compatible functionality where
-     * needed.
-     */
-    private static boolean canListViewScrollUp(RecyclerView recyclerView) {
-        try {
-            RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-            if (layoutManager instanceof LinearLayoutManager) {
-                int position = ((LinearLayoutManager) layoutManager).findFirstCompletelyVisibleItemPosition();
-                return position != 0;
-            } else if (layoutManager instanceof StaggeredGridLayoutManager) {
-                int[] positions = ((StaggeredGridLayoutManager) layoutManager).findFirstCompletelyVisibleItemPositions(null);
-                for (int i = 0; i < positions.length; i++) {
-                    if (positions[i] == 0) {
-                        return false;
+
+        /**
+         * Utility method to check whether a {@link android.widget.ListView} can scroll up from it's current position.
+         * Handles platform version differences, providing backwards compatible functionality where
+         * needed.
+         */
+        private boolean canListViewScrollUp(RecyclerView recyclerView) {
+            try {
+                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                if (layoutManager instanceof LinearLayoutManager) {
+                    int position = ((LinearLayoutManager) layoutManager).findFirstCompletelyVisibleItemPosition();
+                    return position != 0;
+                } else if (layoutManager instanceof StaggeredGridLayoutManager) {
+                    int[] positions = ((StaggeredGridLayoutManager) layoutManager).findFirstCompletelyVisibleItemPositions(null);
+                    for (int i = 0; i < positions.length; i++) {
+                        if (positions[i] == 0) {
+                            return false;
+                        }
                     }
                 }
+            } catch (NullPointerException exception) {
+                Timber.e(exception, "Exception in RecyclerView canListViewScrollUp.");
             }
-        } catch (NullPointerException exception) {
-            Timber.e(exception, "Exception in RecyclerView canListViewScrollUp.");
+            return true;
         }
-        return true;
     }
 
 }
