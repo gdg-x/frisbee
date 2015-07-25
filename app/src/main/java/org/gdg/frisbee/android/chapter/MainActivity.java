@@ -184,7 +184,8 @@ public class MainActivity extends GdgNavDrawerActivity {
     }
 
     private void updateChapterPages() {
-        final boolean wasOrganizer = App.getInstance().isOrganizer();
+        final boolean wasOrganizer = mViewPagerAdapter != null
+                && mViewPagerAdapter.getCount() == ORGANIZER_PAGES.length;
         App.getInstance().checkOrganizer(getGoogleApiClient(),
                 new OrganizerChecker.Callbacks() {
                     @Override

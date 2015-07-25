@@ -257,7 +257,7 @@ public class SettingsFragment extends PreferenceFragment {
                         if (mGoogleApiClient.isConnected()) {
                             Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
                             mGoogleApiClient.disconnect();
-                            mGoogleApiClient.connect();
+                            PrefUtils.setLoggedOut(getActivity());
                         }
                     } else {
                         if (!mGoogleApiClient.isConnected()) {
