@@ -92,6 +92,7 @@ public class FirstStartStep2Fragment extends BaseFragment implements
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(Plus.API)
+                .addApi(Games.API)
                 .addScope(Plus.SCOPE_PLUS_LOGIN)
                 .addScope(Plus.SCOPE_PLUS_PROFILE)
                 .addScope(Games.SCOPE_GAMES)
