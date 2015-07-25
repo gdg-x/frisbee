@@ -45,7 +45,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 class EventAdapter extends BaseAdapter {
 
@@ -200,16 +200,16 @@ class EventAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        @InjectView(R.id.event_title) TextView eventTitle;
-        @InjectView(R.id.event_date) TextView eventDate;
-        @InjectView(R.id.event_time) TextView eventTime;
-        @InjectView(R.id.event_location) TextView eventLocation;
-        @InjectView(R.id.past) TextView past;
-        @InjectView(R.id.icon) ImageView icon;
-//        @InjectView(R.id.event_image_header) ImageView eventHeader;
+        @Bind(R.id.event_title) TextView eventTitle;
+        @Bind(R.id.event_date) TextView eventDate;
+        @Bind(R.id.event_time) TextView eventTime;
+        @Bind(R.id.event_location) TextView eventLocation;
+        @Bind(R.id.past) TextView past;
+        @Bind(R.id.icon) ImageView icon;
+//        @Bind(R.id.event_image_header) ImageView eventHeader;
 
         ViewHolder(View view) {
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 }

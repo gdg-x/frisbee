@@ -30,7 +30,7 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -39,13 +39,13 @@ import timber.log.Timber;
 
 public class GdeActivity extends GdgNavDrawerActivity {
 
-    @InjectView(R.id.pager)
+    @Bind(R.id.pager)
     ViewPager mViewPager;
 
-    @InjectView(R.id.tabs)
+    @Bind(R.id.tabs)
     TabLayout mTabLayout;
 
-    @InjectView(R.id.content_frame)
+    @Bind(R.id.content_frame)
     FrameLayout mContentLayout;
 
     private Handler mHandler = new Handler();

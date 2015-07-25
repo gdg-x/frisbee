@@ -29,7 +29,7 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.common.BaseFragment;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 
 public class GdgRecyclerFragment extends BaseFragment {
@@ -46,10 +46,10 @@ public class GdgRecyclerFragment extends BaseFragment {
 
     RecyclerView mList;
 
-    @InjectView(R.id.empty)
+    @Bind(R.id.empty)
     View mEmptyView;
 
-    @InjectView(R.id.loading)
+    @Bind(R.id.loading)
     View mProgressContainer;
 
     CharSequence mEmptyText;
@@ -77,7 +77,7 @@ public class GdgRecyclerFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_recycler_view, container, false);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
         return v;
     }
 

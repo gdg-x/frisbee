@@ -31,17 +31,17 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 public class ExtLibrariesFragment extends BaseFragment {
 
-    @InjectView(R.id.external)
+    @Bind(R.id.external)
     TextView mExternal;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_external_libraries, container, false);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
         return v;
     }
 

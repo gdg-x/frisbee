@@ -64,7 +64,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 
 public class ArrowActivity extends GdgNavDrawerActivity {
 
@@ -74,17 +74,17 @@ public class ArrowActivity extends GdgNavDrawerActivity {
     private static final int REQUEST_LEADERBOARD = 1;
     private static final int WHITE = 0xFFFFFFFF;
     private static final int BLACK = 0xFF000000;
-    @InjectView(R.id.viewFlipper)
+    @Bind(R.id.viewFlipper)
     ViewFlipper viewFlipper;
-    @InjectView(R.id.switchToSend)
+    @Bind(R.id.switchToSend)
     Button switchToSend;
-    @InjectView(R.id.switchToTag)
+    @Bind(R.id.switchToTag)
     Button switchToReceive;
-    @InjectView(R.id.organizerOnly)
+    @Bind(R.id.organizerOnly)
     LinearLayout organizerOnly;
-    @InjectView(R.id.imageView)
+    @Bind(R.id.imageView)
     ImageView scanImageView;
-    @InjectView(R.id.organizerPic)
+    @Bind(R.id.organizerPic)
     ImageView organizerPic;
     private String previous;
     private BaseArrowHandler mArrowHandler;

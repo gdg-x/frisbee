@@ -31,7 +31,7 @@ import org.gdg.frisbee.android.app.App;
 import java.util.Collection;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 class ContributorAdapter extends ArrayAdapter<Contributor> {
 
@@ -71,13 +71,13 @@ class ContributorAdapter extends ArrayAdapter<Contributor> {
     }
 
     static final class ViewHolder {
-        @InjectView(R.id.contributorName)
+        @Bind(R.id.contributorName)
         TextView contributorName;
-        @InjectView(R.id.contributorIcon)
+        @Bind(R.id.contributorIcon)
         ImageView contributorAvatar;
 
         public ViewHolder(View view) {
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 }

@@ -31,7 +31,7 @@ import android.widget.ListView;
 import org.gdg.frisbee.android.R;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 /**
  * GDG Aachen
@@ -62,10 +62,10 @@ public class GdgListFragment extends BaseFragment {
 
     AdapterView<ListAdapter> mList;
 
-    @InjectView(R.id.empty)
+    @Bind(R.id.empty)
     View mEmptyView;
     
-    @InjectView(R.id.loading)
+    @Bind(R.id.loading)
     View mProgressContainer;
 
     CharSequence mEmptyText;
@@ -93,7 +93,7 @@ public class GdgListFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_list, container, false);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
         return v;
     }
 

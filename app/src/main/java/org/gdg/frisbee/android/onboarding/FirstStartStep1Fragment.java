@@ -43,7 +43,7 @@ import java.util.Collections;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -52,11 +52,11 @@ import timber.log.Timber;
 public class FirstStartStep1Fragment extends BaseFragment {
 
     private static final String ARG_SELECTED_CHAPTER = "selected_chapter";
-    @InjectView(R.id.chapter_spinner)
+    @Bind(R.id.chapter_spinner)
     Spinner mChapterSpinner;
-    @InjectView(R.id.confirm)
+    @Bind(R.id.confirm)
     Button mConfirm;
-    @InjectView(R.id.viewSwitcher)
+    @Bind(R.id.viewSwitcher)
     ViewSwitcher mLoadSwitcher;
     private ChapterAdapter mSpinnerAdapter;
     private Chapter mSelectedChapter;
@@ -167,7 +167,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_welcome_step1, container, false);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
         return v;
     }
 
