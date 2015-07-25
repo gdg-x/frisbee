@@ -16,6 +16,8 @@
 
 package org.gdg.frisbee.android;
 
+import android.text.format.DateUtils;
+
 import org.joda.time.DateTime;
 
 /**
@@ -64,7 +66,7 @@ public class Const {
     public static final String PREF_ORGANIZER_CHECK_TIME = "pref_organizer_check_time";
     public static final String PREF_ORGANIZER_CHECK_ID = "pref_organizer_check_id";
     public static final String PREF_ORGANIZER_STATE = "pref_organizer_state";
-    public static final long ORGANIZER_CHECK_MAX_TIME = 2592000000L; // 30 days
+    public static final long ORGANIZER_CHECK_MAX_TIME = DateUtils.WEEK_IN_MILLIS;
     public static final String ARROW_MIME = "application/vnd.org.gdgx.frisbee.arrow";
     public static final String ARROW_LB = "CgkIh5yNxL8MEAIQBw";
     public static final String ARROW_K = "XXXX111122223333";
