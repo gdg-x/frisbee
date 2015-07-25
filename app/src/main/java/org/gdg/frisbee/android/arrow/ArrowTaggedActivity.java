@@ -50,7 +50,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import timber.log.Timber;
@@ -60,7 +60,7 @@ public class ArrowTaggedActivity extends GdgNavDrawerActivity {
     public static final String ID_SEPARATOR_FOR_SPLIT = "\\|";
     public static final String ID_SPLIT_CHAR = "|";
 
-    @InjectView(R.id.taggedList)
+    @Bind(R.id.taggedList)
     ListView taggedList;
     String taggedOrganizers = "";
     private OrganizerAdapter adapter;

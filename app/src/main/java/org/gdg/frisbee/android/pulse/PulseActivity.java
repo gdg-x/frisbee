@@ -47,7 +47,7 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -55,13 +55,13 @@ import timber.log.Timber;
 
 public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment.Callbacks {
 
-    @InjectView(R.id.pager)
+    @Bind(R.id.pager)
     ViewPager mViewPager;
 
-    @InjectView(R.id.tabs)
+    @Bind(R.id.tabs)
     TabLayout mTabLayout;
 
-    @InjectView(R.id.content_frame)
+    @Bind(R.id.content_frame)
     FrameLayout mContentLayout;
 
     private CountriesSpinnerAdapter mSpinnerAdapter;

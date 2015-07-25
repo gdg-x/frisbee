@@ -53,8 +53,8 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import io.doorbell.android.DoorbellApi;
 import io.doorbell.android.manavo.rest.RestCallback;
 import timber.log.Timber;
@@ -71,8 +71,8 @@ public class FeedbackFragment extends DialogFragment {
     private static final String PROPERTY_APP_VERSION_CODE = "App Version Code";
 //    private static final String POWERED_BY_DOORBELL_TEXT = "Powered by <a href=\"https://doorbell.io\">Doorbell.io</a>";
 
-    @InjectView(R.id.feedback_message_text) EditText mMessageField;
-    @InjectView(R.id.feedback_email_text) AutoCompleteTextView mEmailField;
+    @Bind(R.id.feedback_message_text) EditText mMessageField;
+    @Bind(R.id.feedback_email_text) AutoCompleteTextView mEmailField;
 
     private JSONObject mProperties;
     private DoorbellApi mApi;
@@ -97,7 +97,7 @@ public class FeedbackFragment extends DialogFragment {
 
         View feedbackView = LayoutInflater.from(getActivity())
                 .inflate(R.layout.dialog_feedback, (ViewGroup) getView(), false);
-        ButterKnife.inject(this, feedbackView);
+        ButterKnife.bind(this, feedbackView);
         setupEmailAutocomplete();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())

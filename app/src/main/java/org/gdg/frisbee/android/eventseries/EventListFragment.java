@@ -153,7 +153,7 @@ public abstract class EventListFragment extends GdgListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_events, container, false);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
         return v;
     }
 }

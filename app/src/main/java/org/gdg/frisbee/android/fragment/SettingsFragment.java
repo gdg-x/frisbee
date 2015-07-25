@@ -96,6 +96,10 @@ public class SettingsFragment extends PreferenceFragment {
                     @Override
                     protected Void doInBackground(Void... voids) {
                         try {
+                            if (!mGoogleApiClient.isConnected()) {
+                                mGoogleApiClient.blockingConnect();
+                            }
+
                             GdgXHub client = App.getInstance().getGdgXHub();
                             String token = GoogleAuthUtil.getToken(getActivity(), 
                                     Plus.AccountApi.getAccountName(mGoogleApiClient), 

@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.eventseries;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -27,15 +28,14 @@ import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 
-import butterknife.InjectView;
-import butterknife.Optional;
+import butterknife.Bind;
 
 public class TaggedEventSeriesActivity extends GdgNavDrawerActivity {
 
-    @Optional @InjectView(R.id.special_logo)
+    @Nullable @Bind(R.id.special_logo)
     ImageView mLogo;
 
-    @Optional @InjectView(R.id.special_description)
+    @Nullable @Bind(R.id.special_description)
     TextView mDescription;
 
     private TaggedEventSeries mTaggedEventSeries;

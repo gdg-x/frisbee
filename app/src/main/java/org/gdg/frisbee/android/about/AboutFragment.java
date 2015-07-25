@@ -28,18 +28,18 @@ import android.widget.TextView;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.common.BaseFragment;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class AboutFragment extends BaseFragment {
 
-    @InjectView(R.id.version)
+    @Bind(R.id.version)
     TextView mVersion;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_about, container, false);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
         return v;
     }
 

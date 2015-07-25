@@ -24,14 +24,14 @@ import android.view.MenuItem;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.common.GdgActivity;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 
 public class AboutActivity extends GdgActivity {
 
-    @InjectView(R.id.pager)
+    @Bind(R.id.pager)
     ViewPager mViewPager;
 
-    @InjectView(R.id.tabs)
+    @Bind(R.id.tabs)
     TabLayout mTabLayout;
 
     @Override

@@ -60,29 +60,29 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import timber.log.Timber;
 
 public class EventOverviewFragment extends Fragment {
 
-    @InjectView(R.id.title)
+    @Bind(R.id.title)
     TextView mTitle;
 
-    @InjectView(R.id.date)
+    @Bind(R.id.date)
     TextView mDate;
 
-    @InjectView(R.id.start_time)
+    @Bind(R.id.start_time)
     TextView mStartTime;
 
-    @InjectView(R.id.event_description)
+    @Bind(R.id.event_description)
     TextView mEventDescription;
 
-    @InjectView(R.id.loading)
+    @Bind(R.id.loading)
     View mProgressContainer;
 
-    @InjectView(R.id.group_logo)
+    @Bind(R.id.group_logo)
     ImageView mGroupLogo;
 
     private boolean mLoading;
@@ -92,7 +92,7 @@ public class EventOverviewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_event_overview, parent, false);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
 
         setHasOptionsMenu(true);
         return v;

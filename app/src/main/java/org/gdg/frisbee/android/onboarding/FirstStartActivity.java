@@ -58,7 +58,7 @@ import org.gdg.frisbee.android.widget.NonSwipeableViewPager;
 import java.io.IOException;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -73,13 +73,13 @@ public class FirstStartActivity extends AppCompatActivity implements
 
     private GoogleCloudMessaging mGcm;
 
-    @InjectView(R.id.pager)
+    @Bind(R.id.pager)
     NonSwipeableViewPager mViewPager;
 
-    @InjectView(R.id.loading)
+    @Bind(R.id.loading)
     LinearLayout mLoading;
 
-    @InjectView(R.id.contentLayout)
+    @Bind(R.id.contentLayout)
     FrameLayout mContentLayout;
 
     private Chapter mSelectedChapter;
@@ -96,7 +96,7 @@ public class FirstStartActivity extends AppCompatActivity implements
 
         App.getInstance().updateLastLocation();
 
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         mViewPagerAdapter = new FirstStartPageAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);

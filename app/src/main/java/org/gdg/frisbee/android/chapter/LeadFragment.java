@@ -20,7 +20,7 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.lead.LeadMessage;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 public class LeadFragment extends ListFragment {
     private LeadAnnouncementsAdapter mAdapter;
@@ -85,15 +85,15 @@ public class LeadFragment extends ListFragment {
     }
 
     public static class ViewHolder {
-        @InjectView(R.id.msg_title)
+        @Bind(R.id.msg_title)
         TextView title;
-        @InjectView(R.id.msg_details)
+        @Bind(R.id.msg_details)
         TextView details;
-        @InjectView(R.id.msg_type)
+        @Bind(R.id.msg_type)
         TextView type;
 
         public ViewHolder(View view) {
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 }

@@ -195,7 +195,7 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_news, container, false);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
         return createSwipeRefresh(v);
     }
 

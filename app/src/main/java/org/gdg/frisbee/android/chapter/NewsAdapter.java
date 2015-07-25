@@ -51,7 +51,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
@@ -542,17 +542,17 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView attachmentTitle;
-        @InjectView(R.id.plus_one_button)
+        @Bind(R.id.plus_one_button)
         PlusOneButton plusButton;
-        @InjectView(R.id.attachmentContainer)
+        @Bind(R.id.attachmentContainer)
         ViewGroup container;
-        @InjectView(R.id.shareContainer)
+        @Bind(R.id.shareContainer)
         ViewGroup shareContainer;
-        @InjectView(R.id.timestamp)
+        @Bind(R.id.timestamp)
         TextView timeStamp;
-        @InjectView(R.id.content)
+        @Bind(R.id.content)
         TextView content;
-        @InjectView(R.id.shareContent)
+        @Bind(R.id.shareContent)
         TextView shareContent;
         ImageView articleImage;
         TextView title;
@@ -566,7 +566,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
         private ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.inject(this, itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

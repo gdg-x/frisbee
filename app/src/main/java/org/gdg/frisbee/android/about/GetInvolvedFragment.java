@@ -31,7 +31,7 @@ public class GetInvolvedFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_get_involved, container, false);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
         return v;
     }
 }

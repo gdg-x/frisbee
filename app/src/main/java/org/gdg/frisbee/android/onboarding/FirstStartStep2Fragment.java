@@ -35,7 +35,7 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.common.BaseFragment;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 public class FirstStartStep2Fragment extends BaseFragment implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -49,9 +49,9 @@ public class FirstStartStep2Fragment extends BaseFragment implements
     private static final int DIALOG_PLAY_SERVICES_ERROR = 0;
 
     private static final String SAVED_PROGRESS = "sign_in_progress";
-    @InjectView(R.id.googleSignin)
+    @Bind(R.id.googleSignin)
     Button mSignInButton;
-    @InjectView(R.id.skipSignin)
+    @Bind(R.id.skipSignin)
     Button mSkipSignin;
     private GoogleApiClient mGoogleApiClient;
     // We use mSignInProgress to track whether user has clicked sign in.
@@ -108,7 +108,7 @@ public class FirstStartStep2Fragment extends BaseFragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_welcome_step2, container, false);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
         return v;
     }
 

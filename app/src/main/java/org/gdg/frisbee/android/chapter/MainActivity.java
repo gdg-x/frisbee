@@ -58,7 +58,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import timber.log.Timber;
@@ -79,11 +79,11 @@ public class MainActivity extends GdgNavDrawerActivity {
     public static final int REQUEST_FIRST_START_WIZARD = 100;
     private static final int PLAY_SERVICE_DIALOG_REQUEST_CODE = 200;
 
-    @InjectView(R.id.pager)
+    @Bind(R.id.pager)
     ViewPager mViewPager;
-    @InjectView(R.id.tabs)
+    @Bind(R.id.tabs)
     TabLayout mTabLayout;
-    @InjectView(R.id.content_frame)
+    @Bind(R.id.content_frame)
     FrameLayout mContentFrameLayout;
 
     private Handler mHandler = new Handler();

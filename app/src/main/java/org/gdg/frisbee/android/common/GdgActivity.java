@@ -91,7 +91,7 @@ public abstract class GdgActivity extends TrackableActivity implements
     @Override
     public void setContentView(int layoutResId) {
         super.setContentView(layoutResId);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         getActionBarToolbar();
     }
 

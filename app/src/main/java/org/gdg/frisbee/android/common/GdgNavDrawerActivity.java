@@ -59,19 +59,19 @@ import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 
 public abstract class GdgNavDrawerActivity extends GdgActivity {
 
     protected ActionBarDrawerToggle mDrawerToggle;
     protected String mStoredHomeChapterId;
-    @InjectView(R.id.drawer)
+    @Bind(R.id.drawer)
     DrawerLayout mDrawerLayout;
-    @InjectView(R.id.navdrawer_image)
+    @Bind(R.id.navdrawer_image)
     ImageView mDrawerImage;
-    @InjectView(R.id.navdrawer_user_picture)
+    @Bind(R.id.navdrawer_user_picture)
     ImageView mDrawerUserPicture;
-    @InjectView(R.id.nav_view)
+    @Bind(R.id.nav_view)
     NavigationView mNavigationView;
 
     private MenuItem drawerItemToNavigateAfterSignIn = null;
