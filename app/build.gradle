@@ -152,6 +152,10 @@ play {
     track = 'alpha'
 }
 
+configurations {
+    compile.exclude module: 'httpclient'
+}
+
 dependencies {
     //Android Support
     compile "com.android.support:support-v4:$supportVersion"
@@ -172,7 +176,6 @@ dependencies {
     compile "com.google.android.gms:play-services-gcm:$playServicesVersion"
 
     //Google
-    compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.google.http-client:google-http-client-gson:1.20.0'
     compile 'com.google.apis:google-api-services-plus:v1-rev126-1.18.0-rc'
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
