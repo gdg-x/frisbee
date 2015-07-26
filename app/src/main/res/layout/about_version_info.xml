@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:tools="http://schemas.android.com/tools"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  tools:showIn="@layout/fragment_about">
+
+
+  <ImageView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:src="@drawable/powered_by_x" />
+
+  <TextView
+    android:id="@+id/textView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/keyline_1"
+    android:gravity="center_horizontal"
+    android:text="@string/about_license" />
+
+  <TextView
+    android:id="@+id/version"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/keyline_1"
+    android:gravity="center_horizontal"
+    tools:text="1.0"
+    android:textStyle="bold" />
+</merge>

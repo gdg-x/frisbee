@@ -26,8 +26,8 @@
   <ImageView
     android:contentDescription="@string/organizers"
     android:id="@+id/icon"
-    android:layout_width="32dp"
-    android:layout_height="32dip"
+    android:layout_width="@dimen/avatar_size"
+    android:layout_height="@dimen/avatar_size"
     android:layout_gravity="center_horizontal|top" />
 
   <TextView

@@ -172,4 +172,5 @@
     <string name="cd_navdrawer_user_picture">User Profile Image</string>
     <string name="title_signing_needed">Sign-in Needed</string>
     <string name="signin">Sign-in</string>
+    <string name="fork_me">Fork me</string>
 </resources>

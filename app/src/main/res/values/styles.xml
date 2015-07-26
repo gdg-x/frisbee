@@ -57,6 +57,12 @@
     <item name="cardElevation">4dp</item>
     <item name="cardUseCompatPadding">true</item>
   </style>
+  <style name="CardView.GDE" parent="CardView.Default">
+    <item name="android:layout_margin">@dimen/content_padding</item>
+  </style>
+  <style name="CardView.Contributor" parent="CardView.Default">
+    <item name="android:layout_margin">@dimen/content_padding</item>
+  </style>
 
   <style name="Widget.GDG.TextView.CardHeader" parent="android:style/Widget.TextView">
     <item name="android:paddingLeft">@dimen/keyline_1_twice</item>

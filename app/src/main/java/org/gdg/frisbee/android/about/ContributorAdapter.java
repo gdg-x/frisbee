@@ -36,13 +36,13 @@ import butterknife.Bind;
 class ContributorAdapter extends ArrayAdapter<Contributor> {
 
     public ContributorAdapter(Context context) {
-        super(context, R.layout.contributor_item);
+        super(context, R.layout.list_contributor_item);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = View.inflate(getContext(), R.layout.contributor_item, null);
+            convertView = View.inflate(getContext(), R.layout.list_contributor_item, null);
             ViewHolder viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         }

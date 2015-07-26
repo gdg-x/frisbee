@@ -80,7 +80,7 @@ class GdeAdapter extends BaseAdapter {
     public View getView(int i, View convertView, ViewGroup parent) {
         View rowView = convertView;
         if (rowView == null) {
-            rowView = mInflater.inflate(R.layout.gde_item, parent, false);
+            rowView = mInflater.inflate(R.layout.list_gde_item, parent, false);
             ViewHolder viewHolder = new ViewHolder();
             viewHolder.thumbnailView = (SquaredImageView) rowView.findViewById(R.id.thumb);
             viewHolder.nameView = (TextView) rowView.findViewById(R.id.name);

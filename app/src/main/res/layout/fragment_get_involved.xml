@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:card_view="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
   <android.support.v7.widget.CardView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/keyline_1_minus_8dp"
-    card_view:cardCornerRadius="2dp"
-    card_view:cardUseCompatPadding="true"
-    card_view:cardElevation="4dp">
+    style="@style/CardView.Default">
 
     <ScrollView
       android:layout_width="match_parent"
@@ -18,7 +14,7 @@
 
       <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="10dip">
 
@@ -50,6 +46,7 @@
 
   <ImageView
     android:id="@+id/forkMe"
+    android:contentDescription="@string/fork_me"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_alignParentTop="true"

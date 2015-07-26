@@ -3,7 +3,6 @@
   <item name="match_parent" type="dimen">-1</item>
   <item name="wrap_content" type="dimen">-2</item>
   
-  <dimen name="logo_size">50dip</dimen>
   <dimen name="text_size_small">12sp</dimen>
   <dimen name="text_size_large">18sp</dimen>
   <dimen name="navdrawer_width">260dp</dimen>
@@ -24,5 +23,6 @@
   <dimen name="responsive_width">@dimen/match_parent</dimen>
   <dimen name="icon_width_event_half">24dp</dimen>
   <dimen name="icon_width_event_third">16dp</dimen>
+  <dimen name="avatar_size">48dp</dimen>
 
 </resources>
