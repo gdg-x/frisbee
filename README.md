@@ -28,8 +28,10 @@ Check http://github.com/gdg-x for more information about all development activit
 
 Development
 -----------
+Read the [Contribution Guidelines](https://github.com/gdg-x/frisbee/blob/develop/CONTRIBUTING.md).
 
 Read the [Development Guide](https://github.com/gdg-x/frisbee/wiki/Developer-Documentation).
+
 
 ###Contributors
 * [Sebastian Mauer](https://github.com/mauimauer)
