@@ -23,6 +23,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
@@ -30,7 +31,10 @@ import android.widget.Toast;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.appstate.AppStateManager;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.games.Games;
+import com.google.android.gms.plus.Plus;
 import com.google.gson.FieldNamingPolicy;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
@@ -43,6 +47,7 @@ import net.danlew.android.joda.JodaTimeAndroid;
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.achievements.AchievementActionHandler;
 import org.gdg.frisbee.android.api.GdgXHub;
 import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.deserializer.ZuluDateTimeDeserializer;
@@ -69,7 +74,8 @@ import timber.log.Timber;
  * Date: 20.04.13
  * Time: 12:09
  */
-public class App extends Application implements LocationListener {
+public class App extends Application implements LocationListener,
+        GoogleApiClient.ConnectionCallbacks {
 
     private static App mInstance = null;
 
@@ -87,6 +93,10 @@ public class App extends Application implements LocationListener {
     private OrganizerChecker mOrganizerChecker;
     private ArrayList<TaggedEventSeries> mTaggedEventSeriesList;
     private RefWatcher refWatcher;
+
+    private GoogleApiClient mGoogleApiClient;
+    private AchievementActionHandler mAchievementActionHandler;
+    private Handler mHandler = new Handler();
 
     @Override
     public void onCreate() {
@@ -126,6 +136,19 @@ public class App extends Application implements LocationListener {
         getModelCache();
 
         PrefUtils.increaseAppStartCount(this);
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addApi(Plus.API)
+                .addApi(Games.API)
+                .addApi(AppStateManager.API)
+                .addScope(Plus.SCOPE_PLUS_LOGIN)
+                .addScope(Plus.SCOPE_PLUS_PROFILE)
+                .addScope(Games.SCOPE_GAMES)
+                .build();
+
+        mAchievementActionHandler =
+                new AchievementActionHandler(mHandler, getGoogleApiClient(), this);
 
         // Initialize Picasso
         mPicasso = new Picasso.Builder(this)
@@ -345,5 +368,24 @@ public class App extends Application implements LocationListener {
 
     public RefWatcher getRefWatcher() {
         return refWatcher;
+    }
+
+    @NonNull
+    public GoogleApiClient getGoogleApiClient() {
+        return mGoogleApiClient;
+    }
+
+    public AchievementActionHandler getAchievementActionHandler() {
+        return mAchievementActionHandler;
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        mAchievementActionHandler.onConnected();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        mGoogleApiClient.connect();
     }
 }
