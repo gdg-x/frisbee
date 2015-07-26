@@ -64,7 +64,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
     FrameLayout mContentLayout;
 
     private ArrayAdapter<String> mSpinnerAdapter;
-    private MyAdapter mViewPagerAdapter;
+    private PulsePagerAdapter mViewPagerAdapter;
     private ArrayList<String> mPulseTargets;
     private Spinner mSpinner;
 
@@ -76,8 +76,9 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
 
         mPulseTargets = new ArrayList<>();
 
-        mViewPagerAdapter = new MyAdapter(this, getSupportFragmentManager());
+        mViewPagerAdapter = new PulsePagerAdapter(this, getSupportFragmentManager());
         mSpinnerAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item_actionbar);
+        mSpinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
 
         App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PULSE_GLOBAL, true, new ModelCache.CacheListener() {
             @Override
@@ -189,11 +190,11 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
         mSpinner.setSelection(getPulseTargets().indexOf(key));
     }
 
-    public class MyAdapter extends FragmentStatePagerAdapter {
+    public class PulsePagerAdapter extends FragmentStatePagerAdapter {
         private Context mContext;
         private String mSelectedPulseTarget;
 
-        public MyAdapter(Context ctx, FragmentManager fm) {
+        public PulsePagerAdapter(Context ctx, FragmentManager fm) {
             super(fm);
             mContext = ctx;
         }
