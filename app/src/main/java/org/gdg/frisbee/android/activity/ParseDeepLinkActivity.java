@@ -20,7 +20,7 @@ public class ParseDeepLinkActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String deepLinkId = PlusShare.getDeepLinkId(this.getIntent());
+        String deepLinkId = PlusShare.getDeepLinkId(getIntent());
         Intent target = parseDeepLinkId(deepLinkId);
         if (target != null) {
             startActivity(target);
@@ -37,6 +37,9 @@ public class ParseDeepLinkActivity extends Activity {
      * @return The intent corresponding to the deep-link ID.
      */
     private Intent parseDeepLinkId(String deepLinkId) {
+        if (deepLinkId == null) {
+            return null;
+        }
         Intent route = new Intent();
         Timber.d("Deep Link id: " + deepLinkId);
         String[] parts = deepLinkId.split("/");
