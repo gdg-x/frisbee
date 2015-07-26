@@ -157,10 +157,11 @@ public final class PrefUtils {
         prefs(context).edit().putInt(PREFS_VERSION_CODE, newVersion).apply();
     }
 
-    public static void resetInitalSettings(final Context context) {
-        SharedPreferences prefs = prefs(context);
-        prefs.edit().remove(PREFS_GCM_REG_ID).apply();
-        prefs.edit().clear().apply();
-        prefs.edit().putBoolean(PREFS_FIRST_START, true).apply();
+    public static void resetInitialSettings(final Context context) {
+        prefs(context).edit()
+                .remove(PREFS_GCM_REG_ID)
+                .clear()
+                .putBoolean(PREFS_FIRST_START, true)
+                .apply();
     }
 }

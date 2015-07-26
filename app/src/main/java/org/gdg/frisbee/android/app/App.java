@@ -188,7 +188,7 @@ public class App extends Application implements LocationListener {
     private void migrate(int oldVersion, int newVersion) {
 
         if (oldVersion < 11100 || BuildConfig.ALPHA) {
-            PrefUtils.resetInitalSettings(this);
+            PrefUtils.resetInitialSettings(this);
             if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
                 // SD-card available
                 String rootDirExt = Environment.getExternalStorageDirectory().getAbsolutePath()

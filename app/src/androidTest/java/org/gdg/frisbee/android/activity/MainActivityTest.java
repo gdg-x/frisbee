@@ -8,6 +8,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.chapter.MainActivity;
+import org.gdg.frisbee.android.utils.PrefUtils;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,12 +24,16 @@ public class MainActivityTest {
 
     public static final Uri URI_GDG_BRUSSELS = Uri.parse("https://developers.google.com/groups/chapter/105068877693379070381/");
     @Rule
-    public ActivityTestRule activityRule = new ActivityTestRule<>(MainActivity.class, true, false);
+    public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<MainActivity>(MainActivity.class, true, false) {
+        @Override
+        protected void beforeActivityLaunched() {
+            PrefUtils.setInitialSettings(InstrumentationRegistry.getTargetContext(), false, false, null, null);
+        }
+    };
 
     @Test
     public void canHandleDevelopersGoogleChapterUri() {
         final Intent intent = new Intent(Intent.ACTION_VIEW, URI_GDG_BRUSSELS);
-        intent.setClass(InstrumentationRegistry.getTargetContext(), MainActivity.class);
         activityRule.launchActivity(intent);
         onView(withId(R.id.actionbar_spinner)).check(matches(withSpinnerText("Brussels")));
     }
@@ -36,7 +41,6 @@ public class MainActivityTest {
     @Test
     public void doesNotFailWithInvalidUri() {
         final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://developers.google.com/groups/chapter"));
-        intent.setClass(InstrumentationRegistry.getTargetContext(), MainActivity.class);
         activityRule.launchActivity(intent);
         onView(withId(R.id.actionbar_spinner)).check(matches(withSpinnerText(any(String.class))));
     }
