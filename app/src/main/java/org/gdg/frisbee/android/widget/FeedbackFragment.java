@@ -20,7 +20,6 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
@@ -32,14 +31,17 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 
 import org.gdg.frisbee.android.BuildConfig;
@@ -71,8 +73,17 @@ public class FeedbackFragment extends DialogFragment {
     private static final String PROPERTY_APP_VERSION_CODE = "App Version Code";
 //    private static final String POWERED_BY_DOORBELL_TEXT = "Powered by <a href=\"https://doorbell.io\">Doorbell.io</a>";
 
-    @Bind(R.id.feedback_message_text) EditText mMessageField;
-    @Bind(R.id.feedback_email_text) AutoCompleteTextView mEmailField;
+    @Bind(R.id.feedback_message_text)
+    EditText mMessageField;
+
+    @Bind(R.id.feedback_email_text)
+    AutoCompleteTextView mEmailField;
+
+    @Bind(R.id.feedback_message_text_layout)
+    TextInputLayout mLayoutMessage;
+
+    @Bind(R.id.feedback_email_text_layout)
+    TextInputLayout mLayoutEmail;
 
     private JSONObject mProperties;
     private DoorbellApi mApi;
@@ -105,24 +116,66 @@ public class FeedbackFragment extends DialogFragment {
                 .setTitle(R.string.feedback)
                 .setCancelable(true)
                 .setNegativeButton(R.string.feedback_cancel, null)
-                .setPositiveButton(R.string.feedback_send, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                .setPositiveButton(R.string.feedback_send, null);
+
+        return builder.create();
+    }
+
+    public void onStart() {
+        super.onStart();
+        final AlertDialog dialog = (AlertDialog) getDialog();
+        if (dialog != null) {
+
+            Button positiveButton = (Button) dialog.getButton(Dialog.BUTTON_POSITIVE);
+            positiveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (isValidInput()) {
                         mApi.setLoadingMessage(getActivity().getString(R.string.feedback_sending));
                         mApi.setCallback(new RestCallback() {
                             public void success(Object obj) {
                                 //TODO add feedback
-//                                Toast.makeText(getActivity(), obj.toString(), Toast.LENGTH_SHORT).show();
                                 mMessageField.setText("");
                                 mProperties = new JSONObject();
                             }
                         });
                         mApi.sendFeedback(mMessageField.getText().toString(),
                                 mEmailField.getText().toString(), mProperties, "");
-                    }
-                });
 
-        return builder.create();
+                        dialog.dismiss();
+                    }
+                }
+            });
+        }
+    }
+
+    private boolean isValidInput() {
+
+        boolean isValid = false;
+
+        String strMessage = mMessageField.getText().toString();
+        String strEmail = mEmailField.getText().toString();
+
+        if (!TextUtils.isEmpty(strMessage)) {
+            isValid = true;
+            mLayoutMessage.setErrorEnabled(false);
+        } else {
+            isValid = false;
+            mLayoutMessage.setErrorEnabled(true);
+            mLayoutMessage.setError(getString(R.string.feedback_message_required));
+        }
+
+        if (!TextUtils.isEmpty(strEmail)) {
+            isValid = true;
+            mLayoutEmail.setErrorEnabled(false);
+        } else {
+            isValid = false;
+            mLayoutMessage.setErrorEnabled(true);
+            mLayoutEmail.setError(getString(R.string.feedback_email_required));
+        }
+
+        return isValid;
     }
 
     private void setupEmailAutocomplete() {
