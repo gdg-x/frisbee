@@ -126,8 +126,19 @@ public class EventOverviewFragment extends Fragment {
         });
     }
 
-    public void updateWithDetails(EventFullDetails eventFullDetails) {
+    public void updateWithDetails(final EventFullDetails eventFullDetails) {
         mTitle.setText(eventFullDetails.getTitle());
+
+        final String eventUrl = eventFullDetails.getEventUrl();
+        if (eventUrl != null && !eventUrl.equals(getActivity().getIntent().getDataString())) {
+            mTitle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    launchUrl(eventUrl);
+                }
+            });
+        }
+
         String about = eventFullDetails.getAbout();
         if (about == null) {
             about = getString(R.string.no_description_available);
