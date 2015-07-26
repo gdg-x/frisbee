@@ -60,6 +60,7 @@ public class Const {
     public static final int DRAWER_HELP = 101;
     public static final int DRAWER_FEEDBACK = 102;
     public static final int DRAWER_ABOUT = 103;
+    public static final int DRAWER_SUBMENU_GAMES = 1000;
 
     //Arrow
     public static final String QR_MSG_PREFIX = "gdgx://arrow?m=";
