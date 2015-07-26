@@ -34,9 +34,9 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include layout="@layout/fragment_chapter_info_about" />
+            <include layout="@layout/chapter_info_about" />
 
-            <include layout="@layout/fragment_chapter_info_leads_links" />
+            <include layout="@layout/chapter_info_leads_links" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

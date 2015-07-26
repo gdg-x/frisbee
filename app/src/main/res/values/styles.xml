@@ -58,4 +58,13 @@
     <item name="cardUseCompatPadding">true</item>
   </style>
 
+  <style name="Widget.GDG.TextView.CardHeader" parent="android:style/Widget.TextView">
+    <item name="android:paddingLeft">@dimen/keyline_1_twice</item>
+    <item name="android:paddingRight">@dimen/keyline_1_twice</item>
+    <item name="android:paddingTop">@dimen/keyline_1</item>
+    <item name="android:paddingBottom">@dimen/keyline_1</item>
+    <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+    <item name="android:textStyle">bold</item>
+  </style>
+
 </resources>

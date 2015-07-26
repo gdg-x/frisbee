@@ -42,7 +42,7 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-              <include layout="@layout/fragment_chapter_info_about" />
+              <include layout="@layout/chapter_info_about" />
             </LinearLayout>
 
             <LinearLayout
@@ -51,7 +51,7 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <include layout="@layout/fragment_chapter_info_leads_links"/>
+                <include layout="@layout/chapter_info_leads_links"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
