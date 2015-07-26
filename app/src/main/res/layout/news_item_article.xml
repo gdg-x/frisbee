@@ -4,21 +4,15 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:orientation="vertical"
-  android:padding="10dip">
+  android:orientation="vertical">
 
-  <View
-    android:layout_width="match_parent"
-    android:layout_height="1dip"
-    android:layout_marginBottom="5dip"
-    android:layout_marginLeft="5dip"
-    android:layout_marginRight="5dip"
-    android:background="@color/cloud"></View>
+  <include layout="@layout/news_item_separator" />
 
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="@dimen/keyline_1">
 
     <org.gdg.frisbee.android.widget.ResizableImageView
       android:id="@+id/image"
@@ -30,7 +24,7 @@
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginLeft="10dip"
+      android:layout_marginLeft="@dimen/keyline_1"
       android:layout_weight="1"
       android:orientation="vertical">
 

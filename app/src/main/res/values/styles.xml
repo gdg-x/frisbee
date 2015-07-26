@@ -51,4 +51,11 @@
     <item name="android:textSize">18sp</item>
   </style>
 
+  <style name="CardView.Default" parent="CardView">
+    <item name="android:layout_margin">@dimen/keyline_1_minus_8dp</item>
+    <item name="cardCornerRadius">2dp</item>
+    <item name="cardElevation">4dp</item>
+    <item name="cardUseCompatPadding">true</item>
+  </style>
+
 </resources>
