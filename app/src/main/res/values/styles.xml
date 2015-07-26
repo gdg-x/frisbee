@@ -51,16 +51,16 @@
     <item name="android:textSize">18sp</item>
   </style>
 
-  <style name="CardView.Default" parent="CardView">
+  <style name="Widget.GDG.CardView" parent="CardView">
     <item name="android:layout_margin">@dimen/keyline_1_minus_8dp</item>
     <item name="cardCornerRadius">2dp</item>
     <item name="cardElevation">4dp</item>
     <item name="cardUseCompatPadding">true</item>
   </style>
-  <style name="CardView.GDE" parent="CardView.Default">
+  <style name="Widget.GDG.CardView.GDE">
     <item name="android:layout_margin">@dimen/content_padding</item>
   </style>
-  <style name="CardView.Contributor" parent="CardView.Default">
+  <style name="Widget.GDG.CardView.Contributor" parent="Widget.GDG.CardView">
     <item name="android:layout_margin">@dimen/content_padding</item>
   </style>
 

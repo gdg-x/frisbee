@@ -14,7 +14,7 @@
   <android.support.v7.widget.CardView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    style="@style/CardView.Default">
+    style="@style/Widget.GDG.CardView">
 
     <LinearLayout
       android:id="@+id/organizer_box"
@@ -34,7 +34,7 @@
   <android.support.v7.widget.CardView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    style="@style/CardView.Default">
+    style="@style/Widget.GDG.CardView">
 
     <LinearLayout
       android:id="@+id/resources_box"
