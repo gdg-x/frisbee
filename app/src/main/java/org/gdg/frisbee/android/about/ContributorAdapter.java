@@ -18,6 +18,7 @@ package org.gdg.frisbee.android.about;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -35,14 +36,17 @@ import butterknife.Bind;
 
 class ContributorAdapter extends ArrayAdapter<Contributor> {
 
+    private final LayoutInflater mLayoutInflator;
+
     public ContributorAdapter(Context context) {
         super(context, R.layout.list_contributor_item);
+        mLayoutInflator = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = View.inflate(getContext(), R.layout.list_contributor_item, null);
+            convertView = mLayoutInflator.inflate(R.layout.list_contributor_item, parent, false);
             ViewHolder viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         }
