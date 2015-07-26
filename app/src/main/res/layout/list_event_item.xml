@@ -24,12 +24,11 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <ImageView
+    <View
       android:id="@+id/event_image_header"
       android:layout_width="match_parent"
-      android:layout_height="48dp"
-      android:background="?colorPrimary"
-      android:contentDescription="@null" />
+      android:layout_height="@dimen/icon_width_event"
+      android:background="?colorPrimary" />
 
     <TextView
       android:id="@+id/event_date"
@@ -37,8 +36,8 @@
       android:layout_height="wrap_content"
       android:layout_alignParentRight="true"
       android:layout_alignParentTop="true"
-      android:paddingRight="8dp"
-      android:paddingTop="@dimen/content_padding"
+      android:paddingRight="@dimen/icon_width_event_third"
+      android:paddingTop="@dimen/icon_width_event_third"
       android:textAllCaps="true"
       android:textColor="?android:textColorPrimaryInverse"
       tools:ignore="RelativeOverlap"
@@ -51,7 +50,7 @@
       android:layout_alignParentLeft="true"
       android:layout_marginLeft="8dp"
       android:layout_marginRight="8dp"
-      android:layout_marginTop="24dp"
+      android:layout_marginTop="@dimen/icon_width_event_half"
       android:contentDescription="@null"
       android:scaleType="fitXY"
       android:src="@drawable/icon" />
@@ -79,16 +78,14 @@
         android:id="@+id/event_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:singleLine="true"
         android:textColor="@color/line_2"
-        tools:text="Cumartesi gunu" />
+        tools:text="19:00" />
 
       <TextView
         android:id="@+id/event_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:singleLine="true"
         android:textColor="@color/line_2"
         tools:text="Istanbul ITU" />

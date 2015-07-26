@@ -21,5 +21,7 @@
   
   <dimen name="icon_width_event">48dp</dimen>
   <dimen name="responsive_width">@dimen/match_parent</dimen>
+  <dimen name="icon_width_event_half">24dp</dimen>
+  <dimen name="icon_width_event_third">16dp</dimen>
 
 </resources>
