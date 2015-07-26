@@ -13,27 +13,22 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:card_view="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  card_view:cardCornerRadius="2dp"
-  card_view:cardUseCompatPadding="true"
-  card_view:cardElevation="4dp">
+  style="@style/CardView.Default">
 
   <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <ImageView
+    <View
       android:id="@+id/image_header"
       android:layout_width="match_parent"
-      android:layout_height="48dp"
-      android:background="?colorPrimary"
-      android:contentDescription="@null" />
+      android:layout_height="@dimen/icon_width_event"
+      android:background="?colorPrimary" />
 
     <TextView
       android:id="@+id/msg_type"
@@ -41,8 +36,8 @@
       android:layout_height="wrap_content"
       android:layout_alignParentRight="true"
       android:layout_alignParentTop="true"
-      android:paddingRight="8dp"
-      android:paddingTop="@dimen/content_padding"
+      android:paddingRight="@dimen/icon_width_event_third"
+      android:paddingTop="@dimen/icon_width_event_third"
       android:textAllCaps="true"
       android:textColor="?android:textColorPrimaryInverse"
       tools:text="Message"
@@ -53,11 +48,9 @@
       android:layout_width="@dimen/icon_width_event"
       android:layout_height="@dimen/icon_width_event"
       android:layout_alignParentLeft="true"
-      android:layout_marginStart="8dp"
       android:layout_marginLeft="8dp"
-      android:layout_marginEnd="8dp"
       android:layout_marginRight="8dp"
-      android:layout_marginTop="24dp"
+      android:layout_marginTop="@dimen/icon_width_event_half"
       android:contentDescription="@null"
       android:scaleType="fitXY"
       android:src="@drawable/icon" />
@@ -69,11 +62,9 @@
       android:layout_below="@id/image_header"
       android:layout_alignWithParentIfMissing="true"
       android:layout_marginBottom="@dimen/keyline_1"
+      android:layout_marginTop="@dimen/keyline_1"
       android:layout_toRightOf="@+id/msg_icon"
       android:layout_toEndOf="@+id/msg_icon"
-      android:layout_marginEnd="8dp"
-      android:layout_marginRight="8dp"
-      android:layout_marginTop="@dimen/keyline_1"
       android:orientation="vertical">
 
       <TextView
@@ -87,7 +78,6 @@
         android:id="@+id/msg_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:textColor="@color/line_2"
         tools:text="Details" />
 
