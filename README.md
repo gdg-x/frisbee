@@ -29,40 +29,7 @@ Check http://github.com/gdg-x for more information about all development activit
 Development
 -----------
 
-Check out project and import it to Android Studio. 
-
-###Checkstyle Integration
-
-This project enforces a checkstyle. The checkstyle configuration is available in `settings/checkstyle.xml` file. Please respect to the configuration. 
-
-**Note:** Because of the line ending difference between Unix systems and Windows, you may get checkstyle errors about line endings. If you do, please check this [help page](https://www.jetbrains.com/idea/help/handling-lf-and-crlf-line-endings.html).
-If you cannot resolve the issue, you can simply comment out the following line in the `checkstyle.xml` file.
-```
-<module name="NewlineAtEndOfFile" />
-```
-
-###Image Optimization
-
-Image optimization is encouraged for new images. You can use the [image_optim](https://github.com/toy/image_optim) tool to do it easily. Use the following command to install it.
-```
-gem install image_optim image_optim_pack
-```
-
-###API Keys
-`local.properties` file is used for storing API keys since it is already ignored in the `.gitignore` file. 
-
-The file looks like:
-```
-android_simple_api_access_key=
-ip_simple_api_access_key=
-android_backup_key=
-play_app_id=
-gcm_sender_id=
-hub_client_id=
-```
-
-The first 2 (`android_simple_api_access_key` and `ip_simple_api_access_key`) are regular regular API access keys which can be obtained by creating a new project at [Google Developer Console](https://console.developers.google.com/project). `android_backup_key` is not necessary but can be obtained at this [page](http://developer.android.com/google/backup/signup.html). `play_app_id` is the Google Developer Console project id and lastly `hub_client_id` is the client id used for oAuth with Google.
-
+Read the [Development Guide](https://github.com/gdg-x/frisbee/wiki/Developer-Documentation).
 
 ###Contributors
 * [Sebastian Mauer](https://github.com/mauimauer)
