@@ -173,4 +173,6 @@
     <string name="title_signing_needed">Sign-in Needed</string>
     <string name="signin">Sign-in</string>
     <string name="fork_me">Fork me</string>
+    <string name="feedback_message_required">Message required</string>
+    <string name="feedback_invalid_email">Input valid email address</string>
 </resources>
