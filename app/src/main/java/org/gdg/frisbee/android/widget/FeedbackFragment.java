@@ -126,7 +126,7 @@ public class FeedbackFragment extends DialogFragment {
         final AlertDialog dialog = (AlertDialog) getDialog();
         if (dialog != null) {
 
-            Button positiveButton = (Button) dialog.getButton(Dialog.BUTTON_POSITIVE);
+            Button positiveButton = dialog.getButton(Dialog.BUTTON_POSITIVE);
             positiveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -152,7 +152,7 @@ public class FeedbackFragment extends DialogFragment {
 
     private boolean isValidInput() {
 
-        boolean isValid = false;
+        boolean isValid;
 
         String strMessage = mMessageField.getText().toString();
         String strEmail = mEmailField.getText().toString();
@@ -166,13 +166,13 @@ public class FeedbackFragment extends DialogFragment {
             mLayoutMessage.setError(getString(R.string.feedback_message_required));
         }
 
-        if (!TextUtils.isEmpty(strEmail)) {
+        if (!TextUtils.isEmpty(strEmail) && android.util.Patterns.EMAIL_ADDRESS.matcher(strEmail).matches()) {
             isValid = true;
             mLayoutEmail.setErrorEnabled(false);
         } else {
             isValid = false;
             mLayoutMessage.setErrorEnabled(true);
-            mLayoutEmail.setError(getString(R.string.feedback_email_required));
+            mLayoutEmail.setError(getString(R.string.feedback_invalid_email));
         }
 
         return isValid;
