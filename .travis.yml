@@ -17,4 +17,4 @@ before_install:
 - openssl aes-256-cbc -K $encrypted_2cc10e40a7ba_key -iv $encrypted_2cc10e40a7ba_iv
   -in local.properties.enc -out local.properties -d
 - openssl aes-256-cbc -K $encrypted_fb5a758ffb4c_key -iv $encrypted_fb5a758ffb4c_iv
-  -in GDG-25c6a087f872.p12.enc -out GDG-25c6a087f872.p12 -d
+  -in app/GDG-25c6a087f872.p12.enc -out app/GDG-25c6a087f872.p12 -d
