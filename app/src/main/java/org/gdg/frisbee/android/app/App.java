@@ -242,17 +242,13 @@ public class App extends Application implements LocationListener {
     public ModelCache getModelCache() {
         if (mModelCache == null) {
 
-            final File rootDir;
-            if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-                // SD-card available
-                rootDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
-                        + "/Android/data/" + getPackageName() + "/model_cache/");
-            } else {
-                File internalCacheDir = getCacheDir();
-                rootDir = new File(internalCacheDir.getAbsolutePath() + "/model_cache/");
+            File cacheDir = getExternalCacheDir();
+            if (cacheDir == null) {
+                cacheDir = getCacheDir();
             }
+            final File rootDir = new File(cacheDir, "/model_cache/");
 
-            if (rootDir.mkdirs() || rootDir.isDirectory()) {
+            if (rootDir.isDirectory() || rootDir.mkdirs()) {
                 mModelCache = new ModelCache.Builder(getApplicationContext())
                         .setMemoryCacheEnabled(true)
                         .setDiskCacheEnabled(true)
