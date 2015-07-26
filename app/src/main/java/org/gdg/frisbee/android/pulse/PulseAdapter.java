@@ -32,6 +32,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 class PulseAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
@@ -65,10 +68,7 @@ class PulseAdapter extends BaseAdapter {
         View rowView = convertView;
         if (rowView == null) {
             rowView = mInflater.inflate(R.layout.list_pulse_item, parent, false);
-            ViewHolder viewHolder = new ViewHolder();
-            viewHolder.position = (TextView) rowView.findViewById(R.id.position);
-            viewHolder.key = (TextView) rowView.findViewById(R.id.key);
-            viewHolder.value = (TextView) rowView.findViewById(R.id.value);
+            ViewHolder viewHolder = new ViewHolder(rowView);
             rowView.setTag(viewHolder);
         }
 
@@ -139,6 +139,15 @@ class PulseAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        public TextView position, key, value;
+        @Bind(R.id.position)
+        public TextView position;
+        @Bind(R.id.key)
+        public TextView key;
+        @Bind(R.id.value)
+        public TextView value;
+
+        public ViewHolder(View v) {
+            ButterKnife.bind(this, v);
+        }
     }
 }
