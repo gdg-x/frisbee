@@ -1,23 +1,18 @@
 language: android
-
 android:
   components:
-    - android-22
-    - build-tools-22.0.1
-    - platform-tools
-    - extra-google-m2repository
-    - extra-android-m2repository
-
-    # Specify at least one system image,
-    # if you need to run emulator(s) during your tests
-    # - sys-img-x86-android-22
-
+  - android-22
+  - build-tools-22.0.1
+  - platform-tools
+  - extra-google-m2repository
+  - extra-android-m2repository
 before_script:
-    - GRADLE_OPTS="-Xms40m -Xmx3g -XX:MaxPermSize=3g"
-
+- GRADLE_OPTS="-Xms40m -Xmx3g -XX:MaxPermSize=3g"
 script: "./gradlew clean build test -Dpre-dex=false"
-
 branches:
   only:
-    - master
-    - develop
+  - master
+  - develop
+before_install:
+- openssl aes-256-cbc -K $encrypted_fb5a758ffb4c_key -iv $encrypted_fb5a758ffb4c_iv
+  -in GDG-25c6a087f872.p12.enc -out GDG-25c6a087f872.p12 -d
