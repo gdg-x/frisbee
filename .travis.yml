@@ -8,7 +8,7 @@ android:
   - extra-android-m2repository
 before_script:
 - GRADLE_OPTS="-Xms40m -Xmx3g -XX:MaxPermSize=3g"
-script: "./gradlew clean build test -Dpre-dex=false"
+script: "./gradlew clean build test publishApkRelease -Dpre-dex=false"
 branches:
   only:
   - master
