@@ -33,6 +33,7 @@ import com.google.android.gms.plus.Plus;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.achievements.AchievementActionHandler;
+import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.ScopedBus;
 import org.gdg.frisbee.android.utils.Utils;
@@ -171,6 +172,7 @@ public abstract class GdgActivity extends TrackableActivity implements
                         // If the error resolution was successful we should continue
                         // processing errors.
                         mSignInProgress = STATE_SIGN_IN;
+                        App.getInstance().resetOrganizer();
 
                         if (!mGoogleApiClient.isConnecting()) {
                             // If Google Play services resolved the issue with a dialog then

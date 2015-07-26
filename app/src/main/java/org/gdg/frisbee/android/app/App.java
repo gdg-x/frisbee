@@ -298,6 +298,10 @@ public class App extends Application implements LocationListener {
         mOrganizerChecker.checkOrganizer(apiClient, responseHandler);
     }
 
+    public void resetOrganizer() {
+        mOrganizerChecker.resetOrganizer();
+    }
+
     /**
      * Return the current list of GDG event series occurring in the world.
      * This may be empty but cannot be null.

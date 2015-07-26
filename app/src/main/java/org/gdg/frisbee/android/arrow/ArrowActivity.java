@@ -157,6 +157,10 @@ public class ArrowActivity extends GdgNavDrawerActivity {
     protected void onResume() {
         super.onResume();
         handleIntent(getIntent());
+
+        if (!PrefUtils.isSignedIn(this)) {
+            finish();
+        }
     }
 
     private void handleIntent(Intent intent) {
