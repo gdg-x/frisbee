@@ -27,6 +27,7 @@ public class GdeListFragment extends PeopleListFragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         mAdapter = new PeopleAdapter(getActivity(), R.drawable.gde_dummy);
 
         ArrayList<Gde> gdeList = getArguments().getParcelableArrayList(ARG_PEOPLE_ARRAY);

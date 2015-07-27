@@ -24,7 +24,6 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.ContributorList;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
-import org.gdg.frisbee.android.common.PeopleAdapter;
 import org.gdg.frisbee.android.common.PeopleListFragment;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
@@ -37,7 +36,7 @@ public class ContributorsFragment extends PeopleListFragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        mAdapter = new PeopleAdapter(getActivity());
+        super.onActivityCreated(savedInstanceState);
         loadContributors();
     }
 

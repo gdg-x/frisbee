@@ -27,6 +27,7 @@ public class PeopleListFragment extends GdgListFragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         mAdapter = new PeopleAdapter(getActivity());
         setListAdapter(mAdapter);
     }
