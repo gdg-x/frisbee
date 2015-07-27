@@ -58,6 +58,7 @@ import org.gdg.frisbee.android.api.GithubFactory;
 import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.GroupDirectoryFactory;
 import org.gdg.frisbee.android.api.OkClientFactory;
+import org.gdg.frisbee.android.api.PlusPersonDownloader;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.utils.CrashlyticsTree;
@@ -150,8 +151,11 @@ public class App extends Application implements LocationListener {
         PrefUtils.increaseAppStartCount(this);
 
         // Initialize Picasso
+        OkHttpClient picassoClient = new OkHttpClient();
+        picassoClient.interceptors().add(new PlusPersonDownloader(plusClient));
+
         mPicasso = new Picasso.Builder(this)
-                .downloader(new OkHttpDownloader(this))
+                .downloader(new OkHttpDownloader(picassoClient))
                 .memoryCache(new LruCache(this))
                 .build();
         mPicasso.setIndicatorsEnabled(BuildConfig.DEBUG);

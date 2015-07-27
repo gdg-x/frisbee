@@ -45,7 +45,7 @@ public class PeopleListFragment extends GdgListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mAdapter = new PeopleAdapter(getActivity());
+        mAdapter = new PeopleAdapter(getActivity(), R.drawable.gde_dummy);
 
         if (getArguments().containsKey(ARG_PEOPLE_ARRAY)) {
             ArrayList<Gde> gdeList = getArguments().getParcelableArrayList(ARG_PEOPLE_ARRAY);

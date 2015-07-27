@@ -75,7 +75,7 @@ public class Gde implements GdgPerson, Parcelable {
 
     @Override
     public String getImageUrl() {
-        return null;
+        return socialUrl;
     }
 
     @Override
