@@ -35,19 +35,13 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.google.android.gms.games.Games;
-import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Person;
 
-import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.about.AboutActivity;
 import org.gdg.frisbee.android.activity.SettingsActivity;
-import org.gdg.frisbee.android.api.GapiOkTransport;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.arrow.ArrowActivity;
 import org.gdg.frisbee.android.chapter.MainActivity;
@@ -374,15 +368,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
     @Nullable
     public static Person getPersonSync(final String gplusId) {
-
-        final HttpTransport mTransport = new GapiOkTransport();
-        final JsonFactory mJsonFactory = new GsonFactory();
-        Plus plusClient = new Plus.Builder(mTransport, mJsonFactory, null)
-                .setGoogleClientRequestInitializer(
-                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.IP_SIMPLE_API_ACCESS_KEY))
-                .setApplicationName("GDG Frisbee")
-                .build();
-        return getPersonSync(plusClient, gplusId);
+        return getPersonSync(App.getInstance().getPlusClient(), gplusId);
     }
 
     @Nullable

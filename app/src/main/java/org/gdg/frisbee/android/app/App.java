@@ -31,6 +31,11 @@ import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.plus.Plus;
 import com.google.gson.FieldNamingPolicy;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
@@ -43,6 +48,7 @@ import net.danlew.android.joda.JodaTimeAndroid;
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.GapiOkTransport;
 import org.gdg.frisbee.android.api.GdgXHub;
 import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.deserializer.ZuluDateTimeDeserializer;
@@ -87,6 +93,7 @@ public class App extends Application implements LocationListener {
     private OrganizerChecker mOrganizerChecker;
     private ArrayList<TaggedEventSeries> mTaggedEventSeriesList;
     private RefWatcher refWatcher;
+    private Plus plusClient;
 
     @Override
     public void onCreate() {
@@ -121,6 +128,15 @@ public class App extends Application implements LocationListener {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+
+        //Initialize Plus Client which is used to get profile pictures and NewFeed of the chapters.
+        final HttpTransport mTransport = new GapiOkTransport();
+        final JsonFactory mJsonFactory = new GsonFactory();
+        plusClient = new Plus.Builder(mTransport, mJsonFactory, null)
+                .setGoogleClientRequestInitializer(
+                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.IP_SIMPLE_API_ACCESS_KEY))
+                .setApplicationName("GDG Frisbee")
+                .build();
 
         // Initialize ModelCache and Volley
         getModelCache();
@@ -216,6 +232,10 @@ public class App extends Application implements LocationListener {
         if (loc != null) {
             mLastLocation = loc;
         }
+    }
+
+    public Plus getPlusClient() {
+        return plusClient;
     }
 
     public Location getLastLocation() {

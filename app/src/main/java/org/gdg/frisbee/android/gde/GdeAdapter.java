@@ -9,18 +9,13 @@ import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Person;
 import com.squareup.picasso.Picasso;
 
-import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.GapiOkTransport;
 import org.gdg.frisbee.android.api.model.Gde;
+import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
@@ -41,8 +36,6 @@ class GdeAdapter extends BaseAdapter {
 
     private ArrayList<Gde> mGdes;
 
-    final HttpTransport mTransport = new GapiOkTransport();
-    final JsonFactory mJsonFactory = new GsonFactory();
     private Plus mClient;
 
     private HashMap<Integer, Object> mConsumedMap;
@@ -55,11 +48,7 @@ class GdeAdapter extends BaseAdapter {
         mGdes = new ArrayList<>();
         mConsumedMap = new HashMap<>();
 
-        mClient = new Plus.Builder(mTransport, mJsonFactory, null)
-                .setGoogleClientRequestInitializer(
-                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.IP_SIMPLE_API_ACCESS_KEY))
-                .setApplicationName("GDG Frisbee")
-                .build();
+        mClient = App.getInstance().getPlusClient();
         mPlusPattern = Pattern.compile("http[s]?:\\/\\/plus\\..*google\\.com.*(\\+[a-zA-Z] +|[0-9]{21}).*");
     }
 
@@ -104,11 +93,6 @@ class GdeAdapter extends BaseAdapter {
         final Gde gde = (Gde) getItem(i);
 
         holder.thumbnailView.setImageResource(R.drawable.gde_dummy);
-        //holder.thumbnailView.setBackgroundResource(R.drawable.gde_dummy);
-
-        /*App.getInstance().getPicasso()
-                .load(show.getHighQualityThumbnail())
-                .into(holder.thumbnailView);*/
 
         holder.nameView.setText(gde.getName());
         holder.countryView.setText(gde.getAddress());

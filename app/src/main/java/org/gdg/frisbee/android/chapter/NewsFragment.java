@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.chapter;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -24,17 +25,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.ActivityFeed;
 
-import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.GapiOkTransport;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.GdgActivity;
@@ -51,11 +46,6 @@ import butterknife.ButterKnife;
 
 public class NewsFragment extends SwipeRefreshRecyclerViewFragment
         implements SwipeRefreshLayout.OnRefreshListener {
-
-    final HttpTransport mTransport = new GapiOkTransport();
-    final JsonFactory mJsonFactory = new GsonFactory();
-
-    private Plus mClient;
 
     private NewsAdapter mAdapter;
 
@@ -80,10 +70,7 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mClient = new Plus.Builder(mTransport, mJsonFactory, null)
-                .setGoogleClientRequestInitializer(
-                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.IP_SIMPLE_API_ACCESS_KEY))
-                .build();
+        Plus client = App.getInstance().getPlusClient();
 
         StaggeredGridLayoutManager layoutManager = 
                 new StaggeredGridLayoutManager(
@@ -109,27 +96,11 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
                     .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, ActivityFeed>() {
                         @Override
                         public ActivityFeed doInBackground(String... params) {
-                            try {
-
-                                ActivityFeed feed = (ActivityFeed) App.getInstance().getModelCache().get(Const.CACHE_KEY_NEWS + params[0]);
-
-                                if (feed == null) {
-                                    Plus.Activities.List request = mClient.activities().list(params[0], "public");
-                                    request.setMaxResults(10L);
-                                    request.setFields(
-                                            "nextPageToken,"
-                                                    + "items(id,published,url,object/content,verb,"
-                                                    + "object/attachments,object/actor,annotation,object(plusoners,replies,resharers))");
-                                    feed = request.execute();
-
-                                    App.getInstance().getModelCache().put(Const.CACHE_KEY_NEWS + params[0], feed, DateTime.now().plusHours(1));
-                                }
-
-                                return feed;
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                            ActivityFeed feed = (ActivityFeed) App.getInstance().getModelCache().get(Const.CACHE_KEY_NEWS + params[0]);
+                            if (feed == null) {
+                                feed = getActivityFeedSync(params[0]);
                             }
-                            return null;
+                            return feed;
                         }
                     })
                     .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, ActivityFeed>() {
@@ -207,23 +178,7 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
                     .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, ActivityFeed>() {
                         @Override
                         public ActivityFeed doInBackground(String... params) {
-                            try {
-
-                                Plus.Activities.List request = mClient.activities().list(params[0], "public");
-                                request.setMaxResults(10L);
-                                request.setFields(
-                                        "nextPageToken,"
-                                                + "items(id,published,url,object/content,verb,"
-                                                + "object/attachments,annotation,object(plusoners,replies,resharers))");
-                                ActivityFeed feed = request.execute();
-
-                                App.getInstance().getModelCache().put(Const.CACHE_KEY_NEWS + params[0], feed, DateTime.now().plusHours(1));
-
-                                return feed;
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            return null;
+                            return getActivityFeedSync(params[0]);
                         }
                     })
                     .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, ActivityFeed>() {
@@ -241,5 +196,27 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
                     })
                     .buildAndExecute();
         }
+    }
+
+    @Nullable
+    private ActivityFeed getActivityFeedSync(String param) {
+        try {
+            Plus client = App.getInstance().getPlusClient();
+
+            Plus.Activities.List request = client.activities().list(param, "public");
+            request.setMaxResults(10L);
+            request.setFields(
+                    "nextPageToken,"
+                            + "items(id,published,url,object/content,verb,"
+                            + "object/attachments,annotation,object(plusoners,replies,resharers))");
+            ActivityFeed feed = request.execute();
+
+            App.getInstance().getModelCache().put(Const.CACHE_KEY_NEWS + param, feed, DateTime.now().plusHours(1));
+
+            return feed;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
