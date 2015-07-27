@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
 
 import timber.log.Timber;
 
-class GdeAdapter extends BaseAdapter {
+class PeopleAdapter extends BaseAdapter {
 
     private Context mContext;
     private LayoutInflater mInflater;
@@ -43,7 +43,7 @@ class GdeAdapter extends BaseAdapter {
 
     private Pattern mPlusPattern;
 
-    public GdeAdapter(Context ctx) {
+    public PeopleAdapter(Context ctx) {
         mContext = ctx;
         mInflater = LayoutInflater.from(mContext);
         mGdes = new ArrayList<>();

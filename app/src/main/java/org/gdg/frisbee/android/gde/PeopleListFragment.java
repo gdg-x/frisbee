@@ -24,7 +24,7 @@ public class PeopleListFragment extends GdgListFragment {
 
     private static final String ARG_PEOPLE_ARRAY = "people";
 
-    private GdeAdapter mAdapter;
+    private PeopleAdapter mAdapter;
 
     public static PeopleListFragment newInstance(@NonNull ArrayList<Gde> gdes, boolean active) {
         PeopleListFragment fragment = new PeopleListFragment();
@@ -45,7 +45,7 @@ public class PeopleListFragment extends GdgListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mAdapter = new GdeAdapter(getActivity());
+        mAdapter = new PeopleAdapter(getActivity());
 
         if (getArguments().containsKey(ARG_PEOPLE_ARRAY)) {
             ArrayList<Gde> gdeList = getArguments().getParcelableArrayList(ARG_PEOPLE_ARRAY);
