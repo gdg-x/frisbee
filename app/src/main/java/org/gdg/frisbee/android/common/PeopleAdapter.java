@@ -1,7 +1,8 @@
-package org.gdg.frisbee.android.gde;
+package org.gdg.frisbee.android.common;
 
 import android.content.Context;
 import android.support.annotation.DrawableRes;
+import android.text.TextUtils;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import com.squareup.picasso.RequestCreator;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.GdgPerson;
@@ -20,10 +23,14 @@ import org.gdg.frisbee.android.widget.SquaredImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-class PeopleAdapter extends ArrayAdapter<GdgPerson> {
+public class PeopleAdapter extends ArrayAdapter<GdgPerson> {
 
     @DrawableRes private int placeholder;
     private SparseBooleanArray mConsumedMap;
+
+    public PeopleAdapter(Context ctx) {
+        this(ctx, 0);
+    }
 
     public PeopleAdapter(Context ctx, @DrawableRes int placeholder) {
         super(ctx, R.layout.gde_item);
@@ -53,14 +60,16 @@ class PeopleAdapter extends ArrayAdapter<GdgPerson> {
         }
         final ViewHolder holder = (ViewHolder) rowView.getTag();
 
-        holder.nameView.setText(gdgPerson.getName());
-        holder.countryView.setText(gdgPerson.getAddress());
+        holder.primaryTextView.setText(gdgPerson.getPrimaryText());
+        holder.secondaryTextView.setText(gdgPerson.getSecondaryText());
 
-        if (gdgPerson.getImageUrl() != null) {
-            App.getInstance().getPicasso()
-                    .load(gdgPerson.getImageUrl())
-                    .placeholder(placeholder)
-                    .into(holder.thumbnailView);
+        if (!TextUtils.isEmpty(gdgPerson.getImageUrl())) {
+            RequestCreator creator = App.getInstance().getPicasso()
+                    .load(gdgPerson.getImageUrl());
+            if (placeholder  != 0) {
+                creator.placeholder(placeholder);
+            }
+            creator.into(holder.thumbnailView);
         }
 
         if (!mConsumedMap.get(i)) {
@@ -74,8 +83,8 @@ class PeopleAdapter extends ArrayAdapter<GdgPerson> {
     }
 
     static class ViewHolder {
-        @Bind(R.id.name) public TextView nameView;
-        @Bind(R.id.country) public TextView countryView;
+        @Bind(R.id.name) public TextView primaryTextView;
+        @Bind(R.id.country) public TextView secondaryTextView;
         @Bind(R.id.thumb) public SquaredImageView thumbnailView;
 
         public ViewHolder(View v) {

@@ -9,4 +9,14 @@ public class Translator extends Contributor {
         setAvatarUrl(avatarUrl);
         setContributions(contributions);
     }
+
+    @Override
+    public String getPrimaryText() {
+        return getName();
+    }
+
+    @Override
+    public String getSecondaryText() {
+        return getLogin();
+    }
 }

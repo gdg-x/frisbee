@@ -42,12 +42,10 @@ public class Gde implements GdgPerson, Parcelable {
         return product.trim();
     }
 
-    @Override
     public String getName() {
         return name;
     }
 
-    @Override
     public String getAddress() {
         return address;
     }
@@ -66,6 +64,16 @@ public class Gde implements GdgPerson, Parcelable {
 
     public String getSocialUrl() {
         return socialUrl;
+    }
+
+    @Override
+    public String getPrimaryText() {
+        return getName();
+    }
+
+    @Override
+    public String getSecondaryText() {
+        return getAddress();
     }
 
     @Override

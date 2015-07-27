@@ -27,11 +27,12 @@ import android.widget.ListView;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.model.Contributor;
 import org.gdg.frisbee.android.api.model.ContributorList;
+import org.gdg.frisbee.android.api.model.GdgPerson;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.GdgListFragment;
+import org.gdg.frisbee.android.common.PeopleAdapter;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
@@ -42,13 +43,13 @@ import retrofit.RetrofitError;
 
 public class ContributorsFragment extends GdgListFragment {
 
-    protected ContributorAdapter mAdapter;
+    protected PeopleAdapter mAdapter;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mAdapter = new ContributorAdapter(getActivity());
+        mAdapter = new PeopleAdapter(getActivity());
         setListAdapter(mAdapter);
 
         loadContributors();
@@ -105,9 +106,9 @@ public class ContributorsFragment extends GdgListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Contributor contributor = mAdapter.getItem(position);
+        GdgPerson contributor = mAdapter.getItem(position);
         Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse(contributor.getHtmlUrl()));
+        i.setData(Uri.parse(contributor.getUrl()));
         startActivity(i);
     }
 }

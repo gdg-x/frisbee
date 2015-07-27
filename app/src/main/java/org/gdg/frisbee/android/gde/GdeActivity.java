@@ -19,6 +19,7 @@ import org.gdg.frisbee.android.api.model.GdeList;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
+import org.gdg.frisbee.android.common.PeopleListFragment;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
