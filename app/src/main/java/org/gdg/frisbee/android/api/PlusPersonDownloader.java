@@ -43,7 +43,8 @@ public class PlusPersonDownloader implements Interceptor {
         String gplusId = matcher.group(1);
         Person person = getPersonSync(gplusId);
         if (person != null && person.getImage() != null && person.getImage().getUrl() != null) {
-            return chain.proceed(request.newBuilder().url(person.getImage().getUrl()).build());
+            String imageUrl = person.getImage().getUrl().replace("sz=50", "sz=196");
+            return chain.proceed(request.newBuilder().url(imageUrl).build());
         }
 
         return null;
