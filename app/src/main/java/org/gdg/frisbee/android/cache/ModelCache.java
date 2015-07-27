@@ -42,6 +42,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.lang.ref.WeakReference;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -264,45 +265,7 @@ public class ModelCache {
     }
 
     public void getAsync(final String url, final boolean checkExpiration, final CacheListener mListener) {
-        new AsyncTask<Void, Void, Object>() {
-
-            @Override
-            protected Object doInBackground(Void... voids) {
-                return ModelCache.this.get(url, checkExpiration);
-            }
-
-            @Override
-            protected void onPostExecute(Object o) {
-                if (o != null) {
-                    mListener.onGet(o);
-                } else {
-                    mListener.onNotFound(url);
-                }
-            }
-        }.execute();
-    }
-
-    public void getAsync(final String url, final boolean checkExpiration, final boolean forceFetch, final CacheListener mListener) {
-        new AsyncTask<Void, Void, Object>() {
-
-            @Override
-            protected Object doInBackground(Void... voids) {
-                if (!forceFetch) {
-                    return ModelCache.this.get(url, checkExpiration);
-                } else {
-                    return null;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(Object o) {
-                if (o != null) {
-                    mListener.onGet(o);
-                } else {
-                    mListener.onNotFound(url);
-                }
-            }
-        }.execute();
+        new GetAsyncTask(ModelCache.this, url, checkExpiration, mListener).execute();
     }
 
     public Object get(String url) {
@@ -403,22 +366,7 @@ public class ModelCache {
     }
 
     public void putAsync(final String url, final Object obj, final DateTime expiresAt, final CachePutListener onDoneListener) {
-        new AsyncTask<Void, Void, Void>() {
-
-            @Override
-            protected Void doInBackground(Void... voids) {
-                put(url, obj, expiresAt);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                if (onDoneListener != null) {
-                    onDoneListener.onPutIntoCache();
-                }
-            }
-        }.execute();
+        new PutAsyncTask(ModelCache.this, url, obj, expiresAt, onDoneListener).execute();
     }
 
     public CacheItem put(final String url, final Object obj, DateTime expiresAt) {
@@ -530,7 +478,6 @@ public class ModelCache {
         out.close();
     }
 
-
     private void writeValueToDisk(OutputStream os, Object o) throws IOException {
 
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(os));
@@ -548,6 +495,7 @@ public class ModelCache {
 
         out.close();
     }
+
 
     private long readExpirationFromDisk(InputStream is) throws IOException {
         DataInputStream din = new DataInputStream(is);
@@ -617,9 +565,9 @@ public class ModelCache {
     }
 
     public class CacheItem {
+
         private Object mValue;
         private DateTime mExpiresAt;
-
         public CacheItem(Object value, DateTime expiresAt) {
             mValue = value;
             mExpiresAt = expiresAt;
@@ -644,15 +592,15 @@ public class ModelCache {
     }
 
     public interface CachePutListener {
+
         void onPutIntoCache();
     }
-
     public interface CacheListener {
+
         void onGet(Object item);
-
         void onNotFound(String key);
-    }
 
+    }
     static final class DiskCacheFlushRunnable implements Runnable {
 
         private final DiskLruCache mDiskCache;
@@ -669,6 +617,77 @@ public class ModelCache {
                 mDiskCache.flush();
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+        }
+
+    }
+
+    public static class GetAsyncTask extends AsyncTask<Void, Void, Object> {
+
+        private WeakReference<ModelCache> modelCacheRef;
+        private WeakReference<CacheListener> listenerRef;
+        private String key;
+        private boolean checkExpiration;
+
+        public GetAsyncTask(ModelCache modelCache, String key, boolean checkExpiration, CacheListener listener) {
+            this.modelCacheRef = new WeakReference<>(modelCache);
+            this.key = key;
+            this.checkExpiration = checkExpiration;
+            this.listenerRef = new WeakReference<>(listener);
+        }
+
+        @Override
+        protected Object doInBackground(Void... voids) {
+            if (modelCacheRef.get() != null) {
+                return modelCacheRef.get().get(key, checkExpiration);
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            CacheListener listener = listenerRef.get();
+            if (listener != null) {
+                if (o != null) {
+                    listener.onGet(o);
+                } else {
+                    listener.onNotFound(key);
+                }
+            }
+        }
+    }
+
+    public static class PutAsyncTask extends AsyncTask<Void, Void, Object> {
+
+        private WeakReference<ModelCache> modelCacheRef;
+        private WeakReference<CachePutListener> onDoneListenerRef;
+        private String key;
+        private Object obj;
+        private DateTime expiresAt;
+
+        public PutAsyncTask(ModelCache modelCache, String key, Object obj, DateTime expiresAt, CachePutListener onDoneListener) {
+            this.modelCacheRef = new WeakReference<>(modelCache);
+            this.key = key;
+            this.obj = obj;
+            this.expiresAt = expiresAt;
+            this.onDoneListenerRef = new WeakReference<>(onDoneListener);
+        }
+
+        @Override
+        protected Object doInBackground(Void... voids) {
+            if (modelCacheRef.get() != null) {
+                return modelCacheRef.get().put(key, obj, expiresAt);
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            CachePutListener onDoneListener = onDoneListenerRef.get();
+            if (onDoneListener != null) {
+                onDoneListener.onPutIntoCache();
             }
         }
     }
