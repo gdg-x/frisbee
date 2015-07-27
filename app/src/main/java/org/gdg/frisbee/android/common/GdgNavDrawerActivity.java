@@ -117,6 +117,11 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             setupDrawerContent(mNavigationView);
         }
 
+        // Finds if there's an item selected or not.
+        Bundle b = getIntent().getExtras();
+        if (b != null) {
+            setNavDrawerItemSelected(b.getString(Const.DRAWER_ITEM));
+        }
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -134,15 +139,17 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         }
 
         menu.add(GAMES_GROUP_ID, Const.DRAWER_ACHIEVEMENTS, Menu.NONE, R.string.achievements).setIcon(R.drawable.ic_drawer_achievements);
-        menu.add(GAMES_GROUP_ID, Const.DRAWER_ARROW, Menu.NONE, R.string.arrow).setIcon(R.drawable.ic_drawer_arrow);
+        menu.add(GAMES_GROUP_ID, Const.DRAWER_ARROW, Menu.NONE, R.string.arrow).setIcon(R.drawable.ic_drawer_arrow).setCheckable(true);
 
         menu.add(SETTINGS_GROUP_ID, Const.DRAWER_SETTINGS, Menu.NONE, R.string.settings).setIcon(R.drawable.ic_drawer_settings);
         menu.add(SETTINGS_GROUP_ID, Const.DRAWER_HELP, Menu.NONE, R.string.help).setIcon(R.drawable.ic_drawer_help);
         menu.add(SETTINGS_GROUP_ID, Const.DRAWER_FEEDBACK, Menu.NONE, R.string.feedback).setIcon(R.drawable.ic_drawer_feedback);
         menu.add(SETTINGS_GROUP_ID, Const.DRAWER_ABOUT, Menu.NONE, R.string.about).setIcon(R.drawable.ic_drawer_about);
 
-        navigationView.setNavigationItemSelectedListener(
+        // Enables the navigationView to "check" the items of this group when selected
+        menu.setGroupCheckable(GROUP_ID, true, true);
 
+        navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
@@ -160,6 +167,9 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             PrefUtils.setShouldNotOpenDrawerOnStart(GdgNavDrawerActivity.this);
         }
 
+        Bundle b = new Bundle();
+        b.putString(Const.DRAWER_ITEM, item.getTitle().toString());
+
         switch (item.getItemId()) {
             case Const.DRAWER_ACHIEVEMENTS:
                 if (PrefUtils.isSignedIn(this) && getGoogleApiClient().isConnected()) {
@@ -170,20 +180,28 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 }
                 break;
             case Const.DRAWER_HOME:
-                navigateTo(MainActivity.class, null);
+                if (!(this instanceof MainActivity)) {
+                    navigateTo(MainActivity.class, b);
+                }
                 break;
             case Const.DRAWER_GDE:
-                navigateTo(GdeActivity.class, null);
+                if (!(this instanceof GdeActivity)) {
+                    navigateTo(GdeActivity.class, b);
+                }
                 break;
             case Const.DRAWER_SPECIAL:
                 onDrawerSpecialItemClick(item);
                 break;
             case Const.DRAWER_PULSE:
-                navigateTo(PulseActivity.class, null);
+                if (!(this instanceof PulseActivity)) {
+                    navigateTo(PulseActivity.class, b);
+                }
                 break;
             case Const.DRAWER_ARROW:
                 if (PrefUtils.isSignedIn(this) && getGoogleApiClient().isConnected()) {
-                    navigateTo(ArrowActivity.class, null);
+                    if (!(this instanceof ArrowActivity)) {
+                        navigateTo(ArrowActivity.class, b);
+                    }
                 } else {
                     drawerItemToNavigateAfterSignIn = item;
                     showLoginErrorDialog(R.string.arrow_need_games);
@@ -232,6 +250,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 Bundle special = new Bundle();
                 special.putString(Const.EXTRA_TAGGED_EVENT_CACHEKEY, taggedEventSeries.getTag());
                 special.putParcelable(Const.EXTRA_TAGGED_EVENT, taggedEventSeries);
+                special.putString(Const.DRAWER_ITEM, item.getTitle().toString());
                 navigateTo(TaggedEventSeriesActivity.class, special);
 
                 break;
@@ -249,6 +268,17 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
         startActivity(i);
         mDrawerLayout.closeDrawers();
+    }
+
+    protected void setNavDrawerItemSelected(String title) {
+        Menu menu = mNavigationView.getMenu();
+        int size = menu.size();
+        for (int i = 0; i < size; i++) {
+            MenuItem item = menu.getItem(i);
+            if (item.getTitle().equals(title)) {
+                item.setChecked(true);
+            }
+        }
     }
 
     @Override

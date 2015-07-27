@@ -31,7 +31,6 @@ import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.gson.FieldNamingPolicy;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 import com.squareup.picasso.LruCache;
@@ -44,8 +43,9 @@ import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.GdgXHub;
+import org.gdg.frisbee.android.api.GdgXHubClient;
 import org.gdg.frisbee.android.api.GroupDirectory;
-import org.gdg.frisbee.android.api.deserializer.ZuluDateTimeDeserializer;
+import org.gdg.frisbee.android.api.GroupDirectoryClient;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.utils.CrashlyticsTree;
@@ -58,9 +58,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 import io.fabric.sdk.android.Fabric;
-import retrofit.RequestInterceptor;
-import retrofit.RestAdapter;
-import retrofit.converter.GsonConverter;
 import timber.log.Timber;
 
 /**
@@ -315,30 +312,14 @@ public class App extends Application implements LocationListener {
 
     public GdgXHub getGdgXHub() {
         if (hubInstance == null) {
-            hubInstance = new RestAdapter.Builder()
-                    .setEndpoint(GdgXHub.BASE_URL)
-                    .setConverter(new GsonConverter(Utils.getGson(FieldNamingPolicy.IDENTITY, new ZuluDateTimeDeserializer())))
-                    .build().create(GdgXHub.class);
+            hubInstance = GdgXHubClient.getHubApi(this);
         }
         return hubInstance;
     }
 
     public GroupDirectory getGroupDirectory() {
         if (groupDirectoryInstance == null) {
-            groupDirectoryInstance = new RestAdapter.Builder()
-                    .setEndpoint(GroupDirectory.BASE_URL)
-                    .setConverter(new GsonConverter(Utils.getGson()))
-                    .setRequestInterceptor(new RequestInterceptor() {
-                        @Override
-                        public void intercept(RequestFacade request) {
-                            request.addHeader("User-Agent", "GDG-Frisbee/0.1 (Android)");
-                            request.addHeader("Referer", "https://developers.google.com/groups/directory/");
-                            request.addHeader("X-Requested-With", "XMLHttpRequest");
-                            request.addHeader("Cache-Control", "no-cache");
-                            request.addHeader("DNT", "1");
-                        }
-                    })
-                    .build().create(GroupDirectory.class);
+            groupDirectoryInstance = GroupDirectoryClient.getGroupDirectoryApi(this);
         }
         return groupDirectoryInstance;
     }

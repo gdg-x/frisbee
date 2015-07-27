@@ -129,7 +129,6 @@ public class ArrowActivity extends GdgNavDrawerActivity {
                 viewFlipper.setDisplayedChild(0);
             }
         });
-
     }
 
     @Override
@@ -146,7 +145,11 @@ public class ArrowActivity extends GdgNavDrawerActivity {
                 startActivityForResult(Games.Leaderboards.getLeaderboardIntent(getGoogleApiClient(), Const.ARROW_LB), REQUEST_LEADERBOARD);
                 return true;
             case R.id.arrow_tagged:
-                startActivity(new Intent(this, ArrowTaggedActivity.class));
+                Intent i = new Intent(this, ArrowTaggedActivity.class);
+                Bundle b = new Bundle();
+                b.putString(Const.DRAWER_ITEM, getResources().getString(R.string.arrow));
+                i.putExtras(b);
+                startActivity(i, b);
                 return true;
         }
 
