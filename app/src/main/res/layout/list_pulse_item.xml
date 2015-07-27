@@ -1,49 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:orientation="horizontal">
+  android:minHeight="?attr/listPreferredItemHeight"
+  android:orientation="horizontal"
+  tools:layout_height="?attr/listPreferredItemHeight"
+  tools:context=".pulse.PulseActivity">
 
-  <android.support.v7.widget.CardView
-    android:id="@+id/card_view"
+  <TextView
+    android:id="@+id/position"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/keyline_1"
+    android:textAppearance="?attr/textAppearanceListItem"
+    android:layout_centerVertical="true"
+    android:textStyle="bold"
+    tools:text="1."/>
+
+  <TextView
+    android:id="@+id/key"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
+    android:layout_toRightOf="@+id/position"
+    android:layout_marginLeft="4dp"
+    android:textAppearance="?attr/textAppearanceListItem"
+    tools:text="GDG Sampletown"/>
+
+  <TextView
+    android:id="@+id/value"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentRight="true"
+    android:layout_centerVertical="true"
+    android:paddingRight="@dimen/keyline_1"
+    android:textAppearance="?attr/textAppearanceListItem"
+    tools:text="(00)"/>
+
+  <View
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="5dip"
-    android:padding="10dip"
-    card_view:cardCornerRadius="3dp"
-    card_view:contentPadding="10dp">
-
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:orientation="horizontal">
-
-      <TextView
-        android:id="@+id/position"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|top"
-        tools:text="1."
-        android:textStyle="bold" />
-
-      <TextView
-        android:id="@+id/key"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|top"
-        android:layout_marginLeft="5dip"
-        tools:text="GDG Sampletown" />
-
-      <TextView
-        android:id="@+id/value"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|top"
-        android:gravity="right"
-        tools:text="(00)" />
-    </LinearLayout>
-  </android.support.v7.widget.CardView>
-</LinearLayout>
+    android:layout_height="wrap_content"
+    android:background="?attr/dividerHorizontal"/>
+</RelativeLayout>
