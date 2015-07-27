@@ -154,7 +154,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
                 return PlainLayoutFragment.newInstance(R.layout.fragment_gde_about);
             } else {
                 String key = mGdeMap.keySet().toArray(new String[mGdeMap.size()])[position - 1];
-                Fragment frag = GdeListFragment.newInstance(mGdeMap.get(key), position == mViewPager.getCurrentItem());
+                Fragment frag = PeopleListFragment.newInstance(mGdeMap.get(key), position == mViewPager.getCurrentItem());
                 mFragments.append(position, new WeakReference<>(frag));
 
                 return frag;

@@ -20,18 +20,16 @@ import butterknife.ButterKnife;
 /**
  * Created by maui on 29.05.2014.
  */
-public class GdeListFragment extends GdgListFragment {
+public class PeopleListFragment extends GdgListFragment {
 
-    private static final String ARG_GDES = "gdes";
-    private static final String ARG_ACTIVE = "active";
+    private static final String ARG_PEOPLE_ARRAY = "people";
 
     private GdeAdapter mAdapter;
 
-    public static GdeListFragment newInstance(@NonNull ArrayList<Gde> gdes, boolean active) {
-        GdeListFragment fragment = new GdeListFragment();
+    public static PeopleListFragment newInstance(@NonNull ArrayList<Gde> gdes, boolean active) {
+        PeopleListFragment fragment = new PeopleListFragment();
         Bundle arguments = new Bundle();
-        arguments.putParcelableArrayList(ARG_GDES, gdes);
-        arguments.putBoolean(ARG_ACTIVE, active);
+        arguments.putParcelableArrayList(ARG_PEOPLE_ARRAY, gdes);
         fragment.setArguments(arguments);
         return fragment;
     }
@@ -49,8 +47,8 @@ public class GdeListFragment extends GdgListFragment {
 
         mAdapter = new GdeAdapter(getActivity());
 
-        if (getArguments().containsKey(ARG_GDES)) {
-            ArrayList<Gde> gdeList = getArguments().getParcelableArrayList(ARG_GDES);
+        if (getArguments().containsKey(ARG_PEOPLE_ARRAY)) {
+            ArrayList<Gde> gdeList = getArguments().getParcelableArrayList(ARG_PEOPLE_ARRAY);
             mAdapter.addAll(gdeList);
         }
 
