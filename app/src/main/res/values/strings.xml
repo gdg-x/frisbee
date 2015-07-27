@@ -174,4 +174,5 @@
     <string name="signin">Sign-in</string>
     <string name="feedback_message_required">Message required</string>
     <string name="feedback_invalid_email">Input valid email address</string>
+    <string name="drawer_subheader_games">Games</string>
 </resources>
