@@ -2,6 +2,7 @@ package org.gdg.frisbee.android.gde;
 
 import android.content.Context;
 import android.support.annotation.DrawableRes;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,20 +17,18 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.widget.SquaredImageView;
 
-import java.util.HashMap;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 class PeopleAdapter extends ArrayAdapter<GdgPerson> {
 
     @DrawableRes private int placeholder;
-    private HashMap<Integer, Object> mConsumedMap;
+    private SparseBooleanArray mConsumedMap;
 
     public PeopleAdapter(Context ctx, @DrawableRes int placeholder) {
         super(ctx, R.layout.gde_item);
         this.placeholder = placeholder;
-        mConsumedMap = new HashMap<>();
+        mConsumedMap = new SparseBooleanArray();
     }
 
     @Override
@@ -64,8 +63,8 @@ class PeopleAdapter extends ArrayAdapter<GdgPerson> {
                     .into(holder.thumbnailView);
         }
 
-        if (!mConsumedMap.containsKey(i)) {
-            mConsumedMap.put(i, null);
+        if (!mConsumedMap.get(i)) {
+            mConsumedMap.put(i, true);
             // In which case we magically instantiate our effect and launch it directly on the view
             Animation animation = AnimationUtils.makeInChildBottomAnimation(getContext());
             rowView.startAnimation(animation);
