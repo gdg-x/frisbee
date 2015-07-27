@@ -17,7 +17,7 @@
 package org.gdg.frisbee.android.about;
 
 import org.gdg.frisbee.android.api.model.Contributor;
-import org.gdg.frisbee.android.crowdin.model.Translator;
+import org.gdg.frisbee.android.api.model.Translator;
 
 
 public class TranslatorsFragment extends ContributorsFragment {

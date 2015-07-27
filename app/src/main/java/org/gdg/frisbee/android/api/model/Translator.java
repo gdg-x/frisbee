@@ -1,4 +1,4 @@
-package org.gdg.frisbee.android.crowdin.model;
+package org.gdg.frisbee.android.api.model;
 
 import org.gdg.frisbee.android.api.model.Contributor;
 
