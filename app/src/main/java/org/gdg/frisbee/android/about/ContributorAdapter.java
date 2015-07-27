@@ -28,10 +28,8 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Contributor;
 import org.gdg.frisbee.android.app.App;
 
-import java.util.Collection;
-
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 class ContributorAdapter extends ArrayAdapter<Contributor> {
 
@@ -46,10 +44,9 @@ class ContributorAdapter extends ArrayAdapter<Contributor> {
             ViewHolder viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         }
+        ViewHolder viewHolder = (ViewHolder) convertView.getTag();
 
         Contributor contributor = getItem(position);
-
-        ViewHolder viewHolder = (ViewHolder) convertView.getTag();
         viewHolder.contributorName.setText(contributor.getLogin());
 
         if (!TextUtils.isEmpty(contributor.getAvatarUrl())) {
@@ -59,15 +56,6 @@ class ContributorAdapter extends ArrayAdapter<Contributor> {
         }
 
         return convertView;
-    }
-
-    @Override
-    public void addAll(Collection<? extends Contributor> contributors) {
-        setNotifyOnChange(false);
-        for (Contributor c : contributors) {
-            add(c);
-        }
-        notifyDataSetChanged(); // also sets mNotifyOnChange = true;
     }
 
     static final class ViewHolder {

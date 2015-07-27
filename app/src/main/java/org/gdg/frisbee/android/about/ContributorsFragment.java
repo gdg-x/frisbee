@@ -39,28 +39,14 @@ import org.joda.time.DateTime;
 import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.RetrofitError;
-import timber.log.Timber;
 
 public class ContributorsFragment extends GdgListFragment {
 
     protected ContributorAdapter mAdapter;
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        Timber.d("onSaveInstanceState()");
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Timber.d("onResume()");
-    }
-
-    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Timber.d("onActivityCreated()");
 
         mAdapter = new ContributorAdapter(getActivity());
         setListAdapter(mAdapter);
@@ -95,15 +81,12 @@ public class ContributorsFragment extends GdgListFragment {
         App.getInstance().getGithub().getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO, new Callback<ContributorList>() {
             @Override
             public void success(final ContributorList contributors, retrofit.client.Response response) {
+
+                mAdapter.addAll(contributors);
                 App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_FRISBEE_CONTRIBUTORS,
                         contributors,
                         DateTime.now().plusDays(1),
-                        new ModelCache.CachePutListener() {
-                            @Override
-                            public void onPutIntoCache() {
-                                mAdapter.addAll(contributors);
-                            }
-                        });
+                        null);
             }
 
             @Override
