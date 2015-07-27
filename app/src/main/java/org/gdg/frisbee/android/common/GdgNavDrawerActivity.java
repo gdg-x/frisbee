@@ -37,7 +37,6 @@ import android.widget.ImageView;
 import com.google.android.gms.games.Games;
 import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
 import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.plus.Plus;
@@ -48,6 +47,7 @@ import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.about.AboutActivity;
 import org.gdg.frisbee.android.activity.SettingsActivity;
+import org.gdg.frisbee.android.api.GapiOkTransport;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.arrow.ArrowActivity;
 import org.gdg.frisbee.android.chapter.MainActivity;
@@ -65,6 +65,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.Bind;
+import timber.log.Timber;
 
 public abstract class GdgNavDrawerActivity extends GdgActivity {
 
@@ -374,11 +375,11 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     @Nullable
     public static Person getPersonSync(final String gplusId) {
 
-        final HttpTransport mTransport = new NetHttpTransport();
+        final HttpTransport mTransport = new GapiOkTransport();
         final JsonFactory mJsonFactory = new GsonFactory();
         Plus plusClient = new Plus.Builder(mTransport, mJsonFactory, null)
                 .setGoogleClientRequestInitializer(
-                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.ANDROID_SIMPLE_API_ACCESS_KEY))
+                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.IP_SIMPLE_API_ACCESS_KEY))
                 .setApplicationName("GDG Frisbee")
                 .build();
         return getPersonSync(plusClient, gplusId);
@@ -407,6 +408,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             person = request.execute();
             App.getInstance().getModelCache().put(cacheUrl, person, DateTime.now().plusDays(2));
         } catch (IOException e) {
+            Timber.e(e, "Error while getting profile URL.");
         }
 
         return person;

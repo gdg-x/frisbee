@@ -9,7 +9,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -50,15 +49,15 @@ class GdeAdapter extends BaseAdapter {
 
     private Pattern mPlusPattern;
 
-    public GdeAdapter(Context ctx, GoogleApiClient client) {
+    public GdeAdapter(Context ctx) {
         mContext = ctx;
         mInflater = LayoutInflater.from(mContext);
-        mGdes = new ArrayList<Gde>();
+        mGdes = new ArrayList<>();
         mConsumedMap = new HashMap<>();
 
         mClient = new Plus.Builder(mTransport, mJsonFactory, null)
                 .setGoogleClientRequestInitializer(
-                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.ANDROID_SIMPLE_API_ACCESS_KEY))
+                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.IP_SIMPLE_API_ACCESS_KEY))
                 .setApplicationName("GDG Frisbee")
                 .build();
         mPlusPattern = Pattern.compile("http[s]?:\\/\\/plus\\..*google\\.com.*(\\+[a-zA-Z] +|[0-9]{21}).*");
