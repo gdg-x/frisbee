@@ -81,12 +81,6 @@ public class PulseFragment extends GdgListFragment {
         mTarget = getArguments().getString(ARG_TARGET);
         mMode = getArguments().getInt(ARG_MODE);
 
-        if (getListView() instanceof ListView) {
-            ListView listView = (ListView) getListView();
-            listView.setDivider(null);
-            listView.setDividerHeight(0);
-        }
-
         mAdapter = new PulseAdapter(getActivity());
         setListAdapter(mAdapter);
 
