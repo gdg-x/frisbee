@@ -7,10 +7,11 @@ package org.gdg.frisbee.android.api.model;
  * Time: 02:09
  * To change this template use File | Settings | File Templates.
  */
-public class Contributor {
+public class Contributor implements GdgPerson {
     private String name, login, avatarUrl, url, htmlUrl;
     private int contributions;
 
+    @Override
     public String getName() {
         return name;
     }
@@ -35,6 +36,7 @@ public class Contributor {
         this.avatarUrl = avatarUrl;
     }
 
+    @Override
     public String getUrl() {
         return url;
     }
@@ -57,5 +59,15 @@ public class Contributor {
 
     public void setContributions(int contributions) {
         this.contributions = contributions;
+    }
+
+    @Override
+    public String getImageUrl() {
+        return avatarUrl;
+    }
+
+    @Override
+    public String getAddress() {
+        return null;
     }
 }

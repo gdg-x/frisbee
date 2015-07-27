@@ -1,7 +1,5 @@
 package org.gdg.frisbee.android.api.model;
 
-import org.gdg.frisbee.android.api.model.Contributor;
-
 public class Translator extends Contributor {
     public Translator(String name, String login, String avatarUrl, int contributions) {
         super();

@@ -15,6 +15,7 @@ import com.squareup.picasso.Picasso;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Gde;
+import org.gdg.frisbee.android.api.model.GdgPerson;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.task.Builder;
@@ -34,7 +35,7 @@ class GdeAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater mInflater;
 
-    private ArrayList<Gde> mGdes;
+    private ArrayList<GdgPerson> mGdes;
 
     private Plus mClient;
 
@@ -64,7 +65,7 @@ class GdeAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int i) {
-        return Utils.stringToLong(mGdes.get(i).getEmail());
+        return Utils.stringToLong(mGdes.get(i).getUrl());
     }
 
     @Override
