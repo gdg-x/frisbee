@@ -27,7 +27,7 @@
     android:layout_height="match_parent"
     android:drawSelectorOnTop="true"
     android:gravity="top"
-    android:numColumns="@integer/gde_fragment_column_count"
+    android:numColumns="@integer/people_fragment_column_count"
     android:stretchMode="columnWidth" />
 
   <include layout="@layout/loading_animated_view" />

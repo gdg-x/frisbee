@@ -33,7 +33,7 @@ public class PeopleAdapter extends ArrayAdapter<GdgPerson> {
     }
 
     public PeopleAdapter(Context ctx, @DrawableRes int placeholder) {
-        super(ctx, R.layout.gde_item);
+        super(ctx, R.layout.list_person_item);
         this.placeholder = placeholder;
         mConsumedMap = new SparseBooleanArray();
     }
@@ -54,7 +54,7 @@ public class PeopleAdapter extends ArrayAdapter<GdgPerson> {
 
         View rowView = convertView;
         if (rowView == null) {
-            rowView = LayoutInflater.from(getContext()).inflate(R.layout.gde_item, parent, false);
+            rowView = LayoutInflater.from(getContext()).inflate(R.layout.list_person_item, parent, false);
             ViewHolder viewHolder = new ViewHolder(rowView);
             rowView.setTag(viewHolder);
         }
@@ -83,9 +83,9 @@ public class PeopleAdapter extends ArrayAdapter<GdgPerson> {
     }
 
     static class ViewHolder {
-        @Bind(R.id.name) public TextView primaryTextView;
-        @Bind(R.id.country) public TextView secondaryTextView;
-        @Bind(R.id.thumb) public SquaredImageView thumbnailView;
+        @Bind(android.R.id.text1) public TextView primaryTextView;
+        @Bind(android.R.id.text2) public TextView secondaryTextView;
+        @Bind(android.R.id.icon) public SquaredImageView thumbnailView;
 
         public ViewHolder(View v) {
             ButterKnife.bind(this, v);
