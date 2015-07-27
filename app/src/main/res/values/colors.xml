@@ -40,11 +40,17 @@
   <color name="theme_accent_1">@color/white</color>
   <color name="navdrawer_background">#ffffffff</color>
   <color name="navdrawer_inset_foreground">#4000</color>
-  
+  <color name="recycler_window_bg">#FFF5F5F5</color>
+
   <color name="color_primary_studyjams">#7161CE</color>
   <color name="color_primary_dark_studyjams">#4C45BB</color>
   <color name="color_primary_wtm">#60B7A3</color>
   <color name="color_primary_dark_wtm">#3D9B86</color>
   <color name="color_primary_ioextended">#50B8D0</color>
   <color name="color_primary_dark_ioextended">#30A1BC</color>
+
+  <color name="material_green_400">#66BB6A</color>
+  <color name="material_red_400">#EF5350</color>
+  <color name="material_yellow_700">#FBC02D</color>
+
 </resources>

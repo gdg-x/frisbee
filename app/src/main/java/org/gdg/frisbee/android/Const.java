@@ -61,6 +61,8 @@ public class Const {
     public static final int DRAWER_FEEDBACK = 102;
     public static final int DRAWER_ABOUT = 103;
 
+    public static final String DRAWER_ITEM = "org.gdg.frisbee.DRAWER_ITEM";
+
     //Arrow
     public static final String QR_MSG_PREFIX = "gdgx://arrow?m=";
     public static final String PREF_ORGANIZER_CHECK_TIME = "pref_organizer_check_time";

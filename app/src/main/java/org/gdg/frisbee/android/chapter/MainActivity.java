@@ -164,6 +164,8 @@ public class MainActivity extends GdgNavDrawerActivity {
         if (PrefUtils.isSignedIn(this)) {
             checkAchievements();
         }
+
+        setNavDrawerItemSelected(getResources().getString(R.string.home_gdg));
     }
 
     @Override
