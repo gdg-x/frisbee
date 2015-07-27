@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -33,14 +34,16 @@ import android.view.SubMenu;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
-import com.google.android.gms.plus.People;
-import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.model.people.Person;
-import com.google.android.gms.plus.model.people.PersonBuffer;
+import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.plus.Plus;
+import com.google.api.services.plus.model.Person;
 
+import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.about.AboutActivity;
@@ -58,6 +61,7 @@ import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.view.BitmapBorderTransformation;
 import org.joda.time.DateTime;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.Bind;
@@ -339,7 +343,8 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                     .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person>() {
                         @Override
                         public Person doInBackground(String... params) {
-                            return getPersonSync(getGoogleApiClient(), params[0]);
+
+                            return getPersonSync(params[0]);
                         }
                     })
                     .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person>() {
@@ -366,8 +371,22 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         return currentHomeChapterId != null && (mStoredHomeChapterId == null || !mStoredHomeChapterId.equals(currentHomeChapterId));
     }
 
+    @Nullable
+    public static Person getPersonSync(final String gplusId) {
 
-    public static Person getPersonSync(final GoogleApiClient apiClient, final String gplusId) {
+        final HttpTransport mTransport = new NetHttpTransport();
+        final JsonFactory mJsonFactory = new GsonFactory();
+        Plus plusClient = new Plus.Builder(mTransport, mJsonFactory, null)
+                .setGoogleClientRequestInitializer(
+                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.ANDROID_SIMPLE_API_ACCESS_KEY))
+                .setApplicationName("GDG Frisbee")
+                .build();
+        return getPersonSync(plusClient, gplusId);
+    }
+
+    @Nullable
+    public static Person getPersonSync(final Plus plusClient, final String gplusId) {
+
         final String cacheUrl = Const.CACHE_KEY_PERSON + gplusId;
         Object cachedPerson = App.getInstance().getModelCache().get(cacheUrl);
         Person person = null;
@@ -382,18 +401,14 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             App.getInstance().getModelCache().remove(cacheUrl);
         }
 
-        People.LoadPeopleResult result = Plus.PeopleApi.load(apiClient, gplusId).await();
-        if (result.getStatus().getStatusCode() == CommonStatusCodes.SUCCESS) {
-            PersonBuffer personBuffer = result.getPersonBuffer();
-            try {
-                if (personBuffer.getCount() > 0) {
-                    person = personBuffer.get(0);
-                    App.getInstance().getModelCache().put(cacheUrl, person, DateTime.now().plusDays(2));
-                }
-            } finally {
-                personBuffer.close();
-            }
+        try {
+            Plus.People.Get request = plusClient.people().get(gplusId);
+            request.setFields("aboutMe,cover/coverPhoto/url,image/url,displayName,tagline,urls");
+            person = request.execute();
+            App.getInstance().getModelCache().put(cacheUrl, person, DateTime.now().plusDays(2));
+        } catch (IOException e) {
         }
+
         return person;
     }
 }

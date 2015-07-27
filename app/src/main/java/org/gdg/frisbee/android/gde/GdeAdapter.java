@@ -10,10 +10,17 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.plus.model.people.Person;
+import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.plus.Plus;
+import com.google.api.services.plus.model.Person;
 import com.squareup.picasso.Picasso;
 
+import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.GapiOkTransport;
 import org.gdg.frisbee.android.api.model.Gde;
 import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.task.Builder;
@@ -35,18 +42,25 @@ class GdeAdapter extends BaseAdapter {
 
     private ArrayList<Gde> mGdes;
 
+    final HttpTransport mTransport = new GapiOkTransport();
+    final JsonFactory mJsonFactory = new GsonFactory();
+    private Plus mClient;
+
     private HashMap<Integer, Object> mConsumedMap;
 
     private Pattern mPlusPattern;
-    private final GoogleApiClient mClient;
 
     public GdeAdapter(Context ctx, GoogleApiClient client) {
         mContext = ctx;
         mInflater = LayoutInflater.from(mContext);
         mGdes = new ArrayList<Gde>();
         mConsumedMap = new HashMap<>();
-        mClient = client;
 
+        mClient = new Plus.Builder(mTransport, mJsonFactory, null)
+                .setGoogleClientRequestInitializer(
+                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.ANDROID_SIMPLE_API_ACCESS_KEY))
+                .setApplicationName("GDG Frisbee")
+                .build();
         mPlusPattern = Pattern.compile("http[s]?:\\/\\/plus\\..*google\\.com.*(\\+[a-zA-Z] +|[0-9]{21}).*");
     }
 
