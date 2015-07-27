@@ -380,7 +380,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
         if (cachedPerson instanceof Person) {
             person = (Person) cachedPerson;
-            if (person.getId() != null) {
+            if (person.getImage() != null) {
                 return person;
             }
         }
