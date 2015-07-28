@@ -42,23 +42,22 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.plus.Plus;
 
 import org.gdg.frisbee.android.BuildConfig;
-import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.api.GdgXHub;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.GcmRegistrationRequest;
 import org.gdg.frisbee.android.api.model.GcmRegistrationResponse;
 import org.gdg.frisbee.android.api.model.HomeGdgRequest;
 import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.gdg.frisbee.android.widget.NonSwipeableViewPager;
 
 import java.io.IOException;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -241,9 +240,6 @@ public class FirstStartActivity extends AppCompatActivity implements
 
         Intent resultData = new Intent(this, MainActivity.class);
         resultData.setAction(ACTION_FIRST_START);
-        if (mSelectedChapter != null) {
-            resultData.putExtra(Const.EXTRA_CHAPTER_ID, mSelectedChapter.getGplusId());
-        }
         startActivity(resultData);
 
         super.finish();

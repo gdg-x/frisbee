@@ -16,18 +16,17 @@
 
 package org.gdg.frisbee.android.onboarding;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.widget.Toast;
 
 import org.gdg.frisbee.android.BuildConfig;
-import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
 
-public class StartActivity extends AppCompatActivity {
+public class StartActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,15 +41,9 @@ public class StartActivity extends AppCompatActivity {
             intentForStart = new Intent(StartActivity.this, FirstStartActivity.class);
         } else {
             intentForStart = new Intent(StartActivity.this, MainActivity.class);
-
-            final String selectedChapterGplusId = PrefUtils.getHomeChapterId(this);
-            if (selectedChapterGplusId != null) {
-                intentForStart.putExtra(Const.EXTRA_CHAPTER_ID, selectedChapterGplusId);
-            }
         }
 
         startActivity(intentForStart);
         finish();
     }
-
 }
