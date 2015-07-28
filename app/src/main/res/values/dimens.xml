@@ -22,6 +22,4 @@
   <dimen name="icon_width_event">48dp</dimen>
   <dimen name="responsive_width">@dimen/match_parent</dimen>
 
-  <dimen name="list_item_avatar_size">46dp</dimen>
-
 </resources>
