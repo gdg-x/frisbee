@@ -25,9 +25,6 @@ public class GdeDirectoryClient {
     private GdeDirectoryClient() {
     }
 
-    // We can make this a singleton to avoid instantiating this twice
-    private static GdeDirectory gdeDirectory;
-
     private static RestAdapter getRestAdapter() {
         return new RestAdapter.Builder()
                 .setEndpoint(API_URL)
@@ -38,9 +35,6 @@ public class GdeDirectoryClient {
     }
 
     public static GdeDirectory getGdeApi() {
-        if (gdeDirectory == null) {
-            gdeDirectory = getRestAdapter().create(GdeDirectory.class);
-        }
-        return gdeDirectory;
+        return getRestAdapter().create(GdeDirectory.class);
     }
 }

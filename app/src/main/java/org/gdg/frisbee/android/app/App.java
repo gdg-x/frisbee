@@ -33,6 +33,7 @@ import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
+import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.LruCache;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
@@ -42,6 +43,8 @@ import net.danlew.android.joda.JodaTimeAndroid;
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.GdeDirectory;
+import org.gdg.frisbee.android.api.GdeDirectoryClient;
 import org.gdg.frisbee.android.api.GdgXHub;
 import org.gdg.frisbee.android.api.GdgXHubClient;
 import org.gdg.frisbee.android.api.GroupDirectory;
@@ -76,8 +79,11 @@ public class App extends Application implements LocationListener {
         return mInstance;
     }
 
+    private OkHttpClient mOkHttpClient;
+    private Client mRetrofitClient;
     private GroupDirectory groupDirectoryInstance;
     private GdgXHub hubInstance;
+    private GdeDirectory gdeDirectoryInstance;
     private ModelCache mModelCache;
     private Picasso mPicasso;
     private Tracker mTracker;
@@ -86,7 +92,6 @@ public class App extends Application implements LocationListener {
     private OrganizerChecker mOrganizerChecker;
     private ArrayList<TaggedEventSeries> mTaggedEventSeriesList;
     private RefWatcher refWatcher;
-    private Client mRetrofitClient;
 
     @Override
     public void onCreate() {
@@ -323,9 +328,23 @@ public class App extends Application implements LocationListener {
         return groupDirectoryInstance;
     }
 
+    public GdeDirectory getGdeDirectory() {
+        if (gdeDirectoryInstance == null) {
+            gdeDirectoryInstance = GdeDirectoryClient.getGdeApi();
+        }
+        return gdeDirectoryInstance;
+    }
+
+    public OkHttpClient getOkHttpClient() {
+        if (mOkHttpClient == null) {
+            mOkHttpClient = OkClientProvider.getOkHttpClient(this);
+        }
+        return mOkHttpClient;
+    }
+
     public Client getRetrofitClient() {
         if (mRetrofitClient == null) {
-            mRetrofitClient = OkClientProvider.getClient(this);
+            mRetrofitClient = OkClientProvider.getClient();
         }
         return mRetrofitClient;
     }
