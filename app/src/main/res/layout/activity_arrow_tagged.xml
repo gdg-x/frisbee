@@ -31,11 +31,12 @@
 
     <include layout="@layout/toolbar_actionbar" />
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
       android:id="@+id/taggedList"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:drawSelectorOnTop="true" />
+      android:drawSelectorOnTop="true"
+    />
   </LinearLayout>
 
   <include layout="@layout/navdrawer" />
