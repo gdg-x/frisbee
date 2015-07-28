@@ -158,7 +158,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        menuItem.setChecked(true);
                         onDrawerItemClick(menuItem);
                         mDrawerLayout.closeDrawers();
                         return true;
