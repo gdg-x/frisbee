@@ -25,11 +25,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.google.gson.FieldNamingPolicy;
-
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.GitHub;
+import org.gdg.frisbee.android.api.GithubClient;
 import org.gdg.frisbee.android.api.model.Contributor;
 import org.gdg.frisbee.android.api.model.ContributorList;
 import org.gdg.frisbee.android.app.App;
@@ -41,9 +39,7 @@ import org.joda.time.DateTime;
 
 import butterknife.ButterKnife;
 import retrofit.Callback;
-import retrofit.RestAdapter;
 import retrofit.RetrofitError;
-import retrofit.converter.GsonConverter;
 import timber.log.Timber;
 
 public class ContributorsFragment extends GdgListFragment {
@@ -97,12 +93,7 @@ public class ContributorsFragment extends GdgListFragment {
     }
     
     private void fetchGitHubContributors() {
-        GitHub gitHubClient = new RestAdapter.Builder()
-                .setEndpoint("https://api.github.com")
-                .setConverter(new GsonConverter(Utils.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)))
-                .build().create(GitHub.class);
-        
-        gitHubClient.getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO, new Callback<ContributorList>() {
+        GithubClient.getGitHubApi().getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO, new Callback<ContributorList>() {
             @Override
             public void success(final ContributorList contributors, retrofit.client.Response response) {
                 App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_FRISBEE_CONTRIBUTORS,
