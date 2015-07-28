@@ -133,17 +133,23 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         final ArrayList<TaggedEventSeries> currentEventSeries =
                 App.getInstance().currentTaggedEventSeries();
         for (TaggedEventSeries taggedEventSeries : currentEventSeries) {
-            menu.add(GROUP_ID, Const.DRAWER_SPECIAL, Menu.NONE, taggedEventSeries.getTitleResId()).setIcon(taggedEventSeries.getDrawerIconResId());
+            menu.add(GROUP_ID,
+                    taggedEventSeries.getDrawerId(),
+                    Menu.NONE,
+                    taggedEventSeries.getTitleResId())
+                    .setIcon(taggedEventSeries.getDrawerIconResId());
         }
 
         SubMenu subMenu = menu.addSubMenu(GAMES_GROUP_ID, Const.DRAWER_SUBMENU_GAMES, Menu.NONE, R.string.drawer_subheader_games);
         subMenu.add(GAMES_GROUP_ID, Const.DRAWER_ACHIEVEMENTS, Menu.NONE, R.string.achievements).setIcon(R.drawable.ic_drawer_achievements);
-        subMenu.add(GAMES_GROUP_ID, Const.DRAWER_ARROW, Menu.NONE, R.string.arrow).setIcon(R.drawable.ic_drawer_arrow);
+        subMenu.add(GAMES_GROUP_ID, Const.DRAWER_ARROW, Menu.NONE, R.string.arrow).setIcon(R.drawable.ic_drawer_arrow).setCheckable(true);
 
         menu.add(SETTINGS_GROUP_ID, Const.DRAWER_SETTINGS, Menu.NONE, R.string.settings).setIcon(R.drawable.ic_drawer_settings);
         menu.add(SETTINGS_GROUP_ID, Const.DRAWER_HELP, Menu.NONE, R.string.help).setIcon(R.drawable.ic_drawer_help);
         menu.add(SETTINGS_GROUP_ID, Const.DRAWER_FEEDBACK, Menu.NONE, R.string.feedback).setIcon(R.drawable.ic_drawer_feedback);
         menu.add(SETTINGS_GROUP_ID, Const.DRAWER_ABOUT, Menu.NONE, R.string.about).setIcon(R.drawable.ic_drawer_about);
+
+        menu.setGroupCheckable(GROUP_ID, true, true);
 
         menu.findItem(getIntent().getIntExtra(EXTRA_SELECTED_DRAWER_ITEM_ID, Const.DRAWER_HOME)).setChecked(true);
 
@@ -178,20 +184,36 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 }
                 break;
             case Const.DRAWER_HOME:
-                navigateTo(MainActivity.class, data);
+                if (!(this instanceof MainActivity)) {
+                    navigateTo(MainActivity.class, data);
+                }
                 break;
             case Const.DRAWER_GDE:
-                navigateTo(GdeActivity.class, data);
+                if (!(this instanceof GdeActivity)) {
+                    navigateTo(GdeActivity.class, data);
+                }
                 break;
-            case Const.DRAWER_SPECIAL:
-                onDrawerSpecialItemClick(item, data);
+            case Const.DRAWER_WTM:
+            case Const.DRAWER_STUDY_JAM:
+            case Const.DRAWER_IO_EXTENDED:
+                if (getSupportActionBar() != null) {
+                    // If title is null them we are not in a SpecialEventActivity
+                    if (getSupportActionBar().getTitle() == null
+                            || !getSupportActionBar().getTitle().equals(item.getTitle())) {
+                        onDrawerSpecialItemClick(item, data);
+                    }
+                }
                 break;
             case Const.DRAWER_PULSE:
-                navigateTo(PulseActivity.class, data);
+                if (!(this instanceof PulseActivity)) {
+                    navigateTo(PulseActivity.class, data);
+                }
                 break;
             case Const.DRAWER_ARROW:
                 if (PrefUtils.isSignedIn(this) && getGoogleApiClient().isConnected()) {
-                    navigateTo(ArrowActivity.class, data);
+                    if (!(this instanceof ArrowActivity)) {
+                        navigateTo(ArrowActivity.class, data);
+                    }
                 } else {
                     drawerItemToNavigateAfterSignIn = item;
                     showLoginErrorDialog(R.string.arrow_need_games);
