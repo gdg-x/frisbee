@@ -39,20 +39,21 @@ public class Const {
     public static final String EXTRA_TAGGED_EVENT = "org.gdg.frisbee.TAGGED_EVENT";
     public static final String EXTRA_TAGGED_EVENT_CACHEKEY = "org.gdg.frisbee.TAGGED_EVENT_CACHEKEY";
     //Special Events Dates
-    public static final DateTime START_TIME_IOEXTENDED =    new DateTime(2015, 5, 1, 0, 0);
-    public static final DateTime START_TIME_STUDY_JAMS =    new DateTime(2015, 2, 1, 0, 0);
+    public static final DateTime START_TIME_DEVFEST =       new DateTime(2015, 9, 1, 0, 0);
     public static final DateTime START_TIME_WTM =           new DateTime(2015, 2, 1, 0, 0);
+    public static final DateTime START_TIME_STUDY_JAMS =    new DateTime(2015, 2, 1, 0, 0);
+    public static final DateTime START_TIME_IOEXTENDED =    new DateTime(2015, 5, 1, 0, 0);
 
-    public static final DateTime END_TIME_IOEXTENDED =      new DateTime(2015, 6, 1, 0, 0);
-    public static final DateTime END_TIME_STUDY_JAMS =      new DateTime(2015, 5, 1, 0, 0);
+    public static final DateTime END_TIME_DEVFEST =      new DateTime(2016, 1, 1, 0, 0);
     public static final DateTime END_TIME_WTM =             new DateTime(2015, 4, 1, 0, 0);
+    public static final DateTime END_TIME_STUDY_JAMS =      new DateTime(2015, 5, 1, 0, 0);
+    public static final DateTime END_TIME_IOEXTENDED =      new DateTime(2015, 6, 1, 0, 0);
 
     public static final String EXTRA_PLUS_ID = "plus_id";
 
     //Navigation Drawer
     public static final int DRAWER_HOME = 0;
     public static final int DRAWER_PULSE = 2;
-    public static final int DRAWER_SPECIAL = 3;
     public static final int DRAWER_ACHIEVEMENTS = 4;
     public static final int DRAWER_GDE = 5;
     public static final int DRAWER_ARROW = 99;
@@ -63,9 +64,10 @@ public class Const {
     public static final int DRAWER_SUBMENU_GAMES = 1000;
 
     // Drawer Special Event Items
-    public static final int DRAWER_WTM = 30;
-    public static final int DRAWER_STUDY_JAM = 31;
-    public static final int DRAWER_IO_EXTENDED = 32;
+    public static final int DRAWER_DEVFEST = 30;
+    public static final int DRAWER_WTM = 31;
+    public static final int DRAWER_STUDY_JAM = 32;
+    public static final int DRAWER_IO_EXTENDED = 33;
 
     //Arrow
     public static final String QR_MSG_PREFIX = "gdgx://arrow?m=";

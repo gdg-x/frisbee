@@ -157,6 +157,13 @@ public class App extends Application implements LocationListener {
     private void initTaggedEventSeries() {
 
         mTaggedEventSeriesList = new ArrayList<>();
+        //Add DevFest
+        addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
+                R.style.Theme_GDG_Special_DevFest,
+                "devfest",
+                Const.DRAWER_DEVFEST,
+                Const.START_TIME_DEVFEST,
+                Const.END_TIME_DEVFEST));
         //Add Women Techmakers
         addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
                 R.style.Theme_GDG_Special_Wtm,

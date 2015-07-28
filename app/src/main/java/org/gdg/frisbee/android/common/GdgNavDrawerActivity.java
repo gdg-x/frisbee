@@ -189,6 +189,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             case Const.DRAWER_GDE:
                 navigateTo(GdeActivity.class, data);
                 break;
+            case Const.DRAWER_DEVFEST:
             case Const.DRAWER_WTM:
             case Const.DRAWER_STUDY_JAM:
             case Const.DRAWER_IO_EXTENDED:
@@ -249,7 +250,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         final ArrayList<TaggedEventSeries> currentEventSeries =
                 App.getInstance().currentTaggedEventSeries();
         for (TaggedEventSeries taggedEventSeries : currentEventSeries) {
-            if (getString(taggedEventSeries.getTitleResId()).equals(item.getTitle())) {
+            if (taggedEventSeries.getDrawerId() == item.getItemId()) {
 
                 data.putString(Const.EXTRA_TAGGED_EVENT_CACHEKEY, taggedEventSeries.getTag());
                 data.putParcelable(Const.EXTRA_TAGGED_EVENT, taggedEventSeries);
