@@ -16,55 +16,47 @@
   ~ limitations under the License.
   -->
 
-
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+  android:id="@+id/contentContainer"
+  xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:layout_marginLeft="8dip"
-  android:layout_marginRight="8dip"
-  android:layout_marginTop="8dip"
-  card_view:cardCornerRadius="5dp">
+  android:layout_gravity="start"
+  android:background="?selectableItemBackground"
+  android:minHeight="?android:attr/listPreferredItemHeight"
+  android:orientation="horizontal"
+  android:padding="8dp">
+
+  <ImageView
+    android:id="@+id/avatar"
+    android:layout_width="@dimen/list_item_avatar"
+    android:layout_height="@dimen/list_item_avatar"
+    android:layout_gravity="center_vertical"
+    android:src="@drawable/ic_arrow_tagged"/>
 
   <LinearLayout
-    android:id="@+id/contentContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="left|center_vertical"
-    android:orientation="horizontal">
+    android:orientation="vertical"
+    android:padding="10dip">
 
-    <ImageView
-      android:id="@+id/avatar"
-      android:layout_width="40dip"
-      android:layout_height="40dip"
-      android:layout_gravity="center_vertical"
-      android:src="@drawable/ic_arrow_tagged" />
-
-    <LinearLayout
+    <TextView
+      android:id="@+id/organizerName"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:orientation="vertical"
-      android:padding="10dip">
+      android:layout_marginBottom="5dip"
+      android:autoLink="email|map|web"
+      android:linksClickable="false"
+      android:textStyle="bold"
+      tools:text="GDG Organizer"/>
 
-      <TextView
-        android:id="@+id/organizerName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dip"
-        android:autoLink="email|map|web"
-        android:linksClickable="false"
-        tools:text="GDG Organizer"
-        android:textStyle="bold" />
-
-      <TextView
-        android:id="@+id/organizerChapter"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:autoLink="email|map|web"
-        android:linksClickable="false"
-        tools:text="GDG Chapter" />
-    </LinearLayout>
-
+    <TextView
+      android:id="@+id/organizerChapter"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:autoLink="email|map|web"
+      android:linksClickable="false"
+      tools:text="GDG Chapter"/>
   </LinearLayout>
-</android.support.v7.widget.CardView>
+</LinearLayout>
