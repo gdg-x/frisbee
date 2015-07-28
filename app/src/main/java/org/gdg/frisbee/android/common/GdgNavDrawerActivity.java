@@ -184,36 +184,22 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 }
                 break;
             case Const.DRAWER_HOME:
-                if (!(this instanceof MainActivity)) {
-                    navigateTo(MainActivity.class, data);
-                }
+                navigateTo(MainActivity.class, data);
                 break;
             case Const.DRAWER_GDE:
-                if (!(this instanceof GdeActivity)) {
-                    navigateTo(GdeActivity.class, data);
-                }
+                navigateTo(GdeActivity.class, data);
                 break;
             case Const.DRAWER_WTM:
             case Const.DRAWER_STUDY_JAM:
             case Const.DRAWER_IO_EXTENDED:
-                if (getSupportActionBar() != null) {
-                    // If title is null them we are not in a SpecialEventActivity
-                    if (getSupportActionBar().getTitle() == null
-                            || !getSupportActionBar().getTitle().equals(item.getTitle())) {
-                        onDrawerSpecialItemClick(item, data);
-                    }
-                }
+                onDrawerSpecialItemClick(item, data);
                 break;
             case Const.DRAWER_PULSE:
-                if (!(this instanceof PulseActivity)) {
-                    navigateTo(PulseActivity.class, data);
-                }
+                navigateTo(PulseActivity.class, data);
                 break;
             case Const.DRAWER_ARROW:
                 if (PrefUtils.isSignedIn(this) && getGoogleApiClient().isConnected()) {
-                    if (!(this instanceof ArrowActivity)) {
-                        navigateTo(ArrowActivity.class, data);
-                    }
+                    navigateTo(ArrowActivity.class, data);
                 } else {
                     drawerItemToNavigateAfterSignIn = item;
                     showLoginErrorDialog(R.string.arrow_need_games);
@@ -253,6 +239,12 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     public void onDrawerSpecialItemClick(MenuItem item, Bundle data) {
+        // If title is null them we are not in a SpecialEventActivity
+        if (getSupportActionBar() != null && getSupportActionBar().getTitle() != null
+                && getSupportActionBar().getTitle().equals(item.getTitle())) {
+            return;
+        }
+
 
         final ArrayList<TaggedEventSeries> currentEventSeries =
                 App.getInstance().currentTaggedEventSeries();
@@ -269,6 +261,11 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     private void navigateTo(Class<? extends GdgActivity> activityClass, Bundle additional) {
+        if (this.getClass().equals(activityClass)
+                && !(this instanceof TaggedEventSeriesActivity)) {
+            return;
+        }
+
         Intent i = new Intent(GdgNavDrawerActivity.this, activityClass);
         i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
