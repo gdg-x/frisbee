@@ -159,19 +159,17 @@ public class FeedbackFragment extends DialogFragment {
 
         if (!TextUtils.isEmpty(strMessage)) {
             isValid = true;
-            mLayoutMessage.setErrorEnabled(false);
+            mLayoutMessage.setError(null);
         } else {
             isValid = false;
-            mLayoutMessage.setErrorEnabled(true);
             mLayoutMessage.setError(getString(R.string.feedback_message_required));
         }
 
         if (!TextUtils.isEmpty(strEmail) && android.util.Patterns.EMAIL_ADDRESS.matcher(strEmail).matches()) {
-            isValid = true;
-            mLayoutEmail.setErrorEnabled(false);
+            isValid = isValid & true;
+            mLayoutEmail.setError(null);
         } else {
-            isValid = false;
-            mLayoutMessage.setErrorEnabled(true);
+            isValid = isValid & false;
             mLayoutEmail.setError(getString(R.string.feedback_invalid_email));
         }
 
