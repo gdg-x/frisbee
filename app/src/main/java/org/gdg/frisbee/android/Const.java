@@ -62,6 +62,11 @@ public class Const {
     public static final int DRAWER_ABOUT = 103;
     public static final int DRAWER_SUBMENU_GAMES = 1000;
 
+    // Drawer Special Event Items
+    public static final int DRAWER_WTM = 30;
+    public static final int DRAWER_STUDY_JAM = 31;
+    public static final int DRAWER_IO_EXTENDED = 32;
+
     //Arrow
     public static final String QR_MSG_PREFIX = "gdgx://arrow?m=";
     public static final String PREF_ORGANIZER_CHECK_TIME = "pref_organizer_check_time";

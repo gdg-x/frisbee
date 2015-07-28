@@ -161,18 +161,21 @@ public class App extends Application implements LocationListener {
         addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
                 R.style.Theme_GDG_Special_Wtm,
                 "wtm",
+                Const.DRAWER_WTM,
                 Const.START_TIME_WTM,
                 Const.END_TIME_WTM));
         //Add Android Fundamentals Study Jams
         addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
                 R.style.Theme_GDG_Special_StudyJams,
                 "studyjam",
+                Const.DRAWER_STUDY_JAM,
                 Const.START_TIME_STUDY_JAMS,
                 Const.END_TIME_STUDY_JAMS));
         //Add IO Extended
         addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
                 R.style.Theme_GDG_Special_IOExtended,
                 "i-oextended",
+                Const.DRAWER_IO_EXTENDED,
                 Const.START_TIME_IOEXTENDED,
                 Const.END_TIME_IOEXTENDED));
     }
