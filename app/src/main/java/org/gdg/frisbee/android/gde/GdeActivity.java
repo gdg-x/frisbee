@@ -14,7 +14,6 @@ import android.widget.FrameLayout;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.GdeDirectoryClient;
 import org.gdg.frisbee.android.api.model.Gde;
 import org.gdg.frisbee.android.api.model.GdeList;
 import org.gdg.frisbee.android.app.App;
@@ -76,7 +75,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
     
     private void fetchGdeDirectory() {
 
-        GdeDirectoryClient.getGdeApi().getDirectory(new Callback<GdeList>() {
+        App.getInstance().getGdeDirectory().getDirectory(new Callback<GdeList>() {
             @Override
             public void success(final GdeList directory, retrofit.client.Response response) {
                 App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_GDE_LIST,
