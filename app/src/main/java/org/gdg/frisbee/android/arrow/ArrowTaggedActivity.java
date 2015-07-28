@@ -16,18 +16,17 @@
 
 package org.gdg.frisbee.android.arrow;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.util.SparseArrayCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.appstate.AppStateManager;
@@ -36,21 +35,23 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.plus.People;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
-import com.squareup.picasso.Picasso;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
+import org.gdg.frisbee.android.view.BitmapBorderTransformation;
+import org.gdg.frisbee.android.view.DividerItemDecoration;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import timber.log.Timber;
@@ -61,9 +62,11 @@ public class ArrowTaggedActivity extends GdgNavDrawerActivity {
     public static final String ID_SPLIT_CHAR = "|";
 
     @Bind(R.id.taggedList)
-    ListView taggedList;
+    RecyclerView taggedList;
     String taggedOrganizers = "";
     private OrganizerAdapter adapter;
+
+    String[] orgas;
 
     @Override
     protected String getTrackedViewName() {
@@ -75,21 +78,16 @@ public class ArrowTaggedActivity extends GdgNavDrawerActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arrow_tagged);
 
-        adapter = new OrganizerAdapter(this, 0);
+        adapter = new OrganizerAdapter();
 
         if (!PrefUtils.isSignedIn(this)) {
             finish();
         }
 
+        taggedList.setLayoutManager(new LinearLayoutManager(this));
+        taggedList.addItemDecoration(new DividerItemDecoration(this, null));
         taggedList.setAdapter(adapter);
-        taggedList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Organizer item = adapter.getItem(i);
 
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/" + item.plusId + "/posts")));
-            }
-        });
     }
 
     @Override
@@ -120,7 +118,10 @@ public class ArrowTaggedActivity extends GdgNavDrawerActivity {
 
                     @Override
                     public void success(final Directory directory, final retrofit.client.Response response) {
-                        String[] orgas = taggedOrganizers.split("\\|");
+                        if (orgas != null) {
+                            return;
+                        }
+                        orgas = taggedOrganizers.split("\\|");
                         for (String orga : orgas) {
                             Chapter orgaChapter = null;
                             for (Chapter c : directory.getGroups()) {
@@ -180,38 +181,67 @@ public class ArrowTaggedActivity extends GdgNavDrawerActivity {
         public Person resolved;
     }
 
-    public class OrganizerAdapter extends ArrayAdapter<Organizer> {
+    public class OrganizerAdapter extends RecyclerView.Adapter<OrganizerAdapter.ViewHolder> {
 
-        private LayoutInflater inflater;
+        // SparseArray is recommended by most Android Developer Advocates
+        // as it has reduced memory usage
+        private SparseArrayCompat<Organizer> organizers;
 
-        public OrganizerAdapter(Context context, int resource) {
-            super(context, resource);
-
-            inflater = LayoutInflater.from(context);
+        public OrganizerAdapter() {
+            organizers = new SparseArrayCompat<>();
         }
 
         @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-                convertView = inflater.inflate(R.layout.list_tagged_organizer_item, parent, false);
-            }
-
-            Organizer o = getItem(position);
-
-            ImageView avatar = (ImageView) convertView.findViewById(R.id.avatar);
-            TextView name = (TextView) convertView.findViewById(R.id.organizerName);
-            TextView chapter = (TextView) convertView.findViewById(R.id.organizerChapter);
-
-            Picasso.with(getContext()).load(o.resolved.getImage().getUrl())
-                    .into(avatar);
-
-            name.setText(o.resolved.getDisplayName());
-            chapter.setText(o.chapterName);
-
-
-            return convertView;
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View v =  LayoutInflater.from(parent.getContext()).inflate(R.layout.list_tagged_organizer_item, parent, false);
+            return new ViewHolder(v);
         }
 
+        @Override
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            final Organizer o = organizers.get(position);
 
+            App.getInstance().getPicasso()
+                    .load(o.resolved.getImage().getUrl())
+                    .transform(new BitmapBorderTransformation(0,
+                            getResources().getDimensionPixelSize(R.dimen.list_item_avatar) / 2,
+                            getResources().getColor(R.color.white)))
+                    .into(holder.avatar);
+
+            holder.name.setText(o.resolved.getDisplayName());
+            holder.chapter.setText(o.chapterName);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/" + o.plusId + "/posts")));
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return organizers.size();
+        }
+
+        public void add(Organizer o) {
+            organizers.append(organizers.size(), o);
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+
+            @Bind(R.id.avatar)
+            ImageView avatar;
+
+            @Bind(R.id.organizerName)
+            TextView name;
+
+            @Bind(R.id.organizerChapter)
+            TextView chapter;
+
+            public ViewHolder(View itemView) {
+                super(itemView);
+                ButterKnife.bind(this, itemView);
+            }
+        }
     }
 }
