@@ -36,7 +36,6 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.plus.Plus;
-import com.google.gson.FieldNamingPolicy;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 import com.squareup.picasso.LruCache;
@@ -50,8 +49,10 @@ import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.GapiOkTransport;
 import org.gdg.frisbee.android.api.GdgXHub;
+import org.gdg.frisbee.android.api.GdgXHubClient;
 import org.gdg.frisbee.android.api.GroupDirectory;
-import org.gdg.frisbee.android.api.deserializer.ZuluDateTimeDeserializer;
+import org.gdg.frisbee.android.api.GroupDirectoryClient;
+import org.gdg.frisbee.android.api.OkClientProvider;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.utils.CrashlyticsTree;
@@ -64,9 +65,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import io.fabric.sdk.android.Fabric;
-import retrofit.RequestInterceptor;
-import retrofit.RestAdapter;
-import retrofit.converter.GsonConverter;
+import retrofit.client.Client;
 import timber.log.Timber;
 
 /**
@@ -94,6 +93,7 @@ public class App extends Application implements LocationListener {
     private ArrayList<TaggedEventSeries> mTaggedEventSeriesList;
     private RefWatcher refWatcher;
     private Plus plusClient;
+    private Client mRetrofitClient;
 
     @Override
     public void onCreate() {
@@ -334,32 +334,23 @@ public class App extends Application implements LocationListener {
 
     public GdgXHub getGdgXHub() {
         if (hubInstance == null) {
-            hubInstance = new RestAdapter.Builder()
-                    .setEndpoint(GdgXHub.BASE_URL)
-                    .setConverter(new GsonConverter(Utils.getGson(FieldNamingPolicy.IDENTITY, new ZuluDateTimeDeserializer())))
-                    .build().create(GdgXHub.class);
+            hubInstance = GdgXHubClient.getHubApi();
         }
         return hubInstance;
     }
 
     public GroupDirectory getGroupDirectory() {
         if (groupDirectoryInstance == null) {
-            groupDirectoryInstance = new RestAdapter.Builder()
-                    .setEndpoint(GroupDirectory.BASE_URL)
-                    .setConverter(new GsonConverter(Utils.getGson()))
-                    .setRequestInterceptor(new RequestInterceptor() {
-                        @Override
-                        public void intercept(RequestFacade request) {
-                            request.addHeader("User-Agent", "GDG-Frisbee/0.1 (Android)");
-                            request.addHeader("Referer", "https://developers.google.com/groups/directory/");
-                            request.addHeader("X-Requested-With", "XMLHttpRequest");
-                            request.addHeader("Cache-Control", "no-cache");
-                            request.addHeader("DNT", "1");
-                        }
-                    })
-                    .build().create(GroupDirectory.class);
+            groupDirectoryInstance = GroupDirectoryClient.getGroupDirectoryApi();
         }
         return groupDirectoryInstance;
+    }
+
+    public Client getRetrofitClient() {
+        if (mRetrofitClient == null) {
+            mRetrofitClient = OkClientProvider.getClient(this);
+        }
+        return mRetrofitClient;
     }
 
     public RefWatcher getRefWatcher() {
