@@ -23,16 +23,20 @@ public final class OkClientProvider {
     private static final int DISK_CACHE_SIZE = 50 * 1024 * 1024; // 50MB
 
     private static OkClient okClient;
+    private static OkHttpClient okHttpClient;
 
     private OkClientProvider() {
     }
 
     public static OkHttpClient getOkHttpClient(Context context) {
-        OkHttpClient okHttpClient = new OkHttpClient();
-        // Install an HTTP cache in the application cache directory.
-        File cacheDir = new File(context.getApplicationContext().getCacheDir(), "http");
-        Cache cache = new Cache(cacheDir, DISK_CACHE_SIZE);
-        okHttpClient.setCache(cache);
+        if (okHttpClient == null) {
+            okHttpClient = new OkHttpClient();
+            // Install an HTTP cache in the application cache directory.
+            File cacheDir = new File(context.getApplicationContext().getCacheDir(), "http");
+            Cache cache = new Cache(cacheDir, DISK_CACHE_SIZE);
+            okHttpClient.setCache(cache);
+        }
+
         return okHttpClient;
     }
 
