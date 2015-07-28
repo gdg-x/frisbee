@@ -1,4 +1,4 @@
-package org.gdg.frisbee.android.lead;
+package org.gdg.frisbee.android.api.model;
 
 import android.support.annotation.StringRes;
 
