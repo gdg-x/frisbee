@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.api.model.Gde;
 import org.gdg.frisbee.android.common.GdgListFragment;
 
@@ -48,7 +47,7 @@ public class GdeListFragment extends GdgListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mAdapter = new GdeAdapter(getActivity(), ((GdgActivity) getActivity()).getGoogleApiClient());
+        mAdapter = new GdeAdapter(getActivity());
 
         if (getArguments().containsKey(ARG_GDES)) {
             ArrayList<Gde> gdeList = getArguments().getParcelableArrayList(ARG_GDES);
