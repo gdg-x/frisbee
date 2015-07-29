@@ -53,6 +53,8 @@ import org.gdg.frisbee.android.api.GdeDirectory;
 import org.gdg.frisbee.android.api.GdeDirectoryFactory;
 import org.gdg.frisbee.android.api.GdgXHub;
 import org.gdg.frisbee.android.api.GdgXHubFactory;
+import org.gdg.frisbee.android.api.GitHub;
+import org.gdg.frisbee.android.api.GithubFactory;
 import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.GroupDirectoryFactory;
 import org.gdg.frisbee.android.api.OkClientFactory;
@@ -87,6 +89,7 @@ public class App extends Application implements LocationListener {
     private GroupDirectory groupDirectoryInstance;
     private GdgXHub hubInstance;
     private GdeDirectory gdeDirectoryInstance;
+    private GitHub gitHubInstance;
     private ModelCache mModelCache;
     private Picasso mPicasso;
     private Tracker mTracker;
@@ -354,6 +357,13 @@ public class App extends Application implements LocationListener {
             gdeDirectoryInstance = GdeDirectoryFactory.provideGdeApi();
         }
         return gdeDirectoryInstance;
+    }
+
+    public GitHub getGithub() {
+        if (gitHubInstance == null) {
+            gitHubInstance = GithubFactory.provideGitHubApi();
+        }
+        return gitHubInstance;
     }
 
     public OkHttpClient getOkHttpClient() {
