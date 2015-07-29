@@ -196,7 +196,7 @@ public class MainActivity extends GdgNavDrawerActivity {
                     @Override
                     public void onOrganizerResponse(boolean isOrganizer) {
                         if (mViewPagerAdapter != null && wasOrganizer != isOrganizer) {
-                            mViewPagerAdapter.notifyDataSetChanged();
+                            mViewPagerAdapter.notifyDataSetChanged(false /* forceUpdate */);
                             mTabLayout.setTabsFromPagerAdapter(mViewPagerAdapter);
                         }
                     }
@@ -375,7 +375,7 @@ public class MainActivity extends GdgNavDrawerActivity {
         if (!selectedChapterId.equals(newChapterId)) {
             Timber.d("Switching newChapterId!");
             selectedChapterId = newChapterId;
-            mViewPagerAdapter.notifyDataSetChanged();
+            mViewPagerAdapter.notifyDataSetChanged(true /* forceUpdate */);
         }
     }
 
@@ -385,6 +385,7 @@ public class MainActivity extends GdgNavDrawerActivity {
         private Context mContext;
         @NonNull
         private String mSelectedChapterId;
+        private boolean forceUpdate = false;
 
         public ChapterFragmentPagerAdapter(Context ctx,
                                            FragmentManager fm,
@@ -395,10 +396,23 @@ public class MainActivity extends GdgNavDrawerActivity {
             mPages = App.getInstance().isOrganizer() ? ORGANIZER_PAGES : PAGES;
         }
 
+        public void notifyDataSetChanged(boolean forceUpdate) {
+            this.forceUpdate = forceUpdate;
+            notifyDataSetChanged();
+        }
+
         @Override
         public void notifyDataSetChanged() {
             mPages = App.getInstance().isOrganizer() ? ORGANIZER_PAGES : PAGES;
             super.notifyDataSetChanged();
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            if (forceUpdate) {
+                return POSITION_NONE;
+            }
+            return super.getItemPosition(object);
         }
 
         @Override
