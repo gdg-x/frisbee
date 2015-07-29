@@ -22,7 +22,7 @@ public class IntentFilterTest {
     @Test
     public void developerGroupsLaunchesMainActivity() throws PackageManager.NameNotFoundException {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(MainActivityTest.URI_GDG_BRUSSELS);
+        intent.setData(MainActivityDeepLinkTest.URI_GDG_BRUSSELS);
         final List<ResolveInfo> activities = InstrumentationRegistry.getTargetContext().getPackageManager().queryIntentActivities(intent, 0);
 
         assertThat(activities).areAtLeastOne(new Condition<ResolveInfo>() {
