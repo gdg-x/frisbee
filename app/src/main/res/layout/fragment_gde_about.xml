@@ -7,22 +7,18 @@
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingLeft="8dip"
-    android:paddingRight="8dip"
-    android:paddingTop="8dip">
+    android:orientation="vertical">
 
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <android.support.v7.widget.CardView
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="15dip"
-      card_view:cardCornerRadius="5dp">
+      style="@style/Widget.GDG.CardView">
 
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="10dip">
+        android:padding="@dimen/keyline_1">
 
         <TextView
           android:id="@+id/textView"
@@ -41,23 +37,22 @@
       </LinearLayout>
     </android.support.v7.widget.CardView>
 
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <android.support.v7.widget.CardView
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="8dip"
-      card_view:cardCornerRadius="5dp">
+      style="@style/Widget.GDG.CardView">
 
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="10dip">
+        android:padding="@dimen/keyline_1">
 
         <TextView
           android:id="@+id/textView3"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:paddingBottom="10dip"
+          android:paddingBottom="@dimen/keyline_1"
           android:text="@string/gde_what_title"
           android:textAppearance="?android:attr/textAppearanceMedium"
           android:textStyle="bold" />

@@ -21,8 +21,8 @@
 
             <ImageView
                 android:id="@+id/group_logo"
-                android:layout_width="@dimen/logo_size"
-                android:layout_height="@dimen/logo_size"
+                android:layout_width="@dimen/icon_width_event"
+                android:layout_height="@dimen/icon_width_event"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"

@@ -21,14 +21,10 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content">
 
-  <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+  <android.support.v7.widget.CardView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="4dip"
-    android:layout_marginLeft="8dip"
-    android:layout_marginRight="8dip"
-    android:layout_marginTop="4dip"
-    card_view:cardCornerRadius="5dp">
+    style="@style/Widget.GDG.CardView">
 
     <LinearLayout
       android:layout_width="match_parent"
@@ -48,7 +44,7 @@
           android:layout_height="wrap_content"
           android:autoLink="email|map|web"
           android:linksClickable="true"
-          android:padding="10dip"
+          android:padding="@dimen/keyline_1"
           tools:text="Content" />
 
         <LinearLayout
@@ -56,15 +52,9 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:orientation="vertical"
-          android:visibility="gone">
+          android:visibility="visible">
 
-          <View
-            android:layout_width="match_parent"
-            android:layout_height="1dip"
-            android:layout_marginBottom="5dip"
-            android:layout_marginLeft="5dip"
-            android:layout_marginRight="5dip"
-            android:background="@color/cloud" />
+          <include layout="@layout/news_item_separator" />
 
           <TextView
             android:id="@+id/shareContent"
@@ -72,7 +62,7 @@
             android:layout_height="wrap_content"
             android:autoLink="all"
             android:linksClickable="true"
-            android:padding="10dip"
+            android:padding="@dimen/keyline_1"
             tools:text="Share Content" />
         </LinearLayout>
       </LinearLayout>
@@ -88,10 +78,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingBottom="15dip"
-        android:paddingLeft="10dip"
-        android:paddingRight="10dip"
-        android:paddingTop="10dip">
+        android:padding="@dimen/keyline_1">
 
         <com.google.android.gms.plus.PlusOneButton
           android:id="@+id/plus_one_button"

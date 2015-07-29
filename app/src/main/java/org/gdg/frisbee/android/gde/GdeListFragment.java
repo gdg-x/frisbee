@@ -38,7 +38,7 @@ public class GdeListFragment extends GdgListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_gde_list, container, false);
+        View v = inflater.inflate(R.layout.fragment_people_list, container, false);
         ButterKnife.bind(this, v);
         return v;
     }

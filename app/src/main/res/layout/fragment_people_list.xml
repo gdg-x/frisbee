@@ -14,11 +14,25 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
+-->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:orientation="vertical">
+  android:orientation="vertical"
+  android:padding="@dimen/keyline_1">
 
+  <GridView
+    android:id="@android:id/list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:drawSelectorOnTop="true"
+    android:gravity="top"
+    android:numColumns="@integer/gde_fragment_column_count"
+    android:stretchMode="columnWidth" />
+
+  <include layout="@layout/loading_animated_view" />
+
+  <include layout="@layout/empty" />
 </LinearLayout>
+  
