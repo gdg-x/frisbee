@@ -50,12 +50,12 @@ import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.GapiOkTransport;
 import org.gdg.frisbee.android.api.GdeDirectory;
-import org.gdg.frisbee.android.api.GdeDirectoryClient;
+import org.gdg.frisbee.android.api.GdeDirectoryFactory;
 import org.gdg.frisbee.android.api.GdgXHub;
-import org.gdg.frisbee.android.api.GdgXHubClient;
+import org.gdg.frisbee.android.api.GdgXHubFactory;
 import org.gdg.frisbee.android.api.GroupDirectory;
-import org.gdg.frisbee.android.api.GroupDirectoryClient;
-import org.gdg.frisbee.android.api.OkClientProvider;
+import org.gdg.frisbee.android.api.GroupDirectoryFactory;
+import org.gdg.frisbee.android.api.OkClientFactory;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.utils.CrashlyticsTree;
@@ -68,7 +68,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 import io.fabric.sdk.android.Fabric;
-import retrofit.client.Client;
 import timber.log.Timber;
 /**
  * Created with IntelliJ IDEA.
@@ -85,7 +84,6 @@ public class App extends Application implements LocationListener {
     }
 
     private OkHttpClient mOkHttpClient;
-    private Client mRetrofitClient;
     private GroupDirectory groupDirectoryInstance;
     private GdgXHub hubInstance;
     private GdeDirectory gdeDirectoryInstance;
@@ -132,6 +130,7 @@ public class App extends Application implements LocationListener {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+        mOkHttpClient = OkClientFactory.provideOkHttpClient(this);
 
         //Initialize Plus Client which is used to get profile pictures and NewFeed of the chapters.
         final HttpTransport mTransport = new GapiOkTransport();
@@ -338,37 +337,27 @@ public class App extends Application implements LocationListener {
 
     public GdgXHub getGdgXHub() {
         if (hubInstance == null) {
-            hubInstance = GdgXHubClient.getHubApi();
+            hubInstance = GdgXHubFactory.provideHubApi();
         }
         return hubInstance;
     }
 
     public GroupDirectory getGroupDirectory() {
         if (groupDirectoryInstance == null) {
-            groupDirectoryInstance = GroupDirectoryClient.getGroupDirectoryApi();
+            groupDirectoryInstance = GroupDirectoryFactory.provideGroupDirectoryApi();
         }
         return groupDirectoryInstance;
     }
 
     public GdeDirectory getGdeDirectory() {
         if (gdeDirectoryInstance == null) {
-            gdeDirectoryInstance = GdeDirectoryClient.getGdeApi();
+            gdeDirectoryInstance = GdeDirectoryFactory.provideGdeApi();
         }
         return gdeDirectoryInstance;
     }
 
     public OkHttpClient getOkHttpClient() {
-        if (mOkHttpClient == null) {
-            mOkHttpClient = OkClientProvider.getOkHttpClient(this);
-        }
         return mOkHttpClient;
-    }
-
-    public Client getRetrofitClient() {
-        if (mRetrofitClient == null) {
-            mRetrofitClient = OkClientProvider.getClient();
-        }
-        return mRetrofitClient;
     }
 
     public RefWatcher getRefWatcher() {

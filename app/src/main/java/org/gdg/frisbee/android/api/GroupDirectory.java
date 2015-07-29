@@ -28,8 +28,6 @@ import retrofit.http.Query;
 
 public interface GroupDirectory {
 
-    String BASE_URL = "https://developers.google.com";
-
     @GET("/groups/pulse_stats/")
     void getPulse(Callback<Pulse> callback);
 

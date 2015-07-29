@@ -3,7 +3,7 @@ package org.gdg.frisbee.android.api;
 import com.google.gson.FieldNamingPolicy;
 
 import org.gdg.frisbee.android.BuildConfig;
-import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.api.deserializer.ZuluDateTimeDeserializer;
 import org.gdg.frisbee.android.utils.Utils;
 
 import retrofit.RestAdapter;
@@ -14,27 +14,27 @@ import retrofit.converter.GsonConverter;
  *
  * @author Marcus Gabilheri
  * @version 1.0
- * @since 7/28/15.
+ * @since 7/26/15.
  */
-public class GdeDirectoryClient {
+public final class GdgXHubFactory {
 
     // This variable is meant to be changed as pleased while debugging
     private static final RestAdapter.LogLevel LOG_LEVEL = RestAdapter.LogLevel.NONE;
-    public static final String API_URL = "https://gde-map.appspot.com";
+    private static final String BASE_URL = "https://hub.gdgx.io/api/v1";
 
-    private GdeDirectoryClient() {
+    private GdgXHubFactory() {
     }
 
-    private static RestAdapter getRestAdapter() {
+    private static RestAdapter provideRestAdapter() {
         return new RestAdapter.Builder()
-                .setEndpoint(API_URL)
-                .setClient(App.getInstance().getRetrofitClient())
+                .setEndpoint(BASE_URL)
+                .setClient(OkClientFactory.provideClient())
                 .setLogLevel(BuildConfig.DEBUG ? LOG_LEVEL : RestAdapter.LogLevel.NONE)
-                .setConverter(new GsonConverter(Utils.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)))
+                .setConverter(new GsonConverter(Utils.getGson(FieldNamingPolicy.IDENTITY, new ZuluDateTimeDeserializer())))
                 .build();
     }
 
-    public static GdeDirectory getGdeApi() {
-        return getRestAdapter().create(GdeDirectory.class);
+    public static GdgXHub provideHubApi() {
+        return provideRestAdapter().create(GdgXHub.class);
     }
 }

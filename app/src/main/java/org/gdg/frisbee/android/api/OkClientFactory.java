@@ -1,6 +1,7 @@
 package org.gdg.frisbee.android.api;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
@@ -19,15 +20,16 @@ import retrofit.client.OkClient;
  * @version 1.0
  * @since 7/26/15.
  */
-public final class OkClientProvider {
+public final class OkClientFactory {
 
     // Cache size for the OkHttpClient
     private static final int DISK_CACHE_SIZE = 50 * 1024 * 1024; // 50MB
 
-    private OkClientProvider() {
+    private OkClientFactory() {
     }
 
-    public static OkHttpClient getOkHttpClient(Context context) {
+    @NonNull
+    public static OkHttpClient provideOkHttpClient(Context context) {
         OkHttpClient okHttpClient = new OkHttpClient();
         // Install an HTTP cache in the application cache directory.
         File cacheDir = new File(context.getApplicationContext().getCacheDir(), "http");
@@ -36,7 +38,8 @@ public final class OkClientProvider {
         return okHttpClient;
     }
 
-    public static Client getClient() {
+    @NonNull
+    public static Client provideClient() {
         return new OkClient(App.getInstance().getOkHttpClient());
     }
 }

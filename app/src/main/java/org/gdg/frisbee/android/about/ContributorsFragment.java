@@ -27,7 +27,7 @@ import android.widget.ListView;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.GithubClient;
+import org.gdg.frisbee.android.api.GithubFactory;
 import org.gdg.frisbee.android.api.model.Contributor;
 import org.gdg.frisbee.android.api.model.ContributorList;
 import org.gdg.frisbee.android.app.App;
@@ -93,7 +93,7 @@ public class ContributorsFragment extends GdgListFragment {
     }
     
     private void fetchGitHubContributors() {
-        GithubClient.getGitHubApi().getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO, new Callback<ContributorList>() {
+        GithubFactory.provideGitHubApi().getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO, new Callback<ContributorList>() {
             @Override
             public void success(final ContributorList contributors, retrofit.client.Response response) {
                 App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_FRISBEE_CONTRIBUTORS,

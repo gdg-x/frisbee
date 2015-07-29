@@ -1,7 +1,6 @@
 package org.gdg.frisbee.android.api;
 
 import org.gdg.frisbee.android.BuildConfig;
-import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.Utils;
 
 import retrofit.RequestInterceptor;
@@ -15,20 +14,21 @@ import retrofit.converter.GsonConverter;
  * @version 1.0
  * @since 7/26/15.
  */
-public final class GroupDirectoryClient {
+public final class GroupDirectoryFactory {
 
     // This variable is meant to be changed as pleased while debugging
     private static final RestAdapter.LogLevel LOG_LEVEL = RestAdapter.LogLevel.NONE;
+    private static final String BASE_URL = "https://developers.google.com";
 
-    private GroupDirectoryClient() {
+    private GroupDirectoryFactory() {
     }
 
-    private static RestAdapter getRestAdapter() {
+    private static RestAdapter provideRestAdapter() {
         return new RestAdapter.Builder()
-                    .setEndpoint(GroupDirectory.BASE_URL)
+                    .setEndpoint(BASE_URL)
                     .setConverter(new GsonConverter(Utils.getGson()))
                     .setLogLevel(BuildConfig.DEBUG ? LOG_LEVEL : RestAdapter.LogLevel.NONE)
-                    .setClient(App.getInstance().getRetrofitClient())
+                    .setClient(OkClientFactory.provideClient())
                     .setRequestInterceptor(new RequestInterceptor() {
                         @Override
                         public void intercept(RequestFacade request) {
@@ -42,7 +42,7 @@ public final class GroupDirectoryClient {
                     .build();
     }
 
-    public static GroupDirectory getGroupDirectoryApi() {
-        return getRestAdapter().create(GroupDirectory.class);
+    public static GroupDirectory provideGroupDirectoryApi() {
+        return provideRestAdapter().create(GroupDirectory.class);
     }
 }
