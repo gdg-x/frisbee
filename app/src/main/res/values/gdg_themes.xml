@@ -91,4 +91,16 @@
     <item name="specialEventTitle">@string/ioextended</item>
     <item name="specialEventDescription">@string/ioextended_description</item>
   </style>
+
+  <style name="Theme.GDG.Special.DevFest" parent="Theme.GDG.Special">
+    <item name="colorPrimary">@color/color_primary_devfest</item>
+    <item name="colorPrimaryDark">@color/color_primary_dark_devfest</item>
+
+    <item name="specialEventDrawerIcon">@drawable/ic_drawer_devfest</item>
+    <item name="specialEventDefaultIcon">@drawable/ic_devfest</item>
+    <item name="specialEventLogo">@drawable/ic_logo_devfest</item>
+
+    <item name="specialEventTitle">@string/devfest</item>
+    <item name="specialEventDescription">@string/devfest_description</item>
+  </style>
 </resources>
