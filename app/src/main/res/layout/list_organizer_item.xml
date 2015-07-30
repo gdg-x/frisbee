@@ -24,8 +24,8 @@
 
   <ImageView
     android:id="@+id/icon"
-    android:layout_width="32dp"
-    android:layout_height="32dip"
+    android:layout_width="@dimen/organizer_icon_size"
+    android:layout_height="@dimen/organizer_icon_size"
     android:layout_gravity="center_horizontal|top"
     android:layout_marginRight="8dip" />
 
