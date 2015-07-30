@@ -20,7 +20,6 @@ import retrofit.http.Path;
 import retrofit.http.Query;
 
 public interface GdgXHub {
-    String BASE_URL = "https://hub.gdgx.io/api/v1";
 
     @GET("/chapters?perpage=-1")
     void getDirectory(Callback<Directory> callback);

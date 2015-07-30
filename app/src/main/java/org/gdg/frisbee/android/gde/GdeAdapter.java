@@ -9,12 +9,13 @@ import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.plus.model.people.Person;
+import com.google.api.services.plus.Plus;
+import com.google.api.services.plus.model.Person;
 import com.squareup.picasso.Picasso;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Gde;
+import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
@@ -35,18 +36,19 @@ class GdeAdapter extends BaseAdapter {
 
     private ArrayList<Gde> mGdes;
 
+    private Plus mClient;
+
     private HashMap<Integer, Object> mConsumedMap;
 
     private Pattern mPlusPattern;
-    private final GoogleApiClient mClient;
 
-    public GdeAdapter(Context ctx, GoogleApiClient client) {
+    public GdeAdapter(Context ctx) {
         mContext = ctx;
         mInflater = LayoutInflater.from(mContext);
-        mGdes = new ArrayList<Gde>();
+        mGdes = new ArrayList<>();
         mConsumedMap = new HashMap<>();
-        mClient = client;
 
+        mClient = App.getInstance().getPlusClient();
         mPlusPattern = Pattern.compile("http[s]?:\\/\\/plus\\..*google\\.com.*(\\+[a-zA-Z] +|[0-9]{21}).*");
     }
 
@@ -91,11 +93,6 @@ class GdeAdapter extends BaseAdapter {
         final Gde gde = (Gde) getItem(i);
 
         holder.thumbnailView.setImageResource(R.drawable.gde_dummy);
-        //holder.thumbnailView.setBackgroundResource(R.drawable.gde_dummy);
-
-        /*App.getInstance().getPicasso()
-                .load(show.getHighQualityThumbnail())
-                .into(holder.thumbnailView);*/
 
         holder.nameView.setText(gde.getName());
         holder.countryView.setText(gde.getAddress());

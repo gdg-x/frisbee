@@ -31,9 +31,14 @@ import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.gson.FieldNamingPolicy;
+import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.plus.Plus;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
+import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.LruCache;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
@@ -43,9 +48,16 @@ import net.danlew.android.joda.JodaTimeAndroid;
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.GapiOkTransport;
+import org.gdg.frisbee.android.api.GdeDirectory;
+import org.gdg.frisbee.android.api.GdeDirectoryFactory;
 import org.gdg.frisbee.android.api.GdgXHub;
+import org.gdg.frisbee.android.api.GdgXHubFactory;
+import org.gdg.frisbee.android.api.GitHub;
+import org.gdg.frisbee.android.api.GithubFactory;
 import org.gdg.frisbee.android.api.GroupDirectory;
-import org.gdg.frisbee.android.api.deserializer.ZuluDateTimeDeserializer;
+import org.gdg.frisbee.android.api.GroupDirectoryFactory;
+import org.gdg.frisbee.android.api.OkClientFactory;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.utils.CrashlyticsTree;
@@ -58,11 +70,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import io.fabric.sdk.android.Fabric;
-import retrofit.RequestInterceptor;
-import retrofit.RestAdapter;
-import retrofit.converter.GsonConverter;
 import timber.log.Timber;
-
 /**
  * Created with IntelliJ IDEA.
  * User: maui
@@ -77,8 +85,11 @@ public class App extends Application implements LocationListener {
         return mInstance;
     }
 
+    private OkHttpClient mOkHttpClient;
     private GroupDirectory groupDirectoryInstance;
     private GdgXHub hubInstance;
+    private GdeDirectory gdeDirectoryInstance;
+    private GitHub gitHubInstance;
     private ModelCache mModelCache;
     private Picasso mPicasso;
     private Tracker mTracker;
@@ -87,6 +98,7 @@ public class App extends Application implements LocationListener {
     private OrganizerChecker mOrganizerChecker;
     private ArrayList<TaggedEventSeries> mTaggedEventSeriesList;
     private RefWatcher refWatcher;
+    private Plus plusClient;
 
     @Override
     public void onCreate() {
@@ -121,6 +133,16 @@ public class App extends Application implements LocationListener {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+        mOkHttpClient = OkClientFactory.provideOkHttpClient(this);
+
+        //Initialize Plus Client which is used to get profile pictures and NewFeed of the chapters.
+        final HttpTransport mTransport = new GapiOkTransport();
+        final JsonFactory mJsonFactory = new GsonFactory();
+        plusClient = new Plus.Builder(mTransport, mJsonFactory, null)
+                .setGoogleClientRequestInitializer(
+                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.IP_SIMPLE_API_ACCESS_KEY))
+                .setApplicationName("GDG Frisbee")
+                .build();
 
         // Initialize ModelCache and Volley
         getModelCache();
@@ -157,6 +179,13 @@ public class App extends Application implements LocationListener {
     private void initTaggedEventSeries() {
 
         mTaggedEventSeriesList = new ArrayList<>();
+        //Add DevFest
+        addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
+                R.style.Theme_GDG_Special_DevFest,
+                "devfest",
+                Const.DRAWER_DEVFEST,
+                Const.START_TIME_DEVFEST,
+                Const.END_TIME_DEVFEST));
         //Add Women Techmakers
         addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
                 R.style.Theme_GDG_Special_Wtm,
@@ -219,6 +248,10 @@ public class App extends Application implements LocationListener {
         if (loc != null) {
             mLastLocation = loc;
         }
+    }
+
+    public Plus getPlusClient() {
+        return plusClient;
     }
 
     public Location getLastLocation() {
@@ -314,32 +347,34 @@ public class App extends Application implements LocationListener {
 
     public GdgXHub getGdgXHub() {
         if (hubInstance == null) {
-            hubInstance = new RestAdapter.Builder()
-                    .setEndpoint(GdgXHub.BASE_URL)
-                    .setConverter(new GsonConverter(Utils.getGson(FieldNamingPolicy.IDENTITY, new ZuluDateTimeDeserializer())))
-                    .build().create(GdgXHub.class);
+            hubInstance = GdgXHubFactory.provideHubApi();
         }
         return hubInstance;
     }
 
     public GroupDirectory getGroupDirectory() {
         if (groupDirectoryInstance == null) {
-            groupDirectoryInstance = new RestAdapter.Builder()
-                    .setEndpoint(GroupDirectory.BASE_URL)
-                    .setConverter(new GsonConverter(Utils.getGson()))
-                    .setRequestInterceptor(new RequestInterceptor() {
-                        @Override
-                        public void intercept(RequestFacade request) {
-                            request.addHeader("User-Agent", "GDG-Frisbee/0.1 (Android)");
-                            request.addHeader("Referer", "https://developers.google.com/groups/directory/");
-                            request.addHeader("X-Requested-With", "XMLHttpRequest");
-                            request.addHeader("Cache-Control", "no-cache");
-                            request.addHeader("DNT", "1");
-                        }
-                    })
-                    .build().create(GroupDirectory.class);
+            groupDirectoryInstance = GroupDirectoryFactory.provideGroupDirectoryApi();
         }
         return groupDirectoryInstance;
+    }
+
+    public GdeDirectory getGdeDirectory() {
+        if (gdeDirectoryInstance == null) {
+            gdeDirectoryInstance = GdeDirectoryFactory.provideGdeApi();
+        }
+        return gdeDirectoryInstance;
+    }
+
+    public GitHub getGithub() {
+        if (gitHubInstance == null) {
+            gitHubInstance = GithubFactory.provideGitHubApi();
+        }
+        return gitHubInstance;
+    }
+
+    public OkHttpClient getOkHttpClient() {
+        return mOkHttpClient;
     }
 
     public RefWatcher getRefWatcher() {

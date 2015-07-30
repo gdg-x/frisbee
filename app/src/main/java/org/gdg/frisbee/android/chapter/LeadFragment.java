@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.lead.LeadMessage;
+import org.gdg.frisbee.android.api.model.LeadMessage;
 
 import butterknife.ButterKnife;
 import butterknife.Bind;

@@ -12,11 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.SparseArray;
 import android.widget.FrameLayout;
 
-import com.google.gson.FieldNamingPolicy;
-
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.GdeDirectory;
 import org.gdg.frisbee.android.api.model.Gde;
 import org.gdg.frisbee.android.api.model.GdeList;
 import org.gdg.frisbee.android.app.App;
@@ -32,9 +29,7 @@ import java.util.Map;
 
 import butterknife.Bind;
 import retrofit.Callback;
-import retrofit.RestAdapter;
 import retrofit.RetrofitError;
-import retrofit.converter.GsonConverter;
 import timber.log.Timber;
 
 public class GdeActivity extends GdgNavDrawerActivity {
@@ -80,12 +75,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
     
     private void fetchGdeDirectory() {
 
-        GdeDirectory gdeDirectoryClient = new RestAdapter.Builder()
-                .setEndpoint("https://gde-map.appspot.com")
-                .setConverter(new GsonConverter(Utils.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)))
-                .build().create(GdeDirectory.class);
-        
-        gdeDirectoryClient.getDirectory(new Callback<GdeList>() {
+        App.getInstance().getGdeDirectory().getDirectory(new Callback<GdeList>() {
             @Override
             public void success(final GdeList directory, retrofit.client.Response response) {
                 App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_GDE_LIST,

@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -33,13 +34,9 @@ import android.view.SubMenu;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
-import com.google.android.gms.plus.People;
-import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.model.people.Person;
-import com.google.android.gms.plus.model.people.PersonBuffer;
+import com.google.api.services.plus.Plus;
+import com.google.api.services.plus.model.Person;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -58,9 +55,11 @@ import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.view.BitmapBorderTransformation;
 import org.joda.time.DateTime;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.Bind;
+import timber.log.Timber;
 
 public abstract class GdgNavDrawerActivity extends GdgActivity {
 
@@ -158,7 +157,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        menuItem.setChecked(true);
                         onDrawerItemClick(menuItem);
                         mDrawerLayout.closeDrawers();
                         return true;
@@ -189,6 +187,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             case Const.DRAWER_GDE:
                 navigateTo(GdeActivity.class, data);
                 break;
+            case Const.DRAWER_DEVFEST:
             case Const.DRAWER_WTM:
             case Const.DRAWER_STUDY_JAM:
             case Const.DRAWER_IO_EXTENDED:
@@ -249,7 +248,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         final ArrayList<TaggedEventSeries> currentEventSeries =
                 App.getInstance().currentTaggedEventSeries();
         for (TaggedEventSeries taggedEventSeries : currentEventSeries) {
-            if (getString(taggedEventSeries.getTitleResId()).equals(item.getTitle())) {
+            if (taggedEventSeries.getDrawerId() == item.getItemId()) {
 
                 data.putString(Const.EXTRA_TAGGED_EVENT_CACHEKEY, taggedEventSeries.getTag());
                 data.putParcelable(Const.EXTRA_TAGGED_EVENT, taggedEventSeries);
@@ -358,7 +357,8 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                     .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person>() {
                         @Override
                         public Person doInBackground(String... params) {
-                            return getPersonSync(getGoogleApiClient(), params[0]);
+
+                            return getPersonSync(params[0]);
                         }
                     })
                     .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person>() {
@@ -385,15 +385,21 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         return currentHomeChapterId != null && (mStoredHomeChapterId == null || !mStoredHomeChapterId.equals(currentHomeChapterId));
     }
 
+    @Nullable
+    public static Person getPersonSync(final String gplusId) {
+        return getPersonSync(App.getInstance().getPlusClient(), gplusId);
+    }
 
-    public static Person getPersonSync(final GoogleApiClient apiClient, final String gplusId) {
+    @Nullable
+    public static Person getPersonSync(final Plus plusClient, final String gplusId) {
+
         final String cacheUrl = Const.CACHE_KEY_PERSON + gplusId;
         Object cachedPerson = App.getInstance().getModelCache().get(cacheUrl);
         Person person = null;
 
         if (cachedPerson instanceof Person) {
             person = (Person) cachedPerson;
-            if (person.getId() != null) {
+            if (person.getImage() != null) {
                 return person;
             }
         }
@@ -401,18 +407,15 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             App.getInstance().getModelCache().remove(cacheUrl);
         }
 
-        People.LoadPeopleResult result = Plus.PeopleApi.load(apiClient, gplusId).await();
-        if (result.getStatus().getStatusCode() == CommonStatusCodes.SUCCESS) {
-            PersonBuffer personBuffer = result.getPersonBuffer();
-            try {
-                if (personBuffer.getCount() > 0) {
-                    person = personBuffer.get(0);
-                    App.getInstance().getModelCache().put(cacheUrl, person, DateTime.now().plusDays(2));
-                }
-            } finally {
-                personBuffer.close();
-            }
+        try {
+            Plus.People.Get request = plusClient.people().get(gplusId);
+            request.setFields("aboutMe,cover/coverPhoto/url,image/url,displayName,tagline,urls");
+            person = request.execute();
+            App.getInstance().getModelCache().put(cacheUrl, person, DateTime.now().plusDays(2));
+        } catch (IOException e) {
+            Timber.e(e, "Error while getting profile URL.");
         }
+
         return person;
     }
 }
