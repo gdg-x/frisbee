@@ -138,7 +138,7 @@ public class InfoFragment extends BaseFragment {
                     .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person>() {
                         @Override
                         public void onPostExecute(String[] params, Person person) {
-                            if (person != null) {
+                            if (person != null && getActivity() != null) {
                                 updateChapterUIFrom(person);
                                 updateOrganizersOnline(person);
                             }

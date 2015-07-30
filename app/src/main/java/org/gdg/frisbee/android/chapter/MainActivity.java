@@ -94,6 +94,7 @@ public class MainActivity extends GdgNavDrawerActivity {
 
     private ChapterComparator mLocationComparator;
     private Spinner mSpinner;
+    private String selectedChapterId;
 
     /**
      * Called when the activity is first created.
@@ -113,12 +114,14 @@ public class MainActivity extends GdgNavDrawerActivity {
         mChapterAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         initSpinner();
 
-        if (savedInstanceState == null) {
+        ArrayList<Chapter> chapters = null;
 
+        if (savedInstanceState != null) {
+            chapters = savedInstanceState.getParcelableArrayList(ARG_CHAPTERS);
+            selectedChapterId = savedInstanceState.getString(ARG_SELECTED_CHAPTER);
+        } else {
             Intent intent = getIntent();
-            if (intent != null
-                    && intent.getAction() != null
-                    && intent.getAction().equals(FirstStartActivity.ACTION_FIRST_START)) {
+            if (FirstStartActivity.ACTION_FIRST_START.equals(intent.getAction())) {
                 Timber.d("Completed FirstStartWizard");
 
                 if (PrefUtils.isSignedIn(this)) {
@@ -126,34 +129,36 @@ public class MainActivity extends GdgNavDrawerActivity {
                 }
             }
 
-            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
-                @Override
-                public void onGet(Object item) {
-                    Directory directory = (Directory) item;
-                    initChapters(directory.getGroups());
-                }
+            selectedChapterId = getChapterIdFromIntent(intent);
+        }
 
-                @Override
-                public void onNotFound(String key) {
-                    if (Utils.isOnline(MainActivity.this)) {
-                        fetchChapters();
-                    } else {
-                        Snackbar snackbar = Snackbar.make(mContentFrameLayout, getString(R.string.offline_alert),
-                                Snackbar.LENGTH_SHORT);
-                        ColoredSnackBar.alert(snackbar).show();
-                    }
-                }
-            });
+        if (selectedChapterId == null) {
+            selectedChapterId = PrefUtils.getHomeChapterIdNotNull(this);
+        }
 
+        if (chapters != null) {
+            initChapters(chapters);
         } else {
-            if (savedInstanceState.containsKey(ARG_CHAPTERS)) {
-                ArrayList<Chapter> chapters = savedInstanceState.getParcelableArrayList(ARG_CHAPTERS);
+            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB,
+                    new ModelCache.CacheListener() {
+                        @Override
+                        public void onGet(Object item) {
+                            Directory directory = (Directory) item;
+                            initChapters(directory.getGroups());
+                        }
 
-                Chapter selectedChapter = savedInstanceState.getParcelable(ARG_SELECTED_CHAPTER);
-                initChapters(chapters, selectedChapter);
-            } else {
-                fetchChapters();
-            }
+                        @Override
+                        public void onNotFound(String key) {
+                            if (Utils.isOnline(MainActivity.this)) {
+                                fetchChapters();
+                            } else {
+                                Snackbar snackbar = Snackbar.make(mContentFrameLayout,
+                                        getString(R.string.offline_alert),
+                                        Snackbar.LENGTH_SHORT);
+                                ColoredSnackBar.alert(snackbar).show();
+                            }
+                        }
+                    });
         }
 
         if (PrefUtils.shouldShowSeasonsGreetings(this)) {
@@ -191,7 +196,7 @@ public class MainActivity extends GdgNavDrawerActivity {
                     @Override
                     public void onOrganizerResponse(boolean isOrganizer) {
                         if (mViewPagerAdapter != null && wasOrganizer != isOrganizer) {
-                            mViewPagerAdapter.notifyDataSetChanged();
+                            mViewPagerAdapter.notifyDataSetChanged(false /* forceUpdate */);
                             mTabLayout.setTabsFromPagerAdapter(mViewPagerAdapter);
                         }
                     }
@@ -206,53 +211,23 @@ public class MainActivity extends GdgNavDrawerActivity {
         String homeChapterId = getCurrentHomeChapterId();
         if (isHomeChapterOutdated(homeChapterId)
                 && isShowingStoredHomeChapter()) {
-            Chapter chapter = mChapterAdapter.findById(homeChapterId);
-            if (chapter != null) {
-                updateSelectionfor(chapter);
+            int position = mChapterAdapter.getPosition(homeChapterId);
+            if (position != -1) {
+                updateSelectionfor(homeChapterId);
             }
         }
     }
 
     private boolean isShowingStoredHomeChapter() {
-        if (mStoredHomeChapterId == null) {
-            return false;
-        }
-        Chapter chapterShown = mViewPagerAdapter.getSelectedChapter();
-        return chapterShown != null && chapterShown.getGplusId().equals(mStoredHomeChapterId);
-    }
-
-    /**
-     * Initializes ViewPager, SlidingTabLayout, and Spinner Navigation.
-     * <p/>
-     * It tries to get selected chapter from Intent Extras,
-     * if not found, gets the first Chapter in the array.
-     * This function is called after cache query or network call is success
-     *
-     * @param chapters Chapter array to be initialized, never null.
-     */
-    private void initChapters(@NonNull ArrayList<Chapter> chapters) {
-        String chapterId = getChapterIdFromIntent(getIntent());
-
-        Chapter selectedChapter = null;
-        if (chapterId != null) {
-            for (Chapter c : chapters) {
-                if (c.getGplusId().equals(chapterId)) {
-                    selectedChapter = c;
-                    break;
-                }
-            }
-        }
-
-        if (selectedChapter == null) {
-            selectedChapter = chapters.get(0);
-        }
-        initChapters(chapters, selectedChapter);
+        return selectedChapterId.equals(mStoredHomeChapterId);
     }
 
     private String getChapterIdFromIntent(final Intent intent) {
         if (intent.hasExtra(Const.EXTRA_CHAPTER_ID)) {
             return intent.getStringExtra(Const.EXTRA_CHAPTER_ID);
-        } else if (intent.getData() != null && intent.getData().getScheme().equals("https")) {
+        } else if (intent.getData() != null
+                && intent.getData().getScheme() != null
+                && intent.getData().getScheme().equals("https")) {
             return intent.getData().getLastPathSegment();
         }
         return null;
@@ -288,21 +263,18 @@ public class MainActivity extends GdgNavDrawerActivity {
     }
 
     /**
-     * Initializes ViewPager, SlidingTabLayout, and Spinner Navigation.
-     * This function is called after cache query or network call is success,
-     * or after an orientation change using savedInstance.
+     * Initializes ViewPager, TabLayout, and Spinner Navigation.
      *
-     * @param chapters        Chapter array to be initialized, never null.
-     * @param selectedChapter selectedChapter, never null.
+     * @param chapters Chapter array to be initialized, never null.
      */
-    private void initChapters(@NonNull ArrayList<Chapter> chapters,
-                              @NonNull Chapter selectedChapter) {
+    private void initChapters(@NonNull ArrayList<Chapter> chapters) {
         addChapters(chapters);
+
         mViewPagerAdapter = new ChapterFragmentPagerAdapter(this,
-                getSupportFragmentManager(), selectedChapter);
+                getSupportFragmentManager(), selectedChapterId);
         mViewPager.setAdapter(mViewPagerAdapter);
-        mViewPager.setOffscreenPageLimit(2);
-        updateSelectionfor(selectedChapter);
+        mViewPager.setOffscreenPageLimit(3);
+        updateSelectionfor(selectedChapterId);
 
         mTabLayout.setupWithViewPager(mViewPager);
 
@@ -318,8 +290,7 @@ public class MainActivity extends GdgNavDrawerActivity {
 
     protected String getTrackedViewName() {
         if (mViewPager == null
-                || mViewPagerAdapter == null
-                || mViewPagerAdapter.getSelectedChapter() == null) {
+                || mViewPagerAdapter == null) {
             return "Main";
         }
         final String[] pagesNames = {"News", "Info", "Events"};
@@ -329,7 +300,8 @@ public class MainActivity extends GdgNavDrawerActivity {
         } catch (IndexOutOfBoundsException e) {
             pageName = "";
         }
-        return "Main/" + mViewPagerAdapter.getSelectedChapter().getName().replaceAll(" ", "-")
+        Chapter chapter = mChapterAdapter.findById(selectedChapterId);
+        return "Main/" + (chapter != null ? chapter.getName().replaceAll(" ", "-") : "")
                 + "/" + pageName;
     }
 
@@ -367,8 +339,8 @@ public class MainActivity extends GdgNavDrawerActivity {
         if (mChapterAdapter.getCount() > 0) {
             outState.putParcelableArrayList(ARG_CHAPTERS, mChapterAdapter.getAll());
         }
-        if (mViewPagerAdapter != null && mViewPagerAdapter.getSelectedChapter() != null) {
-            outState.putParcelable(ARG_SELECTED_CHAPTER, mViewPagerAdapter.getSelectedChapter());
+        if (mViewPagerAdapter != null) {
+            outState.putString(ARG_SELECTED_CHAPTER, mViewPagerAdapter.getSelectedChapter());
         }
     }
 
@@ -387,8 +359,9 @@ public class MainActivity extends GdgNavDrawerActivity {
             public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
 
                 Chapter selectedChapter = mChapterAdapter.getItem(position);
-                updateSelectionfor(selectedChapter);
+                updateSelectionfor(selectedChapter.getGplusId());
             }
+
             @Override
             public void onNothingSelected(final AdapterView<?> parent) {
                 // Nothing to do.
@@ -396,13 +369,13 @@ public class MainActivity extends GdgNavDrawerActivity {
         });
     }
 
-    private void updateSelectionfor(final Chapter chapter) {
-        Chapter previous = mViewPagerAdapter.getSelectedChapter();
-        mViewPagerAdapter.setSelectedChapter(chapter);
-        mSpinner.setSelection(mChapterAdapter.getPosition(chapter));
-        if (previous == null || !previous.equals(chapter)) {
-            Timber.d("Switching chapter!");
-            mViewPagerAdapter.notifyDataSetChanged();
+    private void updateSelectionfor(final String newChapterId) {
+        mViewPagerAdapter.setSelectedChapter(newChapterId);
+        mSpinner.setSelection(mChapterAdapter.getPosition(newChapterId));
+        if (!selectedChapterId.equals(newChapterId)) {
+            Timber.d("Switching newChapterId!");
+            selectedChapterId = newChapterId;
+            mViewPagerAdapter.notifyDataSetChanged(true /* forceUpdate */);
         }
     }
 
@@ -410,13 +383,22 @@ public class MainActivity extends GdgNavDrawerActivity {
 
         private int[] mPages;
         private Context mContext;
-        private Chapter mSelectedChapter;
+        @NonNull
+        private String mSelectedChapterId;
+        private boolean forceUpdate = false;
 
-        public ChapterFragmentPagerAdapter(Context ctx, FragmentManager fm, @NonNull Chapter selectedChapter) {
+        public ChapterFragmentPagerAdapter(Context ctx,
+                                           FragmentManager fm,
+                                           @NonNull String selectedChapterId) {
             super(fm);
             mContext = ctx;
-            mSelectedChapter = selectedChapter;
+            mSelectedChapterId = selectedChapterId;
             mPages = App.getInstance().isOrganizer() ? ORGANIZER_PAGES : PAGES;
+        }
+
+        public void notifyDataSetChanged(boolean forceUpdate) {
+            this.forceUpdate = forceUpdate;
+            notifyDataSetChanged();
         }
 
         @Override
@@ -426,22 +408,29 @@ public class MainActivity extends GdgNavDrawerActivity {
         }
 
         @Override
+        public int getItemPosition(Object object) {
+            if (forceUpdate) {
+                return POSITION_NONE;
+            }
+            return super.getItemPosition(object);
+        }
+
+        @Override
         public int getCount() {
             return mPages.length;
         }
 
         @Override
         public Fragment getItem(int position) {
-            String gplusId = mSelectedChapter == null ? "" : mSelectedChapter.getGplusId();
             switch (position) {
                 case 0:
-                    return NewsFragment.newInstance(gplusId);
+                    return NewsFragment.newInstance(mSelectedChapterId);
                 case 1:
-                    return InfoFragment.newInstance(gplusId);
+                    return InfoFragment.newInstance(mSelectedChapterId);
                 case 2:
-                    return GdgEventListFragment.newInstance(gplusId);
+                    return GdgEventListFragment.newInstance(mSelectedChapterId);
                 case 3:
-                    return LeadFragment.newInstance(gplusId);
+                    return LeadFragment.newInstance(mSelectedChapterId);
             }
             return null;
         }
@@ -455,15 +444,14 @@ public class MainActivity extends GdgNavDrawerActivity {
             }
         }
 
-        public Chapter getSelectedChapter() {
-            return mSelectedChapter;
+        @NonNull
+        public String getSelectedChapter() {
+            return mSelectedChapterId;
         }
 
-        public void setSelectedChapter(@NonNull Chapter chapter) {
-            if (mSelectedChapter != null) {
-                trackView();
-            }
-            mSelectedChapter = chapter;
+        public void setSelectedChapter(@NonNull String chapterId) {
+            trackView();
+            mSelectedChapterId = chapterId;
         }
     }
 }

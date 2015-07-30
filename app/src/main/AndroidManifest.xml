@@ -122,7 +122,9 @@
       android:screenOrientation="sensor"
       android:theme="@style/Theme.GDG.SeeTrough"/>
     <activity
-      android:name=".onboarding.StartActivity">
+      android:name=".onboarding.StartActivity"
+      android:configChanges="orientation|keyboardHidden|screenSize"
+      android:theme="@android:style/Theme.NoDisplay">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <category android:name="android.intent.category.LAUNCHER"/>
@@ -131,7 +133,10 @@
     <activity
       android:name=".pulse.PulseActivity"
       android:theme="@style/Theme.GDG.WithNavDrawer"/>
-    <activity android:name=".activity.ParseDeepLinkActivity">
+    <activity
+      android:name=".activity.ParseDeepLinkActivity"
+      android:configChanges="orientation|keyboardHidden|screenSize"
+      android:theme="@android:style/Theme.NoDisplay">
       <intent-filter>
         <action android:name="com.google.android.apps.plus.VIEW_DEEP_LINK"/>
         <data android:scheme="vnd.google.deeplink"/>
