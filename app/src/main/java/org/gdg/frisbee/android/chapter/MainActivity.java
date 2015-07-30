@@ -273,7 +273,7 @@ public class MainActivity extends GdgNavDrawerActivity {
         mViewPagerAdapter = new ChapterFragmentPagerAdapter(this,
                 getSupportFragmentManager(), selectedChapterId);
         mViewPager.setAdapter(mViewPagerAdapter);
-        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.setOffscreenPageLimit(3);
         updateSelectionfor(selectedChapterId);
 
         mTabLayout.setupWithViewPager(mViewPager);
