@@ -44,6 +44,7 @@ import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.Utils;
+import org.gdg.frisbee.android.view.BitmapBorderTransformation;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
 
 import java.io.UnsupportedEncodingException;
@@ -352,6 +353,9 @@ public class InfoFragment extends BaseFragment {
             if (person.getImage() != null) {
                 App.getInstance().getPicasso()
                         .load(person.getImage().getUrl())
+                        .transform(new BitmapBorderTransformation(0,
+                                getResources().getDimensionPixelSize(R.dimen.organizer_icon_size) / 2,
+                                getResources().getColor(R.color.white)))
                         .placeholder(R.drawable.ic_no_avatar)
                         .into(picture);
             }
