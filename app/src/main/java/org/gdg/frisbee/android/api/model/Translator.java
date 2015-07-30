@@ -1,6 +1,4 @@
-package org.gdg.frisbee.android.crowdin.model;
-
-import org.gdg.frisbee.android.api.model.Contributor;
+package org.gdg.frisbee.android.api.model;
 
 public class Translator extends Contributor {
     public Translator(String name, String login, String avatarUrl, int contributions) {
@@ -10,5 +8,15 @@ public class Translator extends Contributor {
         setHtmlUrl("https://crowdin.com/profile/" + login);
         setAvatarUrl(avatarUrl);
         setContributions(contributions);
+    }
+
+    @Override
+    public String getPrimaryText() {
+        return getName();
+    }
+
+    @Override
+    public String getSecondaryText() {
+        return getLogin();
     }
 }

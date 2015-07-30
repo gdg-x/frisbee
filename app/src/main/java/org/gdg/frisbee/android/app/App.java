@@ -58,6 +58,7 @@ import org.gdg.frisbee.android.api.GithubFactory;
 import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.GroupDirectoryFactory;
 import org.gdg.frisbee.android.api.OkClientFactory;
+import org.gdg.frisbee.android.api.PlusPersonDownloader;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.utils.CrashlyticsTree;
@@ -136,7 +137,9 @@ public class App extends Application implements LocationListener {
         mOkHttpClient = OkClientFactory.provideOkHttpClient(this);
 
         //Initialize Plus Client which is used to get profile pictures and NewFeed of the chapters.
-        final HttpTransport mTransport = new GapiOkTransport();
+        final HttpTransport mTransport = new GapiOkTransport.Builder()
+                .setOkHttpClient(mOkHttpClient)
+                .build();
         final JsonFactory mJsonFactory = new GsonFactory();
         plusClient = new Plus.Builder(mTransport, mJsonFactory, null)
                 .setGoogleClientRequestInitializer(
@@ -150,11 +153,17 @@ public class App extends Application implements LocationListener {
         PrefUtils.increaseAppStartCount(this);
 
         // Initialize Picasso
+        // When we clone mOkHttpClient, it will use all the same cache and everything.
+        // Only the interceptors will be different.
+        // We shouldn't have the below interceptor in other instances.
+        OkHttpClient picassoClient = mOkHttpClient.clone();
+        picassoClient.interceptors().add(new PlusPersonDownloader(plusClient));
+
         mPicasso = new Picasso.Builder(this)
-                .downloader(new OkHttpDownloader(this))
+                .downloader(new OkHttpDownloader(picassoClient))
                 .memoryCache(new LruCache(this))
                 .build();
-        mPicasso.setIndicatorsEnabled(BuildConfig.DEBUG);
+//        mPicasso.setIndicatorsEnabled(BuildConfig.DEBUG);
 
         JodaTimeAndroid.init(this);
 

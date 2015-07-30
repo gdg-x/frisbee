@@ -19,6 +19,7 @@ import org.gdg.frisbee.android.api.model.GdeList;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
+import org.gdg.frisbee.android.common.PlainLayoutFragment;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
@@ -154,7 +155,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
                 return PlainLayoutFragment.newInstance(R.layout.fragment_gde_about);
             } else {
                 String key = mGdeMap.keySet().toArray(new String[mGdeMap.size()])[position - 1];
-                Fragment frag = GdeListFragment.newInstance(mGdeMap.get(key), position == mViewPager.getCurrentItem());
+                Fragment frag = GdeListFragment.newInstance(mGdeMap.get(key));
                 mFragments.append(position, new WeakReference<>(frag));
 
                 return frag;

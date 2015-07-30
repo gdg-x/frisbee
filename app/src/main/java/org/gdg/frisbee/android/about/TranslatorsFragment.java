@@ -17,7 +17,7 @@
 package org.gdg.frisbee.android.about;
 
 import org.gdg.frisbee.android.api.model.Contributor;
-import org.gdg.frisbee.android.crowdin.model.Translator;
+import org.gdg.frisbee.android.api.model.Translator;
 
 
 public class TranslatorsFragment extends ContributorsFragment {
@@ -67,8 +67,6 @@ public class TranslatorsFragment extends ContributorsFragment {
     };
 
     protected void loadContributors() {
-        for (Contributor contributor : TRANSLATORS) {
-            mAdapter.add(contributor);
-        }
+        mAdapter.addAll(TRANSLATORS);
     }
 }

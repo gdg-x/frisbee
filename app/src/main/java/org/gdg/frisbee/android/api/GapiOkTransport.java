@@ -70,16 +70,14 @@ public class GapiOkTransport extends HttpTransport {
      * properties</a>.
      */
     private final Proxy proxy;
+    private final OkHttpClient okHttpClient;
 
     /**
      * Constructor with the default behavior.
      *
-     * <p>
-     * Instead use {@link Builder} to modify behavior.
-     * </p>
      */
     public GapiOkTransport() {
-        this(null, null, null);
+        this(new OkHttpClient(), null, null, null);
     }
 
     /**
@@ -90,7 +88,9 @@ public class GapiOkTransport extends HttpTransport {
      * @param hostnameVerifier host name verifier or {@code null} for the default
      */
     GapiOkTransport(
+            OkHttpClient okHttpClient,
             Proxy proxy, SSLSocketFactory sslSocketFactory, HostnameVerifier hostnameVerifier) {
+        this.okHttpClient = okHttpClient;
         this.proxy = proxy;
         /* SSL socket factory or {@code null} for the default. */
         SSLSocketFactory sslSocketFactory1 = sslSocketFactory;
@@ -108,8 +108,7 @@ public class GapiOkTransport extends HttpTransport {
         Preconditions.checkArgument(supportsMethod(method), "HTTP method %s not supported", method);
         // connection with proxy settings
         URL connUrl = new URL(url);
-        OkHttpClient client = new OkHttpClient();
-        OkUrlFactory factory = new OkUrlFactory(client);
+        OkUrlFactory factory = new OkUrlFactory(okHttpClient);
         SSLContext sslContext;
         try {
             sslContext = SSLContext.getInstance("TLS");
@@ -117,10 +116,10 @@ public class GapiOkTransport extends HttpTransport {
         } catch (GeneralSecurityException e) {
             throw new AssertionError(); // The system has no TLS. Just give up.
         }
-        client.setSslSocketFactory(sslContext.getSocketFactory());
+        okHttpClient.setSslSocketFactory(sslContext.getSocketFactory());
 
         if (proxy != null) {
-            client.setProxy(proxy);
+            okHttpClient.setProxy(proxy);
         }
 
         URLConnection conn = factory.open(connUrl);
@@ -155,6 +154,11 @@ public class GapiOkTransport extends HttpTransport {
         private Proxy proxy;
 
         /**
+         * OkHttpClient to be used. If it is not available, the default client will be initialized.
+         */
+        private OkHttpClient okHttpClient;
+
+        /**
          * Sets the HTTP proxy or {@code null} to use the proxy settings from <a
          * href="http://docs.oracle.com/javase/7/docs/api/java/net/doc-files/net-properties.html">system
          * properties</a>.
@@ -169,6 +173,11 @@ public class GapiOkTransport extends HttpTransport {
          */
         public Builder setProxy(Proxy proxy) {
             this.proxy = proxy;
+            return this;
+        }
+
+        public Builder setOkHttpClient(OkHttpClient okHttpClient) {
+            this.okHttpClient = okHttpClient;
             return this;
         }
 
@@ -271,8 +280,7 @@ public class GapiOkTransport extends HttpTransport {
 
         /** Returns a new instance of {@link GapiOkTransport} based on the options. */
         public GapiOkTransport build() {
-            return new GapiOkTransport(proxy, sslSocketFactory, hostnameVerifier);
+            return new GapiOkTransport(okHttpClient, proxy, sslSocketFactory, hostnameVerifier);
         }
     }
-
 }
