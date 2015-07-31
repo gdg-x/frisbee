@@ -25,9 +25,6 @@ def versionMinor = 1
 def versionPatch = 0
 def versionBuild = 1 // bump for dogfood builds, public betas, etc.
 
-def supportVersion = "22.2.1"
-def playServicesVersion = "7.5.0"
-
 android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
@@ -157,6 +154,10 @@ configurations {
 }
 
 dependencies {
+
+    def supportVersion = "22.2.1"
+    def playServicesVersion = "7.5.0"
+
     //Android Support
     compile "com.android.support:support-v4:$supportVersion"
     compile "com.android.support:appcompat-v7:$supportVersion"
