@@ -1,3 +1,9 @@
-* Material Design
-* Android Study Jam series
-* Women Techmakers series
+<strong>Release 2.2, released on 01/08/2015</strong>
+
+* Leads Section with important information for GDG Organizers
+* Navigation Menu looks better now with sections.
+* App will not ask you to login twice.
+* Arrow game is working now.
+* Croutons replaced with fancy Snackbars
+* Lots of bug fixes
+* Couple of memory leaks removed thanks to leak canary
