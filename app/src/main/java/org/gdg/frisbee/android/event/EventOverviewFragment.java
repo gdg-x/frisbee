@@ -222,7 +222,7 @@ public class EventOverviewFragment extends Fragment {
                                 Picasso.with(getActivity()).load(gplusChapter.getImage().getUrl()).into(new Target() {
                                     @Override
                                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
-                                        if (isDetached()) {
+                                        if (!isAdded()) {
                                             return;
                                         }
                                         BitmapDrawable logo = new BitmapDrawable(getResources(), bitmap);
