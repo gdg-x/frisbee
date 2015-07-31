@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.api.model.Chapter;
@@ -101,9 +102,10 @@ public final class PrefUtils {
                 .getBoolean(PREFS_FIRST_START, false);
     }
 
+    @NonNull
     public static String getRegistrationId(Context context) {
         String registrationId = prefs(context).getString(PREFS_GCM_REG_ID, null);
-        if (registrationId.isEmpty()) {
+        if (TextUtils.isEmpty(registrationId)) {
             return "";
         }
         return registrationId;
