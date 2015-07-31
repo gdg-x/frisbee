@@ -100,7 +100,7 @@
   <string name="gcm_event_ticker">Um novo evento em seu GDG local foi agendado.</string>
   <string name="ioextended_description">Google i/o Extended é sobre juntar a conferência do Google em seu grupo local.</string>
   <string name="devfest_description">GDG DevFests são eventos de grande porte, organizados pela comunidade que podem oferecer palestras de várias áreas de produtos, hack-a-thons de dia inteiro, laboratórios de código (code labs) e muito mais. \ N \ ncada GDG DevFest será inspirado e adaptado exclusivamente para as necessidades da comunidade de desenvolvedores que o hospeda. Enquanto dois eventos não serão exatamente iguais, cada DevFest GDG será, em sua essência, alimentado pela crença compartilhada de que quando os desenvolvedores se reúnem para trocar idéias, coisas incríveis podem acontecer.</string>
-  <string name="studyjams_description">Google Developers Study Jams é uma série global de grupos de estudo gratuitos, mantidos pela comunidade e presenciais. A primeira série do Study Jams é apresentada em parceria com o Udacity e seguirá o seu currículo Android Fundamentals. Facilitadores do Google Developer Group certificados no curso irão liderar o Study Jams, que se encontrarão semanalmente por 8 - 9 semanas.</string>
+  <string name="studyjams_description">Os Study Jams do Google Developers são uma série gratuita, gerida pela comunidade, de grupos estudos presenciais. A primeira série foi apresentada em parceria com a Udacity e seguirá o seu curso \"Fundamentos de Android\". Facilitadores dos GDGs que foram certificados no curso serão os líderes das Study Jams e se reunião semanalmente por 8 - 9 semanas.</string>
   <string name="wtm_description">Women Techmakers é um programa global do Google e uma marca para as mulheres na tecnologia. Lançado em 2012 pela então vice-presidente do Google[x] Megan Smith, Women Techmakers é liderado agora pela Women in Technology Advocate Natalie Villalobos e um time global de Googlers que são apaixonados pelo empoderamento de mulheres em tecnologia através de uma maior visibilidade, comunidade e recursos.\n\nCada um de nossos summits e meetups serão voltados para as comunidades locais de mulheres na tecnologia. Summits e meetups ao redor do mundo podem exibir workshops de programação hands-on, palestrantes inspirados e oportunidades de networking.\n\nTodos eventos irão ocorrer no mês de março.</string>
   <string name="media_route_menu_title">Sessão de compartilhamento</string>
   <string name="navigate_to">Navegue até o evento</string>
@@ -149,12 +149,22 @@
   <string name="feedback_send">Enviar</string>
   <string name="feedback_sending">Enviando&#8230;</string>
   <string name="for_leads">Para organizadores</string>
-  <string name="leads_welcome">Parabéns por ser um organizador do GDG!</string>
-  <string name="leads_resources">Você deveria verificar os recursos do GDG na pasta pública do Google Drive. Clique para ver a documentação, gráficos, codelabs e muito mais.</string>
-  <string name="leads_wisdom">O livro GDG Wisdom em http://gdg-wisdom.gitbooks.io contém informações mais geais. Sinta-se livre para contribuir e editar páginas. Clique para ler o livro.</string>
   <string name="leads_welcome_title">Seja bem-vindo(a)</string>
+  <string name="leads_welcome">Como um líder de GDG, você tem acesso a estes conteúdos exclusivos para organizadores!</string>
   <string name="leads_resources_title">Recursos GDG</string>
-  <string name="leads_wisdom_title">GDG Wisdom</string>
+  <string name="leads_resources">Você pode encontrar recursos para seu GDG nesta pasta do Google Drive. Toque para visualizar slides, guias, gráficos, code labs e muito mais.</string>
+  <string name="leads_wisdom_title">GDG Wisdom GitBook</string>
+  <string name="leads_wisdom">Este GitBook contém uma variedade de informações sobre como organizar um capítulo do GDG. Por favor, edite páginas e contribua para este esforço global. Toque para abrir este GitBook.</string>
+  <string name="leads_gplus_community_title">GDG Organizer Creative Sandbox</string>
+  <string name="leads_gplus_community">Esta comunidade global do G+ fala sobre compartilhar experiências e conhecimentos relacionados a organização de um capítulo do GDG. Toque para participar da conversa!</string>
   <string name="message">Mensagem</string>
   <string name="resource">Recurso</string>
+  <string name="cd_navdrawer_image">Navigation Drawer Chapter Image</string>
+  <string name="cd_navdrawer_user_picture">Imagem de perfil de usuário</string>
+  <string name="title_signing_needed">Registro necessário</string>
+  <string name="signin">Registro</string>
+  <string name="feedback_message_required">Mensagem obrigatória</string>
+  <string name="feedback_invalid_email">Insira um e-mail válido</string>
+  <string name="drawer_subheader_games">Jogos</string>
+  <string name="fork_me">Faça um Fork</string>
 </resources>

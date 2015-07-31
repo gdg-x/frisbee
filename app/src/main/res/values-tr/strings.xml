@@ -149,12 +149,22 @@
   <string name="feedback_send">Gönder</string>
   <string name="feedback_sending">Gönderiliyor&#8230;</string>
   <string name="for_leads">Organizatörler İçin</string>
-  <string name="leads_welcome">GDG organizatörü olduğunuz için tebrik ederiz!</string>
-  <string name="leads_resources">Herkese açık Google Drive klasöründeki GDG kaynaklarına bakmalısın. Dokümantasyon, grafikler, code lab\'lar ve daha fazlası için tıklayın.</string>
-  <string name="leads_wisdom">http://gdg-wisdom.gitbooks.io adresindeki GDG Wisdom kitabı daha fazla bilgi içermektedir. Lütfen katkıda bulunmak ve sayfalarını düzenlemek için çekinmeyin. Kitabı okumak için tıklayın.</string>
   <string name="leads_welcome_title">Hoşgeldiniz</string>
+  <string name="leads_welcome">GDG organizatörü olarak, aşağıdaki sana özel kaynaklara erişim hakkın var!</string>
   <string name="leads_resources_title">GDG Kaynakları</string>
-  <string name="leads_wisdom_title">GDG Wisdom</string>
+  <string name="leads_resources">Aşağıdaki Google Drive klasöründe önemli GDG kaynakları bulabilirsin. Sunumlar, klavuzlar, grafikler, code lab\'lar ve daha fazlası için tıkla.</string>
+  <string name="leads_wisdom_title">GDG Wisdom GitBook</string>
+  <string name="leads_wisdom">Bu GitBook, bölgenizde GDG kurmak ve yönetmek ile ilgili çok zengin bilgi içerir. Bu global emeğe lütfen sayfaları düzenleyerek ve yeni bilgiler ekleyerek katkıda bulunun. GitBook sayfasını açmak için tıklayın.</string>
+  <string name="leads_gplus_community_title">GDG Organizer Creative Sandbox</string>
+  <string name="leads_gplus_community">Bu global G+ community\'sinde herkes GDG ile ilgili bilgilerini ve tecrübelerini paylaşıyor. Sen de katılmak için tıkla!</string>
   <string name="message">Mesaj</string>
   <string name="resource">Kaynak</string>
+  <string name="cd_navdrawer_image">Sol Menüde Bölge Resmi</string>
+  <string name="cd_navdrawer_user_picture">Kullanıcı profil resmi</string>
+  <string name="title_signing_needed">Giriş Gerekiyor</string>
+  <string name="signin">Giriş</string>
+  <string name="feedback_message_required">Mesaj gerekli</string>
+  <string name="feedback_invalid_email">Geçerli bir eposta adresi girin</string>
+  <string name="drawer_subheader_games">Oyunlar</string>
+  <string name="fork_me">Beni Fork\'la</string>
 </resources>

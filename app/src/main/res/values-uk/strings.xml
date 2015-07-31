@@ -130,7 +130,7 @@
         конференції, хакатони, techtalk\'и, демо шоу та багато іншого.\n\nЗнайдіть унікальний GDG DevFest поряд з
         вами!
     </string>
-  <string name="studyjams_description">Google Developers Study Jams is a free series of global, community-run, in-person study groups. The first Study Jams series is presented in partnership with Udacity and will follow their Android Fundamentals curriculum. Google Developer Group facilitators certified in the course will lead the Study Jams that meet once weekly for 8 - 9 weeks.</string>
+  <string name="studyjams_description">Google Developers Study Jams є серією безкоштовних навчальних груп, які проходять по всьому світу. Перша серія проводиться у партнерстві з Udacity і буде дотримуватися їхніх основ навчальної програми Android. Представники Google Developer Group, є сертифікованими лекторами, які проводять подію щотижня протягом 8 - 9 тижнів.</string>
   <string name="wtm_description">Women Techmakers це бренд Google і глобальна програма для жінок в ІТ. Стартувпла в 2012 році, за сприяння віце-президента Google[х] Меган Сміт.  Наразі Women Techmakers очолює Women in Technology  Advocate Natalie Villalobos і глобальна команда Google-рів, які захоплені розширенням прав і можливостей жінок в ІТ за рахунок збільшення спільноти, ресурсів і загальної видимості.\n\nКожна із наших зустрічей та самітів буде проведена місцевою групою Women Techmakers. Саміти і зустрічі по всьому світу можуть показати практичні семінари програмування, надихати доповідачів і знаходити друзів.\n\nВсі події проводяться протягом березня.</string>
   <string name="media_route_menu_title">Сесія зйомок</string>
   <string name="navigate_to">Перейти до події</string>
@@ -179,12 +179,22 @@
   <string name="feedback_send">Надіслати</string>
   <string name="feedback_sending">Надсилання...</string>
   <string name="for_leads">Для лідерів</string>
-  <string name="leads_welcome">Вітання організатору GDG!</string>
-  <string name="leads_resources">Перегляньте GDG ресурси в загальній папці на Google Drive. Натисніть, щоб переглянути документацію, графіку, лабораторії коду і багато іншого.</string>
-  <string name="leads_wisdom">Книга мудрості GDG на http://gdg-wisdom.gitbooks.io містить більш загальну інформацію. Ви можете зробити свій внесок і редагувати сторінки. Натисніть, щоб прочитати книгу.</string>
   <string name="leads_welcome_title">Ласкаво просимо</string>
+  <string name="leads_welcome">Як організатор GDG, ви маєте доступ до цих ресурсів!</string>
   <string name="leads_resources_title">GDG ресурси</string>
-  <string name="leads_wisdom_title">Мудрість GDG</string>
+  <string name="leads_resources">Ви можете знайти важливі ресурси GDG в цій папці на диску Google. Натисніть тут для перегляду слайдів, порад, графіки, лабораторії коду та багато іншого.</string>
+  <string name="leads_wisdom_title">Книга мудрості GDG</string>
+  <string name="leads_wisdom">Цей GitBook містить безліч загальної інформації про організацію GDG. Будь ласка, редагуйте сторінки і зробіть внесок у ці глобальні зусилля. Натисніть тут, щоб відкрити її.</string>
+  <string name="leads_gplus_community_title">Творча пісочниться GDG</string>
+  <string name="leads_gplus_community">Це є глобальна G+ сторінка для обміну досвідом і знаннями, пов\'язані із організацією GDG. Натисніть тут, щоб приєднатися до розмови!</string>
   <string name="message">Повідомлення</string>
   <string name="resource">Ресурс</string>
+  <string name="cd_navdrawer_image">Зображення групи в меню навігації</string>
+  <string name="cd_navdrawer_user_picture">Зображення профілю користувача</string>
+  <string name="title_signing_needed">Необхідний вхід</string>
+  <string name="signin">Вхід</string>
+  <string name="feedback_message_required">Потрібно повідомлення</string>
+  <string name="feedback_invalid_email">Введіть коректну адресу електронної пошти</string>
+  <string name="drawer_subheader_games">Ігри</string>
+  <string name="fork_me">Клонуй мене</string>
 </resources>

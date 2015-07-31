@@ -96,7 +96,7 @@
   <string name="gcm_event_ticker">Ձեր հիմնական GDG խումբը նշանակել է նոր միջոցառում:</string>
   <string name="ioextended_description">Google I/O Extended-ի ժամանակ դուք տեսակապով դիտում եք Google-ի կոնֆերանսը՝ ձեր տեղային խմբի մասնակիցների հետ:</string>
   <string name="devfest_description">GDG DevFest-երը մեծ միջոցառումներ են, որոնք կազմակերպվում են տեղային GDG խմբերի կողմից և կարող են պարունակել ներկայացումներ տարբեր պրոդուկտների մասին, հաքաթոններ, code lab-եր և այլն:\n\nՅուրաքանչյուր GDG DevFest ինքնուրույն է և կարող է պարունակել միայն տվյալ խմբի ծրագրավորողների համար առավել հետաքրքիր թեմաներ: Այդ իսկ պատճառով գրեքե անհնար է գտնել երկու ամբողջովին նույնատիպ GDG DevFest, սակայն բոլոր այս միջոցառումների հիմնական նպատակն է միավորել ծրագրավորողներին և ոլորտով հետաքրքրված անձանց, փոխանակվել փորձով և համագործակցել, որի արդյունքում հետաքրքիր նորամուծություններ կարող են ստեղծվել:</string>
-  <string name="studyjams_description">Google Developers Study Jam-երը տեղային GDG խմբերի կողմից կազմակերպվող անվճար ուսուցողական հանդիպումներ են: Առաջին Study Jam-երը ստեղծվել են Udacity-ի օգնությամբ և միտված են Android-ի հիմնական հնարավորությունների մասին անվճար ուսուցմանը: GDG ֆասիլիտատորները սերտիֆիկացվում են ուսուցանելու համար և ղեկավարում են Study Jam-երը, խմբի անդամների հանդիպումների ժամանակ՝ շաբաթը մեկ անգամ, 8-9 շաբաթ շարունակ:</string>
+  <string name="studyjams_description">Google Developers Study Jam-երը տեղային GDG խմբերի կողմից կազմակերպվող անվճար ուսուցողական հանդիպումներ են: Առաջին Study Jam-երը ստեղծվել են Udacity-ի օգնությամբ և միտված են Android-ի հիմնական հնարավորությունների մասին անվճար ուսուցմանը: GDG ֆասիլիտատորները սերտիֆիկացվում են ուսուցանելու համար և ղեկավարում են Study Jam-երը, խմբի անդամների հանդիպումների ժամանակ՝ շաբաթը մեկ անգամ, 8-9 շաբաթ շարունակ.</string>
   <string name="wtm_description">Women Techmakers-ը Google-ի գլոբալ ծրագրերից մեկն է և ստեղծված է տեխնոլոգիական կանանց համար: Ծրագիրը սկսվել է 2012 թվականին Google[x]-ի փոխնախագահ Megan Smith-ի կողմից, իսկ հիմա դրա համակարգմամբ զբաղվում է Women in Technology Advocate-ի պաշտոնը զբաղեցնող Natalie Villalobos-ը, ում օգնում են Googl-ի բազմաթիվ այլ աշխատակիցներ, ովքեր հետաքրքրված են տեխնոլոգիական կանանց խթանելու հարցում:\n\nՅուրաքանչյուր այսպիսի հանդիպման հիմքում ընկած են տվյալ տեղանքի տեխնոլոգիական կանայք: Այդ հանդիպումների ընթացքում կարող են լինել կոդավորման դասեր, հետաքրքիր ներկայացումներ և համագործակցության նոր հնարավորություններին միտված այլ միջոցառումներ:\n\nԲոլոր հանդիպումները տեղի են ունենում Մարտ մասվա ընթացքում:</string>
   <string name="media_route_menu_title">Սեսիայի հեռարձակում</string>
   <string name="navigate_to">Անցնել միջոցառմանը</string>
@@ -145,12 +145,22 @@
   <string name="feedback_send">Ուղարկել</string>
   <string name="feedback_sending">Ուղարկում է&#8230;</string>
   <string name="for_leads">Ղեկավարների համար</string>
-  <string name="leads_welcome">Շնորհավորում ենք՝ GDG համակարգող դառնալու առիթով:</string>
-  <string name="leads_resources">Խորհուրդ ենք տալիս ծանոթանալ GDG Ռեսուրսին՝ Google Drive-ի հատուկ արկղում: Սեղմեք՝ փաստաթղթերին, գրաֆիկական պատկերին, կոդերին և այլ հետաքրքրին տեղեկություններին ծանոթանալու համար:</string>
-  <string name="leads_wisdom">GDG Wisdom-ի գրքույկը՝ http://gdg-wisdom.gitbooks.io, պարունակում է ավելի շատ տեղեկություններ: Մասնակցեք և խմբագրեք էջերը: Սեղմեք՝ գրքույկին անցնելու համար:</string>
   <string name="leads_welcome_title">Բարի գալուստ</string>
+  <string name="leads_welcome">As a GDG lead, you have access to these organizer-only resources!</string>
   <string name="leads_resources_title">GDG Ռեսուրսներ</string>
-  <string name="leads_wisdom_title">GDG Wisdom</string>
+  <string name="leads_resources">You can find important GDG Resources in this Google Drive folder. Tap to browse slide decks, guides, graphics, code labs, and more.</string>
+  <string name="leads_wisdom_title">GDG Wisdom GitBook</string>
+  <string name="leads_wisdom">This GitBook contains a wealth of general information about running a GDG chapter. Please edit pages and contribute to this global effort. Tap to open this GitBook.</string>
+  <string name="leads_gplus_community_title">GDG Organizer Creative Sandbox</string>
+  <string name="leads_gplus_community">This global G+ community is about sharing experiences and knowledge related to running a GDG chapter. Tap to join the conversation!</string>
   <string name="message">Հաղորդագրություն</string>
   <string name="resource">Ռեսուրս</string>
+  <string name="cd_navdrawer_image">Navigation Drawer Chapter Image</string>
+  <string name="cd_navdrawer_user_picture">Պրոֆիլի նկար</string>
+  <string name="title_signing_needed">Հարկավոր է մուտք գործել</string>
+  <string name="signin">Մուտք</string>
+  <string name="feedback_message_required">Հաղորդագրությունը պարտադիր է</string>
+  <string name="feedback_invalid_email">Մուտքագրեք վավեր էլփոստ</string>
+  <string name="drawer_subheader_games">Խաղեր</string>
+  <string name="fork_me">Fork անել</string>
 </resources>
