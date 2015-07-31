@@ -51,7 +51,7 @@ public class YoutubeActivity extends GdgActivity implements YouTubePlayer.OnInit
                         .findFragmentById(R.id.youtube_fragment);
         mPlayerFragment.initialize(BuildConfig.ANDROID_SIMPLE_API_ACCESS_KEY, this);
 
-        setRequestedOrientation(PORTRAIT_ORIENTATION);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     @Override
