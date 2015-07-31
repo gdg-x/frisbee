@@ -339,6 +339,9 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
     protected void updateUserPicture() {
         com.google.android.gms.plus.model.people.Person user = com.google.android.gms.plus.Plus.PeopleApi.getCurrentPerson(getGoogleApiClient());
+        if (user == null) {
+            return;
+        }
         com.google.android.gms.plus.model.people.Person.Image userPicture = user.getImage();
         if (userPicture != null && userPicture.hasUrl()) {
             App.getInstance().getPicasso().load(userPicture.getUrl())
