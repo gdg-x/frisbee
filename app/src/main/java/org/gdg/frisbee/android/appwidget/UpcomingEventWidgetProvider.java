@@ -24,16 +24,17 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.widget.RemoteViews;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.event.EventActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.joda.time.DateTime;
@@ -68,7 +69,8 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
             return null;
         }
 
-        private Chapter findChapter(String chapterId) {
+        @Nullable
+        private Chapter findChapter(@Nullable String chapterId) {
             if (chapterId != null) {
                 for (Chapter chapter : mChapters) {
                     if (chapter.getGplusId().equals(chapterId)) {
@@ -159,11 +161,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
         }
 
         private void showChild(RemoteViews views, int i) {
-            if (i == 1) {
-                views.setDisplayedChild(R.id.viewFlipper, 1);
-            } else {
-                views.setDisplayedChild(R.id.viewFlipper, 0);
-            }
+            views.setDisplayedChild(R.id.viewFlipper, i);
         }
     }
 
