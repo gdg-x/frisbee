@@ -43,7 +43,7 @@ public interface GdgXHub {
                        @Body GcmRegistrationRequest request,
                        Callback<GcmRegistrationResponse> callback);
 
-    @PUT("/user/home")
+    @PUT("/frisbee/user/home")
     void setHomeGdg(@Header("Authorization") String authorization,
                     @Body HomeGdgRequest request,
                     Callback<Void> callback);
