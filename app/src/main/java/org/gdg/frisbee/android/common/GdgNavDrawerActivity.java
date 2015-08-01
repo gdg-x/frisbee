@@ -63,7 +63,7 @@ import timber.log.Timber;
 
 public abstract class GdgNavDrawerActivity extends GdgActivity {
 
-    private static final String EXTRA_SELECTED_DRAWER_ITEM_ID = "SELECTED_DRAWER_ITEM_ID";
+    protected static final String EXTRA_SELECTED_DRAWER_ITEM_ID = "SELECTED_DRAWER_ITEM_ID";
 
     protected ActionBarDrawerToggle mDrawerToggle;
     protected String mStoredHomeChapterId;
