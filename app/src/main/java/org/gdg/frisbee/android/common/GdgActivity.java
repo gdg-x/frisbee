@@ -35,6 +35,7 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.achievements.AchievementActionHandler;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.PrefUtils;
+import org.gdg.frisbee.android.utils.RecentTasksStyler;
 import org.gdg.frisbee.android.utils.ScopedBus;
 import org.gdg.frisbee.android.utils.Utils;
 
@@ -108,6 +109,7 @@ public abstract class GdgActivity extends TrackableActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        RecentTasksStyler.styleRecentTasksEntry(this);
 
         if (!Utils.isEmulator()) {
 
