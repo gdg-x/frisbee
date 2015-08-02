@@ -18,10 +18,8 @@ package org.gdg.frisbee.android.onboarding;
 
 import android.app.backup.BackupManager;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -35,32 +33,18 @@ import android.widget.LinearLayout;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.plus.Plus;
 
-import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.GdgXHub;
 import org.gdg.frisbee.android.api.model.Chapter;
-import org.gdg.frisbee.android.api.model.GcmRegistrationRequest;
-import org.gdg.frisbee.android.api.model.GcmRegistrationResponse;
-import org.gdg.frisbee.android.api.model.HomeGdgRequest;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
-import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.gdg.frisbee.android.widget.NonSwipeableViewPager;
-
-import java.io.IOException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 import timber.log.Timber;
 
 public class FirstStartActivity extends AppCompatActivity implements
@@ -252,75 +236,8 @@ public class FirstStartActivity extends AppCompatActivity implements
 
     @Override
     public void onComplete(final boolean enableAnalytics, final boolean enableGcm) {
-
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-
-                if (enableGcm && PrefUtils.isSignedIn(FirstStartActivity.this)) {
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            setLoadingScreen(true);
-                        }
-                    });
-                    try {
-                        String token = GoogleAuthUtil.getToken(FirstStartActivity.this,
-                                Plus.AccountApi.getAccountName(mGoogleApiClient),
-                                "audience:server:client_id:" + BuildConfig.HUB_CLIENT_ID);
-                        final String regid = mGcm.register(BuildConfig.GCM_SENDER_ID);
-
-
-                        final GdgXHub client = App.getInstance().getGdgXHub();
-                        client.registerGcm("Bearer " + token, new GcmRegistrationRequest(regid), new Callback<GcmRegistrationResponse>() {
-                            @Override
-                            public void success(GcmRegistrationResponse gcmRegistrationResponse, retrofit.client.Response response) {
-                                setLoadingScreen(false);
-                                PrefUtils.setInitialSettings(
-                                        FirstStartActivity.this,
-                                        /* enableGcm */ true,
-                                        enableAnalytics,
-                                        regid,
-                                        gcmRegistrationResponse.getNotificationKey());
-                                finish();
-                            }
-
-                            @Override
-                            public void failure(RetrofitError error) {
-                                setLoadingScreen(false);
-                                Snackbar snackbar = Snackbar.make(mContentLayout, R.string.server_error,
-                                        Snackbar.LENGTH_SHORT);
-                                ColoredSnackBar.alert(snackbar).show();
-                                Timber.e(error, "GCM Register Fail");
-                            }
-                        });
-
-                        client.setHomeGdg("Bearer " + token,
-                                new HomeGdgRequest(PrefUtils.getHomeChapterIdNotNull(FirstStartActivity.this)),
-                                new Callback<Void>() {
-                                    @Override
-                                    public void success(Void aVoid, Response response) {
-                                    }
-
-                                    @Override
-                                    public void failure(RetrofitError error) {
-                                        Timber.e(error, "Setting Home failed.");
-                                    }
-                                });
-
-                    } catch (IOException e) {
-                        Timber.e("Token fail. %s", e);
-                    } catch (GoogleAuthException e) {
-                        Timber.e("Auth fail. %s", e);
-                    }
-                } else {
-                    PrefUtils.setInitialSettings(FirstStartActivity.this, enableGcm, enableAnalytics, null, null);
-                    finish();
-                }
-
-                return null;
-            }
-        }.execute();
+        PrefUtils.setInitialSettings(FirstStartActivity.this, enableGcm, enableAnalytics, null, null);
+        finish();
     }
 
     public class FirstStartPageAdapter extends FragmentStatePagerAdapter {
