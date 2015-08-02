@@ -40,13 +40,11 @@
         Щоб використовувати ці функції, необхідно авторизуватися в Google.
     </string>
   <string name="or">або</string>
-  <string name="no_thanks">ні, дякую.</string>
   <string name="skip">Пропустити вхід</string>
   <string name="youtube_init_failed">Не вдалося ініціалізувати програвач YouTube.</string>
   <string name="achievements">Досягнення</string>
   <string name="settings">Налаштування</string>
   <string name="about">Про...</string>
-  <string name="gdl">Google Developers Live</string>
   <plurals name="seconds_ago">
     <item quantity="one">щойно</item>
     <item quantity="few">%d секунд тому</item>
@@ -113,8 +111,6 @@
   <string name="share_on_gplus">Запросити друзів</string>
   <string name="join_me">Приєднуйтесь до мене на цій події!</string>
   <string name="name_not_known">Невідоме ім\'я</string>
-  <string name="signin_first">Ви повинні ввійти за допомогою G+, щоб використовувати цю функцію
-    </string>
   <string name="originally_shared">спочатку поділився:</string>
   <string name="server_error">Виникла помилка. Спробуйте ще раз.</string>
   <string name="search_hint">Пошук GDG групи</string>

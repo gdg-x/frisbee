@@ -37,13 +37,11 @@
   <string name="confirm">Bestätigen</string>
   <string name="signin_description">Die GDG App nutzt Google+ und andere Google Services. Um diese Funktionalitäten zu nutzen musst du bei Google eingeloggt sein.</string>
   <string name="or">oder</string>
-  <string name="no_thanks">Nein, danke.</string>
   <string name="skip">Überspringen</string>
   <string name="youtube_init_failed">YouTube konnte nicht initialisiert werden.</string>
   <string name="achievements">Erfolge</string>
   <string name="settings">Einstellungen</string>
   <string name="about">Über Frisbee</string>
-  <string name="gdl">Google Developers Live</string>
   <plurals name="seconds_ago">
     <item quantity="one">vor einer Sekunde</item>
     <item quantity="other">vor %d Sekunden</item>
@@ -90,7 +88,6 @@
   <string name="share_on_gplus">Freunde einladen</string>
   <string name="join_me">Begleitet mich zu diesem Event!</string>
   <string name="name_not_known">Unbekannt</string>
-  <string name="signin_first">Du musst mit Google+ angemeldet sein um dieses Feature zu nutzen.</string>
   <string name="originally_shared">hat Folgendes ursprünglich geteilt:</string>
   <string name="server_error">Ein Fehler ist aufgetreten. Versuch es noch einmal.</string>
   <string name="search_hint">Suche nach GDGs</string>

@@ -37,13 +37,11 @@
   <string name="confirm">Gerai</string>
   <string name="signin_description">GDG programėlė naudojasi Google+ ir kitais Google Servisais. Šiai funkcijai reikia prisijungimo su Google paskyra.</string>
   <string name="or">ar</string>
-  <string name="no_thanks">ne ačiū.</string>
   <string name="skip">Praleisti prisijungimą</string>
   <string name="youtube_init_failed">YouTube Grotuvas negalėjo būti inicijuotas.</string>
   <string name="achievements">Pasiekimai</string>
   <string name="settings">Nustatymai</string>
   <string name="about">Apie</string>
-  <string name="gdl">Google Developers Live</string>
   <plurals name="seconds_ago">
     <item quantity="one">ką tik</item>
     <item quantity="few">prieš %d sekundes</item>
@@ -94,7 +92,6 @@
   <string name="share_on_gplus">Pakviesti draugus</string>
   <string name="join_me">Prisijunkite prie šio renginio!</string>
   <string name="name_not_known">Nežinomas vardas</string>
-  <string name="signin_first">Šiai funkcijai reikia prisijungti su G+</string>
   <string name="originally_shared">pirmas pasidalijo:</string>
   <string name="server_error">An error occurred. Try again.</string>
   <string name="search_hint">Search GDG Chapter</string>

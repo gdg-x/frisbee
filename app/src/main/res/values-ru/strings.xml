@@ -37,13 +37,11 @@
   <string name="confirm">Подтвердить</string>
   <string name="signin_description">Приложение GDG интегрируется с Google+ и другими сервисами Google. Для использования этого функицонала, необходимо, чтобы ты вошёл в Google.</string>
   <string name="or">или</string>
-  <string name="no_thanks">нет, спасибо.</string>
   <string name="skip">Пропустить вход</string>
   <string name="youtube_init_failed">Проигрыватель YouTube не может быть инициализирован.</string>
   <string name="achievements">Достижения</string>
   <string name="settings">Настройки</string>
   <string name="about">О группе</string>
-  <string name="gdl">Google Developers Live</string>
   <plurals name="seconds_ago">
     <item quantity="one">только что</item>
     <item quantity="few">%d секунд назад</item>
@@ -94,7 +92,6 @@
   <string name="share_on_gplus">Пригласите друзей</string>
   <string name="join_me">Присоединяйся ко мне на этом мероприятии!</string>
   <string name="name_not_known">Имя неизвестно</string>
-  <string name="signin_first">Вы должны войти с G+ для использования этого функционала</string>
   <string name="originally_shared">изначально поделился:</string>
   <string name="server_error">An error occurred. Try again.</string>
   <string name="search_hint">Search GDG Chapter</string>

@@ -15,7 +15,6 @@
   -->
 <resources>
 
-  <dimen name="navdrawer_width">304dp</dimen>
   <dimen name="navdrawer_image_height">164dp</dimen>
   <dimen name="navdrawer_user_picture_size">64dp</dimen>
 

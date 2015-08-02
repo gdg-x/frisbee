@@ -18,6 +18,7 @@ package org.gdg.frisbee.android.api.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -131,8 +132,9 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
         parcel.writeStringList(organizers);
     }
 
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public Chapter createFromParcel(Parcel in) {
+    public static final Parcelable.Creator<Chapter> CREATOR = new Parcelable.Creator<Chapter>() {
+        @NonNull
+        public Chapter createFromParcel(@NonNull Parcel in) {
             return new Chapter(in);
         }
 

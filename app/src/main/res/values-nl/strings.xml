@@ -37,13 +37,11 @@
   <string name="confirm">Bevestigen</string>
   <string name="signin_description">De GDG App integreert met Google+ en andere Google-services. Om deze functies te gebruiken moet je jezelf aanmelden met Google.</string>
   <string name="or">of</string>
-  <string name="no_thanks">Nee, bedankt.</string>
   <string name="skip">Sign-in overslaan</string>
   <string name="youtube_init_failed">YouTube Player kan niet geïnitialiseerd worden.</string>
   <string name="achievements">Successen</string>
   <string name="settings">Instellingen</string>
   <string name="about">Over</string>
-  <string name="gdl">Google Developers Live</string>
   <plurals name="seconds_ago">
     <item quantity="one">zo net</item>
     <item quantity="other">%d seconden geleden</item>
@@ -90,7 +88,6 @@
   <string name="share_on_gplus">Invite Friends</string>
   <string name="join_me">Join me at this event!</string>
   <string name="name_not_known">Name not known</string>
-  <string name="signin_first">You have to sign-in with G+ to use this feature</string>
   <string name="originally_shared">heeft oorspronkelijk gedeeld:</string>
   <string name="server_error">An error occurred. Try again.</string>
   <string name="search_hint">Search GDG Chapter</string>

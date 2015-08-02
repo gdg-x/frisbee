@@ -37,13 +37,11 @@
   <string name="confirm">पुष्टि करें</string>
   <string name="signin_description">यह जी डी जी एप्प गूगल+ और अन्य गूगल सेवाओं का प्रयोग करती है। उन सेवाओं का प्रयोग करने के लिए आपको अपने गूगल अकाउंट के साथ जुड़ना होगा</string>
   <string name="or">या</string>
-  <string name="no_thanks">नहीं, धन्यवाद्</string>
   <string name="skip">साईन इन छोड़ें</string>
   <string name="youtube_init_failed">यूटूब शुरू नहीं किया जा सका। </string>
   <string name="achievements">उपलब्धियां</string>
   <string name="settings">व्यवस्था</string>
   <string name="about">एप्प के बारे में</string>
-  <string name="gdl">Google Developers Live</string>
   <plurals name="seconds_ago">
     <item quantity="one">अभी अभी</item>
     <item quantity="other">%d सेकंड पहले</item>
@@ -90,7 +88,6 @@
   <string name="share_on_gplus">दोस्तों को आमंत्रित करें</string>
   <string name="join_me">मेरे साथ इस कार्यक्रम में शामिल होँ!</string>
   <string name="name_not_known">अज्ञात नाम</string>
-  <string name="signin_first">यह सुविधा इस्तेमाल करने के लिए आपको किसी अकाउंट के साथ जुड़ना होगा</string>
   <string name="originally_shared">पहला शेयर :</string>
   <string name="server_error">कुछ समस्या प्रकट हुई। दोबारा प्रयत्न करें।</string>
   <string name="search_hint">खोज GDG अध्याय</string>

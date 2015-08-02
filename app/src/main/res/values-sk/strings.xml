@@ -37,13 +37,11 @@
   <string name="confirm">Potvrdiť</string>
   <string name="signin_description">GDG aplikácia využíva Google+ a iné služby Google. Pre ich používanie sa musíte prihlásiť do svojho účtu.</string>
   <string name="or">alebo</string>
-  <string name="no_thanks">nie ďakujem</string>
   <string name="skip">Preskočiť prihlásenie</string>
   <string name="youtube_init_failed">YouTube Player nemohol byť načítaný.</string>
   <string name="achievements">Achievementy</string>
   <string name="settings">Nastavenia</string>
   <string name="about">O nás</string>
-  <string name="gdl">Google Developers Live</string>
   <plurals name="seconds_ago">
     <item quantity="one">nedávno</item>
     <item quantity="few">pred %d sekundami</item>
@@ -94,7 +92,6 @@
   <string name="share_on_gplus">Pozvite priateľov</string>
   <string name="join_me">Pridajte sa na tento event</string>
   <string name="name_not_known">Meno neznáme</string>
-  <string name="signin_first">Musíte sa prihlásiť na používanie tejto funkcie</string>
   <string name="originally_shared">originálne zdieľané:</string>
   <string name="server_error">An error occurred. Try again.</string>
   <string name="search_hint">Search GDG Chapter</string>

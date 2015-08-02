@@ -37,13 +37,11 @@
   <string name="confirm">تأكيد</string>
   <string name="signin_description">التطبيق مدخل يدمج مع جوجل + وخدمات جوجل الأخرى. لاستخدام هذه الدالة أنت بحاجة لتسجيل الدخول إلى جوجل.</string>
   <string name="or">أو</string>
-  <string name="no_thanks">لا، شكراً.</string>
   <string name="skip">تخطي تسجيل الدخول</string>
   <string name="youtube_init_failed">تعذر تهيئة مشغل يوتيوب.</string>
   <string name="achievements">الإنجازات</string>
   <string name="settings">الإعدادات</string>
   <string name="about">حول البرنامج</string>
-  <string name="gdl">Google Developers Live</string>
   <plurals name="seconds_ago">
     <item quantity="zero">الآن</item>
     <item quantity="one">الآن</item>
@@ -107,7 +105,6 @@
   <string name="share_on_gplus">أدع الأصدقاء</string>
   <string name="join_me">انضم الي في هذا الحدث!</string>
   <string name="name_not_known">اسم غير معروف</string>
-  <string name="signin_first">يجب عليك تسجيل الدخول مع G + لاستخدام هذه الميزة</string>
   <string name="originally_shared">الأصل المشترك:</string>
   <string name="server_error">حدث خطأ. حاول مرة أخرى.</string>
   <string name="search_hint">بحث GDG الفصل</string>

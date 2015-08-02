@@ -38,13 +38,11 @@
   <string name="confirm">確認</string>
   <string name="signin_description">GDGアプリはGoogle+や他のGoogleサービスと統合しています。これらの機能を使用するには、Googleアカウントでログインしてください。</string>
   <string name="or">または</string>
-  <string name="no_thanks">やめておきます</string>
   <string name="skip">ログインしない</string>
   <string name="youtube_init_failed">YouTubeプレイヤーを初期化できませんでした</string>
   <string name="achievements">アチーブメント</string>
   <string name="settings">設定</string>
   <string name="about">アバウト</string>
-  <string name="gdl">Google Developers Live</string>
   <plurals name="seconds_ago">
     <item quantity="other">%d 秒前</item>
   </plurals>
@@ -87,7 +85,6 @@
   <string name="share_on_gplus">友達を招待</string>
   <string name="join_me">Join me at this event!</string>
   <string name="name_not_known">Name not known</string>
-  <string name="signin_first">You have to sign-in with G+ to use this feature</string>
   <string name="originally_shared">originally shared:</string>
   <string name="server_error">エラーが発生しました。もう一度やり直してください。</string>
   <string name="search_hint">GDGチャプターを検索</string>

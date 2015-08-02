@@ -37,13 +37,11 @@
   <string name="confirm">ยืนยัน</string>
   <string name="signin_description">แอพพลิเคชั่น GDG จะเชื่อมต่อกับ Google+ และบริการอื่นๆของ Google หากต้องการใช้ต้องการใช้ฟังก์ชันเหล่านี้ คุณต้องลงชื่อเข้าใช้งานด้วยบัญชี Google</string>
   <string name="or">หรือ</string>
-  <string name="no_thanks">ไม่ ขอบคุณ</string>
   <string name="skip">ข้ามการลงชื่อเข้าใช้</string>
   <string name="youtube_init_failed">ไม่สามารถเริ่มการเล่น YouTube ได้</string>
   <string name="achievements">ความสำเร็จ</string>
   <string name="settings">การตั้งค่า</string>
   <string name="about">เกี่ยวกับ</string>
-  <string name="gdl">Google Developers Live</string>
   <plurals name="seconds_ago">
     <item quantity="other">%d วินาทีที่ผ่านมา</item>
   </plurals>
@@ -86,7 +84,6 @@
   <string name="share_on_gplus">เชิญเพื่อนเข้าใช้งาน</string>
   <string name="join_me">เข้าร่วมกิจกรรมนี้กับฉัน</string>
   <string name="name_not_known">ไม่ทราบชื่อ</string>
-  <string name="signin_first">คุณต้องลงชื่อเข้าใช้งานด้วยบัญชี Google+ เพื่อใช้ฟังก์ชันนี้</string>
   <string name="originally_shared">แบ่งปันเป็นคนแรกโดย:</string>
   <string name="server_error">เกิดข้อผิดพลาดกับระบบ โปรดลองอีกครั้ง</string>
   <string name="search_hint">ค้นหา GDG Chapter</string>

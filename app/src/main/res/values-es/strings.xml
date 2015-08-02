@@ -37,13 +37,11 @@
   <string name="confirm">Confirmar</string>
   <string name="signin_description">La App GDG está integrada con Google+ y otros servicios de Google. Para usar estas funciones, debes iniciar sesión con tu cuenta de Google.</string>
   <string name="or">o</string>
-  <string name="no_thanks">no, gracias.</string>
   <string name="skip">Omitir registro</string>
   <string name="youtube_init_failed">No se pudo iniciar el reproductor de YouTube.</string>
   <string name="achievements">Logros</string>
   <string name="settings">Configuraciónes</string>
   <string name="about">Acerca de</string>
-  <string name="gdl">Google Developers Live</string>
   <plurals name="seconds_ago">
     <item quantity="one">justo ahora</item>
     <item quantity="other">hace %d segundos</item>
@@ -90,7 +88,6 @@
   <string name="share_on_gplus">Invitar Amigos</string>
   <string name="join_me">¡Acompáñame en este evento!</string>
   <string name="name_not_known">Nombre desconocido</string>
-  <string name="signin_first">Tienes que iniciar sesión con G+ para poder usar esta función</string>
   <string name="originally_shared">compartida originalmente por:</string>
   <string name="server_error">Ha ocurrido un error. Vuelve a intentarlo.</string>
   <string name="search_hint">Buscar GDG</string>
