@@ -169,7 +169,7 @@ public class FeedbackFragment extends DialogFragment {
             isValid = isValid & true;
             mLayoutEmail.setError(null);
         } else {
-            isValid = isValid & false;
+            isValid = false;
             mLayoutEmail.setError(getString(R.string.feedback_invalid_email));
         }
 
@@ -209,9 +209,9 @@ public class FeedbackFragment extends DialogFragment {
 
         try {
             Class e1 = Class.forName(cm1.getClass().getName());
-            Method resolution = e1.getDeclaredMethod("getMobileDataEnabled", new Class[0]);
+            Method resolution = e1.getDeclaredMethod("getMobileDataEnabled");
             resolution.setAccessible(true);
-            mobileDataEnabled1 = (Boolean) resolution.invoke(cm1, new Object[0]);
+            mobileDataEnabled1 = (Boolean) resolution.invoke(cm1);
         } catch (Exception e) {
             Timber.d(e, "Mobil data problem.");
         }

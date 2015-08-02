@@ -34,8 +34,8 @@ public class Builder<Params, Result> {
     private ArrayList<Params> mParams;
 
     public Builder(Class<Params> paramsType, Class<Result> resultType) {
-        mTask = new CommonAsyncTask<Params, Result>(paramsType, resultType);
-        mParams = new ArrayList<Params>();
+        mTask = new CommonAsyncTask<>(paramsType, resultType);
+        mParams = new ArrayList<>();
     }
 
     public Builder<Params, Result> addParameter(Params param) {
@@ -65,7 +65,7 @@ public class Builder<Params, Result> {
 
     public CommonAsyncTask<Params, Result> build() {
         Params[] p = (Params[]) Array.newInstance(mTask.getParamsType(), 0);
-        mTask.setParameters((Params[]) mParams.toArray(p));
+        mTask.setParameters(mParams.toArray(p));
         return mTask;
     }
 
