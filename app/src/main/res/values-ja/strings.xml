@@ -144,11 +144,11 @@
   <string name="feedback_sending">送信中...</string>
   <string name="for_leads">リーダ向け</string>
   <string name="leads_welcome_title">ようこそ</string>
-  <string name="leads_welcome">As a GDG lead, you have access to these organizer-only resources!</string>
+  <string name="leads_welcome">GDGオーガナイザー、おめでとう！</string>
   <string name="leads_resources_title">GDGリソース</string>
-  <string name="leads_resources">You can find important GDG Resources in this Google Drive folder. Tap to browse slide decks, guides, graphics, code labs, and more.</string>
-  <string name="leads_wisdom_title">GDG Wisdom GitBook</string>
-  <string name="leads_wisdom">This GitBook contains a wealth of general information about running a GDG chapter. Please edit pages and contribute to this global effort. Tap to open this GitBook.</string>
+  <string name="leads_resources">Googleドライブの公開フォルダからGDGリソースを確認して下さい。ドキュメント、グラフィック、コードラボなどを参照できます。</string>
+  <string name="leads_wisdom_title">GDGウィズダム</string>
+  <string name="leads_wisdom">GDGウィズダム http://gdg-wisdom.gitbooks.io には一般的な情報が含まれます。気軽にページを編集して貢献してください。本を読むをクリックします。</string>
   <string name="leads_gplus_community_title">GDG Organizer Creative Sandbox</string>
   <string name="leads_gplus_community">This global G+ community is about sharing experiences and knowledge related to running a GDG chapter. Tap to join the conversation!</string>
   <string name="message">メッセージ</string>

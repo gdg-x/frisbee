@@ -147,7 +147,7 @@
   <string name="feedback_sending">Sende&#8230;</string>
   <string name="for_leads">Für Organisatoren</string>
   <string name="leads_welcome_title">Willkommen</string>
-  <string name="leads_welcome">As a GDG lead, you have access to these organizer-only resources!</string>
+  <string name="leads_welcome">Glückwunsch, du bist ein GDG Organisator!</string>
   <string name="leads_resources_title">GDG Ressourcen</string>
   <string name="leads_resources">You can find important GDG Resources in this Google Drive folder. Tap to browse slide decks, guides, graphics, code labs, and more.</string>
   <string name="leads_wisdom_title">GDG Wisdom GitBook</string>

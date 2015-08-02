@@ -143,11 +143,11 @@
   <string name="feedback_sending">Ուղարկում է&#8230;</string>
   <string name="for_leads">Ղեկավարների համար</string>
   <string name="leads_welcome_title">Բարի գալուստ</string>
-  <string name="leads_welcome">As a GDG lead, you have access to these organizer-only resources!</string>
+  <string name="leads_welcome">Շնորհավորում ենք՝ GDG համակարգող դառնալու առիթով!</string>
   <string name="leads_resources_title">GDG Ռեսուրսներ</string>
-  <string name="leads_resources">You can find important GDG Resources in this Google Drive folder. Tap to browse slide decks, guides, graphics, code labs, and more.</string>
+  <string name="leads_resources">Խորհուրդ ենք տալիս ծանոթանալ GDG Ռեսուրսին՝ Google Drive-ի հատուկ արկղում: Սեղմեք՝ փաստաթղթերին, գրաֆիկական պատկերին, կոդերին և այլ հետաքրքրին տեղեկություններին ծանոթանալու համար.</string>
   <string name="leads_wisdom_title">GDG Wisdom GitBook</string>
-  <string name="leads_wisdom">This GitBook contains a wealth of general information about running a GDG chapter. Please edit pages and contribute to this global effort. Tap to open this GitBook.</string>
+  <string name="leads_wisdom">GDG Wisdom-ի գրքույկը՝ http://gdg-wisdom. gitbooks. io, պարունակում է ավելի շատ տեղեկություններ: Մասնակցեք և խմբագրեք էջերը: Սեղմեք՝ գրքույկին անցնելու համար.</string>
   <string name="leads_gplus_community_title">GDG Organizer Creative Sandbox</string>
   <string name="leads_gplus_community">This global G+ community is about sharing experiences and knowledge related to running a GDG chapter. Tap to join the conversation!</string>
   <string name="message">Հաղորդագրություն</string>
