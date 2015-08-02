@@ -17,8 +17,8 @@ public class GdeListFragment extends PeopleListFragment {
 
     private static final String ARG_PEOPLE_ARRAY = "people";
 
-    public static PeopleListFragment newInstance(@NonNull ArrayList<Gde> gdes) {
-        PeopleListFragment fragment = new PeopleListFragment();
+    public static GdeListFragment newInstance(@NonNull ArrayList<Gde> gdes) {
+        GdeListFragment fragment = new GdeListFragment();
         Bundle arguments = new Bundle();
         arguments.putParcelableArrayList(ARG_PEOPLE_ARRAY, gdes);
         fragment.setArguments(arguments);
