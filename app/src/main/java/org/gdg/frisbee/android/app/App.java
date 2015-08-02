@@ -284,6 +284,7 @@ public class App extends Application implements LocationListener {
         return mTracker;
     }
 
+    @NonNull
     public ModelCache getModelCache() {
         if (mModelCache == null) {
 
@@ -293,13 +294,13 @@ public class App extends Application implements LocationListener {
             }
             final File rootDir = new File(cacheDir, "/model_cache/");
 
+            ModelCache.Builder builder = new ModelCache.Builder()
+                    .setMemoryCacheEnabled(true);
             if (rootDir.isDirectory() || rootDir.mkdirs()) {
-                mModelCache = new ModelCache.Builder(getApplicationContext())
-                        .setMemoryCacheEnabled(true)
-                        .setDiskCacheEnabled(true)
-                        .setDiskCacheLocation(rootDir)
-                        .build();
+                builder.setDiskCacheEnabled(true)
+                        .setDiskCacheLocation(rootDir);
             }
+            mModelCache = builder.build();
         }
         return mModelCache;
     }
