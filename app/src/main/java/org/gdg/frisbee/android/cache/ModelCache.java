@@ -16,7 +16,6 @@
 
 package org.gdg.frisbee.android.cache;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Looper;
 import android.os.Process;
@@ -74,8 +73,6 @@ public class ModelCache {
             return Runtime.getRuntime().maxMemory();
         }
 
-        private Context mContext;
-
         private boolean mDiskCacheEnabled;
 
         private File mDiskCacheLocation;
@@ -87,12 +84,6 @@ public class ModelCache {
         private int mMemoryCacheMaxSize;
 
         public Builder() {
-            this(null);
-        }
-
-        public Builder(Context context) {
-            mContext = context;
-
             // Disk Cache is disabled by default, but it's default size is set
             mDiskCacheMaxSize = DEFAULT_DISK_CACHE_MAX_SIZE_MB * MEGABYTE;
 
@@ -102,7 +93,7 @@ public class ModelCache {
         }
 
         public ModelCache build() {
-            final ModelCache cache = new ModelCache(mContext);
+            final ModelCache cache = new ModelCache();
 
             if (isValidOptionsForMemoryCache()) {
                 cache.setMemoryCache(new LruCache<String, CacheItem>(mMemoryCacheMaxSize));
@@ -225,11 +216,7 @@ public class ModelCache {
     // Transient
     private ScheduledFuture<?> mDiskCacheFuture;
 
-    ModelCache(Context context) {
-        if (context != null) {
-            // Make sure we have the application context
-            context = context.getApplicationContext();
-        }
+    ModelCache() {
 
         mGson = new GsonBuilder()
                 .registerTypeAdapter(DateTime.class, new DateTimeDeserializer())
