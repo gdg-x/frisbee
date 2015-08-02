@@ -38,6 +38,10 @@ public class PeopleAdapter extends ArrayAdapter<GdgPerson> {
         mConsumedMap = new SparseBooleanArray();
     }
 
+    public void setPlaceholder(@DrawableRes int placeholder) {
+        this.placeholder = placeholder;
+    }
+
     @Override
     public boolean hasStableIds() {
         return true;
