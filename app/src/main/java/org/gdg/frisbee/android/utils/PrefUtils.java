@@ -33,27 +33,27 @@ public final class PrefUtils {
         // Prevent instances of this class being created.
     }
 
-    public static SharedPreferences prefs(final Context context) {
+    public static SharedPreferences prefs(@NonNull final Context context) {
         return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
-    public static boolean shouldOpenDrawerOnStart(Context context) {
+    public static boolean shouldOpenDrawerOnStart(@NonNull Context context) {
         return prefs(context).getBoolean(PREFS_OPEN_DRAWER_ON_START, true);
     }
 
-    public static void setShouldNotOpenDrawerOnStart(Context context) {
+    public static void setShouldNotOpenDrawerOnStart(@NonNull Context context) {
         prefs(context).edit().putBoolean(PREFS_OPEN_DRAWER_ON_START, false).apply();
     }
 
-    public static boolean isSignedIn(Context context) {
+    public static boolean isSignedIn(@NonNull Context context) {
         return prefs(context).getBoolean(SETTINGS_SIGNED_IN, false);
     }
 
-    public static void setSignedIn(Context context) {
+    public static void setSignedIn(@NonNull Context context) {
         prefs(context).edit().putBoolean(SETTINGS_SIGNED_IN, true).apply();
     }
 
-    public static void setLoggedOut(Context context) {
+    public static void setLoggedOut(@NonNull Context context) {
         prefs(context).edit()
                 .putBoolean(SETTINGS_SIGNED_IN, false)
                 .putBoolean(Const.PREF_ORGANIZER_STATE, false)
@@ -63,25 +63,25 @@ public final class PrefUtils {
     }
 
     @Nullable
-    public static String getHomeChapterId(final Context context) {
+    public static String getHomeChapterId(@NonNull final Context context) {
         return prefs(context)
                 .getString(SETTINGS_HOME_GDG, null);
     }
 
     @NonNull
-    public static String getHomeChapterIdNotNull(final Context context) {
+    public static String getHomeChapterIdNotNull(@NonNull final Context context) {
         return prefs(context)
                 .getString(SETTINGS_HOME_GDG, "");
     }
 
-    public static void setHomeChapter(final Context context, final Chapter chapter) {
+    public static void setHomeChapter(@NonNull final Context context, @NonNull final Chapter chapter) {
         prefs(context).edit()
                 .putString(SETTINGS_HOME_GDG, chapter.getGplusId())
                 .putString(SETTINGS_HOME_GDG_NAME, chapter.getName())
                 .apply();
     }
 
-    public static void setInitialSettings(final Context context, final boolean enableGcm, final boolean enableAnalytics,
+    public static void setInitialSettings(@NonNull final Context context, final boolean enableGcm, final boolean enableAnalytics,
                                           final String regid, final String notificationKey) {
         prefs(context).edit()
                 .putBoolean(SETTINGS_GCM, enableGcm)
@@ -92,18 +92,18 @@ public final class PrefUtils {
                 .apply();
     }
 
-    public static boolean isFirstStart(Context context) {
+    public static boolean isFirstStart(@NonNull Context context) {
         return prefs(context)
                 .getBoolean(PREFS_FIRST_START, PREFS_FIRST_START_DEFAULT);
     }
 
-    public static boolean isGcmEnabled(Context context) {
+    public static boolean isGcmEnabled(@NonNull Context context) {
         return prefs(context)
                 .getBoolean(PREFS_FIRST_START, false);
     }
 
     @NonNull
-    public static String getRegistrationId(Context context) {
+    public static String getRegistrationId(@NonNull Context context) {
         String registrationId = prefs(context).getString(PREFS_GCM_REG_ID, null);
         if (TextUtils.isEmpty(registrationId)) {
             return "";
@@ -111,33 +111,33 @@ public final class PrefUtils {
         return registrationId;
     }
 
-    public static void increaseAppStartCount(final Context context) {
+    public static void increaseAppStartCount(@NonNull final Context context) {
         increaseIntPreference(context, PREFS_APP_STARTS);
     }
 
-    public static int increaseVideoViewed(final Context mContext) {
+    public static int increaseVideoViewed(@NonNull final Context mContext) {
         return increaseIntPreference(mContext, PREFS_VIDEOS_PLAYED);
     }
 
-    private static int increaseIntPreference(final Context context, String key) {
+    private static int increaseIntPreference(@NonNull final Context context, String key) {
         int newValue = prefs(context).getInt(key, 0) + 1;
         prefs(context).edit().putInt(key, newValue).apply();
         return newValue;
     }
 
-    public static boolean isAnalyticsEnabled(final Context context) {
+    public static boolean isAnalyticsEnabled(@NonNull final Context context) {
         return prefs(context).getBoolean(SETTINGS_ANALYTICS, false);
     }
 
-    public static int getVersionCode(final Context context) {
+    public static int getVersionCode(@NonNull final Context context) {
         return prefs(context).getInt(PREFS_VERSION_CODE, 0);
     }
 
-    public static int getAppStarts(final Context context) {
+    public static int getAppStarts(@NonNull final Context context) {
         return prefs(context).getInt(PREFS_APP_STARTS, 0);
     }
 
-    public static boolean shouldShowSeasonsGreetings(final Context context) {
+    public static boolean shouldShowSeasonsGreetings(@NonNull final Context context) {
         DateTime now = DateTime.now();
         if (prefs(context).getInt(PREFS_SEASONS_GREETINGS, now.getYear() - 1) < now.getYear()
                 && (now.getDayOfYear() >= 354 && now.getDayOfYear() <= 366)) {
@@ -147,7 +147,7 @@ public final class PrefUtils {
         return false;
     }
 
-    public static void setGcmSettings(final Context context, final boolean enabledGcm, final String regId, final String notificationKey) {
+    public static void setGcmSettings(@NonNull final Context context, final boolean enabledGcm, final String regId, final String notificationKey) {
         prefs(context).edit()
                 .putBoolean(SETTINGS_GCM, enabledGcm)
                 .putString(PREFS_GCM_REG_ID, regId)
@@ -155,11 +155,11 @@ public final class PrefUtils {
                 .apply();
     }
 
-    public static void setVersionCode(final Context context, final int newVersion) {
+    public static void setVersionCode(@NonNull final Context context, final int newVersion) {
         prefs(context).edit().putInt(PREFS_VERSION_CODE, newVersion).apply();
     }
 
-    public static void resetInitialSettings(final Context context) {
+    public static void resetInitialSettings(@NonNull final Context context) {
         prefs(context).edit()
                 .remove(PREFS_GCM_REG_ID)
                 .clear()

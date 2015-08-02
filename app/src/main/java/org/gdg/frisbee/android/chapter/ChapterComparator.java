@@ -1,7 +1,7 @@
 package org.gdg.frisbee.android.chapter;
 
 import android.location.Location;
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.app.App;
@@ -18,14 +18,15 @@ import java.util.Comparator;
 public class ChapterComparator implements Comparator<Chapter> {
 
     private static final float MAX_DISTANCE = 500000;
+    @NonNull
     private final String mHomeChapterId;
 
-    public ChapterComparator(@Nullable String homeChapterId) {
+    public ChapterComparator(@NonNull String homeChapterId) {
         mHomeChapterId = homeChapterId;
     }
 
     @Override
-    public int compare(Chapter chapter, Chapter chapter2) {
+    public int compare(@NonNull Chapter chapter, @NonNull Chapter chapter2) {
         float[] results = new float[1];
         float[] results2 = new float[1];
 

@@ -71,7 +71,7 @@ public class Utils {
     /**
      * @return Application's version code from the {@code PackageManager}.
      */
-    public static int getAppVersion(Context context) {
+    public static int getAppVersion(@NonNull Context context) {
         try {
             PackageInfo packageInfo = context.getPackageManager()
                     .getPackageInfo(context.getPackageName(), 0);
@@ -94,14 +94,14 @@ public class Utils {
                 .applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, res.getDisplayMetrics());
     }
     
-    public static float convertPixelsToDp(float px, Context context) {
+    public static float convertPixelsToDp(float px, @NonNull Context context) {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
 
         return px / (metrics.densityDpi / 160f);
     }
 
-    public static String getUppercaseLetters(String in) {
+    public static String getUppercaseLetters(@NonNull String in) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < in.length(); i++) {
             char c = in.charAt(i);
@@ -112,7 +112,8 @@ public class Utils {
         return sb.toString();
     }
 
-    public static Map<String, String> splitQuery(URL url) throws UnsupportedEncodingException {
+    @NonNull
+    public static Map<String, String> splitQuery(@NonNull URL url) throws UnsupportedEncodingException {
         Map<String, String> queryPairs = new HashMap<>();
         String query = url.getQuery();
         if (query == null) {
@@ -127,7 +128,7 @@ public class Utils {
         return queryPairs;
     }
 
-    public static String toHumanTimePeriod(Context ctx, DateTime start, DateTime end) {
+    public static String toHumanTimePeriod(@NonNull Context ctx, @NonNull DateTime start, DateTime end) {
         String result;
         Resources res = ctx.getResources();
         Period p = new Period(start, end);
@@ -146,7 +147,7 @@ public class Utils {
         return result;
     }
 
-    public static boolean isOnline(Context context) {
+    public static boolean isOnline(@NonNull Context context) {
         ConnectivityManager mConMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         return mConMgr.getActiveNetworkInfo() != null
@@ -159,7 +160,7 @@ public class Utils {
         return Build.PRODUCT.equals("google_sdk");
     }
 
-    public static long stringToLong(String str) {
+    public static long stringToLong(@NonNull String str) {
         long l = 0;
         for (int i = 0; i < str.length(); i++) {
             l += str.charAt(i) * Math.pow(10, i);
@@ -167,7 +168,7 @@ public class Utils {
         return l;
     }
 
-    public static String inputStreamToString(InputStream is) throws IOException {
+    public static String inputStreamToString(@NonNull InputStream is) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
         String line;
@@ -181,7 +182,8 @@ public class Utils {
         return sb.toString();
     }
 
-    public static ArrayList<View> findViewByType(ViewGroup root, Class clazz) {
+    @NonNull
+    public static ArrayList<View> findViewByType(@NonNull ViewGroup root, Class clazz) {
         ArrayList<View> views = new ArrayList<>();
         int count = root.getChildCount();
         for (int i = 0; i <= count; i++) {
@@ -224,12 +226,12 @@ public class Utils {
      * @param possibleEmail Given String.
      * @return true if the given String is an email address.
      */
-    public static boolean isEmailAddress(String possibleEmail) {
+    public static boolean isEmailAddress(@NonNull String possibleEmail) {
         return Patterns.EMAIL_ADDRESS.matcher(possibleEmail).matches();
     }
 
 
-    public static boolean canLaunch(Context context, final Intent viewUrlIntent) {
+    public static boolean canLaunch(@NonNull Context context, final Intent viewUrlIntent) {
         return context.getPackageManager().resolveActivity(viewUrlIntent, PackageManager.MATCH_DEFAULT_ONLY) != null;
     }
 }

@@ -16,6 +16,8 @@
 
 package org.gdg.frisbee.android.task;
 
+import android.support.annotation.NonNull;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
@@ -38,26 +40,31 @@ public class Builder<Params, Result> {
         mParams = new ArrayList<>();
     }
 
+    @NonNull
     public Builder<Params, Result> addParameter(Params param) {
         mParams.add(param);
         return this;
     }
 
+    @NonNull
     public Builder<Params, Result> setParameter(ArrayList<Params> params) {
         mParams = params;
         return this;
     }
 
+    @NonNull
     public Builder<Params, Result> setOnPostExecuteListener(CommonAsyncTask.OnPostExecuteListener<Params, Result> listener) {
         mTask.setPostListener(listener);
         return this;
     }
 
+    @NonNull
     public Builder<Params, Result> setOnBackgroundExecuteListener(CommonAsyncTask.OnBackgroundExecuteListener<Params, Result> listener) {
         mTask.setBackgroundListener(listener);
         return this;
     }
 
+    @NonNull
     public Builder<Params, Result> setOnPreExecuteListener(CommonAsyncTask.OnPreExecuteListener listener) {
         mTask.setPreListener(listener);
         return this;
@@ -73,7 +80,7 @@ public class Builder<Params, Result> {
         build().execute((Params[]) mParams.toArray());
     }
 
-    public void buildAndExecuteOnExecutor(Executor executor) {
+    public void buildAndExecuteOnExecutor(@NonNull Executor executor) {
         build().executeOnExecutor(executor, (Params[]) mParams.toArray());
     }
 }

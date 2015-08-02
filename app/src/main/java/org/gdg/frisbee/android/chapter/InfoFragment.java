@@ -19,6 +19,8 @@ package org.gdg.frisbee.android.chapter;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.text.Html;
 import android.text.Spanned;
@@ -78,10 +80,12 @@ public class InfoFragment extends BaseFragment {
 
     private LayoutInflater mInflater;
 
+    @NonNull
     private Builder<String, Person[]> mFetchOrganizerInfo = new Builder<>(String.class, Person[].class)
             .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person[]>() {
+                @Nullable
                 @Override
-                public Person[] doInBackground(String... params) {
+                public Person[] doInBackground(@Nullable String... params) {
                     if (params == null) {
                         return null;
                     }
@@ -107,7 +111,8 @@ public class InfoFragment extends BaseFragment {
                 }
             });
 
-    public static InfoFragment newInstance(String plusId) {
+    @NonNull
+    public static InfoFragment newInstance(@NonNull String plusId) {
         InfoFragment fragment = new InfoFragment();
         Bundle arguments = new Bundle();
         arguments.putString(Const.EXTRA_PLUS_ID, plusId);
@@ -122,9 +127,10 @@ public class InfoFragment extends BaseFragment {
         mInflater = LayoutInflater.from(getActivity());
 
         final String chapterPlusId = getArguments().getString(Const.EXTRA_PLUS_ID);
-        if (Utils.isOnline(getActivity())) {
+        if (chapterPlusId != null && Utils.isOnline(getActivity())) {
             new Builder<>(String.class, Person.class)
                     .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person>() {
+                        @Nullable
                         @Override
                         public Person doInBackground(String... params) {
                             if (isAdded()) {
@@ -137,7 +143,7 @@ public class InfoFragment extends BaseFragment {
                     })
                     .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person>() {
                         @Override
-                        public void onPostExecute(String[] params, Person person) {
+                        public void onPostExecute(String[] params, @Nullable Person person) {
                             if (person != null && getActivity() != null) {
                                 updateChapterUIFrom(person);
                                 updateOrganizersOnline(person);
@@ -187,15 +193,17 @@ public class InfoFragment extends BaseFragment {
 
                 @Override
                 public void onNotFound(String key) {
-                    Snackbar snackbar = Snackbar.make(getView(), R.string.offline_alert,
-                            Snackbar.LENGTH_SHORT);
-                    ColoredSnackBar.alert(snackbar).show();
+                    if (getView() != null) {
+                        Snackbar snackbar = Snackbar.make(getView(), R.string.offline_alert,
+                                Snackbar.LENGTH_SHORT);
+                        ColoredSnackBar.alert(snackbar).show();
+                    }
                 }
             });
         }
     }
 
-    private void addOrganizersToUI(final Person[] people) {
+    private void addOrganizersToUI(@Nullable final Person[] people) {
         if (people == null) {
             addUnknowOrganizerToUI();
         } else {
@@ -211,7 +219,7 @@ public class InfoFragment extends BaseFragment {
         mOrganizerBox.addView(v);
     }
 
-    private void addOrganizerToUI(final Person organizer) {
+    private void addOrganizerToUI(@Nullable final Person organizer) {
         if (organizer == null) {
             addUnknowOrganizerToUI();
         } else {
@@ -229,7 +237,7 @@ public class InfoFragment extends BaseFragment {
         }
     }
 
-    private void updateChapterUIFrom(final Person person) {
+    private void updateChapterUIFrom(@NonNull final Person person) {
         if (mTagline != null) {
             mTagline.setText(person.getTagline());
         }
@@ -238,7 +246,7 @@ public class InfoFragment extends BaseFragment {
         }
     }
 
-    private Spanned getAboutText(Person person) {
+    private Spanned getAboutText(@NonNull Person person) {
         String aboutText = person.getAboutMe();
         if (aboutText == null) {
             return SpannedString.valueOf("");
@@ -246,13 +254,12 @@ public class InfoFragment extends BaseFragment {
         return Html.fromHtml(aboutText);
     }
 
-    private void updateOrganizersOnline(final Person person) {
+    private void updateOrganizersOnline(@NonNull final Person person) {
         if (person.getUrls() != null) {
             for (Person.Urls url : person.getUrls()) {
                 if (url.getValue().contains("plus.google.com/")) {
-                    if (url.getValue().contains("communities")) {
-                        // TODO
-                    } else {
+                    // TODO control the else statement
+                    if (!url.getValue().contains("communities")) {
                         String org = url.getValue();
                         try {
                             String organizerParameter = getGPlusIdFromPersonUrl(url);
@@ -276,8 +283,8 @@ public class InfoFragment extends BaseFragment {
         }
     }
 
-    private String getGPlusIdFromPersonUrl(Person.Urls personUrl) {
-        final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID);
+    private String getGPlusIdFromPersonUrl(@NonNull Person.Urls personUrl) {
+        final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID, "");
         if (personUrl.getValue().contains("+")) {
             try {
                 return "+" + URLDecoder.decode(personUrl.getValue()
@@ -344,7 +351,7 @@ public class InfoFragment extends BaseFragment {
         }
     }
 
-    public View createOrganizerView(Person person) {
+    public View createOrganizerView(@Nullable Person person) {
         View convertView = mInflater.inflate(R.layout.list_organizer_item, (ViewGroup) getView(), false);
 
         ImageView picture = (ImageView) convertView.findViewById(R.id.icon);
@@ -378,7 +385,7 @@ public class InfoFragment extends BaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_chapter_info, container, false);
         ButterKnife.bind(this, v);
         return v;

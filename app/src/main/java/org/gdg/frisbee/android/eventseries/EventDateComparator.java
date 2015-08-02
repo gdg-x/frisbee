@@ -1,5 +1,7 @@
 package org.gdg.frisbee.android.eventseries;
 
+import android.support.annotation.NonNull;
+
 import java.util.Comparator;
 
 class EventDateComparator implements Comparator<EventAdapter.Item> {
@@ -8,7 +10,7 @@ class EventDateComparator implements Comparator<EventAdapter.Item> {
     }
 
     @Override
-    public int compare(EventAdapter.Item event1, EventAdapter.Item event2) {
+    public int compare(@NonNull EventAdapter.Item event1, @NonNull EventAdapter.Item event2) {
         if (event1.getEvent().getStart() == null) {
             if (event2.getEvent().getStart() == null) {
                 return 0;

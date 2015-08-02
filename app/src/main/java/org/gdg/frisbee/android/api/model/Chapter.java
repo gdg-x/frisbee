@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.api.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -56,7 +57,7 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
         organizers = new ArrayList<>();
     }
 
-    public Chapter(Parcel in) {
+    public Chapter(@NonNull Parcel in) {
         name = in.readString();
         status = in.readString();
         city = in.readString();
@@ -111,7 +112,7 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
     }
 
     @Override
-    public int compareTo(Chapter o) {
+    public int compareTo(@NonNull Chapter o) {
         return name.compareTo(o.getName());
     }
 
@@ -121,7 +122,7 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
+    public void writeToParcel(@NonNull Parcel parcel, int i) {
         parcel.writeString(name);
         parcel.writeString(status);
         parcel.writeString(city);
@@ -138,13 +139,14 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
             return new Chapter(in);
         }
 
+        @NonNull
         public Chapter[] newArray(int size) {
             return new Chapter[size];
         }
     };
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (o == null) {
             return false;
         }

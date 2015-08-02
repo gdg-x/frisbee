@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.about;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +40,7 @@ public class ExtLibrariesFragment extends BaseFragment {
     TextView mExternal;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_external_libraries, container, false);
         ButterKnife.bind(this, v);
         return v;

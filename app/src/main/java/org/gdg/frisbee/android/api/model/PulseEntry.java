@@ -16,6 +16,8 @@
 
 package org.gdg.frisbee.android.api.model;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 public class PulseEntry {
@@ -50,7 +52,7 @@ public class PulseEntry {
         return mId;
     }
 
-    public int compareTo(int mode, PulseEntry pulseEntry) {
+    public int compareTo(int mode, @NonNull PulseEntry pulseEntry) {
         switch (mode) {
             case 0:
                 return (getMeetings() - pulseEntry.getMeetings()) * -1;

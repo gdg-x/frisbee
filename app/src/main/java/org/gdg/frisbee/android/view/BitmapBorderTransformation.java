@@ -7,6 +7,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.support.annotation.NonNull;
 
 import com.squareup.picasso.Transformation;
 
@@ -22,7 +23,7 @@ public class BitmapBorderTransformation implements Transformation {
     }
 
     @Override
-    public Bitmap transform(Bitmap source) {
+    public Bitmap transform(@NonNull Bitmap source) {
         if (source.getConfig() == null) {
             return source;
         }
@@ -78,6 +79,7 @@ public class BitmapBorderTransformation implements Transformation {
         return output;
     }
 
+    @NonNull
     @Override
     public String key() {
         return "bitmapBorder("

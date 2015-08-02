@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.fragment;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,11 +35,12 @@ import timber.log.Timber;
  * providing the 'swipe-to-refresh' UX gesture by wrapping the the content view in a
  * {@link android.support.v4.widget.SwipeRefreshLayout}.
  */
+@SuppressWarnings("unused")
 public class SwipeRefreshRecyclerViewFragment extends GdgRecyclerFragment {
 
     private ListFragmentSwipeRefreshLayout mSwipeRefreshLayout;
 
-    public View createSwipeRefresh(final View listFragmentView) {
+    public View createSwipeRefresh(@NonNull final View listFragmentView) {
 
         // Now create a SwipeRefreshLayout to wrap the fragment's content view
         mSwipeRefreshLayout = new ListFragmentSwipeRefreshLayout(getActivity());
@@ -128,7 +130,7 @@ public class SwipeRefreshRecyclerViewFragment extends GdgRecyclerFragment {
 
         private WeakReference<RecyclerView> recyclerView;
 
-        public ListFragmentSwipeRefreshLayout(Context context) {
+        public ListFragmentSwipeRefreshLayout(@NonNull Context context) {
             super(context);
         }
 
@@ -157,7 +159,7 @@ public class SwipeRefreshRecyclerViewFragment extends GdgRecyclerFragment {
          * Handles platform version differences, providing backwards compatible functionality where
          * needed.
          */
-        private boolean canListViewScrollUp(RecyclerView recyclerView) {
+        private boolean canListViewScrollUp(@NonNull RecyclerView recyclerView) {
             try {
                 RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
                 if (layoutManager instanceof LinearLayoutManager) {
@@ -165,8 +167,8 @@ public class SwipeRefreshRecyclerViewFragment extends GdgRecyclerFragment {
                     return position != 0;
                 } else if (layoutManager instanceof StaggeredGridLayoutManager) {
                     int[] positions = ((StaggeredGridLayoutManager) layoutManager).findFirstCompletelyVisibleItemPositions(null);
-                    for (int i = 0; i < positions.length; i++) {
-                        if (positions[i] == 0) {
+                    for (int position : positions) {
+                        if (position == 0) {
                             return false;
                         }
                     }

@@ -3,6 +3,7 @@ package org.gdg.frisbee.android.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.plus.PlusShare;
@@ -36,7 +37,8 @@ public class ParseDeepLinkActivity extends Activity {
      * @param deepLinkId The deep-link ID to parse.
      * @return The intent corresponding to the deep-link ID.
      */
-    private Intent parseDeepLinkId(String deepLinkId) {
+    @Nullable
+    private Intent parseDeepLinkId(@Nullable String deepLinkId) {
         if (deepLinkId == null) {
             return null;
         }

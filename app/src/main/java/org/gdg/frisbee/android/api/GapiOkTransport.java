@@ -16,6 +16,8 @@
 
 package org.gdg.frisbee.android.api;
 
+import android.support.annotation.NonNull;
+
 import com.google.api.client.http.HttpMethods;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.util.Preconditions;
@@ -103,8 +105,9 @@ public class GapiOkTransport extends HttpTransport {
         return Arrays.binarySearch(SUPPORTED_METHODS, method) >= 0;
     }
 
+    @NonNull
     @Override
-    protected GapiOkHttpRequest buildRequest(String method, String url) throws IOException {
+    protected GapiOkHttpRequest buildRequest(@NonNull String method, @NonNull String url) throws IOException {
         Preconditions.checkArgument(supportsMethod(method), "HTTP method %s not supported", method);
         // connection with proxy settings
         URL connUrl = new URL(url);
@@ -171,11 +174,13 @@ public class GapiOkTransport extends HttpTransport {
          setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 8080)))
          * </pre>
          */
+        @NonNull
         public Builder setProxy(Proxy proxy) {
             this.proxy = proxy;
             return this;
         }
 
+        @NonNull
         public Builder setOkHttpClient(OkHttpClient okHttpClient) {
             this.okHttpClient = okHttpClient;
             return this;
@@ -197,7 +202,8 @@ public class GapiOkTransport extends HttpTransport {
          * @param storePass password protecting the key store file
          * @since 1.14
          */
-        public Builder trustCertificatesFromJavaKeyStore(InputStream keyStoreStream, String storePass)
+        @NonNull
+        public Builder trustCertificatesFromJavaKeyStore(@NonNull InputStream keyStoreStream, @NonNull String storePass)
             throws GeneralSecurityException, IOException {
             KeyStore trustStore = SecurityUtils.getJavaKeyStore();
             SecurityUtils.loadKeyStore(trustStore, keyStoreStream, storePass);
@@ -218,6 +224,7 @@ public class GapiOkTransport extends HttpTransport {
          * @param certificateStream certificate stream
          * @since 1.14
          */
+        @NonNull
         public Builder trustCertificatesFromStream(InputStream certificateStream)
             throws GeneralSecurityException, IOException {
             KeyStore trustStore = SecurityUtils.getJavaKeyStore();
@@ -234,6 +241,7 @@ public class GapiOkTransport extends HttpTransport {
          *        or {@link SecurityUtils#loadKeyStoreFromCertificates})
          * @since 1.14
          */
+        @NonNull
         public Builder trustCertificates(KeyStore trustStore) throws GeneralSecurityException {
             SSLContext sslContext = SslUtils.getTlsSslContext();
             SslUtils.initSslContext(sslContext, trustStore, SslUtils.getPkixTrustManagerFactory());
@@ -250,6 +258,7 @@ public class GapiOkTransport extends HttpTransport {
          * environments.
          * </p>
          */
+        @NonNull
         public Builder doNotValidateCertificate() throws GeneralSecurityException {
             hostnameVerifier = SslUtils.trustAllHostnameVerifier();
             sslSocketFactory = SslUtils.trustAllSSLContext().getSocketFactory();
@@ -262,6 +271,7 @@ public class GapiOkTransport extends HttpTransport {
         }
 
         /** Sets the SSL socket factory or {@code null} for the default. */
+        @NonNull
         public Builder setSslSocketFactory(SSLSocketFactory sslSocketFactory) {
             this.sslSocketFactory = sslSocketFactory;
             return this;
@@ -273,12 +283,14 @@ public class GapiOkTransport extends HttpTransport {
         }
 
         /** Sets the host name verifier or {@code null} for the default. */
+        @NonNull
         public Builder setHostnameVerifier(HostnameVerifier hostnameVerifier) {
             this.hostnameVerifier = hostnameVerifier;
             return this;
         }
 
         /** Returns a new instance of {@link GapiOkTransport} based on the options. */
+        @NonNull
         public GapiOkTransport build() {
             return new GapiOkTransport(okHttpClient, proxy, sslSocketFactory, hostnameVerifier);
         }

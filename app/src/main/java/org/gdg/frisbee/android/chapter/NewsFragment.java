@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.chapter;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -49,6 +50,7 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
 
     private NewsAdapter mAdapter;
 
+    @NonNull
     public static NewsFragment newInstance(String plusId) {
         NewsFragment fragment = new NewsFragment();
         Bundle arguments = new Bundle();
@@ -94,6 +96,7 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
                         }
                     })
                     .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, ActivityFeed>() {
+                        @Nullable
                         @Override
                         public ActivityFeed doInBackground(String... params) {
                             ActivityFeed feed = (ActivityFeed) App.getInstance().getModelCache().get(Const.CACHE_KEY_NEWS + params[0]);
@@ -105,7 +108,7 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
                     })
                     .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, ActivityFeed>() {
                         @Override
-                        public void onPostExecute(String[] params, ActivityFeed activityFeed) {
+                        public void onPostExecute(String[] params, @Nullable ActivityFeed activityFeed) {
                             if (activityFeed != null) {
                                 mAdapter.addAll(activityFeed.getItems());
                                 setIsLoading(false);
@@ -163,8 +166,9 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
 //        }
 //    }
 
+    @NonNull
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_news, container, false);
         ButterKnife.bind(this, v);
         return createSwipeRefresh(v);
@@ -176,6 +180,7 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
             new Builder<>(String.class, ActivityFeed.class)
                     .addParameter(getArguments().getString(Const.EXTRA_PLUS_ID))
                     .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, ActivityFeed>() {
+                        @Nullable
                         @Override
                         public ActivityFeed doInBackground(String... params) {
                             return getActivityFeedSync(params[0]);
@@ -183,7 +188,7 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
                     })
                     .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, ActivityFeed>() {
                         @Override
-                        public void onPostExecute(String[] params, ActivityFeed activityFeed) {
+                        public void onPostExecute(String[] params, @Nullable ActivityFeed activityFeed) {
                             if (activityFeed != null) {
                                 mAdapter.replaceAll(activityFeed.getItems(), 0);
                                 mAdapter.notifyDataSetChanged();
@@ -199,7 +204,7 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
     }
 
     @Nullable
-    private ActivityFeed getActivityFeedSync(String param) {
+    private ActivityFeed getActivityFeedSync(@NonNull String param) {
         try {
             Plus client = App.getInstance().getPlusClient();
 

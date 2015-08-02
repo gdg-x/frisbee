@@ -121,7 +121,7 @@ public class TaggedEventSeries implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(mTag);
         dest.writeInt(mDrawerIconResId);
         dest.writeInt(mTitleResId);
@@ -134,7 +134,7 @@ public class TaggedEventSeries implements Parcelable {
         dest.writeLong(mEndDateInMillis.getMillis());
     }
 
-    private TaggedEventSeries(Parcel in) {
+    private TaggedEventSeries(@NonNull Parcel in) {
         mTag = in.readString();
         mDrawerIconResId = in.readInt();
         mTitleResId = in.readInt();
@@ -148,10 +148,12 @@ public class TaggedEventSeries implements Parcelable {
     }
 
     public static final Parcelable.Creator<TaggedEventSeries> CREATOR = new Parcelable.Creator<TaggedEventSeries>() {
-        public TaggedEventSeries createFromParcel(Parcel source) {
+        @NonNull
+        public TaggedEventSeries createFromParcel(@NonNull Parcel source) {
             return new TaggedEventSeries(source);
         }
 
+        @NonNull
         public TaggedEventSeries[] newArray(int size) {
             return new TaggedEventSeries[size];
         }

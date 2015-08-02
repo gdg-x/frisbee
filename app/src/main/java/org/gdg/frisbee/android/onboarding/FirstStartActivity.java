@@ -20,6 +20,8 @@ import android.app.backup.BackupManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -47,6 +49,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
+
 public class FirstStartActivity extends AppCompatActivity implements
         FirstStartStep1Fragment.Step1Listener, 
         FirstStartStep2Fragment.Step2Listener, 
@@ -65,11 +68,12 @@ public class FirstStartActivity extends AppCompatActivity implements
     @Bind(R.id.contentLayout)
     FrameLayout mContentLayout;
 
-    private Chapter mSelectedChapter;
     private FirstStartPageAdapter mViewPagerAdapter;
 
+    @NonNull
     private Handler mHandler = new Handler();
 
+    @Nullable
     private GoogleApiClient mGoogleApiClient = null;
 
     @Override
@@ -86,7 +90,7 @@ public class FirstStartActivity extends AppCompatActivity implements
 
         mGcm = GoogleCloudMessaging.getInstance(this);
 
-        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i2) {
                 //To change body of implemented methods use File | Settings | File Templates.
@@ -153,8 +157,7 @@ public class FirstStartActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onConfirmedChapter(Chapter chapter) {
-        mSelectedChapter = chapter;
+    public void onConfirmedChapter(@NonNull Chapter chapter) {
         PrefUtils.setHomeChapter(this, chapter);
 
         if (mGoogleApiClient == null) {
@@ -267,6 +270,7 @@ public class FirstStartActivity extends AppCompatActivity implements
             return mFragments[position];
         }
 
+        @NonNull
         @Override
         public CharSequence getPageTitle(int position) {
             return "";

@@ -18,6 +18,7 @@ package org.gdg.frisbee.android.api.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 /**
  * GDG Aachen
@@ -34,7 +35,7 @@ public class Geo implements Parcelable {
 
     }
 
-    public Geo(Parcel in) {
+    public Geo(@NonNull Parcel in) {
         lat = in.readDouble();
         lng = in.readDouble();
     }
@@ -53,16 +54,18 @@ public class Geo implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
+    public void writeToParcel(@NonNull Parcel parcel, int i) {
         parcel.writeDouble(lat);
         parcel.writeDouble(lng);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public Geo createFromParcel(Parcel in) {
+        @NonNull
+        public Geo createFromParcel(@NonNull Parcel in) {
             return new Geo(in);
         }
 
+        @NonNull
         public Geo[] newArray(int size) {
             return new Geo[size];
         }

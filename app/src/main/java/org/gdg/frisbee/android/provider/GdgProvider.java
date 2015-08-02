@@ -24,6 +24,8 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.activity.SearchActivity;
@@ -52,6 +54,7 @@ public class GdgProvider extends ContentProvider {
         uriMatcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY, SEARCH_SUGGEST);
     }
 
+    @Nullable
     private Directory mDirectory;
 
     @Override
@@ -59,46 +62,42 @@ public class GdgProvider extends ContentProvider {
         return true;
     }
 
+    @NonNull
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
 
-        if (!isSetupDone()) {
-            prepareProvider();
+        if (mDirectory == null) {
+            mDirectory = (Directory) App.getInstance().getModelCache().get(Const.CACHE_KEY_CHAPTER_LIST_HUB);
+            Timber.d("Initialized ContentProvider");
         }
 
         String searchString = uri.getLastPathSegment();
         return getSuggestions(searchString);
     }
 
-    private boolean isSetupDone() {
-        return mDirectory != null;
-    }
-
-    private void prepareProvider() {
-        mDirectory = (Directory) App.getInstance().getModelCache().get(Const.CACHE_KEY_CHAPTER_LIST_HUB);
-        Timber.d("Initialized ContentProvider");
-    }
-
-    private MatrixCursor getSuggestions(String query) {
+    @NonNull
+    private MatrixCursor getSuggestions(@NonNull String query) {
         MatrixCursor cursor = new MatrixCursor(CHAPTER_COLUMNS);
 
-        for (Chapter chapter : mDirectory.getGroups()) {
-            if (chapter.getName().toLowerCase().contains(query.toLowerCase())) {
-                cursor.addRow(new Object[] {
-                    chapter.getGplusId(),
-                    chapter.getName(),
-                    chapter.getCity() + ", " + chapter.getCountry(),
-                    SearchActivity.ACTION_FOUND,
-                    chapter.getGplusId()
-                });
+        if (mDirectory != null) {
+            for (Chapter chapter : mDirectory.getGroups()) {
+                if (chapter.getName().toLowerCase().contains(query.toLowerCase())) {
+                    cursor.addRow(new String[]{
+                        chapter.getGplusId(),
+                        chapter.getName(),
+                        chapter.getCity() + ", " + chapter.getCountry(),
+                        SearchActivity.ACTION_FOUND,
+                        chapter.getGplusId()
+                    });
+                }
             }
         }
         return cursor;
     }
 
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
         switch (uriMatcher.match(uri)) {
             case SEARCH_SUGGEST:
                 return SearchManager.SUGGEST_MIME_TYPE;
@@ -108,6 +107,7 @@ public class GdgProvider extends ContentProvider {
         }
     }
 
+    @NonNull
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
         throw new UnsupportedOperationException();

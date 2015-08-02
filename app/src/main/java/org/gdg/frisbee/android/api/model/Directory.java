@@ -18,6 +18,8 @@ package org.gdg.frisbee.android.api.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -40,7 +42,7 @@ public class Directory implements GdgResponse, Parcelable {
         groups = new ArrayList<>();
     }
 
-    public Directory(Parcel in) {
+    public Directory(@NonNull Parcel in) {
         groups = new ArrayList<>();
         in.readTypedList(groups, Chapter.CREATOR);
     }
@@ -55,20 +57,23 @@ public class Directory implements GdgResponse, Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
+    public void writeToParcel(@NonNull Parcel parcel, int i) {
         parcel.writeTypedList(groups);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public Chapter createFromParcel(Parcel in) {
+        @NonNull
+        public Chapter createFromParcel(@NonNull Parcel in) {
             return new Chapter(in);
         }
 
+        @NonNull
         public Chapter[] newArray(int size) {
             return new Chapter[size];
         }
     };
 
+    @Nullable
     public Chapter getGroupById(String chapterId) {
         for (Chapter group : groups) {
             if (group.getGplusId().equals(chapterId)) {

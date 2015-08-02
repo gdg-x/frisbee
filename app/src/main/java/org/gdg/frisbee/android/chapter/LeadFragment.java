@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
@@ -26,10 +27,11 @@ public class LeadFragment extends ListFragment {
     private LeadAnnouncementsAdapter mAdapter;
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_for_leads, container, false);
     }
 
+    @NonNull
     public static Fragment newInstance(final String gplusId) {
         Fragment fragment = new LeadFragment();
         Bundle arguments = new Bundle();
@@ -64,12 +66,13 @@ public class LeadFragment extends ListFragment {
     }
 
     private static class LeadAnnouncementsAdapter extends ArrayAdapter<LeadMessage> {
-        public LeadAnnouncementsAdapter(final Context context) {
+        public LeadAnnouncementsAdapter(@NonNull final Context context) {
             super(context, R.layout.list_announcement_item);
         }
 
+        @NonNull
         @Override
-        public View getView(final int position, View convertView, final ViewGroup parent) {
+        public View getView(final int position, @Nullable View convertView, final ViewGroup parent) {
             if (convertView == null) {
                 convertView = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.list_announcement_item, parent, false);
                 final ViewHolder viewHolder = new ViewHolder(convertView);

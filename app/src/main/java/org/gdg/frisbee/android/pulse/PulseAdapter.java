@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.pulse;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +44,7 @@ class PulseAdapter extends BaseAdapter {
 
     private int mMode;
 
-    public PulseAdapter(Context ctx) {
+    public PulseAdapter(@NonNull Context ctx) {
         mInflater = LayoutInflater.from(ctx);
         mPulse = new ArrayList<>();
     }
@@ -113,7 +114,7 @@ class PulseAdapter extends BaseAdapter {
         return rowView;
     }
 
-    public void setPulse(final int mode, Pulse pulse) {
+    public void setPulse(final int mode, @NonNull Pulse pulse) {
         mMode = mode;
         mPulse.clear();
         mPulse.addAll(pulse.entrySet());
@@ -121,7 +122,7 @@ class PulseAdapter extends BaseAdapter {
 
         Collections.sort(mPulse, new Comparator<Map.Entry<String, PulseEntry>>() {
             @Override
-            public int compare(Map.Entry<String, PulseEntry> entry, Map.Entry<String, PulseEntry> entry2) {
+            public int compare(@NonNull Map.Entry<String, PulseEntry> entry, @NonNull Map.Entry<String, PulseEntry> entry2) {
                 PulseEntry value = entry.getValue();
                 PulseEntry value2 = entry2.getValue();
 

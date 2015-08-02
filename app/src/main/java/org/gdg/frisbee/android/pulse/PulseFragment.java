@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.pulse;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,11 +28,11 @@ import android.widget.ListView;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.api.model.Pulse;
 import org.gdg.frisbee.android.api.model.PulseEntry;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.common.GdgListFragment;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
@@ -50,10 +51,11 @@ public class PulseFragment extends GdgListFragment {
     private static final String GLOBAL = "Global";
 
     private int mMode;
-    private String mTarget;
+    @NonNull private String mTarget = GLOBAL;
     private PulseAdapter mAdapter;
     private Callbacks mListener;
 
+    @NonNull
     public static PulseFragment newInstance(int mode, String target) {
         PulseFragment fragment = new PulseFragment();
         Bundle arguments = new Bundle();
@@ -78,7 +80,7 @@ public class PulseFragment extends GdgListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mTarget = getArguments().getString(ARG_TARGET);
+        mTarget = getArguments().getString(ARG_TARGET, GLOBAL);
         mMode = getArguments().getInt(ARG_MODE);
 
         mAdapter = new PulseAdapter(getActivity());
@@ -106,7 +108,7 @@ public class PulseFragment extends GdgListFragment {
         if (mTarget.equals(GLOBAL)) {
             App.getInstance().getGroupDirectory().getPulse(new Callback<Pulse>() {
                 @Override
-                public void success(final Pulse pulse, retrofit.client.Response response) {
+                public void success(@NonNull final Pulse pulse, retrofit.client.Response response) {
                     App.getInstance().getModelCache().putAsync(
                             Const.CACHE_KEY_PULSE + mTarget.toLowerCase(),
                             pulse,
@@ -132,7 +134,7 @@ public class PulseFragment extends GdgListFragment {
         } else {
             App.getInstance().getGroupDirectory().getCountryPulse(mTarget, new Callback<Pulse>() {
                 @Override
-                public void success(final Pulse pulse, retrofit.client.Response response) {
+                public void success(@NonNull final Pulse pulse, retrofit.client.Response response) {
                     App.getInstance().getModelCache().putAsync(
                             Const.CACHE_KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
                             pulse,
@@ -158,14 +160,14 @@ public class PulseFragment extends GdgListFragment {
         }
     }
 
-    private void initAdapter(Pulse pulse) {
+    private void initAdapter(@NonNull Pulse pulse) {
         mAdapter.setPulse(mMode, pulse);
         mAdapter.notifyDataSetChanged();
         setIsLoading(false);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_pulse, container, false);
         ButterKnife.bind(this, v);
         return v;

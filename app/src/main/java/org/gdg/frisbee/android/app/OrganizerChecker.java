@@ -1,6 +1,8 @@
 package org.gdg.frisbee.android.app;
 
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
@@ -16,6 +18,7 @@ import retrofit.RetrofitError;
 public class OrganizerChecker {
     private boolean mIsOrganizer = false;
     private long mLastOrganizerCheck = 0;
+    @Nullable
     private String mCheckedId = null;
     private SharedPreferences mPreferences;
 
@@ -34,6 +37,7 @@ public class OrganizerChecker {
         return mLastOrganizerCheck;
     }
 
+    @Nullable
     public String getLastOrganizerCheckId() {
         return mCheckedId;
     }
@@ -42,7 +46,7 @@ public class OrganizerChecker {
         return mIsOrganizer;
     }
 
-    public void checkOrganizer(GoogleApiClient apiClient, final Callbacks responseHandler) {
+    public void checkOrganizer(@NonNull GoogleApiClient apiClient, @NonNull final Callbacks responseHandler) {
         Person plusPerson = null;
         if (apiClient.isConnected() && PrefUtils.isSignedIn(apiClient.getContext())) {
             plusPerson = Plus.PeopleApi.getCurrentPerson(apiClient);
@@ -55,7 +59,7 @@ public class OrganizerChecker {
             mIsOrganizer = false;
             App.getInstance().getGdgXHub().checkOrganizer(currentId, new Callback<OrganizerCheckResponse>() {
                 @Override
-                public void success(OrganizerCheckResponse organizerCheckResponse, retrofit.client.Response response) {
+                public void success(@NonNull OrganizerCheckResponse organizerCheckResponse, retrofit.client.Response response) {
                     mLastOrganizerCheck = System.currentTimeMillis();
                     mCheckedId = currentId;
                     mIsOrganizer = organizerCheckResponse.getChapters().size() > 0;

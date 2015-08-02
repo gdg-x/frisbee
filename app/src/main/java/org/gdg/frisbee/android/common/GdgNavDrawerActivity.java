@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.NavigationView;
@@ -66,6 +67,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     private static final String EXTRA_SELECTED_DRAWER_ITEM_ID = "SELECTED_DRAWER_ITEM_ID";
 
     protected ActionBarDrawerToggle mDrawerToggle;
+    @Nullable
     protected String mStoredHomeChapterId;
     @Bind(R.id.drawer)
     DrawerLayout mDrawerLayout;
@@ -76,6 +78,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     @Bind(R.id.nav_view)
     NavigationView mNavigationView;
 
+    @Nullable
     private MenuItem drawerItemToNavigateAfterSignIn = null;
     private static final int GROUP_ID = 1;
     private static final int GAMES_GROUP_ID = 2;
@@ -121,7 +124,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
     }
 
-    private void setupDrawerContent(NavigationView navigationView) {
+    private void setupDrawerContent(@NonNull NavigationView navigationView) {
 
         Menu menu = navigationView.getMenu();
         menu.add(GROUP_ID, Const.DRAWER_HOME, Menu.NONE, R.string.home_gdg).setIcon(R.drawable.ic_drawer_home_gdg);
@@ -156,7 +159,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                         onDrawerItemClick(menuItem);
                         mDrawerLayout.closeDrawers();
                         return true;
@@ -164,7 +167,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 });
     }
 
-    private void onDrawerItemClick(final MenuItem item) {
+    private void onDrawerItemClick(@NonNull final MenuItem item) {
 
         if (PrefUtils.shouldOpenDrawerOnStart(GdgNavDrawerActivity.this)) {
             PrefUtils.setShouldNotOpenDrawerOnStart(GdgNavDrawerActivity.this);
@@ -237,7 +240,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 .show();
     }
 
-    public void onDrawerSpecialItemClick(MenuItem item, Bundle data) {
+    public void onDrawerSpecialItemClick(@NonNull MenuItem item, @NonNull Bundle data) {
         // If title is null them we are not in a SpecialEventActivity
         if (getSupportActionBar() != null && getSupportActionBar().getTitle() != null
                 && getSupportActionBar().getTitle().equals(item.getTitle())) {
@@ -259,7 +262,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         }
     }
 
-    private void navigateTo(Class<? extends GdgActivity> activityClass, Bundle additional) {
+    private void navigateTo(Class<? extends GdgActivity> activityClass, @Nullable Bundle additional) {
         if (this.getClass().equals(activityClass)
                 && !(this instanceof TaggedEventSeriesActivity)) {
             return;
@@ -358,6 +361,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             new Builder<>(String.class, Person.class)
                     .addParameter(homeChapterId)
                     .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person>() {
+                        @Nullable
                         @Override
                         public Person doInBackground(String... params) {
 
@@ -366,7 +370,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                     })
                     .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person>() {
                         @Override
-                        public void onPostExecute(String[] params, Person person) {
+                        public void onPostExecute(String[] params, @Nullable Person person) {
                             if (person != null) {
                                 mStoredHomeChapterId = homeChapterId;
                                 if (person.getCover() != null) {
@@ -380,21 +384,22 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         }
     }
 
+    @Nullable
     protected String getCurrentHomeChapterId() {
         return PrefUtils.getHomeChapterId(this);
     }
 
-    protected boolean isHomeChapterOutdated(final String currentHomeChapterId) {
+    protected boolean isHomeChapterOutdated(@Nullable final String currentHomeChapterId) {
         return currentHomeChapterId != null && (mStoredHomeChapterId == null || !mStoredHomeChapterId.equals(currentHomeChapterId));
     }
 
     @Nullable
-    public static Person getPersonSync(final String gplusId) {
+    public static Person getPersonSync(@NonNull final String gplusId) {
         return getPersonSync(App.getInstance().getPlusClient(), gplusId);
     }
 
     @Nullable
-    public static Person getPersonSync(final Plus plusClient, final String gplusId) {
+    public static Person getPersonSync(@NonNull final Plus plusClient, @NonNull final String gplusId) {
 
         final String cacheUrl = Const.CACHE_KEY_PERSON + gplusId;
         Object cachedPerson = App.getInstance().getModelCache().get(cacheUrl);

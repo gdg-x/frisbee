@@ -2,6 +2,8 @@ package org.gdg.frisbee.android.gde;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -44,6 +46,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
     @Bind(R.id.content_frame)
     FrameLayout mContentLayout;
 
+    @NonNull
     private Handler mHandler = new Handler();
 
     private GdeCategoryAdapter mViewPagerAdapter;
@@ -78,7 +81,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
 
         App.getInstance().getGdeDirectory().getDirectory(new Callback<GdeList>() {
             @Override
-            public void success(final GdeList directory, retrofit.client.Response response) {
+            public void success(@NonNull final GdeList directory, retrofit.client.Response response) {
                 App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_GDE_LIST,
                         directory,
                         DateTime.now().plusDays(4),
@@ -104,7 +107,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
         });
     }
 
-    private void addGdes(final GdeList directory) {
+    private void addGdes(@NonNull final GdeList directory) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -127,6 +130,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
         });
     }
 
+    @Nullable
     protected String getTrackedViewName() {
         return null;
     }
@@ -140,7 +144,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
             mGdeMap = new HashMap<>();
         }
 
-        public void addMap(Map<String, GdeList> collection) {
+        public void addMap(@NonNull Map<String, GdeList> collection) {
             mGdeMap.putAll(collection);
         }
 

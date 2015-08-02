@@ -18,6 +18,8 @@ package org.gdg.frisbee.android.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,7 +33,7 @@ import org.gdg.frisbee.android.common.BaseFragment;
 import butterknife.ButterKnife;
 import butterknife.Bind;
 
-
+@SuppressWarnings("unused")
 public class GdgRecyclerFragment extends BaseFragment {
 
     private final Handler mHandler = new Handler();
@@ -74,8 +76,9 @@ public class GdgRecyclerFragment extends BaseFragment {
      * behavior of ListFragment.  In particular, this is currently the only
      * way to have the built-in indeterminant progress state be shown.
      */
+    @NonNull
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_recycler_view, container, false);
         ButterKnife.bind(this, v);
         return v;
@@ -105,7 +108,7 @@ public class GdgRecyclerFragment extends BaseFragment {
     /**
      * Provide the cursor for the list view.
      */
-    public void setRecyclerAdapter(RecyclerView.Adapter adapter) {
+    public void setRecyclerAdapter(@NonNull RecyclerView.Adapter adapter) {
         boolean hadAdapter = mAdapter != null;
         mAdapter = adapter;
         if (mList != null) {
@@ -113,7 +116,7 @@ public class GdgRecyclerFragment extends BaseFragment {
             if (!mListShown && !hadAdapter) {
                 // The list was hidden, and previously didn't have an
                 // adapter.  It is now time to show it.
-                setListShown(true, getView().getWindowToken() != null);
+                setListShown(true, getView() != null && getView().getWindowToken() != null);
             }
         }
         updateEmpty();
@@ -267,6 +270,7 @@ public class GdgRecyclerFragment extends BaseFragment {
     /**
      * Get the ListAdapter associated with this activity's ListView.
      */
+    @Nullable
     public RecyclerView.Adapter getAdapter() {
         return mAdapter;
     }

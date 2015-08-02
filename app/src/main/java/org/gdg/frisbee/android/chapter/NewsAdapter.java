@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.chapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -75,14 +76,14 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         setHasStableIds(true);
     }
 
-    public void addAll(Collection<Activity> items) {
+    public void addAll(@NonNull Collection<Activity> items) {
         for (Activity a : items) {
             mActivities.add(new Item(a));
         }
         notifyDataSetChanged();
     }
 
-    public void replaceAll(Collection<Activity> items, int start) {
+    public void replaceAll(@NonNull Collection<Activity> items, int start) {
         for (Activity a : items) {
 
             if (start < mActivities.size()) {
@@ -165,7 +166,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         return 0;
     }
 
-    public void updatePlusOne(View v) {
+    public void updatePlusOne(@Nullable View v) {
         if (v != null && v.getTag() != null) {
             ViewHolder viewHolder = (ViewHolder) v.getTag();
 
@@ -176,6 +177,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         }
     }
 
+    @NonNull
     @Override
     public NewsAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = mInflater.inflate(R.layout.news_item_base, viewGroup, false);
@@ -188,7 +190,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int i) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int i) {
 
         Item item = getItemInternal(i);
         final Activity activity = item.getActivity();
@@ -253,7 +255,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 //        }
     }
 
-    private View createAttachmentView(ViewHolder mViewHolder, ViewGroup container, int layout, int type) {
+    private View createAttachmentView(@NonNull ViewHolder mViewHolder, @NonNull ViewGroup container, int layout, int type) {
         View attachmentView;
 
         if (container.getChildCount() == 0) {
@@ -295,7 +297,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         return attachmentView;
     }
 
-    private void populateArticle(ViewHolder mViewHolder, ViewGroup container, final Activity.PlusObject.Attachments attachment) {
+    private void populateArticle(@NonNull ViewHolder mViewHolder,
+                                 @NonNull ViewGroup container,
+                                 @Nullable final Activity.PlusObject.Attachments attachment) {
         if (attachment == null) {
             return;
         }
@@ -336,7 +340,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     }
 
     @Nullable
-    private String getAttachmentImageUrl(final Activity.PlusObject.Attachments attachment) {
+    private String getAttachmentImageUrl(@NonNull final Activity.PlusObject.Attachments attachment) {
         if (attachment.getFullImage() != null) {
             return attachment.getFullImage().getUrl();
         } else if (attachment.getImage() != null) {
@@ -345,7 +349,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         return null;
     }
 
-    private void populateVideo(ViewHolder mViewHolder, ViewGroup container, final Activity.PlusObject.Attachments attachment) {
+    private void populateVideo(@NonNull ViewHolder mViewHolder,
+                               @NonNull ViewGroup container,
+                               @Nullable final Activity.PlusObject.Attachments attachment) {
         if (attachment == null) {
             return;
         }
@@ -375,18 +381,21 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                             mContext.startActivity(viewUrlIntent);
                         }
                     }
-                } catch (UnsupportedEncodingException | MalformedURLException e) {
+                } catch (@NonNull UnsupportedEncodingException | MalformedURLException e) {
                     e.printStackTrace();
                 }
             }
         });
     }
 
-    private String getVideoIdFrom(final Activity.PlusObject.Attachments attachment) throws UnsupportedEncodingException, MalformedURLException {
+    private String getVideoIdFrom(@NonNull final Activity.PlusObject.Attachments attachment)
+            throws UnsupportedEncodingException, MalformedURLException {
         return Utils.splitQuery(new URL(attachment.getUrl())).get("v");
     }
 
-    private void populatePhoto(ViewHolder mViewHolder, ViewGroup container, Activity.PlusObject.Attachments attachment) {
+    private void populatePhoto(@NonNull ViewHolder mViewHolder,
+                               @NonNull ViewGroup container,
+                               @Nullable Activity.PlusObject.Attachments attachment) {
         if (attachment == null) {
             return;
         }
@@ -406,7 +415,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     }
 
-    private void populateAlbum(ViewHolder mViewHolder, ViewGroup container, Activity.PlusObject.Attachments attachment) {
+    private void populateAlbum(@NonNull ViewHolder mViewHolder, @NonNull ViewGroup container, @Nullable Activity.PlusObject.Attachments attachment) {
         if (attachment == null) {
             return;
         }
@@ -430,7 +439,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         }
     }
 
-    private void populateEvent(ViewHolder mViewHolder, ViewGroup container, final Activity.PlusObject.Attachments attachment) {
+    private void populateEvent(@NonNull ViewHolder mViewHolder,
+                               @NonNull ViewGroup container,
+                               @NonNull final Activity.PlusObject.Attachments attachment) {
         createAttachmentView(mViewHolder, container, R.layout.news_item_event, 5);
 
         TextView title = mViewHolder.attachmentTitle;
@@ -462,11 +473,11 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     }
 
-    private void populatePost(Activity item, TextView content) {
+    private void populatePost(@NonNull Activity item, @NonNull TextView content) {
         content.setText(fromHtml(item.getObject().getContent()));
     }
 
-    private void populateShare(Activity item, ViewHolder holder) {
+    private void populateShare(@NonNull Activity item, @NonNull ViewHolder holder) {
         String originallyShared = "";
 
         if (item.getObject().getActor() != null && mContext != null) {
@@ -564,7 +575,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         ImageView pic3;
         String url;
 
-        private ViewHolder(View itemView) {
+        private ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }

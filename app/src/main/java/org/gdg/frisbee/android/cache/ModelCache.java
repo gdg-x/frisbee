@@ -19,6 +19,8 @@ package org.gdg.frisbee.android.cache;
 import android.os.AsyncTask;
 import android.os.Looper;
 import android.os.Process;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.util.LruCache;
 
 import com.google.api.client.json.JsonFactory;
@@ -92,6 +94,7 @@ public class ModelCache {
             mMemoryCacheMaxSize = DEFAULT_MEM_CACHE_MAX_SIZE;
         }
 
+        @NonNull
         public ModelCache build() {
             final ModelCache cache = new ModelCache();
 
@@ -102,6 +105,7 @@ public class ModelCache {
             if (isValidOptionsForDiskCache()) {
                 new AsyncTask<Void, Void, DiskLruCache>() {
 
+                    @Nullable
                     @Override
                     protected DiskLruCache doInBackground(Void... params) {
                         try {
@@ -130,6 +134,7 @@ public class ModelCache {
          *
          * @return This Builder object to allow for chaining of calls to set methods.
          */
+        @NonNull
         public Builder setDiskCacheEnabled(boolean enabled) {
             mDiskCacheEnabled = enabled;
             return this;
@@ -140,6 +145,7 @@ public class ModelCache {
          *
          * @return This Builder object to allow for chaining of calls to set methods.
          */
+        @NonNull
         public Builder setDiskCacheLocation(File location) {
             mDiskCacheLocation = location;
             return this;
@@ -151,6 +157,7 @@ public class ModelCache {
          *
          * @return This Builder object to allow for chaining of calls to set methods.
          */
+        @NonNull
         public Builder setDiskCacheMaxSize(long maxSize) {
             mDiskCacheMaxSize = maxSize;
             return this;
@@ -161,6 +168,7 @@ public class ModelCache {
          *
          * @return This Builder object to allow for chaining of calls to set methods.
          */
+        @NonNull
         public Builder setMemoryCacheEnabled(boolean enabled) {
             mMemoryCacheEnabled = enabled;
             return this;
@@ -172,6 +180,7 @@ public class ModelCache {
          *
          * @return This Builder object to allow for chaining of calls to set methods.
          */
+        @NonNull
         public Builder setMemoryCacheMaxSize(int size) {
             mMemoryCacheMaxSize = size;
             return this;
@@ -204,6 +213,7 @@ public class ModelCache {
 
     private LruCache<String, CacheItem> mMemoryCache;
 
+    @Nullable
     private DiskLruCache mDiskCache;
 
     // Variables which are only used when the Disk Cache is enabled
@@ -211,24 +221,24 @@ public class ModelCache {
 
     private ScheduledThreadPoolExecutor mDiskCacheFlusherExecutor;
 
+    @Nullable
     private DiskCacheFlushRunnable mDiskCacheFlusherRunnable;
 
     // Transient
     private ScheduledFuture<?> mDiskCacheFuture;
 
     ModelCache() {
-
         mGson = new GsonBuilder()
                 .registerTypeAdapter(DateTime.class, new DateTimeDeserializer())
                 .registerTypeAdapter(DateTime.class, new DateTimeSerializer())
                 .create();
     }
 
-    public boolean contains(String url) {
+    public boolean contains(@NonNull String url) {
         return containsInMemoryCache(url) || containsInDiskCache(url);
     }
 
-    public boolean containsInDiskCache(String url) {
+    public boolean containsInDiskCache(@NonNull String url) {
         if (null != mDiskCache) {
             checkNotOnMainThread();
 
@@ -242,7 +252,7 @@ public class ModelCache {
         return false;
     }
 
-    public boolean containsInMemoryCache(String url) {
+    public boolean containsInMemoryCache(@NonNull String url) {
         return null != mMemoryCache && null != mMemoryCache.get(url);
     }
 
@@ -254,11 +264,13 @@ public class ModelCache {
         new GetAsyncTask(ModelCache.this, url, checkExpiration, mListener).execute();
     }
 
-    public Object get(String url) {
+    @Nullable
+    public Object get(@NonNull String url) {
         return get(url, true);
     }
 
-    public Object get(String url, boolean checkExpiration) {
+    @Nullable
+    public Object get(@NonNull String url, boolean checkExpiration) {
         Timber.d(String.format("get(%s)", url));
         CacheItem result;
 
@@ -277,7 +289,8 @@ public class ModelCache {
         }
     }
 
-    public CacheItem getFromDiskCache(final String url, boolean checkExpiration) {
+    @Nullable
+    public CacheItem getFromDiskCache(@NonNull final String url, boolean checkExpiration) {
         CacheItem result = null;
 
         if (null != mDiskCache) {
@@ -317,7 +330,8 @@ public class ModelCache {
         return result;
     }
 
-    public CacheItem getFromMemoryCache(final String url, boolean checkExpiration) {
+    @Nullable
+    public CacheItem getFromMemoryCache(@NonNull final String url, boolean checkExpiration) {
         CacheItem result = null;
 
         if (null != mMemoryCache) {
@@ -343,7 +357,8 @@ public class ModelCache {
         return null != mMemoryCache;
     }
 
-    public CacheItem put(final String url, final Object obj) {
+    @Nullable
+    public CacheItem put(@NonNull final String url, final Object obj) {
         return put(url, obj, new DateTime(0));
     }
 
@@ -355,7 +370,8 @@ public class ModelCache {
         new PutAsyncTask(ModelCache.this, url, obj, expiresAt, onDoneListener).execute();
     }
 
-    public CacheItem put(final String url, final Object obj, DateTime expiresAt) {
+    @Nullable
+    public CacheItem put(@NonNull final String url, @Nullable final Object obj, @NonNull DateTime expiresAt) {
 
         if (obj == null) {
             return null;
@@ -390,7 +406,7 @@ public class ModelCache {
         return d;
     }
 
-    public void remove(String url) {
+    public void remove(@NonNull String url) {
         if (null != mMemoryCache) {
             mMemoryCache.remove(url);
         }
@@ -407,9 +423,10 @@ public class ModelCache {
         }
     }
 
-    public void removeAsync(final String url) {
+    public void removeAsync(@NonNull final String url) {
         new AsyncTask<Void, Void, Void>() {
 
+            @Nullable
             @Override
             protected Void doInBackground(Void... voids) {
                 ModelCache.this.remove(url);
@@ -418,7 +435,7 @@ public class ModelCache {
         }.execute();
     }
 
-    synchronized void setDiskCache(DiskLruCache diskCache) {
+    synchronized void setDiskCache(@Nullable DiskLruCache diskCache) {
         mDiskCache = diskCache;
 
         if (null != diskCache) {
@@ -455,7 +472,7 @@ public class ModelCache {
                         TimeUnit.SECONDS);
     }
 
-    private void writeExpirationToDisk(OutputStream os, DateTime expiresAt) throws IOException {
+    private void writeExpirationToDisk(OutputStream os, @NonNull DateTime expiresAt) throws IOException {
 
         DataOutputStream out = new DataOutputStream(os);
 
@@ -464,7 +481,7 @@ public class ModelCache {
         out.close();
     }
 
-    private void writeValueToDisk(OutputStream os, Object o) throws IOException {
+    private void writeValueToDisk(@NonNull OutputStream os, @NonNull Object o) throws IOException {
 
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(os));
 
@@ -483,14 +500,14 @@ public class ModelCache {
     }
 
 
-    private long readExpirationFromDisk(InputStream is) throws IOException {
+    private long readExpirationFromDisk(@NonNull InputStream is) throws IOException {
         DataInputStream din = new DataInputStream(is);
         long expiration = din.readLong();
         din.close();
         return expiration;
     }
 
-    private Object readValueFromDisk(InputStream is) throws IOException {
+    private Object readValueFromDisk(@NonNull InputStream is) throws IOException {
         BufferedReader fss = new BufferedReader(new InputStreamReader(is, "UTF-8"));
         String className = fss.readLine();
 
@@ -523,7 +540,7 @@ public class ModelCache {
         }
     }
 
-    private static String transformUrlForDiskCacheKey(String url) {
+    private static String transformUrlForDiskCacheKey(@NonNull String url) {
         try {
             // Create MD5 Hash
             MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
@@ -622,6 +639,7 @@ public class ModelCache {
             this.listener = listener;
         }
 
+        @Nullable
         @Override
         protected Object doInBackground(Void... voids) {
             if (modelCache != null) {
@@ -632,7 +650,7 @@ public class ModelCache {
         }
 
         @Override
-        protected void onPostExecute(Object o) {
+        protected void onPostExecute(@Nullable Object o) {
             if (listener != null) {
                 if (o != null) {
                     listener.onGet(o);
@@ -659,6 +677,7 @@ public class ModelCache {
             this.onDoneListener = onDoneListener;
         }
 
+        @Nullable
         @Override
         protected Object doInBackground(Void... voids) {
             if (modelCache != null) {

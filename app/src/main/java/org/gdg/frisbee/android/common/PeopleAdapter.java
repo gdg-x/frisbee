@@ -2,6 +2,7 @@ package org.gdg.frisbee.android.common;
 
 import android.content.Context;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -28,11 +29,11 @@ public class PeopleAdapter extends ArrayAdapter<GdgPerson> {
     @DrawableRes private int placeholder;
     private SparseBooleanArray mConsumedMap;
 
-    public PeopleAdapter(Context ctx) {
+    public PeopleAdapter(@NonNull Context ctx) {
         this(ctx, 0);
     }
 
-    public PeopleAdapter(Context ctx, @DrawableRes int placeholder) {
+    public PeopleAdapter(@NonNull Context ctx, @DrawableRes int placeholder) {
         super(ctx, R.layout.list_person_item);
         this.placeholder = placeholder;
         mConsumedMap = new SparseBooleanArray();

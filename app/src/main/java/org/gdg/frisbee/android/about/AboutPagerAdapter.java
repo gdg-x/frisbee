@@ -1,6 +1,7 @@
 package org.gdg.frisbee.android.about;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -25,6 +26,7 @@ class AboutPagerAdapter extends FragmentStatePagerAdapter {
         return mContext.getResources().getStringArray(R.array.about_tabs).length;
     }
 
+    @Nullable
     @Override
     public Fragment getItem(int position) {
         switch (position) {

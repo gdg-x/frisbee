@@ -18,6 +18,7 @@ package org.gdg.frisbee.android.chapter;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
@@ -36,6 +37,7 @@ public class YoutubeActivity extends GdgActivity implements YouTubePlayer.OnInit
     private static final int PORTRAIT_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;
     public static final String EXTRA_VIDEO_ID = "video_id";
 
+    @NonNull
     protected String getTrackedViewName() {
         return "YouTube";
     }
@@ -55,7 +57,7 @@ public class YoutubeActivity extends GdgActivity implements YouTubePlayer.OnInit
     }
 
     @Override
-    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean wasRestored) {
+    public void onInitializationSuccess(YouTubePlayer.Provider provider, @NonNull YouTubePlayer youTubePlayer, boolean wasRestored) {
 
         youTubePlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
         youTubePlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_ALWAYS_FULLSCREEN_IN_LANDSCAPE);

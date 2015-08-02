@@ -1,5 +1,6 @@
 package org.gdg.frisbee.android.api.model;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 
 import org.gdg.frisbee.android.R;
@@ -21,10 +22,12 @@ public class LeadMessage {
         mLinkUrl = linkUrl;
     }
 
+    @NonNull
     public static LeadMessage newMessage(final String title, final String details) {
         return new LeadMessage(Type.message, title, details);
     }
 
+    @NonNull
     public static LeadMessage newResource(final String title, final String details, final String linkUrl) {
         return new LeadMessage(Type.resource, title, details, linkUrl);
     }

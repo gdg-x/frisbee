@@ -14,6 +14,9 @@
 
 package org.gdg.frisbee.android.api;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import com.google.api.client.http.HttpStatusCodes;
 import com.google.api.client.http.LowLevelHttpResponse;
 
@@ -26,13 +29,14 @@ import java.util.Map;
 
 public class GapiOkResponse extends LowLevelHttpResponse {
 
+    @NonNull
     private final HttpURLConnection connection;
     private final int responseCode;
     private final String responseMessage;
     private final ArrayList<String> headerNames = new ArrayList<>();
     private final ArrayList<String> headerValues = new ArrayList<>();
 
-    GapiOkResponse(HttpURLConnection connection) throws IOException {
+    GapiOkResponse(@NonNull HttpURLConnection connection) throws IOException {
         this.connection = connection;
         int responseCode = connection.getResponseCode();
         this.responseCode = responseCode == -1 ? 0 : responseCode;
@@ -85,6 +89,7 @@ public class GapiOkResponse extends LowLevelHttpResponse {
         return responseMessage;
     }
 
+    @Nullable
     @Override
     public String getStatusLine() {
         String result = connection.getHeaderField(0);
