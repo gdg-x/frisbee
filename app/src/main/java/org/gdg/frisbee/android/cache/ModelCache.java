@@ -42,7 +42,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.lang.ref.WeakReference;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -624,22 +623,22 @@ public class ModelCache {
 
     public static class GetAsyncTask extends AsyncTask<Void, Void, Object> {
 
-        private WeakReference<ModelCache> modelCacheRef;
-        private WeakReference<CacheListener> listenerRef;
+        private ModelCache modelCache;
+        private CacheListener listener;
         private String key;
         private boolean checkExpiration;
 
         public GetAsyncTask(ModelCache modelCache, String key, boolean checkExpiration, CacheListener listener) {
-            this.modelCacheRef = new WeakReference<>(modelCache);
+            this.modelCache = modelCache;
             this.key = key;
             this.checkExpiration = checkExpiration;
-            this.listenerRef = new WeakReference<>(listener);
+            this.listener = listener;
         }
 
         @Override
         protected Object doInBackground(Void... voids) {
-            if (modelCacheRef.get() != null) {
-                return modelCacheRef.get().get(key, checkExpiration);
+            if (modelCache != null) {
+                return modelCache.get(key, checkExpiration);
             } else {
                 return null;
             }
@@ -647,7 +646,6 @@ public class ModelCache {
 
         @Override
         protected void onPostExecute(Object o) {
-            CacheListener listener = listenerRef.get();
             if (listener != null) {
                 if (o != null) {
                     listener.onGet(o);
@@ -660,24 +658,24 @@ public class ModelCache {
 
     public static class PutAsyncTask extends AsyncTask<Void, Void, Object> {
 
-        private WeakReference<ModelCache> modelCacheRef;
-        private WeakReference<CachePutListener> onDoneListenerRef;
+        private ModelCache modelCache;
+        private CachePutListener onDoneListener;
         private String key;
         private Object obj;
         private DateTime expiresAt;
 
         public PutAsyncTask(ModelCache modelCache, String key, Object obj, DateTime expiresAt, CachePutListener onDoneListener) {
-            this.modelCacheRef = new WeakReference<>(modelCache);
+            this.modelCache = modelCache;
             this.key = key;
             this.obj = obj;
             this.expiresAt = expiresAt;
-            this.onDoneListenerRef = new WeakReference<>(onDoneListener);
+            this.onDoneListener = onDoneListener;
         }
 
         @Override
         protected Object doInBackground(Void... voids) {
-            if (modelCacheRef.get() != null) {
-                return modelCacheRef.get().put(key, obj, expiresAt);
+            if (modelCache != null) {
+                return modelCache.put(key, obj, expiresAt);
             } else {
                 return null;
             }
@@ -685,7 +683,6 @@ public class ModelCache {
 
         @Override
         protected void onPostExecute(Object o) {
-            CachePutListener onDoneListener = onDoneListenerRef.get();
             if (onDoneListener != null) {
                 onDoneListener.onPutIntoCache();
             }
