@@ -24,6 +24,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -41,7 +42,7 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
+import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.view.BitmapBorderTransformation;
 import org.gdg.frisbee.android.view.DividerItemDecoration;
@@ -56,7 +57,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import timber.log.Timber;
 
-public class ArrowTaggedActivity extends GdgNavDrawerActivity {
+public class ArrowTaggedActivity extends GdgActivity {
 
     public static final String ID_SEPARATOR_FOR_SPLIT = "\\|";
     public static final String ID_SPLIT_CHAR = "|";
@@ -77,7 +78,7 @@ public class ArrowTaggedActivity extends GdgNavDrawerActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arrow_tagged);
-
+        getActionBarToolbar().setNavigationIcon(R.drawable.ic_up);
         adapter = new OrganizerAdapter();
 
         if (!PrefUtils.isSignedIn(this)) {
@@ -87,7 +88,15 @@ public class ArrowTaggedActivity extends GdgNavDrawerActivity {
         taggedList.setLayoutManager(new LinearLayoutManager(this));
         taggedList.addItemDecoration(new DividerItemDecoration(this, null));
         taggedList.setAdapter(adapter);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
