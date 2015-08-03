@@ -53,8 +53,6 @@ class EventAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private ArrayList<Item> mEvents;
     private final int mDefaultIcon;
-    private boolean mFirstPastEvent = true;
-    private static final DateTime DATETIME_NOW = DateTime.now();
 
     public EventAdapter(Context ctx) {
         this(ctx, R.drawable.icon);
@@ -101,6 +99,7 @@ class EventAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View convertView, ViewGroup viewGroup) {
+        
         ViewHolder holder;
         if (convertView != null && convertView.getTag() != null) {
             holder = (ViewHolder) convertView.getTag();
@@ -128,7 +127,7 @@ class EventAdapter extends BaseAdapter {
         
         holder.eventLocation.setText(event.getLocation());
 
-        if (event.getStart().isBefore(DATETIME_NOW)) {
+        if (event.getStart().isBefore(DateTime.now())) {
             holder.past.setVisibility(View.VISIBLE);
         } else {
             holder.past.setVisibility(View.GONE);

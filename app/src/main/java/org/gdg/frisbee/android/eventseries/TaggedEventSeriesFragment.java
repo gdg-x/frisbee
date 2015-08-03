@@ -47,15 +47,15 @@ import retrofit.RetrofitError;
 public class TaggedEventSeriesFragment extends EventListFragment {
 
     private static final String ARGS_ADD_DESCRIPTION_AS_HEADER = "add_description";
-
+    
     private String mCacheKey = "";
     private TaggedEventSeries mTaggedEventSeries;
     private Comparator<EventAdapter.Item> mLocationComparator = new TaggedEventDistanceComparator();
     private Comparator<EventAdapter.Item> mCurrentComparator = mLocationComparator;
     private Comparator<EventAdapter.Item> mDateComparator = new EventDateComparator();
 
-    public static TaggedEventSeriesFragment newInstance(String cacheKey,
-                                                        TaggedEventSeries taggedEventSeries,
+    public static TaggedEventSeriesFragment newInstance(String cacheKey, 
+                                                        TaggedEventSeries taggedEventSeries, 
                                                         boolean addDescriptionAsHeader) {
         TaggedEventSeriesFragment frag = new TaggedEventSeriesFragment();
         Bundle args = new Bundle();
@@ -108,7 +108,6 @@ public class TaggedEventSeriesFragment extends EventListFragment {
         return new EventAdapter(getActivity(), mTaggedEventSeries.getDefaultIconResId());
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     void fetchEvents() {
         setIsLoading(true);
@@ -118,19 +117,21 @@ public class TaggedEventSeriesFragment extends EventListFragment {
             @Override
             public void success(final PagedList<TaggedEvent> taggedEventPagedList, final retrofit.client.Response response) {
                 mEvents.addAll(taggedEventPagedList.getItems());
-                App.getInstance().getModelCache().putAsync(mCacheKey,
-                        mEvents,
-                        DateTime.now().plusHours(2),
+
+                
+                App.getInstance().getModelCache().putAsync(mCacheKey, 
+                        mEvents, 
+                        DateTime.now().plusHours(2), 
                         new ModelCache.CachePutListener() {
                             @Override
                             public void onPutIntoCache() {
-                                splitEventsAndAddToAdapter(mEvents);
+                                mAdapter.addAll(mEvents);
                                 sortEvents();
                                 setIsLoading(false);
                             }
                         });
             }
-
+            
             @Override
             public void failure(final RetrofitError error) {
                 onError(error);
@@ -145,7 +146,8 @@ public class TaggedEventSeriesFragment extends EventListFragment {
                 @Override
                 public void onGet(Object item) {
                     ArrayList<TaggedEvent> events = (ArrayList<TaggedEvent>) item;
-                    splitEventsAndAddToAdapter(events);
+
+                    mAdapter.addAll(events);
                     sortEvents();
                     setIsLoading(false);
                     if (isAdded()) {

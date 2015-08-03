@@ -33,7 +33,6 @@ public class GdgEventListFragment extends EventListFragment {
         return new EventAdapter(getActivity());
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     void fetchEvents() {
         final DateTime now = DateTime.now();
@@ -49,7 +48,8 @@ public class GdgEventListFragment extends EventListFragment {
             App.getInstance().getGroupDirectory().getChapterEventList(mStart, mEnd, plusId, new Callback<ArrayList<Event>>() {
                 @Override
                 public void success(ArrayList<Event> events, retrofit.client.Response response) {
-                    splitEventsAndAddToAdapter(events);
+                    mEvents.addAll(events);
+
                     App.getInstance().getModelCache().putAsync(cacheKey, mEvents, DateTime.now().plusHours(2), new ModelCache.CachePutListener() {
                         @Override
                         public void onPutIntoCache() {
@@ -71,7 +71,8 @@ public class GdgEventListFragment extends EventListFragment {
 
                     if (checkValidCache(item)) {
                         ArrayList<Event> events = (ArrayList<Event>) item;
-                        splitEventsAndAddToAdapter(events);
+
+                        mAdapter.addAll(events);
                         setIsLoading(false);
                         Snackbar snackbar = Snackbar.make(getView(), R.string.cached_content,
                                 Snackbar.LENGTH_SHORT);
