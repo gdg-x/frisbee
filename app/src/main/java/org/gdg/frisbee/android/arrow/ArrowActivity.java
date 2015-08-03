@@ -65,6 +65,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import butterknife.Bind;
+import timber.log.Timber;
 
 public class ArrowActivity extends GdgNavDrawerActivity {
 
@@ -212,7 +213,6 @@ public class ArrowActivity extends GdgNavDrawerActivity {
     }
 
     private void taggedPerson(String msg) {
-
         try {
             String decrypted = CryptoUtils.decrypt(Const.ARROW_K, msg);
 
@@ -235,7 +235,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            Timber.e(e, "Error while trying to tag person");
         }
     }
 
@@ -313,10 +313,14 @@ public class ArrowActivity extends GdgNavDrawerActivity {
 
 
     private String getEncryptedMessage() throws Exception {
-        return CryptoUtils.encrypt(Const.ARROW_K, 
-                Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getId()
-                + ID_SPLIT_CHAR
-                + getNow());
+        if (getGoogleApiClient().isConnected()) {
+            return CryptoUtils.encrypt(Const.ARROW_K,
+                    Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getId()
+                            + ID_SPLIT_CHAR
+                            + getNow());
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -388,7 +392,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
 
                 mHandler.postDelayed(updateQrCode, 60000);
             } catch (Exception e) {
-                e.printStackTrace();
+                Timber.e(e, "Error while trying to update QR code");
             }
         }
     };
@@ -405,7 +409,9 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         }
     }
 
-    private class NfcArrowHandler extends BaseArrowHandler implements NfcAdapter.OnNdefPushCompleteCallback, NfcAdapter.CreateNdefMessageCallback {
+    private class NfcArrowHandler extends BaseArrowHandler
+            implements NfcAdapter.OnNdefPushCompleteCallback, NfcAdapter.CreateNdefMessageCallback {
+
         public void enablePush() {
             mNfcAdapter.setNdefPushMessageCallback(this, ArrowActivity.this);
             mNfcAdapter.setOnNdefPushCompleteCallback(this, ArrowActivity.this);
@@ -420,6 +426,10 @@ public class ArrowActivity extends GdgNavDrawerActivity {
 
             try {
                 String msg = getEncryptedMessage();
+                if (msg == null) {
+                    return null;
+                }
+
                 NdefRecord mimeRecord = new NdefRecord(
                         NdefRecord.TNF_MIME_MEDIA,
                         Const.ARROW_MIME.getBytes(CHARSET),
@@ -427,17 +437,13 @@ public class ArrowActivity extends GdgNavDrawerActivity {
                         msg.getBytes(CHARSET));
                 return new NdefMessage(new NdefRecord[]{mimeRecord});
             } catch (Exception e) {
-                e.printStackTrace();
+                Timber.e(e, "Error while trying to create NFC message");
                 Toast.makeText(ArrowActivity.this, ArrowActivity.this.getString(R.string.arrow_oops), Toast.LENGTH_LONG).show();
             }
             return null;
         }
 
         @Override
-        public void onNdefPushComplete(NfcEvent nfcEvent) {
-
-        }
+        public void onNdefPushComplete(NfcEvent nfcEvent) { }
     }
-
-
 }
