@@ -53,7 +53,7 @@
           android:layout_weight="1"
           android:scaleType="fitCenter"
           android:src="@drawable/arrow_tagf"
-          android:contentDescription="@string/arrowTagImage"/>
+          android:contentDescription="@string/cd_arrowTagImage"/>
 
         <TextView
           android:id="@+id/textView"
@@ -102,7 +102,7 @@
           android:layout_gravity="center"
           android:layout_weight="1"
           android:scaleType="fitCenter"
-          android:contentDescription="@string/qrCode"/>
+          android:contentDescription="@string/cd_qrCode"/>
 
         <TextView
           android:id="@+id/textView2"

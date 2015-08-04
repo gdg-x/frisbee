@@ -20,20 +20,20 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.MenuItem;
 
 import com.google.android.gms.appstate.AppStateManager;
 import com.google.android.gms.appstate.AppStateStatusCodes;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.plus.People;
 import com.google.android.gms.plus.Plus;
-import com.google.api.client.util.Strings;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
+import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.view.DividerItemDecoration;
 
@@ -46,7 +46,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import timber.log.Timber;
 
-public class ArrowTaggedActivity extends GdgNavDrawerActivity {
+public class ArrowTaggedActivity extends GdgActivity {
 
     public static final String ID_SEPARATOR_FOR_SPLIT = "\\|";
     public static final String ID_SPLIT_CHAR = "|";
@@ -66,7 +66,7 @@ public class ArrowTaggedActivity extends GdgNavDrawerActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arrow_tagged);
-
+        getActionBarToolbar().setNavigationIcon(R.drawable.ic_up);
         adapter = new OrganizerAdapter(this);
 
         if (!PrefUtils.isSignedIn(this)) {
@@ -76,11 +76,6 @@ public class ArrowTaggedActivity extends GdgNavDrawerActivity {
         taggedList.setLayoutManager(new LinearLayoutManager(this));
         taggedList.addItemDecoration(new DividerItemDecoration(this, null));
         taggedList.setAdapter(adapter);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
 
         AppStateManager.load(getGoogleApiClient(), Const.ARROW_DONE_STATE_KEY)
                 .setResultCallback(new ResultCallback<AppStateManager.StateResult>() {
@@ -117,8 +112,17 @@ public class ArrowTaggedActivity extends GdgNavDrawerActivity {
                 });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void loadChapterOrganizers(Directory directory) {
-        if (Strings.isNullOrEmpty(serializedOrganizers)) {
+        if (TextUtils.isEmpty(serializedOrganizers)) {
             return;
         }
 

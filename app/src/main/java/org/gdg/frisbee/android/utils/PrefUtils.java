@@ -26,6 +26,7 @@ public final class PrefUtils {
     private static final String PREFS_APP_STARTS = "gdg_app_starts";
     private static final String PREFS_GCM_NOTIFICATION_KEY = "gcm_notification_key";
     private static final String PREFS_SEASONS_GREETINGS = "seasons_greetings";
+    private static final String PREFS_ACHIEVEMENTS_PREFIX = "achievement_unlocked_";
 
     private static final boolean PREFS_FIRST_START_DEFAULT = true;
 
@@ -164,6 +165,17 @@ public final class PrefUtils {
                 .remove(PREFS_GCM_REG_ID)
                 .clear()
                 .putBoolean(PREFS_FIRST_START, true)
+                .apply();
+    }
+
+    public static boolean isAchievementUnlocked(final Context context, final String achievement) {
+        return prefs(context).getBoolean(PREFS_ACHIEVEMENTS_PREFIX + achievement, false);
+    }
+
+    public static void setAchievementUnlocked(@NonNull final Context context,
+                                              @NonNull final String achievement) {
+        prefs(context).edit()
+                .putBoolean(PREFS_ACHIEVEMENTS_PREFIX + achievement, true)
                 .apply();
     }
 }

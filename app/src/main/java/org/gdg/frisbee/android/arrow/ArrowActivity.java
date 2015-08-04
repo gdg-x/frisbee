@@ -25,6 +25,7 @@ import android.nfc.NfcEvent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -311,7 +312,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         Toast.makeText(this, R.string.no_nfc_use_qr_scanner, Toast.LENGTH_LONG).show();
     }
 
-
+    @Nullable
     private String getEncryptedMessage() throws Exception {
         if (getGoogleApiClient().isConnected()) {
             return CryptoUtils.encrypt(Const.ARROW_K,
@@ -402,11 +403,8 @@ public class ArrowActivity extends GdgNavDrawerActivity {
     }
 
     private class BaseArrowHandler {
-        public void enablePush() {
-        }
-
-        public void disablePush() {
-        }
+        public void enablePush() { }
+        public void disablePush() { }
     }
 
     private class NfcArrowHandler extends BaseArrowHandler
@@ -421,6 +419,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
             mNfcAdapter.setNdefPushMessage(null, ArrowActivity.this);
         }
 
+        @Nullable
         @Override
         public NdefMessage createNdefMessage(NfcEvent nfcEvent) {
 
