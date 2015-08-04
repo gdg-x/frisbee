@@ -162,7 +162,7 @@ public abstract class EventListFragment extends GdgListFragment {
      * @param events
      *      The events list to be added
      */
-    protected void splitEventsAndAddToAdapter(Collection<? extends SimpleEvent> events) {
+    private void splitEventsAndAddToAdapter(Collection<? extends SimpleEvent> events) {
         Pair<List<SimpleEvent>, List<SimpleEvent>> pair = splitEventsList(events);
         mAdapter.addAll(pair.first);
         mAdapter.addAll(pair.second);

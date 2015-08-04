@@ -33,7 +33,6 @@ public class GdgEventListFragment extends EventListFragment {
         return new EventAdapter(getActivity());
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     void fetchEvents() {
         final DateTime now = DateTime.now();

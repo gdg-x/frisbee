@@ -108,7 +108,6 @@ public class TaggedEventSeriesFragment extends EventListFragment {
         return new EventAdapter(getActivity(), mTaggedEventSeries.getDefaultIconResId());
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     void fetchEvents() {
         setIsLoading(true);
