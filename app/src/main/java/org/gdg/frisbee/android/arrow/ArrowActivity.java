@@ -372,7 +372,11 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         @Override
         public void run() {
             try {
-                String message = Const.QR_MSG_PREFIX + getEncryptedMessage();
+                String encryptedMessage = getEncryptedMessage();
+                if (TextUtils.isEmpty(encryptedMessage)) {
+                    return;
+                }
+                String message = Const.QR_MSG_PREFIX + encryptedMessage;
                 MultiFormatWriter mQrCodeWriter = new MultiFormatWriter();
                 int qrCodeSize = getResources().getInteger(R.integer.qr_code_size);
                 BitMatrix bitMatrix = mQrCodeWriter.encode(message, BarcodeFormat.QR_CODE, qrCodeSize, qrCodeSize);
