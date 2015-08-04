@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.chapter;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.text.Html;
 import android.text.Spanned;
@@ -216,15 +217,17 @@ public class InfoFragment extends BaseFragment {
             addUnknowOrganizerToUI();
         } else {
             View v = createOrganizerView(organizer);
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/" + organizer.getId() + "/posts")));
+            if (v != null) {
+                v.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/" + organizer.getId() + "/posts")));
+                    }
+                });
+                registerForContextMenu(v);
+                if (mOrganizerBox != null) {
+                    mOrganizerBox.addView(v);
                 }
-            });
-            registerForContextMenu(v);
-            if (mOrganizerBox != null) {
-                mOrganizerBox.addView(v);
             }
         }
     }
@@ -277,7 +280,7 @@ public class InfoFragment extends BaseFragment {
     }
 
     private String getGPlusIdFromPersonUrl(Person.Urls personUrl) {
-        final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID);
+        final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID, "");
         if (personUrl.getValue().contains("+")) {
             try {
                 return "+" + URLDecoder.decode(personUrl.getValue()
@@ -344,7 +347,11 @@ public class InfoFragment extends BaseFragment {
         }
     }
 
+    @Nullable
     public View createOrganizerView(Person person) {
+        if (getActivity() == null) {
+            return null;
+        }
         View convertView = mInflater.inflate(R.layout.list_organizer_item, (ViewGroup) getView(), false);
 
         ImageView picture = (ImageView) convertView.findViewById(R.id.icon);
