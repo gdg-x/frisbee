@@ -412,7 +412,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
         try {
             Plus.People.Get request = plusClient.people().get(gplusId);
-            request.setFields("aboutMe,cover/coverPhoto/url,image/url,displayName,tagline,urls");
+            request.setFields("id,aboutMe,cover/coverPhoto/url,image/url,displayName,tagline,url,urls");
             person = request.execute();
             App.getInstance().getModelCache().put(cacheUrl, person, DateTime.now().plusDays(2));
         } catch (IOException e) {
