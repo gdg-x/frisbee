@@ -19,6 +19,8 @@ package org.gdg.frisbee.android.common;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,13 +60,16 @@ public class GdgListFragment extends BaseFragment {
             }
         };
 
+    @Nullable
     ListAdapter mAdapter;
 
     AdapterView<ListAdapter> mList;
 
+    @Nullable
     @Bind(R.id.empty)
     View mEmptyView;
     
+    @Nullable
     @Bind(R.id.loading)
     View mProgressContainer;
 
@@ -90,8 +95,9 @@ public class GdgListFragment extends BaseFragment {
      * behavior of ListFragment.  In particular, this is currently the only
      * way to have the built-in indeterminant progress state be shown.
      */
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_list, container, false);
         ButterKnife.bind(this, v);
         return v;
@@ -248,6 +254,7 @@ public class GdgListFragment extends BaseFragment {
     /**
      * Get the activity's list view widget.
      */
+    @NonNull
     public AdapterView<ListAdapter> getListView() {
         ensureList();
         return mList;
@@ -322,6 +329,7 @@ public class GdgListFragment extends BaseFragment {
     /**
      * Get the ListAdapter associated with this activity's ListView.
      */
+    @Nullable
     public ListAdapter getListAdapter() {
         return mAdapter;
     }

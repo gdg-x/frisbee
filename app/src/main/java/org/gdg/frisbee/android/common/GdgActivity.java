@@ -23,6 +23,8 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 
 import com.google.android.gms.appstate.AppStateManager;
@@ -52,6 +54,7 @@ public abstract class GdgActivity extends TrackableActivity implements
     private static final int DIALOG_PLAY_SERVICES_ERROR = 0;
     private final ScopedBus scopedBus = new ScopedBus();
     private AchievementActionHandler mAchievementActionHandler;
+    @NonNull
     private Handler mHandler = new Handler();
 
     // GoogleApiClient wraps our service connection to Google Play services and
@@ -81,12 +84,9 @@ public abstract class GdgActivity extends TrackableActivity implements
 
     private Toolbar mActionBarToolbar;
 
+    @NonNull
     protected ScopedBus getBus() {
         return scopedBus;
-    }
-
-    public Handler getHandler() {
-        return mHandler;
     }
 
     @Override
@@ -96,6 +96,7 @@ public abstract class GdgActivity extends TrackableActivity implements
         getActionBarToolbar();
     }
 
+    @Nullable
     @Override
     protected String getTrackedViewName() {
         return null;
@@ -124,7 +125,7 @@ public abstract class GdgActivity extends TrackableActivity implements
         }
 
         mAchievementActionHandler =
-                new AchievementActionHandler(getHandler(), mGoogleApiClient, this);
+                new AchievementActionHandler(mHandler, mGoogleApiClient, this);
     }
 
     @Override
@@ -264,7 +265,7 @@ public abstract class GdgActivity extends TrackableActivity implements
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult result) {
+    public void onConnectionFailed(@NonNull ConnectionResult result) {
         if (mSignInProgress != STATE_IN_PROGRESS) {
             // We do not have an intent in progress so we should store the latest
             // error resolution intent for use when the sign in button is clicked.

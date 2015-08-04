@@ -18,6 +18,8 @@ package org.gdg.frisbee.android.event;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -60,13 +62,14 @@ public class EventActivity extends GdgActivity {
         }
     }
 
+    @NonNull
     protected String getTrackedViewName() {
         return "Event/" + getResources().getStringArray(R.array.event_tabs)[getCurrentPage()] 
                 + "/" + getIntent().getStringExtra(Const.EXTRA_EVENT_ID);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == android.R.id.home) {
             finish();
@@ -95,6 +98,7 @@ public class EventActivity extends GdgActivity {
             return 1;
         }
 
+        @Nullable
         @Override
         public Fragment getItem(int position) {
             switch (position) {

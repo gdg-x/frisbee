@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.eventseries;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -53,10 +54,10 @@ public abstract class EventListFragment extends GdgListFragment {
 
     protected ArrayList<SimpleEvent> mEvents;
     
-    protected void onError(Throwable e) {
+    protected void onError(@NonNull Throwable e) {
         setIsLoading(false);
         e.printStackTrace();
-        if (isAdded()) {
+        if (isAdded() && getView() != null) {
             Snackbar snackbar = Snackbar.make(getView(), R.string.fetch_events_failed,
                     Snackbar.LENGTH_SHORT);
             ColoredSnackBar.alert(snackbar).show();
@@ -66,12 +67,6 @@ public abstract class EventListFragment extends GdgListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        if (getListView() instanceof ListView) {
-            ListView listView = (ListView) getListView();
-            listView.setDivider(null);
-            listView.setDividerHeight(0);
-        }
 
         registerForContextMenu(getListView());
 
@@ -87,7 +82,7 @@ public abstract class EventListFragment extends GdgListFragment {
     abstract void fetchEvents();
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+    public void onCreateContextMenu(@NonNull ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
         SimpleEvent event = mAdapter.getItem(info.position);
@@ -97,7 +92,7 @@ public abstract class EventListFragment extends GdgListFragment {
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         SimpleEvent event = mAdapter.getItem(info.position);
 
@@ -128,13 +123,13 @@ public abstract class EventListFragment extends GdgListFragment {
         }
     }
 
-    private void launchNavigation(SimpleEvent event) {
+    private void launchNavigation(@NonNull SimpleEvent event) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse("geo:0,0?q=" + event.getLocation()));
         startActivity(intent);
     }
 
-    public void addEventToCalendar(SimpleEvent event) {
+    public void addEventToCalendar(@NonNull SimpleEvent event) {
         Intent intent = new Intent(Intent.ACTION_EDIT);
         intent.setType("vnd.android.cursor.item/event");
 
@@ -150,8 +145,9 @@ public abstract class EventListFragment extends GdgListFragment {
         startActivity(intent);
     }
 
+    @NonNull
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_events, container, false);
         ButterKnife.bind(this, v);
         return v;

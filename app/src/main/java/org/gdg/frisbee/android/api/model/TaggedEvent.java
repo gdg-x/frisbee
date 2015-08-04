@@ -1,5 +1,8 @@
 package org.gdg.frisbee.android.api.model;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
@@ -9,11 +12,13 @@ public class TaggedEvent implements SimpleEvent {
     LatLng geo;
     DateTime end, start;
 
+    @NonNull
     @Override
     public DateTime getStart() {
         return convertToEventTimezone(start);
     }
 
+    @NonNull
     @Override
     public DateTime getEnd() {
         return convertToEventTimezone(end);
@@ -29,6 +34,7 @@ public class TaggedEvent implements SimpleEvent {
         return title;
     }
 
+    @Nullable
     @Override
     public String getIconUrl() {
         return null;

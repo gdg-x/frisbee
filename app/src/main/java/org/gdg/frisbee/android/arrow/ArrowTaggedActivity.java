@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.arrow;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.util.SparseArrayCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -64,11 +65,13 @@ public class ArrowTaggedActivity extends GdgActivity {
 
     @Bind(R.id.taggedList)
     RecyclerView taggedList;
+    @NonNull
     String taggedOrganizers = "";
     private OrganizerAdapter adapter;
 
     String[] orgas;
 
+    @NonNull
     @Override
     protected String getTrackedViewName() {
         return "Arrow/Tagges";
@@ -105,7 +108,7 @@ public class ArrowTaggedActivity extends GdgActivity {
 
         AppStateManager.load(getGoogleApiClient(), Const.ARROW_DONE_STATE_KEY).setResultCallback(new ResultCallback<AppStateManager.StateResult>() {
             @Override
-            public void onResult(AppStateManager.StateResult stateResult) {
+            public void onResult(@NonNull AppStateManager.StateResult stateResult) {
                 AppStateManager.StateConflictResult conflictResult = stateResult.getConflictResult();
                 AppStateManager.StateLoadedResult loadedResult = stateResult.getLoadedResult();
 
@@ -126,7 +129,7 @@ public class ArrowTaggedActivity extends GdgActivity {
                 App.getInstance().getGdgXHub().getDirectory(new Callback<Directory>() {
 
                     @Override
-                    public void success(final Directory directory, final retrofit.client.Response response) {
+                    public void success(@NonNull final Directory directory, final retrofit.client.Response response) {
                         if (orgas != null) {
                             return;
                         }
@@ -150,7 +153,7 @@ public class ArrowTaggedActivity extends GdgActivity {
                                 Plus.PeopleApi.load(getGoogleApiClient(), organizer.plusId)
                                         .setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
                                             @Override
-                                            public void onResult(People.LoadPeopleResult loadPeopleResult) {
+                                            public void onResult(@NonNull People.LoadPeopleResult loadPeopleResult) {
                                                 organizer.resolved = loadPeopleResult.getPersonBuffer().get(0);
                                                 adapter.add(organizer);
                                                 adapter.notifyDataSetChanged();
@@ -170,7 +173,7 @@ public class ArrowTaggedActivity extends GdgActivity {
         });
     }
 
-    private String mergeIds(String list1, String list2) {
+    private String mergeIds(@NonNull String list1, @NonNull String list2) {
         String[] parts1 = list1.split(ID_SEPARATOR_FOR_SPLIT);
         String[] parts2 = list2.split(ID_SEPARATOR_FOR_SPLIT);
         Set<String> mergedSet = new HashSet<>(Arrays.asList(parts1));
@@ -200,14 +203,15 @@ public class ArrowTaggedActivity extends GdgActivity {
             organizers = new SparseArrayCompat<>();
         }
 
+        @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View v =  LayoutInflater.from(parent.getContext()).inflate(R.layout.list_tagged_organizer_item, parent, false);
             return new ViewHolder(v);
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             final Organizer o = organizers.get(position);
 
             App.getInstance().getPicasso()
@@ -247,7 +251,7 @@ public class ArrowTaggedActivity extends GdgActivity {
             @Bind(R.id.organizerChapter)
             TextView chapter;
 
-            public ViewHolder(View itemView) {
+            public ViewHolder(@NonNull View itemView) {
                 super(itemView);
                 ButterKnife.bind(this, itemView);
             }

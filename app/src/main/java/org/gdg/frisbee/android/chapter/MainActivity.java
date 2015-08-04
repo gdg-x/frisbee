@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -86,14 +87,17 @@ public class MainActivity extends GdgNavDrawerActivity {
     @Bind(R.id.content_frame)
     FrameLayout mContentFrameLayout;
 
+    @NonNull
     private Handler mHandler = new Handler();
     private ChapterAdapter mChapterAdapter;
+    @Nullable
     private ChapterFragmentPagerAdapter mViewPagerAdapter;
 
     private boolean mFirstStart = false;
 
     private ChapterComparator mLocationComparator;
     private Spinner mSpinner;
+    @Nullable
     private String selectedChapterId;
 
     /**
@@ -104,7 +108,7 @@ public class MainActivity extends GdgNavDrawerActivity {
      *                           recently supplied in onSaveInstanceState(Bundle). <b>Note: Otherwise it is null.</b>
      */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -222,7 +226,7 @@ public class MainActivity extends GdgNavDrawerActivity {
         return selectedChapterId.equals(mStoredHomeChapterId);
     }
 
-    private String getChapterIdFromIntent(final Intent intent) {
+    private String getChapterIdFromIntent(@NonNull final Intent intent) {
         if (intent.hasExtra(Const.EXTRA_CHAPTER_ID)) {
             return intent.getStringExtra(Const.EXTRA_CHAPTER_ID);
         } else if (intent.getData() != null
@@ -236,7 +240,7 @@ public class MainActivity extends GdgNavDrawerActivity {
     public void fetchChapters() {
         App.getInstance().getGdgXHub().getDirectory(new Callback<Directory>() {
 
-            public void success(final Directory directory, retrofit.client.Response response) {
+            public void success(@NonNull final Directory directory, retrofit.client.Response response) {
                 App.getInstance().getModelCache().putAsync(
                         Const.CACHE_KEY_CHAPTER_LIST_HUB,
                         directory,
@@ -288,6 +292,7 @@ public class MainActivity extends GdgNavDrawerActivity {
         }
     }
 
+    @NonNull
     protected String getTrackedViewName() {
         if (mViewPager == null
                 || mViewPagerAdapter == null) {
@@ -317,7 +322,7 @@ public class MainActivity extends GdgNavDrawerActivity {
         getAchievementActionHandler().handleAppStarted();
     }
 
-    private void addChapters(List<Chapter> chapterList) {
+    private void addChapters(@NonNull List<Chapter> chapterList) {
         Collections.sort(chapterList, mLocationComparator);
         mChapterAdapter.clear();
         mChapterAdapter.addAll(chapterList);
@@ -333,7 +338,7 @@ public class MainActivity extends GdgNavDrawerActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
         if (mChapterAdapter.getCount() > 0) {
@@ -369,7 +374,7 @@ public class MainActivity extends GdgNavDrawerActivity {
         });
     }
 
-    private void updateSelectionfor(final String newChapterId) {
+    private void updateSelectionfor(@NonNull final String newChapterId) {
         mViewPagerAdapter.setSelectedChapter(newChapterId);
         mSpinner.setSelection(mChapterAdapter.getPosition(newChapterId));
         if (!selectedChapterId.equals(newChapterId)) {
@@ -420,6 +425,7 @@ public class MainActivity extends GdgNavDrawerActivity {
             return mPages.length;
         }
 
+        @Nullable
         @Override
         public Fragment getItem(int position) {
             switch (position) {
@@ -435,6 +441,7 @@ public class MainActivity extends GdgNavDrawerActivity {
             return null;
         }
 
+        @NonNull
         @Override
         public CharSequence getPageTitle(int position) {
             if (0 <= position && position < mPages.length) {

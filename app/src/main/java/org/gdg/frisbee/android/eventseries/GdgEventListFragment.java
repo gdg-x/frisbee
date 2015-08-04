@@ -1,6 +1,7 @@
 package org.gdg.frisbee.android.eventseries;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 
 import org.gdg.frisbee.android.Const;
@@ -20,6 +21,7 @@ import retrofit.RetrofitError;
 
 public class GdgEventListFragment extends EventListFragment {
 
+    @NonNull
     public static EventListFragment newInstance(String plusId) {
         EventListFragment fragment = new GdgEventListFragment();
         Bundle arguments = new Bundle();
@@ -28,6 +30,7 @@ public class GdgEventListFragment extends EventListFragment {
         return fragment;
     }
 
+    @NonNull
     @Override
     EventAdapter createEventAdapter() {
         return new EventAdapter(getActivity());
@@ -47,7 +50,7 @@ public class GdgEventListFragment extends EventListFragment {
         if (Utils.isOnline(getActivity())) {
             App.getInstance().getGroupDirectory().getChapterEventList(mStart, mEnd, plusId, new Callback<ArrayList<Event>>() {
                 @Override
-                public void success(ArrayList<Event> events, retrofit.client.Response response) {
+                public void success(@NonNull ArrayList<Event> events, retrofit.client.Response response) {
                     mEvents.addAll(events);
 
                     App.getInstance().getModelCache().putAsync(cacheKey, mEvents, DateTime.now().plusHours(2), new ModelCache.CachePutListener() {
@@ -60,7 +63,7 @@ public class GdgEventListFragment extends EventListFragment {
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
+                public void failure(@NonNull RetrofitError error) {
                     onError(error);
                 }
             });

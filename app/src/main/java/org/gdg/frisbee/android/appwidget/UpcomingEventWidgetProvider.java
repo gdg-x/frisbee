@@ -24,6 +24,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.widget.RemoteViews;
 
 import org.gdg.frisbee.android.Const;
@@ -68,7 +70,8 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
             return null;
         }
 
-        private Chapter findChapter(String chapterId) {
+        @Nullable
+        private Chapter findChapter(@Nullable String chapterId) {
             if (chapterId != null) {
                 for (Chapter chapter : mChapters) {
                     if (chapter.getGplusId().equals(chapterId)) {
@@ -79,7 +82,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
             return null;
         }
 
-        public void buildUpdate(final Context context, final AppWidgetManager manager, final ComponentName thisWidget) {
+        public void buildUpdate(@NonNull final Context context, @NonNull final AppWidgetManager manager, final ComponentName thisWidget) {
             final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_upcoming_event);
             Intent mainIntent = new Intent(context, MainActivity.class);
             final PendingIntent pi = PendingIntent.getActivity(context, REQUEST_CODE_LAUNCH_FRISBEE, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -87,7 +90,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
 
             App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, false, new ModelCache.CacheListener() {
                 @Override
-                public void onGet(Object item) {
+                public void onGet(@NonNull Object item) {
                     mChapters = ((Directory) item).getGroups();
                     final Chapter homeGdg = findChapter(PrefUtils.getHomeChapterId(UpdateService.this));
 
@@ -113,7 +116,10 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
 
         }
 
-        private void fetchEvents(Chapter homeGdg, final RemoteViews views, final AppWidgetManager manager, final ComponentName thisWidget) {
+        private void fetchEvents(@NonNull Chapter homeGdg,
+                                 @NonNull final RemoteViews views,
+                                 @NonNull final AppWidgetManager manager,
+                                 final ComponentName thisWidget) {
             App.getInstance().getGroupDirectory()
                     .getChapterEventList(
                             (int) (new DateTime().getMillis() / 1000),
@@ -121,7 +127,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                             homeGdg.getGplusId(),
                             new Callback<ArrayList<Event>>() {
                                 @Override
-                                public void success(ArrayList<Event> events, retrofit.client.Response response) {
+                                public void success(@NonNull ArrayList<Event> events, retrofit.client.Response response) {
                                     Timber.d("Got events");
                                     if (events.size() > 0) {
                                         Event firstEvent = events.get(0);
@@ -151,14 +157,14 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                             });
         }
 
-        private void showErrorChild(RemoteViews views, int errorStringResource, Context context) {
+        private void showErrorChild(@NonNull RemoteViews views, int errorStringResource, @NonNull Context context) {
             views.setTextViewText(R.id.textView_no_events, getString(errorStringResource));
             showChild(views, 0);
             Intent i = new Intent(context, MainActivity.class);
             views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(context, 0, i, 0));
         }
 
-        private void showChild(RemoteViews views, int i) {
+        private void showChild(@NonNull RemoteViews views, int i) {
             if (i == 1) {
                 views.setDisplayedChild(R.id.viewFlipper, 1);
             } else {
@@ -168,7 +174,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
     }
 
     @Override
-    public void onUpdate(Context context, final AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+    public void onUpdate(@NonNull Context context, final AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 
         context.startService(new Intent(context, UpdateService.class));
     }

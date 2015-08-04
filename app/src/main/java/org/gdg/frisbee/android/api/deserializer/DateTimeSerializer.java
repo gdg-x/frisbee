@@ -16,6 +16,8 @@
 
 package org.gdg.frisbee.android.api.deserializer;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
@@ -36,8 +38,9 @@ import java.lang.reflect.Type;
  * Time: 04:51
  */
 public class DateTimeSerializer implements JsonSerializer<DateTime> {
+    @NonNull
     @Override
-    public JsonElement serialize(DateTime dateTime, Type type, JsonSerializationContext jsonSerializationContext) {
+    public JsonElement serialize(@NonNull DateTime dateTime, Type type, JsonSerializationContext jsonSerializationContext) {
         DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ssZZ");
         return new JsonPrimitive(dateTime.toString(fmt));
     }

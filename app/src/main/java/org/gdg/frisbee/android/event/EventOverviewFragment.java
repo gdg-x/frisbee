@@ -22,6 +22,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
@@ -90,7 +91,7 @@ public class EventOverviewFragment extends Fragment {
     private EventFullDetails mEvent;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_event_overview, parent, false);
         ButterKnife.bind(this, v);
 
@@ -110,7 +111,7 @@ public class EventOverviewFragment extends Fragment {
         final String eventId = getArguments().getString(Const.EXTRA_EVENT_ID);
         App.getInstance().getGdgXHub().getEventDetail(eventId, new Callback<EventFullDetails>() {
             @Override
-            public void success(EventFullDetails eventFullDetails, retrofit.client.Response response) {
+            public void success(@NonNull EventFullDetails eventFullDetails, retrofit.client.Response response) {
                 onResponse(eventFullDetails);
             }
 
@@ -126,7 +127,7 @@ public class EventOverviewFragment extends Fragment {
         });
     }
 
-    public void updateWithDetails(final EventFullDetails eventFullDetails) {
+    public void updateWithDetails(@NonNull final EventFullDetails eventFullDetails) {
         mTitle.setText(eventFullDetails.getTitle());
 
         final String eventUrl = eventFullDetails.getEventUrl();
@@ -149,19 +150,19 @@ public class EventOverviewFragment extends Fragment {
         setIsLoading(false);
     }
 
-    private String formatTime(EventFullDetails eventFullDetails) {
+    private String formatTime(@NonNull EventFullDetails eventFullDetails) {
         DateTimeFormatter fmt = DateTimeFormat.shortTime();
         return fmt.print(eventFullDetails.getStart());
     }
 
-    private String formatDate(EventFullDetails eventFullDetails) {
+    private String formatDate(@NonNull EventFullDetails eventFullDetails) {
 
         DateTimeFormatter fmt = DateTimeFormat.fullDate();
         // TODO check whether this is a multi day event
         return fmt.print(eventFullDetails.getStart());
     }
 
-    public void onResponse(final EventFullDetails eventFullDetails) {
+    public void onResponse(@NonNull final EventFullDetails eventFullDetails) {
         if (getActivity() == null) {
             return;
         }
@@ -207,7 +208,7 @@ public class EventOverviewFragment extends Fragment {
         });
     }
 
-    private void updateGroupDetails(Chapter group) {
+    private void updateGroupDetails(@NonNull Chapter group) {
         if (getActivity() == null) {
             return;
         }
@@ -215,7 +216,7 @@ public class EventOverviewFragment extends Fragment {
         Plus.PeopleApi.load(((GdgActivity) getActivity()).getGoogleApiClient(), group.getGplusId())
                 .setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
                     @Override
-                    public void onResult(People.LoadPeopleResult loadPeopleResult) {
+                    public void onResult(@NonNull People.LoadPeopleResult loadPeopleResult) {
                         if (loadPeopleResult.getStatus().getStatusCode() == CommonStatusCodes.SUCCESS) {
                             Person gplusChapter = loadPeopleResult.getPersonBuffer().get(0);
                             if (gplusChapter.getImage().hasUrl()) {
@@ -283,7 +284,7 @@ public class EventOverviewFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         if (mEvent != null) {
             inflater.inflate(R.menu.event_menu, menu);
             MenuItem shareMenuitem = menu.findItem(R.id.share);
@@ -305,7 +306,7 @@ public class EventOverviewFragment extends Fragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add_calendar:
                 addEventToCalendar();
@@ -351,6 +352,7 @@ public class EventOverviewFragment extends Fragment {
         startActivity(intent);
     }
 
+    @NonNull
     public static Fragment createfor(String eventId) {
         EventOverviewFragment fragment = new EventOverviewFragment();
         Bundle args = new Bundle();

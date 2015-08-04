@@ -2,6 +2,7 @@ package org.gdg.frisbee.android.widget;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -17,7 +18,7 @@ public class ResizableImageView extends ImageView {
 
     private int mWidth = -1, mHeight = -1;
 
-    public ResizableImageView(Context context, AttributeSet attrs) {
+    public ResizableImageView(@NonNull Context context, AttributeSet attrs) {
         super(context, attrs);
         setAdjustViewBounds(true);
     }

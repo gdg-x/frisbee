@@ -1,5 +1,6 @@
 package org.gdg.frisbee.android.api;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.api.services.plus.Plus;
@@ -19,7 +20,11 @@ import java.util.regex.Pattern;
 import timber.log.Timber;
 
 /**
- * Created by tasomaniac on 27/7/15.
+ * Intercepts the network request made by Picasso.
+ * If it is a Google+ profile link, it makes a Plus API request first.
+ * And then get the image and returns that image as the request link.
+ *
+ * Created by Said Tahsin Dane on 27/7/15.
  */
 public class PlusPersonDownloader implements Interceptor {
 
@@ -32,7 +37,7 @@ public class PlusPersonDownloader implements Interceptor {
     }
 
     @Override
-    public Response intercept(Chain chain) throws IOException {
+    public Response intercept(@NonNull Chain chain) throws IOException {
         Request request = chain.request();
 
         Matcher matcher = mPlusPattern.matcher(request.urlString());
@@ -47,11 +52,11 @@ public class PlusPersonDownloader implements Interceptor {
             return chain.proceed(request.newBuilder().url(imageUrl).build());
         }
 
-        return null;
+        return chain.proceed(request);
     }
 
     @Nullable
-    public Person getPersonSync(final String gplusId) {
+    public Person getPersonSync(@NonNull final String gplusId) {
 
         final String cacheUrl = Const.CACHE_KEY_PERSON + gplusId;
         Object cachedPerson = App.getInstance().getModelCache().get(cacheUrl);

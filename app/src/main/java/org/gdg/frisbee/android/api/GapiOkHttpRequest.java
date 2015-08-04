@@ -14,6 +14,8 @@
 
 package org.gdg.frisbee.android.api;
 
+import android.support.annotation.NonNull;
+
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.api.client.http.LowLevelHttpRequest;
 import com.google.api.client.http.LowLevelHttpResponse;
@@ -26,18 +28,19 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 
 public class GapiOkHttpRequest extends LowLevelHttpRequest {
+    @NonNull
     private final HttpURLConnection connection;
 
     /**
      * @param connection HTTP URL connection
      */
-    GapiOkHttpRequest(HttpURLConnection connection) {
+    GapiOkHttpRequest(@NonNull HttpURLConnection connection) {
         this.connection = connection;
         connection.setInstanceFollowRedirects(true);
     }
 
     @Override
-    public void addHeader(String name, String value) {
+    public void addHeader(@NonNull String name, String value) {
         connection.addRequestProperty(name, value);
     }
 
@@ -47,6 +50,7 @@ public class GapiOkHttpRequest extends LowLevelHttpRequest {
         connection.setConnectTimeout(connectTimeout);
     }
 
+    @NonNull
     @Override
     public LowLevelHttpResponse execute() throws IOException {
         HttpURLConnection connection = this.connection;

@@ -16,6 +16,8 @@
 
 package org.gdg.frisbee.android.utils;
 
+import android.support.annotation.NonNull;
+
 import com.squareup.otto.Bus;
 
 import java.util.HashSet;
@@ -36,21 +38,21 @@ public class ScopedBus {
     private final Set<Object> objects = new HashSet<Object>();
     private boolean active;
 
-    public void register(Object obj) {
+    public void register(@NonNull Object obj) {
         objects.add(obj);
         if (active) {
             bus.register(obj);
         }
     }
 
-    public void unregister(Object obj) {
+    public void unregister(@NonNull Object obj) {
         objects.remove(obj);
         if (active) {
             bus.unregister(obj);
         }
     }
 
-    public void post(Object event) {
+    public void post(@NonNull Object event) {
         bus.post(event);
     }
 

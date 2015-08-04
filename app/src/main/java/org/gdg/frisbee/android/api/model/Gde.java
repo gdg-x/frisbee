@@ -2,14 +2,17 @@ package org.gdg.frisbee.android.api.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 public class Gde implements GdgPerson, Parcelable {
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public Gde createFromParcel(Parcel in) {
+        @NonNull
+        public Gde createFromParcel(@NonNull Parcel in) {
             return new Gde(in);
         }
 
+        @NonNull
         public Gde[] newArray(int size) {
             return new Gde[size];
         }
@@ -17,7 +20,7 @@ public class Gde implements GdgPerson, Parcelable {
     private String product, name, address, email, socialUrl;
     private double lat, lng;
 
-    public Gde(Parcel in) {
+    public Gde(@NonNull Parcel in) {
         product = in.readString();
         name = in.readString();
         address = in.readString();
@@ -28,7 +31,7 @@ public class Gde implements GdgPerson, Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
+    public void writeToParcel(@NonNull Parcel parcel, int i) {
         parcel.writeString(product);
         parcel.writeString(name);
         parcel.writeString(address);
@@ -38,6 +41,7 @@ public class Gde implements GdgPerson, Parcelable {
         parcel.writeString(socialUrl);
     }
 
+    @NonNull
     public String getProduct() {
         return product.trim();
     }

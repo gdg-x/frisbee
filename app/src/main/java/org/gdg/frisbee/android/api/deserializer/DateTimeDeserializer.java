@@ -16,6 +16,8 @@
 
 package org.gdg.frisbee.android.api.deserializer;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -38,7 +40,9 @@ import java.util.Locale;
  */
 public class DateTimeDeserializer implements JsonDeserializer<DateTime> {
     @Override
-    public DateTime deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+    public DateTime deserialize(@NonNull JsonElement jsonElement,
+                                Type type,
+                                JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
         //DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ssZZ");
         //2013-05-15T16:30:00+02:00
 

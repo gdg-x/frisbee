@@ -24,6 +24,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,6 +68,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     private GoogleApiClient mGoogleApiClient;
 
+    @Nullable
     private Preference.OnPreferenceChangeListener mOnHomeGdgPreferenceChange = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object o) {
@@ -83,6 +85,7 @@ public class SettingsFragment extends PreferenceFragment {
         }
     };
 
+    @NonNull
     private Preference.OnPreferenceChangeListener mOnGcmPreferenceChange = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object o) {
@@ -93,6 +96,7 @@ public class SettingsFragment extends PreferenceFragment {
                 mLoading.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in));
 
                 new AsyncTask<Void, Void, Void>() {
+                    @Nullable
                     @Override
                     protected Void doInBackground(Void... voids) {
                         try {
@@ -124,7 +128,8 @@ public class SettingsFragment extends PreferenceFragment {
                                 client.registerGcm("Bearer " + token, new GcmRegistrationRequest(regId),
                                         new Callback<GcmRegistrationResponse>() {
                                             @Override
-                                            public void success(GcmRegistrationResponse gcmRegistrationResponse, retrofit.client.Response response) {
+                                            public void success(@NonNull GcmRegistrationResponse gcmRegistrationResponse,
+                                                                retrofit.client.Response response) {
                                                 PrefUtils.setGcmSettings(getActivity(), true, regId, gcmRegistrationResponse.getNotificationKey());
                                             }
 
@@ -170,6 +175,7 @@ public class SettingsFragment extends PreferenceFragment {
         }
     };
 
+    @NonNull
     private Preference.OnPreferenceChangeListener mOnAnalyticsPreferenceChange = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object o) {
@@ -279,6 +285,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     private void setHomeGdg(final String homeGdg) {
         new AsyncTask<Void, Void, Void>() {
+            @Nullable
             @Override
             protected Void doInBackground(Void... voids) {
 

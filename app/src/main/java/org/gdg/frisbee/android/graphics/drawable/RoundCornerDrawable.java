@@ -26,6 +26,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 
 /**
  * GDG Aachen
@@ -41,6 +42,7 @@ public class RoundCornerDrawable extends Drawable {
     private Paint mPaint;
     private int mMargin;
     private BitmapShader mBitmapShader;
+    @NonNull
     private RectF mRect = new RectF();
 
     public RoundCornerDrawable(Bitmap bitmap, float cornerRadius, int margin) {
@@ -52,6 +54,7 @@ public class RoundCornerDrawable extends Drawable {
         mPaint.setShader(mBitmapShader);
     }
 
+    @NonNull
     public RectF getRect() {
         return mRect;
     }
@@ -65,13 +68,13 @@ public class RoundCornerDrawable extends Drawable {
     }
 
     @Override
-    protected void onBoundsChange(Rect bounds) {
+    protected void onBoundsChange(@NonNull Rect bounds) {
         super.onBoundsChange(bounds);
         mRect.set(mMargin, mMargin, bounds.width() - mMargin, bounds.height() - mMargin);
     }
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(@NonNull Canvas canvas) {
         canvas.drawRoundRect(mRect, mCornerRadius, mCornerRadius, mPaint);
     }
 

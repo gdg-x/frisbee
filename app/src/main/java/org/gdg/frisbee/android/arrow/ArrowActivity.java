@@ -25,6 +25,8 @@ import android.nfc.NfcEvent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -89,9 +91,12 @@ public class ArrowActivity extends GdgNavDrawerActivity {
     private String previous;
     private BaseArrowHandler mArrowHandler;
     private NfcAdapter mNfcAdapter;
+    @Nullable
     private String mPendingScore;
+    @NonNull
     private Handler mHandler = new Handler();
 
+    @NonNull
     @Override
     protected String getTrackedViewName() {
         return "Arrow";
@@ -140,7 +145,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.arrow_lb:
                 startActivityForResult(Games.Leaderboards.getLeaderboardIntent(getGoogleApiClient(), Const.ARROW_LB), REQUEST_LEADERBOARD);
@@ -163,7 +168,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         }
     }
 
-    private void handleIntent(Intent intent) {
+    private void handleIntent(@NonNull Intent intent) {
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
             Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
             if (rawMsgs != null) {
@@ -191,7 +196,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
+    protected void onNewIntent(@NonNull Intent intent) {
         super.onNewIntent(intent);
         handleIntent(intent);
     }
@@ -239,7 +244,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         }
     }
 
-    private void score(final String id) {
+    private void score(@NonNull final String id) {
 
         if (id.equals(Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getId())) {
             Toast.makeText(this, R.string.arrow_selfie, Toast.LENGTH_LONG).show();
@@ -248,7 +253,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
 
         AppStateManager.load(getGoogleApiClient(), Const.ARROW_DONE_STATE_KEY).setResultCallback(new ResultCallback<AppStateManager.StateResult>() {
             @Override
-            public void onResult(AppStateManager.StateResult stateResult) {
+            public void onResult(@NonNull AppStateManager.StateResult stateResult) {
                 AppStateManager.StateConflictResult conflictResult = stateResult.getConflictResult();
                 AppStateManager.StateLoadedResult loadedResult = stateResult.getLoadedResult();
 
@@ -285,7 +290,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         });
     }
 
-    private String mergeIds(String list1, String list2) {
+    private String mergeIds(@NonNull String list1, @NonNull String list2) {
         String[] parts1 = list1.split(ID_SEPARATOR_FOR_SPLIT);
         String[] parts2 = list2.split(ID_SEPARATOR_FOR_SPLIT);
         Set<String> mergedSet = new HashSet<>(Arrays.asList(parts1));
@@ -300,7 +305,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
 
         Plus.PeopleApi.load(getGoogleApiClient(), id).setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
             @Override
-            public void onResult(People.LoadPeopleResult loadPeopleResult) {
+            public void onResult(@NonNull People.LoadPeopleResult loadPeopleResult) {
                 Person organizer = loadPeopleResult.getPersonBuffer().get(0);
                 Toast.makeText(ArrowActivity.this, "It worked...you tagged " + organizer.getDisplayName(), Toast.LENGTH_LONG).show();
             }
@@ -363,6 +368,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
 
     }
 
+    @NonNull
     private Runnable updateQrCode = new Runnable() {
         @Override
         public void run() {
@@ -415,6 +421,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
             mNfcAdapter.setNdefPushMessage(null, ArrowActivity.this);
         }
 
+        @Nullable
         @Override
         public NdefMessage createNdefMessage(NfcEvent nfcEvent) {
 

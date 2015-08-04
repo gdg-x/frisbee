@@ -26,6 +26,8 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.gdg.frisbee.android.utils.base.ILastLocationFinder;
 
@@ -58,7 +60,7 @@ public class GingerbreadLastLocationFinder implements ILastLocationFinder {
      * Construct a new Gingerbread Last Location Finder.
      * @param context Context
      */
-    public GingerbreadLastLocationFinder(Context context) {
+    public GingerbreadLastLocationFinder(@NonNull Context context) {
         this.context = context;
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         // Coarse accuracy is specified here to get the fastest possible result.
@@ -82,6 +84,7 @@ public class GingerbreadLastLocationFinder implements ILastLocationFinder {
      * @param minTime Minimum time required between location updates.
      * @return The most accurate and / or timely previously detected location.
      */
+    @Nullable
     public Location getLastBestLocation(int minDistance, long minTime) {
         Location bestResult = null;
         float bestAccuracy = Float.MAX_VALUE;
@@ -137,9 +140,10 @@ public class GingerbreadLastLocationFinder implements ILastLocationFinder {
      * The oneshot location update is returned via the {@link LocationListener}
      * specified in {@link setChangedLocationListener}.
      */
+    @Nullable
     protected BroadcastReceiver singleUpdateReceiver = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(@NonNull Context context, @NonNull Intent intent) {
             context.unregisterReceiver(singleUpdateReceiver);
 
             String key = LocationManager.KEY_LOCATION_CHANGED;

@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.about;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
@@ -47,12 +48,13 @@ public class AboutActivity extends GdgActivity {
         mTabLayout.setupWithViewPager(mViewPager);
     }
 
+    @NonNull
     protected String getTrackedViewName() {
         return "About/" + getResources().getStringArray(R.array.about_tabs)[getCurrentPage()];
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == android.R.id.home) {
             finish();

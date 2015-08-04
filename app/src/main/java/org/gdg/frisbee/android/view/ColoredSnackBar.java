@@ -1,5 +1,6 @@
 package org.gdg.frisbee.android.view;
 
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.TextView;
@@ -21,7 +22,8 @@ public class ColoredSnackBar {
     private ColoredSnackBar() {
     }
 
-    private static View getSnackBarLayout(Snackbar snackbar) {
+    @Nullable
+    private static View getSnackBarLayout(@Nullable Snackbar snackbar) {
         if (snackbar != null) {
             return snackbar.getView();
         }

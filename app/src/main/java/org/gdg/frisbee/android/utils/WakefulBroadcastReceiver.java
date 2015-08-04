@@ -21,6 +21,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.PowerManager;
+import android.support.annotation.NonNull;
 import android.util.SparseArray;
 
 import timber.log.Timber;
@@ -77,7 +78,7 @@ public abstract class WakefulBroadcastReceiver extends BroadcastReceiver {
      * {@link android.content.Context#startService(android.content.Intent)
      * Context.startService}.
      */
-    public static ComponentName startWakefulService(Context context, Intent intent) {
+    public static ComponentName startWakefulService(@NonNull Context context, @NonNull Intent intent) {
         synchronized (mActiveWakeLocks) {
             int id = mNextId;
             mNextId++;
@@ -109,7 +110,7 @@ public abstract class WakefulBroadcastReceiver extends BroadcastReceiver {
      * @return Returns true if the intent is associated with a wake lock that is
      * now released; returns false if there was no wake lock specified for it.
      */
-    public static boolean completeWakefulIntent(Intent intent) {
+    public static boolean completeWakefulIntent(@NonNull Intent intent) {
         final int id = intent.getIntExtra(EXTRA_WAKE_LOCK_ID, 0);
         if (id == 0) {
             return false;

@@ -2,6 +2,7 @@ package org.gdg.frisbee.android.api.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -25,7 +26,7 @@ public class Country implements Parcelable {
         this.isoCode = isoCode;
     }
 
-    public Country(Parcel in) {
+    public Country(@NonNull Parcel in) {
         name = in.readString();
         isoCode = in.readString();
     }
@@ -52,16 +53,18 @@ public class Country implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
+    public void writeToParcel(@NonNull Parcel parcel, int i) {
         parcel.writeString(name);
         parcel.writeString(isoCode);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public Country createFromParcel(Parcel in) {
+        @NonNull
+        public Country createFromParcel(@NonNull Parcel in) {
             return new Country(in);
         }
 
+        @NonNull
         public Country[] newArray(int size) {
             return new Country[size];
         }

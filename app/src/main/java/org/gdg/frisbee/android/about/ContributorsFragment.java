@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.about;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 
 import org.gdg.frisbee.android.Const;
@@ -66,7 +67,7 @@ public class ContributorsFragment extends PeopleListFragment {
     private void fetchGitHubContributors() {
         App.getInstance().getGithub().getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO, new Callback<ContributorList>() {
             @Override
-            public void success(final ContributorList contributors, retrofit.client.Response response) {
+            public void success(@NonNull final ContributorList contributors, retrofit.client.Response response) {
 
                 mAdapter.addAll(contributors);
                 App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_FRISBEE_CONTRIBUTORS,

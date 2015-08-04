@@ -17,6 +17,8 @@
 package org.gdg.frisbee.android.onboarding;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,13 +30,13 @@ import android.widget.ViewSwitcher;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.chapter.ChapterAdapter;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
-import org.gdg.frisbee.android.common.BaseFragment;
+import org.gdg.frisbee.android.chapter.ChapterAdapter;
 import org.gdg.frisbee.android.chapter.ChapterComparator;
+import org.gdg.frisbee.android.common.BaseFragment;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
@@ -42,8 +44,8 @@ import org.joda.time.DateTime;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -59,11 +61,12 @@ public class FirstStartStep1Fragment extends BaseFragment {
     @Bind(R.id.viewSwitcher)
     ViewSwitcher mLoadSwitcher;
     private ChapterAdapter mSpinnerAdapter;
+    @Nullable
     private Chapter mSelectedChapter;
     private ChapterComparator mLocationComparator;
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
         if (mSpinnerAdapter != null && mSpinnerAdapter.getCount() > 0) {
@@ -73,11 +76,11 @@ public class FirstStartStep1Fragment extends BaseFragment {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 
         super.onActivityCreated(savedInstanceState);
 
-        mLocationComparator = new ChapterComparator(PrefUtils.getHomeChapterId(getActivity()));
+        mLocationComparator = new ChapterComparator(PrefUtils.getHomeChapterIdNotNull(getActivity()));
 
         mSpinnerAdapter = new ChapterAdapter(getActivity(), R.layout.spinner_item_welcome);
         mSpinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
@@ -117,7 +120,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
         App.getInstance().getGdgXHub().getDirectory(new Callback<Directory>() {
 
             @Override
-            public void success(final Directory directory, Response response) {
+            public void success(@NonNull final Directory directory, Response response) {
 
                 App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB,
                         directory,
@@ -133,7 +136,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
 
             @Override
             public void failure(RetrofitError error) {
-                try {
+                if (getView() != null) {
                     Snackbar snackbar = Snackbar.make(getView(), R.string.fetch_chapters_failed,
                             Snackbar.LENGTH_INDEFINITE);
                     snackbar.setAction("Retry", new View.OnClickListener() {
@@ -143,7 +146,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
                         }
                     });
                     ColoredSnackBar.alert(snackbar).show();
-                } catch (IllegalStateException exception) {
+                } else {
                     Toast.makeText(getActivity(), R.string.fetch_chapters_failed, Toast.LENGTH_SHORT).show();
                 }
                 Timber.e(error, "Could'nt fetch chapter list");
@@ -151,7 +154,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
         });
     }
 
-    private void addChapters(List<Chapter> chapterList) {
+    private void addChapters(@NonNull List<Chapter> chapterList) {
         Collections.sort(chapterList, mLocationComparator);
         mSpinnerAdapter.clear();
         mSpinnerAdapter.addAll(chapterList);
@@ -165,7 +168,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_welcome_step1, container, false);
         ButterKnife.bind(this, v);
         return v;

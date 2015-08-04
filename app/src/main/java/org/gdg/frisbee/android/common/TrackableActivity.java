@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.common;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
@@ -41,6 +42,7 @@ abstract class TrackableActivity extends AppCompatActivity implements ViewPager.
 
     private int mCurrentPage = 0;
 
+    @Nullable
     protected abstract String getTrackedViewName();
 
     protected int getCurrentPage() {
@@ -77,7 +79,7 @@ abstract class TrackableActivity extends AppCompatActivity implements ViewPager.
         trackView(getTrackedViewName());
     }
 
-    protected void trackView(String viewName) {
+    protected void trackView(@Nullable String viewName) {
         if (viewName != null) {
             Tracker t = App.getInstance().getTracker();
             // Set screen name.

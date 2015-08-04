@@ -18,6 +18,7 @@ package org.gdg.frisbee.android.achievements;
 
 import android.content.Context;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
@@ -36,6 +37,7 @@ public class AchievementActionHandler {
     private final Context mContext;
     private final Handler mHandler;
     private final GoogleApiClient mGoogleApi;
+    @NonNull
     private final ArrayList<String> mPending;
 
     public AchievementActionHandler(Handler handler,

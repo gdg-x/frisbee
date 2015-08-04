@@ -1,5 +1,7 @@
 package org.gdg.frisbee.android.api;
 
+import android.support.annotation.NonNull;
+
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.utils.Utils;
 
@@ -31,7 +33,7 @@ public final class GroupDirectoryFactory {
                     .setClient(OkClientFactory.provideClient())
                     .setRequestInterceptor(new RequestInterceptor() {
                         @Override
-                        public void intercept(RequestFacade request) {
+                        public void intercept(@NonNull RequestFacade request) {
                             request.addHeader("User-Agent", "GDG-Frisbee/0.1 (Android)");
                             request.addHeader("Referer", "https://developers.google.com/groups/directory/");
                             request.addHeader("X-Requested-With", "XMLHttpRequest");

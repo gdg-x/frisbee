@@ -30,7 +30,7 @@ import java.util.Collection;
 
 public class ChapterAdapter extends ArrayAdapter<Chapter> {
 
-    public ChapterAdapter(Context context, @LayoutRes int layoutRes) {
+    public ChapterAdapter(@NonNull Context context, @LayoutRes int layoutRes) {
         super(context, layoutRes);
     }
 
@@ -41,6 +41,7 @@ public class ChapterAdapter extends ArrayAdapter<Chapter> {
         }
     }
 
+    @NonNull
     public ArrayList<Chapter> getAll() {
         ArrayList<Chapter> chapters = new ArrayList<>();
         for (int i = 0; i < getCount(); i++) {

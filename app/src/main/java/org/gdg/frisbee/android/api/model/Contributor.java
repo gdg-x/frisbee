@@ -1,5 +1,7 @@
 package org.gdg.frisbee.android.api.model;
 
+import android.support.annotation.Nullable;
+
 /**
  * Created with IntelliJ IDEA.
  * User: maui
@@ -67,6 +69,7 @@ public class Contributor implements GdgPerson {
         return login;
     }
 
+    @Nullable
     @Override
     public String getSecondaryText() {
         return null;

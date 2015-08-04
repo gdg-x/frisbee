@@ -1,6 +1,7 @@
 package org.gdg.frisbee.android.eventseries;
 
 import android.location.Location;
+import android.support.annotation.NonNull;
 
 import org.gdg.frisbee.android.api.model.TaggedEvent;
 import org.gdg.frisbee.android.app.App;
@@ -13,7 +14,7 @@ class TaggedEventDistanceComparator implements Comparator<EventAdapter.Item> {
     }
 
     @Override
-    public int compare(EventAdapter.Item eventItem1, EventAdapter.Item eventItem2) {
+    public int compare(@NonNull EventAdapter.Item eventItem1, @NonNull EventAdapter.Item eventItem2) {
         float[] results = new float[1];
         float[] results2 = new float[1];
 

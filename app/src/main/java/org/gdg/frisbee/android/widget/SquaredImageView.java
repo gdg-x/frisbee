@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.widget;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -33,7 +34,7 @@ public class SquaredImageView extends ImageView {
         super(context);
     }
 
-    public SquaredImageView(Context context, AttributeSet attrs) {
+    public SquaredImageView(@NonNull Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 

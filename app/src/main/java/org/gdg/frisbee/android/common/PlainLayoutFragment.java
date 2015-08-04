@@ -2,6 +2,7 @@ package org.gdg.frisbee.android.common;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ public class PlainLayoutFragment extends BaseFragment {
 
     private static final String ARG_LAYOUT_RES = "layout_res";
 
+    @NonNull
     public static PlainLayoutFragment newInstance(@LayoutRes int res) {
         PlainLayoutFragment frag = new PlainLayoutFragment();
         Bundle bndl = new Bundle();
@@ -36,7 +38,7 @@ public class PlainLayoutFragment extends BaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(mLayoutRes, container, false);
     }
 }

@@ -18,6 +18,7 @@ package org.gdg.frisbee.android.widget;
 
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -36,12 +37,12 @@ public class AnimationImageView extends ImageView {
         initAnimation();
     }
 
-    public AnimationImageView(Context context, AttributeSet attrs) {
+    public AnimationImageView(@NonNull Context context, AttributeSet attrs) {
         super(context, attrs);
         initAnimation();
     }
 
-    public AnimationImageView(Context context, AttributeSet attrs, int defStyle) {
+    public AnimationImageView(@NonNull Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         initAnimation();
     }

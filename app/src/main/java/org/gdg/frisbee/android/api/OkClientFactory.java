@@ -29,7 +29,7 @@ public final class OkClientFactory {
     }
 
     @NonNull
-    public static OkHttpClient provideOkHttpClient(Context context) {
+    public static OkHttpClient provideOkHttpClient(@NonNull Context context) {
         OkHttpClient okHttpClient = new OkHttpClient();
         // Install an HTTP cache in the application cache directory.
         File cacheDir = new File(context.getApplicationContext().getCacheDir(), "http");

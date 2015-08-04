@@ -20,6 +20,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,7 +67,7 @@ class EventAdapter extends BaseAdapter {
         mDefaultIcon = defaultIcon;
     }
 
-    public void addAll(Collection<? extends SimpleEvent> items) {
+    public void addAll(@NonNull Collection<? extends SimpleEvent> items) {
         for (SimpleEvent a : items) {
             mEvents.add(new Item(a));
         }
@@ -97,8 +99,9 @@ class EventAdapter extends BaseAdapter {
     }
 
 
+    @NonNull
     @Override
-    public View getView(int i, View convertView, ViewGroup viewGroup) {
+    public View getView(int i, @Nullable View convertView, ViewGroup viewGroup) {
         
         ViewHolder holder;
         if (convertView != null && convertView.getTag() != null) {
@@ -144,7 +147,7 @@ class EventAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private void openEventLink(SimpleEvent event) {
+    private void openEventLink(@NonNull SimpleEvent event) {
         String link = event.getGPlusEventLink();
         if (!TextUtils.isEmpty(link)) {
             if (!link.startsWith("http")) {

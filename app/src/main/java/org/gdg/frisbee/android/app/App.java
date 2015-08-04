@@ -72,6 +72,7 @@ import java.util.ArrayList;
 
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
+
 /**
  * Created with IntelliJ IDEA.
  * User: maui
@@ -305,7 +306,7 @@ public class App extends Application implements LocationListener {
         return mModelCache;
     }
 
-    private boolean deleteDirectory(File dir) {
+    private boolean deleteDirectory(@NonNull File dir) {
         if (dir.isDirectory()) {
             for (File child : dir.listFiles()) {
                 deleteDirectory(child);

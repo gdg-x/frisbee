@@ -16,6 +16,9 @@
 
 package org.gdg.frisbee.android.utils;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -33,47 +36,50 @@ public class CryptoUtils {
 
     }
     
-    public static String encrypt(String seed, String cleartext) throws Exception {
+    public static String encrypt(@NonNull String seed, @NonNull String cleartext) throws Exception {
         byte[] rawKey = getRawKey(seed.getBytes());
         byte[] result = encrypt(rawKey, cleartext.getBytes());
         return toHex(result);
     }
 
-    public static String decrypt(String seed, String encrypted) throws Exception {
+    @NonNull
+    public static String decrypt(@NonNull String seed, @NonNull String encrypted) throws Exception {
         byte[] rawKey = getRawKey(seed.getBytes());
         byte[] enc = toByte(encrypted);
         byte[] result = decrypt(rawKey, enc);
         return new String(result);
     }
 
-    private static byte[] getRawKey(byte[] key) throws Exception {
+    private static byte[] getRawKey(@NonNull byte[] key) throws Exception {
         SecretKey skey = new SecretKeySpec(key, "AES");
         return skey.getEncoded();
     }
 
 
-    private static byte[] encrypt(byte[] raw, byte[] clear) throws Exception {
+    private static byte[] encrypt(@NonNull byte[] raw, @NonNull byte[] clear) throws Exception {
         SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
         Cipher cipher = Cipher.getInstance("AES");
         cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
         return cipher.doFinal(clear);
     }
 
-    private static byte[] decrypt(byte[] raw, byte[] encrypted) throws Exception {
+    private static byte[] decrypt(@NonNull byte[] raw, @NonNull byte[] encrypted) throws Exception {
         SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
         Cipher cipher = Cipher.getInstance("AES");
         cipher.init(Cipher.DECRYPT_MODE, skeySpec);
         return cipher.doFinal(encrypted);
     }
 
-    public static String toHex(String txt) {
+    public static String toHex(@NonNull String txt) {
         return toHex(txt.getBytes());
     }
-    public static String fromHex(String hex) {
+    @NonNull
+    public static String fromHex(@NonNull String hex) {
         return new String(toByte(hex));
     }
 
-    public static byte[] toByte(String hexString) {
+    @NonNull
+    public static byte[] toByte(@NonNull String hexString) {
         int len = hexString.length() / 2;
         byte[] result = new byte[len];
         for (int i = 0; i < len; i++) {
@@ -82,7 +88,7 @@ public class CryptoUtils {
         return result;
     }
 
-    public static String toHex(byte[] buf) {
+    public static String toHex(@Nullable byte[] buf) {
         if (buf == null) {
             return "";
         }
@@ -93,7 +99,7 @@ public class CryptoUtils {
         return result.toString();
     }
     private static final String HEX = "0123456789ABCDEF";
-    private static void appendHex(StringBuffer sb, byte b) {
+    private static void appendHex(@NonNull StringBuffer sb, byte b) {
         sb.append(HEX.charAt((b >> 4) & 0x0f)).append(HEX.charAt(b & 0x0f));
     }
 }

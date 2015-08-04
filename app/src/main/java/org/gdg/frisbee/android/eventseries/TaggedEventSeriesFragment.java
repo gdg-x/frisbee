@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.eventseries;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -48,14 +49,15 @@ public class TaggedEventSeriesFragment extends EventListFragment {
 
     private static final String ARGS_ADD_DESCRIPTION_AS_HEADER = "add_description";
     
-    private String mCacheKey = "";
+    private String mCacheKey;
     private TaggedEventSeries mTaggedEventSeries;
-    private Comparator<EventAdapter.Item> mLocationComparator = new TaggedEventDistanceComparator();
-    private Comparator<EventAdapter.Item> mCurrentComparator = mLocationComparator;
-    private Comparator<EventAdapter.Item> mDateComparator = new EventDateComparator();
+    @NonNull private Comparator<EventAdapter.Item> mLocationComparator = new TaggedEventDistanceComparator();
+    @NonNull private Comparator<EventAdapter.Item> mCurrentComparator = mLocationComparator;
+    @NonNull private Comparator<EventAdapter.Item> mDateComparator = new EventDateComparator();
 
-    public static TaggedEventSeriesFragment newInstance(String cacheKey, 
-                                                        TaggedEventSeries taggedEventSeries, 
+    @NonNull
+    public static TaggedEventSeriesFragment newInstance(@NonNull String cacheKey,
+                                                        @NonNull TaggedEventSeries taggedEventSeries,
                                                         boolean addDescriptionAsHeader) {
         TaggedEventSeriesFragment frag = new TaggedEventSeriesFragment();
         Bundle args = new Bundle();
@@ -77,8 +79,9 @@ public class TaggedEventSeriesFragment extends EventListFragment {
         }
     }
 
+    @NonNull
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState);
 
         ListView list = ButterKnife.findById(v, android.R.id.list);
@@ -103,6 +106,7 @@ public class TaggedEventSeriesFragment extends EventListFragment {
         return v;
     }
 
+    @NonNull
     @Override
     EventAdapter createEventAdapter() {
         return new EventAdapter(getActivity(), mTaggedEventSeries.getDefaultIconResId());
@@ -115,7 +119,7 @@ public class TaggedEventSeriesFragment extends EventListFragment {
         Callback<PagedList<TaggedEvent>> listener = new Callback<PagedList<TaggedEvent>>() {
 
             @Override
-            public void success(final PagedList<TaggedEvent> taggedEventPagedList, final retrofit.client.Response response) {
+            public void success(@NonNull final PagedList<TaggedEvent> taggedEventPagedList, final retrofit.client.Response response) {
                 mEvents.addAll(taggedEventPagedList.getItems());
 
                 
@@ -133,7 +137,7 @@ public class TaggedEventSeriesFragment extends EventListFragment {
             }
             
             @Override
-            public void failure(final RetrofitError error) {
+            public void failure(@NonNull final RetrofitError error) {
                 onError(error);
             }
         };
@@ -175,12 +179,12 @@ public class TaggedEventSeriesFragment extends EventListFragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.special_event_menu, menu);
     }
 
     @Override
-    public void onPrepareOptionsMenu(Menu menu) {
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
         if (mCurrentComparator == mLocationComparator) {
             menu.findItem(R.id.order_by_date).setVisible(true);
             menu.findItem(R.id.order_by_distance).setVisible(false);
@@ -192,7 +196,7 @@ public class TaggedEventSeriesFragment extends EventListFragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.order_by_date) {
             mCurrentComparator = mDateComparator;
             setIsLoading(true);

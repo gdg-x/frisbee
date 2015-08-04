@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.activity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -39,11 +40,12 @@ public class SearchActivity extends GdgNavDrawerActivity {
         handleIntent(getIntent());
     }
 
+    @NonNull
     protected String getTrackedViewName() {
         return "Search";
     }
 
-    private void handleIntent(Intent intent) {
+    private void handleIntent(@NonNull Intent intent) {
         String action = intent.getAction();
         Timber.d(intent.getDataString());
         if (Intent.ACTION_SEARCH.equals(action)) {
@@ -59,7 +61,7 @@ public class SearchActivity extends GdgNavDrawerActivity {
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
+    protected void onNewIntent(@NonNull Intent intent) {
         setIntent(intent);
         handleIntent(intent);
     }

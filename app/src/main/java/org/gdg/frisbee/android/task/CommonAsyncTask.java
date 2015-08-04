@@ -17,6 +17,8 @@
 package org.gdg.frisbee.android.task;
 
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -63,7 +65,7 @@ public class CommonAsyncTask<Params, Result> extends AsyncTask<Params, Void, Res
     }
 
     @Override
-    protected final Result doInBackground(Params... params) {
+    protected final Result doInBackground(@Nullable Params... params) {
         if (params != null && params.length == 0 && mBackgroundListener != null) {
             return mBackgroundListener.doInBackground((Params[]) null);
         }
@@ -133,12 +135,14 @@ public class CommonAsyncTask<Params, Result> extends AsyncTask<Params, Void, Res
         void onPreExecute();
     }
 
+    @NonNull
     public CommonAsyncTask<Params, Result> execute() {
         super.execute(mParams);
         return this;
     }
 
-    public CommonAsyncTask<Params, Result> executeWithAdditionalParams(Params[] p) {
+    @NonNull
+    public CommonAsyncTask<Params, Result> executeWithAdditionalParams(@NonNull Params[] p) {
         Params[] result = Arrays.copyOf(mParams, mParams.length + p.length);
         System.arraycopy(p, 0, result, mParams.length, p.length);
         super.execute(result);
