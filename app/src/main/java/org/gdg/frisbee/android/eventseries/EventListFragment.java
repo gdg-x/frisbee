@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.util.Pair;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -34,8 +35,12 @@ import org.gdg.frisbee.android.api.model.SimpleEvent;
 import org.gdg.frisbee.android.common.GdgListFragment;
 import org.gdg.frisbee.android.event.EventActivity;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import butterknife.ButterKnife;
 
@@ -148,6 +153,44 @@ public abstract class EventListFragment extends GdgListFragment {
         }
 
         startActivity(intent);
+    }
+
+    /**
+     * Helper method that will split events into upcoming / past
+     * and add to the adapter of this list fragment
+     *
+     * @param events
+     *      The events list to be added
+     */
+    protected void splitEventsAndAddToAdapter(Collection<? extends SimpleEvent> events) {
+        Pair<List<SimpleEvent>, List<SimpleEvent>> pair = splitEventsList(events);
+        mAdapter.addAll(pair.first);
+        mAdapter.addAll(pair.second);
+    }
+
+    /**
+     * Split a events list into Upcoming / Past events
+     *
+     * @param events
+     *      The events list that needs to be sorted
+     * @return
+     *      A pair containting the split list into Upcoming / Past events
+     */
+    private Pair<List<SimpleEvent>, List<SimpleEvent>> splitEventsList(Collection<? extends SimpleEvent> events) {
+        List<SimpleEvent> upcoming = new ArrayList<>();
+        List<SimpleEvent> past = new ArrayList<>();
+
+        DateTime now = DateTime.now();
+
+        for (SimpleEvent event : events) {
+            if (event.getStart().isBefore(now)) {
+                past.add(event);
+            } else {
+                upcoming.add(event);
+            }
+        }
+        Collections.reverse(past);
+        return new Pair<>(upcoming, past);
     }
 
     @Override
