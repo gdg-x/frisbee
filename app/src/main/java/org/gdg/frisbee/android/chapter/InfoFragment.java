@@ -24,6 +24,7 @@ import android.support.design.widget.Snackbar;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.SpannedString;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -221,7 +222,10 @@ public class InfoFragment extends BaseFragment {
                 v.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/" + organizer.getId() + "/posts")));
+                        String url = organizer.getUrl();
+                        if (!TextUtils.isEmpty(url)) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                        }
                     }
                 });
                 registerForContextMenu(v);
