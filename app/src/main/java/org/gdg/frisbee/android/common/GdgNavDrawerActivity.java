@@ -150,7 +150,8 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
         menu.setGroupCheckable(GROUP_ID, true, true);
 
-        MenuItem selectedItem = menu.findItem(getIntent().getIntExtra(EXTRA_SELECTED_DRAWER_ITEM_ID, Const.DRAWER_HOME));
+        final int selectedDrawerItemId = getIntent().getIntExtra(EXTRA_SELECTED_DRAWER_ITEM_ID, Const.DRAWER_HOME);
+        final MenuItem selectedItem = menu.findItem(selectedDrawerItemId);
         if (selectedItem != null) {
             selectedItem.setChecked(true);
         }
