@@ -164,4 +164,6 @@
   <string name="feedback_invalid_email">Insira um e-mail válido</string>
   <string name="drawer_subheader_games">Jogos</string>
   <string name="fork_me">Faça um Fork</string>
+  <string name="cd_arrowTagImage">Arrow Tagging Game</string>
+  <string name="cd_qrCode">QR Code</string>
 </resources>

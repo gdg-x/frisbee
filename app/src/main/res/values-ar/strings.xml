@@ -181,4 +181,6 @@
   <string name="feedback_invalid_email">إدخال عنوان بريد إلكتروني صحيح</string>
   <string name="drawer_subheader_games">ألعاب</string>
   <string name="fork_me">مفترق لي</string>
+  <string name="cd_arrowTagImage">Arrow Tagging Game</string>
+  <string name="cd_qrCode">QR Code</string>
 </resources>

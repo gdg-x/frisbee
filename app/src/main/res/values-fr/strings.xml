@@ -169,4 +169,6 @@
   <string name="feedback_invalid_email">Entrée adresse email valide</string>
   <string name="drawer_subheader_games">Jeux</string>
   <string name="fork_me">Fourche moi</string>
+  <string name="cd_arrowTagImage">Arrow Tagging Game</string>
+  <string name="cd_qrCode">QR Code</string>
 </resources>

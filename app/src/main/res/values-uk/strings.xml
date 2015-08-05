@@ -193,4 +193,6 @@
   <string name="feedback_invalid_email">Введіть коректну адресу електронної пошти</string>
   <string name="drawer_subheader_games">Ігри</string>
   <string name="fork_me">Клонуй мене</string>
+  <string name="cd_arrowTagImage">Arrow Tagging Game</string>
+  <string name="cd_qrCode">QR Code</string>
 </resources>
