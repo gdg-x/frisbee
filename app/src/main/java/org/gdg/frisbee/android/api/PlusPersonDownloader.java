@@ -60,18 +60,22 @@ public class PlusPersonDownloader implements Interceptor {
         if (cachedPerson instanceof Person) {
             person = (Person) cachedPerson;
             if (person.getImage() != null) {
+                Timber.d("Cache hit: " + gplusId);
                 return person;
             }
         }
         if (cachedPerson != null) {
             App.getInstance().getModelCache().remove(cacheUrl);
+            Timber.d("Cache removal: " + gplusId);
         }
 
         try {
             Plus.People.Get request = plusClient.people().get(gplusId);
-            request.setFields("aboutMe,cover/coverPhoto/url,image/url,displayName,tagline,urls");
+            request.setFields("id,aboutMe,cover/coverPhoto/url,image/url,displayName,tagline,url,urls");
             person = request.execute();
             App.getInstance().getModelCache().put(cacheUrl, person, DateTime.now().plusDays(2));
+
+            Timber.d("Request: " + gplusId);
         } catch (IOException e) {
             Timber.e(e, "Error while getting profile URL.");
         }
