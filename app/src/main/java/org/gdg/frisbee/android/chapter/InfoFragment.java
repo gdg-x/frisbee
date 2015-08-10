@@ -39,10 +39,10 @@ import com.google.api.services.plus.model.Person;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.PlusPersonDownloader;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.BaseFragment;
-import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.Utils;
@@ -92,7 +92,7 @@ public class InfoFragment extends BaseFragment {
                     for (int i = 0; i < params.length; i++) {
                         Timber.d("Get Organizer " + params[i]);
                         if (isAdded()) {
-                            people[i] = GdgNavDrawerActivity.getPersonSync(params[i]);
+                            people[i] = PlusPersonDownloader.getPersonSync(params[i]);
                         } else {
                             // fragment is not used anymore
                             people[i] = null;
@@ -130,7 +130,7 @@ public class InfoFragment extends BaseFragment {
                         @Override
                         public Person doInBackground(String... params) {
                             if (isAdded()) {
-                                return GdgNavDrawerActivity.getPersonSync(chapterPlusId);
+                                return PlusPersonDownloader.getPersonSync(chapterPlusId);
                             } else {
                                 // fragment is not used anymore
                                 return null;

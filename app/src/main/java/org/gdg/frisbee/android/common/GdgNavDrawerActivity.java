@@ -21,7 +21,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -35,13 +34,13 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.google.android.gms.games.Games;
-import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Person;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.about.AboutActivity;
 import org.gdg.frisbee.android.activity.SettingsActivity;
+import org.gdg.frisbee.android.api.PlusPersonDownloader;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.arrow.ArrowActivity;
 import org.gdg.frisbee.android.chapter.MainActivity;
@@ -53,13 +52,10 @@ import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.view.BitmapBorderTransformation;
-import org.joda.time.DateTime;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.Bind;
-import timber.log.Timber;
 
 public abstract class GdgNavDrawerActivity extends GdgActivity {
 
@@ -365,7 +361,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                         @Override
                         public Person doInBackground(String... params) {
 
-                            return getPersonSync(params[0]);
+                            return PlusPersonDownloader.getPersonSync(params[0]);
                         }
                     })
                     .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person>() {
@@ -390,39 +386,5 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
     protected boolean isHomeChapterOutdated(final String currentHomeChapterId) {
         return currentHomeChapterId != null && (mStoredHomeChapterId == null || !mStoredHomeChapterId.equals(currentHomeChapterId));
-    }
-
-    @Nullable
-    public static Person getPersonSync(final String gplusId) {
-        return getPersonSync(App.getInstance().getPlusClient(), gplusId);
-    }
-
-    @Nullable
-    public static Person getPersonSync(final Plus plusClient, final String gplusId) {
-
-        final String cacheUrl = Const.CACHE_KEY_PERSON + gplusId;
-        Object cachedPerson = App.getInstance().getModelCache().get(cacheUrl);
-        Person person = null;
-
-        if (cachedPerson instanceof Person) {
-            person = (Person) cachedPerson;
-            if (person.getImage() != null) {
-                return person;
-            }
-        }
-        if (cachedPerson != null) {
-            App.getInstance().getModelCache().remove(cacheUrl);
-        }
-
-        try {
-            Plus.People.Get request = plusClient.people().get(gplusId);
-            request.setFields("id,aboutMe,cover/coverPhoto/url,image/url,displayName,tagline,url,urls");
-            person = request.execute();
-            App.getInstance().getModelCache().put(cacheUrl, person, DateTime.now().plusDays(2));
-        } catch (IOException e) {
-            Timber.e(e, "Error while getting profile URL.");
-        }
-
-        return person;
     }
 }
