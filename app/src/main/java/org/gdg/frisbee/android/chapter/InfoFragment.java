@@ -210,7 +210,9 @@ public class InfoFragment extends BaseFragment {
     private void addUnknowOrganizerToUI() {
         Timber.d("null person");
         View v = getUnknownOrganizerView();
-        mOrganizerBox.addView(v);
+        if (mOrganizerBox != null) {
+            mOrganizerBox.addView(v);
+        }
     }
 
     private void addOrganizerToUI(final Person organizer) {
