@@ -1,4 +1,4 @@
 <resources>
   <string name="app_name" translatable="false">GDG Debug</string>
-  <string name="__leak_canary_display_activity_label">GDG Leaks</string>
+  <string name="__leak_canary_display_activity_label" translatable="false">GDG Leaks</string>
 </resources>
