@@ -48,8 +48,8 @@ import timber.log.Timber;
 
 public class ArrowTaggedActivity extends GdgActivity {
 
-    public static final String ID_SEPARATOR_FOR_SPLIT = "\\|";
-    public static final String ID_SPLIT_CHAR = "|";
+    private static final String ID_SEPARATOR_FOR_SPLIT = "\\|";
+    private static final String ID_SPLIT_CHAR = "|";
 
     @Bind(R.id.taggedList)
     RecyclerView taggedList;

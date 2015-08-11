@@ -6,7 +6,7 @@ package org.gdg.frisbee.android.achievements;
  *
  * @author Bartek Przybylski <bart.p.pl@gmail.com>
  */
-public class Achievements {
+class Achievements {
 
     private Achievements() {
     }

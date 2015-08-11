@@ -147,7 +147,7 @@ public abstract class GdgActivity extends TrackableActivity implements
         }
     }
 
-    public AchievementActionHandler getAchievementActionHandler() {
+    protected AchievementActionHandler getAchievementActionHandler() {
         return mAchievementActionHandler;
     }
 

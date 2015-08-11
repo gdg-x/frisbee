@@ -139,7 +139,7 @@ public abstract class EventListFragment extends GdgListFragment {
         startActivity(intent);
     }
 
-    public void addEventToCalendar(SimpleEvent event) {
+    private void addEventToCalendar(SimpleEvent event) {
         Intent intent = new Intent(Intent.ACTION_EDIT);
         intent.setType("vnd.android.cursor.item/event");
 

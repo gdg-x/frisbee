@@ -163,7 +163,7 @@ class EventAdapter extends BaseAdapter {
         }
     }
 
-    public void openEventInExternalApp(String uri) {
+    private void openEventInExternalApp(String uri) {
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(uri));
         mContext.startActivity(i);

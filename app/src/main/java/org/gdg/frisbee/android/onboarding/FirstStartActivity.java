@@ -229,7 +229,7 @@ public class FirstStartActivity extends AppCompatActivity implements
         super.finish();
     }
 
-    public void requestBackup() {
+    private void requestBackup() {
         BackupManager bm = new BackupManager(this);
         bm.dataChanged();
     }

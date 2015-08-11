@@ -317,7 +317,7 @@ public class InfoFragment extends BaseFragment {
         }
     }
 
-    public void setIsLoading(boolean isLoading) {
+    private void setIsLoading(boolean isLoading) {
 
         if (isLoading == mLoading || getActivity() == null) {
             return;
@@ -354,7 +354,7 @@ public class InfoFragment extends BaseFragment {
     }
 
     @Nullable
-    public View createOrganizerView(Person person) {
+    private View createOrganizerView(Person person) {
         if (getActivity() == null) {
             return null;
         }

@@ -71,8 +71,8 @@ import timber.log.Timber;
 public class ArrowActivity extends GdgNavDrawerActivity {
 
     private static final Charset CHARSET = Charset.forName("US-ASCII");
-    public static final String ID_SEPARATOR_FOR_SPLIT = "\\|";
-    public static final String ID_SPLIT_CHAR = "|";
+    private static final String ID_SEPARATOR_FOR_SPLIT = "\\|";
+    private static final String ID_SPLIT_CHAR = "|";
     private static final int REQUEST_LEADERBOARD = 1;
     private static final int WHITE = 0xFFFFFFFF;
     private static final int BLACK = 0xFF000000;
@@ -310,7 +310,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         });
     }
 
-    public void showNoNfc() {
+    private void showNoNfc() {
         Toast.makeText(this, R.string.no_nfc_use_qr_scanner, Toast.LENGTH_LONG).show();
     }
 
@@ -404,7 +404,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         }
     };
 
-    public long getNow() {
+    private long getNow() {
         return DateTime.now(DateTimeZone.UTC).getMillis();
     }
 

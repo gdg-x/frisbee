@@ -40,7 +40,7 @@ public class Directory implements GdgResponse, Parcelable {
         groups = new ArrayList<>();
     }
 
-    public Directory(Parcel in) {
+    private Directory(Parcel in) {
         groups = new ArrayList<>();
         in.readTypedList(groups, Chapter.CREATOR);
     }

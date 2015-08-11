@@ -181,7 +181,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
         mTabLayout.setupWithViewPager(mViewPager);
     }
 
-    public ArrayList<String> getPulseTargets() {
+    private ArrayList<String> getPulseTargets() {
         return mPulseTargets;
     }
 

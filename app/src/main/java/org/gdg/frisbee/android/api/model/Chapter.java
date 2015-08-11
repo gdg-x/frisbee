@@ -56,7 +56,7 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
         organizers = new ArrayList<>();
     }
 
-    public Chapter(Parcel in) {
+    private Chapter(Parcel in) {
         name = in.readString();
         status = in.readString();
         city = in.readString();

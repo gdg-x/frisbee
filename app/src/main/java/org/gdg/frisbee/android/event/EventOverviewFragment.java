@@ -126,7 +126,7 @@ public class EventOverviewFragment extends Fragment {
         });
     }
 
-    public void updateWithDetails(final EventFullDetails eventFullDetails) {
+    private void updateWithDetails(final EventFullDetails eventFullDetails) {
         mTitle.setText(eventFullDetails.getTitle());
 
         final String eventUrl = eventFullDetails.getEventUrl();
@@ -161,7 +161,7 @@ public class EventOverviewFragment extends Fragment {
         return fmt.print(eventFullDetails.getStart());
     }
 
-    public void onResponse(final EventFullDetails eventFullDetails) {
+    private void onResponse(final EventFullDetails eventFullDetails) {
         if (getActivity() == null) {
             return;
         }
@@ -248,7 +248,7 @@ public class EventOverviewFragment extends Fragment {
         //mGroupLogo.setVisibility(View.INVISIBLE);  //commented as it's making group logo invisible without any condition
     }
 
-    public void setIsLoading(boolean isLoading) {
+    private void setIsLoading(boolean isLoading) {
 
         if (isLoading == mLoading || getActivity() == null) {
             return;
@@ -335,7 +335,7 @@ public class EventOverviewFragment extends Fragment {
         startActivity(intent);
     }
 
-    public void addEventToCalendar() {
+    private void addEventToCalendar() {
         Intent intent = new Intent(Intent.ACTION_EDIT);
         intent.setType("vnd.android.cursor.item/event");
 
