@@ -36,7 +36,6 @@ import org.gdg.frisbee.android.achievements.AchievementActionHandler;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.RecentTasksStyler;
-import org.gdg.frisbee.android.utils.ScopedBus;
 import org.gdg.frisbee.android.utils.Utils;
 
 import java.util.List;
@@ -51,7 +50,6 @@ public abstract class GdgActivity extends TrackableActivity implements
     private static final int STATE_IN_PROGRESS = 2;
     private static final int RC_SIGN_IN = 0;
     private static final int DIALOG_PLAY_SERVICES_ERROR = 0;
-    private final ScopedBus scopedBus = new ScopedBus();
     private AchievementActionHandler mAchievementActionHandler;
     private Handler mHandler = new Handler();
 
@@ -81,10 +79,6 @@ public abstract class GdgActivity extends TrackableActivity implements
     private PendingIntent mSignInIntent;
 
     private Toolbar mActionBarToolbar;
-
-    protected ScopedBus getBus() {
-        return scopedBus;
-    }
 
     public Handler getHandler() {
         return mHandler;
@@ -149,18 +143,6 @@ public abstract class GdgActivity extends TrackableActivity implements
 
     public AchievementActionHandler getAchievementActionHandler() {
         return mAchievementActionHandler;
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        getBus().paused();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        getBus().resumed();
     }
 
     @Override
