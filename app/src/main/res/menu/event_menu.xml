@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto">
+      xmlns:app="http://schemas.android.com/apk/res-auto">
   <item
     android:id="@+id/share"
     android:title="@string/share"
-    app:showAsAction="always"
-    app:actionProviderClass="android.support.v7.widget.ShareActionProvider"></item>
+    app:actionProviderClass="android.support.v7.widget.ShareActionProvider"
+    app:showAsAction="always"/>
   <item
     android:id="@+id/add_calendar"
-    android:title="@string/add_to_calendar"></item>
+    android:title="@string/add_to_calendar"/>
   <item
     android:id="@+id/navigate_to"
-    android:title="@string/navigate_to"></item>
+    android:title="@string/navigate_to"/>
   <item
     android:id="@+id/view_event_url"
-    android:title="@string/open_event_site"></item>
+    android:title="@string/open_event_site"/>
 
 </menu>

@@ -17,5 +17,7 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/share_with_googleplus" android:title="@string/share_with_googleplus"></item>
+  <item
+    android:id="@+id/share_with_googleplus"
+    android:title="@string/share_with_googleplus"/>
 </menu>
