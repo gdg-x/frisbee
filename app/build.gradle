@@ -90,7 +90,6 @@ android {
             proguardFile '../settings/proguard/proguard-google-play-services.pro'
             proguardFile '../settings/proguard/proguard-google-analytics.pro'
             proguardFile '../settings/proguard/proguard-gson.pro'
-            proguardFile '../settings/proguard/proguard-square-otto.pro'
             proguardFile '../settings/proguard/proguard-square-okio.pro'
             proguardFile '../settings/proguard/proguard-square-okhttp.pro'
             proguardFile '../settings/proguard/proguard-square-picasso.pro'
