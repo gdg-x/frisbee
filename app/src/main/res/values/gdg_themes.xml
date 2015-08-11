@@ -23,8 +23,8 @@
     <item name="actionBarInsetStart">@dimen/keyline_2</item>
     <item name="spinnerBarInsetStart">@dimen/keyline_2_minus_16dp</item>
     <item name="android:windowContentOverlay">@null</item>
-    <item name="colorPrimary">@color/material_blue_500</item>
-    <item name="colorPrimaryDark">@color/material_blue_700</item>
+    <item name="colorPrimary">@color/theme_primary</item>
+    <item name="colorPrimaryDark">@color/theme_primary_dark</item>
 
     <item name="android:windowBackground">@color/default_bg</item>
     <item name="windowActionBar">false</item>

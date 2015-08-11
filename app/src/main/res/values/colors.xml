@@ -34,13 +34,10 @@
   <color name="light_semi_transparent">#b6e0e0e0</color>
   <color name="material_blue_500">#2196F3</color>
   <color name="material_blue_700">#1976D2</color>
-  <color name="tab_text_color">@android:color/white</color>
-  <color name="tab_selected_strip">@color/theme_accent_1</color>
   <color name="theme_primary">@color/material_blue_500</color>
+  <color name="theme_primary_dark">@color/material_blue_700</color>
   <color name="theme_accent_1">@color/white</color>
-  <color name="navdrawer_background">#ffffffff</color>
-  <color name="navdrawer_inset_foreground">#4000</color>
-  
+
   <color name="color_primary_studyjams">#7161CE</color>
   <color name="color_primary_dark_studyjams">#4C45BB</color>
   <color name="color_primary_wtm">#60B7A3</color>
