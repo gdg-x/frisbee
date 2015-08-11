@@ -40,7 +40,7 @@
   <string name="skip">Tralascia accesso</string>
   <string name="youtube_init_failed">Impossibile inizializzare YouTube.</string>
   <string name="achievements">Risultati</string>
-  <string name="settings">impostazioni</string>
+  <string name="settings">Impostazioni</string>
   <string name="about">Informazioni</string>
   <plurals name="seconds_ago">
     <item quantity="one">Adesso</item>
