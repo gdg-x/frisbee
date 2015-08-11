@@ -84,7 +84,7 @@
   <string name="done">Listo</string>
   <string name="allow_analytics">Permitirnos recolectar datos anónimos de uso, lo que nos ayuda a mejorar la app</string>
   <string name="enable_gcm">Habilitar las Notificaciones GDG (ser notificado acerca de nuevos Eventos)</string>
-  <string name="step3_text">Una cosa más antes de empezar...</string>
+  <string name="step3_text">Una cosa más antes de empezar…</string>
   <string name="share_on_gplus">Invitar Amigos</string>
   <string name="join_me">¡Acompáñame en este evento!</string>
   <string name="name_not_known">Nombre desconocido</string>
@@ -102,7 +102,7 @@
   <string name="media_route_menu_title">Sesión de Cast</string>
   <string name="navigate_to">Dirección del evento</string>
   <string name="gde">Google Developer Experts</string>
-  <string name="fetch_gde_failed">No se pudo obtener el directorio de GDE...</string>
+  <string name="fetch_gde_failed">No se pudo obtener el directorio de GDE…</string>
   <string name="gde_who_title">¿Quiénes son Google Developer Experts?</string>
   <string name="gde_who_desc">Los Google Developer expertos (GDEs) son expertos en una o más tecnologías Google. El programa GDE reconoce la labor ejemplar realizada por estas estrellas del rock para los desarrolladores de Google alrededor del mundo invitándolos a ser parte de la creciente comunidad GDE. Los GDEs son gurús, mentores y amigos; son desarrolladores como tú.\n\nLos Google Developer Experts exponen en eventos locales y globales, tienen una fuerte presencia online y una excelente formación técnica en su campo. Estos desarrolladores independientes aportan -con su experiencia y conocimiento trabajando con tecnologías Google en el mundo real- a las comunidades de desarrolladores de todo el mundo.</string>
   <string name="gde_what_title">¿Qué tipo de actividades hacen los GDEs?</string>
@@ -124,7 +124,7 @@
   <string name="event">Evento</string>
   <string name="no_description_available"><![CDATA[<i>No hay Descripción disponible.</i>]]></string>
   <string name="starting_at">A partir de las %1$s</string>
-  <string name="loading_data_failed">No pudo cargar la lista de eventos...</string>
+  <string name="loading_data_failed">No pudo cargar la lista de eventos…</string>
   <string name="share">Comparir</string>
   <string name="open_event_site">Ver la página de eventos</string>
   <string name="arrow_tagged">Sus organizadores etiquetados</string>
@@ -144,7 +144,7 @@
   <string name="feedback_email_hint">Tu dirección de e-mail</string>
   <string name="feedback_message_hint">¿En que estas pensando?</string>
   <string name="feedback_send">Enviar</string>
-  <string name="feedback_sending">Enviando...</string>
+  <string name="feedback_sending">Enviando…</string>
   <string name="for_leads">Para Organizadores</string>
   <string name="leads_welcome_title">Bienvenida(o)</string>
   <string name="leads_welcome">Como Organizador de GDG ¡Tienes acceso a recursos sólo para organizadores!</string>

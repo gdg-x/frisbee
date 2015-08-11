@@ -144,7 +144,7 @@
   <string name="feedback_email_hint">आपका ईमेल पता</string>
   <string name="feedback_message_hint">आपके मन में क्या है?</string>
   <string name="feedback_send">भेजें</string>
-  <string name="feedback_sending">संदेश वितरित हो रहा है...</string>
+  <string name="feedback_sending">संदेश वितरित हो रहा है…</string>
   <string name="for_leads">For Leads</string>
   <string name="leads_welcome_title">स्वागत है</string>
   <string name="leads_welcome">As a GDG lead, you have access to these organizer-only resources!</string>

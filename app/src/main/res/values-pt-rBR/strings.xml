@@ -102,7 +102,7 @@
   <string name="media_route_menu_title">Sessão de compartilhamento</string>
   <string name="navigate_to">Navegue até o evento</string>
   <string name="gde">Google Developer Experts</string>
-  <string name="fetch_gde_failed">Não foi possível buscar o diretório de GDEs...</string>
+  <string name="fetch_gde_failed">Não foi possível buscar o diretório de GDEs…</string>
   <string name="gde_who_title">Quem são os especialistas do Google Developer?</string>
   <string name="gde_who_desc">Google Developer Experts (GDEs) são especialistas em uma ou mais tecnologias de desenvolvedor do Google. O programa GDE reconhece o trabalho exemplar feito por estas estrelas do rock para os desenvolvedores do Google em todo o mundo convidando-os a fazer parte da crescente comunidade GDE. GDEs são gurus, mestres e amigos; eles são os desenvolvedores como você.\n\Google Developer Expertss falam em eventos locais e globais, têm uma forte presença online e um excelente background técnico em seus campo de atuação. Esses desenvolvedores independentes trazem sua experiência do mundo real e conhecimento trabalhando com tecnologias Google para comunidades de desenvolvedores em todo o mundo.</string>
   <string name="gde_what_title">Que tipo de actividades fazem os GDEs?</string>
@@ -124,7 +124,7 @@
   <string name="event">Evento</string>
   <string name="no_description_available"><![CDATA[<i>Nenhuma descrição disponível.</i>]]></string>
   <string name="starting_at">Começando em %1$s</string>
-  <string name="loading_data_failed">Não foi possível carregar a lista de eventos...</string>
+  <string name="loading_data_failed">Não foi possível carregar a lista de eventos…</string>
   <string name="share">Compartilhar</string>
   <string name="open_event_site">Ver página de eventos</string>
   <string name="arrow_tagged">Seus organizadores marcados</string>

@@ -161,7 +161,7 @@
   <string name="feedback_email_hint">بريدك الإلكتروني</string>
   <string name="feedback_message_hint">ما الذي يدور في ذهنك؟?</string>
   <string name="feedback_send">أرسل</string>
-  <string name="feedback_sending">جاري الإرسال...</string>
+  <string name="feedback_sending">جاري الإرسال…</string>
   <string name="for_leads">ليؤدي</string>
   <string name="leads_welcome_title">مرحبا</string>
   <string name="leads_welcome">كما تؤدي GDG، لديك حق الوصول إلى هذه الموارد في تنظيم الوحيد!</string>
