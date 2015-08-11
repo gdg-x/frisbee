@@ -19,22 +19,16 @@ package org.gdg.frisbee.android.onboarding;
 import android.app.backup.BackupManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Chapter;
@@ -54,21 +48,13 @@ public class FirstStartActivity extends AppCompatActivity implements
 
     public static final String ACTION_FIRST_START = "finish_first_start";
 
-    private GoogleCloudMessaging mGcm;
-
     @Bind(R.id.pager)
     NonSwipeableViewPager mViewPager;
-
-    @Bind(R.id.loading)
-    LinearLayout mLoading;
 
     @Bind(R.id.contentLayout)
     FrameLayout mContentLayout;
 
-    private Chapter mSelectedChapter;
     private FirstStartPageAdapter mViewPagerAdapter;
-
-    private Handler mHandler = new Handler();
 
     private GoogleApiClient mGoogleApiClient = null;
 
@@ -83,8 +69,6 @@ public class FirstStartActivity extends AppCompatActivity implements
 
         mViewPagerAdapter = new FirstStartPageAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);
-
-        mGcm = GoogleCloudMessaging.getInstance(this);
 
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -110,51 +94,8 @@ public class FirstStartActivity extends AppCompatActivity implements
         });
     }
 
-    private void setLoadingScreen(boolean show) {
-        Animation fadeAnim;
-        if (show) {
-            fadeAnim = AnimationUtils.loadAnimation(this, R.anim.fade_in);
-            fadeAnim.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                    mLoading.setVisibility(View.VISIBLE);
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    //To change body of implemented methods use File | Settings | File Templates.
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                    //To change body of implemented methods use File | Settings | File Templates.
-                }
-            });
-        } else {
-            fadeAnim = AnimationUtils.loadAnimation(this, R.anim.fade_out);
-            fadeAnim.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    mLoading.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                    //To change body of implemented methods use File | Settings | File Templates.
-                }
-            });
-        }
-
-        mLoading.startAnimation(fadeAnim);
-    }
-
     @Override
     public void onConfirmedChapter(Chapter chapter) {
-        mSelectedChapter = chapter;
         PrefUtils.setHomeChapter(this, chapter);
 
         if (mGoogleApiClient == null) {
