@@ -15,19 +15,18 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
 -->
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
-
-  <include layout="@layout/loading_animated_view"/>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  xmlns:tools="http://schemas.android.com/tools">
 
   <ScrollView
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:visibility="gone"
+    tools:visibility="visible">
 
     <LinearLayout
       android:id="@+id/scrollView"
@@ -61,4 +60,6 @@
       </LinearLayout>
     </LinearLayout>
   </ScrollView>
-</LinearLayout>
+
+  <include layout="@layout/loading_animated_view"/>
+</RelativeLayout>

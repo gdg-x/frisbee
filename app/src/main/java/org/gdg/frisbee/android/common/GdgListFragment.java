@@ -30,8 +30,9 @@ import android.widget.ListView;
 
 import org.gdg.frisbee.android.R;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
+import retrofit.http.HEAD;
 
 /**
  * GDG Aachen

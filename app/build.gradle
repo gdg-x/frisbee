@@ -219,6 +219,7 @@ dependencies {
     compile 'io.doorbell:android-sdk:0.2.2@aar'
     compile 'org.jsoup:jsoup:1.8.2'
     compile 'net.danlew:android.joda:2.9.0'
+    compile 'com.tasomaniac:delayed-progress:0.3'
     compile 'com.google.code.findbugs:jsr305:2.0.1'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.4@aar') {
         transitive = true;
