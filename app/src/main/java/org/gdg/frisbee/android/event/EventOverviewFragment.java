@@ -34,8 +34,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -49,19 +47,19 @@ import com.squareup.picasso.Target;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.EventFullDetails;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import timber.log.Timber;
@@ -81,10 +79,13 @@ public class EventOverviewFragment extends Fragment {
     TextView mEventDescription;
 
     @Bind(R.id.loading)
-    View mProgressContainer;
+    DelayedProgressBar mProgressContainer;
 
     @Bind(R.id.group_logo)
     ImageView mGroupLogo;
+
+    @Bind(R.id.container)
+    View mContainer;
 
     private boolean mLoading;
     private Directory mDirectory;
@@ -258,28 +259,17 @@ public class EventOverviewFragment extends Fragment {
         mLoading = isLoading;
 
         if (isLoading) {
-            mProgressContainer.startAnimation(AnimationUtils.loadAnimation(
-                    getActivity(), android.R.anim.fade_in));
-            mProgressContainer.setVisibility(View.VISIBLE);
+            mContainer.setVisibility(View.GONE);
+            mProgressContainer.show(true);
         } else {
-            Animation fadeOut = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out);
-            fadeOut.setAnimationListener(new Animation.AnimationListener() {
+            mProgressContainer.hide(true, new Runnable() {
                 @Override
-                public void onAnimationStart(Animation animation) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    if (mProgressContainer != null) {
-                        mProgressContainer.setVisibility(View.GONE);
-                    }
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
+                public void run() {
+                    mContainer.setAlpha(0.0f);
+                    mContainer.setVisibility(View.VISIBLE);
+                    mContainer.animate().alpha(1.0f);
                 }
             });
-            mProgressContainer.startAnimation(fadeOut);
         }
     }
 
