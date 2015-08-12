@@ -22,14 +22,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
+
+import com.tasomaniac.android.widget.DelayedProgressBar;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.common.BaseFragment;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 
 public class GdgRecyclerFragment extends BaseFragment {
@@ -50,7 +53,7 @@ public class GdgRecyclerFragment extends BaseFragment {
     View mEmptyView;
 
     @Bind(R.id.loading)
-    View mProgressContainer;
+    DelayedProgressBar mProgressContainer;
 
     CharSequence mEmptyText;
     boolean mListShown;
@@ -110,11 +113,11 @@ public class GdgRecyclerFragment extends BaseFragment {
         mAdapter = adapter;
         if (mList != null) {
             mList.setAdapter(adapter);
-            if (!mListShown && !hadAdapter) {
-                // The list was hidden, and previously didn't have an
-                // adapter.  It is now time to show it.
-                setListShown(true, getView().getWindowToken() != null);
-            }
+//            if (!mListShown && !hadAdapter) {
+//                // The list was hidden, and previously didn't have an
+//                // adapter.  It is now time to show it.
+//                setListShown(true, getView().getWindowToken() != null);
+//            }
         }
         updateEmpty();
         mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
@@ -163,29 +166,14 @@ public class GdgRecyclerFragment extends BaseFragment {
 
         if (isLoading) {
             setListShown(false, true);
-            mProgressContainer.startAnimation(AnimationUtils.loadAnimation(
-                    getActivity(), android.R.anim.fade_in));
-            mProgressContainer.setVisibility(View.VISIBLE);
+            mProgressContainer.show(true);
         } else {
-            Animation fadeOut = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out);
-            fadeOut.setAnimationListener(new Animation.AnimationListener() {
+            mProgressContainer.hide(true, new Runnable() {
                 @Override
-                public void onAnimationStart(Animation animation) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    if (mProgressContainer != null) {
-                        mProgressContainer.setVisibility(View.GONE);
-                    }
+                public void run() {
                     updateEmpty();
                 }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                }
             });
-            mProgressContainer.startAnimation(fadeOut);
         }
     }
 
@@ -247,16 +235,16 @@ public class GdgRecyclerFragment extends BaseFragment {
 
         if (shown) {
             if (animate) {
-                mList.startAnimation(AnimationUtils.loadAnimation(
-                        getActivity(), android.R.anim.fade_in));
+                mList.setAlpha(0.0f);
+                mList.animate().alpha(1.0f).setInterpolator(new DecelerateInterpolator());
             } else {
                 mList.clearAnimation();
             }
             mList.setVisibility(View.VISIBLE);
         } else {
             if (animate) {
-                mList.startAnimation(AnimationUtils.loadAnimation(
-                        getActivity(), android.R.anim.fade_out));
+                mList.setAlpha(1.0f);
+                mList.animate().alpha(0.0f).setInterpolator(new AccelerateInterpolator());
             } else {
                 mList.clearAnimation();
             }
