@@ -109,15 +109,9 @@ public class GdgRecyclerFragment extends BaseFragment {
      * Provide the cursor for the list view.
      */
     public void setRecyclerAdapter(RecyclerView.Adapter adapter) {
-        boolean hadAdapter = mAdapter != null;
         mAdapter = adapter;
         if (mList != null) {
             mList.setAdapter(adapter);
-//            if (!mListShown && !hadAdapter) {
-//                // The list was hidden, and previously didn't have an
-//                // adapter.  It is now time to show it.
-//                setListShown(true, getView().getWindowToken() != null);
-//            }
         }
         updateEmpty();
         mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
