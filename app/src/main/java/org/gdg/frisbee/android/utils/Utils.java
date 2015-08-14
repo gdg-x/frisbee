@@ -27,8 +27,6 @@ import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.util.Patterns;
 import android.util.TypedValue;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
@@ -48,7 +46,6 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -179,22 +176,6 @@ public class Utils {
         is.close();
 
         return sb.toString();
-    }
-
-    public static ArrayList<View> findViewByType(ViewGroup root, Class clazz) {
-        ArrayList<View> views = new ArrayList<>();
-        int count = root.getChildCount();
-        for (int i = 0; i <= count; i++) {
-            View v = root.getChildAt(i);
-            if (v != null) {
-                if (v.getClass().equals(clazz)) {
-                    views.add(v);
-                } else if (v instanceof ViewGroup) {
-                    views.addAll(findViewByType((ViewGroup) v, clazz));
-                }
-            }
-        }
-        return views;
     }
 
     public static Gson getGson() {

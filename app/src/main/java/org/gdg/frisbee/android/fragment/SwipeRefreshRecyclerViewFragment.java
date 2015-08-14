@@ -165,8 +165,8 @@ public class SwipeRefreshRecyclerViewFragment extends GdgRecyclerFragment {
                     return position != 0;
                 } else if (layoutManager instanceof StaggeredGridLayoutManager) {
                     int[] positions = ((StaggeredGridLayoutManager) layoutManager).findFirstCompletelyVisibleItemPositions(null);
-                    for (int i = 0; i < positions.length; i++) {
-                        if (positions[i] == 0) {
+                    for (int position : positions) {
+                        if (position == 0) {
                             return false;
                         }
                     }

@@ -84,7 +84,7 @@
   <string name="done">Listo</string>
   <string name="allow_analytics">Permitirnos recolectar datos anónimos de uso, lo que nos ayuda a mejorar la app</string>
   <string name="enable_gcm">Habilitar las Notificaciones GDG (ser notificado acerca de nuevos Eventos)</string>
-  <string name="step3_text">Una cosa más antes de empezar...</string>
+  <string name="step3_text">Una cosa más antes de empezar…</string>
   <string name="share_on_gplus">Invitar Amigos</string>
   <string name="join_me">¡Acompáñame en este evento!</string>
   <string name="name_not_known">Nombre desconocido</string>
@@ -97,12 +97,12 @@
   <string name="gcm_event_ticker">Un nuevo evento de su GDG principal ha sido agendado.</string>
   <string name="ioextended_description">Google I/O Extended se trata de unirte a la conferencia de Google en tu grupo local.</string>
   <string name="devfest_description">Los GDG DevFests son eventos grandes, conducidos por la comunidad que pueden ofrecer sesiones con presentadores en múltiples áreas, hackatones de todo el día, laboratorios de programación, etcétera.\n\nCada GDG DevFest estará inspirado y hecho a la medida de las necesidades de la comunidad de desarrolladores que lo organiza. Aunque no haya dos eventos exactamente iguales, cada GDG DevFest estará, en su esencia, potenciado por la convicción compartida de que cuando los desarrolladores se reúnen para intercambiar ideas, cosas increíbles pueden suceder.</string>
-  <string name="studyjams_description">Los Google Developers Study Jams son una serie de grupos de estudio globales, llevados por la comunidad de forma presencial. La primera serie de Study Jams es presentada en asociación con Udacity y seguirá la currícula del curso Android Fundamentals. Los facilitadores de los Google Developer Groups, certificados en el curso, liderarán los Study Jams, quienes se reunirán una vez a la semana por 8 - 9 semanas.</string>
+  <string name="studyjams_description">Los Google Developers Study Jams son una serie de grupos de estudio globales, llevados por la comunidad de forma presencial. La primera serie de Study Jams es presentada en asociación con Udacity y seguirá la currícula del curso Android Fundamentals. Los facilitadores de los Google Developer Groups, certificados en el curso, liderarán los Study Jams, quienes se reunirán una vez a la semana por 8 – 9 semanas.</string>
   <string name="wtm_description">Women Techmakers es el programa y marca global de Google para las mujeres en tecnología. Iniciada en 2012 por la entonces VP de Google[x] Megan Smith, Women Techmakers es ahora liderada por Natalie Villalobos, Women in Technology Advocate, y un equipo global de Googlers quienes son apasionados acerca del empoderamiento de muejeres en tecnología a través del incremento en visibilidad, comunidad y recursos.\n\nEn nuestras cumbres y meetups serán provistos a las comunidades locales de mujeres en tecnología. Estas cumbres y meetups alrededor del mundo podrán contar con talleres prácticos de programación, ponentes inspiradoras y oportunidades de networking.\n\nTodos los eventos ocurrirán dentro del mes de Marzo.</string>
   <string name="media_route_menu_title">Sesión de Cast</string>
   <string name="navigate_to">Dirección del evento</string>
   <string name="gde">Google Developer Experts</string>
-  <string name="fetch_gde_failed">No se pudo obtener el directorio de GDE...</string>
+  <string name="fetch_gde_failed">No se pudo obtener el directorio de GDE…</string>
   <string name="gde_who_title">¿Quiénes son Google Developer Experts?</string>
   <string name="gde_who_desc">Los Google Developer expertos (GDEs) son expertos en una o más tecnologías Google. El programa GDE reconoce la labor ejemplar realizada por estas estrellas del rock para los desarrolladores de Google alrededor del mundo invitándolos a ser parte de la creciente comunidad GDE. Los GDEs son gurús, mentores y amigos; son desarrolladores como tú.\n\nLos Google Developer Experts exponen en eventos locales y globales, tienen una fuerte presencia online y una excelente formación técnica en su campo. Estos desarrolladores independientes aportan -con su experiencia y conocimiento trabajando con tecnologías Google en el mundo real- a las comunidades de desarrolladores de todo el mundo.</string>
   <string name="gde_what_title">¿Qué tipo de actividades hacen los GDEs?</string>
@@ -124,7 +124,7 @@
   <string name="event">Evento</string>
   <string name="no_description_available"><![CDATA[<i>No hay Descripción disponible.</i>]]></string>
   <string name="starting_at">A partir de las %1$s</string>
-  <string name="loading_data_failed">No pudo cargar la lista de eventos...</string>
+  <string name="loading_data_failed">No pudo cargar la lista de eventos…</string>
   <string name="share">Comparir</string>
   <string name="open_event_site">Ver la página de eventos</string>
   <string name="arrow_tagged">Sus organizadores etiquetados</string>
@@ -144,7 +144,7 @@
   <string name="feedback_email_hint">Tu dirección de e-mail</string>
   <string name="feedback_message_hint">¿En que estas pensando?</string>
   <string name="feedback_send">Enviar</string>
-  <string name="feedback_sending">Enviando...</string>
+  <string name="feedback_sending">Enviando…</string>
   <string name="for_leads">Para Organizadores</string>
   <string name="leads_welcome_title">Bienvenida(o)</string>
   <string name="leads_welcome">Como Organizador de GDG ¡Tienes acceso a recursos sólo para organizadores!</string>

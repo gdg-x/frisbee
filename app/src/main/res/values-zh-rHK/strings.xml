@@ -57,7 +57,7 @@
   <string name="contributors">本 GDG 應用程式為社群貢獻的成果並開放原始碼。以下為參與貢獻的人士：</string>
   <string name="get_involved">參與貢獻！</string>
   <string name="get_involved_text">本 GDG 應用程式為社群貢獻的成果並開放原始碼，任何人都歡迎參與編修及改善本應用程式。\n\n請直接前往 Github 提取代碼。\n\nhttps://github.com/gdg-x</string>
-  <string name="about_license">(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof the Apache 2.0 License</string>
+  <string name="about_license">© 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof the Apache 2.0 License</string>
   <string name="past_event">過往活動</string>
   <string name="upcoming_widget">GDG - 即將到來的活動</string>
   <string name="global">全球</string>
@@ -98,7 +98,7 @@
   <string name="media_route_menu_title">Cast session</string>
   <string name="navigate_to">Navigate to event</string>
   <string name="gde">Google Developer Experts</string>
-  <string name="fetch_gde_failed">Could not fetch GDE Directory...</string>
+  <string name="fetch_gde_failed">Could not fetch GDE Directory…</string>
   <string name="gde_who_title">Who are Google Developer Experts?</string>
   <string name="gde_who_desc">Google Developer Experts (GDEs) are experts in one or more Google developer technologies. The GDE program recognizes the exemplary work done by these rock stars for the Google Developers worldwide by inviting them to be part of the growing GDE community. GDEs are gurus, mentors and friends; they are developers just like you.\n\nGoogle Developers Experts speak in local and global events, have a strong online presence and an excellent technical background in their field. These independent developers bring their real-world experience and knowledge working with Google technologies to developer communities worldwide.</string>
   <string name="gde_what_title">What kind of activities do GDEs do?</string>

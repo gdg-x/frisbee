@@ -40,7 +40,7 @@
   <string name="skip">Tralascia accesso</string>
   <string name="youtube_init_failed">Impossibile inizializzare YouTube.</string>
   <string name="achievements">Risultati</string>
-  <string name="settings">impostazioni</string>
+  <string name="settings">Impostazioni</string>
   <string name="about">Informazioni</string>
   <plurals name="seconds_ago">
     <item quantity="one">Adesso</item>
@@ -61,7 +61,7 @@
   <string name="contributors">L\'app GDG è un sforzo della comunità open source. Le seguenti persone hanno contribuito all\'app:</string>
   <string name="get_involved">Mettiti in gioco!</string>
   <string name="get_involved_text">L\'app GDG è un sforzo della comunità open source. Tutti sono benvenuti a partecipare e migliorare questa app.\n\n Dai un\'occhiata a  GitHub e al nostro codice.\n\nhttps://github.com/gdg-x</string>
-  <string name="about_license">(c) 2013 Il progetto GDG Frisbee Project\n Tutti i diritti riservati\n\nsecondo i termini\n della licenza 2.0 di Apache</string>
+  <string name="about_license">© 2013 Il progetto GDG Frisbee Project\n Tutti i diritti riservati\n\nsecondo i termini\n della licenza 2.0 di Apache</string>
   <string name="past_event">PASSATO</string>
   <string name="upcoming_widget">GDG - prossimi eventi</string>
   <string name="global">Generale</string>
@@ -84,7 +84,7 @@
   <string name="done">Fatto</string>
   <string name="allow_analytics">Permettici di raccogliere i dati di utilizzo che ci aiuteranno a migliorare l\'app</string>
   <string name="enable_gcm">Attiva le notifiche di GDG Cloud (riceverai una notifica su nuovi eventi)</string>
-  <string name="step3_text">Ancora una cosa prima di iniziare...</string>
+  <string name="step3_text">Ancora una cosa prima di iniziare…</string>
   <string name="share_on_gplus">Invita amici</string>
   <string name="join_me">Unitevi a me in questo evento!</string>
   <string name="name_not_known">Nome sconosciuto</string>
@@ -102,7 +102,7 @@
   <string name="media_route_menu_title">Sessione Cast</string>
   <string name="navigate_to">Controlla gli eventi</string>
   <string name="gde">Google Developer Experts</string>
-  <string name="fetch_gde_failed">Could not fetch GDE Directory...</string>
+  <string name="fetch_gde_failed">Could not fetch GDE Directory…</string>
   <string name="gde_who_title">Chi sono i Google Developer Experts?</string>
   <string name="gde_who_desc">Google Developer Experts (GDEs) are experts in one or more Google developer technologies. The GDE program recognizes the exemplary work done by these rock stars for the Google Developers worldwide by inviting them to be part of the growing GDE community. GDEs are gurus, mentors and friends; they are developers just like you.\n\nGoogle Developers Experts speak in local and global events, have a strong online presence and an excellent technical background in their field. These independent developers bring their real-world experience and knowledge working with Google technologies to developer communities worldwide.</string>
   <string name="gde_what_title">Che tipo di attività svolgono i GDEs?</string>

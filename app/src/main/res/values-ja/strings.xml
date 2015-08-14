@@ -141,7 +141,7 @@
   <string name="feedback_email_hint">あなたのメールアドレス</string>
   <string name="feedback_message_hint">何を考えていますか？</string>
   <string name="feedback_send">送信</string>
-  <string name="feedback_sending">送信中...</string>
+  <string name="feedback_sending">送信中…</string>
   <string name="for_leads">リーダ向け</string>
   <string name="leads_welcome_title">ようこそ</string>
   <string name="leads_welcome">GDGオーガナイザー、おめでとう！</string>

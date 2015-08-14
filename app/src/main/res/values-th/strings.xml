@@ -57,7 +57,7 @@
   <string name="contributors">แอพพลิเคชัน GDG เป็นผลงานส่วนหนึ่งของชุมชนนักพัฒนา โดยเปิดให้มีการเข้าถึงที่มาและยำไปใช้ได้โดยเสรี(Open source) โดยบุคคลเหล่านี้คือผู้ที่มีส่วนช่วยในการพัฒนา:</string>
   <string name="get_involved">เข้าร่วมกับเรา</string>
   <string name="get_involved_text">แอพพลิเคชัน GDG  เป็นผลงานส่วนหนึ่งของชุมชนนักพัฒนา โดยเปิดให้มีการเข้าถึงที่มาและยำไปใช้ได้โดยเสรี(Open source) ทุกคนสามารถร่วมเป็นส่วนหนึ่งในการเข้าร่วมและพัฒนาแอพพลิเคชันนี้ เพียงไปที่ Github แล้ว checkout ซอร์สโค้ดจาก \n\nhttps://github.com/gdg-x</string>
-  <string name="about_license">(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof the Apache 2.0 License</string>
+  <string name="about_license">© 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof the Apache 2.0 License</string>
   <string name="past_event">ที่ผ่านมา</string>
   <string name="upcoming_widget">GDG - กิจกรรมที่กำลังจะมีขึ้น</string>
   <string name="global">รอบโลก</string>
@@ -80,7 +80,7 @@
   <string name="done">เรียบร้อยแล้ว</string>
   <string name="allow_analytics">อนุญาตให้เราเก็บข้อมูลการใช้ในลักษณะไม่เปิดเผยตัวตนผู้ใช้ เพื่อช่วยในการพัฒนาแอพพลิเคชัน</string>
   <string name="enable_gcm">เปิดการแจ้งเตือนผ่านระบบคลาวด์ (รับการแจ้งเตือนเกี่ยวกับกิจกรรมใหม่)</string>
-  <string name="step3_text">ข้อตกลงก่อนเริ่มใช้งาน...</string>
+  <string name="step3_text">ข้อตกลงก่อนเริ่มใช้งาน…</string>
   <string name="share_on_gplus">เชิญเพื่อนเข้าใช้งาน</string>
   <string name="join_me">เข้าร่วมกิจกรรมนี้กับฉัน</string>
   <string name="name_not_known">ไม่ทราบชื่อ</string>
@@ -98,7 +98,7 @@
   <string name="media_route_menu_title">Cast session</string>
   <string name="navigate_to">Navigate to event</string>
   <string name="gde">Google Developer Experts</string>
-  <string name="fetch_gde_failed">Could not fetch GDE Directory...</string>
+  <string name="fetch_gde_failed">Could not fetch GDE Directory…</string>
   <string name="gde_who_title">Who are Google Developer Experts?</string>
   <string name="gde_who_desc">Google Developer Experts (GDEs) are experts in one or more Google developer technologies. The GDE program recognizes the exemplary work done by these rock stars for the Google Developers worldwide by inviting them to be part of the growing GDE community. GDEs are gurus, mentors and friends; they are developers just like you.\n\nGoogle Developers Experts speak in local and global events, have a strong online presence and an excellent technical background in their field. These independent developers bring their real-world experience and knowledge working with Google technologies to developer communities worldwide.</string>
   <string name="gde_what_title">What kind of activities do GDEs do?</string>
