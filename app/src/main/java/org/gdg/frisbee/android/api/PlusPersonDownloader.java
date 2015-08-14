@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 import timber.log.Timber;
 
 /**
- * Created by tasomaniac on 27/7/15.
+ * Created by Said Tahsin Dane on 27/7/15.
  */
 public class PlusPersonDownloader implements Interceptor {
 
@@ -41,7 +41,7 @@ public class PlusPersonDownloader implements Interceptor {
         }
 
         String gplusId = matcher.group(1);
-        Person person = getPersonSync(gplusId);
+        Person person = getPersonSync(plusClient, gplusId);
         if (person != null && person.getImage() != null && person.getImage().getUrl() != null) {
             String imageUrl = person.getImage().getUrl().replace("sz=50", "sz=196");
             return chain.proceed(request.newBuilder().url(imageUrl).build());
@@ -51,7 +51,12 @@ public class PlusPersonDownloader implements Interceptor {
     }
 
     @Nullable
-    public Person getPersonSync(final String gplusId) {
+    public static Person getPersonSync(final String gplusId) {
+        return getPersonSync(App.getInstance().getPlusClient(), gplusId);
+    }
+
+    @Nullable
+    public static Person getPersonSync(final Plus plusClient, final String gplusId) {
 
         final String cacheUrl = Const.CACHE_KEY_PERSON + gplusId;
         Object cachedPerson = App.getInstance().getModelCache().get(cacheUrl);
