@@ -108,8 +108,6 @@ public abstract class GdgActivity extends TrackableActivity implements
         if (!Utils.isEmulator()) {
 
             mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
                     .addApi(Plus.API)
                     .addApi(Games.API)
                     .addApi(AppStateManager.API)
@@ -127,6 +125,9 @@ public abstract class GdgActivity extends TrackableActivity implements
     protected void onStart() {
         super.onStart();
 
+        mGoogleApiClient.registerConnectionCallbacks(this);
+        mGoogleApiClient.registerConnectionFailedListener(this);
+
         if (PrefUtils.isSignedIn(this)) {
             mGoogleApiClient.connect();
         }
@@ -135,6 +136,9 @@ public abstract class GdgActivity extends TrackableActivity implements
     @Override
     protected void onStop() {
         super.onStop();
+
+        mGoogleApiClient.unregisterConnectionCallbacks(this);
+        mGoogleApiClient.unregisterConnectionFailedListener(this);
 
         if (PrefUtils.isSignedIn(this) && mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
