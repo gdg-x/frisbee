@@ -35,7 +35,7 @@ import timber.log.Timber;
 
 public class GdgProvider extends ContentProvider {
 
-    public static final String AUTHORITY = "org.gdg.frisbee.android.provider.GdgProvider";
+    private static final String AUTHORITY = "org.gdg.frisbee.android.provider.GdgProvider";
 
     private static final String[] CHAPTER_COLUMNS = new String[] {
         BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1,

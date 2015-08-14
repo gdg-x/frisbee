@@ -17,7 +17,7 @@ public class Gde implements GdgPerson, Parcelable {
     private String product, name, address, email, socialUrl;
     private double lat, lng;
 
-    public Gde(Parcel in) {
+    private Gde(Parcel in) {
         product = in.readString();
         name = in.readString();
         address = in.readString();
@@ -42,13 +42,7 @@ public class Gde implements GdgPerson, Parcelable {
         return product.trim();
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public String getAddress() {
-        return address;
-    }
 
     public double getLat() {
         return lat;
@@ -68,12 +62,12 @@ public class Gde implements GdgPerson, Parcelable {
 
     @Override
     public String getPrimaryText() {
-        return getName();
+        return name;
     }
 
     @Override
     public String getSecondaryText() {
-        return getAddress();
+        return address;
     }
 
     @Override

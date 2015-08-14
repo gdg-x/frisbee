@@ -14,7 +14,7 @@ import org.joda.time.DateTime;
 public final class PrefUtils {
     public static final String PREF_NAME = "gdg";
     public static final String SETTINGS_HOME_GDG = "gdg_home";
-    public static final String SETTINGS_HOME_GDG_NAME = "gdg_home_name";
+    private static final String SETTINGS_HOME_GDG_NAME = "gdg_home_name";
     public static final String SETTINGS_GCM = "gcm";
     public static final String SETTINGS_SIGNED_IN = "gdg_signed_in";
     public static final String SETTINGS_ANALYTICS = "analytics";

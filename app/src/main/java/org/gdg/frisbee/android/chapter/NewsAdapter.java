@@ -116,7 +116,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         return mActivities.size();
     }
 
-    public Item getItemInternal(int i) {
+    private Item getItemInternal(int i) {
         return mActivities.get(i);
     }
 
@@ -455,7 +455,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         content.setText(attachment.getContent());
     }
 
-    public void openEventInGPlus(String uri) {
+    private void openEventInGPlus(String uri) {
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(uri));
         mContext.startActivity(i);

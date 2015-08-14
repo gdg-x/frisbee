@@ -252,7 +252,7 @@ public class FeedbackFragment extends DialogFragment {
         }
     }
 
-    public void addProperty(String key, Object value) {
+    private void addProperty(String key, Object value) {
         try {
             mProperties.put(key, value);
         } catch (JSONException e) {

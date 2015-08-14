@@ -61,7 +61,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
     private static final String EXTRA_SELECTED_DRAWER_ITEM_ID = "SELECTED_DRAWER_ITEM_ID";
 
-    protected ActionBarDrawerToggle mDrawerToggle;
+    private ActionBarDrawerToggle mDrawerToggle;
     protected String mStoredHomeChapterId;
     @Bind(R.id.drawer)
     DrawerLayout mDrawerLayout;
@@ -237,7 +237,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 .show();
     }
 
-    public void onDrawerSpecialItemClick(MenuItem item, Bundle data) {
+    private void onDrawerSpecialItemClick(MenuItem item, Bundle data) {
         // If title is null them we are not in a SpecialEventActivity
         if (getSupportActionBar() != null && getSupportActionBar().getTitle() != null
                 && getSupportActionBar().getTitle().equals(item.getTitle())) {
@@ -327,17 +327,17 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         }
     }
 
-    protected boolean isNavDrawerOpen() {
+    private boolean isNavDrawerOpen() {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START);
     }
 
-    protected void closeNavDrawer() {
+    private void closeNavDrawer() {
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
     }
 
-    protected void updateUserPicture() {
+    private void updateUserPicture() {
         com.google.android.gms.plus.model.people.Person user = com.google.android.gms.plus.Plus.PeopleApi.getCurrentPerson(getGoogleApiClient());
         if (user == null) {
             return;

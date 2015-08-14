@@ -46,13 +46,13 @@ import timber.log.Timber;
  */
 public class GingerbreadLastLocationFinder implements ILastLocationFinder {
 
-    protected static final String SINGLE_LOCATION_UPDATE_ACTION = "org.gdg.frisbee.actions.SINGLE_LOCATION_UPDATE_ACTION";
+    private static final String SINGLE_LOCATION_UPDATE_ACTION = "org.gdg.frisbee.actions.SINGLE_LOCATION_UPDATE_ACTION";
 
-    protected PendingIntent singleUpatePI;
-    protected LocationListener locationListener;
-    protected LocationManager locationManager;
-    protected Context context;
-    protected Criteria criteria;
+    private PendingIntent singleUpatePI;
+    private LocationListener locationListener;
+    private LocationManager locationManager;
+    private Context context;
+    private Criteria criteria;
 
     /**
      * Construct a new Gingerbread Last Location Finder.
@@ -137,7 +137,7 @@ public class GingerbreadLastLocationFinder implements ILastLocationFinder {
      * The oneshot location update is returned via the {@link LocationListener}
      * specified in {@link setChangedLocationListener}.
      */
-    protected BroadcastReceiver singleUpdateReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver singleUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             context.unregisterReceiver(singleUpdateReceiver);

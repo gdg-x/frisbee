@@ -65,7 +65,7 @@ import timber.log.Timber;
 
 public class MainActivity extends GdgNavDrawerActivity {
 
-    public static final String SECTION_EVENTS = "events";
+    private static final String SECTION_EVENTS = "events";
     private static final String ARG_SELECTED_CHAPTER = "selected_chapter";
     private static final String ARG_CHAPTERS = "chapters";
 
@@ -76,7 +76,7 @@ public class MainActivity extends GdgNavDrawerActivity {
         R.string.news, R.string.info, R.string.events, R.string.for_leads
     };
 
-    public static final int REQUEST_FIRST_START_WIZARD = 100;
+    private static final int REQUEST_FIRST_START_WIZARD = 100;
     private static final int PLAY_SERVICE_DIALOG_REQUEST_CODE = 200;
 
     @Bind(R.id.pager)
@@ -233,7 +233,7 @@ public class MainActivity extends GdgNavDrawerActivity {
         return null;
     }
 
-    public void fetchChapters() {
+    private void fetchChapters() {
         App.getInstance().getGdgXHub().getDirectory(new Callback<Directory>() {
 
             public void success(final Directory directory, retrofit.client.Response response) {
