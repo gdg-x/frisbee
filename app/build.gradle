@@ -140,6 +140,8 @@ android {
     packagingOptions {
         exclude 'LICENSE.txt'
     }
+    
+    useLibrary 'org.apache.http.legacy'
 }
 
 play {
