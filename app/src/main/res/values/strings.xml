@@ -175,4 +175,8 @@
     <string name="fork_me">Fork me</string>
     <string name="cd_arrowTagImage">Arrow Tagging Game</string>
     <string name="cd_qrCode">QR Code</string>
+    <string name="checkin">Checkin on-site</string>
+    <string name="annoymous">annoymous</string>
+    <string name="leads_all_checkins_title">All checkins</string>
+    <string name="leads_all_checkins">See all checkins</string>
 </resources>

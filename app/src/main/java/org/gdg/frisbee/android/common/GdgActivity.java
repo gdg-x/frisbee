@@ -29,6 +29,7 @@ import com.google.android.gms.appstate.AppStateManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
+import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.plus.Plus;
 
 import org.gdg.frisbee.android.R;
@@ -111,6 +112,7 @@ public abstract class GdgActivity extends TrackableActivity implements
                     .addApi(Plus.API)
                     .addApi(Games.API)
                     .addApi(AppStateManager.API)
+                    .addApi(Nearby.MESSAGES_API)
                     .addScope(Plus.SCOPE_PLUS_LOGIN)
                     .addScope(Plus.SCOPE_PLUS_PROFILE)
                     .addScope(Games.SCOPE_GAMES)
@@ -135,14 +137,14 @@ public abstract class GdgActivity extends TrackableActivity implements
 
     @Override
     protected void onStop() {
-        super.onStop();
-
         mGoogleApiClient.unregisterConnectionCallbacks(this);
         mGoogleApiClient.unregisterConnectionFailedListener(this);
 
         if (PrefUtils.isSignedIn(this) && mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
+
+        super.onStop();
     }
 
     protected AchievementActionHandler getAchievementActionHandler() {

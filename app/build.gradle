@@ -168,13 +168,13 @@ dependencies {
     compile "com.android.support:design:$supportVersion"
 
     //Play Services
-    compile "com.google.android.gms:play-services-location:$playServicesVersion"
     compile "com.google.android.gms:play-services-games:$playServicesVersion"
     compile "com.google.android.gms:play-services-identity:$playServicesVersion"
     compile "com.google.android.gms:play-services-plus:$playServicesVersion"
     compile "com.google.android.gms:play-services-appstate:$playServicesVersion"
     compile "com.google.android.gms:play-services-analytics:$playServicesVersion"
     compile "com.google.android.gms:play-services-gcm:$playServicesVersion"
+    compile "com.google.android.gms:play-services-nearby:$playServicesVersion"
 
     //Google
     compile 'com.google.http-client:google-http-client-gson:1.20.0'

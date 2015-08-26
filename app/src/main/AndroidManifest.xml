@@ -56,6 +56,9 @@
       android:name="com.google.android.gms.appstate.APP_ID"
       android:value="@string/play_app_id"/>
     <meta-data
+      android:name="com.google.android.nearby.messages.API_KEY"
+      android:value="@string/play_app_id" />
+    <meta-data
       android:name="com.google.android.backup.api_key"
       android:value="@string/android_backup_key"/>
     <meta-data
@@ -161,6 +164,16 @@
       android:name=".event.EventActivity"
       android:theme="@style/Theme.GDG"
       android:parentActivityName=".chapter.MainActivity">
+    </activity>
+    <activity
+        android:name=".checkin.AllCheckinsActivity"
+        android:theme="@style/Theme.GDG"
+        android:parentActivityName=".chapter.MainActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <data android:scheme="gdgx" android:host="allcheckins"/>
+      </intent-filter>
     </activity>
 
     <provider

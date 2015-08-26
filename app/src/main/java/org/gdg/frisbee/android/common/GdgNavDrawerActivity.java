@@ -18,6 +18,7 @@ package org.gdg.frisbee.android.common;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,12 +28,15 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.games.Games;
 import com.google.api.services.plus.model.Person;
 
@@ -44,6 +48,7 @@ import org.gdg.frisbee.android.api.PlusPersonDownloader;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.arrow.ArrowActivity;
 import org.gdg.frisbee.android.chapter.MainActivity;
+import org.gdg.frisbee.android.checkin.CheckinSender;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeriesActivity;
 import org.gdg.frisbee.android.gde.GdeActivity;
@@ -60,6 +65,8 @@ import butterknife.Bind;
 public abstract class GdgNavDrawerActivity extends GdgActivity {
 
     private static final String EXTRA_SELECTED_DRAWER_ITEM_ID = "SELECTED_DRAWER_ITEM_ID";
+    private static final String TAG = GdgNavDrawerActivity.class.getSimpleName();
+    private static final int REQUEST_RESOLVE_ERROR = 100;
 
     private ActionBarDrawerToggle mDrawerToggle;
     protected String mStoredHomeChapterId;
@@ -76,6 +83,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     private static final int GROUP_ID = 1;
     private static final int GAMES_GROUP_ID = 2;
     private static final int SETTINGS_GROUP_ID = 3;
+    private boolean mResolvingError;
 
     @Override
     public void setContentView(int layoutResId) {
@@ -136,6 +144,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         }
 
         SubMenu subMenu = menu.addSubMenu(GAMES_GROUP_ID, Const.DRAWER_SUBMENU_GAMES, Menu.NONE, R.string.drawer_subheader_games);
+        subMenu.add(GAMES_GROUP_ID, Const.DRAWER_CHECKIN, Menu.NONE, R.string.checkin).setIcon(R.drawable.ic_drawer_checkin);
         subMenu.add(GAMES_GROUP_ID, Const.DRAWER_ACHIEVEMENTS, Menu.NONE, R.string.achievements).setIcon(R.drawable.ic_drawer_achievements);
         subMenu.add(GAMES_GROUP_ID, Const.DRAWER_ARROW, Menu.NONE, R.string.arrow).setIcon(R.drawable.ic_drawer_arrow).setCheckable(true);
 
@@ -162,6 +171,29 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                         return true;
                     }
                 });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
+        super.onActivityResult(requestCode, responseCode, intent);
+        if (requestCode == REQUEST_RESOLVE_ERROR) {
+            mResolvingError = false;
+            if (responseCode == RESULT_OK) {
+                new CheckinSender(this).broadcast(new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        if (status.isSuccess()) {
+                            Log.i(TAG, "checkin succeeded.");
+                        } else {
+                            Log.e(TAG, "checkin failed second time with " + status);
+                        }
+                    }
+                });
+            } else {
+                // This may mean that user had rejected to grant nearby permission.
+                Log.e(TAG, "Failed to resolve error with code " + responseCode);
+            }
+        }
     }
 
     private void onDrawerItemClick(final MenuItem item) {
@@ -199,6 +231,32 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             case Const.DRAWER_ARROW:
                 if (PrefUtils.isSignedIn(this) && getGoogleApiClient().isConnected()) {
                     navigateTo(ArrowActivity.class, data);
+                } else {
+                    drawerItemToNavigateAfterSignIn = item;
+                    showLoginErrorDialog(R.string.arrow_need_games);
+                }
+                break;
+            case Const.DRAWER_CHECKIN:
+                if (PrefUtils.isSignedIn(this) && getGoogleApiClient().isConnected()) {
+                    new CheckinSender(this).broadcast(new ResultCallback<Status>() {
+                        @Override
+                        public void onResult(Status status) {
+                            if (status.isSuccess()) {
+                                Log.i(TAG, "checkin succeeded.");
+                            } else {
+                                if (status.hasResolution()) {
+                                    try {
+                                        status.startResolutionForResult(GdgNavDrawerActivity.this,
+                                                REQUEST_RESOLVE_ERROR);
+                                        mResolvingError = true;
+                                    } catch (IntentSender.SendIntentException e) {
+                                        Log.e(TAG, "checkin broadcast failed with exception: " + e);
+                                    }
+                                    Log.e(TAG, "checkin failed with : " + status);
+                                }
+                            }
+                        }
+                    });
                 } else {
                     drawerItemToNavigateAfterSignIn = item;
                     showLoginErrorDialog(R.string.arrow_need_games);

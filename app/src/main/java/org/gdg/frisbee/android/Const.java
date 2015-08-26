@@ -28,6 +28,8 @@ import org.joda.time.DateTime;
  */
 public class Const {
 
+    public static final String URL_GDG_LEADS_ALL_CHECKINS = "gdgx://allcheckins";
+
     private Const() {
     }
 
@@ -61,6 +63,7 @@ public class Const {
     public static final int DRAWER_HELP = 101;
     public static final int DRAWER_FEEDBACK = 102;
     public static final int DRAWER_ABOUT = 103;
+    public static final int DRAWER_CHECKIN = 104;
     public static final int DRAWER_SUBMENU_GAMES = 1000;
 
     // Drawer Special Event Items
