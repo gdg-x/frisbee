@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
@@ -13,23 +15,41 @@ import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
+import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.common.GdgActivity;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class AllCheckinsActivity extends GdgActivity {
     private static final String TAG = AllCheckinsActivity.class.getSimpleName();
     private static final int REQUEST_RESOLVE_ERROR = 1;
     public static final String CHECKIN_TYPE = "CHECKIN";
 
+    @Bind(R.id.list_view)
+    ListView listView;
+
     private MessageListener mMessageListener = new MessageListener() {
         @Override
         public void onFound(Message message) {
-            if (CHECKIN_TYPE.equals(message.getNamespace())) {
-                Log.i(TAG, "received message: " + new String(message.getContent()));
+            if (CHECKIN_TYPE.equals(message.getType())) {
+                addName(new String(message.getContent()));
             }
         }
     };
     
     private boolean mResolvingError;
+    private ArrayAdapter<String> adapter;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_all_checkings);
+        ButterKnife.bind(this);
+
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        listView.setAdapter(adapter);
+    }
 
     @Override
     public void onConnected(Bundle bundle) {
@@ -42,7 +62,6 @@ public class AllCheckinsActivity extends GdgActivity {
                 })
         );
 
-        
         super.onConnected(bundle);
     }
 
@@ -67,6 +86,11 @@ public class AllCheckinsActivity extends GdgActivity {
                 Log.e(TAG, "Failed to resolve error with code " + resultCode);
             }
         }
+    }
+
+    private void addName(String name) {
+        adapter.add(name);
+        adapter.notifyDataSetInvalidated();
     }
 
     private void subscribeForCheckins() {

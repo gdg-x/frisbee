@@ -19,7 +19,7 @@ public class CheckinSender {
 
     public void broadcast(ResultCallback<Status> errorCheckingCallback) {
         String displayName = getUserName();
-        Message message = new Message(displayName.getBytes());
+        Message message = new Message(displayName.getBytes(), AllCheckinsActivity.CHECKIN_TYPE);
         Nearby.Messages.publish(mActivity.getGoogleApiClient(), message)
                 .setResultCallback(errorCheckingCallback);
 
