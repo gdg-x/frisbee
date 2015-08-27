@@ -54,6 +54,7 @@ import timber.log.Timber;
 
 public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment.Callbacks {
 
+    private static final String INSTANCE_STATE_SELECTED_PULSE = "INSTANCE_STATE_SELECTED_PULSE";
     @Bind(R.id.pager)
     ViewPager mViewPager;
 
@@ -77,25 +78,27 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
         mPulseTargets = new ArrayList<>();
 
         mViewPagerAdapter = new PulsePagerAdapter(this, getSupportFragmentManager());
-        mSpinnerAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item_actionbar);
+        mSpinnerAdapter = new ArrayAdapter<>(this, R.layout.spinner_item_actionbar);
         mSpinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
+        final String selectedPulse = savedInstanceState != null ? savedInstanceState.getString(INSTANCE_STATE_SELECTED_PULSE) : null;
 
         App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PULSE_GLOBAL, true, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 Pulse pulse = (Pulse) item;
                 mPulseTargets.addAll(pulse.keySet());
-                initSpinner();
+                initSpinner(selectedPulse);
             }
 
             @Override
             public void onNotFound(String key) {
-                fetchPulse();
+                fetchPulse(selectedPulse);
             }
         });
     }
 
-    private void fetchPulse() {
+    private void fetchPulse(final String selectedPulse) {
         App.getInstance().getGroupDirectory().getPulse(new Callback<Pulse>() {
             @Override
             public void success(final Pulse pulse, Response response) {
@@ -107,7 +110,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
                             @Override
                             public void onPutIntoCache() {
                                 mPulseTargets.addAll(pulse.keySet());
-                                initSpinner();
+                                initSpinner(selectedPulse);
                             }
                         });
             }
@@ -118,7 +121,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
                     Snackbar snackbar = Snackbar.make(mContentLayout, R.string.fetch_chapters_failed,
                             Snackbar.LENGTH_SHORT);
                     ColoredSnackBar.alert(snackbar).show();
-                } catch (IllegalStateException exception) {
+                } catch (IllegalStateException ignored) {
                 }
                 Timber.e(error, "Couldn't fetch chapter list");
             }
@@ -143,7 +146,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
                 + "/" + pageName;
     }
 
-    private void initSpinner() {
+    private void initSpinner(String selectedPulse) {
         Toolbar toolbar = getActionBarToolbar();
         View spinnerContainer = LayoutInflater.from(this).inflate(R.layout.actionbar_spinner,
                 toolbar, false);
@@ -172,7 +175,11 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
 
         Collections.sort(mPulseTargets);
         mPulseTargets.add(0, "Global");
-        mViewPagerAdapter.setSelectedPulseTarget(mPulseTargets.get(0));
+        if (selectedPulse == null) {
+            selectedPulse = mPulseTargets.get(0);
+        }
+        mViewPagerAdapter.setSelectedPulseTarget(selectedPulse);
+        mSpinner.setSelection(mPulseTargets.indexOf(selectedPulse));
         mSpinnerAdapter.clear();
 
         mSpinnerAdapter.addAll(mPulseTargets);
@@ -188,6 +195,12 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
     @Override
     public void openPulse(final String key) {
         mSpinner.setSelection(getPulseTargets().indexOf(key));
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(INSTANCE_STATE_SELECTED_PULSE, (String) mSpinner.getSelectedItem());
     }
 
     public class PulsePagerAdapter extends FragmentStatePagerAdapter {
