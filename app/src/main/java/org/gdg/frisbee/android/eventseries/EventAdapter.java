@@ -17,7 +17,6 @@
 package org.gdg.frisbee.android.eventseries;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.DrawableRes;
 import android.text.TextUtils;
@@ -35,6 +34,7 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.api.model.SimpleEvent;
 import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -44,8 +44,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 class EventAdapter extends BaseAdapter {
 
@@ -164,9 +164,7 @@ class EventAdapter extends BaseAdapter {
     }
 
     private void openEventInExternalApp(String uri) {
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse(uri));
-        mContext.startActivity(i);
+        mContext.startActivity(Utils.createExternalIntent(mContext, Uri.parse(uri)));
     }
 
     public void sort(Comparator<Item> eventComparator) {

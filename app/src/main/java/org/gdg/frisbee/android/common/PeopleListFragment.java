@@ -1,6 +1,5 @@
 package org.gdg.frisbee.android.common;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +9,7 @@ import android.widget.ListView;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.GdgPerson;
+import org.gdg.frisbee.android.utils.Utils;
 
 import butterknife.ButterKnife;
 
@@ -36,6 +36,6 @@ public class PeopleListFragment extends GdgListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         GdgPerson person = mAdapter.getItem(position);
-        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(person.getUrl())));
+        startActivity(Utils.createExternalIntent(getActivity(), Uri.parse(person.getUrl())));
     }
 }

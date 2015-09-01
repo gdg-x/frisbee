@@ -16,7 +16,6 @@
 
 package org.gdg.frisbee.android.chapter;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -226,7 +225,7 @@ public class InfoFragment extends BaseFragment {
                     public void onClick(View view) {
                         String url = organizer.getUrl();
                         if (!TextUtils.isEmpty(url)) {
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                            startActivity(Utils.createExternalIntent(getActivity(), Uri.parse(url)));
                         }
                     }
                 });
