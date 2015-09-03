@@ -45,9 +45,10 @@ import timber.log.Timber;
 
 public class PulseFragment extends GdgListFragment {
 
+    public static final String GLOBAL = "Global";
+
     private static final String ARG_MODE = "mode";
     private static final String ARG_TARGET = "target";
-    private static final String GLOBAL = "Global";
 
     private int mMode;
     private String mTarget;

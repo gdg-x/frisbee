@@ -98,6 +98,15 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        if (!PulseFragment.GLOBAL.equals(mSpinner.getSelectedItem())) {
+            openPulse(PulseFragment.GLOBAL);
+            return;
+        }
+        super.onBackPressed();
+    }
+
     private void fetchPulse(final String selectedPulse) {
         App.getInstance().getGroupDirectory().getPulse(new Callback<Pulse>() {
             @Override
@@ -174,7 +183,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
         });
 
         Collections.sort(mPulseTargets);
-        mPulseTargets.add(0, "Global");
+        mPulseTargets.add(0, PulseFragment.GLOBAL);
         if (selectedPulse == null) {
             selectedPulse = mPulseTargets.get(0);
         }
