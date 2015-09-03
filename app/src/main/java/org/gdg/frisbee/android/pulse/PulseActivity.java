@@ -164,15 +164,12 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
         toolbar.addView(spinnerContainer, lp);
 
         mSpinner = (Spinner) spinnerContainer.findViewById(R.id.actionbar_spinner);
-        mSpinner.setAdapter(mSpinnerAdapter);
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
                 String previous = mViewPagerAdapter.getSelectedPulseTarget();
-                mViewPagerAdapter.setSelectedPulseTarget(mSpinnerAdapter.getItem(position));
                 if (!previous.equals(mSpinnerAdapter.getItem(position))) {
-                    Timber.d("Switching chapter!");
-                    mViewPagerAdapter.notifyDataSetChanged();
+                    refreshSpinner(mSpinnerAdapter.getItem(position));
                 }
             }
 
@@ -182,16 +179,25 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
             }
         });
 
+        refreshSpinner(selectedPulse);
+    }
+
+    private void refreshSpinner(String selectedPulse) {
+
+        mSpinner.setAdapter(mSpinnerAdapter);
+
         Collections.sort(mPulseTargets);
         mPulseTargets.add(0, PulseFragment.GLOBAL);
         if (selectedPulse == null) {
             selectedPulse = mPulseTargets.get(0);
         }
-        mViewPagerAdapter.setSelectedPulseTarget(selectedPulse);
-        mSpinner.setSelection(mPulseTargets.indexOf(selectedPulse));
-        mSpinnerAdapter.clear();
 
+        mSpinnerAdapter.clear();
         mSpinnerAdapter.addAll(mPulseTargets);
+        mSpinner.setSelection(mPulseTargets.indexOf(selectedPulse));
+
+        mViewPagerAdapter = new PulsePagerAdapter(this, getSupportFragmentManager());
+        mViewPagerAdapter.setSelectedPulseTarget(selectedPulse);
 
         mViewPager.setAdapter(mViewPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
