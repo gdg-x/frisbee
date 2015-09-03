@@ -43,9 +43,14 @@ class PulseAdapter extends BaseAdapter {
 
     private int mMode;
 
-    public PulseAdapter(Context ctx) {
+    public PulseAdapter(Context ctx, int[] positions) {
         mInflater = LayoutInflater.from(ctx);
         mPulse = new ArrayList<>();
+        mPositions = positions;
+    }
+
+    public int[] getPositions() {
+        return mPositions;
     }
 
     @Override
@@ -117,7 +122,11 @@ class PulseAdapter extends BaseAdapter {
         mMode = mode;
         mPulse.clear();
         mPulse.addAll(pulse.entrySet());
-        mPositions = new int[mPulse.size()];
+        //Only initialize if the positions are not provided.
+        //They are provided in constructor and coming from savedInstanceState of the Fragment.
+        if (mPositions == null || mPositions.length != mPulse.size()) {
+            mPositions = new int[mPulse.size()];
+        }
 
         Collections.sort(mPulse, new Comparator<Map.Entry<String, PulseEntry>>() {
             @Override
