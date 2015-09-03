@@ -27,7 +27,6 @@ public class ParseDeepLinkActivity extends Activity {
         }
 
         finish();
-
     }
 
     /**

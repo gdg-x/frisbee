@@ -328,9 +328,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         attachmentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(attachment.getUrl()));
-                mContext.startActivity(i);
+                mContext.startActivity(Utils.createExternalIntent(mContext, Uri.parse(attachment.getUrl())));
             }
         });
     }
@@ -370,7 +368,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                         playVideoIntent.putExtra(YoutubeActivity.EXTRA_VIDEO_ID, videoId);
                         mContext.startActivity(playVideoIntent);
                     } else {
-                        Intent viewUrlIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(attachment.getUrl()));
+                        Intent viewUrlIntent = Utils.createExternalIntent(mContext, Uri.parse(attachment.getUrl()));
                         if (Utils.canLaunch(mContext, viewUrlIntent)) {
                             mContext.startActivity(viewUrlIntent);
                         }
@@ -456,9 +454,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     }
 
     private void openEventInGPlus(String uri) {
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse(uri));
-        mContext.startActivity(i);
+        mContext.startActivity(Utils.createExternalIntent(mContext, Uri.parse(uri)));
 
     }
 

@@ -2,7 +2,6 @@ package org.gdg.frisbee.android.chapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,9 +17,10 @@ import android.widget.TextView;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.LeadMessage;
+import org.gdg.frisbee.android.utils.Utils;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class LeadFragment extends ListFragment {
     private LeadAnnouncementsAdapter mAdapter;
@@ -59,7 +59,7 @@ public class LeadFragment extends ListFragment {
     public void onListItemClick(final ListView l, final View v, final int position, final long id) {
         final LeadMessage item = mAdapter.getItem(position);
         if (item.getType() == LeadMessage.Type.resource) {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(item.getLinkUrl())));
+            startActivity(Utils.createExternalIntent(getActivity(), Uri.parse(item.getLinkUrl())));
         }
     }
 
