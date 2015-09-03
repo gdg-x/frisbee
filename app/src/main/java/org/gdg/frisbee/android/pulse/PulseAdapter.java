@@ -39,7 +39,7 @@ class PulseAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
     private ArrayList<Map.Entry<String, PulseEntry>> mPulse;
-    private int[] mPosition;
+    private int[] mPositions;
 
     private int mMode;
 
@@ -84,15 +84,15 @@ class PulseAdapter extends BaseAdapter {
                 z++;
             }
             if (z > 2) {
-                mPosition[i] = mPosition[mPulse.indexOf(prevEntry)] + 1;
+                mPositions[i] = mPositions[mPulse.indexOf(prevEntry)] + 1;
             } else {
-                mPosition[i] = mPosition[i - 1] + 1;
+                mPositions[i] = mPositions[i - 1] + 1;
 
             }
-            holder.position.setText(mPosition[i] + ".");
+            holder.position.setText(mPositions[i] + ".");
 
         } else {
-            mPosition[i] = 1;
+            mPositions[i] = 1;
             holder.position.setText("1.");
         }
 
@@ -117,7 +117,7 @@ class PulseAdapter extends BaseAdapter {
         mMode = mode;
         mPulse.clear();
         mPulse.addAll(pulse.entrySet());
-        mPosition = new int[mPulse.size()];
+        mPositions = new int[mPulse.size()];
 
         Collections.sort(mPulse, new Comparator<Map.Entry<String, PulseEntry>>() {
             @Override
