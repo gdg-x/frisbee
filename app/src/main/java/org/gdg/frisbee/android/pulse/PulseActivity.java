@@ -239,15 +239,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
 
         @Override
         public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return PulseFragment.newInstance(0, mSelectedPulseTarget);
-                case 1:
-                    return PulseFragment.newInstance(1, mSelectedPulseTarget);
-                case 2:
-                    return PulseFragment.newInstance(2, mSelectedPulseTarget);
-            }
-            return null;
+            return PulseFragment.newInstance(position, mSelectedPulseTarget);
         }
 
         @Override

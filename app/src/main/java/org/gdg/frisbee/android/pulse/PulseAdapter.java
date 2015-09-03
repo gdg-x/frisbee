@@ -131,18 +131,7 @@ class PulseAdapter extends BaseAdapter {
         Collections.sort(mPulse, new Comparator<Map.Entry<String, PulseEntry>>() {
             @Override
             public int compare(Map.Entry<String, PulseEntry> entry, Map.Entry<String, PulseEntry> entry2) {
-                PulseEntry value = entry.getValue();
-                PulseEntry value2 = entry2.getValue();
-
-                switch (mode) {
-                    case 0:
-                        return (value.getMeetings() - value2.getMeetings()) * -1;
-                    case 1:
-                        return (value.getAttendees() - value2.getAttendees()) * -1;
-                    case 2:
-                        return (value.getPlusMembers() - value2.getPlusMembers()) * -1;
-                }
-                return 0;
+                return entry.getValue().compareTo(mode, entry2.getValue());
             }
         });
     }
