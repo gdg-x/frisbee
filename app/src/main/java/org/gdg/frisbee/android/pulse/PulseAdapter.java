@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.pulse;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +44,7 @@ class PulseAdapter extends BaseAdapter {
 
     private int mMode;
 
-    public PulseAdapter(Context ctx, int[] positions) {
+    public PulseAdapter(Context ctx, @Nullable int[] positions) {
         mInflater = LayoutInflater.from(ctx);
         mPulse = new ArrayList<>();
         mPositions = positions;
