@@ -26,6 +26,7 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.ShareCompat;
 import android.util.DisplayMetrics;
 import android.util.Patterns;
@@ -36,12 +37,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 
-import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.deserializer.DateTimeDeserializer;
-import org.joda.time.DateTime;
-import org.joda.time.Period;
-import org.joda.time.format.DateTimeFormat;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,6 +46,12 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.deserializer.DateTimeDeserializer;
+import org.joda.time.DateTime;
+import org.joda.time.Period;
+import org.joda.time.format.DateTimeFormat;
 
 import timber.log.Timber;
 
@@ -218,7 +219,12 @@ public class Utils {
 
     @SuppressWarnings("deprecation")
     public static Intent createExternalIntent(Context context, Uri uri) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder()
+                .setToolbarColor(context.getResources().getColor(R.color.theme_primary))
+                .setShowTitle(true)
+                .build();
+        Intent intent = customTabsIntent.intent;
+        intent.setData(uri);
         intent.putExtra(ShareCompat.EXTRA_CALLING_PACKAGE, context.getPackageName());
         if (context instanceof Activity) {
             intent.putExtra(ShareCompat.EXTRA_CALLING_ACTIVITY, ((Activity) context).getComponentName());
