@@ -16,7 +16,6 @@
 
 package org.gdg.frisbee.android.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -27,7 +26,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
-import android.support.v4.app.ShareCompat;
 import android.util.DisplayMetrics;
 import android.util.Patterns;
 import android.util.TypedValue;
@@ -36,6 +34,12 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
+
+import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.deserializer.DateTimeDeserializer;
+import org.joda.time.DateTime;
+import org.joda.time.Period;
+import org.joda.time.format.DateTimeFormat;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -46,12 +50,6 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.deserializer.DateTimeDeserializer;
-import org.joda.time.DateTime;
-import org.joda.time.Period;
-import org.joda.time.format.DateTimeFormat;
 
 import timber.log.Timber;
 
@@ -225,11 +223,6 @@ public class Utils {
                 .build();
         Intent intent = customTabsIntent.intent;
         intent.setData(uri);
-        intent.putExtra(ShareCompat.EXTRA_CALLING_PACKAGE, context.getPackageName());
-        if (context instanceof Activity) {
-            intent.putExtra(ShareCompat.EXTRA_CALLING_ACTIVITY, ((Activity) context).getComponentName());
-        }
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         return intent;
     }
 }

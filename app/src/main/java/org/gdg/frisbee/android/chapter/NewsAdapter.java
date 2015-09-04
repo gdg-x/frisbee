@@ -499,9 +499,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                 ssb.setSpan(new ClickableSpan() {
                     @Override
                     public void onClick(View view) {
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(url));
-                        mContext.startActivity(i);
+                        mContext.startActivity(Utils.createExternalIntent(mContext, Uri.parse(url)));
                     }
                 }, start, end, 33);
             }
