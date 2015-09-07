@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Gde;
 import org.gdg.frisbee.android.api.model.GdeList;
 import org.gdg.frisbee.android.app.App;
@@ -29,9 +30,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.Bind;
-import retrofit.Callback;
-import retrofit.Response;
-import timber.log.Timber;
 
 public class GdeActivity extends GdgNavDrawerActivity {
 
@@ -78,8 +76,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
 
         App.getInstance().getGdeDirectory().getDirectory().enqueue(new Callback<GdeList>() {
             @Override
-            public void onResponse(Response<GdeList> response) {
-                final GdeList directory = response.body();
+            public void onSuccessResponse(final GdeList directory) {
                 App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_GDE_LIST,
                         directory,
                         DateTime.now().plusDays(4),
@@ -92,14 +89,16 @@ public class GdeActivity extends GdgNavDrawerActivity {
             }
 
             @Override
-            public void onFailure(Throwable t) {
+            public void onFailure(Throwable t, int errorMessage) {
                 try {
-                    Snackbar snackbar = Snackbar.make(mContentLayout, R.string.fetch_gde_failed,
+                    if (errorMessage != R.string.offline_alert) {
+                        errorMessage = R.string.fetch_gde_failed;
+                    }
+                    Snackbar snackbar = Snackbar.make(mContentLayout, errorMessage,
                             Snackbar.LENGTH_SHORT);
                     ColoredSnackBar.alert(snackbar).show();
                 } catch (IllegalStateException ignored) {
                 }
-                Timber.e(t, "Could'nt fetch GDE list");
             }
         });
     }

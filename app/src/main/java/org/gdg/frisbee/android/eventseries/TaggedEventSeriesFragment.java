@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.PagedList;
 import org.gdg.frisbee.android.api.model.TaggedEvent;
 import org.gdg.frisbee.android.app.App;
@@ -41,8 +42,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 import butterknife.ButterKnife;
-import retrofit.Callback;
-import retrofit.Response;
 
 public class TaggedEventSeriesFragment extends EventListFragment {
 
@@ -114,8 +113,8 @@ public class TaggedEventSeriesFragment extends EventListFragment {
 
         Callback<PagedList<TaggedEvent>> listener = new Callback<PagedList<TaggedEvent>>() {
             @Override
-            public void onResponse(Response<PagedList<TaggedEvent>> response) {
-                mEvents.addAll(response.body().getItems());
+            public void onSuccessResponse(PagedList<TaggedEvent> response) {
+                mEvents.addAll(response.getItems());
                 App.getInstance().getModelCache().putAsync(mCacheKey,
                         mEvents,
                         DateTime.now().plusHours(2),
@@ -130,8 +129,8 @@ public class TaggedEventSeriesFragment extends EventListFragment {
             }
 
             @Override
-            public void onFailure(Throwable t) {
-                onError(t);
+            public void onFailure(Throwable t, int errorMessage) {
+                onError(errorMessage);
             }
         };
 
@@ -142,19 +141,28 @@ public class TaggedEventSeriesFragment extends EventListFragment {
             App.getInstance().getModelCache().getAsync(mCacheKey, false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
-                    ArrayList<TaggedEvent> events = (ArrayList<TaggedEvent>) item;
-                    mAdapter.addAll(events);
-                    sortEvents();
-                    setIsLoading(false);
-                    if (isAdded()) {
-                        Snackbar snackbar = Snackbar.make(getView(), R.string.cached_content,
-                                Snackbar.LENGTH_SHORT);
-                        ColoredSnackBar.info(snackbar).show();
+                    if (checkValidCache(item)) {
+                        ArrayList<TaggedEvent> events = (ArrayList<TaggedEvent>) item;
+                        mAdapter.addAll(events);
+                        sortEvents();
+                        setIsLoading(false);
+                        if (isAdded()) {
+                            Snackbar snackbar = Snackbar.make(getView(), R.string.cached_content,
+                                    Snackbar.LENGTH_SHORT);
+                            ColoredSnackBar.info(snackbar).show();
+                        }
+                    } else {
+                        App.getInstance().getModelCache().removeAsync(mCacheKey);
+                        onNotFound();
                     }
                 }
 
                 @Override
                 public void onNotFound(String key) {
+                    onNotFound();
+                }
+
+                private void onNotFound() {
                     setIsLoading(false);
                     if (isAdded()) {
                         Snackbar snackbar = Snackbar.make(getView(), R.string.offline_alert,

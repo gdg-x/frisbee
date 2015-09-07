@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.eventseries;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -45,11 +46,13 @@ public abstract class EventListFragment extends GdgListFragment {
 
     protected ArrayList<SimpleEvent> mEvents;
     
-    protected void onError(Throwable e) {
+    protected void onError(@StringRes int errorMessage) {
         setIsLoading(false);
-        e.printStackTrace();
         if (isAdded()) {
-            Snackbar snackbar = Snackbar.make(getView(), R.string.fetch_events_failed,
+            if (errorMessage != R.string.offline_alert) {
+                errorMessage = R.string.fetch_events_failed;
+            }
+            Snackbar snackbar = Snackbar.make(getView(), errorMessage,
                     Snackbar.LENGTH_SHORT);
             ColoredSnackBar.alert(snackbar).show();
         }
@@ -149,5 +152,15 @@ public abstract class EventListFragment extends GdgListFragment {
         View v = inflater.inflate(R.layout.fragment_events, container, false);
         ButterKnife.bind(this, v);
         return v;
+    }
+
+    protected boolean checkValidCache(Object item) {
+        if (item instanceof ArrayList) {
+            ArrayList<?> result = (ArrayList) item;
+            if (result.size() > 0) {
+                return result.get(0) instanceof SimpleEvent;
+            }
+        }
+        return false;
     }
 }

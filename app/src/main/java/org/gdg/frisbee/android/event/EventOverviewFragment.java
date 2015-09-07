@@ -48,6 +48,7 @@ import com.tasomaniac.android.widget.DelayedProgressBar;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.EventFullDetails;
@@ -61,9 +62,6 @@ import org.joda.time.format.DateTimeFormatter;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import retrofit.Callback;
-import retrofit.Response;
-import timber.log.Timber;
 
 public class EventOverviewFragment extends Fragment {
 
@@ -113,19 +111,18 @@ public class EventOverviewFragment extends Fragment {
         final String eventId = getArguments().getString(Const.EXTRA_EVENT_ID);
         App.getInstance().getGdgXHub().getEventDetail(eventId).enqueue(new Callback<EventFullDetails>() {
             @Override
-            public void onResponse(Response<EventFullDetails> response) {
-                EventOverviewFragment.this.onResponse(response.body());
+            public void onSuccessResponse(EventFullDetails response) {
+                onSuccess(response);
             }
 
             @Override
-            public void onFailure(Throwable t) {
+            public void onFailure(Throwable t, int errorMessage) {
 
                 if (isAdded()) {
-                    Snackbar snackbar = Snackbar.make(getView(), R.string.server_error,
+                    Snackbar snackbar = Snackbar.make(getView(), errorMessage,
                             Snackbar.LENGTH_SHORT);
                     ColoredSnackBar.alert(snackbar).show();
                 }
-                Timber.d(t, "error while retrieving event %s", eventId);
             }
         });
     }
@@ -165,7 +162,7 @@ public class EventOverviewFragment extends Fragment {
         return fmt.print(eventFullDetails.getStart());
     }
 
-    private void onResponse(final EventFullDetails eventFullDetails) {
+    private void onSuccess(final EventFullDetails eventFullDetails) {
         if (getActivity() == null) {
             return;
         }
@@ -189,19 +186,21 @@ public class EventOverviewFragment extends Fragment {
                 if (Utils.isOnline(getActivity())) {
                     App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
                         @Override
-                        public void onResponse(Response<Directory> response) {
-                            mDirectory = response.body();
+                        public void onSuccessResponse(Directory directory) {
+                            mDirectory = directory;
                             updateGroupDetails(mDirectory.getGroupById(eventFullDetails.getChapter()));
                         }
 
                         @Override
-                        public void onFailure(Throwable t) {
+                        public void onFailure(Throwable t, int errorMessage) {
                             if (isAdded()) {
-                                Snackbar snackbar = Snackbar.make(getView(), R.string.fetch_chapters_failed,
+                                if (errorMessage != R.string.offline_alert) {
+                                    errorMessage = R.string.fetch_chapters_failed;
+                                }
+                                Snackbar snackbar = Snackbar.make(getView(), errorMessage,
                                         Snackbar.LENGTH_SHORT);
                                 ColoredSnackBar.alert(snackbar).show();
                             }
-                            Timber.e(t, "Could'nt fetch chapter list");
                         }
                     });
                 } else {

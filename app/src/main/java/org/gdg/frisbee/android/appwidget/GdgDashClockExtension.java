@@ -7,6 +7,7 @@ import com.google.android.apps.dashclock.api.DashClockExtension;
 import com.google.android.apps.dashclock.api.ExtensionData;
 
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.PrefUtils;
@@ -15,8 +16,6 @@ import org.joda.time.format.DateTimeFormat;
 
 import java.util.ArrayList;
 
-import retrofit.Callback;
-import retrofit.Response;
 import timber.log.Timber;
 
 public class GdgDashClockExtension extends DashClockExtension {
@@ -36,8 +35,7 @@ public class GdgDashClockExtension extends DashClockExtension {
                 homeGdg)
                 .enqueue(new Callback<ArrayList<Event>>() {
                     @Override
-                    public void onResponse(Response<ArrayList<Event>> response) {
-                        ArrayList<Event> events = response.body();
+                    public void onSuccessResponse(ArrayList<Event> events) {
                         if (events.size() > 0) {
                             if (events.get(0).getGPlusEventLink() != null) {
 
@@ -60,11 +58,6 @@ public class GdgDashClockExtension extends DashClockExtension {
                             publishUpdate(new ExtensionData()
                                     .visible(false));
                         }
-                    }
-
-                    @Override
-                    public void onFailure(Throwable t) {
-                        Timber.e(t, "Error updating Widget");
                     }
                 });
     }

@@ -21,6 +21,7 @@ import android.support.design.widget.Snackbar;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.ContributorList;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
@@ -28,9 +29,6 @@ import org.gdg.frisbee.android.common.PeopleListFragment;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
-
-import retrofit.Callback;
-import retrofit.Response;
 
 public class ContributorsFragment extends PeopleListFragment {
 
@@ -66,19 +64,13 @@ public class ContributorsFragment extends PeopleListFragment {
     private void fetchGitHubContributors() {
         App.getInstance().getGithub().getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO).enqueue(new Callback<ContributorList>() {
             @Override
-            public void onResponse(Response<ContributorList> response) {
+            public void onSuccessResponse(ContributorList contributors) {
 
-                ContributorList contributors = response.body();
                 mAdapter.addAll(contributors);
                 App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_FRISBEE_CONTRIBUTORS,
                         contributors,
                         DateTime.now().plusDays(1),
                         null);
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-
             }
         });
     }

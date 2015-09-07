@@ -29,6 +29,7 @@ import android.widget.RemoteViews;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.Event;
@@ -42,8 +43,6 @@ import org.joda.time.format.DateTimeFormat;
 
 import java.util.ArrayList;
 
-import retrofit.Callback;
-import retrofit.Response;
 import timber.log.Timber;
 
 public class UpcomingEventWidgetProvider extends AppWidgetProvider {
@@ -123,10 +122,8 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                             homeGdg.getGplusId())
                     .enqueue(new Callback<ArrayList<Event>>() {
                         @Override
-                        public void onResponse(Response<ArrayList<Event>> response) {
+                        public void onSuccessResponse(ArrayList<Event> events) {
                             Timber.d("Got events");
-
-                            ArrayList<Event> events = response.body();
                             if (events.size() > 0) {
                                 Event firstEvent = events.get(0);
                                 views.setTextViewText(R.id.title, firstEvent.getTitle());
@@ -147,10 +144,12 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                         }
 
                         @Override
-                        public void onFailure(Throwable t) {
+                        public void onFailure(Throwable t, int errorMessage) {
 
-                            Timber.e(t, "Error updating Widget");
-                            showErrorChild(views, R.string.loading_data_failed, UpdateService.this);
+                            showErrorChild(views,
+                                    errorMessage == R.string.offline_alert
+                                            ? errorMessage : R.string.loading_data_failed,
+                                    UpdateService.this);
                             manager.updateAppWidget(thisWidget, views);
                         }
                     });

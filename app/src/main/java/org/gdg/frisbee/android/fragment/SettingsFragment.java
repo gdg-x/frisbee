@@ -42,6 +42,7 @@ import com.google.android.gms.plus.Plus;
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.GdgXHub;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
@@ -56,8 +57,6 @@ import org.gdg.frisbee.android.utils.PrefUtils;
 
 import java.io.IOException;
 
-import retrofit.Callback;
-import retrofit.Response;
 import timber.log.Timber;
 
 public class SettingsFragment extends PreferenceFragment {
@@ -108,13 +107,8 @@ public class SettingsFragment extends PreferenceFragment {
                                 client.unregisterGcm("Bearer " + token, new GcmRegistrationRequest(PrefUtils.getRegistrationId(getActivity())))
                                         .enqueue(new Callback<GcmRegistrationResponse>() {
                                             @Override
-                                            public void onResponse(Response<GcmRegistrationResponse> response) {
+                                            public void onSuccessResponse(GcmRegistrationResponse response) {
                                                 PrefUtils.setGcmSettings(getActivity(), false, null, null);
-                                            }
-
-                                            @Override
-                                            public void onFailure(Throwable t) {
-                                                Timber.e(t, "Fail");
                                             }
                                         });
                             } else {
@@ -123,16 +117,11 @@ public class SettingsFragment extends PreferenceFragment {
                                 client.registerGcm("Bearer " + token, new GcmRegistrationRequest(regId))
                                         .enqueue(new Callback<GcmRegistrationResponse>() {
                                             @Override
-                                            public void onResponse(Response<GcmRegistrationResponse> response) {
+                                            public void onSuccessResponse(GcmRegistrationResponse response) {
                                                 PrefUtils.setGcmSettings(getActivity(),
                                                         true,
                                                         regId,
-                                                        response.body().getNotificationKey());
-                                            }
-
-                                            @Override
-                                            public void onFailure(Throwable t) {
-                                                Timber.e(t, "Fail");
+                                                        response.getNotificationKey());
                                             }
                                         });
 
@@ -295,13 +284,7 @@ public class SettingsFragment extends PreferenceFragment {
                             new HomeGdgRequest(homeGdg))
                             .enqueue(new Callback<Void>() {
                                 @Override
-                                public void onResponse(Response<Void> response) {
-
-                                }
-
-                                @Override
-                                public void onFailure(Throwable t) {
-                                    Timber.e(t, "Setting Home failed.");
+                                public void onSuccessResponse(Void response) {
                                 }
                             });
                 } catch (IOException | GoogleAuthException e) {

@@ -36,6 +36,7 @@ import android.widget.Spinner;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Pulse;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
@@ -47,9 +48,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import butterknife.Bind;
-import retrofit.Callback;
-import retrofit.Response;
-import timber.log.Timber;
 
 public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment.Callbacks {
 
@@ -106,8 +104,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
     private void fetchPulse(final String selectedPulse) {
         App.getInstance().getGroupDirectory().getPulse().enqueue(new Callback<Pulse>() {
             @Override
-            public void onResponse(Response<Pulse> response) {
-                final Pulse pulse = response.body();
+            public void onSuccessResponse(final Pulse pulse) {
                 App.getInstance().getModelCache().putAsync(
                         Const.CACHE_KEY_PULSE_GLOBAL,
                         pulse,
@@ -122,14 +119,13 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
             }
 
             @Override
-            public void onFailure(Throwable t) {
+            public void onFailure(Throwable t, int errorMessage) {
                 try {
-                    Snackbar snackbar = Snackbar.make(mContentLayout, R.string.fetch_chapters_failed,
+                    Snackbar snackbar = Snackbar.make(mContentLayout, errorMessage,
                             Snackbar.LENGTH_SHORT);
                     ColoredSnackBar.alert(snackbar).show();
                 } catch (IllegalStateException ignored) {
                 }
-                Timber.e(t, "Couldn't fetch chapter list");
             }
         });
     }
