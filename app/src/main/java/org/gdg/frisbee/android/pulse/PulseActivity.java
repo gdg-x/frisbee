@@ -94,7 +94,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
 
     @Override
     public void onBackPressed() {
-        if (!PulseFragment.GLOBAL.equals(mSpinner.getSelectedItem())) {
+        if (mSpinner != null && !PulseFragment.GLOBAL.equals(mSpinner.getSelectedItem())) {
             openPulse(PulseFragment.GLOBAL);
             return;
         }
@@ -208,7 +208,9 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(INSTANCE_STATE_SELECTED_PULSE, (String) mSpinner.getSelectedItem());
+        if (mSpinner != null) {
+            outState.putString(INSTANCE_STATE_SELECTED_PULSE, (String) mSpinner.getSelectedItem());
+        }
     }
 
     public class PulsePagerAdapter extends FragmentStatePagerAdapter {
