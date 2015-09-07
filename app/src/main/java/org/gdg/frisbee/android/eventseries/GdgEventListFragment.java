@@ -2,6 +2,7 @@ package org.gdg.frisbee.android.eventseries;
 
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.util.Pair;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -14,6 +15,9 @@ import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -94,6 +98,45 @@ public class GdgEventListFragment extends EventListFragment {
                 }
             });
         }
+    }
+
+
+    /**
+     * Helper method that will split events into upcoming / past
+     * and add to the adapter of this list fragment
+     *
+     * @param events
+     *      The events list to be added
+     */
+    private void splitEventsAndAddToAdapter(Collection<? extends SimpleEvent> events) {
+        Pair<List<SimpleEvent>, List<SimpleEvent>> pair = splitEventsList(events);
+        mAdapter.addAll(pair.first);
+        mAdapter.addAll(pair.second);
+    }
+
+    /**
+     * Split a events list into Upcoming / Past events
+     *
+     * @param events
+     *      The events list that needs to be sorted
+     * @return
+     *      A pair containting the split list into Upcoming / Past events
+     */
+    private Pair<List<SimpleEvent>, List<SimpleEvent>> splitEventsList(Collection<? extends SimpleEvent> events) {
+        List<SimpleEvent> upcoming = new ArrayList<>();
+        List<SimpleEvent> past = new ArrayList<>();
+
+        DateTime now = DateTime.now();
+
+        for (SimpleEvent event : events) {
+            if (event.getStart().isBefore(now)) {
+                past.add(event);
+            } else {
+                upcoming.add(event);
+            }
+        }
+        Collections.reverse(past);
+        return new Pair<>(upcoming, past);
     }
 
     private boolean checkValidCache(Object item) {
