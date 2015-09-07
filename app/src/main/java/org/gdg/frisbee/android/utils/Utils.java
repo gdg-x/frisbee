@@ -16,7 +16,6 @@
 
 package org.gdg.frisbee.android.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -26,7 +25,7 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ShareCompat;
+import android.support.customtabs.CustomTabsIntent;
 import android.util.DisplayMetrics;
 import android.util.Patterns;
 import android.util.TypedValue;
@@ -218,12 +217,12 @@ public class Utils {
 
     @SuppressWarnings("deprecation")
     public static Intent createExternalIntent(Context context, Uri uri) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        intent.putExtra(ShareCompat.EXTRA_CALLING_PACKAGE, context.getPackageName());
-        if (context instanceof Activity) {
-            intent.putExtra(ShareCompat.EXTRA_CALLING_ACTIVITY, ((Activity) context).getComponentName());
-        }
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder()
+                .setToolbarColor(context.getResources().getColor(R.color.theme_primary))
+                .setShowTitle(true)
+                .build();
+        Intent intent = customTabsIntent.intent;
+        intent.setData(uri);
         return intent;
     }
 }

@@ -166,6 +166,7 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$supportVersion"
     compile "com.android.support:support-annotations:$supportVersion"
     compile "com.android.support:design:$supportVersion"
+    compile "com.android.support:customtabs:$supportVersion"
 
     //Play Services
     compile "com.google.android.gms:play-services-location:$playServicesVersion"

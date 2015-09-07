@@ -22,6 +22,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
@@ -330,9 +331,11 @@ public class EventOverviewFragment extends Fragment {
     }
 
     private void launchUrl(String eventUrl) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(eventUrl));
-        startActivity(intent);
+        new CustomTabsIntent.Builder()
+                .setToolbarColor(getResources().getColor(R.color.theme_primary))
+                .setShowTitle(true)
+                .build()
+                .launchUrl(getActivity(), Uri.parse(eventUrl));
     }
 
     private void addEventToCalendar() {

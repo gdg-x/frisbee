@@ -51,6 +51,7 @@ import org.gdg.frisbee.android.pulse.PulseActivity;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.PrefUtils;
+import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.BitmapBorderTransformation;
 
 import java.util.ArrayList;
@@ -208,7 +209,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 navigateTo(SettingsActivity.class, data);
                 break;
             case Const.DRAWER_HELP:
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Const.URL_HELP)));
+                startActivity(Utils.createExternalIntent(this, Uri.parse(Const.URL_HELP)));
                 break;
             case Const.DRAWER_FEEDBACK:
                 showFeedbackDialog();
