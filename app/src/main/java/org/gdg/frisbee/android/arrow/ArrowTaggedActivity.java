@@ -43,7 +43,7 @@ import java.io.IOException;
 
 import butterknife.Bind;
 import retrofit.Callback;
-import retrofit.RetrofitError;
+import retrofit.Response;
 import timber.log.Timber;
 
 public class ArrowTaggedActivity extends GdgActivity {
@@ -116,20 +116,17 @@ public class ArrowTaggedActivity extends GdgActivity {
                             }
                         }
 
-                        App.getInstance().getGdgXHub().getDirectory(
-                                new Callback<Directory>() {
+                        App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
+                            @Override
+                            public void onResponse(Response<Directory> response) {
+                                loadChapterOrganizers(response.body());
+                            }
 
-                                    @Override
-                                    public void success(final Directory directory, final retrofit.client.Response response) {
-                                        loadChapterOrganizers(directory);
-                                    }
-
-                                    @Override
-                                    public void failure(final RetrofitError error) {
-                                        Timber.e(error, "Error");
-                                    }
-                                }
-                        );
+                            @Override
+                            public void onFailure(Throwable t) {
+                                Timber.e(t, "Error");
+                            }
+                        });
                     }
                 });
     }

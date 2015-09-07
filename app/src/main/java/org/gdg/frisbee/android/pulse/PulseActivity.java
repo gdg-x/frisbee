@@ -48,8 +48,7 @@ import java.util.Collections;
 
 import butterknife.Bind;
 import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit.Response;
 import timber.log.Timber;
 
 public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment.Callbacks {
@@ -105,9 +104,10 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
     }
 
     private void fetchPulse(final String selectedPulse) {
-        App.getInstance().getGroupDirectory().getPulse(new Callback<Pulse>() {
+        App.getInstance().getGroupDirectory().getPulse().enqueue(new Callback<Pulse>() {
             @Override
-            public void success(final Pulse pulse, Response response) {
+            public void onResponse(Response<Pulse> response) {
+                final Pulse pulse = response.body();
                 App.getInstance().getModelCache().putAsync(
                         Const.CACHE_KEY_PULSE_GLOBAL,
                         pulse,
@@ -122,14 +122,14 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void onFailure(Throwable t) {
                 try {
                     Snackbar snackbar = Snackbar.make(mContentLayout, R.string.fetch_chapters_failed,
                             Snackbar.LENGTH_SHORT);
                     ColoredSnackBar.alert(snackbar).show();
                 } catch (IllegalStateException ignored) {
                 }
-                Timber.e(error, "Couldn't fetch chapter list");
+                Timber.e(t, "Couldn't fetch chapter list");
             }
         });
     }

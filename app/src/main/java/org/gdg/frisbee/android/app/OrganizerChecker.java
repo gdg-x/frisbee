@@ -11,7 +11,7 @@ import org.gdg.frisbee.android.api.model.OrganizerCheckResponse;
 import org.gdg.frisbee.android.utils.PrefUtils;
 
 import retrofit.Callback;
-import retrofit.RetrofitError;
+import retrofit.Response;
 
 public class OrganizerChecker {
     private boolean mIsOrganizer = false;
@@ -53,19 +53,19 @@ public class OrganizerChecker {
                 && (!currentId.equals(mCheckedId)
                 || System.currentTimeMillis() > mLastOrganizerCheck + Const.ORGANIZER_CHECK_MAX_TIME)) {
             mIsOrganizer = false;
-            App.getInstance().getGdgXHub().checkOrganizer(currentId, new Callback<OrganizerCheckResponse>() {
+            App.getInstance().getGdgXHub().checkOrganizer(currentId).enqueue(new Callback<OrganizerCheckResponse>() {
                 @Override
-                public void success(OrganizerCheckResponse organizerCheckResponse, retrofit.client.Response response) {
+                public void onResponse(Response<OrganizerCheckResponse> response) {
                     mLastOrganizerCheck = System.currentTimeMillis();
                     mCheckedId = currentId;
-                    mIsOrganizer = organizerCheckResponse.getChapters().size() > 0;
+                    mIsOrganizer = response.body().getChapters().size() > 0;
                     responseHandler.onOrganizerResponse(mIsOrganizer);
 
                     savePreferences();
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
+                public void onFailure(Throwable t) {
                     mIsOrganizer = false;
                     responseHandler.onErrorResponse();
                 }

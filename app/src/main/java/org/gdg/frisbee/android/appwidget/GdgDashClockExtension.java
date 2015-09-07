@@ -16,7 +16,7 @@ import org.joda.time.format.DateTimeFormat;
 import java.util.ArrayList;
 
 import retrofit.Callback;
-import retrofit.RetrofitError;
+import retrofit.Response;
 import timber.log.Timber;
 
 public class GdgDashClockExtension extends DashClockExtension {
@@ -33,10 +33,11 @@ public class GdgDashClockExtension extends DashClockExtension {
         App.getInstance().getGroupDirectory().getChapterEventList(
                 (int) (new DateTime().getMillis() / 1000),
                 (int) (new DateTime().plusMonths(1).getMillis() / 1000),
-                homeGdg,
-                new Callback<ArrayList<Event>>() {
+                homeGdg)
+                .enqueue(new Callback<ArrayList<Event>>() {
                     @Override
-                    public void success(ArrayList<Event> events, retrofit.client.Response response) {
+                    public void onResponse(Response<ArrayList<Event>> response) {
+                        ArrayList<Event> events = response.body();
                         if (events.size() > 0) {
                             if (events.get(0).getGPlusEventLink() != null) {
 
@@ -62,8 +63,8 @@ public class GdgDashClockExtension extends DashClockExtension {
                     }
 
                     @Override
-                    public void failure(RetrofitError error) {
-                        Timber.e(error, "Error updating Widget");
+                    public void onFailure(Throwable t) {
+                        Timber.e(t, "Error updating Widget");
                     }
                 });
     }

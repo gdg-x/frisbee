@@ -44,8 +44,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit.Response;
 import timber.log.Timber;
 
 public class FirstStartStep1Fragment extends BaseFragment {
@@ -114,10 +113,11 @@ public class FirstStartStep1Fragment extends BaseFragment {
     
     private void fetchChapters() {
 
-        App.getInstance().getGdgXHub().getDirectory(new Callback<Directory>() {
-
+        App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
             @Override
-            public void success(final Directory directory, Response response) {
+            public void onResponse(Response<Directory> response) {
+                final Directory directory = response.body();
+
                 if (isContextValid()) {
                     addChapters(directory.getGroups());
                     mLoadSwitcher.setDisplayedChild(1);
@@ -129,7 +129,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void onFailure(Throwable t) {
                 if (isContextValid()) {
                     Snackbar snackbar = Snackbar.make(getView(), R.string.fetch_chapters_failed,
                             Snackbar.LENGTH_INDEFINITE);
@@ -141,7 +141,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
                     });
                     ColoredSnackBar.alert(snackbar).show();
                 }
-                Timber.e(error, "Could'nt fetch chapter list");
+                Timber.e(t, "Could'nt fetch chapter list");
             }
         });
     }

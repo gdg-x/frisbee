@@ -62,7 +62,7 @@ import org.joda.time.format.DateTimeFormatter;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import retrofit.Callback;
-import retrofit.RetrofitError;
+import retrofit.Response;
 import timber.log.Timber;
 
 public class EventOverviewFragment extends Fragment {
@@ -111,20 +111,21 @@ public class EventOverviewFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         final String eventId = getArguments().getString(Const.EXTRA_EVENT_ID);
-        App.getInstance().getGdgXHub().getEventDetail(eventId, new Callback<EventFullDetails>() {
+        App.getInstance().getGdgXHub().getEventDetail(eventId).enqueue(new Callback<EventFullDetails>() {
             @Override
-            public void success(EventFullDetails eventFullDetails, retrofit.client.Response response) {
-                onResponse(eventFullDetails);
+            public void onResponse(Response<EventFullDetails> response) {
+                EventOverviewFragment.this.onResponse(response.body());
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void onFailure(Throwable t) {
+
                 if (isAdded()) {
                     Snackbar snackbar = Snackbar.make(getView(), R.string.server_error,
                             Snackbar.LENGTH_SHORT);
                     ColoredSnackBar.alert(snackbar).show();
                 }
-                Timber.d(error, "error while retrieving event %s", eventId);
+                Timber.d(t, "error while retrieving event %s", eventId);
             }
         });
     }
@@ -186,22 +187,21 @@ public class EventOverviewFragment extends Fragment {
             @Override
             public void onNotFound(String key) {
                 if (Utils.isOnline(getActivity())) {
-                    App.getInstance().getGdgXHub().getDirectory(new Callback<Directory>() {
+                    App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
                         @Override
-                        public void success(Directory directory, retrofit.client.Response response) {
-
-                            mDirectory = directory;
+                        public void onResponse(Response<Directory> response) {
+                            mDirectory = response.body();
                             updateGroupDetails(mDirectory.getGroupById(eventFullDetails.getChapter()));
                         }
 
                         @Override
-                        public void failure(RetrofitError error) {
+                        public void onFailure(Throwable t) {
                             if (isAdded()) {
                                 Snackbar snackbar = Snackbar.make(getView(), R.string.fetch_chapters_failed,
                                         Snackbar.LENGTH_SHORT);
                                 ColoredSnackBar.alert(snackbar).show();
                             }
-                            Timber.e(error, "Could'nt fetch chapter list");
+                            Timber.e(t, "Could'nt fetch chapter list");
                         }
                     });
                 } else {

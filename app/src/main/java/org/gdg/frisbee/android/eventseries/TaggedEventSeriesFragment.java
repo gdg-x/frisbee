@@ -42,7 +42,7 @@ import java.util.Comparator;
 
 import butterknife.ButterKnife;
 import retrofit.Callback;
-import retrofit.RetrofitError;
+import retrofit.Response;
 
 public class TaggedEventSeriesFragment extends EventListFragment {
 
@@ -113,10 +113,9 @@ public class TaggedEventSeriesFragment extends EventListFragment {
         setIsLoading(true);
 
         Callback<PagedList<TaggedEvent>> listener = new Callback<PagedList<TaggedEvent>>() {
-
             @Override
-            public void success(final PagedList<TaggedEvent> taggedEventPagedList, final retrofit.client.Response response) {
-                mEvents.addAll(taggedEventPagedList.getItems());
+            public void onResponse(Response<PagedList<TaggedEvent>> response) {
+                mEvents.addAll(response.body().getItems());
                 App.getInstance().getModelCache().putAsync(mCacheKey,
                         mEvents,
                         DateTime.now().plusHours(2),
@@ -131,14 +130,14 @@ public class TaggedEventSeriesFragment extends EventListFragment {
             }
 
             @Override
-            public void failure(final RetrofitError error) {
-                onError(error);
+            public void onFailure(Throwable t) {
+                onError(t);
             }
         };
 
         if (Utils.isOnline(getActivity())) {
             App.getInstance().getGdgXHub()
-                    .getTaggedEventUpcomingList(mTaggedEventSeries.getTag(), DateTime.now(), listener);
+                    .getTaggedEventUpcomingList(mTaggedEventSeries.getTag(), DateTime.now()).enqueue(listener);
         } else {
             App.getInstance().getModelCache().getAsync(mCacheKey, false, new ModelCache.CacheListener() {
                 @Override

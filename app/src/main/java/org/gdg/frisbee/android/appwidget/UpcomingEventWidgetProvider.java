@@ -43,7 +43,7 @@ import org.joda.time.format.DateTimeFormat;
 import java.util.ArrayList;
 
 import retrofit.Callback;
-import retrofit.RetrofitError;
+import retrofit.Response;
 import timber.log.Timber;
 
 public class UpcomingEventWidgetProvider extends AppWidgetProvider {
@@ -120,37 +120,40 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                     .getChapterEventList(
                             (int) (new DateTime().getMillis() / 1000),
                             (int) (new DateTime().plusMonths(1).getMillis() / 1000),
-                            homeGdg.getGplusId(),
-                            new Callback<ArrayList<Event>>() {
-                                @Override
-                                public void success(ArrayList<Event> events, retrofit.client.Response response) {
-                                    Timber.d("Got events");
-                                    if (events.size() > 0) {
-                                        Event firstEvent = events.get(0);
-                                        views.setTextViewText(R.id.title, firstEvent.getTitle());
-                                        views.setTextViewText(R.id.location, firstEvent.getLocation());
-                                        views.setTextViewText(R.id.startDate,
-                                                firstEvent.getStart().toLocalDateTime()
-                                                        .toString(DateTimeFormat.patternForStyle("MS", getResources().getConfiguration().locale)));
-                                        showChild(views, 1);
+                            homeGdg.getGplusId())
+                    .enqueue(new Callback<ArrayList<Event>>() {
+                        @Override
+                        public void onResponse(Response<ArrayList<Event>> response) {
+                            Timber.d("Got events");
 
-                                        Intent i = new Intent(UpdateService.this, EventActivity.class);
-                                        i.putExtra(Const.EXTRA_EVENT_ID, firstEvent.getId());
-                                        views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(UpdateService.this, 0, i, 0));
+                            ArrayList<Event> events = response.body();
+                            if (events.size() > 0) {
+                                Event firstEvent = events.get(0);
+                                views.setTextViewText(R.id.title, firstEvent.getTitle());
+                                views.setTextViewText(R.id.location, firstEvent.getLocation());
+                                views.setTextViewText(R.id.startDate,
+                                        firstEvent.getStart().toLocalDateTime()
+                                                .toString(DateTimeFormat.patternForStyle("MS", getResources().getConfiguration().locale)));
+                                showChild(views, 1);
 
-                                    } else {
-                                        showErrorChild(views, R.string.no_scheduled_events, UpdateService.this);
-                                    }
-                                    manager.updateAppWidget(thisWidget, views);
-                                }
+                                Intent i = new Intent(UpdateService.this, EventActivity.class);
+                                i.putExtra(Const.EXTRA_EVENT_ID, firstEvent.getId());
+                                views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(UpdateService.this, 0, i, 0));
 
-                                @Override
-                                public void failure(RetrofitError error) {
-                                    Timber.e(error, "Error updating Widget");
-                                    showErrorChild(views, R.string.loading_data_failed, UpdateService.this);
-                                    manager.updateAppWidget(thisWidget, views);
-                                }
-                            });
+                            } else {
+                                showErrorChild(views, R.string.no_scheduled_events, UpdateService.this);
+                            }
+                            manager.updateAppWidget(thisWidget, views);
+                        }
+
+                        @Override
+                        public void onFailure(Throwable t) {
+
+                            Timber.e(t, "Error updating Widget");
+                            showErrorChild(views, R.string.loading_data_failed, UpdateService.this);
+                            manager.updateAppWidget(thisWidget, views);
+                        }
+                    });
         }
 
         private void showErrorChild(RemoteViews views, int errorStringResource, Context context) {

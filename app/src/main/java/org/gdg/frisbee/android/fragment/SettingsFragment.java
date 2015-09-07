@@ -57,8 +57,7 @@ import org.gdg.frisbee.android.utils.PrefUtils;
 import java.io.IOException;
 
 import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit.Response;
 import timber.log.Timber;
 
 public class SettingsFragment extends PreferenceFragment {
@@ -101,36 +100,39 @@ public class SettingsFragment extends PreferenceFragment {
                             }
 
                             GdgXHub client = App.getInstance().getGdgXHub();
-                            String token = GoogleAuthUtil.getToken(getActivity(), 
-                                    Plus.AccountApi.getAccountName(mGoogleApiClient), 
+                            String token = GoogleAuthUtil.getToken(getActivity(),
+                                    Plus.AccountApi.getAccountName(mGoogleApiClient),
                                     "oauth2: " + Scopes.PLUS_LOGIN);
 
                             if (!enableGcm) {
-                                client.unregisterGcm("Bearer " + token, new GcmRegistrationRequest(PrefUtils.getRegistrationId(getActivity())),
-                                        new Callback<GcmRegistrationResponse>() {
+                                client.unregisterGcm("Bearer " + token, new GcmRegistrationRequest(PrefUtils.getRegistrationId(getActivity())))
+                                        .enqueue(new Callback<GcmRegistrationResponse>() {
                                             @Override
-                                            public void success(GcmRegistrationResponse gcmRegistrationResponse, retrofit.client.Response response) {
+                                            public void onResponse(Response<GcmRegistrationResponse> response) {
                                                 PrefUtils.setGcmSettings(getActivity(), false, null, null);
                                             }
 
                                             @Override
-                                            public void failure(RetrofitError error) {
-                                                Timber.e(error, "Fail");
+                                            public void onFailure(Throwable t) {
+                                                Timber.e(t, "Fail");
                                             }
                                         });
                             } else {
                                 final String regId = mGcm.register(BuildConfig.GCM_SENDER_ID);
 
-                                client.registerGcm("Bearer " + token, new GcmRegistrationRequest(regId),
-                                        new Callback<GcmRegistrationResponse>() {
+                                client.registerGcm("Bearer " + token, new GcmRegistrationRequest(regId))
+                                        .enqueue(new Callback<GcmRegistrationResponse>() {
                                             @Override
-                                            public void success(GcmRegistrationResponse gcmRegistrationResponse, retrofit.client.Response response) {
-                                                PrefUtils.setGcmSettings(getActivity(), true, regId, gcmRegistrationResponse.getNotificationKey());
+                                            public void onResponse(Response<GcmRegistrationResponse> response) {
+                                                PrefUtils.setGcmSettings(getActivity(),
+                                                        true,
+                                                        regId,
+                                                        response.body().getNotificationKey());
                                             }
 
                                             @Override
-                                            public void failure(RetrofitError error) {
-                                                Timber.e(error, "Fail");
+                                            public void onFailure(Throwable t) {
+                                                Timber.e(t, "Fail");
                                             }
                                         });
 
@@ -290,15 +292,16 @@ public class SettingsFragment extends PreferenceFragment {
                             "oauth2: " + Scopes.PLUS_LOGIN);
 
                     App.getInstance().getGdgXHub().setHomeGdg("Bearer " + token,
-                            new HomeGdgRequest(homeGdg),
-                            new Callback<Void>() {
+                            new HomeGdgRequest(homeGdg))
+                            .enqueue(new Callback<Void>() {
                                 @Override
-                                public void success(Void aVoid, Response response) {
+                                public void onResponse(Response<Void> response) {
+
                                 }
 
                                 @Override
-                                public void failure(RetrofitError error) {
-                                    Timber.e(error, "Setting Home failed.");
+                                public void onFailure(Throwable t) {
+                                    Timber.e(t, "Setting Home failed.");
                                 }
                             });
                 } catch (IOException | GoogleAuthException e) {

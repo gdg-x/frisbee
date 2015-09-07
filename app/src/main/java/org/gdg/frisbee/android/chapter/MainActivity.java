@@ -46,10 +46,6 @@ import com.google.android.gms.appinvite.AppInviteReferral;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -68,9 +64,14 @@ import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import butterknife.Bind;
 import retrofit.Callback;
-import retrofit.RetrofitError;
+import retrofit.Response;
+import retrofit.http.HEAD;
 import timber.log.Timber;
 
 public class MainActivity extends GdgNavDrawerActivity {
@@ -266,37 +267,36 @@ public class MainActivity extends GdgNavDrawerActivity {
     }
 
     private void fetchChapters() {
-        App.getInstance().getGdgXHub().getDirectory(
-                new Callback<Directory>() {
+        App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
+            @Override
+            public void onResponse(Response<Directory> response) {
+                final Directory directory = response.body();
 
-                    public void success(final Directory directory, retrofit.client.Response response) {
-                        App.getInstance().getModelCache().putAsync(
-                                Const.CACHE_KEY_CHAPTER_LIST_HUB,
-                                directory,
-                                DateTime.now().plusDays(1),
-                                new ModelCache.CachePutListener() {
-                                    @Override
-                                    public void onPutIntoCache() {
-                                        ArrayList<Chapter> chapters = directory.getGroups();
-                                        initChapters(chapters);
-                                    }
-                                }
-                        );
-                    }
+                ArrayList<Chapter> chapters = directory.getGroups();
+                initChapters(chapters);
 
-                    public void failure(RetrofitError error) {
-                        try {
-                            Snackbar snackbar = Snackbar.make(
-                                    mContentFrameLayout, getString(R.string.fetch_chapters_failed),
-                                    Snackbar.LENGTH_SHORT
-                            );
-                            ColoredSnackBar.alert(snackbar).show();
-                        } catch (IllegalStateException exception) {
-                        }
-                        Timber.e(error, "Couldn't fetch chapter list");
-                    }
+                App.getInstance().getModelCache().putAsync(
+                        Const.CACHE_KEY_CHAPTER_LIST_HUB,
+                        directory,
+                        DateTime.now().plusDays(1),
+                        new ModelCache.CachePutListener() {
+                            @Override
+                            public void onPutIntoCache() {
+                            }
+                        });
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                try {
+                    Snackbar snackbar = Snackbar.make(mContentFrameLayout, getString(R.string.fetch_chapters_failed),
+                            Snackbar.LENGTH_SHORT);
+                    ColoredSnackBar.alert(snackbar).show();
+                } catch (IllegalStateException ignored) {
                 }
-        );
+                Timber.e(t, "Couldn't fetch chapter list");
+            }
+        });
     }
 
     /**

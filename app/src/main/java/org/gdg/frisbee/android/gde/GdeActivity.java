@@ -30,7 +30,7 @@ import java.util.Map;
 
 import butterknife.Bind;
 import retrofit.Callback;
-import retrofit.RetrofitError;
+import retrofit.Response;
 import timber.log.Timber;
 
 public class GdeActivity extends GdgNavDrawerActivity {
@@ -76,9 +76,10 @@ public class GdeActivity extends GdgNavDrawerActivity {
     
     private void fetchGdeDirectory() {
 
-        App.getInstance().getGdeDirectory().getDirectory(new Callback<GdeList>() {
+        App.getInstance().getGdeDirectory().getDirectory().enqueue(new Callback<GdeList>() {
             @Override
-            public void success(final GdeList directory, retrofit.client.Response response) {
+            public void onResponse(Response<GdeList> response) {
+                final GdeList directory = response.body();
                 App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_GDE_LIST,
                         directory,
                         DateTime.now().plusDays(4),
@@ -91,15 +92,14 @@ public class GdeActivity extends GdgNavDrawerActivity {
             }
 
             @Override
-            public void failure(RetrofitError error) {
-
+            public void onFailure(Throwable t) {
                 try {
                     Snackbar snackbar = Snackbar.make(mContentLayout, R.string.fetch_gde_failed,
                             Snackbar.LENGTH_SHORT);
                     ColoredSnackBar.alert(snackbar).show();
-                } catch (IllegalStateException exception) {
+                } catch (IllegalStateException ignored) {
                 }
-                Timber.e(error, "Could'nt fetch GDE list");
+                Timber.e(t, "Could'nt fetch GDE list");
             }
         });
     }
