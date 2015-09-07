@@ -30,7 +30,7 @@ import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
 import retrofit.Callback;
-import retrofit.RetrofitError;
+import retrofit.Response;
 
 public class ContributorsFragment extends PeopleListFragment {
 
@@ -64,10 +64,11 @@ public class ContributorsFragment extends PeopleListFragment {
     }
     
     private void fetchGitHubContributors() {
-        App.getInstance().getGithub().getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO, new Callback<ContributorList>() {
+        App.getInstance().getGithub().getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO).enqueue(new Callback<ContributorList>() {
             @Override
-            public void success(final ContributorList contributors, retrofit.client.Response response) {
+            public void onResponse(Response<ContributorList> response) {
 
+                ContributorList contributors = response.body();
                 mAdapter.addAll(contributors);
                 App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_FRISBEE_CONTRIBUTORS,
                         contributors,
@@ -76,7 +77,7 @@ public class ContributorsFragment extends PeopleListFragment {
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void onFailure(Throwable t) {
 
             }
         });

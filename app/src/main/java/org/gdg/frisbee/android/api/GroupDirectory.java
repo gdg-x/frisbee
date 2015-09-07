@@ -21,22 +21,21 @@ import org.gdg.frisbee.android.api.model.Pulse;
 
 import java.util.ArrayList;
 
-import retrofit.Callback;
+import retrofit.Call;
 import retrofit.http.GET;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
 public interface GroupDirectory {
 
-    @GET("/groups/pulse_stats/")
-    void getPulse(Callback<Pulse> callback);
+    @GET("groups/pulse_stats/")
+    Call<Pulse> getPulse();
 
-    @GET("/groups/pulse_stats/{country}/")
-    void getCountryPulse(@Path("country") String country, Callback<Pulse> callback);
+    @GET("groups/pulse_stats/{country}/")
+    Call<Pulse> getCountryPulse(@Path("country") String country);
 
-    @GET("/events/feed/json")
-    void getChapterEventList(@Query("start") final int start,
+    @GET("events/feed/json")
+    Call<ArrayList<Event>> getChapterEventList(@Query("start") final int start,
                              @Query("end") final int end,
-                             @Query("group") final String chapterId,
-                             Callback<ArrayList<Event>> callback);
+                             @Query("group") final String chapterId);
 }

@@ -2,35 +2,25 @@ package org.gdg.frisbee.android.api;
 
 import com.google.gson.FieldNamingPolicy;
 
-import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.api.deserializer.ZuluDateTimeDeserializer;
+import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.Utils;
 
-import retrofit.RestAdapter;
-import retrofit.converter.GsonConverter;
+import retrofit.GsonConverterFactory;
+import retrofit.Retrofit;
 
-/**
- * Created by <a href="mailto:marcusandreog@gmail.com">Marcus Gabilheri</a>
- *
- * @author Marcus Gabilheri
- * @version 1.0
- * @since 7/26/15.
- */
 public final class GdgXHubFactory {
 
-    // This variable is meant to be changed as pleased while debugging
-    private static final RestAdapter.LogLevel LOG_LEVEL = RestAdapter.LogLevel.NONE;
-    private static final String BASE_URL = "https://hub.gdgx.io/api/v1";
+    private static final String BASE_URL = "https://hub.gdgx.io/api/v1/";
 
     private GdgXHubFactory() {
     }
 
-    private static RestAdapter provideRestAdapter() {
-        return new RestAdapter.Builder()
-                .setEndpoint(BASE_URL)
-                .setClient(OkClientFactory.provideClient())
-                .setLogLevel(BuildConfig.DEBUG ? LOG_LEVEL : RestAdapter.LogLevel.NONE)
-                .setConverter(new GsonConverter(Utils.getGson(FieldNamingPolicy.IDENTITY, new ZuluDateTimeDeserializer())))
+    private static Retrofit provideRestAdapter() {
+        return new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(App.getInstance().getOkHttpClient())
+                .addConverterFactory(GsonConverterFactory.create(Utils.getGson(FieldNamingPolicy.IDENTITY, new ZuluDateTimeDeserializer())))
                 .build();
     }
 

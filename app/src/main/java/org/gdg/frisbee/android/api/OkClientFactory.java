@@ -6,12 +6,7 @@ import android.support.annotation.NonNull;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 
-import org.gdg.frisbee.android.app.App;
-
 import java.io.File;
-
-import retrofit.client.Client;
-import retrofit.client.OkClient;
 
 public final class OkClientFactory {
 
@@ -29,10 +24,5 @@ public final class OkClientFactory {
         Cache cache = new Cache(cacheDir, DISK_CACHE_SIZE);
         okHttpClient.setCache(cache);
         return okHttpClient;
-    }
-
-    @NonNull
-    public static Client provideClient() {
-        return new OkClient(App.getInstance().getOkHttpClient());
     }
 }

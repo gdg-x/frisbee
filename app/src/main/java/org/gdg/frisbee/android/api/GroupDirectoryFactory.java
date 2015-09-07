@@ -1,44 +1,46 @@
 package org.gdg.frisbee.android.api;
 
-import org.gdg.frisbee.android.BuildConfig;
+import com.squareup.okhttp.Interceptor;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.Utils;
 
-import retrofit.RequestInterceptor;
-import retrofit.RestAdapter;
-import retrofit.converter.GsonConverter;
+import java.io.IOException;
 
-/**
- * Created by <a href="mailto:marcusandreog@gmail.com">Marcus Gabilheri</a>
- *
- * @author Marcus Gabilheri
- * @version 1.0
- * @since 7/26/15.
- */
+import retrofit.GsonConverterFactory;
+import retrofit.Retrofit;
+
 public final class GroupDirectoryFactory {
 
-    // This variable is meant to be changed as pleased while debugging
-    private static final RestAdapter.LogLevel LOG_LEVEL = RestAdapter.LogLevel.NONE;
     private static final String BASE_URL = "https://developers.google.com";
 
     private GroupDirectoryFactory() {
     }
 
-    private static RestAdapter provideRestAdapter() {
-        return new RestAdapter.Builder()
-                    .setEndpoint(BASE_URL)
-                    .setConverter(new GsonConverter(Utils.getGson()))
-                    .setLogLevel(BuildConfig.DEBUG ? LOG_LEVEL : RestAdapter.LogLevel.NONE)
-                    .setClient(OkClientFactory.provideClient())
-                    .setRequestInterceptor(new RequestInterceptor() {
-                        @Override
-                        public void intercept(RequestFacade request) {
-                            request.addHeader("User-Agent", "GDG-Frisbee/0.1 (Android)");
-                            request.addHeader("Referer", "https://developers.google.com/groups/directory/");
-                            request.addHeader("X-Requested-With", "XMLHttpRequest");
-                            request.addHeader("Cache-Control", "no-cache");
-                            request.addHeader("DNT", "1");
-                        }
-                    })
+    private static Retrofit provideRestAdapter() {
+        OkHttpClient client = App.getInstance().getOkHttpClient().clone();
+        client.interceptors().add(new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+
+                Request compressedRequest = chain.request().newBuilder()
+                        .header("User-Agent", "GDG-Frisbee/0.1 (Android)")
+                        .header("Referer", "https://developers.google.com/groups/directory/")
+                        .header("X-Requested-With", "XMLHttpRequest")
+                        .header("Cache-Control", "no-cache")
+                        .header("DNT", "1")
+                        .build();
+                return chain.proceed(compressedRequest);
+
+            }
+        });
+        return new Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create(Utils.getGson()))
+                    .client(client)
                     .build();
     }
 
