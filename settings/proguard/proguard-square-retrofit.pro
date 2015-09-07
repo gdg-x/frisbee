@@ -9,3 +9,6 @@
 -keepclasseswithmembers class * {
     @retrofit.http.* <methods>;
 }
+
+-keepattributes Signature
+-keepattributes Exceptions
