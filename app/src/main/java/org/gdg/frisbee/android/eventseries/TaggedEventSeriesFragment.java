@@ -123,7 +123,7 @@ public class TaggedEventSeriesFragment extends EventListFragment {
                         new ModelCache.CachePutListener() {
                             @Override
                             public void onPutIntoCache() {
-                                splitEventsAndAddToAdapter(mEvents);
+                                mAdapter.addAll(mEvents);
                                 sortEvents();
                                 setIsLoading(false);
                             }
@@ -144,7 +144,7 @@ public class TaggedEventSeriesFragment extends EventListFragment {
                 @Override
                 public void onGet(Object item) {
                     ArrayList<TaggedEvent> events = (ArrayList<TaggedEvent>) item;
-                    splitEventsAndAddToAdapter(events);
+                    mAdapter.addAll(events);
                     sortEvents();
                     setIsLoading(false);
                     if (isAdded()) {
