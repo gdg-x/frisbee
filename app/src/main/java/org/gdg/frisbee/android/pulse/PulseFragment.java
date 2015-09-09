@@ -49,6 +49,7 @@ public class PulseFragment extends GdgListFragment {
 
     private static final String ARG_MODE = "mode";
     private static final String ARG_TARGET = "target";
+    private static final String INSTANCE_STATE_POSITIONS = "INSTANCE_STATE_POSITIONS";
 
     private int mMode;
     private String mTarget;
@@ -76,13 +77,21 @@ public class PulseFragment extends GdgListFragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putIntArray(INSTANCE_STATE_POSITIONS, mAdapter.getPositions());
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         mTarget = getArguments().getString(ARG_TARGET);
         mMode = getArguments().getInt(ARG_MODE);
 
-        mAdapter = new PulseAdapter(getActivity());
+        int[] positions = savedInstanceState != null
+                ? savedInstanceState.getIntArray(INSTANCE_STATE_POSITIONS) : null;
+        mAdapter = new PulseAdapter(getActivity(), positions);
         setListAdapter(mAdapter);
 
         setIsLoading(true);

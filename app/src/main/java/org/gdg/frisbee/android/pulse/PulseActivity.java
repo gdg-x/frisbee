@@ -76,10 +76,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
         setContentView(R.layout.activity_pulse);
 
         mPulseTargets = new ArrayList<>();
-
         mViewPagerAdapter = new PulsePagerAdapter(this, getSupportFragmentManager());
-        mSpinnerAdapter = new ArrayAdapter<>(this, R.layout.spinner_item_actionbar);
-        mSpinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
 
         final String selectedPulse = savedInstanceState != null ? savedInstanceState.getString(INSTANCE_STATE_SELECTED_PULSE) : null;
 
@@ -156,6 +153,9 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
     }
 
     private void initSpinner(String selectedPulse) {
+        Collections.sort(mPulseTargets);
+        mPulseTargets.add(0, PulseFragment.GLOBAL);
+
         Toolbar toolbar = getActionBarToolbar();
         View spinnerContainer = LayoutInflater.from(this).inflate(R.layout.actionbar_spinner,
                 toolbar, false);
@@ -164,15 +164,17 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
         toolbar.addView(spinnerContainer, lp);
 
         mSpinner = (Spinner) spinnerContainer.findViewById(R.id.actionbar_spinner);
+
+        mSpinnerAdapter = new ArrayAdapter<>(this, R.layout.spinner_item_actionbar, mPulseTargets);
+        mSpinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         mSpinner.setAdapter(mSpinnerAdapter);
+
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
                 String previous = mViewPagerAdapter.getSelectedPulseTarget();
-                mViewPagerAdapter.setSelectedPulseTarget(mSpinnerAdapter.getItem(position));
                 if (!previous.equals(mSpinnerAdapter.getItem(position))) {
-                    Timber.d("Switching chapter!");
-                    mViewPagerAdapter.notifyDataSetChanged();
+                    refreshSpinner(mSpinnerAdapter.getItem(position));
                 }
             }
 
@@ -182,17 +184,18 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
             }
         });
 
-        Collections.sort(mPulseTargets);
-        mPulseTargets.add(0, PulseFragment.GLOBAL);
+        refreshSpinner(selectedPulse);
+    }
+
+    private void refreshSpinner(String selectedPulse) {
+
         if (selectedPulse == null) {
             selectedPulse = mPulseTargets.get(0);
         }
-        mViewPagerAdapter.setSelectedPulseTarget(selectedPulse);
         mSpinner.setSelection(mPulseTargets.indexOf(selectedPulse));
-        mSpinnerAdapter.clear();
 
-        mSpinnerAdapter.addAll(mPulseTargets);
-
+        mViewPagerAdapter = new PulsePagerAdapter(this, getSupportFragmentManager());
+        mViewPagerAdapter.setSelectedPulseTarget(selectedPulse);
         mViewPager.setAdapter(mViewPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
     }
@@ -233,15 +236,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
 
         @Override
         public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return PulseFragment.newInstance(0, mSelectedPulseTarget);
-                case 1:
-                    return PulseFragment.newInstance(1, mSelectedPulseTarget);
-                case 2:
-                    return PulseFragment.newInstance(2, mSelectedPulseTarget);
-            }
-            return null;
+            return PulseFragment.newInstance(position, mSelectedPulseTarget);
         }
 
         @Override

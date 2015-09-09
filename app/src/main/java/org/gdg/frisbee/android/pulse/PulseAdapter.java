@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.pulse;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,13 +40,18 @@ class PulseAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
     private ArrayList<Map.Entry<String, PulseEntry>> mPulse;
-    private int[] mPosition;
+    private int[] mPositions;
 
     private int mMode;
 
-    public PulseAdapter(Context ctx) {
+    public PulseAdapter(Context ctx, @Nullable int[] positions) {
         mInflater = LayoutInflater.from(ctx);
         mPulse = new ArrayList<>();
+        mPositions = positions;
+    }
+
+    public int[] getPositions() {
+        return mPositions;
     }
 
     @Override
@@ -84,15 +90,15 @@ class PulseAdapter extends BaseAdapter {
                 z++;
             }
             if (z > 2) {
-                mPosition[i] = mPosition[mPulse.indexOf(prevEntry)] + 1;
+                mPositions[i] = mPositions[mPulse.indexOf(prevEntry)] + 1;
             } else {
-                mPosition[i] = mPosition[i - 1] + 1;
+                mPositions[i] = mPositions[i - 1] + 1;
 
             }
-            holder.position.setText(mPosition[i] + ".");
+            holder.position.setText(mPositions[i] + ".");
 
         } else {
-            mPosition[i] = 1;
+            mPositions[i] = 1;
             holder.position.setText("1.");
         }
 
@@ -117,23 +123,16 @@ class PulseAdapter extends BaseAdapter {
         mMode = mode;
         mPulse.clear();
         mPulse.addAll(pulse.entrySet());
-        mPosition = new int[mPulse.size()];
+        //Only initialize if the positions are not provided.
+        //They are provided in constructor and coming from savedInstanceState of the Fragment.
+        if (mPositions == null || mPositions.length != mPulse.size()) {
+            mPositions = new int[mPulse.size()];
+        }
 
         Collections.sort(mPulse, new Comparator<Map.Entry<String, PulseEntry>>() {
             @Override
             public int compare(Map.Entry<String, PulseEntry> entry, Map.Entry<String, PulseEntry> entry2) {
-                PulseEntry value = entry.getValue();
-                PulseEntry value2 = entry2.getValue();
-
-                switch (mode) {
-                    case 0:
-                        return (value.getMeetings() - value2.getMeetings()) * -1;
-                    case 1:
-                        return (value.getAttendees() - value2.getAttendees()) * -1;
-                    case 2:
-                        return (value.getPlusMembers() - value2.getPlusMembers()) * -1;
-                }
-                return 0;
+                return entry.getValue().compareTo(mode, entry2.getValue());
             }
         });
     }
