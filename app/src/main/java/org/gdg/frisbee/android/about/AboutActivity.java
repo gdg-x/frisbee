@@ -52,10 +52,18 @@ public class AboutActivity extends GdgActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_about, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if (item.getItemId() == android.R.id.home) {
+        if (android.R.id.home == item.getItemId()) {
             finish();
+            return true;
+        } else if (R.id.action_app_invite == item.getItemId()) {
             return true;
         }
 
