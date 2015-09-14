@@ -16,8 +16,10 @@
 
 package org.gdg.frisbee.android.chapter;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -26,6 +28,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -36,11 +39,13 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.Spinner;
 
+import com.google.android.gms.appinvite.AppInviteReferral;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.activity.DeepLinkActivity;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
@@ -96,6 +101,9 @@ public class MainActivity extends GdgNavDrawerActivity {
     private Spinner mSpinner;
     private String selectedChapterId;
 
+    // Local Broadcast receiver for receiving invites
+    private BroadcastReceiver mDeepLinkReceiver = null;
+
     /**
      * Called when the activity is first created.
      *
@@ -121,6 +129,7 @@ public class MainActivity extends GdgNavDrawerActivity {
             selectedChapterId = savedInstanceState.getString(ARG_SELECTED_CHAPTER);
         } else {
             Intent intent = getIntent();
+
             if (FirstStartActivity.ACTION_FIRST_START.equals(intent.getAction())) {
                 Timber.d("Completed FirstStartWizard");
 
@@ -130,6 +139,13 @@ public class MainActivity extends GdgNavDrawerActivity {
             }
 
             selectedChapterId = getChapterIdFromIntent(intent);
+
+            if (AppInviteReferral.hasReferral(intent)) {
+                // In this case the referral data is in the intent launching the MainActivity,
+                // which means this user already had the app installed. We do not have to
+                // register the Broadcast Receiver to listen for Play Store Install information
+                launchDeepLinkActivity(intent);
+            }
         }
 
         if (selectedChapterId == null) {
@@ -330,6 +346,13 @@ public class MainActivity extends GdgNavDrawerActivity {
         if (PrefUtils.isFirstStart(this)) {
             startActivityForResult(new Intent(this, FirstStartActivity.class), REQUEST_FIRST_START_WIZARD);
         }
+        registerDeepLinkReceiver();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterDeepLinkReceiver();
     }
 
     @Override
@@ -453,5 +476,37 @@ public class MainActivity extends GdgNavDrawerActivity {
             trackView();
             mSelectedChapterId = chapterId;
         }
+    }
+
+    private void registerDeepLinkReceiver() {
+        // Create local Broadcast receiver that starts DeepLinkActivity when a deep link
+        // is found
+        mDeepLinkReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (AppInviteReferral.hasReferral(intent)) {
+                    launchDeepLinkActivity(intent);
+                }
+            }
+        };
+
+        IntentFilter intentFilter = new IntentFilter(getString(R.string.action_deep_link));
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                mDeepLinkReceiver, intentFilter);
+    }
+
+    private void unregisterDeepLinkReceiver() {
+        if (mDeepLinkReceiver != null) {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(mDeepLinkReceiver);
+        }
+    }
+
+    /**
+     * Launch DeepLinkActivity with an intent containing App Invite information
+     */
+    private void launchDeepLinkActivity(Intent intent) {
+        Timber.d("launchDeepLinkActivity:" + intent);
+        Intent newIntent = new Intent(intent).setClass(this, DeepLinkActivity.class);
+        startActivity(newIntent);
     }
 }

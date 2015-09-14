@@ -53,6 +53,17 @@
     <item name="actionBarInsetStart">@dimen/keyline_2_minus_16dp</item>
   </style>
 
+  <style name="Theme.GDG.Panel" parent="Theme.AppCompat.Light.Dialog">
+
+    <item name="colorPrimary">@color/theme_primary</item>
+    <item name="colorPrimaryDark">@color/theme_primary_dark</item>
+
+    <item name="android:windowBackground">@android:color/transparent</item>
+
+    <item name="windowActionBar">false</item>
+    <item name="android:windowNoTitle">true</item>
+  </style>
+
   <!-- Special Event Series-->
   <style name="Theme.GDG.Special" parent="Theme.GDG.WithNavDrawer"/>
 
