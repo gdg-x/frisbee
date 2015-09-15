@@ -55,7 +55,7 @@ public abstract class GdgActivity extends TrackableActivity implements
 
     // GoogleApiClient wraps our service connection to Google Play services and
     // provides access to the users sign in state and Google's APIs.
-    private GoogleApiClient mGoogleApiClient;
+    protected GoogleApiClient mGoogleApiClient;
 
     // We use mSignInProgress to track whether user has clicked sign in.
     // mSignInProgress can be one of three values:
@@ -106,19 +106,22 @@ public abstract class GdgActivity extends TrackableActivity implements
         RecentTasksStyler.styleRecentTasksEntry(this);
 
         if (!Utils.isEmulator()) {
-
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addApi(Plus.API)
-                    .addApi(Games.API)
-                    .addApi(AppStateManager.API)
-                    .addScope(Plus.SCOPE_PLUS_LOGIN)
-                    .addScope(Plus.SCOPE_PLUS_PROFILE)
-                    .addScope(Games.SCOPE_GAMES)
-                    .build();
+            createGoogleApiClient();
         }
 
         mAchievementActionHandler =
                 new AchievementActionHandler(getHandler(), mGoogleApiClient, this);
+    }
+
+    protected void createGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(Plus.API)
+                .addApi(Games.API)
+                .addApi(AppStateManager.API)
+                .addScope(Plus.SCOPE_PLUS_LOGIN)
+                .addScope(Plus.SCOPE_PLUS_PROFILE)
+                .addScope(Games.SCOPE_GAMES)
+                .build();
     }
 
     @Override
