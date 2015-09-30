@@ -117,9 +117,9 @@ android {
             versionNameSuffix "-debug"
             signingConfig signingConfigs.debug
 
-            buildConfigField "String", "IP_SIMPLE_API_ACCESS_KEY", "\"AIzaSyBhJJeiBWKTfbV446m2sgJCP-EogEWZUh0\""
-            buildConfigField "String", "ANDROID_SIMPLE_API_ACCESS_KEY", "\"AIzaSyD4B78bwtz5vgFqPO7sxY_R4XDhI6Fk2F4\""
-            resValue "string", "android_simple_api_access_key", "AIzaSyD4B78bwtz5vgFqPO7sxY_R4XDhI6Fk2F4"
+            buildConfigField "String", "IP_SIMPLE_API_ACCESS_KEY", "\"$local_properties.ip_simple_api_access_key_debug\""
+            buildConfigField "String", "ANDROID_SIMPLE_API_ACCESS_KEY", "\"$local_properties.android_simple_api_access_key_debug\""
+            resValue "string", "android_simple_api_access_key", local_properties.android_simple_api_access_key_debug ?: ""
         }
     }
 
