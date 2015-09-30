@@ -279,11 +279,7 @@ public class SettingsFragment extends PreferenceFragment {
 
                     App.getInstance().getGdgXHub().setHomeGdg("Bearer " + token,
                             new HomeGdgRequest(homeGdg))
-                            .enqueue(new Callback<Void>() {
-                                @Override
-                                public void success(Void response) {
-                                }
-                            });
+                            .execute();
                 } catch (IOException | GoogleAuthException e) {
                     e.printStackTrace();
                 }
