@@ -32,7 +32,7 @@ public class StartActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (BuildConfig.DEBUG && TextUtils.isEmpty(BuildConfig.PLAY_APP_ID)) {
+        if (BuildConfig.DEBUG && TextUtils.isEmpty(BuildConfig.IP_SIMPLE_API_ACCESS_KEY)) {
             Toast.makeText(this, "no API keys defined!", Toast.LENGTH_SHORT).show();
         }
 
