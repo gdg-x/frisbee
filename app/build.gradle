@@ -55,16 +55,12 @@ android {
         buildConfigField "Boolean", "ALPHA", "false"
         
         //KEYS
-        buildConfigField "String", "ANDROID_SIMPLE_API_ACCESS_KEY", "\"" + (local_properties.android_simple_api_access_key ?: "") + "\""
-        buildConfigField "String", "IP_SIMPLE_API_ACCESS_KEY", "\"" + (local_properties.ip_simple_api_access_key ?: "") + "\""
         buildConfigField "String", "HUB_CLIENT_ID", "\"" + (local_properties.hub_client_id ?: "") + "\""
-        buildConfigField "String", "PLAY_APP_ID", "\"" + (local_properties.play_app_id ?: "") + "\""
         buildConfigField "String", "GCM_SENDER_ID", "\"" + (local_properties.gcm_sender_id ?: "") + "\""
         buildConfigField "long", "DOORBELL_ID", local_properties.doorbell_id ?: "0"
         buildConfigField "String", "DOORBELL_APP_KEY", "\"" + (local_properties.doorbell_app_key ?: "") + "\""
-        resValue "string", "play_app_id", local_properties.play_app_id ?: ""
+        resValue "string", "play_app_id", "429371117063"
         resValue "string", "android_backup_key", local_properties.android_backup_key ?: ""
-        resValue "string", "android_simple_api_access_key", local_properties.android_simple_api_access_key ?: ""
     }
 
     signingConfigs {
@@ -104,6 +100,10 @@ android {
             shrinkResources true
             debuggable false
             signingConfig signingConfigs.release
+
+            buildConfigField "String", "IP_SIMPLE_API_ACCESS_KEY", "\"$local_properties.ip_simple_api_access_key\""
+            buildConfigField "String", "ANDROID_SIMPLE_API_ACCESS_KEY", "\"$local_properties.android_simple_api_access_key\""
+            resValue "string", "android_simple_api_access_key", local_properties.android_simple_api_access_key ?: ""
         }
         alpha.initWith(release)
         alpha {
@@ -116,6 +116,10 @@ android {
             applicationIdSuffix ".debug"
             versionNameSuffix "-debug"
             signingConfig signingConfigs.debug
+
+            buildConfigField "String", "IP_SIMPLE_API_ACCESS_KEY", "\"$local_properties.ip_simple_api_access_key_debug\""
+            buildConfigField "String", "ANDROID_SIMPLE_API_ACCESS_KEY", "\"$local_properties.android_simple_api_access_key_debug\""
+            resValue "string", "android_simple_api_access_key", local_properties.android_simple_api_access_key_debug ?: ""
         }
     }
 

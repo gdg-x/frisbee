@@ -32,8 +32,8 @@ public class StartActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (BuildConfig.DEBUG && TextUtils.isEmpty(BuildConfig.PLAY_APP_ID)) {
-            Toast.makeText(this, "no API keys defined!", Toast.LENGTH_SHORT).show();
+        if (BuildConfig.DEBUG && TextUtils.isEmpty(BuildConfig.IP_SIMPLE_API_ACCESS_KEY)) {
+            Toast.makeText(this, "No API keys defined!\nPlease check Github project Wiki page for more detail.", Toast.LENGTH_LONG).show();
         }
 
         Intent intentForStart;
