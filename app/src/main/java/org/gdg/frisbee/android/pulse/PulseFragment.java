@@ -114,7 +114,7 @@ public class PulseFragment extends GdgListFragment {
         if (mTarget.equals(GLOBAL)) {
             App.getInstance().getGroupDirectory().getPulse().enqueue(new Callback<Pulse>() {
                 @Override
-                public void onSuccessResponse(final Pulse pulse) {
+                public void success(final Pulse pulse) {
                     App.getInstance().getModelCache().putAsync(
                             Const.CACHE_KEY_PULSE + mTarget.toLowerCase(),
                             pulse,
@@ -128,7 +128,7 @@ public class PulseFragment extends GdgListFragment {
                 }
 
                 @Override
-                public void onFailure(Throwable t, int errorMessage) {
+                public void failure(Throwable t, int errorMessage) {
                     if (isAdded()) {
                         Snackbar snackbar = Snackbar.make(getView(), errorMessage,
                                 Snackbar.LENGTH_SHORT);
@@ -139,7 +139,7 @@ public class PulseFragment extends GdgListFragment {
         } else {
             App.getInstance().getGroupDirectory().getCountryPulse(mTarget).enqueue(new Callback<Pulse>() {
                 @Override
-                public void onSuccessResponse(final Pulse pulse) {
+                public void success(final Pulse pulse) {
                     App.getInstance().getModelCache().putAsync(
                             Const.CACHE_KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
                             pulse,
@@ -153,7 +153,7 @@ public class PulseFragment extends GdgListFragment {
                 }
 
                 @Override
-                public void onFailure(Throwable t, int errorMessage) {
+                public void failure(Throwable t, int errorMessage) {
                     if (isAdded()) {
                         Snackbar snackbar = Snackbar.make(getView(), errorMessage,
                                 Snackbar.LENGTH_SHORT);

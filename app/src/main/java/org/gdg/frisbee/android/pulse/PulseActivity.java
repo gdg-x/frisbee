@@ -104,7 +104,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
     private void fetchPulse(final String selectedPulse) {
         App.getInstance().getGroupDirectory().getPulse().enqueue(new Callback<Pulse>() {
             @Override
-            public void onSuccessResponse(final Pulse pulse) {
+            public void success(final Pulse pulse) {
                 App.getInstance().getModelCache().putAsync(
                         Const.CACHE_KEY_PULSE_GLOBAL,
                         pulse,
@@ -119,7 +119,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
             }
 
             @Override
-            public void onFailure(Throwable t, int errorMessage) {
+            public void failure(Throwable t, int errorMessage) {
                 try {
                     Snackbar snackbar = Snackbar.make(mContentLayout, errorMessage,
                             Snackbar.LENGTH_SHORT);

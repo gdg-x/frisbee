@@ -266,9 +266,7 @@ public class MainActivity extends GdgNavDrawerActivity {
     private void fetchChapters() {
         App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
             @Override
-            public void onSuccessResponse(Directory directory) {
-                ArrayList<Chapter> chapters = directory.getGroups();
-                initChapters(chapters);
+            public void success(final Directory directory) {
 
                 App.getInstance().getModelCache().putAsync(
                         Const.CACHE_KEY_CHAPTER_LIST_HUB,
@@ -277,12 +275,14 @@ public class MainActivity extends GdgNavDrawerActivity {
                         new ModelCache.CachePutListener() {
                             @Override
                             public void onPutIntoCache() {
+                                ArrayList<Chapter> chapters = directory.getGroups();
+                                initChapters(chapters);
                             }
                         });
             }
 
             @Override
-            public void onFailure(Throwable t, int errorMessage) {
+            public void failure(Throwable t, int errorMessage) {
                 try {
                     if (errorMessage != R.string.offline_alert) {
                         errorMessage = R.string.fetch_chapters_failed;

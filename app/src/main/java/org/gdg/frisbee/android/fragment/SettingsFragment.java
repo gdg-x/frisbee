@@ -107,7 +107,7 @@ public class SettingsFragment extends PreferenceFragment {
                                 client.unregisterGcm("Bearer " + token, new GcmRegistrationRequest(PrefUtils.getRegistrationId(getActivity())))
                                         .enqueue(new Callback<GcmRegistrationResponse>() {
                                             @Override
-                                            public void onSuccessResponse(GcmRegistrationResponse response) {
+                                            public void success(GcmRegistrationResponse gcmRegistrationResponse) {
                                                 PrefUtils.setGcmSettings(getActivity(), false, null, null);
                                             }
                                         });
@@ -117,11 +117,8 @@ public class SettingsFragment extends PreferenceFragment {
                                 client.registerGcm("Bearer " + token, new GcmRegistrationRequest(regId))
                                         .enqueue(new Callback<GcmRegistrationResponse>() {
                                             @Override
-                                            public void onSuccessResponse(GcmRegistrationResponse response) {
-                                                PrefUtils.setGcmSettings(getActivity(),
-                                                        true,
-                                                        regId,
-                                                        response.getNotificationKey());
+                                            public void success(GcmRegistrationResponse gcmRegistrationResponse) {
+                                                PrefUtils.setGcmSettings(getActivity(), true, regId, gcmRegistrationResponse.getNotificationKey());
                                             }
                                         });
 
@@ -284,7 +281,7 @@ public class SettingsFragment extends PreferenceFragment {
                             new HomeGdgRequest(homeGdg))
                             .enqueue(new Callback<Void>() {
                                 @Override
-                                public void onSuccessResponse(Void response) {
+                                public void success(Void response) {
                                 }
                             });
                 } catch (IOException | GoogleAuthException e) {

@@ -76,7 +76,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
 
         App.getInstance().getGdeDirectory().getDirectory().enqueue(new Callback<GdeList>() {
             @Override
-            public void onSuccessResponse(final GdeList directory) {
+            public void success(final GdeList directory) {
                 App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_GDE_LIST,
                         directory,
                         DateTime.now().plusDays(4),
@@ -89,7 +89,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
             }
 
             @Override
-            public void onFailure(Throwable t, int errorMessage) {
+            public void failure(Throwable t, int errorMessage) {
                 try {
                     if (errorMessage != R.string.offline_alert) {
                         errorMessage = R.string.fetch_gde_failed;

@@ -113,8 +113,8 @@ public class TaggedEventSeriesFragment extends EventListFragment {
 
         Callback<PagedList<TaggedEvent>> listener = new Callback<PagedList<TaggedEvent>>() {
             @Override
-            public void onSuccessResponse(PagedList<TaggedEvent> response) {
-                mEvents.addAll(response.getItems());
+            public void success(final PagedList<TaggedEvent> taggedEventPagedList) {
+                mEvents.addAll(taggedEventPagedList.getItems());
                 App.getInstance().getModelCache().putAsync(mCacheKey,
                         mEvents,
                         DateTime.now().plusHours(2),
@@ -129,7 +129,7 @@ public class TaggedEventSeriesFragment extends EventListFragment {
             }
 
             @Override
-            public void onFailure(Throwable t, int errorMessage) {
+            public void failure(Throwable t, int errorMessage) {
                 onError(errorMessage);
             }
         };

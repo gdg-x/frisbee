@@ -53,17 +53,17 @@ public class OrganizerChecker {
             mIsOrganizer = false;
             App.getInstance().getGdgXHub().checkOrganizer(currentId).enqueue(new Callback<OrganizerCheckResponse>() {
                 @Override
-                public void onSuccessResponse(OrganizerCheckResponse response) {
+                public void success(OrganizerCheckResponse organizerCheckResponse) {
                     mLastOrganizerCheck = System.currentTimeMillis();
                     mCheckedId = currentId;
-                    mIsOrganizer = response.getChapters().size() > 0;
+                    mIsOrganizer = organizerCheckResponse.getChapters().size() > 0;
                     responseHandler.onOrganizerResponse(mIsOrganizer);
 
                     savePreferences();
                 }
 
                 @Override
-                public void onFailure(Throwable t, int errorMessage) {
+                public void failure(Throwable t, int errorMessage) {
                     mIsOrganizer = false;
                     responseHandler.onErrorResponse();
                 }

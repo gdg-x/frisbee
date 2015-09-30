@@ -117,7 +117,7 @@ public class ArrowTaggedActivity extends GdgActivity {
 
                         App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
                             @Override
-                            public void onSuccessResponse(Directory directory) {
+                            public void success(Directory directory) {
                                 loadChapterOrganizers(directory);
                             }
                         });

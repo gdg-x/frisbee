@@ -111,12 +111,12 @@ public class EventOverviewFragment extends Fragment {
         final String eventId = getArguments().getString(Const.EXTRA_EVENT_ID);
         App.getInstance().getGdgXHub().getEventDetail(eventId).enqueue(new Callback<EventFullDetails>() {
             @Override
-            public void onSuccessResponse(EventFullDetails response) {
-                onSuccess(response);
+            public void success(EventFullDetails eventFullDetails) {
+                onSuccess(eventFullDetails);
             }
 
             @Override
-            public void onFailure(Throwable t, int errorMessage) {
+            public void failure(Throwable t, int errorMessage) {
 
                 if (isAdded()) {
                     Snackbar snackbar = Snackbar.make(getView(), errorMessage,
@@ -186,13 +186,13 @@ public class EventOverviewFragment extends Fragment {
                 if (Utils.isOnline(getActivity())) {
                     App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
                         @Override
-                        public void onSuccessResponse(Directory directory) {
+                        public void success(Directory directory) {
                             mDirectory = directory;
                             updateGroupDetails(mDirectory.getGroupById(eventFullDetails.getChapter()));
                         }
 
                         @Override
-                        public void onFailure(Throwable t, int errorMessage) {
+                        public void failure(Throwable t, int errorMessage) {
                             if (isAdded()) {
                                 if (errorMessage != R.string.offline_alert) {
                                     errorMessage = R.string.fetch_chapters_failed;

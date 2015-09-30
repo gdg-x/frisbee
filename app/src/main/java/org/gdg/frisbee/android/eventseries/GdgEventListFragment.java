@@ -49,7 +49,7 @@ public class GdgEventListFragment extends EventListFragment {
         if (Utils.isOnline(getActivity())) {
             App.getInstance().getGroupDirectory().getChapterEventList(mStart, mEnd, plusId).enqueue(new Callback<ArrayList<Event>>() {
                 @Override
-                public void onSuccessResponse(ArrayList<Event> events) {
+                public void success(ArrayList<Event> events) {
                     splitEventsAndAddToAdapter(events);
                     App.getInstance().getModelCache().putAsync(cacheKey, mEvents, DateTime.now().plusHours(2), new ModelCache.CachePutListener() {
                         @Override
@@ -61,7 +61,7 @@ public class GdgEventListFragment extends EventListFragment {
                 }
 
                 @Override
-                public void onFailure(Throwable t, int errorMessage) {
+                public void failure(Throwable t, int errorMessage) {
                     onError(errorMessage);
                 }
             });

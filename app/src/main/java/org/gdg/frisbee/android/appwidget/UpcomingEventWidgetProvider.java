@@ -122,7 +122,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                             homeGdg.getGplusId())
                     .enqueue(new Callback<ArrayList<Event>>() {
                         @Override
-                        public void onSuccessResponse(ArrayList<Event> events) {
+                        public void success(ArrayList<Event> events) {
                             Timber.d("Got events");
                             if (events.size() > 0) {
                                 Event firstEvent = events.get(0);
@@ -144,7 +144,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                         }
 
                         @Override
-                        public void onFailure(Throwable t, int errorMessage) {
+                        public void failure(Throwable t, int errorMessage) {
 
                             showErrorChild(views,
                                     errorMessage == R.string.offline_alert

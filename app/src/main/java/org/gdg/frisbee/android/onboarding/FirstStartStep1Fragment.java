@@ -113,7 +113,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
 
         App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
             @Override
-            public void onSuccessResponse(Directory directory) {
+            public void success(Directory directory) {
 
                 if (isContextValid()) {
                     addChapters(directory.getGroups());
@@ -126,7 +126,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
             }
 
             @Override
-            public void onFailure(Throwable t, int errorMessage) {
+            public void failure(Throwable t, int errorMessage) {
                 if (isContextValid()) {
                     if (errorMessage != R.string.offline_alert) {
                         errorMessage = R.string.fetch_chapters_failed;

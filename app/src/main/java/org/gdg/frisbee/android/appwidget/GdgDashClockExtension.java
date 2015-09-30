@@ -35,7 +35,7 @@ public class GdgDashClockExtension extends DashClockExtension {
                 homeGdg)
                 .enqueue(new Callback<ArrayList<Event>>() {
                     @Override
-                    public void onSuccessResponse(ArrayList<Event> events) {
+                    public void success(ArrayList<Event> events) {
                         if (events.size() > 0) {
                             if (events.get(0).getGPlusEventLink() != null) {
 
