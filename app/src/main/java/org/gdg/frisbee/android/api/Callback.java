@@ -7,13 +7,14 @@ import org.gdg.frisbee.android.R;
 import java.io.IOException;
 
 import retrofit.Response;
+import retrofit.Retrofit;
 import timber.log.Timber;
 
 public abstract class Callback<T> implements retrofit.Callback<T> {
 
     @Override
-    public final void onResponse(Response<T> response) {
-        if (response.isSuccess())  {
+    public final void onResponse(Response<T> response, Retrofit retrofit) {
+        if (response.isSuccess()) {
             onSuccessResponse(response.body());
         } else {
             try {

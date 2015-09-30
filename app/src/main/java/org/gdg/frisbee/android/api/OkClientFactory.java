@@ -43,8 +43,8 @@ public final class OkClientFactory {
             Request request = chain.request();
 
             long t1 = System.nanoTime();
-            Timber.i(String.format("Sending request %s on %s%n%s",
-                    request.url(), chain.connection(), request.headers()));
+            Timber.i(String.format("Sending request %s on %s",
+                    request.url(), chain.connection()));
 
             Response response = chain.proceed(request);
 
