@@ -19,8 +19,7 @@
       android:layout_marginBottom="25dip"
       android:orientation="vertical"
       android:paddingBottom="5dip"
-      android:paddingLeft="15dip"
-      android:paddingRight="5dip"
+      android:layout_marginLeft="10dp"
       android:paddingTop="5dip">
 
       <TextView
@@ -32,7 +31,7 @@
         android:text="@string/welcome"
         android:textColor="@color/asbestos"
         android:textIsSelectable="false"
-        android:textSize="24dip" />
+        android:textAppearance="@android:style/TextAppearance.Large"/>
 
       <TextView
         android:id="@+id/textView1"
@@ -43,7 +42,7 @@
         android:text="@string/choose_home_gdg"
         android:textColor="@color/asbestos"
         android:textIsSelectable="false"
-        android:textSize="24dip" />
+        android:textAppearance="@android:style/TextAppearance.Large" />
     </LinearLayout>
 
     <org.gdg.frisbee.android.widget.ResizableImageView
