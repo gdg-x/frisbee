@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.event;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -25,11 +26,23 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+
+import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.model.EventFullDetails;
+import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.common.GdgActivity;
 
 import butterknife.Bind;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import timber.log.Timber;
 
 public class EventActivity extends GdgActivity {
 
@@ -40,6 +53,7 @@ public class EventActivity extends GdgActivity {
     TabLayout mTabLayout;
 
     private String mEventId;
+    private EventFullDetails mEventFullDetails;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,9 +74,80 @@ public class EventActivity extends GdgActivity {
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        recordStartPageView();
+    }
+
+    @Override
+    protected void onStop() {
+        recordEndPageView();
+        super.onStop();
+    }
+
     protected String getTrackedViewName() {
         return "Event/" + getResources().getStringArray(R.array.event_tabs)[getCurrentPage()] 
                 + "/" + getIntent().getStringExtra(Const.EXTRA_EVENT_ID);
+    }
+
+    private void recordStartPageView() {
+        App.getInstance().getGdgXHub().getEventDetail(
+                mEventId, new Callback<EventFullDetails>() {
+                    @Override
+                    public void success(EventFullDetails eventFullDetails, retrofit.client.Response response) {
+                        mEventFullDetails = eventFullDetails;
+                        final String title = eventFullDetails.getTitle();
+                        final Uri appUri = createDeepLinkUrl(eventFullDetails.getId());
+
+                        Action viewAction = Action.newAction(Action.TYPE_VIEW, title, appUri);
+                        PendingResult<Status> result = AppIndex.AppIndexApi.start(getGoogleApiClient(), viewAction);
+                        result.setResultCallback(appIndexApiCallback("start " + title));
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                }
+        );
+    }
+
+    private void recordEndPageView() {
+        if (mEventFullDetails != null) {
+            final String title = mEventFullDetails.getTitle();
+            final Uri appUri = createDeepLinkUrl(mEventFullDetails.getId());
+
+            Action viewAction = Action.newAction(Action.TYPE_VIEW, title, appUri);
+            PendingResult<Status> result = AppIndex.AppIndexApi.end(getGoogleApiClient(), viewAction);
+            result.setResultCallback(appIndexApiCallback("end " + title));
+        }
+    }
+
+    private ResultCallback<Status> appIndexApiCallback(final String label) {
+        return new ResultCallback<Status>() {
+            @Override
+            public void onResult(Status status) {
+                if (status.isSuccess()) {
+                    Timber.d(
+                            "App Indexing API: Recorded event "
+                                    + label + " view successfully."
+                    );
+                } else {
+                    Timber.e(
+                            "App Indexing API: There was an error recording the event view."
+                                    + status.toString()
+                    );
+                }
+            }
+        };
+    }
+
+    private Uri createDeepLinkUrl(String eventId) {
+        Uri hostUri = Uri.parse(Const.URL_DEVELOPERS_GOOGLE_COM).buildUpon().appendPath("events")
+                .appendPath(eventId).build();
+        return Uri.parse("android-app://" + BuildConfig.APPLICATION_ID + "/"
+                                 + hostUri.getScheme() + "/" + hostUri.getHost() + "/" + hostUri.getPath());
     }
 
     @Override

@@ -182,6 +182,7 @@ dependencies {
     compile "com.google.android.gms:play-services-analytics:$playServicesVersion"
     compile "com.google.android.gms:play-services-gcm:$playServicesVersion"
     compile "com.google.android.gms:play-services-appinvite:$playServicesVersion"
+    compile "com.google.android.gms:play-services-appindexing:$playServicesVersion"
 
 
 

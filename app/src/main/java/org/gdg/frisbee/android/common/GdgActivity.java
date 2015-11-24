@@ -25,11 +25,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.Toolbar;
 
+import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appstate.AppStateManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.Plus;
+
+import java.util.List;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.achievements.AchievementActionHandler;
@@ -37,8 +40,6 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.RecentTasksStyler;
 import org.gdg.frisbee.android.utils.Utils;
-
-import java.util.List;
 
 import butterknife.ButterKnife;
 
@@ -117,6 +118,7 @@ public abstract class GdgActivity extends TrackableActivity implements
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Plus.API)
                 .addApi(Games.API)
+                .addApi(AppIndex.APP_INDEX_API)
                 .addApi(AppStateManager.API)
                 .addScope(Plus.SCOPE_PLUS_LOGIN)
                 .addScope(Plus.SCOPE_PLUS_PROFILE)
