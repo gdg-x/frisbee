@@ -36,7 +36,7 @@ import timber.log.Timber;
  * Activity for displaying information about a receive App Invite invitation.  This activity
  * displays as a Dialog over the MainActivity and does not cover the full screen.
  */
-public class DeepLinkActivity extends GdgActivity {
+public class AppInviteActivity extends GdgActivity {
 
     // Invitation intent received while GoogleApiClient was not connected, to be reported
     // on connection
@@ -58,14 +58,16 @@ public class DeepLinkActivity extends GdgActivity {
             @NonNull
             @Override
             public Dialog onCreateDialog(Bundle savedInstanceState) {
-                return new AlertDialog.Builder(DeepLinkActivity.this)
+                return new AlertDialog.Builder(AppInviteActivity.this)
                         .setTitle("Congrats!")
                         .setMessage("You installed the app with an invite. Here is your reward!")
                         .create();
             }
         };
-        dialogFragment.show(getSupportFragmentManager(),
-                DeepLinkActivity.class.getSimpleName());
+        dialogFragment.show(
+                getSupportFragmentManager(),
+                AppInviteActivity.class.getSimpleName()
+        );
     }
 
     // [START deep_link_on_start]
@@ -74,7 +76,7 @@ public class DeepLinkActivity extends GdgActivity {
         super.onStart();
 
         // If app is already installed app and launched with deep link that matches
-        // DeepLinkActivity filter, then the referral info will be in the intent
+        // AppInviteActivity filter, then the referral info will be in the intent
         Intent intent = getIntent();
         processReferralIntent(intent);
     }
@@ -83,7 +85,7 @@ public class DeepLinkActivity extends GdgActivity {
     // [START process_referral_intent]
     private void processReferralIntent(Intent intent) {
         if (!AppInviteReferral.hasReferral(intent)) {
-            Timber.e("Error: DeepLinkActivity Intent does not contain App Invite");
+            Timber.e("Error: AppInviteActivity Intent does not contain App Invite");
             return;
         }
 

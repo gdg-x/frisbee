@@ -154,7 +154,7 @@
       </intent-filter>
     </activity>
     <activity
-      android:name=".activity.DeepLinkActivity"
+      android:name=".activity.AppInviteActivity"
       android:theme="@style/Theme.GDG.Panel">
     </activity>
     <activity
