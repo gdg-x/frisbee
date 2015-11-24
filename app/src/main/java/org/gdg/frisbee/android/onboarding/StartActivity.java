@@ -42,7 +42,7 @@ public class StartActivity extends Activity {
         } else {
             intentForStart = new Intent(StartActivity.this, MainActivity.class);
         }
-        if (getIntent() != null) {
+        if (getIntent() != null && getIntent().getExtras() != null) {
             intentForStart.putExtras(getIntent().getExtras());
         }
         startActivity(intentForStart);
