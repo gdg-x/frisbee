@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.event;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -31,6 +32,8 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+
+import java.util.List;
 
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
@@ -67,11 +70,21 @@ public class EventActivity extends GdgActivity {
         mViewPager.setAdapter(mViewPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
 
-        mEventId = getIntent().getStringExtra(Const.EXTRA_EVENT_ID);
+        mEventId = getEventIdFrom(getIntent());
         String section = getIntent().getStringExtra(Const.EXTRA_SECTION);
         if (EventPagerAdapter.SECTION_OVERVIEW.equals(section)) {
             mViewPager.setCurrentItem(0);
         }
+    }
+
+    private String getEventIdFrom(Intent intent) {
+        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+            List<String> pathSegments = intent.getData().getPathSegments();
+            if (pathSegments.size() >= 2) {
+                return pathSegments.get(1);
+            }
+        }
+        return intent.getStringExtra(Const.EXTRA_EVENT_ID);
     }
 
     @Override
@@ -88,7 +101,7 @@ public class EventActivity extends GdgActivity {
 
     protected String getTrackedViewName() {
         return "Event/" + getResources().getStringArray(R.array.event_tabs)[getCurrentPage()] 
-                + "/" + getIntent().getStringExtra(Const.EXTRA_EVENT_ID);
+                + "/" + getEventIdFrom(getIntent());
     }
 
     private void recordStartPageView() {
@@ -144,7 +157,7 @@ public class EventActivity extends GdgActivity {
     }
 
     private Uri createDeepLinkUrl(String eventId) {
-        Uri hostUri = Uri.parse(Const.URL_DEVELOPERS_GOOGLE_COM).buildUpon().appendPath("events")
+        Uri hostUri = Uri.parse(Const.URL_GDGROUPS_ORG).buildUpon().appendPath(Const.PATH_GDGROUPS_ORG_EVENT)
                 .appendPath(eventId).build();
         return Uri.parse("android-app://" + BuildConfig.APPLICATION_ID + "/"
                                  + hostUri.getScheme() + "/" + hostUri.getHost() + "/" + hostUri.getPath());
