@@ -1,9 +1,10 @@
 language: android
 android:
   components:
-  - android-23
-  - build-tools-23.0.1
   - platform-tools
+  - tools
+  - android-23
+  - build-tools-23.0.2
   - extra-google-m2repository
   - extra-android-m2repository
 before_script:
