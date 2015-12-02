@@ -154,7 +154,7 @@
       </intent-filter>
     </activity>
     <activity
-      android:name=".activity.DeepLinkActivity"
+      android:name=".activity.AppInviteActivity"
       android:theme="@style/Theme.GDG.Panel">
     </activity>
     <activity
@@ -227,7 +227,8 @@
         android:value="true"/>
       <meta-data
         android:name="description"
-        android:value="@string/dashclock_description"/>
+        android:value="@string/dashclock_description"
+        tools:ignore="ManifestResource" />
     </service>
 
     <meta-data
