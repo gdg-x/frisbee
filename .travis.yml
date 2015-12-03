@@ -1,14 +1,19 @@
 language: android
+
 android:
   components:
-  - android-23
-  - build-tools-23.0.1
   - platform-tools
+  - tools
+  - android-23
+  - build-tools-23.0.2
   - extra-google-m2repository
   - extra-android-m2repository
+
 before_script:
 - GRADLE_OPTS="-Xms40m -Xmx3g -XX:MaxPermSize=3g"
-script: "./gradlew clean build test -Dpre-dex=false"
+
+script: "./gradlew assembleDevDebug testDevDebugUnitTest -Dpre-dex=false"
+
 branches:
   only:
   - master

@@ -13,13 +13,6 @@ import java.io.File;
 import retrofit.client.Client;
 import retrofit.client.OkClient;
 
-/**
- * Created by <a href="mailto:marcusandreog@gmail.com">Marcus Gabilheri</a>
- *
- * @author Marcus Gabilheri
- * @version 1.0
- * @since 7/26/15.
- */
 public final class OkClientFactory {
 
     // Cache size for the OkHttpClient

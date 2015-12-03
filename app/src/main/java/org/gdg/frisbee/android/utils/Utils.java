@@ -53,18 +53,10 @@ import java.util.Map;
 
 import timber.log.Timber;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.utils
- * <p/>
- * User: maui
- * Date: 21.04.13
- * Time: 22:34
- */
 public class Utils {
     
     private Utils() {
-
+        // Prevent instances of this class being created.
     }
 
     /**
