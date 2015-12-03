@@ -212,6 +212,7 @@ dependencies {
     //Square
     compile "com.squareup.okhttp:okhttp:$rootProject.okHttpVersion"
     compile "com.squareup.okhttp:okhttp-urlconnection:$rootProject.okHttpVersion"
+    compile "com.squareup.okhttp:logging-interceptor:$rootProject.okHttpVersion"
     compile 'com.squareup.okio:okio:1.6.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
