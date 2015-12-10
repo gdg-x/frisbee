@@ -28,7 +28,7 @@ def versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "23.0.2"
 
     dexOptions {
         // Skip pre-dexing when running on Travis CI or when disabled via -Dpre-dex=false.
@@ -223,7 +223,8 @@ dependencies {
     //Test
     testCompile 'junit:junit:4.12'
     androidTestCompile 'org.assertj:assertj-core:1.7.1'
-    androidTestCompile ('com.android.support.test.espresso:espresso-core:2.2') {
+    androidTestCompile ('com.android.support.test.espresso:espresso-core:2.2.1') {
         exclude module: 'support-annotations'
     }
+    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.1'
 }
