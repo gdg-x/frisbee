@@ -118,8 +118,8 @@ public abstract class GdgActivity extends TrackableActivity implements
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Plus.API)
                 .addApi(Games.API)
-                .addApi(AppIndex.APP_INDEX_API)
                 .addApi(AppStateManager.API)
+                .addApi(AppIndex.API)
                 .addScope(Plus.SCOPE_PLUS_LOGIN)
                 .addScope(Plus.SCOPE_PLUS_PROFILE)
                 .addScope(Games.SCOPE_GAMES)
@@ -207,8 +207,10 @@ public abstract class GdgActivity extends TrackableActivity implements
                 // resolve the error currently preventing our connection to
                 // Google Play services.
                 mSignInProgress = STATE_IN_PROGRESS;
-                startIntentSenderForResult(mSignInIntent.getIntentSender(),
-                        RC_SIGN_IN, null, 0, 0, 0);
+                startIntentSenderForResult(
+                        mSignInIntent.getIntentSender(),
+                        RC_SIGN_IN, null, 0, 0, 0
+                );
             } catch (IntentSender.SendIntentException e) {
                 // The intent was canceled before it was sent.  Attempt to connect to
                 // get an updated ConnectionResult.

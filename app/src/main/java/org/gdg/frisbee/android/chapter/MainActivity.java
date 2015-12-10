@@ -53,9 +53,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.activity.DeepLinkActivity;
+import org.gdg.frisbee.android.activity.AppInviteDeepLinkActivity;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
@@ -320,7 +321,7 @@ public class MainActivity extends GdgNavDrawerActivity {
 
     private void recordStartPageView() {
         final String title = "Google Developer Groups";
-        final Uri appUri = Uri.parse(Const.URL_GDGROUPS_ORG);
+        final Uri appUri = createDeepLinkUri();
         Action viewAction = Action.newAction(Action.TYPE_VIEW, title, appUri);
         PendingResult<Status> result = AppIndex.AppIndexApi.start(getGoogleApiClient(), viewAction);
         result.setResultCallback(appIndexApiCallback("start " + title));
@@ -328,10 +329,18 @@ public class MainActivity extends GdgNavDrawerActivity {
 
     private void recordEndPageView() {
         final String title = "Google Developer Groups";
-        final Uri appUri = Uri.parse(Const.URL_GDGROUPS_ORG);
+        final Uri appUri = createDeepLinkUri();
         Action viewAction = Action.newAction(Action.TYPE_VIEW, title, appUri);
         PendingResult<Status> result = AppIndex.AppIndexApi.end(getGoogleApiClient(), viewAction);
         result.setResultCallback(appIndexApiCallback("end " + title));
+    }
+
+    private Uri createDeepLinkUri() {
+        Uri hostUri = Uri.parse(Const.URL_GDGROUPS_ORG);
+        return Uri.parse(
+                "android-app://" + BuildConfig.APPLICATION_ID + "/"
+                        + hostUri.getScheme() + "/" + hostUri.getHost() + "/" + hostUri.getPath()
+        );
     }
 
 
@@ -530,7 +539,7 @@ public class MainActivity extends GdgNavDrawerActivity {
     }
 
     private void registerDeepLinkReceiver() {
-        // Create local Broadcast receiver that starts DeepLinkActivity when a deep link
+        // Create local Broadcast receiver that starts AppInviteDeepLinkActivity when a deep link
         // is found
         mDeepLinkReceiver = new BroadcastReceiver() {
             @Override
@@ -553,11 +562,11 @@ public class MainActivity extends GdgNavDrawerActivity {
     }
 
     /**
-     * Launch DeepLinkActivity with an intent containing App Invite information
+     * Launch AppInviteDeepLinkActivity with an intent containing App Invite information
      */
     private void launchDeepLinkActivity(Intent intent) {
         Timber.d("launchDeepLinkActivity:" + intent);
-        Intent newIntent = new Intent(intent).setClass(this, DeepLinkActivity.class);
+        Intent newIntent = new Intent(intent).setClass(this, AppInviteDeepLinkActivity.class);
         startActivity(newIntent);
     }
 }
