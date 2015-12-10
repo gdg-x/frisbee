@@ -23,6 +23,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -57,6 +58,7 @@ import org.gdg.frisbee.android.view.BitmapBorderTransformation;
 import java.util.ArrayList;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public abstract class GdgNavDrawerActivity extends GdgActivity {
 
@@ -66,12 +68,11 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     protected String mStoredHomeChapterId;
     @Bind(R.id.drawer)
     DrawerLayout mDrawerLayout;
-    @Bind(R.id.navdrawer_image)
-    ImageView mDrawerImage;
-    @Bind(R.id.navdrawer_user_picture)
-    ImageView mDrawerUserPicture;
     @Bind(R.id.nav_view)
     NavigationView mNavigationView;
+
+    ImageView mDrawerImage;
+    ImageView mDrawerUserPicture;
 
     private MenuItem drawerItemToNavigateAfterSignIn = null;
     private static final int GROUP_ID = 1;
@@ -163,6 +164,9 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                         return true;
                     }
                 });
+        View headerView = navigationView.getHeaderView(0);
+        mDrawerImage = ButterKnife.findById(headerView, R.id.navdrawer_image);
+        mDrawerUserPicture = ButterKnife.findById(headerView, R.id.navdrawer_user_picture);
     }
 
     private void onDrawerItemClick(final MenuItem item) {
@@ -348,7 +352,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             App.getInstance().getPicasso().load(userPicture.getUrl())
                     .transform(new BitmapBorderTransformation(2,
                             getResources().getDimensionPixelSize(R.dimen.navdrawer_user_picture_size) / 2,
-                            getResources().getColor(R.color.white)))
+                            ContextCompat.getColor(this, R.color.white)))
                     .into(mDrawerUserPicture);
         }
     }
@@ -371,7 +375,8 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                             if (person != null) {
                                 mStoredHomeChapterId = homeChapterId;
                                 if (person.getCover() != null) {
-                                    App.getInstance().getPicasso().load(person.getCover().getCoverPhoto().getUrl())
+                                    App.getInstance().getPicasso()
+                                            .load(person.getCover().getCoverPhoto().getUrl())
                                             .into(mDrawerImage);
                                 }
                             }

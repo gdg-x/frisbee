@@ -53,10 +53,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+<<<<<<< HEAD
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.AppInviteDeepLinkActivity;
+=======
+import org.gdg.frisbee.android.Const;
+import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.activity.AppInviteActivity;
+>>>>>>> develop
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
@@ -151,7 +157,7 @@ public class MainActivity extends GdgNavDrawerActivity {
                 // In this case the referral data is in the intent launching the MainActivity,
                 // which means this user already had the app installed. We do not have to
                 // register the Broadcast Receiver to listen for Play Store Install information
-                launchDeepLinkActivity(intent);
+                launchAppInviteActivity(intent);
             }
         }
 
@@ -539,13 +545,17 @@ public class MainActivity extends GdgNavDrawerActivity {
     }
 
     private void registerDeepLinkReceiver() {
+<<<<<<< HEAD
         // Create local Broadcast receiver that starts AppInviteDeepLinkActivity when a deep link
+=======
+        // Create local Broadcast receiver that starts AppInviteActivity when a deep link
+>>>>>>> develop
         // is found
         mDeepLinkReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (AppInviteReferral.hasReferral(intent)) {
-                    launchDeepLinkActivity(intent);
+                    launchAppInviteActivity(intent);
                 }
             }
         };
@@ -562,11 +572,19 @@ public class MainActivity extends GdgNavDrawerActivity {
     }
 
     /**
+<<<<<<< HEAD
      * Launch AppInviteDeepLinkActivity with an intent containing App Invite information
      */
     private void launchDeepLinkActivity(Intent intent) {
         Timber.d("launchDeepLinkActivity:" + intent);
         Intent newIntent = new Intent(intent).setClass(this, AppInviteDeepLinkActivity.class);
+=======
+     * Launch AppInviteActivity with an intent containing App Invite information
+     */
+    private void launchAppInviteActivity(Intent intent) {
+        Timber.d("launchAppInviteActivity:" + intent);
+        Intent newIntent = new Intent(intent).setClass(this, AppInviteActivity.class);
+>>>>>>> develop
         startActivity(newIntent);
     }
 }

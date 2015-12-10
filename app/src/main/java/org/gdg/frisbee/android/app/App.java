@@ -16,7 +16,6 @@
 
 package org.gdg.frisbee.android.app;
 
-import android.app.Application;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -72,13 +71,8 @@ import java.util.ArrayList;
 
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
-/**
- * Created with IntelliJ IDEA.
- * User: maui
- * Date: 20.04.13
- * Time: 12:09
- */
-public class App extends Application implements LocationListener {
+
+public class App extends BaseApp implements LocationListener {
 
     private static App mInstance = null;
 

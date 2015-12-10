@@ -7,7 +7,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.support.v7.internal.widget.ThemeUtils;
 
 import org.gdg.frisbee.android.R;
 
