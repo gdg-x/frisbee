@@ -164,14 +164,18 @@
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="http" />
+        <data android:scheme="https" />
         <data
           android:host="developers.google.com"
-          android:pathPrefix="/events"
-          android:scheme="https" />
+          android:pathPrefix="/events/" />
+        <data
+            android:host="gdgroups.org"
+            android:pathPrefix="/event/" />
       </intent-filter>
     </activity>
     <activity
-      android:name=".activity.DeepLinkActivity"
+      android:name=".activity.AppInviteDeepLinkActivity"
       android:theme="@style/Theme.GDG.Panel">
     </activity>
     <activity
@@ -189,15 +193,6 @@
       android:name=".event.EventActivity"
       android:theme="@style/Theme.GDG"
       android:parentActivityName=".chapter.MainActivity">
-      <intent-filter>
-        <action android:name="android.intent.action.VIEW" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.BROWSABLE" />
-        <data android:scheme="http"/>
-        <data android:scheme="https"/>
-        <data android:host="gdgroups.org"
-          android:pathPrefix="/event/"/>
-      </intent-filter>
     </activity>
 
     <provider

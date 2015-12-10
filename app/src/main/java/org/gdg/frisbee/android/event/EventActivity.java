@@ -33,8 +33,6 @@ import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
-import java.util.List;
-
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -78,12 +76,6 @@ public class EventActivity extends GdgActivity {
     }
 
     private String getEventIdFrom(Intent intent) {
-        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
-            List<String> pathSegments = intent.getData().getPathSegments();
-            if (pathSegments.size() >= 2) {
-                return pathSegments.get(1);
-            }
-        }
         return intent.getStringExtra(Const.EXTRA_EVENT_ID);
     }
 

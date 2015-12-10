@@ -25,10 +25,14 @@ public class ParseDeepLinkActivity extends Activity {
         if (deepLinkId != null) {
             target = parseDeepLinkId(deepLinkId);
         } else {
-            target = new Intent();
-            target.setClass(getApplicationContext(), EventActivity.class);
-            target.putExtra(Const.EXTRA_EVENT_ID, getIntent().getData().getLastPathSegment());
-            target.putExtra(Const.EXTRA_SECTION, EventActivity.EventPagerAdapter.SECTION_OVERVIEW);
+            if (Intent.ACTION_VIEW.equals(getIntent().getAction())) {
+                target = new Intent();
+                target.setClass(getApplicationContext(), EventActivity.class);
+                target.putExtra(Const.EXTRA_EVENT_ID, getIntent().getData().getLastPathSegment());
+                target.putExtra(Const.EXTRA_SECTION, EventActivity.EventPagerAdapter.SECTION_OVERVIEW);
+            } else {
+                target = null;
+            }
         }
 
         if (target != null) {
