@@ -114,11 +114,16 @@ public abstract class GdgActivity extends TrackableActivity implements
     }
 
     protected void createGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApiIfAvailable(Plus.API, Plus.SCOPE_PLUS_LOGIN, Plus.SCOPE_PLUS_PROFILE)
-                .addApiIfAvailable(Games.API, Games.SCOPE_GAMES)
-                .addApiIfAvailable(AppStateManager.API)
-                .build();
+        GoogleApiClient.Builder builder = new GoogleApiClient.Builder(this)
+                .addApiIfAvailable(AppStateManager.API);
+        if (PrefUtils.isSignedIn(this)) {
+            builder.addApiIfAvailable(Plus.API, Plus.SCOPE_PLUS_LOGIN, Plus.SCOPE_PLUS_PROFILE)
+                    .addApiIfAvailable(Games.API, Games.SCOPE_GAMES);
+        } else {
+            builder.addApiIfAvailable(Plus.API)
+                    .addApiIfAvailable(Games.API);
+        }
+        mGoogleApiClient = builder.build();
     }
 
     @Override
@@ -127,10 +132,7 @@ public abstract class GdgActivity extends TrackableActivity implements
 
         mGoogleApiClient.registerConnectionCallbacks(this);
         mGoogleApiClient.registerConnectionFailedListener(this);
-
-        if (PrefUtils.isSignedIn(this)) {
-            mGoogleApiClient.connect();
-        }
+        mGoogleApiClient.connect();
     }
 
     @Override
