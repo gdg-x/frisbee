@@ -104,7 +104,7 @@ public class EventActivity extends GdgActivity {
                     @Override
                     public void success(EventFullDetails eventFullDetails, retrofit.client.Response response) {
                         mEventFullDetails = eventFullDetails;
-                        Action viewAction = createAppIndexAction(eventFullDetails.getTitle(), eventFullDetails.getId());
+                        Action viewAction = createAppIndexAction(eventFullDetails.getTitle(), mEventId);
                         PendingResult<Status> result = AppIndex.AppIndexApi.start(getGoogleApiClient(), viewAction);
                         result.setResultCallback(appIndexApiCallback("start " + viewAction));
                     }
@@ -119,7 +119,7 @@ public class EventActivity extends GdgActivity {
 
     private void recordEndPageView() {
         if (mEventFullDetails != null) {
-            Action viewAction = createAppIndexAction(mEventFullDetails.getTitle(), mEventFullDetails.getId());
+            Action viewAction = createAppIndexAction(mEventFullDetails.getTitle(), mEventId);
             PendingResult<Status> result = AppIndex.AppIndexApi.end(getGoogleApiClient(), viewAction);
             result.setResultCallback(appIndexApiCallback("end " + viewAction));
         }
