@@ -53,16 +53,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-<<<<<<< HEAD
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.AppInviteDeepLinkActivity;
-=======
-import org.gdg.frisbee.android.Const;
-import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.activity.AppInviteActivity;
->>>>>>> develop
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
@@ -168,7 +162,8 @@ public class MainActivity extends GdgNavDrawerActivity {
         if (chapters != null) {
             initChapters(chapters);
         } else {
-            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB,
+            App.getInstance().getModelCache().getAsync(
+                    Const.CACHE_KEY_CHAPTER_LIST_HUB,
                     new ModelCache.CacheListener() {
                         @Override
                         public void onGet(Object item) {
@@ -181,13 +176,16 @@ public class MainActivity extends GdgNavDrawerActivity {
                             if (Utils.isOnline(MainActivity.this)) {
                                 fetchChapters();
                             } else {
-                                Snackbar snackbar = Snackbar.make(mContentFrameLayout,
+                                Snackbar snackbar = Snackbar.make(
+                                        mContentFrameLayout,
                                         getString(R.string.offline_alert),
-                                        Snackbar.LENGTH_SHORT);
+                                        Snackbar.LENGTH_SHORT
+                                );
                                 ColoredSnackBar.alert(snackbar).show();
                             }
                         }
-                    });
+                    }
+            );
         }
 
         if (PrefUtils.shouldShowSeasonsGreetings(this)) {
@@ -306,8 +304,10 @@ public class MainActivity extends GdgNavDrawerActivity {
     private void initChapters(@NonNull ArrayList<Chapter> chapters) {
         addChapters(chapters);
 
-        mViewPagerAdapter = new ChapterFragmentPagerAdapter(this,
-                getSupportFragmentManager(), selectedChapterId);
+        mViewPagerAdapter = new ChapterFragmentPagerAdapter(
+                this,
+                getSupportFragmentManager(), selectedChapterId
+        );
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.setOffscreenPageLimit(3);
         updateSelectionfor(selectedChapterId);
@@ -316,12 +316,14 @@ public class MainActivity extends GdgNavDrawerActivity {
 
         mTabLayout.setupWithViewPager(mViewPager);
         if (SECTION_EVENTS.equals(getIntent().getStringExtra(Const.EXTRA_SECTION))) {
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mViewPager.setCurrentItem(2, true);
-                }
-            }, 500);
+            mHandler.postDelayed(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            mViewPager.setCurrentItem(2, true);
+                        }
+                    }, 500
+            );
         }
     }
 
@@ -348,7 +350,6 @@ public class MainActivity extends GdgNavDrawerActivity {
                         + hostUri.getScheme() + "/" + hostUri.getHost() + "/" + hostUri.getPath()
         );
     }
-
 
     private ResultCallback<Status> appIndexApiCallback(final String label) {
         return new ResultCallback<Status>() {
@@ -437,25 +438,28 @@ public class MainActivity extends GdgNavDrawerActivity {
         Toolbar toolbar = getActionBarToolbar();
         View spinnerContainer = LayoutInflater.from(this).inflate(R.layout.actionbar_spinner, toolbar, false);
         ActionBar.LayoutParams lp = new ActionBar.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+        );
         toolbar.addView(spinnerContainer, lp);
 
         mSpinner = (Spinner) spinnerContainer.findViewById(R.id.actionbar_spinner);
 
         mSpinner.setAdapter(mChapterAdapter);
-        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
+        mSpinner.setOnItemSelectedListener(
+                new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
 
-                Chapter selectedChapter = mChapterAdapter.getItem(position);
-                updateSelectionfor(selectedChapter.getGplusId());
-            }
+                        Chapter selectedChapter = mChapterAdapter.getItem(position);
+                        updateSelectionfor(selectedChapter.getGplusId());
+                    }
 
-            @Override
-            public void onNothingSelected(final AdapterView<?> parent) {
-                // Nothing to do.
-            }
-        });
+                    @Override
+                    public void onNothingSelected(final AdapterView<?> parent) {
+                        // Nothing to do.
+                    }
+                }
+        );
     }
 
     private void updateSelectionfor(final String newChapterId) {
@@ -545,11 +549,7 @@ public class MainActivity extends GdgNavDrawerActivity {
     }
 
     private void registerDeepLinkReceiver() {
-<<<<<<< HEAD
         // Create local Broadcast receiver that starts AppInviteDeepLinkActivity when a deep link
-=======
-        // Create local Broadcast receiver that starts AppInviteActivity when a deep link
->>>>>>> develop
         // is found
         mDeepLinkReceiver = new BroadcastReceiver() {
             @Override
@@ -562,7 +562,8 @@ public class MainActivity extends GdgNavDrawerActivity {
 
         IntentFilter intentFilter = new IntentFilter(getString(R.string.action_deep_link));
         LocalBroadcastManager.getInstance(this).registerReceiver(
-                mDeepLinkReceiver, intentFilter);
+                mDeepLinkReceiver, intentFilter
+        );
     }
 
     private void unregisterDeepLinkReceiver() {
@@ -572,19 +573,11 @@ public class MainActivity extends GdgNavDrawerActivity {
     }
 
     /**
-<<<<<<< HEAD
-     * Launch AppInviteDeepLinkActivity with an intent containing App Invite information
-     */
-    private void launchDeepLinkActivity(Intent intent) {
-        Timber.d("launchDeepLinkActivity:" + intent);
-        Intent newIntent = new Intent(intent).setClass(this, AppInviteDeepLinkActivity.class);
-=======
      * Launch AppInviteActivity with an intent containing App Invite information
      */
     private void launchAppInviteActivity(Intent intent) {
         Timber.d("launchAppInviteActivity:" + intent);
-        Intent newIntent = new Intent(intent).setClass(this, AppInviteActivity.class);
->>>>>>> develop
+        Intent newIntent = new Intent(intent).setClass(this, AppInviteDeepLinkActivity.class);
         startActivity(newIntent);
     }
 }
