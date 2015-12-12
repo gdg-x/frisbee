@@ -192,7 +192,10 @@ public class MainActivity extends GdgNavDrawerActivity {
         super.onResume();
         int playServiceStatus = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
         if (ConnectionResult.SUCCESS != playServiceStatus) {
-            GooglePlayServicesUtil.getErrorDialog(playServiceStatus, this, PLAY_SERVICE_DIALOG_REQUEST_CODE).show();
+            if (PrefUtils.getLastPlayServiceErrorStatus(this) != playServiceStatus) {
+                GooglePlayServicesUtil.getErrorDialog(playServiceStatus, this, PLAY_SERVICE_DIALOG_REQUEST_CODE).show();
+                PrefUtils.setLastPlayServiceErrorStatus(this, playServiceStatus);
+            }
         }
         checkHomeChapterValid();
         updateChapterPages();
