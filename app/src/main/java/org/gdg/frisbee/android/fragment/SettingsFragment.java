@@ -252,8 +252,10 @@ public class SettingsFragment extends PreferenceFragment {
         if (prefGoogleSignIn != null) {
             if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity()) != ConnectionResult.SUCCESS) {
                 prefGoogleSignIn.setEnabled(false);
-                prefGoogleSignIn.setSummaryOff(getString(R.string.common_google_play_services_api_unavailable_text, getString(R.string.signin_with_google)));
-                prefGoogleSignIn.setSummary(getString(R.string.common_google_play_services_api_unavailable_text, getString(R.string.signin_with_google)));
+                prefGoogleSignIn.setSummaryOff(getString(R.string.common_google_play_services_api_unavailable_text,
+                                                         getString(R.string.signin_with_google)));
+                prefGoogleSignIn.setSummary(getString(R.string.common_google_play_services_api_unavailable_text,
+                                                      getString(R.string.signin_with_google)));
             }
             prefGoogleSignIn.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
