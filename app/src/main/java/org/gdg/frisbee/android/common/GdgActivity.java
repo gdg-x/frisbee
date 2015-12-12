@@ -28,6 +28,7 @@ import android.support.v7.widget.Toolbar;
 import com.google.android.gms.appstate.AppStateManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.drive.Drive;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.Plus;
 
@@ -118,8 +119,10 @@ public abstract class GdgActivity extends TrackableActivity implements
                 .addApi(Plus.API)
                 .addApi(Games.API)
                 .addApi(AppStateManager.API)
+                .addApi(Drive.API)
                 .addScope(Plus.SCOPE_PLUS_LOGIN)
                 .addScope(Plus.SCOPE_PLUS_PROFILE)
+                .addScope(Drive.SCOPE_APPFOLDER)
                 .addScope(Games.SCOPE_GAMES)
                 .build();
     }
