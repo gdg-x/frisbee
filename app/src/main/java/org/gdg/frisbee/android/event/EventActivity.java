@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -28,6 +29,7 @@ import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 
 import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AndroidAppUri;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -102,12 +104,9 @@ public class EventActivity extends GdgActivity {
                     @Override
                     public void success(EventFullDetails eventFullDetails, retrofit.client.Response response) {
                         mEventFullDetails = eventFullDetails;
-                        final String title = eventFullDetails.getTitle();
-                        final Uri appUri = createDeepLinkUrl(eventFullDetails.getId());
-
-                        Action viewAction = Action.newAction(Action.TYPE_VIEW, title, appUri);
+                        Action viewAction = createAppIndexAction(eventFullDetails.getTitle(), eventFullDetails.getId());
                         PendingResult<Status> result = AppIndex.AppIndexApi.start(getGoogleApiClient(), viewAction);
-                        result.setResultCallback(appIndexApiCallback("start " + title));
+                        result.setResultCallback(appIndexApiCallback("start " + viewAction));
                     }
 
                     @Override
@@ -120,12 +119,9 @@ public class EventActivity extends GdgActivity {
 
     private void recordEndPageView() {
         if (mEventFullDetails != null) {
-            final String title = mEventFullDetails.getTitle();
-            final Uri appUri = createDeepLinkUrl(mEventFullDetails.getId());
-
-            Action viewAction = Action.newAction(Action.TYPE_VIEW, title, appUri);
+            Action viewAction = createAppIndexAction(mEventFullDetails.getTitle(), mEventFullDetails.getId());
             PendingResult<Status> result = AppIndex.AppIndexApi.end(getGoogleApiClient(), viewAction);
-            result.setResultCallback(appIndexApiCallback("end " + title));
+            result.setResultCallback(appIndexApiCallback("end " + viewAction));
         }
     }
 
@@ -148,11 +144,12 @@ public class EventActivity extends GdgActivity {
         };
     }
 
-    private Uri createDeepLinkUrl(String eventId) {
-        Uri hostUri = Uri.parse(Const.URL_GDGROUPS_ORG).buildUpon().appendPath(Const.PATH_GDGROUPS_ORG_EVENT)
+    @NonNull
+    private Action createAppIndexAction(String title, String eventId) {
+        final Uri hostUri = Uri.parse(Const.URL_GDGROUPS_ORG).buildUpon().appendPath(Const.PATH_GDGROUPS_ORG_EVENT)
                 .appendPath(eventId).build();
-        return Uri.parse("android-app://" + BuildConfig.APPLICATION_ID + "/"
-                                 + hostUri.getScheme() + "/" + hostUri.getHost() + "/" + hostUri.getPath());
+        final Uri appUri = AndroidAppUri.newAndroidAppUri(BuildConfig.APPLICATION_ID, hostUri).toUri();
+        return Action.newAction(Action.TYPE_VIEW, title, hostUri, appUri);
     }
 
     @Override
