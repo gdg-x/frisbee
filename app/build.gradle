@@ -132,6 +132,12 @@ android {
         }
     }
 
+    variantFilter { variant ->
+        if (variant.buildType.name.equals('release') && variant.getFlavors().get(0).name.equals('dev')) {
+            variant.setIgnore(true);
+        }
+    }
+
     lintOptions {
         abortOnError true
         checkReleaseBuilds false
