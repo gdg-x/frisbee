@@ -41,6 +41,10 @@ import com.google.android.gms.appstate.AppStateManager;
 import com.google.android.gms.appstate.AppStateStatusCodes;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.games.Games;
+import com.google.android.gms.games.GamesStatusCodes;
+import com.google.android.gms.games.snapshot.Snapshot;
+import com.google.android.gms.games.snapshot.SnapshotMetadataChange;
+import com.google.android.gms.games.snapshot.Snapshots;
 import com.google.android.gms.plus.People;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
@@ -50,25 +54,26 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import org.gdg.frisbee.android.Const;
-import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
-import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.app.OrganizerChecker;
-import org.gdg.frisbee.android.utils.CryptoUtils;
-import org.gdg.frisbee.android.utils.PrefUtils;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.gdg.frisbee.android.Const;
+import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.app.OrganizerChecker;
+import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
+import org.gdg.frisbee.android.utils.CryptoUtils;
+import org.gdg.frisbee.android.utils.PrefUtils;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+
 import butterknife.Bind;
 import timber.log.Timber;
 
-public class ArrowActivity extends GdgNavDrawerActivity {
+public class ArrowActivity extends GdgNavDrawerActivity implements ResultCallback<Snapshots.OpenSnapshotResult> {
 
     private static final Charset CHARSET = Charset.forName("US-ASCII");
     private static final String ID_SEPARATOR_FOR_SPLIT = "\\|";
@@ -76,6 +81,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
     private static final int REQUEST_LEADERBOARD = 1;
     private static final int WHITE = 0xFFFFFFFF;
     private static final int BLACK = 0xFF000000;
+    private static final int MAX_NUMBER_OF_FAILURES = 4;
     @Bind(R.id.viewFlipper)
     ViewFlipper viewFlipper;
     @Bind(R.id.switchToSend)
@@ -125,12 +131,14 @@ public class ArrowActivity extends GdgNavDrawerActivity {
             }
         });
 
-        switchToReceive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewFlipper.setDisplayedChild(0);
-            }
-        });
+        switchToReceive.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        viewFlipper.setDisplayedChild(0);
+                    }
+                }
+        );
 
     }
 
@@ -160,11 +168,53 @@ public class ArrowActivity extends GdgNavDrawerActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        handleIntent(getIntent());
 
         if (!PrefUtils.isSignedIn(this)) {
             finish();
         }
+
+        handleIntent(getIntent());
+    }
+
+    private void checkSnapshotUpgrade() {
+        Games.Snapshots.open(getGoogleApiClient(), Const.GAMES_SNAPSHOT_ID, false).setResultCallback(
+                new ResultCallback<Snapshots.OpenSnapshotResult>() {
+                    @Override
+                    public void onResult(Snapshots.OpenSnapshotResult openSnapshotResult) {
+                        if (openSnapshotResult.getStatus().getStatusCode() == GamesStatusCodes.STATUS_SNAPSHOT_NOT_FOUND) {
+                            moveFromAppStateToSnapshot();
+                        }
+                    }
+                }
+        );
+    }
+
+    private void moveFromAppStateToSnapshot() {
+        AppStateManager.load(getGoogleApiClient(), Const.ARROW_DONE_STATE_KEY).setResultCallback(
+                new ResultCallback<AppStateManager.StateResult>() {
+                    @Override
+                    public void onResult(AppStateManager.StateResult stateResult) {
+                        if (stateResult.getStatus().isSuccess()) {
+                            final String serializedOrganizers = new String(stateResult.getLoadedResult().getLocalData());
+                            Games.Snapshots.open(getGoogleApiClient(), Const.GAMES_SNAPSHOT_ID, true).setResultCallback(
+                                    new ResultCallback<Snapshots.OpenSnapshotResult>() {
+                                        @Override
+                                        public void onResult(Snapshots.OpenSnapshotResult stateResult) {
+                                            final Snapshot loadedResult = stateResult.getSnapshot();
+                                            final int statusCode = stateResult.getStatus().getStatusCode();
+                                            if (statusCode == GamesStatusCodes.STATUS_OK) {
+                                                loadedResult.getSnapshotContents().writeBytes(serializedOrganizers.getBytes());
+                                                int numberOfTaggedOrganizers = serializedOrganizers.split(ID_SEPARATOR_FOR_SPLIT).length - 1;
+                                                SnapshotMetadataChange metadataChange = new SnapshotMetadataChange.Builder()
+                                                        .setDescription(getString(R.string.arrow_tagged) + ": " + numberOfTaggedOrganizers)
+                                                        .build();
+                                                Games.Snapshots.commitAndClose(getGoogleApiClient(), loadedResult, metadataChange);
+                                            }
+                                        }
+                                    });
+                        }
+                    }
+                });
     }
 
     private void handleIntent(Intent intent) {
@@ -249,46 +299,108 @@ public class ArrowActivity extends GdgNavDrawerActivity {
             return;
         }
 
-        AppStateManager.load(getGoogleApiClient(), Const.ARROW_DONE_STATE_KEY).setResultCallback(new ResultCallback<AppStateManager.StateResult>() {
-            @Override
-            public void onResult(AppStateManager.StateResult stateResult) {
-                AppStateManager.StateConflictResult conflictResult = stateResult.getConflictResult();
-                AppStateManager.StateLoadedResult loadedResult = stateResult.getLoadedResult();
+        storeInAppState(id);
 
-                if (loadedResult != null) {
-                    final int statusCode = loadedResult.getStatus().getStatusCode();
-                    if (statusCode == AppStateStatusCodes.STATUS_OK
-                            || statusCode == AppStateStatusCodes.STATUS_STATE_KEY_NOT_FOUND) {
-                        previous = "";
+        storeInSnapshot(id, null, 0);
+    }
 
-                        if (statusCode == AppStateStatusCodes.STATUS_OK) {
-                            previous = new String(loadedResult.getLocalData());
+    private void storeInAppState(final String id) {
+        AppStateManager.load(getGoogleApiClient(), Const.ARROW_DONE_STATE_KEY).setResultCallback(
+                new ResultCallback<AppStateManager.StateResult>() {
+                    @Override
+                    public void onResult(AppStateManager.StateResult stateResult) {
+                        AppStateManager.StateConflictResult conflictResult = stateResult.getConflictResult();
+                        AppStateManager.StateLoadedResult loadedResult = stateResult.getLoadedResult();
+
+                        if (loadedResult != null) {
+                            final int statusCode = loadedResult.getStatus().getStatusCode();
+                            if (statusCode == AppStateStatusCodes.STATUS_OK
+                                    || statusCode == AppStateStatusCodes.STATUS_STATE_KEY_NOT_FOUND) {
+                                previous = "";
+
+                                if (statusCode == AppStateStatusCodes.STATUS_OK) {
+                                    previous = new String(loadedResult.getLocalData());
+
+                                    if (previous.contains(id)) {
+                                        Toast.makeText(ArrowActivity.this, R.string.arrow_already_tagged, Toast.LENGTH_LONG).show();
+                                    } else {
+                                        addTaggedPersonToCloudSave(null, id);
+                                    }
+                                } else {
+                                    addTaggedPersonToCloudSave(null, id);
+                                }
+                            }
+                        } else if (conflictResult != null) {
+                            previous = mergeIds(new String(conflictResult.getLocalData()), new String(conflictResult.getServerData()));
 
                             if (previous.contains(id)) {
                                 Toast.makeText(ArrowActivity.this, R.string.arrow_already_tagged, Toast.LENGTH_LONG).show();
                             } else {
-                                addTaggedPersonToCloudSave(id);
+                                addTaggedPersonToCloudSave(null, id);
                             }
-                        } else {
-                            addTaggedPersonToCloudSave(id);
+
+                            Toast.makeText(ArrowActivity.this, getString(R.string.arrow_oops), Toast.LENGTH_LONG).show();
                         }
                     }
-                } else if (conflictResult != null) {
-                    previous = mergeIds(new String(conflictResult.getLocalData()), new String(conflictResult.getServerData()));
-
-                    if (previous.contains(id)) {
-                        Toast.makeText(ArrowActivity.this, R.string.arrow_already_tagged, Toast.LENGTH_LONG).show();
-                    } else {
-                        addTaggedPersonToCloudSave(id);
-                    }
-
-                    Toast.makeText(ArrowActivity.this, getString(R.string.arrow_oops), Toast.LENGTH_LONG).show();
                 }
-            }
-        });
+        );
+    }
+
+    private void storeInSnapshot(final String id, final String idsToMerge, final int numberOfFailures) {
+        Games.Snapshots.open(getGoogleApiClient(), Const.GAMES_SNAPSHOT_ID, true).setResultCallback(
+                new ResultCallback<Snapshots.OpenSnapshotResult>() {
+                    @Override
+                    public void onResult(Snapshots.OpenSnapshotResult stateResult) {
+                        Snapshot conflictResult = stateResult.getConflictingSnapshot();
+                        Snapshot loadedResult = stateResult.getSnapshot();
+
+                        if (loadedResult != null) {
+                            final int statusCode = stateResult.getStatus().getStatusCode();
+                            if (statusCode == GamesStatusCodes.STATUS_OK) {
+                                previous = "";
+
+                                if (statusCode == GamesStatusCodes.STATUS_OK) {
+                                    try {
+                                        previous = mergeIds(new String(loadedResult.getSnapshotContents().readFully()), idsToMerge);
+
+                                        if (previous.contains(id)) {
+                                            Toast.makeText(ArrowActivity.this, R.string.arrow_already_tagged, Toast.LENGTH_LONG).show();
+                                        } else {
+                                            addTaggedPersonToCloudSave(loadedResult, id);
+                                        }
+                                    } catch (IOException e) {
+                                        Timber.w(e, "Could not store tagged organizer");
+                                        Toast.makeText(ArrowActivity.this, R.string.arrow_oops, Toast.LENGTH_LONG).show();
+                                    }
+                                } else {
+                                    addTaggedPersonToCloudSave(loadedResult, mergeIds(id, idsToMerge));
+                                }
+                            }
+                        } else if (conflictResult != null) {
+                            Games.Snapshots.resolveConflict(getGoogleApiClient(), stateResult.getConflictId(), conflictResult).await();
+                            if (numberOfFailures < MAX_NUMBER_OF_FAILURES) {
+                                try {
+                                    storeInSnapshot(id, new String(loadedResult.getSnapshotContents().readFully()), numberOfFailures + 1);
+                                } catch (IOException e) {
+                                    Timber.w(e, "Could not store tagged organizer after merge conflicts");
+                                    Toast.makeText(ArrowActivity.this, getString(R.string.arrow_oops), Toast.LENGTH_LONG).show();
+                                }
+                            } else {
+                                Toast.makeText(ArrowActivity.this, getString(R.string.arrow_oops), Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }
+                }
+        );
     }
 
     private String mergeIds(String list1, String list2) {
+        if (list1 == null) {
+            return list2;
+        }
+        if (list2 == null) {
+            return list1;
+        }
         String[] parts1 = list1.split(ID_SEPARATOR_FOR_SPLIT);
         String[] parts2 = list2.split(ID_SEPARATOR_FOR_SPLIT);
         Set<String> mergedSet = new HashSet<>(Arrays.asList(parts1));
@@ -296,10 +408,23 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         return TextUtils.join(ID_SPLIT_CHAR, mergedSet);
     }
 
-    private void addTaggedPersonToCloudSave(String id) {
-        previous = previous + ID_SPLIT_CHAR + id;
+    private void addTaggedPersonToCloudSave(Snapshot snapshot, String id) {
+        if (id != null) {
+            previous = previous + ID_SPLIT_CHAR + id;
+        }
+        int numberOfTaggedOrganizers = previous.split("\\|").length - 1;
+
         AppStateManager.update(getGoogleApiClient(), Const.ARROW_DONE_STATE_KEY, previous.getBytes());
-        Games.Leaderboards.submitScore(getGoogleApiClient(), Const.ARROW_LB, previous.split("\\|").length - 1);
+
+        if (snapshot != null) {
+            snapshot.getSnapshotContents().writeBytes(previous.getBytes());
+            SnapshotMetadataChange metadataChange = new SnapshotMetadataChange.Builder()
+                    .setDescription(getString(R.string.arrow_tagged) + ": " + numberOfTaggedOrganizers)
+                    .build();
+            Games.Snapshots.commitAndClose(getGoogleApiClient(), snapshot, metadataChange);
+        }
+
+        Games.Leaderboards.submitScore(getGoogleApiClient(), Const.ARROW_LB, numberOfTaggedOrganizers);
 
         Plus.PeopleApi.load(getGoogleApiClient(), id).setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
             @Override
@@ -329,6 +454,8 @@ public class ArrowActivity extends GdgNavDrawerActivity {
     @Override
     public void onConnected(Bundle bundle) {
         super.onConnected(bundle);
+
+        checkSnapshotUpgrade();
 
         switchToSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -406,6 +533,11 @@ public class ArrowActivity extends GdgNavDrawerActivity {
 
     private long getNow() {
         return DateTime.now(DateTimeZone.UTC).getMillis();
+    }
+
+    @Override
+    public void onResult(Snapshots.OpenSnapshotResult openSnapshotResult) {
+
     }
 
     private class BaseArrowHandler {
