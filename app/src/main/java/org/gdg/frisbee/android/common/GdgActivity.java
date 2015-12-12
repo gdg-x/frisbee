@@ -117,7 +117,7 @@ public abstract class GdgActivity extends TrackableActivity implements
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApiIfAvailable(Plus.API, Plus.SCOPE_PLUS_LOGIN, Plus.SCOPE_PLUS_PROFILE)
                 .addApiIfAvailable(Games.API, Games.SCOPE_GAMES)
-                .addApi(AppStateManager.API)
+                .addApiIfAvailable(AppStateManager.API)
                 .build();
     }
 
