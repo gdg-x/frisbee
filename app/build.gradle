@@ -172,6 +172,12 @@ play {
 
 configurations {
     compile.exclude module: 'httpclient'
+
+    all {
+        resolutionStrategy {
+            force 'com.android.support:support-annotations:23.1.1'
+        }
+    }
 }
 
 dependencies {
@@ -237,10 +243,6 @@ dependencies {
     //Test
     testCompile 'junit:junit:4.12'
     androidTestCompile 'org.assertj:assertj-core:1.7.1'
-    androidTestCompile ('com.android.support.test.espresso:espresso-core:2.2.1') {
-        exclude module: 'support-annotations'
-    }
-    androidTestCompile ('com.android.support.test.espresso:espresso-intents:2.2.1') {
-        exclude module: 'support-annotations'
-    }
+    androidTestCompile ('com.android.support.test.espresso:espresso-core:2.2.1')
+    androidTestCompile ('com.android.support.test.espresso:espresso-intents:2.2.1')
 }
