@@ -16,34 +16,41 @@
 
 package org.gdg.frisbee.android.onboarding;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.Spinner;
+import android.widget.Filter;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
-
-import org.gdg.frisbee.android.Const;
-import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.chapter.ChapterAdapter;
-import org.gdg.frisbee.android.api.model.Chapter;
-import org.gdg.frisbee.android.api.model.Directory;
-import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.cache.ModelCache;
-import org.gdg.frisbee.android.common.BaseFragment;
-import org.gdg.frisbee.android.chapter.ChapterComparator;
-import org.gdg.frisbee.android.utils.PrefUtils;
-import org.gdg.frisbee.android.view.ColoredSnackBar;
-import org.joda.time.DateTime;
 
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.ButterKnife;
+import org.gdg.frisbee.android.Const;
+import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.model.Chapter;
+import org.gdg.frisbee.android.api.model.Directory;
+import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.chapter.ChapterAdapter;
+import org.gdg.frisbee.android.chapter.ChapterComparator;
+import org.gdg.frisbee.android.common.BaseFragment;
+import org.gdg.frisbee.android.utils.PrefUtils;
+import org.gdg.frisbee.android.view.AutoCompleteSpinnerView;
+import org.gdg.frisbee.android.view.ColoredSnackBar;
+import org.joda.time.DateTime;
+
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -53,7 +60,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
 
     private static final String ARG_SELECTED_CHAPTER = "selected_chapter";
     @Bind(R.id.chapter_spinner)
-    Spinner mChapterSpinner;
+    AutoCompleteSpinnerView mChapterSpinner;
     @Bind(R.id.confirm)
     Button mConfirm;
     @Bind(R.id.viewSwitcher)
@@ -62,12 +69,29 @@ public class FirstStartStep1Fragment extends BaseFragment {
     private Chapter mSelectedChapter;
     private ChapterComparator mLocationComparator;
 
+    private final TextWatcher disableConfirmAfterTextChanged = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            mConfirm.setEnabled(false);
+        }
+    };
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
         if (mSpinnerAdapter != null && mSpinnerAdapter.getCount() > 0) {
-            outState.putParcelable(ARG_SELECTED_CHAPTER, mSpinnerAdapter.getItem(mChapterSpinner.getSelectedItemPosition()));
+            outState.putParcelable(ARG_SELECTED_CHAPTER, mSpinnerAdapter.getItem(mChapterSpinner.getListSelection()));
         }
 
     }
@@ -86,65 +110,100 @@ public class FirstStartStep1Fragment extends BaseFragment {
             mSelectedChapter = savedInstanceState.getParcelable(ARG_SELECTED_CHAPTER);
         }
 
-        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
-            @Override
-            public void onGet(Object item) {
-                Directory directory = (Directory) item;
-                addChapters(directory.getGroups());
-                mLoadSwitcher.setDisplayedChild(1);
-            }
+        App.getInstance().getModelCache().getAsync(
+                Const.CACHE_KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
+                    @Override
+                    public void onGet(Object item) {
+                        Directory directory = (Directory) item;
+                        addChapters(directory.getGroups());
+                        mLoadSwitcher.setDisplayedChild(1);
+                    }
 
-            @Override
-            public void onNotFound(String key) {
-                fetchChapters();
-            }
-        });
+                    @Override
+                    public void onNotFound(String key) {
+                        fetchChapters();
+                    }
+                }
+        );
 
-        mConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Chapter selectedChapter = (Chapter) mChapterSpinner.getSelectedItem();
+        mChapterSpinner.setThreshold(1);
 
-                if (getActivity() instanceof Step1Listener) {
-                    ((Step1Listener) getActivity()).onConfirmedChapter(selectedChapter);
+        Filter.FilterListener enableConfirmOnUniqueFilterResult = new Filter.FilterListener() {
+            @Override
+            public void onFilterComplete(int count) {
+                mConfirm.setEnabled(count == 1);
+                if (count == 1) {
+                    mSelectedChapter = mSpinnerAdapter.getItem(0);
                 }
             }
-        });
+        };
+        AdapterView.OnItemClickListener enableConfirmOnChapterClick = new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mSelectedChapter = mSpinnerAdapter.getItem(position);
+                mConfirm.setEnabled(true);
+            }
+        };
+
+        mChapterSpinner.setFilterCompletionListener(enableConfirmOnUniqueFilterResult);
+        mChapterSpinner.setOnItemClickListener(enableConfirmOnChapterClick);
+        mChapterSpinner.addTextChangedListener(disableConfirmAfterTextChanged);
+
+        mChapterSpinner.setOnTouchListener(new ChapterSpinnerTouchListener());
+
+        mConfirm.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (getActivity() instanceof Step1Listener) {
+                            ((Step1Listener) getActivity()).onConfirmedChapter(mSelectedChapter);
+                        }
+                    }
+                }
+        );
     }
-    
+
     private void fetchChapters() {
 
-        App.getInstance().getGdgXHub().getDirectory(new Callback<Directory>() {
+        App.getInstance().getGdgXHub().getDirectory(
+                new Callback<Directory>() {
 
-            @Override
-            public void success(final Directory directory, Response response) {
+                    @Override
+                    public void success(final Directory directory, Response response) {
 
-                addChapters(directory.getGroups());
-                mLoadSwitcher.setDisplayedChild(1);
-                App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB,
-                        directory,
-                        DateTime.now().plusDays(4),
-                        null);
-            }
+                        addChapters(directory.getGroups());
+                        mLoadSwitcher.setDisplayedChild(1);
+                        App.getInstance().getModelCache().putAsync(
+                                Const.CACHE_KEY_CHAPTER_LIST_HUB,
+                                directory,
+                                DateTime.now().plusDays(4),
+                                null
+                        );
+                    }
 
-            @Override
-            public void failure(RetrofitError error) {
-                try {
-                    Snackbar snackbar = Snackbar.make(getView(), R.string.fetch_chapters_failed,
-                            Snackbar.LENGTH_INDEFINITE);
-                    snackbar.setAction("Retry", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            fetchChapters();
+                    @Override
+                    public void failure(RetrofitError error) {
+                        try {
+                            Snackbar snackbar = Snackbar.make(
+                                    getView(), R.string.fetch_chapters_failed,
+                                    Snackbar.LENGTH_INDEFINITE
+                            );
+                            snackbar.setAction(
+                                    "Retry", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            fetchChapters();
+                                        }
+                                    }
+                            );
+                            ColoredSnackBar.alert(snackbar).show();
+                        } catch (IllegalStateException exception) {
+                            Toast.makeText(getActivity(), R.string.fetch_chapters_failed, Toast.LENGTH_SHORT).show();
                         }
-                    });
-                    ColoredSnackBar.alert(snackbar).show();
-                } catch (IllegalStateException exception) {
-                    Toast.makeText(getActivity(), R.string.fetch_chapters_failed, Toast.LENGTH_SHORT).show();
+                        Timber.e(error, "Could'nt fetch chapter list");
+                    }
                 }
-                Timber.e(error, "Could'nt fetch chapter list");
-            }
-        });
+        );
     }
 
     private void addChapters(List<Chapter> chapterList) {
@@ -157,6 +216,13 @@ public class FirstStartStep1Fragment extends BaseFragment {
         if (mSelectedChapter != null) {
             int pos = mSpinnerAdapter.getPosition(mSelectedChapter);
             mChapterSpinner.setSelection(pos);
+        } else {
+            if (chapterList.size() > 0) {
+                mSelectedChapter = chapterList.get(0);
+            }
+        }
+        if (mSelectedChapter != null) {
+            mChapterSpinner.setText(mSelectedChapter.toString());
         }
     }
 
@@ -167,7 +233,52 @@ public class FirstStartStep1Fragment extends BaseFragment {
         return v;
     }
 
+    private void showAllChaptersByLocation() {
+        mChapterSpinner.setText("");
+        new AlertDialog.Builder(getContext())
+                .setOnItemSelectedListener(
+                        new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                mSelectedChapter = mSpinnerAdapter.getItem(position);
+                                mChapterSpinner.setText(mSelectedChapter.toString());
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        }
+                )
+                .setAdapter(
+                        mSpinnerAdapter, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int position) {
+                                mSelectedChapter = mSpinnerAdapter.getItem(position);
+                                mChapterSpinner.setText(mSelectedChapter.toString(), false);
+                                mConfirm.setEnabled(true);
+                            }
+                        }
+                ).show();
+    }
+
     public interface Step1Listener {
         void onConfirmedChapter(Chapter chapter);
+    }
+
+    private class ChapterSpinnerTouchListener implements View.OnTouchListener {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            final int drawableRight = 2;
+
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                if (event.getRawX() >= (mChapterSpinner.getRight()
+                        - mChapterSpinner.getCompoundDrawables()[drawableRight].getBounds().width())) {
+                    showAllChaptersByLocation();
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
