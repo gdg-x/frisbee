@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <ListPreference
+    <org.gdg.frisbee.android.view.LocationListPreference
         android:key="gdg_home"
         android:title="@string/home_gdg"
         android:summary="@string/home_gdg_summary"
         android:icon="@drawable/ic_home_gdg">
-    </ListPreference>
+    </org.gdg.frisbee.android.view.LocationListPreference>
     <CheckBoxPreference
             android:key="gdg_signed_in"
             android:title="@string/google_signed_in"
