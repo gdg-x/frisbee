@@ -168,45 +168,37 @@ public class FirstStartStep1Fragment extends BaseFragment {
 
     private void fetchChapters() {
 
-        App.getInstance().getGdgXHub().getDirectory(
-                new Callback<Directory>() {
+        App.getInstance().getGdgXHub().getDirectory(new Callback<Directory>() {
 
-                    @Override
-                    public void success(final Directory directory, Response response) {
+            @Override
+            public void success(final Directory directory, Response response) {
 
-                        addChapters(directory.getGroups());
-                        mLoadSwitcher.setDisplayedChild(1);
-                        App.getInstance().getModelCache().putAsync(
-                                Const.CACHE_KEY_CHAPTER_LIST_HUB,
-                                directory,
-                                DateTime.now().plusDays(4),
-                                null
-                        );
-                    }
+                addChapters(directory.getGroups());
+                mLoadSwitcher.setDisplayedChild(1);
+                App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB,
+                        directory,
+                        DateTime.now().plusDays(4),
+                        null);
+            }
 
-                    @Override
-                    public void failure(RetrofitError error) {
-                        try {
-                            Snackbar snackbar = Snackbar.make(
-                                    getView(), R.string.fetch_chapters_failed,
-                                    Snackbar.LENGTH_INDEFINITE
-                            );
-                            snackbar.setAction(
-                                    "Retry", new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            fetchChapters();
-                                        }
-                                    }
-                            );
-                            ColoredSnackBar.alert(snackbar).show();
-                        } catch (IllegalStateException exception) {
-                            Toast.makeText(getActivity(), R.string.fetch_chapters_failed, Toast.LENGTH_SHORT).show();
+            @Override
+            public void failure(RetrofitError error) {
+                try {
+                    Snackbar snackbar = Snackbar.make(getView(), R.string.fetch_chapters_failed,
+                            Snackbar.LENGTH_INDEFINITE);
+                    snackbar.setAction("Retry", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            fetchChapters();
                         }
-                        Timber.e(error, "Could'nt fetch chapter list");
-                    }
+                    });
+                    ColoredSnackBar.alert(snackbar).show();
+                } catch (IllegalStateException exception) {
+                    Toast.makeText(getActivity(), R.string.fetch_chapters_failed, Toast.LENGTH_SHORT).show();
                 }
-        );
+                Timber.e(error, "Could'nt fetch chapter list");
+            }
+        });
     }
 
     private void addChapters(List<Chapter> chapterList) {
