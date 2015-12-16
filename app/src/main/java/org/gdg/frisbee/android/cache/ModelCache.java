@@ -51,14 +51,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import timber.log.Timber;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.cache
- * <p/>
- * User: maui
- * Date: 27.05.13
- * Time: 23:51
- */
 public class ModelCache {
 
     public static class Builder {

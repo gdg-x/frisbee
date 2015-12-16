@@ -19,14 +19,6 @@ package org.gdg.frisbee.android.api.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.api.model
- * <p/>
- * User: maui
- * Date: 21.04.13
- * Time: 22:28
- */
 public class Geo implements Parcelable {
     private double lat, lng;
 
