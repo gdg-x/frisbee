@@ -27,14 +27,6 @@ import org.joda.time.format.DateTimeFormatter;
 
 import java.lang.reflect.Type;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.api.deserializer
- * <p/>
- * User: maui
- * Date: 23.04.13
- * Time: 04:51
- */
 public class DateTimeSerializer implements JsonSerializer<DateTime> {
     @Override
     public JsonElement serialize(DateTime dateTime, Type type, JsonSerializationContext jsonSerializationContext) {
