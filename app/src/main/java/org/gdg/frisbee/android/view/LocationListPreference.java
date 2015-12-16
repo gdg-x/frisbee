@@ -12,18 +12,18 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Filter;
 import android.widget.ListView;
 
 import org.gdg.frisbee.android.R;
 
 public class LocationListPreference extends DialogPreference {
 
-    private EditText editText;
-    private ListView listView;
+    private FilterListView listView;
     private int clickedItemIndex;
     private String mValue;
     private boolean mValueSet;
@@ -44,14 +44,13 @@ public class LocationListPreference extends DialogPreference {
     @Override
     protected void onBindDialogView(View view) {
         super.onBindDialogView(view);
-        editText = (EditText) view.findViewById(R.id.filter);
-        listView = (ListView) view.findViewById(android.R.id.list);
+        listView = (FilterListView) view.findViewById(android.R.id.list);
         clickedItemIndex = findIndexOfValue(mValue);
         listView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        clickedItemIndex = position;
+                        clickedItemIndex = findIndexByLabel((String) parent.getItemAtPosition(position));
                         LocationListPreference.this.onClick(getDialog(), DialogInterface.BUTTON_POSITIVE);
                         getDialog().dismiss();
                     }
@@ -67,7 +66,17 @@ public class LocationListPreference extends DialogPreference {
         listView.setSelection(clickedItemIndex);
         listView.setItemChecked(clickedItemIndex, true);
         listView.setTextFilterEnabled(true);
+        listView.setFilterListener(
+                new Filter.FilterListener() {
+                    @Override
+                    public void onFilterComplete(int count) {
+                        int index = findIndexByLabelInFilteredListView(getPersistedString(null));
+                        listView.setItemChecked(index, true);
+                    }
+                }
+        );
 
+        EditText editText = (EditText) view.findViewById(R.id.filter);
         editText.addTextChangedListener(
                 new TextWatcher() {
                     @Override
@@ -87,14 +96,13 @@ public class LocationListPreference extends DialogPreference {
                 }
         );
         editText.requestFocus();
-        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
     }
 
     @Override
     protected void onDialogClosed(boolean positiveResult) {
         if (positiveResult && clickedItemIndex >= 0 && mEntryValues != null) {
-            String value = mEntryValues[clickedItemIndex].toString();
+            String value = mEntryValues[clickedItemIndex];
+            listView.setItemChecked(clickedItemIndex, true);
             if (callChangeListener(value)) {
                 setValue(value);
             }
@@ -144,6 +152,31 @@ public class LocationListPreference extends DialogPreference {
         if (value != null && mEntryValues != null) {
             for (int i = mEntryValues.length - 1; i >= 0; i--) {
                 if (mEntryValues[i].equals(value)) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    public int findIndexByLabelInFilteredListView(String value) {
+        if (value != null && listView != null) {
+            Adapter adapter = listView.getAdapter();
+            for (int i = adapter.getCount() - 1; i >= 0; i--) {
+                String label = (String) adapter.getItem(i);
+                int index = findIndexByLabel(label);
+                if (mEntryValues[index].equals(value)) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    public int findIndexByLabel(String value) {
+        if (value != null && mEntries != null) {
+            for (int i = mEntries.length - 1; i >= 0; i--) {
+                if (mEntries[i].equals(value)) {
                     return i;
                 }
             }
