@@ -186,7 +186,9 @@ public class GdgListFragment extends BaseFragment {
             mProgressContainer.hide(true, new Runnable() {
                 @Override
                 public void run() {
-                    updateEmpty();
+                    if (mEmptyView != null) {
+                        updateEmpty();
+                    }
                 }
             });
         }

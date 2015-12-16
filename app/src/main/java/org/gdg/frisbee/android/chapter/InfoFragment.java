@@ -331,9 +331,11 @@ public class InfoFragment extends BaseFragment {
             mProgressContainer.hide(true, new Runnable() {
                 @Override
                 public void run() {
-                    mContainer.setAlpha(0.0f);
-                    mContainer.setVisibility(View.VISIBLE);
-                    mContainer.animate().alpha(1.0f);
+                    if (mContainer != null) {
+                        mContainer.setAlpha(0.0f);
+                        mContainer.setVisibility(View.VISIBLE);
+                        mContainer.animate().alpha(1.0f);
+                    }
                 }
             });
         }

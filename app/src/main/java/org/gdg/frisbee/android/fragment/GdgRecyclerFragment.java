@@ -165,7 +165,9 @@ public class GdgRecyclerFragment extends BaseFragment {
             mProgressContainer.hide(true, new Runnable() {
                 @Override
                 public void run() {
-                    updateEmpty();
+                    if (mEmptyView != null) {
+                        updateEmpty();
+                    }
                 }
             });
         }
