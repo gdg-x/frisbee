@@ -7,21 +7,19 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.DialogPreference;
 import android.preference.PreferenceManager;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import org.gdg.frisbee.android.R;
 
-public class LocationListPreference extends DialogPreference {
+public class LocationListPreference extends DialogPreference implements AdapterView.OnItemClickListener {
 
     private FilterListView listView;
     private int clickedItemIndex;
@@ -46,16 +44,8 @@ public class LocationListPreference extends DialogPreference {
         super.onBindDialogView(view);
         listView = (FilterListView) view.findViewById(android.R.id.list);
         clickedItemIndex = findIndexOfValue(mValue);
-        listView.setOnItemClickListener(
-                new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        clickedItemIndex = findIndexByLabel((String) parent.getItemAtPosition(position));
-                        LocationListPreference.this.onClick(getDialog(), DialogInterface.BUTTON_POSITIVE);
-                        getDialog().dismiss();
-                    }
-                }
-        );
+        listView.setOnItemClickListener(this);
+
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         CheckedItemAdapter adapter = new CheckedItemAdapter(
                 getContext(), android.R.layout.simple_list_item_single_choice,
@@ -76,26 +66,22 @@ public class LocationListPreference extends DialogPreference {
                 }
         );
 
-        EditText editText = (EditText) view.findViewById(R.id.filter);
-        editText.addTextChangedListener(
-                new TextWatcher() {
+        SearchView cityNameSearchView = (SearchView) view.findViewById(R.id.filter);
+        cityNameSearchView.setOnQueryTextListener(
+                new SearchView.OnQueryTextListener() {
                     @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
                     }
 
                     @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable editable) {
-                        listView.setFilterText(editable.toString());
+                    public boolean onQueryTextChange(String newText) {
+                        listView.setFilterText(newText);
+                        return true;
                     }
                 }
         );
-        editText.requestFocus();
+        cityNameSearchView.requestFocus();
     }
 
     @Override
@@ -233,6 +219,15 @@ public class LocationListPreference extends DialogPreference {
         setEntryValues(myState.entryValues);
         super.onRestoreInstanceState(myState.getSuperState());
         setValue(myState.value);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (getDialog().isShowing()) {
+            clickedItemIndex = findIndexByLabel((String) parent.getItemAtPosition(position));
+            LocationListPreference.this.onClick(getDialog(), DialogInterface.BUTTON_POSITIVE);
+            getDialog().dismiss();
+        }
     }
 
     private static class CheckedItemAdapter extends ArrayAdapter<CharSequence> {

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:layout_width="match_parent"
   android:layout_height="match_parent">
-  <EditText
+  <SearchView
     android:id="@+id/filter"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:iconifiedByDefault="false"
     android:hint="@string/filter_gdg_by_name"/>
   <org.gdg.frisbee.android.view.FilterListView
     android:id="@android:id/list"
