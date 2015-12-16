@@ -60,12 +60,13 @@ public class FirstStartStep1Fragment extends BaseFragment {
 
     private static final String ARG_SELECTED_CHAPTER = "selected_chapter";
     @Bind(R.id.chapter_spinner)
-    AutoCompleteSpinnerView mChapterSpinner;
+    AutoCompleteSpinnerView autoCompleteSpinnerView;
     @Bind(R.id.confirm)
-    Button mConfirm;
+    Button mConfirmButton;
     @Bind(R.id.viewSwitcher)
     ViewSwitcher mLoadSwitcher;
-    private ChapterAdapter mSpinnerAdapter;
+    private ChapterAdapter mChapterForCityName;
+    private ChapterAdapter mChapterForLocationAdapter;
     private Chapter mSelectedChapter;
     private ChapterComparator mLocationComparator;
 
@@ -82,7 +83,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
 
         @Override
         public void afterTextChanged(Editable s) {
-            mConfirm.setEnabled(false);
+            mConfirmButton.setEnabled(false);
         }
     };
 
@@ -90,8 +91,8 @@ public class FirstStartStep1Fragment extends BaseFragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        if (mSpinnerAdapter != null && mSpinnerAdapter.getCount() > 0) {
-            outState.putParcelable(ARG_SELECTED_CHAPTER, mSpinnerAdapter.getItem(mChapterSpinner.getListSelection()));
+        if (mChapterForCityName != null && mChapterForCityName.getCount() > 0) {
+            outState.putParcelable(ARG_SELECTED_CHAPTER, mSelectedChapter);
         }
 
     }
@@ -103,8 +104,10 @@ public class FirstStartStep1Fragment extends BaseFragment {
 
         mLocationComparator = new ChapterComparator(PrefUtils.getHomeChapterId(getActivity()));
 
-        mSpinnerAdapter = new ChapterAdapter(getActivity(), R.layout.spinner_item_welcome);
-        mSpinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        mChapterForCityName = new ChapterAdapter(getActivity(), R.layout.spinner_item_welcome);
+        mChapterForCityName.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
+        mChapterForLocationAdapter = new ChapterAdapter(getActivity(), android.R.layout.simple_list_item_single_choice);
 
         if (savedInstanceState != null) {
             mSelectedChapter = savedInstanceState.getParcelable(ARG_SELECTED_CHAPTER);
@@ -126,32 +129,32 @@ public class FirstStartStep1Fragment extends BaseFragment {
                 }
         );
 
-        mChapterSpinner.setThreshold(1);
+        autoCompleteSpinnerView.setThreshold(1);
 
         Filter.FilterListener enableConfirmOnUniqueFilterResult = new Filter.FilterListener() {
             @Override
             public void onFilterComplete(int count) {
-                mConfirm.setEnabled(count == 1);
+                mConfirmButton.setEnabled(count == 1);
                 if (count == 1) {
-                    mSelectedChapter = mSpinnerAdapter.getItem(0);
+                    mSelectedChapter = mChapterForCityName.getItem(0);
                 }
             }
         };
         AdapterView.OnItemClickListener enableConfirmOnChapterClick = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mSelectedChapter = mSpinnerAdapter.getItem(position);
-                mConfirm.setEnabled(true);
+                mSelectedChapter = mChapterForCityName.getItem(position);
+                mConfirmButton.setEnabled(true);
             }
         };
 
-        mChapterSpinner.setFilterCompletionListener(enableConfirmOnUniqueFilterResult);
-        mChapterSpinner.setOnItemClickListener(enableConfirmOnChapterClick);
-        mChapterSpinner.addTextChangedListener(disableConfirmAfterTextChanged);
+        autoCompleteSpinnerView.setFilterCompletionListener(enableConfirmOnUniqueFilterResult);
+        autoCompleteSpinnerView.setOnItemClickListener(enableConfirmOnChapterClick);
+        autoCompleteSpinnerView.addTextChangedListener(disableConfirmAfterTextChanged);
 
-        mChapterSpinner.setOnTouchListener(new ChapterSpinnerTouchListener());
+        autoCompleteSpinnerView.setOnTouchListener(new ChapterSpinnerTouchListener());
 
-        mConfirm.setOnClickListener(
+        mConfirmButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -208,21 +211,25 @@ public class FirstStartStep1Fragment extends BaseFragment {
 
     private void addChapters(List<Chapter> chapterList) {
         Collections.sort(chapterList, mLocationComparator);
-        mSpinnerAdapter.clear();
-        mSpinnerAdapter.addAll(chapterList);
+        mChapterForCityName.clear();
+        mChapterForCityName.addAll(chapterList);
 
-        mChapterSpinner.setAdapter(mSpinnerAdapter);
+        mChapterForLocationAdapter.clear();
+        mChapterForLocationAdapter.addAll(chapterList);
+
+        autoCompleteSpinnerView.setAdapter(mChapterForCityName);
 
         if (mSelectedChapter != null) {
-            int pos = mSpinnerAdapter.getPosition(mSelectedChapter);
-            mChapterSpinner.setSelection(pos);
+            int pos = mChapterForCityName.getPosition(mSelectedChapter);
+            autoCompleteSpinnerView.setSelection(pos);
         } else {
             if (chapterList.size() > 0) {
                 mSelectedChapter = chapterList.get(0);
             }
         }
         if (mSelectedChapter != null) {
-            mChapterSpinner.setText(mSelectedChapter.toString());
+            autoCompleteSpinnerView.setText(mSelectedChapter.toString(), false);
+            mConfirmButton.setEnabled(true);
         }
     }
 
@@ -234,29 +241,14 @@ public class FirstStartStep1Fragment extends BaseFragment {
     }
 
     private void showAllChaptersByLocation() {
-        mChapterSpinner.setText("");
         new AlertDialog.Builder(getContext())
-                .setOnItemSelectedListener(
-                        new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                mSelectedChapter = mSpinnerAdapter.getItem(position);
-                                mChapterSpinner.setText(mSelectedChapter.toString());
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        }
-                )
                 .setAdapter(
-                        mSpinnerAdapter, new DialogInterface.OnClickListener() {
+                        mChapterForLocationAdapter, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int position) {
-                                mSelectedChapter = mSpinnerAdapter.getItem(position);
-                                mChapterSpinner.setText(mSelectedChapter.toString(), false);
-                                mConfirm.setEnabled(true);
+                                mSelectedChapter = mChapterForLocationAdapter.getItem(position);
+                                autoCompleteSpinnerView.setText(mSelectedChapter.toString(), false);
+                                mConfirmButton.setEnabled(true);
                             }
                         }
                 ).show();
@@ -272,8 +264,8 @@ public class FirstStartStep1Fragment extends BaseFragment {
             final int drawableRight = 2;
 
             if (event.getAction() == MotionEvent.ACTION_UP) {
-                if (event.getRawX() >= (mChapterSpinner.getRight()
-                        - mChapterSpinner.getCompoundDrawables()[drawableRight].getBounds().width())) {
+                if (event.getRawX() >= (autoCompleteSpinnerView.getRight()
+                        - autoCompleteSpinnerView.getCompoundDrawables()[drawableRight].getBounds().width())) {
                     showAllChaptersByLocation();
                     return true;
                 }
