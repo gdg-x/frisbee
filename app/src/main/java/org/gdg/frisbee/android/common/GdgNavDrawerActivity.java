@@ -309,6 +309,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             mDrawerLayout.openDrawer(GravityCompat.START);
         }
 
+        maybeRemoveUserPicture();
         maybeUpdateChapterImage();
     }
 
@@ -342,8 +343,15 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         }
     }
 
+    private void maybeRemoveUserPicture() {
+        if (!PrefUtils.isSignedIn(this)) {
+            mDrawerUserPicture.setImageDrawable(null);
+        }
+    }
+
     private void updateUserPicture() {
-        com.google.android.gms.plus.model.people.Person user = com.google.android.gms.plus.Plus.PeopleApi.getCurrentPerson(getGoogleApiClient());
+        com.google.android.gms.plus.model.people.Person user =
+                com.google.android.gms.plus.Plus.PeopleApi.getCurrentPerson(getGoogleApiClient());
         if (user == null) {
             return;
         }
