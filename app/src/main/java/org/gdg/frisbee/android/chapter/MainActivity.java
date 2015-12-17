@@ -122,7 +122,8 @@ public class MainActivity extends GdgNavDrawerActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mLocationComparator = new ChapterComparator(PrefUtils.getHomeChapterIdNotNull(this));
+        mLocationComparator = new ChapterComparator(PrefUtils.getHomeChapterIdNotNull(this),
+                App.getInstance().getLastLocation());
 
         mChapterAdapter = new ChapterAdapter(MainActivity.this, R.layout.spinner_item_actionbar);
         mChapterAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);

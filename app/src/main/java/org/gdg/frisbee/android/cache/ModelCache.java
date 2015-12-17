@@ -29,6 +29,8 @@ import com.jakewharton.disklrucache.DiskLruCache;
 
 import org.gdg.frisbee.android.api.deserializer.DateTimeDeserializer;
 import org.gdg.frisbee.android.api.deserializer.DateTimeSerializer;
+import org.gdg.frisbee.android.api.model.Chapter;
+import org.gdg.frisbee.android.api.model.ChapterDeserializer;
 import org.joda.time.DateTime;
 
 import java.io.BufferedReader;
@@ -51,14 +53,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import timber.log.Timber;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.cache
- * <p/>
- * User: maui
- * Date: 27.05.13
- * Time: 23:51
- */
 public class ModelCache {
 
     public static class Builder {
@@ -219,6 +213,7 @@ public class ModelCache {
     ModelCache() {
 
         mGson = new GsonBuilder()
+                .registerTypeAdapter(Chapter.class, new ChapterDeserializer())
                 .registerTypeAdapter(DateTime.class, new DateTimeDeserializer())
                 .registerTypeAdapter(DateTime.class, new DateTimeSerializer())
                 .create();

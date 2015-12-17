@@ -20,7 +20,6 @@ import com.google.gson.annotations.SerializedName;
 
 import org.joda.time.DateTime;
 
-
 public class Event implements GdgResponse, SimpleEvent {
 
     private static final String FIELD_TIMEZONE_NAME = "timezoneName";

@@ -28,14 +28,6 @@ import org.joda.time.format.DateTimeFormatter;
 import java.lang.reflect.Type;
 import java.util.Locale;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.api.deserializer
- * <p/>
- * User: maui
- * Date: 23.04.13
- * Time: 01:39
- */
 public class DateTimeDeserializer implements JsonDeserializer<DateTime> {
     @Override
     public DateTime deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {

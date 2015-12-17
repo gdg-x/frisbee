@@ -16,13 +16,6 @@
 
 package org.gdg.frisbee.android.api.model;
 
-/**
- * Created with IntelliJ IDEA.
- * User: maui
- * Date: 22.08.13
- * Time: 00:21
- * To change this template use File | Settings | File Templates.
- */
 public class GcmRegistrationRequest {
 
     public GcmRegistrationRequest(String registrationId) {

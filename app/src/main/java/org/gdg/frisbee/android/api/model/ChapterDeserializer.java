@@ -14,25 +14,21 @@
  * limitations under the License.
  */
 
-package org.gdg.frisbee.android.api.deserializer;
+package org.gdg.frisbee.android.api.model;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
 import java.lang.reflect.Type;
 
-public class ZuluDateTimeDeserializer implements JsonDeserializer<DateTime> {
+public class ChapterDeserializer implements JsonDeserializer<Chapter> {
     @Override
-    public DateTime deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ss.SSS'Z'");
-        //2013-05-15T16:30:00.000Z
-
-        return fmt.parseDateTime(jsonElement.getAsJsonPrimitive().getAsString());
+    public Chapter deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+        Chapter chapter = new Gson().fromJson(jsonElement, type);
+        chapter.name = chapter.name.trim();
+        return chapter;
     }
 }
