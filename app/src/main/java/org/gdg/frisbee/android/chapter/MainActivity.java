@@ -41,13 +41,10 @@ import android.widget.FrameLayout;
 import android.widget.Spinner;
 
 import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.AndroidAppUri;
 import com.google.android.gms.appinvite.AppInviteReferral;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -90,6 +87,8 @@ public class MainActivity extends GdgNavDrawerActivity {
 
     private static final int REQUEST_FIRST_START_WIZARD = 100;
     private static final int PLAY_SERVICE_DIALOG_REQUEST_CODE = 200;
+    private static final Uri APP_URI = AndroidAppUri.newAndroidAppUri(BuildConfig.APPLICATION_ID, Uri.parse(Const.URL_GDGROUPS_ORG)).toUri();
+    public static final String TITLE_GOOGLE_DEVELOPER_GROUPS = "Google Developer Groups";
 
     @Bind(R.id.pager)
     ViewPager mViewPager;
@@ -328,40 +327,13 @@ public class MainActivity extends GdgNavDrawerActivity {
     }
 
     private void recordStartPageView() {
-        final String title = "Google Developer Groups";
-        final Uri appUri = createDeepLinkUri();
-        Action viewAction = Action.newAction(Action.TYPE_VIEW, title, appUri);
-        PendingResult<Status> result = AppIndex.AppIndexApi.start(getGoogleApiClient(), viewAction);
-        result.setResultCallback(appIndexApiCallback("start " + title));
+        Action viewAction = Action.newAction(Action.TYPE_VIEW, TITLE_GOOGLE_DEVELOPER_GROUPS, APP_URI);
+        recordStartPageView(viewAction);
     }
 
     private void recordEndPageView() {
-        final String title = "Google Developer Groups";
-        final Uri appUri = createDeepLinkUri();
-        Action viewAction = Action.newAction(Action.TYPE_VIEW, title, appUri);
-        PendingResult<Status> result = AppIndex.AppIndexApi.end(getGoogleApiClient(), viewAction);
-        result.setResultCallback(appIndexApiCallback("end " + title));
-    }
-
-    private Uri createDeepLinkUri() {
-        Uri hostUri = Uri.parse(Const.URL_GDGROUPS_ORG);
-        return Uri.parse(
-                "android-app://" + BuildConfig.APPLICATION_ID + "/"
-                        + hostUri.getScheme() + "/" + hostUri.getHost() + "/" + hostUri.getPath()
-        );
-    }
-
-    private ResultCallback<Status> appIndexApiCallback(final String label) {
-        return new ResultCallback<Status>() {
-            @Override
-            public void onResult(Status status) {
-                if (status.isSuccess()) {
-                    Timber.d("App Indexing API: Recorded event %s view successfully.", label);
-                } else {
-                    Timber.e("App Indexing API: There was an error recording the event view. Status = %s", status.toString());
-                }
-            }
-        };
+        Action viewAction = Action.newAction(Action.TYPE_VIEW, TITLE_GOOGLE_DEVELOPER_GROUPS, APP_URI);
+        recordEndPageView(viewAction);
     }
 
     protected String getTrackedViewName() {

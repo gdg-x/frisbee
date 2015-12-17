@@ -30,10 +30,6 @@ import android.view.MenuItem;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AndroidAppUri;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
@@ -45,7 +41,6 @@ import org.gdg.frisbee.android.common.GdgActivity;
 import butterknife.Bind;
 import retrofit.Callback;
 import retrofit.RetrofitError;
-import timber.log.Timber;
 
 public class EventActivity extends GdgActivity {
 
@@ -105,8 +100,7 @@ public class EventActivity extends GdgActivity {
                     public void success(EventFullDetails eventFullDetails, retrofit.client.Response response) {
                         mEventFullDetails = eventFullDetails;
                         Action viewAction = createAppIndexAction(eventFullDetails.getTitle(), mEventId);
-                        PendingResult<Status> result = AppIndex.AppIndexApi.start(getGoogleApiClient(), viewAction);
-                        result.setResultCallback(appIndexApiCallback("start " + viewAction));
+                        recordStartPageView(viewAction);
                     }
 
                     @Override
@@ -120,28 +114,8 @@ public class EventActivity extends GdgActivity {
     private void recordEndPageView() {
         if (mEventFullDetails != null) {
             Action viewAction = createAppIndexAction(mEventFullDetails.getTitle(), mEventId);
-            PendingResult<Status> result = AppIndex.AppIndexApi.end(getGoogleApiClient(), viewAction);
-            result.setResultCallback(appIndexApiCallback("end " + viewAction));
+            recordEndPageView(viewAction);
         }
-    }
-
-    private ResultCallback<Status> appIndexApiCallback(final String label) {
-        return new ResultCallback<Status>() {
-            @Override
-            public void onResult(Status status) {
-                if (status.isSuccess()) {
-                    Timber.d(
-                            "App Indexing API: Recorded event "
-                                    + label + " view successfully."
-                    );
-                } else {
-                    Timber.e(
-                            "App Indexing API: There was an error recording the event view."
-                                    + status.toString()
-                    );
-                }
-            }
-        };
     }
 
     @NonNull
