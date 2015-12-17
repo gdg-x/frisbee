@@ -356,15 +356,9 @@ public class MainActivity extends GdgNavDrawerActivity {
             @Override
             public void onResult(Status status) {
                 if (status.isSuccess()) {
-                    Timber.d(
-                            "App Indexing API: Recorded event "
-                                    + label + " view successfully."
-                    );
+                    Timber.d("App Indexing API: Recorded event %s view successfully.", label);
                 } else {
-                    Timber.e(
-                            "App Indexing API: There was an error recording the event view."
-                                    + status.toString()
-                    );
+                    Timber.e("App Indexing API: There was an error recording the event view. Status = %s", status.toString());
                 }
             }
         };
