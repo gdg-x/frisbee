@@ -16,13 +16,6 @@
 
 package org.gdg.frisbee.android.api.model;
 
-/**
- * Created with IntelliJ IDEA.
- * User: maui
- * Date: 26.08.13
- * Time: 01:46
- * To change this template use File | Settings | File Templates.
- */
 public class HomeGdgRequest {
 
     public HomeGdgRequest(String homeGdg) {
