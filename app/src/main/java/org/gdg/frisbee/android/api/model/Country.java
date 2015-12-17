@@ -5,9 +5,6 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by maui on 28.05.2014.
- */
 public class Country implements Parcelable {
 
     @SerializedName("_id")
