@@ -55,7 +55,7 @@ public abstract class GdgActivity extends TrackableActivity implements
 
     // GoogleApiClient wraps our service connection to Google Play services and
     // provides access to the users sign in state and Google's APIs.
-    protected GoogleApiClient mGoogleApiClient;
+    private GoogleApiClient mGoogleApiClient;
 
     // We use mSignInProgress to track whether user has clicked sign in.
     // mSignInProgress can be one of three values:
@@ -105,15 +105,13 @@ public abstract class GdgActivity extends TrackableActivity implements
         super.onCreate(savedInstanceState);
         RecentTasksStyler.styleRecentTasksEntry(this);
 
-        if (!Utils.isEmulator()) {
-            createGoogleApiClient();
-        }
+        mGoogleApiClient = createGoogleApiClient();
 
         mAchievementActionHandler =
                 new AchievementActionHandler(getHandler(), mGoogleApiClient, this);
     }
 
-    protected void createGoogleApiClient() {
+    protected GoogleApiClient createGoogleApiClient() {
         GoogleApiClient.Builder builder = new GoogleApiClient.Builder(this)
                 .addApiIfAvailable(AppStateManager.API);
         if (PrefUtils.isSignedIn(this)) {
@@ -123,7 +121,7 @@ public abstract class GdgActivity extends TrackableActivity implements
             builder.addApiIfAvailable(Plus.API)
                     .addApiIfAvailable(Games.API);
         }
-        mGoogleApiClient = builder.build();
+        return builder.build();
     }
 
     @Override
@@ -142,7 +140,7 @@ public abstract class GdgActivity extends TrackableActivity implements
         mGoogleApiClient.unregisterConnectionCallbacks(this);
         mGoogleApiClient.unregisterConnectionFailedListener(this);
 
-        if (PrefUtils.isSignedIn(this) && mGoogleApiClient.isConnected()) {
+        if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
     }
