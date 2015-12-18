@@ -254,11 +254,8 @@ public class EventOverviewFragment extends Fragment implements EventDetailsListe
         mLoading = isLoading;
 
         if (isLoading) {
-            mProgressContainer.startAnimation(
-                    AnimationUtils.loadAnimation(
-                            getActivity(), android.R.anim.fade_in
-                    )
-            );
+            mProgressContainer.startAnimation(AnimationUtils.loadAnimation(
+                    getActivity(), android.R.anim.fade_in));
             mProgressContainer.setVisibility(View.VISIBLE);
         } else {
             Animation fadeOut = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out);
