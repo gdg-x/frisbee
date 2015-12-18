@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_vertical|center_horizontal"
-    android:id="@+id/loading">
-
-    <org.gdg.frisbee.android.widget.AnimationImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/gdg_load" />
-</LinearLayout>
+<com.tasomaniac.android.widget.DelayedProgressBar
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/loading"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:visibility="gone"
+  android:indeterminate="true"
+  android:layout_gravity="center"
+  android:layout_centerInParent="true"
+  android:minWidth="256dp"
+  android:maxWidth="256dp"
+  android:minHeight="256dp"
+  android:maxHeight="256dp"
+  android:indeterminateDrawable="@drawable/gdg_load" />

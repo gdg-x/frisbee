@@ -22,25 +22,20 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.tasomaniac.android.widget.DelayedProgressBar;
+
 import org.gdg.frisbee.android.R;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.app
- * <p/>
- * User: maui
- * Date: 23.04.13
- * Time: 19:03
- */
 public class GdgListFragment extends BaseFragment {
 
     private final Handler mHandler = new Handler();
@@ -66,7 +61,7 @@ public class GdgListFragment extends BaseFragment {
     View mEmptyView;
     
     @Bind(R.id.loading)
-    View mProgressContainer;
+    DelayedProgressBar mProgressContainer;
 
     CharSequence mEmptyText;
     boolean mListShown;
@@ -136,15 +131,9 @@ public class GdgListFragment extends BaseFragment {
      * Provide the cursor for the list view.
      */
     public void setListAdapter(ListAdapter adapter) {
-        boolean hadAdapter = mAdapter != null;
         mAdapter = adapter;
         if (mList != null) {
             mList.setAdapter(adapter);
-            if (!mListShown && !hadAdapter) {
-                // The list was hidden, and previously didn't have an
-                // adapter.  It is now time to show it.
-                setListShown(true, getView().getWindowToken() != null);
-            }
         }
         updateEmpty();
         mAdapter.registerDataSetObserver(new DataSetObserver() {
@@ -192,29 +181,16 @@ public class GdgListFragment extends BaseFragment {
 
         if (isLoading) {
             setListShown(false, true);
-            mProgressContainer.startAnimation(AnimationUtils.loadAnimation(
-                    getActivity(), android.R.anim.fade_in));
-            mProgressContainer.setVisibility(View.VISIBLE);
+            mProgressContainer.show(true);
         } else {
-            Animation fadeOut = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out);
-            fadeOut.setAnimationListener(new Animation.AnimationListener() {
+            mProgressContainer.hide(true, new Runnable() {
                 @Override
-                public void onAnimationStart(Animation animation) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    if (mProgressContainer != null) {
-                        mProgressContainer.setVisibility(View.GONE);
+                public void run() {
+                    if (mEmptyView != null) {
+                        updateEmpty();
                     }
-                    updateEmpty();
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
                 }
             });
-            mProgressContainer.startAnimation(fadeOut);
         }
     }
 
@@ -302,16 +278,16 @@ public class GdgListFragment extends BaseFragment {
 
         if (shown) {
             if (animate) {
-                mList.startAnimation(AnimationUtils.loadAnimation(
-                        getActivity(), android.R.anim.fade_in));
+                mList.setAlpha(0.0f);
+                mList.animate().alpha(1.0f).setInterpolator(new DecelerateInterpolator());
             } else {
                 mList.clearAnimation();
             }
             mList.setVisibility(View.VISIBLE);
         } else {
             if (animate) {
-                mList.startAnimation(AnimationUtils.loadAnimation(
-                        getActivity(), android.R.anim.fade_out));
+                mList.setAlpha(1.0f);
+                mList.animate().alpha(0.0f).setInterpolator(new AccelerateInterpolator());
             } else {
                 mList.clearAnimation();
             }
