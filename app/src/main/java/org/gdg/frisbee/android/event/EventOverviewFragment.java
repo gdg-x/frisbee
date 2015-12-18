@@ -49,24 +49,24 @@ import com.squareup.picasso.Target;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.EventFullDetails;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import timber.log.Timber;
 
-public class EventOverviewFragment extends Fragment {
+public class EventOverviewFragment extends Fragment implements EventDetailsListener {
 
     @Bind(R.id.title)
     TextView mTitle;
@@ -103,28 +103,24 @@ public class EventOverviewFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setIsLoading(true);
+        final String eventId = getArguments().getString(Const.EXTRA_EVENT_ID);
+        final EventDetailsProvider provider = (EventDetailsProvider) getActivity();
+        EventFullDetails eventFullDetails = provider.getEvent(eventId);
+        updateFromFullEventDetails(eventId, eventFullDetails);
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        final String eventId = getArguments().getString(Const.EXTRA_EVENT_ID);
-        App.getInstance().getGdgXHub().getEventDetail(eventId, new Callback<EventFullDetails>() {
-            @Override
-            public void success(EventFullDetails eventFullDetails, retrofit.client.Response response) {
-                onResponse(eventFullDetails);
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                if (isAdded()) {
-                    Snackbar snackbar = Snackbar.make(getView(), R.string.server_error,
-                            Snackbar.LENGTH_SHORT);
-                    ColoredSnackBar.alert(snackbar).show();
-                }
-                Timber.d(error, "error while retrieving event %s", eventId);
-            }
-        });
+    public void updateFromFullEventDetails(String eventId, EventFullDetails eventFullDetails) {
+        if (eventFullDetails != null) {
+            onResponse(eventFullDetails);
+        } else {
+            Snackbar snackbar = Snackbar.make(
+                    getView(), R.string.server_error,
+                    Snackbar.LENGTH_SHORT
+            );
+            ColoredSnackBar.alert(snackbar).show();
+            Timber.d("error while retrieving event %s", eventId);
+        }
     }
 
     private void updateWithDetails(final EventFullDetails eventFullDetails) {
@@ -258,8 +254,11 @@ public class EventOverviewFragment extends Fragment {
         mLoading = isLoading;
 
         if (isLoading) {
-            mProgressContainer.startAnimation(AnimationUtils.loadAnimation(
-                    getActivity(), android.R.anim.fade_in));
+            mProgressContainer.startAnimation(
+                    AnimationUtils.loadAnimation(
+                            getActivity(), android.R.anim.fade_in
+                    )
+            );
             mProgressContainer.setVisibility(View.VISIBLE);
         } else {
             Animation fadeOut = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out);
@@ -360,5 +359,9 @@ public class EventOverviewFragment extends Fragment {
         args.putString(Const.EXTRA_EVENT_ID, eventId);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public interface EventDetailsProvider {
+        EventFullDetails getEvent(String eventId);
     }
 }
