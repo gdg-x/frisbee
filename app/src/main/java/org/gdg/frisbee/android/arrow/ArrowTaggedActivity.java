@@ -21,12 +21,22 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.appstate.AppStateManager;
 import com.google.android.gms.appstate.AppStateStatusCodes;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.games.Games;
+import com.google.android.gms.games.GamesStatusCodes;
+import com.google.android.gms.games.snapshot.Snapshot;
+import com.google.android.gms.games.snapshot.Snapshots;
 import com.google.android.gms.plus.People;
 import com.google.android.gms.plus.Plus;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -36,10 +46,6 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.view.DividerItemDecoration;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import butterknife.Bind;
 import retrofit.Callback;
@@ -76,40 +82,102 @@ public class ArrowTaggedActivity extends GdgActivity {
         taggedList.setLayoutManager(new LinearLayoutManager(this));
         taggedList.addItemDecoration(new DividerItemDecoration(this, null));
         taggedList.setAdapter(adapter);
+    }
 
+    private void loadFromAppState() {
         AppStateManager.load(getGoogleApiClient(), Const.ARROW_DONE_STATE_KEY)
-                .setResultCallback(new ResultCallback<AppStateManager.StateResult>() {
-
-                    @Override
-                    public void onResult(AppStateManager.StateResult stateResult) {
-                        AppStateManager.StateConflictResult conflictResult = stateResult.getConflictResult();
-                        AppStateManager.StateLoadedResult loadedResult = stateResult.getLoadedResult();
-                        serializedOrganizers = "";
-
-                        if (loadedResult != null) {
-                            final int statusCode = loadedResult.getStatus().getStatusCode();
-                            if (statusCode == AppStateStatusCodes.STATUS_OK) {
-                                serializedOrganizers = new String(loadedResult.getLocalData());
-                            }
-                        } else if (conflictResult != null) {
-                            serializedOrganizers = mergeIds(new String(conflictResult.getLocalData()),
-                                    new String(conflictResult.getServerData()));
-                        }
-
-                        App.getInstance().getGdgXHub().getDirectory(new Callback<Directory>() {
+                .setResultCallback(
+                        new ResultCallback<AppStateManager.StateResult>() {
 
                             @Override
-                            public void success(final Directory directory, final retrofit.client.Response response) {
-                                loadChapterOrganizers(directory);
-                            }
+                            public void onResult(AppStateManager.StateResult stateResult) {
+                                AppStateManager.StateConflictResult conflictResult = stateResult.getConflictResult();
+                                AppStateManager.StateLoadedResult loadedResult = stateResult.getLoadedResult();
+                                serializedOrganizers = "";
 
-                            @Override
-                            public void failure(final RetrofitError error) {
-                                Timber.e(error, "Error");
+                                if (loadedResult != null) {
+                                    final int statusCode = loadedResult.getStatus().getStatusCode();
+                                    if (statusCode == AppStateStatusCodes.STATUS_OK) {
+                                        serializedOrganizers = new String(loadedResult.getLocalData());
+                                    }
+                                } else if (conflictResult != null) {
+                                    serializedOrganizers = mergeIds(
+                                            new String(conflictResult.getLocalData()),
+                                            new String(conflictResult.getServerData())
+                                    );
+                                }
+
+                                App.getInstance().getGdgXHub().getDirectory(
+                                        new Callback<Directory>() {
+
+                                            @Override
+                                            public void success(final Directory directory, final retrofit.client.Response response) {
+                                                loadChapterOrganizers(directory);
+                                            }
+
+                                            @Override
+                                            public void failure(final RetrofitError error) {
+                                                Timber.e(error, "Error");
+                                            }
+                                        }
+                                );
                             }
                         });
-                    }
-                });
+    }
+
+    private void loadFromSnapshot() {
+        Games.Snapshots.open(getGoogleApiClient(), Const.GAMES_SNAPSHOT_ID, false)
+                .setResultCallback(
+                        new ResultCallback<Snapshots.OpenSnapshotResult>() {
+
+                            @Override
+                            public void onResult(Snapshots.OpenSnapshotResult stateResult) {
+                                if (stateResult.getStatus().getStatusCode() == GamesStatusCodes.STATUS_SNAPSHOT_NOT_FOUND) {
+                                    loadFromAppState();
+                                    return;
+                                }
+
+                                Snapshot conflictResult = stateResult.getConflictingSnapshot();
+                                Snapshot loadedResult = stateResult.getSnapshot();
+                                serializedOrganizers = "";
+                                if (loadedResult != null) {
+                                    final int statusCode = stateResult.getStatus().getStatusCode();
+                                    if (statusCode == AppStateStatusCodes.STATUS_OK) {
+                                        try {
+                                            serializedOrganizers = new String(loadedResult.getSnapshotContents().readFully());
+                                        } catch (IOException e) {
+                                            Timber.w(e, "Could not store tagged organizer");
+                                            Toast.makeText(ArrowTaggedActivity.this, R.string.arrow_oops, Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                } else if (conflictResult != null) {
+                                    try {
+                                        serializedOrganizers = mergeIds(
+                                                new String(loadedResult.getSnapshotContents().readFully()),
+                                                new String(conflictResult.getSnapshotContents().readFully())
+                                        );
+                                    } catch (IOException e) {
+                                        Timber.w(e, "Could not store tagged organizer");
+                                        Toast.makeText(ArrowTaggedActivity.this, R.string.arrow_oops, Toast.LENGTH_LONG).show();
+                                    }
+                                }
+
+                                App.getInstance().getGdgXHub().getDirectory(
+                                        new Callback<Directory>() {
+
+                                            @Override
+                                            public void success(final Directory directory, final retrofit.client.Response response) {
+                                                loadChapterOrganizers(directory);
+                                            }
+
+                                            @Override
+                                            public void failure(final RetrofitError error) {
+                                                Timber.e(error, "Error");
+                                            }
+                                        }
+                                );
+                            }
+                        });
     }
 
     @Override
@@ -167,5 +235,6 @@ public class ArrowTaggedActivity extends GdgActivity {
     @Override
     public void onConnected(Bundle bundle) {
         super.onConnected(bundle);
+        loadFromSnapshot();
     }
 }
