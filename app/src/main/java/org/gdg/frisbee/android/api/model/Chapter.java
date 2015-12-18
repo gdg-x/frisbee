@@ -25,16 +25,16 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 
 public class Chapter implements Comparable<Chapter>, Parcelable {
-    String status, city, name, state;
+    private String status, city, name, state;
 
-    Country country;
+    private Country country;
 
     @SerializedName("_id")
-    String gplusId;
+    private String gplusId;
 
-    ArrayList<String> organizers;
+    private ArrayList<String> organizers;
 
-    Geo geo;
+    private Geo geo;
 
     public Chapter() {
         name = "";
