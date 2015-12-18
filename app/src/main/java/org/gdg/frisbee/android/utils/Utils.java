@@ -36,9 +36,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.model.ChapterDeserializer;
 import org.gdg.frisbee.android.api.deserializer.DateTimeDeserializer;
-import org.gdg.frisbee.android.api.model.Chapter;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.joda.time.format.DateTimeFormat;
@@ -176,7 +174,6 @@ public class Utils {
 
     public static Gson getGson() {
         return new GsonBuilder()
-                .registerTypeAdapter(Chapter.class, new ChapterDeserializer())
                 .registerTypeAdapter(DateTime.class, new DateTimeDeserializer())
                 .create();
     }
@@ -184,7 +181,6 @@ public class Utils {
     public static Gson getGson(FieldNamingPolicy policy) {
         return new GsonBuilder()
                 .setFieldNamingPolicy(policy)
-                .registerTypeAdapter(Chapter.class, new ChapterDeserializer())
                 .registerTypeAdapter(DateTime.class, new DateTimeDeserializer())
                 .create();
     }
@@ -192,7 +188,6 @@ public class Utils {
     public static Gson getGson(FieldNamingPolicy policy, JsonDeserializer<DateTime> dateTimeDeserializer) {
         return new GsonBuilder()
                 .setFieldNamingPolicy(policy)
-                .registerTypeAdapter(Chapter.class, new ChapterDeserializer())
                 .registerTypeAdapter(DateTime.class, dateTimeDeserializer)
                 .create();
 
