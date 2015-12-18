@@ -37,6 +37,7 @@ import android.widget.ImageView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.games.Games;
+import com.google.android.gms.plus.Plus;
 import com.google.api.services.plus.model.Person;
 
 import java.util.ArrayList;
@@ -347,6 +348,9 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     private void updateUserPicture() {
+        if (!getGoogleApiClient().hasConnectedApi(Plus.API)) {
+            return;
+        }
         com.google.android.gms.plus.model.people.Person user = com.google.android.gms.plus.Plus.PeopleApi.getCurrentPerson(getGoogleApiClient());
         if (user == null) {
             return;
