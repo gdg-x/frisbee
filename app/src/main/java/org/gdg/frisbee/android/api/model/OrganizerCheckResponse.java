@@ -2,13 +2,6 @@ package org.gdg.frisbee.android.api.model;
 
 import java.util.ArrayList;
 
-/**
- * Created with IntelliJ IDEA.
- * User: maui
- * Date: 02.04.14
- * Time: 23:30
- * To change this template use File | Settings | File Templates.
- */
 public class OrganizerCheckResponse {
     private String msg, user;
     private ArrayList<Chapter> chapters;

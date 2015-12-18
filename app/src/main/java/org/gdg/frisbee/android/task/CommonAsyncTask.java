@@ -21,14 +21,6 @@ import android.os.AsyncTask;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.task
- * <p/>
- * User: maui
- * Date: 22.04.13
- * Time: 00:06
- */
 public class CommonAsyncTask<Params, Result> extends AsyncTask<Params, Void, Result> {
 
     private OnBackgroundExecuteListener<Params, Result> mBackgroundListener;

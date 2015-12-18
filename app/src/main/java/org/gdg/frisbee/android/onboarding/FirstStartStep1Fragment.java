@@ -77,7 +77,8 @@ public class FirstStartStep1Fragment extends BaseFragment {
 
         super.onActivityCreated(savedInstanceState);
 
-        mLocationComparator = new ChapterComparator(PrefUtils.getHomeChapterId(getActivity()));
+        mLocationComparator = new ChapterComparator(PrefUtils.getHomeChapterId(getActivity()),
+                App.getInstance().getLastLocation());
 
         mSpinnerAdapter = new ChapterAdapter(getActivity(), R.layout.spinner_item_welcome);
         mSpinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);

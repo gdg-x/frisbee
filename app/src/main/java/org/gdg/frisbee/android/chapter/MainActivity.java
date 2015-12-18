@@ -43,10 +43,6 @@ import com.google.android.gms.appinvite.AppInviteReferral;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.AppInviteActivity;
@@ -62,6 +58,10 @@ import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import butterknife.Bind;
 import retrofit.Callback;
@@ -116,7 +116,8 @@ public class MainActivity extends GdgNavDrawerActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mLocationComparator = new ChapterComparator(PrefUtils.getHomeChapterIdNotNull(this));
+        mLocationComparator = new ChapterComparator(PrefUtils.getHomeChapterIdNotNull(this),
+                App.getInstance().getLastLocation());
 
         mChapterAdapter = new ChapterAdapter(MainActivity.this, R.layout.spinner_item_actionbar);
         mChapterAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);

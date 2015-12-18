@@ -24,25 +24,17 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.api.model
- * <p/>
- * User: maui
- * Date: 21.04.13
- * Time: 22:27
- */
 public class Chapter implements Comparable<Chapter>, Parcelable {
-    private String status, city, name, state;
+    String status, city, name, state;
 
-    private Country country;
+    Country country;
 
     @SerializedName("_id")
-    private String gplusId;
+    String gplusId;
 
-    private ArrayList<String> organizers;
+    ArrayList<String> organizers;
 
-    private Geo geo;
+    Geo geo;
 
     public Chapter() {
         name = "";

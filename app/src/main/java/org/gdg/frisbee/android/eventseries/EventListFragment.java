@@ -39,14 +39,6 @@ import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.fragment
- * <p/>
- * User: maui
- * Date: 22.04.13
- * Time: 23:10
- */
 public abstract class EventListFragment extends GdgListFragment {
 
     protected EventAdapter mAdapter;
@@ -61,6 +53,7 @@ public abstract class EventListFragment extends GdgListFragment {
                     Snackbar.LENGTH_SHORT);
             ColoredSnackBar.alert(snackbar).show();
         }
+
     }
 
     @Override

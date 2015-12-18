@@ -20,14 +20,6 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.task
- * <p/>
- * User: maui
- * Date: 22.04.13
- * Time: 00:32
- */
 public class Builder<Params, Result> {
 
     private CommonAsyncTask<Params, Result> mTask;
