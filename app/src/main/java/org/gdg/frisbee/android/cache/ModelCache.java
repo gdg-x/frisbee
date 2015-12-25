@@ -508,7 +508,7 @@ public class ModelCache {
                 return mGson.fromJson(content, clazz);
             }
         } catch (IllegalArgumentException e) {
-            Timber.e("Deserializing from disk failed", e);
+            Timber.e(e, "Deserializing from disk failed");
             return null;
         } catch (ClassNotFoundException e) {
             throw new IOException(e.getMessage());

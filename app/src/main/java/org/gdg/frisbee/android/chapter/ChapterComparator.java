@@ -52,7 +52,7 @@ public class ChapterComparator implements Comparator<Chapter> {
         final boolean closeEnough2 = results2[0] <= MAX_DISTANCE;
         
         if (closeEnough && closeEnough2) {
-            return Integer.compare((int) results[0], (int) results2[0]);
+            return integerCompare((int) results[0], (int) results2[0]);
         } else if (closeEnough) {
             return -1;
         } else if (closeEnough2) {
@@ -60,6 +60,10 @@ public class ChapterComparator implements Comparator<Chapter> {
         } else {
             return chapter.compareTo(chapter2);
         }
+    }
+
+    public static int integerCompare(int lhs, int rhs) {
+        return lhs < rhs ? -1 : (lhs == rhs ? 0 : 1);
     }
 
     @Override
