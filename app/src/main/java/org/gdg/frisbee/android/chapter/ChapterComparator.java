@@ -29,28 +29,31 @@ public class ChapterComparator implements Comparator<Chapter> {
             return 1;
         }
 
-        if (lastLocation == null) {
+        if (lastLocation == null || (chapter.getGeo() == null && chapter2.getGeo() == null)) {
             return chapter.compareTo(chapter2);
         }
 
-        if (chapter.getGeo() == null) {
-            return 1;
+        final boolean closeEnough;
+        final boolean closeEnough2;
+        final float[] results = new float[1];
+        final float[] results2 = new float[1];
+
+        if (chapter.getGeo() != null) {
+            Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(),
+                    chapter.getGeo().getLat(), chapter.getGeo().getLng(), results);
+            closeEnough = results[0] <= MAX_DISTANCE;
+        } else {
+            closeEnough = false;
         }
-        if (chapter2.getGeo() == null) {
-            return -1;
+
+        if (chapter2.getGeo() != null) {
+            Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(),
+                    chapter2.getGeo().getLat(), chapter2.getGeo().getLng(), results2);
+            closeEnough2 = results2[0] <= MAX_DISTANCE;
+        } else {
+            closeEnough2 = false;
         }
 
-        float[] results = new float[1];
-        float[] results2 = new float[1];
-
-        Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(),
-                chapter.getGeo().getLat(), chapter.getGeo().getLng(), results);
-        Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(),
-                chapter2.getGeo().getLat(), chapter2.getGeo().getLng(), results2);
-
-        final boolean closeEnough = results[0] <= MAX_DISTANCE;
-        final boolean closeEnough2 = results2[0] <= MAX_DISTANCE;
-        
         if (closeEnough && closeEnough2) {
             return integerCompare((int) results[0], (int) results2[0]);
         } else if (closeEnough) {

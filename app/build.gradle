@@ -237,6 +237,9 @@ dependencies {
 
     // Dependencies for local unit tests
     testCompile "junit:junit:$rootProject.junitVersion"
+    testCompile "org.mockito:mockito-all:$rootProject.ext.mockitoVersion"
+    testCompile "org.hamcrest:hamcrest-all:$rootProject.ext.hamcrestVersion"
+    testCompile "org.robolectric:robolectric:3.0"
     testCompile "joda-time:joda-time:$rootProject.jodaTimeVersion"
 
     androidTestCompile 'org.assertj:assertj-core:1.7.1'
