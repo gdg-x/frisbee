@@ -35,14 +35,11 @@ import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.EventFullDetails;
-import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.common.GdgActivity;
 
 import butterknife.Bind;
-import retrofit.Callback;
-import retrofit.RetrofitError;
 
-public class EventActivity extends GdgActivity {
+public class EventActivity extends GdgActivity implements EventOverviewFragment.Callbacks {
 
     @Bind(R.id.pager)
     ViewPager mViewPager;
@@ -94,21 +91,10 @@ public class EventActivity extends GdgActivity {
     }
 
     private void recordStartPageView() {
-        App.getInstance().getGdgXHub().getEventDetail(
-                mEventId, new Callback<EventFullDetails>() {
-                    @Override
-                    public void success(EventFullDetails eventFullDetails, retrofit.client.Response response) {
-                        mEventFullDetails = eventFullDetails;
-                        Action viewAction = createAppIndexAction(eventFullDetails.getTitle(), mEventId);
-                        recordStartPageView(viewAction);
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-
-                    }
-                }
-        );
+        if (mEventFullDetails != null) {
+            Action viewAction = createAppIndexAction(mEventFullDetails.getTitle(), mEventId);
+            recordStartPageView(viewAction);
+        }
     }
 
     private void recordEndPageView() {
@@ -135,6 +121,12 @@ public class EventActivity extends GdgActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onEventLoaded(EventFullDetails eventFullDetails) {
+        mEventFullDetails = eventFullDetails;
+        recordStartPageView();
     }
 
     public class EventPagerAdapter extends FragmentStatePagerAdapter {
