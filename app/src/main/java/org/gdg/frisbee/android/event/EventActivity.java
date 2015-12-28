@@ -21,7 +21,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -43,7 +42,7 @@ import butterknife.Bind;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 
-public class EventActivity extends GdgActivity implements EventOverviewFragment.EventDetailsProvider {
+public class EventActivity extends GdgActivity {
 
     @Bind(R.id.pager)
     ViewPager mViewPager;
@@ -100,7 +99,6 @@ public class EventActivity extends GdgActivity implements EventOverviewFragment.
                     @Override
                     public void success(EventFullDetails eventFullDetails, retrofit.client.Response response) {
                         mEventFullDetails = eventFullDetails;
-                        updateFragments(eventFullDetails);
                         Action viewAction = createAppIndexAction(eventFullDetails.getTitle(), mEventId);
                         recordStartPageView(viewAction);
                     }
@@ -111,14 +109,6 @@ public class EventActivity extends GdgActivity implements EventOverviewFragment.
                     }
                 }
         );
-    }
-
-    private void updateFragments(EventFullDetails eventFullDetails) {
-        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
-            if (fragment instanceof EventDetailsListener) {
-                ((EventDetailsListener) fragment).updateFromFullEventDetails(eventFullDetails.getId(), eventFullDetails);
-            }
-        }
     }
 
     private void recordEndPageView() {
@@ -145,14 +135,6 @@ public class EventActivity extends GdgActivity implements EventOverviewFragment.
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public EventFullDetails getEvent(@Nullable String eventId) {
-        if (mEventId != null && mEventId.equals(eventId)) {
-            return mEventFullDetails;
-        }
-        return null;
     }
 
     public class EventPagerAdapter extends FragmentStatePagerAdapter {

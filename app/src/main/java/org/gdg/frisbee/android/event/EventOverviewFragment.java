@@ -65,7 +65,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import timber.log.Timber;
 
-public class EventOverviewFragment extends Fragment implements EventDetailsListener {
+public class EventOverviewFragment extends Fragment {
 
     @Bind(R.id.title)
     TextView mTitle;
@@ -105,24 +105,28 @@ public class EventOverviewFragment extends Fragment implements EventDetailsListe
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setIsLoading(true);
-        final String eventId = getArguments().getString(Const.EXTRA_EVENT_ID);
-        final EventDetailsProvider provider = (EventDetailsProvider) getActivity();
-        EventFullDetails eventFullDetails = provider.getEvent(eventId);
-        updateFromFullEventDetails(eventId, eventFullDetails);
     }
 
     @Override
-    public void updateFromFullEventDetails(String eventId, EventFullDetails eventFullDetails) {
-        if (eventFullDetails != null) {
-            onResponse(eventFullDetails);
-        } else {
-            Snackbar snackbar = Snackbar.make(
-                    getView(), R.string.server_error,
-                    Snackbar.LENGTH_SHORT
-            );
-            ColoredSnackBar.alert(snackbar).show();
-            Timber.d("error while retrieving event %s", eventId);
-        }
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        final String eventId = getArguments().getString(Const.EXTRA_EVENT_ID);
+        App.getInstance().getGdgXHub().getEventDetail(eventId, new Callback<EventFullDetails>() {
+            @Override
+            public void success(EventFullDetails eventFullDetails, retrofit.client.Response response) {
+                onResponse(eventFullDetails);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                if (isAdded()) {
+                    Snackbar snackbar = Snackbar.make(getView(), R.string.server_error,
+                            Snackbar.LENGTH_SHORT);
+                    ColoredSnackBar.alert(snackbar).show();
+                }
+                Timber.d(error, "error while retrieving event %s", eventId);
+            }
+        });
     }
 
     private void updateWithDetails(final EventFullDetails eventFullDetails) {
@@ -349,9 +353,5 @@ public class EventOverviewFragment extends Fragment implements EventDetailsListe
         args.putString(Const.EXTRA_EVENT_ID, eventId);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public interface EventDetailsProvider {
-        EventFullDetails getEvent(String eventId);
     }
 }
