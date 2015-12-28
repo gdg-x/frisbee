@@ -20,8 +20,6 @@ public class ChapterComparator implements Comparator<Chapter> {
 
     @Override
     public int compare(Chapter chapter, Chapter chapter2) {
-        float[] results = new float[1];
-        float[] results2 = new float[1];
 
         if (chapter.getGplusId().equals(homeChapterId)) {
             return -1;
@@ -32,7 +30,7 @@ public class ChapterComparator implements Comparator<Chapter> {
         }
 
         if (lastLocation == null) {
-            return chapter.getName().compareTo(chapter2.getName());
+            return chapter.compareTo(chapter2);
         }
 
         if (chapter.getGeo() == null) {
@@ -41,6 +39,9 @@ public class ChapterComparator implements Comparator<Chapter> {
         if (chapter2.getGeo() == null) {
             return -1;
         }
+
+        float[] results = new float[1];
+        float[] results2 = new float[1];
 
         Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(),
                 chapter.getGeo().getLat(), chapter.getGeo().getLng(), results);
@@ -51,20 +52,18 @@ public class ChapterComparator implements Comparator<Chapter> {
         final boolean closeEnough2 = results2[0] <= MAX_DISTANCE;
         
         if (closeEnough && closeEnough2) {
-            if (results[0] == results2[0]) {
-                return 0;
-            } else if (results[0] > results2[0]) {
-                return 1;
-            } else {
-                return -1;
-            }
+            return integerCompare((int) results[0], (int) results2[0]);
         } else if (closeEnough) {
             return -1;
         } else if (closeEnough2) {
             return 1;
         } else {
-            return chapter.getName().compareTo(chapter2.getName());
+            return chapter.compareTo(chapter2);
         }
+    }
+
+    public static int integerCompare(int lhs, int rhs) {
+        return lhs < rhs ? -1 : (lhs == rhs ? 0 : 1);
     }
 
     @Override

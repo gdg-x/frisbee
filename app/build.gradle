@@ -27,8 +27,8 @@ def versionPatch = 2
 def versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     dexOptions {
         // Skip pre-dexing when running on Travis CI or when disabled via -Dpre-dex=false.
@@ -39,8 +39,8 @@ android {
 
     defaultConfig {
         applicationId "org.gdg.frisbee.android"
-        minSdkVersion 16
-        targetSdkVersion 22
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
@@ -133,7 +133,8 @@ android {
     }
 
     variantFilter { variant ->
-        if (variant.buildType.name.equals('release') && variant.getFlavors().get(0).name.equals('dev')) {
+        if (variant.buildType.name.equals('release')
+                && variant.getFlavors().get(0).name.equals('dev')) {
             variant.setIgnore(true);
         }
     }
@@ -174,37 +175,31 @@ configurations {
     compile.exclude module: 'httpclient'
 
     all {
-        resolutionStrategy {
-            force 'com.android.support:support-annotations:23.1.1'
-        }
+        resolutionStrategy.force "com.android.support:support-annotations:$rootProject.supportLibraryVersion"
     }
 }
 
 dependencies {
 
-    def supportVersion = "23.1.1"
-    def playServicesVersion = "7.8.0"
-
     //Android Support
-    compile "com.android.support:support-v4:$supportVersion"
-    compile "com.android.support:appcompat-v7:$supportVersion"
-    compile "com.android.support:cardview-v7:$supportVersion"
-    compile "com.android.support:recyclerview-v7:$supportVersion"
-    compile "com.android.support:support-annotations:$supportVersion"
-    compile "com.android.support:design:$supportVersion"
-    compile "com.android.support:customtabs:$supportVersion"
+    compile "com.android.support:support-v4:$rootProject.supportLibraryVersion"
+    compile "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
+    compile "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
+    compile "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
+    compile "com.android.support:design:$rootProject.supportLibraryVersion"
+    compile "com.android.support:customtabs:$rootProject.supportLibraryVersion"
     devCompile 'com.android.support:multidex:1.0.1'
 
     //Play Services
-    compile "com.google.android.gms:play-services-location:$playServicesVersion"
-    compile "com.google.android.gms:play-services-games:$playServicesVersion"
-    compile "com.google.android.gms:play-services-identity:$playServicesVersion"
-    compile "com.google.android.gms:play-services-plus:$playServicesVersion"
-    compile "com.google.android.gms:play-services-appstate:$playServicesVersion"
-    compile "com.google.android.gms:play-services-analytics:$playServicesVersion"
-    compile "com.google.android.gms:play-services-gcm:$playServicesVersion"
-    compile "com.google.android.gms:play-services-appinvite:$playServicesVersion"
-    compile "com.google.android.gms:play-services-appindexing:$playServicesVersion"
+    compile "com.google.android.gms:play-services-location:$rootProject.playServicesVersion"
+    compile "com.google.android.gms:play-services-games:$rootProject.playServicesVersion"
+    compile "com.google.android.gms:play-services-identity:$rootProject.playServicesVersion"
+    compile "com.google.android.gms:play-services-plus:$rootProject.playServicesVersion"
+    compile "com.google.android.gms:play-services-appstate:$rootProject.playServicesVersion"
+    compile "com.google.android.gms:play-services-analytics:$rootProject.playServicesVersion"
+    compile "com.google.android.gms:play-services-gcm:$rootProject.playServicesVersion"
+    compile "com.google.android.gms:play-services-appinvite:$rootProject.playServicesVersion"
+    compile "com.google.android.gms:play-services-appindexing:$rootProject.playServicesVersion"
 
     //Google
     compile 'com.google.http-client:google-http-client-gson:1.20.0'
@@ -214,14 +209,14 @@ dependencies {
     compile 'com.google.zxing:core:3.2.1'
 
     //Square
-    compile 'com.squareup.okhttp:okhttp:2.6.0'
-    compile 'com.squareup.okhttp:okhttp-urlconnection:2.6.0'
+    compile "com.squareup.okhttp:okhttp:$rootProject.okHttpVersion"
+    compile "com.squareup.okhttp:okhttp-urlconnection:$rootProject.okHttpVersion"
     compile 'com.squareup.okio:okio:1.6.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
-    alphaCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
+    debugCompile "com.squareup.leakcanary:leakcanary-android:$rootProject.leakCanaryVersion"
+    alphaCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
 
     //Jake Wharton
     compile 'com.jakewharton:butterknife:7.0.1'
@@ -231,7 +226,8 @@ dependencies {
     //Others
     compile 'io.doorbell:android-sdk:0.2.2@aar'
     compile 'org.jsoup:jsoup:1.8.2'
-    compile 'net.danlew:android.joda:2.9.0'
+    compile "net.danlew:android.joda:$rootProject.jodaTimeVersion"
+    compile 'com.tasomaniac:delayed-progress:0.3'
     compile 'com.google.code.findbugs:jsr305:2.0.1'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.4@aar') {
         transitive = true;
@@ -240,9 +236,17 @@ dependencies {
     //Local
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    //Test
-    testCompile 'junit:junit:4.12'
+    // Dependencies for local unit tests
+    testCompile "junit:junit:$rootProject.junitVersion"
+    testCompile "joda-time:joda-time:$rootProject.jodaTimeVersion"
+
     androidTestCompile 'org.assertj:assertj-core:1.7.1'
-    androidTestCompile ('com.android.support.test.espresso:espresso-core:2.2.1')
-    androidTestCompile ('com.android.support.test.espresso:espresso-intents:2.2.1')
+
+    // Android Testing Support Library's runner and rules
+    androidTestCompile "com.android.support.test:runner:$rootProject.runnerVersion"
+    androidTestCompile "com.android.support.test:rules:$rootProject.runnerVersion"
+
+    // Espresso UI Testing dependencies.
+    androidTestCompile "com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion"
+    androidTestCompile "com.android.support.test.espresso:espresso-intents:$rootProject.espressoVersion"
 }

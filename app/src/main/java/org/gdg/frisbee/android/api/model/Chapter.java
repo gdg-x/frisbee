@@ -18,23 +18,24 @@ package org.gdg.frisbee.android.api.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
 public class Chapter implements Comparable<Chapter>, Parcelable {
-    String status, city, name, state;
+    private String status, city, name, state;
 
-    Country country;
+    private Country country;
 
     @SerializedName("_id")
-    String gplusId;
+    private String gplusId;
 
-    ArrayList<String> organizers;
+    private ArrayList<String> organizers;
 
-    Geo geo;
+    private Geo geo;
+
+    private String shortName;
 
     public Chapter() {
         name = "";
@@ -48,17 +49,16 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
         organizers = new ArrayList<>();
     }
 
-    private Chapter(Parcel in) {
+    protected Chapter(Parcel in) {
         name = in.readString();
         status = in.readString();
         city = in.readString();
         gplusId = in.readString();
         state = in.readString();
         country = in.readParcelable(Country.class.getClassLoader());
+        organizers = in.createStringArrayList();
         geo = in.readParcelable(Geo.class.getClassLoader());
-
-        organizers = new ArrayList<>();
-        in.readStringList(organizers);
+        shortName = in.readString();
     }
 
     public ArrayList<String> getOrganizers() {
@@ -99,37 +99,42 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
     }
 
     public String getShortName() {
-        return name.replaceAll("GDG ", "");
+        if (shortName == null) {
+            shortName = name.replaceAll("GDG ", "").trim();
+        }
+        return shortName;
     }
 
     @Override
     public int compareTo(Chapter o) {
-        return name.compareTo(o.getName());
+        return getShortName().compareTo(o.getShortName());
     }
 
     @Override
     public int describeContents() {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(name);
-        parcel.writeString(status);
-        parcel.writeString(city);
-        parcel.writeString(gplusId);
-        parcel.writeString(state);
-        parcel.writeParcelable(country, 0);
-        parcel.writeParcelable(geo, 0);
-        parcel.writeStringList(organizers);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(status);
+        dest.writeString(city);
+        dest.writeString(gplusId);
+        dest.writeString(state);
+        dest.writeParcelable(country, flags);
+        dest.writeStringList(organizers);
+        dest.writeParcelable(geo, flags);
+        dest.writeString(shortName);
     }
 
-    public static final Parcelable.Creator<Chapter> CREATOR = new Parcelable.Creator<Chapter>() {
-        @NonNull
-        public Chapter createFromParcel(@NonNull Parcel in) {
+    public static final Creator<Chapter> CREATOR = new Creator<Chapter>() {
+        @Override
+        public Chapter createFromParcel(Parcel in) {
             return new Chapter(in);
         }
 
+        @Override
         public Chapter[] newArray(int size) {
             return new Chapter[size];
         }

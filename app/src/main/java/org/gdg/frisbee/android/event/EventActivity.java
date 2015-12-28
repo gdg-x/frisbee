@@ -114,7 +114,7 @@ public class EventActivity extends GdgActivity implements EventOverviewFragment.
     }
 
     private void updateFragments(EventFullDetails eventFullDetails) {
-        for (Fragment fragment: getSupportFragmentManager().getFragments()) {
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
             if (fragment instanceof EventDetailsListener) {
                 ((EventDetailsListener) fragment).updateFromFullEventDetails(eventFullDetails.getId(), eventFullDetails);
             }

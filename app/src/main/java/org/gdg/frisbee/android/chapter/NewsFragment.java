@@ -70,8 +70,6 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Plus client = App.getInstance().getPlusClient();
-
         StaggeredGridLayoutManager layoutManager = 
                 new StaggeredGridLayoutManager(
                         getResources().getInteger(R.integer.news_fragment_column_count), 

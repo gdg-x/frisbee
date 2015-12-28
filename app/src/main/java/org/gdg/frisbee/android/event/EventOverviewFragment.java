@@ -34,8 +34,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -46,6 +44,7 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+import com.tasomaniac.android.widget.DelayedProgressBar;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -81,10 +80,13 @@ public class EventOverviewFragment extends Fragment implements EventDetailsListe
     TextView mEventDescription;
 
     @Bind(R.id.loading)
-    View mProgressContainer;
+    DelayedProgressBar mProgressContainer;
 
     @Bind(R.id.group_logo)
     ImageView mGroupLogo;
+
+    @Bind(R.id.container)
+    View mContainer;
 
     private boolean mLoading;
     private Directory mDirectory;
@@ -254,28 +256,19 @@ public class EventOverviewFragment extends Fragment implements EventDetailsListe
         mLoading = isLoading;
 
         if (isLoading) {
-            mProgressContainer.startAnimation(AnimationUtils.loadAnimation(
-                    getActivity(), android.R.anim.fade_in));
-            mProgressContainer.setVisibility(View.VISIBLE);
+            mContainer.setVisibility(View.GONE);
+            mProgressContainer.show(true);
         } else {
-            Animation fadeOut = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out);
-            fadeOut.setAnimationListener(new Animation.AnimationListener() {
+            mProgressContainer.hide(true, new Runnable() {
                 @Override
-                public void onAnimationStart(Animation animation) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    if (mProgressContainer != null) {
-                        mProgressContainer.setVisibility(View.GONE);
+                public void run() {
+                    if (mContainer != null) {
+                        mContainer.setAlpha(0.0f);
+                        mContainer.setVisibility(View.VISIBLE);
+                        mContainer.animate().alpha(1.0f);
                     }
                 }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                }
             });
-            mProgressContainer.startAnimation(fadeOut);
         }
     }
 

@@ -68,6 +68,7 @@ public abstract class EventListFragment extends GdgListFragment {
 
         registerForContextMenu(getListView());
 
+        setIsLoading(true);
         mAdapter = createEventAdapter();
         setListAdapter(mAdapter);
         mEvents = new ArrayList<>();
