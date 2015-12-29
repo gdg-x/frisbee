@@ -58,6 +58,7 @@ import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.OrganizerChecker;
+import org.gdg.frisbee.android.arrow.AppStateMigrationHelper;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.eventseries.GdgEventListFragment;
@@ -213,6 +214,8 @@ public class MainActivity extends GdgNavDrawerActivity {
     public void onConnected(Bundle bundle) {
         super.onConnected(bundle);
         updateChapterPages();
+
+        AppStateMigrationHelper.checkSnapshotUpgrade(this, getGoogleApiClient(), getString(R.string.arrow_tagged));
     }
 
     private void updateChapterPages() {

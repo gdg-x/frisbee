@@ -78,8 +78,8 @@ public class Const {
     public static final String ARROW_MIME = "application/vnd.org.gdgx.frisbee.arrow";
     public static final String ARROW_LB = "CgkIh5yNxL8MEAIQBw";
     public static final String ARROW_K = "XXXX111122223333";
+    public static final String GAMES_SNAPSHOT_ID = "tagged_organizers.json";
     public static final int ARROW_STATE_KEY = 1;
-
     public static final int ARROW_DONE_STATE_KEY = 2;
 
     public static final String EXTRA_EVENT_ID = "EXTRA_EVENT_ID";
