@@ -54,12 +54,6 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.app.App;
@@ -69,6 +63,12 @@ import org.gdg.frisbee.android.utils.CryptoUtils;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import butterknife.Bind;
 import timber.log.Timber;
@@ -154,7 +154,10 @@ public class ArrowActivity extends GdgNavDrawerActivity implements ResultCallbac
         switch (item.getItemId()) {
             case R.id.arrow_lb:
                 if (getGoogleApiClient().isConnected()) {
-                    startActivityForResult(Games.Leaderboards.getLeaderboardIntent(getGoogleApiClient(), Const.ARROW_LB), REQUEST_LEADERBOARD);
+                    startActivityForResult(
+                            Games.Leaderboards.getLeaderboardIntent(getGoogleApiClient(), Const.ARROW_LB),
+                            REQUEST_LEADERBOARD
+                    );
                 }
                 return true;
             case R.id.arrow_tagged:
@@ -176,45 +179,10 @@ public class ArrowActivity extends GdgNavDrawerActivity implements ResultCallbac
         handleIntent(getIntent());
     }
 
-    private void checkSnapshotUpgrade() {
-        Games.Snapshots.open(getGoogleApiClient(), Const.GAMES_SNAPSHOT_ID, false).setResultCallback(
-                new ResultCallback<Snapshots.OpenSnapshotResult>() {
-                    @Override
-                    public void onResult(Snapshots.OpenSnapshotResult openSnapshotResult) {
-                        if (openSnapshotResult.getStatus().getStatusCode() == GamesStatusCodes.STATUS_SNAPSHOT_NOT_FOUND) {
-                            moveFromAppStateToSnapshot();
-                        }
-                    }
-                }
-        );
-    }
-
-    private void moveFromAppStateToSnapshot() {
-        AppStateManager.load(getGoogleApiClient(), Const.ARROW_DONE_STATE_KEY).setResultCallback(
-                new ResultCallback<AppStateManager.StateResult>() {
-                    @Override
-                    public void onResult(AppStateManager.StateResult stateResult) {
-                        if (stateResult.getStatus().isSuccess()) {
-                            final String serializedOrganizers = new String(stateResult.getLoadedResult().getLocalData());
-                            Games.Snapshots.open(getGoogleApiClient(), Const.GAMES_SNAPSHOT_ID, true).setResultCallback(
-                                    new ResultCallback<Snapshots.OpenSnapshotResult>() {
-                                        @Override
-                                        public void onResult(Snapshots.OpenSnapshotResult stateResult) {
-                                            final Snapshot loadedResult = stateResult.getSnapshot();
-                                            final int statusCode = stateResult.getStatus().getStatusCode();
-                                            if (statusCode == GamesStatusCodes.STATUS_OK) {
-                                                loadedResult.getSnapshotContents().writeBytes(serializedOrganizers.getBytes());
-                                                int numberOfTaggedOrganizers = serializedOrganizers.split(ID_SEPARATOR_FOR_SPLIT).length - 1;
-                                                SnapshotMetadataChange metadataChange = new SnapshotMetadataChange.Builder()
-                                                        .setDescription(getString(R.string.arrow_tagged) + ": " + numberOfTaggedOrganizers)
-                                                        .build();
-                                                Games.Snapshots.commitAndClose(getGoogleApiClient(), loadedResult, metadataChange);
-                                            }
-                                        }
-                                    });
-                        }
-                    }
-                });
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntent(intent);
     }
 
     private void handleIntent(Intent intent) {
@@ -242,12 +210,6 @@ public class ArrowActivity extends GdgNavDrawerActivity implements ResultCallbac
                 taggedPerson(msg);
             }
         }
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        handleIntent(intent);
     }
 
     @Override
@@ -531,13 +493,50 @@ public class ArrowActivity extends GdgNavDrawerActivity implements ResultCallbac
         }
     };
 
-    private long getNow() {
-        return DateTime.now(DateTimeZone.UTC).getMillis();
+    private void checkSnapshotUpgrade() {
+        Games.Snapshots.open(getGoogleApiClient(), Const.GAMES_SNAPSHOT_ID, false).setResultCallback(this);
     }
 
     @Override
     public void onResult(Snapshots.OpenSnapshotResult openSnapshotResult) {
+        if (openSnapshotResult.getStatus().getStatusCode() == GamesStatusCodes.STATUS_SNAPSHOT_NOT_FOUND) {
+            migrateFromAppStateToSnapshot();
+        }
+    }
 
+    /**
+     * TODO Will be removed eventually once we migrate fully to upgrade to GMS 8+
+     */
+    private void migrateFromAppStateToSnapshot() {
+        AppStateManager.load(getGoogleApiClient(), Const.ARROW_DONE_STATE_KEY).setResultCallback(
+                new ResultCallback<AppStateManager.StateResult>() {
+                    @Override
+                    public void onResult(AppStateManager.StateResult stateResult) {
+                        if (stateResult.getStatus().isSuccess()) {
+                            final String serializedOrganizers = new String(stateResult.getLoadedResult().getLocalData());
+                            Games.Snapshots.open(getGoogleApiClient(), Const.GAMES_SNAPSHOT_ID, true).setResultCallback(
+                                    new ResultCallback<Snapshots.OpenSnapshotResult>() {
+                                        @Override
+                                        public void onResult(Snapshots.OpenSnapshotResult stateResult) {
+                                            final Snapshot loadedResult = stateResult.getSnapshot();
+                                            final int statusCode = stateResult.getStatus().getStatusCode();
+                                            if (statusCode == GamesStatusCodes.STATUS_OK) {
+                                                loadedResult.getSnapshotContents().writeBytes(serializedOrganizers.getBytes());
+                                                int numberOfTaggedOrganizers = serializedOrganizers.split(ID_SEPARATOR_FOR_SPLIT).length - 1;
+                                                SnapshotMetadataChange metadataChange = new SnapshotMetadataChange.Builder()
+                                                        .setDescription(getString(R.string.arrow_tagged) + ": " + numberOfTaggedOrganizers)
+                                                        .build();
+                                                Games.Snapshots.commitAndClose(getGoogleApiClient(), loadedResult, metadataChange);
+                                            }
+                                        }
+                                    });
+                        }
+                    }
+                });
+    }
+
+    private static long getNow() {
+        return DateTime.now(DateTimeZone.UTC).getMillis();
     }
 
     private class BaseArrowHandler {
