@@ -116,14 +116,10 @@ public abstract class GdgActivity extends TrackableActivity implements
 
     protected void createGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Plus.API)
-                .addApi(Games.API)
+                .addApi(Plus.API).addScope(Plus.SCOPE_PLUS_LOGIN).addScope(Plus.SCOPE_PLUS_PROFILE)
+                .addApi(Games.API).addScope(Games.SCOPE_GAMES)
                 .addApi(AppStateManager.API)
-                .addApi(Drive.API)
-                .addScope(Plus.SCOPE_PLUS_LOGIN)
-                .addScope(Plus.SCOPE_PLUS_PROFILE)
-                .addScope(Drive.SCOPE_APPFOLDER)
-                .addScope(Games.SCOPE_GAMES)
+                .addApi(Drive.API).addScope(Drive.SCOPE_APPFOLDER)
                 .build();
     }
 

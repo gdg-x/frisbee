@@ -139,7 +139,6 @@ public class ArrowActivity extends GdgNavDrawerActivity implements ResultCallbac
                     }
                 }
         );
-
     }
 
     @Override
@@ -214,16 +213,11 @@ public class ArrowActivity extends GdgNavDrawerActivity implements ResultCallbac
 
     @Override
     protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
-        switch (requestCode) {
-            case IntentIntegrator.REQUEST_CODE:
-                if (responseCode == RESULT_CANCELED) {
-                    return;
-                }
-
-                IntentResult result = IntentIntegrator.parseActivityResult(requestCode, responseCode, intent);
-                if (result.getContents().startsWith(Const.QR_MSG_PREFIX)) {
-                    taggedPerson(result.getContents().substring(Const.QR_MSG_PREFIX.length()));
-                }
+        if (requestCode == IntentIntegrator.REQUEST_CODE && responseCode == RESULT_OK) {
+            IntentResult result = IntentIntegrator.parseActivityResult(requestCode, responseCode, intent);
+            if (result.getContents().startsWith(Const.QR_MSG_PREFIX)) {
+                taggedPerson(result.getContents().substring(Const.QR_MSG_PREFIX.length()));
+            }
         }
     }
 
