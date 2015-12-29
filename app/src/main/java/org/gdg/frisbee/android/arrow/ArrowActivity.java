@@ -39,9 +39,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
-import com.google.android.gms.appstate.AppStateManager;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesStatusCodes;
 import com.google.android.gms.games.snapshot.Snapshot;
@@ -72,10 +70,10 @@ import java.nio.charset.Charset;
 import butterknife.Bind;
 import timber.log.Timber;
 
-public class ArrowActivity extends GdgNavDrawerActivity implements ResultCallback<Snapshots.OpenSnapshotResult> {
+public class ArrowActivity extends GdgNavDrawerActivity {
 
     private static final Charset CHARSET = Charset.forName("US-ASCII");
-    private static final String ID_SEPARATOR_FOR_SPLIT = "\\|";
+    public static final String ID_SEPARATOR_FOR_SPLIT = "\\|";
     private static final String ID_SPLIT_CHAR = "|";
     private static final int REQUEST_LEADERBOARD = 1;
     private static final int WHITE = 0xFFFFFFFF;
@@ -375,8 +373,6 @@ public class ArrowActivity extends GdgNavDrawerActivity implements ResultCallbac
     public void onConnected(Bundle bundle) {
         super.onConnected(bundle);
 
-        checkSnapshotUpgrade();
-
         switchToSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -450,48 +446,6 @@ public class ArrowActivity extends GdgNavDrawerActivity implements ResultCallbac
             }
         }
     };
-
-    private void checkSnapshotUpgrade() {
-        Games.Snapshots.open(getGoogleApiClient(), Const.GAMES_SNAPSHOT_ID, false).setResultCallback(this);
-    }
-
-    @Override
-    public void onResult(Snapshots.OpenSnapshotResult openSnapshotResult) {
-        if (openSnapshotResult.getStatus().getStatusCode() == GamesStatusCodes.STATUS_SNAPSHOT_NOT_FOUND) {
-            migrateFromAppStateToSnapshot();
-        }
-    }
-
-    /**
-     * TODO Will be removed eventually once we migrate fully to upgrade to GMS 8+
-     */
-    private void migrateFromAppStateToSnapshot() {
-        AppStateManager.load(getGoogleApiClient(), Const.ARROW_DONE_STATE_KEY).setResultCallback(
-                new ResultCallback<AppStateManager.StateResult>() {
-                    @Override
-                    public void onResult(AppStateManager.StateResult stateResult) {
-                        if (stateResult.getStatus().isSuccess()) {
-                            final String serializedOrganizers = new String(stateResult.getLoadedResult().getLocalData());
-                            Games.Snapshots.open(getGoogleApiClient(), Const.GAMES_SNAPSHOT_ID, true).setResultCallback(
-                                    new ResultCallback<Snapshots.OpenSnapshotResult>() {
-                                        @Override
-                                        public void onResult(Snapshots.OpenSnapshotResult stateResult) {
-                                            final Snapshot loadedResult = stateResult.getSnapshot();
-                                            final int statusCode = stateResult.getStatus().getStatusCode();
-                                            if (statusCode == GamesStatusCodes.STATUS_OK) {
-                                                loadedResult.getSnapshotContents().writeBytes(serializedOrganizers.getBytes());
-                                                int numberOfTaggedOrganizers = serializedOrganizers.split(ID_SEPARATOR_FOR_SPLIT).length - 1;
-                                                SnapshotMetadataChange metadataChange = new SnapshotMetadataChange.Builder()
-                                                        .setDescription(getString(R.string.arrow_tagged) + ": " + numberOfTaggedOrganizers)
-                                                        .build();
-                                                Games.Snapshots.commitAndClose(getGoogleApiClient(), loadedResult, metadataChange);
-                                            }
-                                        }
-                                    });
-                        }
-                    }
-                });
-    }
 
     private static long getNow() {
         return DateTime.now(DateTimeZone.UTC).getMillis();
