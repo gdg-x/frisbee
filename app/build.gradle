@@ -200,6 +200,7 @@ dependencies {
     compile "com.google.android.gms:play-services-analytics:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-gcm:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-appinvite:$rootProject.playServicesVersion"
+    compile "com.google.android.gms:play-services-appindexing:$rootProject.playServicesVersion"
 
     //Google
     compile 'com.google.http-client:google-http-client-gson:1.20.0'

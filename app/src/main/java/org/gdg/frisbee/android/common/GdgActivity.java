@@ -25,11 +25,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.Toolbar;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appstate.AppStateManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.Plus;
+
+import java.util.List;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.achievements.AchievementActionHandler;
@@ -38,9 +45,8 @@ import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.RecentTasksStyler;
 import org.gdg.frisbee.android.utils.Utils;
 
-import java.util.List;
-
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public abstract class GdgActivity extends TrackableActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -118,6 +124,7 @@ public abstract class GdgActivity extends TrackableActivity implements
                 .addApi(Plus.API)
                 .addApi(Games.API)
                 .addApi(AppStateManager.API)
+                .addApi(AppIndex.API)
                 .addScope(Plus.SCOPE_PLUS_LOGIN)
                 .addScope(Plus.SCOPE_PLUS_PROFILE)
                 .addScope(Games.SCOPE_GAMES)
@@ -205,8 +212,10 @@ public abstract class GdgActivity extends TrackableActivity implements
                 // resolve the error currently preventing our connection to
                 // Google Play services.
                 mSignInProgress = STATE_IN_PROGRESS;
-                startIntentSenderForResult(mSignInIntent.getIntentSender(),
-                        RC_SIGN_IN, null, 0, 0, 0);
+                startIntentSenderForResult(
+                        mSignInIntent.getIntentSender(),
+                        RC_SIGN_IN, null, 0, 0, 0
+                );
             } catch (IntentSender.SendIntentException e) {
                 // The intent was canceled before it was sent.  Attempt to connect to
                 // get an updated ConnectionResult.
@@ -272,5 +281,28 @@ public abstract class GdgActivity extends TrackableActivity implements
 
     public void setToolbarTitle(final String title) {
         getActionBarToolbar().setTitle(title);
+    }
+
+    protected void recordEndPageView(Action viewAction) {
+        PendingResult<Status> result = AppIndex.AppIndexApi.end(getGoogleApiClient(), viewAction);
+        result.setResultCallback(appIndexApiCallback("end " + viewAction));
+    }
+
+    protected void recordStartPageView(Action viewAction) {
+        PendingResult<Status> result = AppIndex.AppIndexApi.start(getGoogleApiClient(), viewAction);
+        result.setResultCallback(appIndexApiCallback("start " + viewAction));
+    }
+
+    protected ResultCallback<Status> appIndexApiCallback(final String label) {
+        return new ResultCallback<Status>() {
+            @Override
+            public void onResult(Status status) {
+                if (status.isSuccess()) {
+                    Timber.d("App Indexing API: Recorded event %s view successfully.", label);
+                } else {
+                    Timber.e("App Indexing API: There was an error recording the event view. Status = %s", status.toString());
+                }
+            }
+        };
     }
 }
