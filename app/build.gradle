@@ -24,7 +24,7 @@ def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
 def versionMajor = 2
 def versionMinor = 2
 def versionPatch = 2
-def versionBuild = 0 // bump for dogfood builds, public betas, etc.
+def versionBuild = 1 // bump for dogfood builds, public betas, etc.
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
