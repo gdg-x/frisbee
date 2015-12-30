@@ -44,7 +44,7 @@
   <string name="youtube_init_failed">Не вдалося ініціалізувати програвач YouTube.</string>
   <string name="achievements">Досягнення</string>
   <string name="settings">Налаштування</string>
-  <string name="about">Про…</string>
+  <string name="about">Про</string>
   <plurals name="seconds_ago">
     <item quantity="one">щойно</item>
     <item quantity="few">%d секунд тому</item>
@@ -107,7 +107,7 @@
     </string>
   <string name="enable_gcm">Включити сповіщення GDG (отримувати сповіщення про нові події)
     </string>
-  <string name="step3_text">Ще одна річ, перш ніж ми почнемо…</string>
+  <string name="step3_text">Ще одна річ, перш ніж ми почнемо&#8230;</string>
   <string name="share_on_gplus">Запросити друзів</string>
   <string name="join_me">Приєднуйтесь до мене на цій події!</string>
   <string name="name_not_known">Невідоме ім\'я</string>
@@ -131,7 +131,7 @@
   <string name="media_route_menu_title">Сесія зйомок</string>
   <string name="navigate_to">Перейти до події</string>
   <string name="gde">Google Developer Experts</string>
-  <string name="fetch_gde_failed">Could not fetch GDE Directory…</string>
+  <string name="fetch_gde_failed">Could not fetch GDE Directory&#8230;</string>
   <string name="gde_who_title">Хто такі Google Developer Experts?</string>
   <string name="gde_who_desc">Google Developer Experts (GDE-ти) - це експерти в одній або більше технологіях Google. Програма GDE визнає зразкову роботу, виконану цими рок-зірками для розробків Google  по всьому світу, запрошуючи їх бути частиною зростаючої спільноти GDE. GDE-ти є гуру, наставниками і друзями; вони є розробники такими як і ви.\n\nGDE роблять доповіді на як і на локальних, так і на глобальних подіях, маючи сильну онлайн присутність і глибокі знання в своїй області. Ці незалежні розробники приносять їх реальний досвід і знання роботи з технологіями Google для спільнот розробників по всьому світу.</string>
   <string name="gde_what_title">Що роблять GDE-ти?</string>
@@ -158,7 +158,7 @@
   <string name="open_event_site">Переглянути сторінку події</string>
   <string name="arrow_tagged">Ви \"затегували\" організатора</string>
   <string name="get_involved_translation_text">Якщо ви хочете долучитися до локалізації додатка, тобто перекласти її на іншу мову або поліпшити існуючу, будь ласка, перейдіть на crowdin сторінку\n\nhttps://crowdin.com/project/gdgx-frisbee</string>
-  <string name="about_about">Про…</string>
+  <string name="about_about">Про</string>
   <string name="about_contributors">Розробники</string>
   <string name="about_translators">Перекладачі</string>
   <string name="about_changelog">Журнал змін</string>
@@ -173,7 +173,7 @@
   <string name="feedback_email_hint">Ваш адрес електронної пошти</string>
   <string name="feedback_message_hint">Що у Вас на думці?</string>
   <string name="feedback_send">Надіслати</string>
-  <string name="feedback_sending">Надсилання…</string>
+  <string name="feedback_sending">Надсилання&#8230;</string>
   <string name="for_leads">Для лідерів</string>
   <string name="leads_welcome_title">Ласкаво просимо</string>
   <string name="leads_welcome">Як організатор GDG, ви маєте доступ до цих ресурсів!</string>
@@ -195,4 +195,6 @@
   <string name="fork_me">Клонуй мене</string>
   <string name="cd_arrowTagImage">Arrow Tagging Game</string>
   <string name="cd_qrCode">QR Code</string>
+  <string name="invitation_title">Invite your friends to GDG app</string>
+  <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go.</string>
 </resources>

@@ -43,15 +43,19 @@
   <string name="settings">Կարգավորումներ</string>
   <string name="about">Մեր մասին</string>
   <plurals name="seconds_ago">
+    <item quantity="one">%d վայրկյան առաջ</item>
     <item quantity="other">%d վայրկյան առաջ</item>
   </plurals>
   <plurals name="minutes_ago">
+    <item quantity="one">%d րոպե առաջ</item>
     <item quantity="other">%d րոպե առաջ</item>
   </plurals>
   <plurals name="hours_ago">
+    <item quantity="one">%d ժամ առաջ</item>
     <item quantity="other">%d ժամ առաջ</item>
   </plurals>
   <plurals name="days_ago">
+    <item quantity="one">%d օր առաջ</item>
     <item quantity="other">%d օր առաջ</item>
   </plurals>
   <string name="contributors">GDG Հավելվածը մեր համայնքի աշխատանքի արդյունք է և տարածվում է բաց կոդով: Ստորև նշված մարդիկ իրենց մասնակցությունն են ունեցել հավելվածի ստեղծման գործում.</string>
@@ -162,4 +166,6 @@
   <string name="fork_me">Fork անել</string>
   <string name="cd_arrowTagImage">Arrow Tagging Game</string>
   <string name="cd_qrCode">QR Code</string>
+  <string name="invitation_title">Invite your friends to GDG app</string>
+  <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go.</string>
 </resources>

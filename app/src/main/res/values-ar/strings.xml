@@ -161,7 +161,7 @@
   <string name="feedback_email_hint">بريدك الإلكتروني</string>
   <string name="feedback_message_hint">ما الذي يدور في ذهنك؟?</string>
   <string name="feedback_send">أرسل</string>
-  <string name="feedback_sending">جاري الإرسال…</string>
+  <string name="feedback_sending">جاري الإرسال&#8230;</string>
   <string name="for_leads">ليؤدي</string>
   <string name="leads_welcome_title">مرحبا</string>
   <string name="leads_welcome">كما تؤدي GDG، لديك حق الوصول إلى هذه الموارد في تنظيم الوحيد!</string>
@@ -183,4 +183,6 @@
   <string name="fork_me">مفترق لي</string>
   <string name="cd_arrowTagImage">Arrow Tagging Game</string>
   <string name="cd_qrCode">QR Code</string>
+  <string name="invitation_title">Invite your friends to GDG app</string>
+  <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go.</string>
 </resources>
