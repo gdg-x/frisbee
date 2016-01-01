@@ -31,14 +31,14 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.Plus;
 
+import java.util.List;
+
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.achievements.AchievementActionHandler;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.RecentTasksStyler;
 import org.gdg.frisbee.android.utils.Utils;
-
-import java.util.List;
 
 import butterknife.ButterKnife;
 
@@ -55,7 +55,7 @@ public abstract class GdgActivity extends TrackableActivity implements
 
     // GoogleApiClient wraps our service connection to Google Play services and
     // provides access to the users sign in state and Google's APIs.
-    protected GoogleApiClient mGoogleApiClient;
+    private GoogleApiClient mGoogleApiClient;
 
     // We use mSignInProgress to track whether user has clicked sign in.
     // mSignInProgress can be one of three values:
@@ -105,23 +105,23 @@ public abstract class GdgActivity extends TrackableActivity implements
         super.onCreate(savedInstanceState);
         RecentTasksStyler.styleRecentTasksEntry(this);
 
-        if (!Utils.isEmulator()) {
-            createGoogleApiClient();
-        }
+        mGoogleApiClient = createGoogleApiClient();
 
         mAchievementActionHandler =
                 new AchievementActionHandler(getHandler(), mGoogleApiClient, this);
     }
 
-    protected void createGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Plus.API)
-                .addApi(Games.API)
-                .addApi(AppStateManager.API)
-                .addScope(Plus.SCOPE_PLUS_LOGIN)
-                .addScope(Plus.SCOPE_PLUS_PROFILE)
-                .addScope(Games.SCOPE_GAMES)
-                .build();
+    protected GoogleApiClient createGoogleApiClient() {
+        GoogleApiClient.Builder builder = new GoogleApiClient.Builder(this)
+                .addApiIfAvailable(AppStateManager.API);
+        if (PrefUtils.isSignedIn(this)) {
+            builder.addApiIfAvailable(Plus.API, Plus.SCOPE_PLUS_LOGIN, Plus.SCOPE_PLUS_PROFILE)
+                    .addApiIfAvailable(Games.API, Games.SCOPE_GAMES);
+        } else {
+            builder.addApiIfAvailable(Plus.API)
+                    .addApiIfAvailable(Games.API);
+        }
+        return builder.build();
     }
 
     @Override
@@ -130,10 +130,7 @@ public abstract class GdgActivity extends TrackableActivity implements
 
         mGoogleApiClient.registerConnectionCallbacks(this);
         mGoogleApiClient.registerConnectionFailedListener(this);
-
-        if (PrefUtils.isSignedIn(this)) {
-            mGoogleApiClient.connect();
-        }
+        mGoogleApiClient.connect();
     }
 
     @Override
@@ -143,7 +140,7 @@ public abstract class GdgActivity extends TrackableActivity implements
         mGoogleApiClient.unregisterConnectionCallbacks(this);
         mGoogleApiClient.unregisterConnectionFailedListener(this);
 
-        if (PrefUtils.isSignedIn(this) && mGoogleApiClient.isConnected()) {
+        if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
     }

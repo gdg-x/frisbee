@@ -43,9 +43,9 @@ public class AppInviteActivity extends GdgActivity {
     private Intent mCachedInvitationIntent;
 
     @Override
-    protected void createGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(AppInvite.API)
+    protected GoogleApiClient createGoogleApiClient() {
+        return new GoogleApiClient.Builder(this)
+                .addApiIfAvailable(AppInvite.API)
                 .build();
     }
 

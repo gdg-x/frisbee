@@ -34,8 +34,8 @@ import com.google.android.gms.plus.Plus;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.common.BaseFragment;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class FirstStartStep2Fragment extends BaseFragment implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -91,11 +91,8 @@ public class FirstStartStep2Fragment extends BaseFragment implements
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
-                .addApi(Plus.API)
-                .addApi(Games.API)
-                .addScope(Plus.SCOPE_PLUS_LOGIN)
-                .addScope(Plus.SCOPE_PLUS_PROFILE)
-                .addScope(Games.SCOPE_GAMES)
+                .addApiIfAvailable(Plus.API, Plus.SCOPE_PLUS_LOGIN, Plus.SCOPE_PLUS_PROFILE)
+                .addApiIfAvailable(Games.API, Games.SCOPE_GAMES)
                 .build();
     }
 

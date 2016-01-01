@@ -27,6 +27,7 @@ public final class PrefUtils {
     private static final String PREFS_GCM_NOTIFICATION_KEY = "gcm_notification_key";
     private static final String PREFS_SEASONS_GREETINGS = "seasons_greetings";
     private static final String PREFS_ACHIEVEMENTS_PREFIX = "achievement_unlocked_";
+    private static final String PREFS_LAST_PLAY_SERVICE_ERROR_STATUS = "last_play_service_error_status";
 
     private static final boolean PREFS_FIRST_START_DEFAULT = true;
 
@@ -176,6 +177,16 @@ public final class PrefUtils {
                                               @NonNull final String achievement) {
         prefs(context).edit()
                 .putBoolean(PREFS_ACHIEVEMENTS_PREFIX + achievement, true)
+                .apply();
+    }
+
+    public static int getLastPlayServiceErrorStatus(final Context context) {
+        return prefs(context).getInt(PREFS_LAST_PLAY_SERVICE_ERROR_STATUS, 0);
+    }
+
+    public static void setLastPlayServiceErrorStatus(Context context, int playServiceStatus) {
+        prefs(context).edit()
+                .putInt(PREFS_LAST_PLAY_SERVICE_ERROR_STATUS, playServiceStatus)
                 .apply();
     }
 }

@@ -38,20 +38,20 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.PlusOneButton;
 import com.google.api.services.plus.model.Activity;
 
-import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.utils.Utils;
-import org.gdg.frisbee.android.widget.ResizableImageView;
-import org.joda.time.DateTime;
-
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import butterknife.ButterKnife;
+import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.utils.Utils;
+import org.gdg.frisbee.android.widget.ResizableImageView;
+import org.joda.time.DateTime;
+
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
@@ -60,6 +60,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     private static final int VIEWTYPE_PHOTO = 3;
     private static final int VIEWTYPE_ALBUM = 4;
     private static final int VIEWTYPE_EVENT = 5;
+    public static final int ACTIVITY_REQUEST_CODE_PLUS_BUTTON = 1;
 
     private Context mContext;
     private LayoutInflater mInflater;
@@ -73,6 +74,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         mActivities = new ArrayList<>();
 
         setHasStableIds(true);
+    }
+
+    private boolean showPlusOneButton() {
+        return mPlusClient != null && mPlusClient.isConnected();
     }
 
     public void addAll(Collection<Activity> items) {
@@ -169,9 +174,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         if (v != null && v.getTag() != null) {
             ViewHolder viewHolder = (ViewHolder) v.getTag();
 
-            if (mPlusClient != null && mPlusClient.isConnected()) {
+            if (showPlusOneButton()) {
                 viewHolder.plusButton.setVisibility(View.VISIBLE);
-                viewHolder.plusButton.initialize(viewHolder.url, 1);
+                viewHolder.plusButton.initialize(viewHolder.url, ACTIVITY_REQUEST_CODE_PLUS_BUTTON);
             }
         }
     }
@@ -195,7 +200,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
         holder.url = activity.getUrl();
 
-        if (mPlusClient != null && mPlusClient.isConnected()) {
+        if (showPlusOneButton()) {
             holder.plusButton.setVisibility(View.VISIBLE);
             holder.plusButton.initialize(activity.getUrl(), 1);
         } else {

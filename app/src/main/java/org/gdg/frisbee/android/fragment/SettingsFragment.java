@@ -34,10 +34,14 @@ import android.widget.LinearLayout;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.plus.Plus;
+
+import java.io.IOException;
 
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
@@ -53,8 +57,6 @@ import org.gdg.frisbee.android.appwidget.UpcomingEventWidgetProvider;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
-
-import java.io.IOException;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -248,6 +250,13 @@ public class SettingsFragment extends PreferenceFragment {
 
         CheckBoxPreference prefGoogleSignIn = (CheckBoxPreference) findPreference(PrefUtils.SETTINGS_SIGNED_IN);
         if (prefGoogleSignIn != null) {
+            if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity()) != ConnectionResult.SUCCESS) {
+                prefGoogleSignIn.setEnabled(false);
+                prefGoogleSignIn.setSummaryOff(getString(R.string.common_google_play_services_api_unavailable_text,
+                                                         getString(R.string.signin_with_google)));
+                prefGoogleSignIn.setSummary(getString(R.string.common_google_play_services_api_unavailable_text,
+                                                      getString(R.string.signin_with_google)));
+            }
             prefGoogleSignIn.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object o) {
