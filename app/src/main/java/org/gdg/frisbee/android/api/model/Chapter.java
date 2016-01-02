@@ -18,6 +18,7 @@ package org.gdg.frisbee.android.api.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.VisibleForTesting;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -162,5 +163,10 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
         } else {
             return super.hashCode();
         }
+    }
+
+    @VisibleForTesting
+    public void setGeo(Geo geo) {
+        this.geo = geo;
     }
 }

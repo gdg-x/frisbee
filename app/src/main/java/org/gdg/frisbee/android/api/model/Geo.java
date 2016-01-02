@@ -18,12 +18,16 @@ package org.gdg.frisbee.android.api.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.VisibleForTesting;
 
 public class Geo implements Parcelable {
-    private double lat, lng;
+    private double lat;
+    private double lng;
 
-    public Geo() {
-
+    @VisibleForTesting
+    public Geo(double lat, double lng) {
+        this.lat = lat;
+        this.lng = lng;
     }
 
     public Geo(Parcel in) {
