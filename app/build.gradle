@@ -215,8 +215,8 @@ dependencies {
     compile "com.squareup.okhttp:logging-interceptor:$rootProject.okHttpVersion"
     compile 'com.squareup.okio:okio:1.6.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
-    compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
+    compile "com.squareup.retrofit:retrofit:$rootProject.retrofitVersion"
+    compile "com.squareup.retrofit:converter-gson:$rootProject.retrofitVersion"
     debugCompile "com.squareup.leakcanary:leakcanary-android:$rootProject.leakCanaryVersion"
     alphaCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
     releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
