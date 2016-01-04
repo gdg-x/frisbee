@@ -71,7 +71,6 @@
       android:theme="@style/Theme.GDG.Main">
       <intent-filter>
         <action android:name="android.intent.action.VIEW"/>
-
         <category android:name="android.intent.category.BROWSABLE"/>
         <category android:name="android.intent.category.DEFAULT"/>
 
@@ -86,6 +85,16 @@
         <data
           android:host="chapter"
           android:scheme="gdgx"/>
+      </intent-filter>
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+
+        <data android:scheme="http" />
+        <data android:scheme="https" />
+        <data android:host="gdgroups.org"/>
+        <data android:path="/"/>
       </intent-filter>
     </activity>
     <activity
@@ -152,9 +161,22 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
       </intent-filter>
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW"/>
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="http" />
+        <data android:scheme="https" />
+        <data
+          android:host="developers.google.com"
+          android:pathPrefix="/events/" />
+        <data
+            android:host="gdgroups.org"
+            android:pathPrefix="/event/" />
+      </intent-filter>
     </activity>
     <activity
-      android:name=".activity.AppInviteActivity"
+      android:name=".activity.AppInviteDeepLinkActivity"
       android:theme="@style/Theme.GDG.Panel">
     </activity>
     <activity

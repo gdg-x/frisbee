@@ -168,6 +168,9 @@ public class EventOverviewFragment extends Fragment {
         if (getActivity() == null) {
             return;
         }
+        if (getActivity() instanceof Callbacks) {
+            ((Callbacks) getActivity()).onEventLoaded(eventFullDetails);
+        }
         mEvent = eventFullDetails;
 
         getActivity().supportInvalidateOptionsMenu();
@@ -280,11 +283,11 @@ public class EventOverviewFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (mEvent != null) {
             inflater.inflate(R.menu.event_menu, menu);
-            MenuItem shareMenuitem = menu.findItem(R.id.share);
+            MenuItem shareMenuItem = menu.findItem(R.id.share);
 
             if (mEvent.getEventUrl() != null) {
                 ShareActionProvider mShareActionProvider = 
-                        (ShareActionProvider) MenuItemCompat.getActionProvider(shareMenuitem);
+                        (ShareActionProvider) MenuItemCompat.getActionProvider(shareMenuItem);
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
                 shareIntent.putExtra(Intent.EXTRA_TEXT, mEvent.getEventUrl());
@@ -292,7 +295,7 @@ public class EventOverviewFragment extends Fragment {
                     mShareActionProvider.setShareIntent(shareIntent);
                 }
             } else {
-                shareMenuitem.setVisible(false);
+                shareMenuItem.setVisible(false);
                 menu.findItem(R.id.view_event_url).setVisible(false);
             }
         }
@@ -353,5 +356,9 @@ public class EventOverviewFragment extends Fragment {
         args.putString(Const.EXTRA_EVENT_ID, eventId);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public interface Callbacks {
+        void onEventLoaded(EventFullDetails eventFullDetails);
     }
 }

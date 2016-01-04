@@ -17,7 +17,10 @@
 package org.gdg.frisbee.android.event;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -25,13 +28,18 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AndroidAppUri;
+
+import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.model.EventFullDetails;
 import org.gdg.frisbee.android.common.GdgActivity;
 
 import butterknife.Bind;
 
-public class EventActivity extends GdgActivity {
+public class EventActivity extends GdgActivity implements EventOverviewFragment.Callbacks {
 
     @Bind(R.id.pager)
     ViewPager mViewPager;
@@ -40,6 +48,7 @@ public class EventActivity extends GdgActivity {
     TabLayout mTabLayout;
 
     private String mEventId;
+    private EventFullDetails mEventFullDetails;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,16 +62,54 @@ public class EventActivity extends GdgActivity {
         mViewPager.setAdapter(mViewPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
 
-        mEventId = getIntent().getStringExtra(Const.EXTRA_EVENT_ID);
+        mEventId = getEventIdFrom(getIntent());
         String section = getIntent().getStringExtra(Const.EXTRA_SECTION);
         if (EventPagerAdapter.SECTION_OVERVIEW.equals(section)) {
             mViewPager.setCurrentItem(0);
         }
     }
 
+    private String getEventIdFrom(Intent intent) {
+        return intent.getStringExtra(Const.EXTRA_EVENT_ID);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        recordStartPageView();
+    }
+
+    @Override
+    protected void onStop() {
+        recordEndPageView();
+        super.onStop();
+    }
+
     protected String getTrackedViewName() {
         return "Event/" + getResources().getStringArray(R.array.event_tabs)[getCurrentPage()] 
-                + "/" + getIntent().getStringExtra(Const.EXTRA_EVENT_ID);
+                + "/" + getEventIdFrom(getIntent());
+    }
+
+    private void recordStartPageView() {
+        if (mEventFullDetails != null) {
+            Action viewAction = createAppIndexAction(mEventFullDetails.getTitle(), mEventId);
+            recordStartPageView(viewAction);
+        }
+    }
+
+    private void recordEndPageView() {
+        if (mEventFullDetails != null) {
+            Action viewAction = createAppIndexAction(mEventFullDetails.getTitle(), mEventId);
+            recordEndPageView(viewAction);
+        }
+    }
+
+    @NonNull
+    private Action createAppIndexAction(String title, String eventId) {
+        final Uri hostUri = Uri.parse(Const.URL_GDGROUPS_ORG).buildUpon().appendPath(Const.PATH_GDGROUPS_ORG_EVENT)
+                .appendPath(eventId).build();
+        final Uri appUri = AndroidAppUri.newAndroidAppUri(BuildConfig.APPLICATION_ID, hostUri).toUri();
+        return Action.newAction(Action.TYPE_VIEW, title, hostUri, appUri);
     }
 
     @Override
@@ -74,6 +121,12 @@ public class EventActivity extends GdgActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onEventLoaded(EventFullDetails eventFullDetails) {
+        mEventFullDetails = eventFullDetails;
+        recordStartPageView();
     }
 
     public class EventPagerAdapter extends FragmentStatePagerAdapter {
