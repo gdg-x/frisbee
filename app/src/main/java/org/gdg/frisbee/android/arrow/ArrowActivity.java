@@ -22,10 +22,12 @@ import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.annotation.WorkerThread;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,10 +39,12 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
-import com.google.android.gms.appstate.AppStateManager;
-import com.google.android.gms.appstate.AppStateStatusCodes;
-import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
+import com.google.android.gms.games.GamesStatusCodes;
+import com.google.android.gms.games.snapshot.Snapshot;
+import com.google.android.gms.games.snapshot.SnapshotMetadataChange;
+import com.google.android.gms.games.snapshot.Snapshots;
 import com.google.android.gms.plus.People;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
@@ -52,18 +56,16 @@ import com.google.zxing.integration.android.IntentResult;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.OrganizerChecker;
+import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.utils.CryptoUtils;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import butterknife.Bind;
 import timber.log.Timber;
@@ -71,7 +73,7 @@ import timber.log.Timber;
 public class ArrowActivity extends GdgNavDrawerActivity {
 
     private static final Charset CHARSET = Charset.forName("US-ASCII");
-    private static final String ID_SEPARATOR_FOR_SPLIT = "\\|";
+    public static final String ID_SEPARATOR_FOR_SPLIT = "\\|";
     private static final String ID_SPLIT_CHAR = "|";
     private static final int REQUEST_LEADERBOARD = 1;
     private static final int WHITE = 0xFFFFFFFF;
@@ -88,7 +90,6 @@ public class ArrowActivity extends GdgNavDrawerActivity {
     ImageView scanImageView;
     @Bind(R.id.organizerPic)
     ImageView organizerPic;
-    private String previous;
     private BaseArrowHandler mArrowHandler;
     private NfcAdapter mNfcAdapter;
     private String mPendingScore;
@@ -125,13 +126,14 @@ public class ArrowActivity extends GdgNavDrawerActivity {
             }
         });
 
-        switchToReceive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewFlipper.setDisplayedChild(0);
-            }
-        });
-
+        switchToReceive.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        viewFlipper.setDisplayedChild(0);
+                    }
+                }
+        );
     }
 
     @Override
@@ -146,7 +148,10 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         switch (item.getItemId()) {
             case R.id.arrow_lb:
                 if (getGoogleApiClient().isConnected()) {
-                    startActivityForResult(Games.Leaderboards.getLeaderboardIntent(getGoogleApiClient(), Const.ARROW_LB), REQUEST_LEADERBOARD);
+                    startActivityForResult(
+                            Games.Leaderboards.getLeaderboardIntent(getGoogleApiClient(), Const.ARROW_LB),
+                            REQUEST_LEADERBOARD
+                    );
                 }
                 return true;
             case R.id.arrow_tagged:
@@ -160,11 +165,18 @@ public class ArrowActivity extends GdgNavDrawerActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        handleIntent(getIntent());
 
         if (!PrefUtils.isSignedIn(this)) {
             finish();
         }
+
+        handleIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntent(intent);
     }
 
     private void handleIntent(Intent intent) {
@@ -195,23 +207,12 @@ public class ArrowActivity extends GdgNavDrawerActivity {
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        handleIntent(intent);
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
-        switch (requestCode) {
-            case IntentIntegrator.REQUEST_CODE:
-                if (responseCode == RESULT_CANCELED) {
-                    return;
-                }
-
-                IntentResult result = IntentIntegrator.parseActivityResult(requestCode, responseCode, intent);
-                if (result.getContents().startsWith(Const.QR_MSG_PREFIX)) {
-                    taggedPerson(result.getContents().substring(Const.QR_MSG_PREFIX.length()));
-                }
+        if (requestCode == IntentIntegrator.REQUEST_CODE && responseCode == RESULT_OK) {
+            IntentResult result = IntentIntegrator.parseActivityResult(requestCode, responseCode, intent);
+            if (result.getContents().startsWith(Const.QR_MSG_PREFIX)) {
+                taggedPerson(result.getContents().substring(Const.QR_MSG_PREFIX.length()));
+            }
         }
     }
 
@@ -249,65 +250,107 @@ public class ArrowActivity extends GdgNavDrawerActivity {
             return;
         }
 
-        AppStateManager.load(getGoogleApiClient(), Const.ARROW_DONE_STATE_KEY).setResultCallback(new ResultCallback<AppStateManager.StateResult>() {
-            @Override
-            public void onResult(AppStateManager.StateResult stateResult) {
-                AppStateManager.StateConflictResult conflictResult = stateResult.getConflictResult();
-                AppStateManager.StateLoadedResult loadedResult = stateResult.getLoadedResult();
+        new StoreSnapshotTask(getGoogleApiClient()).execute(id);
+    }
 
-                if (loadedResult != null) {
-                    final int statusCode = loadedResult.getStatus().getStatusCode();
-                    if (statusCode == AppStateStatusCodes.STATUS_OK
-                            || statusCode == AppStateStatusCodes.STATUS_STATE_KEY_NOT_FOUND) {
-                        previous = "";
+    public class StoreSnapshotTask extends AsyncTask<String, Void, String> {
 
-                        if (statusCode == AppStateStatusCodes.STATUS_OK) {
-                            previous = new String(loadedResult.getLocalData());
+        final GoogleApiClient googleApiClient;
 
-                            if (previous.contains(id)) {
-                                Toast.makeText(ArrowActivity.this, R.string.arrow_already_tagged, Toast.LENGTH_LONG).show();
-                            } else {
-                                addTaggedPersonToCloudSave(id);
-                            }
-                        } else {
-                            addTaggedPersonToCloudSave(id);
-                        }
-                    }
-                } else if (conflictResult != null) {
-                    previous = mergeIds(new String(conflictResult.getLocalData()), new String(conflictResult.getServerData()));
+        public StoreSnapshotTask(GoogleApiClient googleApiClient) {
+            this.googleApiClient = googleApiClient;
+        }
 
-                    if (previous.contains(id)) {
-                        Toast.makeText(ArrowActivity.this, R.string.arrow_already_tagged, Toast.LENGTH_LONG).show();
-                    } else {
-                        addTaggedPersonToCloudSave(id);
-                    }
+        @Override
+        protected String doInBackground(String... params) {
+            String id = params[0];
 
-                    Toast.makeText(ArrowActivity.this, getString(R.string.arrow_oops), Toast.LENGTH_LONG).show();
+            try {
+                Snapshot snapshot = openSnapshot();
+                if (snapshot != null) {
+                    storeInSnapshot(snapshot, id);
+
+                    String personName = getTaggedPersonName(id);
+                    return "It worked...you tagged " + personName;
                 }
+            } catch (IOException e) {
+                Timber.w(e, "Could not store tagged organizer");
+            } catch (AlreadyTaggedException e) {
+                return getString(R.string.arrow_already_tagged);
             }
-        });
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String message) {
+
+            if (message != null) {
+                Toast.makeText(ArrowActivity.this, message, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(ArrowActivity.this, R.string.arrow_oops, Toast.LENGTH_LONG).show();
+            }
+        }
+
+        @WorkerThread
+        private Snapshot openSnapshot() {
+            Snapshots.OpenSnapshotResult result = Games.Snapshots.open(
+                    googleApiClient,
+                    Const.GAMES_SNAPSHOT_ID,
+                    true,
+                    Snapshots.RESOLUTION_POLICY_MOST_RECENTLY_MODIFIED
+            ).await();
+
+            final int statusCode = result.getStatus().getStatusCode();
+            if (statusCode == GamesStatusCodes.STATUS_OK) {
+                return result.getSnapshot();
+            }
+
+            Timber.e("Error in Snapshot opening.\n"
+                    + "Status: %s\n"
+                    + "Status Code: %d", result.getStatus().getStatusMessage(), statusCode);
+            return null;
+        }
+
+        @WorkerThread
+        private void storeInSnapshot(Snapshot snapshot, final String id) throws IOException, AlreadyTaggedException {
+            final String previous = new String(snapshot.getSnapshotContents().readFully());
+
+            if (previous.contains(id)) {
+                throw new AlreadyTaggedException();
+            } else {
+                String merged = previous + ID_SPLIT_CHAR + id;
+                saveMergedSnapshot(snapshot, merged);
+            }
+        }
+
+        @WorkerThread
+        private void saveMergedSnapshot(Snapshot snapshot, String merged) {
+            int numberOfTaggedOrganizers = merged.split(ID_SEPARATOR_FOR_SPLIT).length - 1;
+
+            if (snapshot != null) {
+                snapshot.getSnapshotContents().writeBytes(merged.getBytes());
+                SnapshotMetadataChange metadataChange = new SnapshotMetadataChange.Builder()
+                        .setDescription(getString(R.string.arrow_tagged) + ": " + numberOfTaggedOrganizers)
+                        .build();
+                Games.Snapshots.commitAndClose(getGoogleApiClient(), snapshot, metadataChange).await();
+            }
+
+            Games.Leaderboards.submitScore(getGoogleApiClient(), Const.ARROW_LB, numberOfTaggedOrganizers);
+        }
+
+        @WorkerThread
+        private String getTaggedPersonName(String id) {
+            People.LoadPeopleResult peopleResult = Plus.PeopleApi.load(getGoogleApiClient(), id).await();
+
+            if (peopleResult.getStatus().isSuccess()) {
+                Person organizer = peopleResult.getPersonBuffer().get(0);
+                return organizer.getDisplayName();
+            }
+            return null;
+        }
     }
 
-    private String mergeIds(String list1, String list2) {
-        String[] parts1 = list1.split(ID_SEPARATOR_FOR_SPLIT);
-        String[] parts2 = list2.split(ID_SEPARATOR_FOR_SPLIT);
-        Set<String> mergedSet = new HashSet<>(Arrays.asList(parts1));
-        mergedSet.addAll(Arrays.asList(parts2));
-        return TextUtils.join(ID_SPLIT_CHAR, mergedSet);
-    }
-
-    private void addTaggedPersonToCloudSave(String id) {
-        previous = previous + ID_SPLIT_CHAR + id;
-        AppStateManager.update(getGoogleApiClient(), Const.ARROW_DONE_STATE_KEY, previous.getBytes());
-        Games.Leaderboards.submitScore(getGoogleApiClient(), Const.ARROW_LB, previous.split("\\|").length - 1);
-
-        Plus.PeopleApi.load(getGoogleApiClient(), id).setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
-            @Override
-            public void onResult(People.LoadPeopleResult loadPeopleResult) {
-                Person organizer = loadPeopleResult.getPersonBuffer().get(0);
-                Toast.makeText(ArrowActivity.this, "It worked...you tagged " + organizer.getDisplayName(), Toast.LENGTH_LONG).show();
-            }
-        });
+    public static class AlreadyTaggedException extends Exception {
     }
 
     private void showNoNfc() {
@@ -404,7 +447,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         }
     };
 
-    private long getNow() {
+    private static long getNow() {
         return DateTime.now(DateTimeZone.UTC).getMillis();
     }
 

@@ -141,7 +141,7 @@
   <string name="feedback_email_hint">あなたのメールアドレス</string>
   <string name="feedback_message_hint">何を考えていますか？</string>
   <string name="feedback_send">送信</string>
-  <string name="feedback_sending">送信中…</string>
+  <string name="feedback_sending">送信中&#8230;</string>
   <string name="for_leads">リーダ向け</string>
   <string name="leads_welcome_title">ようこそ</string>
   <string name="leads_welcome">GDGオーガナイザー、おめでとう！</string>
@@ -163,4 +163,6 @@
   <string name="fork_me">Fork me</string>
   <string name="cd_arrowTagImage">Arrow Tagging Game</string>
   <string name="cd_qrCode">QR Code</string>
+  <string name="invitation_title">Invite your friends to GDG app</string>
+  <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go.</string>
 </resources>

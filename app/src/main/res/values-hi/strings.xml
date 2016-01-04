@@ -144,7 +144,7 @@
   <string name="feedback_email_hint">आपका ईमेल पता</string>
   <string name="feedback_message_hint">आपके मन में क्या है?</string>
   <string name="feedback_send">भेजें</string>
-  <string name="feedback_sending">संदेश वितरित हो रहा है…</string>
+  <string name="feedback_sending">संदेश वितरित हो रहा है&#8230;</string>
   <string name="for_leads">For Leads</string>
   <string name="leads_welcome_title">स्वागत है</string>
   <string name="leads_welcome">As a GDG lead, you have access to these organizer-only resources!</string>
@@ -166,4 +166,6 @@
   <string name="fork_me">Fork me</string>
   <string name="cd_arrowTagImage">Arrow Tagging Game</string>
   <string name="cd_qrCode">QR Code</string>
+  <string name="invitation_title">Invite your friends to GDG app</string>
+  <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go.</string>
 </resources>

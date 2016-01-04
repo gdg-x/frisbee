@@ -33,10 +33,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.drive.Drive;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.Plus;
-
-import java.util.List;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.achievements.AchievementActionHandler;
@@ -44,6 +43,8 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.RecentTasksStyler;
 import org.gdg.frisbee.android.utils.Utils;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 import timber.log.Timber;
@@ -121,13 +122,11 @@ public abstract class GdgActivity extends TrackableActivity implements
 
     protected void createGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Plus.API)
-                .addApi(Games.API)
-                .addApi(AppStateManager.API)
+                .addApi(Plus.API).addScope(Plus.SCOPE_PLUS_LOGIN).addScope(Plus.SCOPE_PLUS_PROFILE)
+                .addApi(Games.API).addScope(Games.SCOPE_GAMES)
+                .addApi(Drive.API).addScope(Drive.SCOPE_APPFOLDER)
                 .addApi(AppIndex.API)
-                .addScope(Plus.SCOPE_PLUS_LOGIN)
-                .addScope(Plus.SCOPE_PLUS_PROFILE)
-                .addScope(Games.SCOPE_GAMES)
+                .addApi(AppStateManager.API)
                 .build();
     }
 

@@ -133,8 +133,9 @@ android {
     }
 
     variantFilter { variant ->
-        if (variant.buildType.name.equals('release')
-                && variant.getFlavors().get(0).name.equals('dev')) {
+        if (variant.getFlavors().get(0).name.equals('dev')
+                && (variant.buildType.name.equals('release')
+                || variant.buildType.name.equals('alpha'))) {
             variant.setIgnore(true);
         }
     }
@@ -238,6 +239,10 @@ dependencies {
 
     // Dependencies for local unit tests
     testCompile "junit:junit:$rootProject.junitVersion"
+    testCompile "org.mockito:mockito-all:$rootProject.mockitoVersion"
+    testCompile "org.hamcrest:hamcrest-all:$rootProject.hamcrestVersion"
+    testCompile "org.robolectric:robolectric:$rootProject.robolectricVersion"
+    testCompile "org.robolectric:shadows-multidex:$rootProject.robolectricVersion"
     testCompile "joda-time:joda-time:$rootProject.jodaTimeVersion"
 
     androidTestCompile 'org.assertj:assertj-core:1.7.1'

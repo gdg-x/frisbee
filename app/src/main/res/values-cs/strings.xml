@@ -106,7 +106,7 @@
   <string name="media_route_menu_title">Cast session</string>
   <string name="navigate_to">Navigate to event</string>
   <string name="gde">Google Developer Experts</string>
-  <string name="fetch_gde_failed">Could not fetch GDE Directory…</string>
+  <string name="fetch_gde_failed">Could not fetch GDE Directory&#8230;</string>
   <string name="gde_who_title">Who are Google Developer Experts?</string>
   <string name="gde_who_desc">Google Developer Experts (GDEs) are experts in one or more Google developer technologies. The GDE program recognizes the exemplary work done by these rock stars for the Google Developers worldwide by inviting them to be part of the growing GDE community. GDEs are gurus, mentors and friends; they are developers just like you.\n\nGoogle Developers Experts speak in local and global events, have a strong online presence and an excellent technical background in their field. These independent developers bring their real-world experience and knowledge working with Google technologies to developer communities worldwide.</string>
   <string name="gde_what_title">What kind of activities do GDEs do?</string>
@@ -170,4 +170,6 @@
   <string name="fork_me">Fork me</string>
   <string name="cd_arrowTagImage">Arrow Tagging Game</string>
   <string name="cd_qrCode">QR Code</string>
+  <string name="invitation_title">Invite your friends to GDG app</string>
+  <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go.</string>
 </resources>
