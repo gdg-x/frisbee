@@ -17,10 +17,12 @@
 
 package org.gdg.frisbee.android.common;
 
+import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.Toolbar;
@@ -241,6 +243,16 @@ public abstract class GdgActivity extends TrackableActivity implements
         if (!isLastActivityOnStack()) {
             overridePendingTransition(0, 0);
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    protected boolean isContextValid() {
+        boolean isContextValid = !isFinishing()
+                && (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1 || !isDestroyed());
+        if (!isContextValid) {
+            Timber.d("Context is not valid");
+        }
+        return isContextValid;
     }
 
     private boolean isLastActivityOnStack() {
