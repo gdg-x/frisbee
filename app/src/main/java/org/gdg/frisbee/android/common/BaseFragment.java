@@ -31,8 +31,9 @@ public abstract class BaseFragment extends Fragment {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     protected boolean isContextValid() {
-        boolean isContextValid = getActivity() != null && !getActivity().isFinishing() &&
-                (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1 || !getActivity().isDestroyed());
+        boolean isContextValid = getActivity() != null
+                && !getActivity().isFinishing()
+                && (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1 || !getActivity().isDestroyed());
         if (!isContextValid) {
             Timber.d("Context is not valid");
         }
