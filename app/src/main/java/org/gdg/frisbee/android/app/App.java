@@ -131,9 +131,7 @@ public class App extends BaseApp implements LocationListener {
         mOkHttpClient = OkClientFactory.provideOkHttpClient(this);
 
         //Initialize Plus Client which is used to get profile pictures and NewFeed of the chapters.
-        final HttpTransport mTransport = new GapiOkTransport.Builder()
-                .setOkHttpClient(mOkHttpClient)
-                .build();
+        final HttpTransport mTransport = new GapiOkTransport(mOkHttpClient);
         final JsonFactory mJsonFactory = new GsonFactory();
         plusClient = new Plus.Builder(mTransport, mJsonFactory, null)
                 .setGoogleClientRequestInitializer(
