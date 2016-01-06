@@ -18,9 +18,9 @@ package org.gdg.frisbee.android.api;
 
 import org.gdg.frisbee.android.api.model.ContributorList;
 
-import retrofit.Call;
-import retrofit.http.GET;
-import retrofit.http.Path;
+import retrofit2.Call;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
 
 public interface GitHub {
 

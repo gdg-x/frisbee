@@ -21,8 +21,6 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.util.Preconditions;
 import com.google.api.client.util.SecurityUtils;
 import com.google.api.client.util.SslUtils;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.OkUrlFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,6 +35,9 @@ import java.util.Arrays;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
+
+import okhttp3.OkHttpClient;
+import okhttp3.OkUrlFactory;
 
 public class GapiOkTransport extends HttpTransport {
 
@@ -82,12 +83,22 @@ public class GapiOkTransport extends HttpTransport {
     GapiOkTransport(
             OkHttpClient okHttpClient,
             Proxy proxy, SSLSocketFactory sslSocketFactory, HostnameVerifier hostnameVerifier) {
-        this.okHttpClient = okHttpClient;
+        OkHttpClient.Builder builder = okHttpClient.newBuilder();
         this.proxy = proxy;
-        /* SSL socket factory or {@code null} for the default. */
-        SSLSocketFactory sslSocketFactory1 = sslSocketFactory;
-        /* Host name verifier or {@code null} for the default. */
-        HostnameVerifier hostnameVerifier1 = hostnameVerifier;
+
+        SSLContext sslContext;
+        try {
+            sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, null, null);
+        } catch (GeneralSecurityException e) {
+            throw new AssertionError(); // The system has no TLS. Just give up.
+        }
+        builder.sslSocketFactory(sslContext.getSocketFactory());
+
+        if (proxy != null) {
+            builder.proxy(proxy);
+        }
+        this.okHttpClient = builder.build();
     }
 
     @Override
@@ -101,18 +112,6 @@ public class GapiOkTransport extends HttpTransport {
         // connection with proxy settings
         URL connUrl = new URL(url);
         OkUrlFactory factory = new OkUrlFactory(okHttpClient);
-        SSLContext sslContext;
-        try {
-            sslContext = SSLContext.getInstance("TLS");
-            sslContext.init(null, null, null);
-        } catch (GeneralSecurityException e) {
-            throw new AssertionError(); // The system has no TLS. Just give up.
-        }
-        okHttpClient.setSslSocketFactory(sslContext.getSocketFactory());
-
-        if (proxy != null) {
-            okHttpClient.setProxy(proxy);
-        }
 
         URLConnection conn = factory.open(connUrl);
         HttpURLConnection connection = (HttpURLConnection) conn;

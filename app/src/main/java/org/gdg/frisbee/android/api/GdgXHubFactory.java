@@ -6,8 +6,8 @@ import org.gdg.frisbee.android.api.deserializer.ZuluDateTimeDeserializer;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.Utils;
 
-import retrofit.GsonConverterFactory;
-import retrofit.Retrofit;
+import retrofit2.GsonConverterFactory;
+import retrofit2.Retrofit;
 
 public final class GdgXHubFactory {
 
