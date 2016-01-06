@@ -40,14 +40,14 @@ public class Const {
     public static final String EXTRA_TAGGED_EVENT_CACHEKEY = "org.gdg.frisbee.TAGGED_EVENT_CACHEKEY";
     //Special Events Dates
     public static final DateTime START_TIME_DEVFEST =       new DateTime(2015, 9, 1, 0, 0);
-    public static final DateTime START_TIME_WTM =           new DateTime(2015, 2, 1, 0, 0);
-    public static final DateTime START_TIME_STUDY_JAMS =    new DateTime(2015, 2, 1, 0, 0);
-    public static final DateTime START_TIME_IOEXTENDED =    new DateTime(2015, 5, 1, 0, 0);
+    public static final DateTime START_TIME_WTM =           new DateTime(2016, 2, 1, 0, 0);
+    public static final DateTime START_TIME_STUDY_JAMS =    new DateTime(2016, 1, 15, 0, 0);
+    public static final DateTime START_TIME_IOEXTENDED =    new DateTime(2016, 5, 1, 0, 0);
 
-    public static final DateTime END_TIME_DEVFEST =      new DateTime(2016, 1, 1, 0, 0);
-    public static final DateTime END_TIME_WTM =             new DateTime(2015, 4, 1, 0, 0);
-    public static final DateTime END_TIME_STUDY_JAMS =      new DateTime(2015, 5, 1, 0, 0);
-    public static final DateTime END_TIME_IOEXTENDED =      new DateTime(2015, 6, 1, 0, 0);
+    public static final DateTime END_TIME_DEVFEST =         new DateTime(2016, 1, 1, 0, 0);
+    public static final DateTime END_TIME_WTM =             new DateTime(2016, 4, 1, 0, 0);
+    public static final DateTime END_TIME_STUDY_JAMS =      new DateTime(2016, 5, 1, 0, 0);
+    public static final DateTime END_TIME_IOEXTENDED =      new DateTime(2016, 6, 1, 0, 0);
 
     public static final String EXTRA_PLUS_ID = "plus_id";
 
