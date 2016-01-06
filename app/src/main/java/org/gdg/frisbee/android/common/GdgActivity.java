@@ -25,7 +25,12 @@ import android.content.IntentSender;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
+import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -45,14 +50,20 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.RecentTasksStyler;
 import org.gdg.frisbee.android.utils.Utils;
+import org.gdg.frisbee.android.view.ColoredSnackBar;
 
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public abstract class GdgActivity extends TrackableActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
+    @Nullable
+    @Bind(R.id.content_frame)
+    FrameLayout mContentLayout;
 
     private static final int STATE_DEFAULT = 0;
     private static final int STATE_SIGN_IN = 1;
@@ -253,6 +264,18 @@ public abstract class GdgActivity extends TrackableActivity implements
             Timber.d("Context is not valid");
         }
         return isContextValid;
+    }
+
+    protected void showError(@StringRes final int errorStringRes) {
+        if (isContextValid()) {
+            if (mContentLayout != null) {
+                Snackbar snackbar = Snackbar.make(mContentLayout, errorStringRes,
+                        Snackbar.LENGTH_SHORT);
+                ColoredSnackBar.alert(snackbar).show();
+            } else {
+                Toast.makeText(this, errorStringRes, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private boolean isLastActivityOnStack() {

@@ -1,9 +1,5 @@
 package org.gdg.frisbee.android.api;
 
-import android.support.annotation.StringRes;
-
-import org.gdg.frisbee.android.R;
-
 import java.io.IOException;
 
 import retrofit2.Response;
@@ -19,10 +15,10 @@ public abstract class Callback<T> implements retrofit2.Callback<T> {
             try {
                 final Exception e = new Exception(response.errorBody().string());
                 Timber.e(e, "Network Error!");
-                failure(e, R.string.server_error);
+                failure(e);
             } catch (IOException e) {
                 Timber.e(e, "Network Error!");
-                failure(e, R.string.server_error);
+                failure(e);
             }
         }
     }
@@ -30,10 +26,13 @@ public abstract class Callback<T> implements retrofit2.Callback<T> {
     @Override
     public final void onFailure(Throwable t) {
         Timber.d(t, "Network Failure!");
-        failure(t, R.string.offline_alert);
+        networkFailure(t);
     }
 
-    public void failure(Throwable t, @StringRes int errorMessage) {
+    public void failure(Throwable error) {
+    }
+
+    public void networkFailure(Throwable error) {
     }
 
     public abstract void success(T response);

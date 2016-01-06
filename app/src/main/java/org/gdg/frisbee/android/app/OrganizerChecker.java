@@ -63,7 +63,7 @@ public class OrganizerChecker {
                 }
 
                 @Override
-                public void failure(Throwable t, int errorMessage) {
+                public void failure(Throwable error) {
                     mIsOrganizer = false;
                     responseHandler.onErrorResponse();
                 }

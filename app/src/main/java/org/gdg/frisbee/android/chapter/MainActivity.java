@@ -24,7 +24,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -37,7 +36,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.Spinner;
 
 import com.google.android.gms.appindexing.Action;
@@ -62,7 +60,6 @@ import org.gdg.frisbee.android.eventseries.GdgEventListFragment;
 import org.gdg.frisbee.android.onboarding.FirstStartActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.Utils;
-import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
@@ -94,8 +91,6 @@ public class MainActivity extends GdgNavDrawerActivity {
     ViewPager mViewPager;
     @Bind(R.id.tabs)
     TabLayout mTabLayout;
-    @Bind(R.id.content_frame)
-    FrameLayout mContentFrameLayout;
 
     private Handler mHandler = new Handler();
     private ChapterAdapter mChapterAdapter;
@@ -176,12 +171,7 @@ public class MainActivity extends GdgNavDrawerActivity {
                             if (Utils.isOnline(MainActivity.this)) {
                                 fetchChapters();
                             } else {
-                                Snackbar snackbar = Snackbar.make(
-                                        mContentFrameLayout,
-                                        getString(R.string.offline_alert),
-                                        Snackbar.LENGTH_SHORT
-                                );
-                                ColoredSnackBar.alert(snackbar).show();
+                                showError(R.string.offline_alert);
                             }
                         }
                     }
@@ -283,16 +273,13 @@ public class MainActivity extends GdgNavDrawerActivity {
             }
 
             @Override
-            public void failure(Throwable t, int errorMessage) {
-                try {
-                    if (errorMessage != R.string.offline_alert) {
-                        errorMessage = R.string.fetch_chapters_failed;
-                    }
-                    Snackbar snackbar = Snackbar.make(mContentFrameLayout, errorMessage,
-                            Snackbar.LENGTH_SHORT);
-                    ColoredSnackBar.alert(snackbar).show();
-                } catch (IllegalStateException ignored) {
-                }
+            public void failure(Throwable error) {
+                showError(R.string.fetch_chapters_failed);
+            }
+
+            @Override
+            public void networkFailure(Throwable error) {
+                showError(R.string.offline_alert);
             }
         });
     }

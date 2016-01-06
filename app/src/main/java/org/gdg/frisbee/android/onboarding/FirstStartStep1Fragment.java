@@ -17,12 +17,14 @@
 package org.gdg.frisbee.android.onboarding;
 
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import org.gdg.frisbee.android.Const;
@@ -126,23 +128,34 @@ public class FirstStartStep1Fragment extends BaseFragment {
             }
 
             @Override
-            public void failure(Throwable t, int errorMessage) {
-                if (isContextValid()) {
-                    if (errorMessage != R.string.offline_alert) {
-                        errorMessage = R.string.fetch_chapters_failed;
-                    }
-                    Snackbar snackbar = Snackbar.make(getView(), errorMessage,
-                            Snackbar.LENGTH_INDEFINITE);
-                    snackbar.setAction("Retry", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            fetchChapters();
-                        }
-                    });
-                    ColoredSnackBar.alert(snackbar).show();
-                }
+            public void failure(Throwable error) {
+                showError(R.string.fetch_chapters_failed);
+            }
+
+            @Override
+            public void networkFailure(Throwable error) {
+                showError(R.string.offline_alert);
             }
         });
+    }
+
+    @Override
+    protected void showError(@StringRes int errorStringRes) {
+        if (isContextValid()) {
+            if (getView() != null) {
+                Snackbar snackbar = Snackbar.make(getView(), errorStringRes,
+                        Snackbar.LENGTH_INDEFINITE);
+                snackbar.setAction("Retry", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        fetchChapters();
+                    }
+                });
+                ColoredSnackBar.alert(snackbar).show();
+            } else {
+                Toast.makeText(getActivity(), errorStringRes, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void addChapters(List<Chapter> chapterList) {

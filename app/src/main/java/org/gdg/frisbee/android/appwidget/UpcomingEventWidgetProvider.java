@@ -144,12 +144,14 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                         }
 
                         @Override
-                        public void failure(Throwable t, int errorMessage) {
+                        public void failure(Throwable error) {
+                            showErrorChild(views, R.string.loading_data_failed, UpdateService.this);
+                            manager.updateAppWidget(thisWidget, views);
+                        }
 
-                            showErrorChild(views,
-                                    errorMessage == R.string.offline_alert
-                                            ? errorMessage : R.string.loading_data_failed,
-                                    UpdateService.this);
+                        @Override
+                        public void networkFailure(Throwable error) {
+                            showErrorChild(views, R.string.offline_alert, UpdateService.this);
                             manager.updateAppWidget(thisWidget, views);
                         }
                     });

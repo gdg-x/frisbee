@@ -19,7 +19,6 @@ package org.gdg.frisbee.android.pulse;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +33,6 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.common.GdgListFragment;
-import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
 import java.util.Map;
@@ -128,12 +126,13 @@ public class PulseFragment extends GdgListFragment {
                 }
 
                 @Override
-                public void failure(Throwable t, int errorMessage) {
-                    if (isAdded()) {
-                        Snackbar snackbar = Snackbar.make(getView(), errorMessage,
-                                Snackbar.LENGTH_SHORT);
-                        ColoredSnackBar.alert(snackbar).show();
-                    }
+                public void failure(Throwable error) {
+                    showError(R.string.server_error);
+                }
+
+                @Override
+                public void networkFailure(Throwable error) {
+                    showError(R.string.offline_alert);
                 }
             });
         } else {
@@ -153,12 +152,13 @@ public class PulseFragment extends GdgListFragment {
                 }
 
                 @Override
-                public void failure(Throwable t, int errorMessage) {
-                    if (isAdded()) {
-                        Snackbar snackbar = Snackbar.make(getView(), errorMessage,
-                                Snackbar.LENGTH_SHORT);
-                        ColoredSnackBar.alert(snackbar).show();
-                    }
+                public void failure(Throwable error) {
+                    showError(R.string.server_error);
+                }
+
+                @Override
+                public void networkFailure(Throwable error) {
+                    showError(R.string.offline_alert);
                 }
             });
         }

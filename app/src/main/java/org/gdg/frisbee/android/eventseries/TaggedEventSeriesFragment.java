@@ -129,8 +129,13 @@ public class TaggedEventSeriesFragment extends EventListFragment {
             }
 
             @Override
-            public void failure(Throwable t, int errorMessage) {
-                onError(errorMessage);
+            public void failure(Throwable error) {
+                onError(R.string.fetch_events_failed);
+            }
+
+            @Override
+            public void networkFailure(Throwable error) {
+                onError(R.string.offline_alert);
             }
         };
 
@@ -164,11 +169,7 @@ public class TaggedEventSeriesFragment extends EventListFragment {
 
                 private void onNotFound() {
                     setIsLoading(false);
-                    if (isAdded()) {
-                        Snackbar snackbar = Snackbar.make(getView(), R.string.offline_alert,
-                                Snackbar.LENGTH_SHORT);
-                        ColoredSnackBar.alert(snackbar).show();
-                    }
+                    showError(R.string.offline_alert);
                 }
             });
         }

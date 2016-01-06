@@ -18,7 +18,6 @@ package org.gdg.frisbee.android.pulse;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -31,7 +30,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.Spinner;
 
 import org.gdg.frisbee.android.Const;
@@ -41,7 +39,6 @@ import org.gdg.frisbee.android.api.model.Pulse;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
-import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
@@ -57,9 +54,6 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
 
     @Bind(R.id.tabs)
     TabLayout mTabLayout;
-
-    @Bind(R.id.content_frame)
-    FrameLayout mContentLayout;
 
     private ArrayAdapter<String> mSpinnerAdapter;
     private PulsePagerAdapter mViewPagerAdapter;
@@ -119,13 +113,13 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
             }
 
             @Override
-            public void failure(Throwable t, int errorMessage) {
-                try {
-                    Snackbar snackbar = Snackbar.make(mContentLayout, errorMessage,
-                            Snackbar.LENGTH_SHORT);
-                    ColoredSnackBar.alert(snackbar).show();
-                } catch (IllegalStateException ignored) {
-                }
+            public void failure(Throwable error) {
+                showError(R.string.fetch_chapters_failed);
+            }
+
+            @Override
+            public void networkFailure(Throwable error) {
+                showError(R.string.offline_alert);
             }
         });
     }

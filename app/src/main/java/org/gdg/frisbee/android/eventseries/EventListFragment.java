@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
-import android.support.design.widget.Snackbar;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -34,7 +33,6 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.SimpleEvent;
 import org.gdg.frisbee.android.common.GdgListFragment;
 import org.gdg.frisbee.android.event.EventActivity;
-import org.gdg.frisbee.android.view.ColoredSnackBar;
 
 import java.util.ArrayList;
 
@@ -48,15 +46,7 @@ public abstract class EventListFragment extends GdgListFragment {
     
     protected void onError(@StringRes int errorMessage) {
         setIsLoading(false);
-        if (isAdded()) {
-            if (errorMessage != R.string.offline_alert) {
-                errorMessage = R.string.fetch_events_failed;
-            }
-            Snackbar snackbar = Snackbar.make(getView(), errorMessage,
-                    Snackbar.LENGTH_SHORT);
-            ColoredSnackBar.alert(snackbar).show();
-        }
-
+        showError(errorMessage);
     }
 
     @Override

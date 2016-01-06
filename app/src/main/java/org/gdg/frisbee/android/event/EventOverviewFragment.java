@@ -23,7 +23,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
@@ -54,16 +53,16 @@ import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.EventFullDetails;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.common.BaseFragment;
 import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.Utils;
-import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class EventOverviewFragment extends Fragment {
+public class EventOverviewFragment extends BaseFragment {
 
     @Bind(R.id.title)
     TextView mTitle;
@@ -116,13 +115,13 @@ public class EventOverviewFragment extends Fragment {
             }
 
             @Override
-            public void failure(Throwable t, int errorMessage) {
+            public void failure(Throwable error) {
+                showError(R.string.server_error);
+            }
 
-                if (isAdded()) {
-                    Snackbar snackbar = Snackbar.make(getView(), errorMessage,
-                            Snackbar.LENGTH_SHORT);
-                    ColoredSnackBar.alert(snackbar).show();
-                }
+            @Override
+            public void networkFailure(Throwable error) {
+                showError(R.string.offline_alert);
             }
         });
     }
@@ -192,21 +191,17 @@ public class EventOverviewFragment extends Fragment {
                         }
 
                         @Override
-                        public void failure(Throwable t, int errorMessage) {
-                            if (isAdded()) {
-                                if (errorMessage != R.string.offline_alert) {
-                                    errorMessage = R.string.fetch_chapters_failed;
-                                }
-                                Snackbar snackbar = Snackbar.make(getView(), errorMessage,
-                                        Snackbar.LENGTH_SHORT);
-                                ColoredSnackBar.alert(snackbar).show();
-                            }
+                        public void failure(Throwable error) {
+                            showError(R.string.fetch_chapters_failed);
+                        }
+
+                        @Override
+                        public void networkFailure(Throwable error) {
+                            showError(R.string.offline_alert);
                         }
                     });
                 } else {
-                    Snackbar snackbar = Snackbar.make(getView(), R.string.offline_alert,
-                            Snackbar.LENGTH_SHORT);
-                    ColoredSnackBar.alert(snackbar).show();
+                    showError(R.string.offline_alert);
                 }
             }
         });

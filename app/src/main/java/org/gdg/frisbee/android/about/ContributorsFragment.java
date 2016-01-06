@@ -54,8 +54,7 @@ public class ContributorsFragment extends PeopleListFragment {
 
                 @Override
                 public void onNotFound(String key) {
-                    Snackbar snackbar = Snackbar.make(getView(), R.string.offline_alert, Snackbar.LENGTH_SHORT);
-                    ColoredSnackBar.alert(snackbar).show();
+                    showError(R.string.offline_alert);
                 }
             });
         }

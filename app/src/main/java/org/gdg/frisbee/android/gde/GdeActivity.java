@@ -2,7 +2,6 @@ package org.gdg.frisbee.android.gde;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,7 +9,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.SparseArray;
-import android.widget.FrameLayout;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -22,7 +20,6 @@ import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.common.PlainLayoutFragment;
 import org.gdg.frisbee.android.utils.Utils;
-import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
 import java.lang.ref.WeakReference;
@@ -38,9 +35,6 @@ public class GdeActivity extends GdgNavDrawerActivity {
 
     @Bind(R.id.tabs)
     TabLayout mTabLayout;
-
-    @Bind(R.id.content_frame)
-    FrameLayout mContentLayout;
 
     private Handler mHandler = new Handler();
 
@@ -71,7 +65,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
             }
         });
     }
-    
+
     private void fetchGdeDirectory() {
 
         App.getInstance().getGdeDirectory().getDirectory().enqueue(new Callback<GdeList>() {
@@ -89,16 +83,13 @@ public class GdeActivity extends GdgNavDrawerActivity {
             }
 
             @Override
-            public void failure(Throwable t, int errorMessage) {
-                try {
-                    if (errorMessage != R.string.offline_alert) {
-                        errorMessage = R.string.fetch_gde_failed;
-                    }
-                    Snackbar snackbar = Snackbar.make(mContentLayout, errorMessage,
-                            Snackbar.LENGTH_SHORT);
-                    ColoredSnackBar.alert(snackbar).show();
-                } catch (IllegalStateException ignored) {
-                }
+            public void failure(Throwable error) {
+                showError(R.string.fetch_gde_failed);
+            }
+
+            @Override
+            public void networkFailure(Throwable error) {
+                showError(R.string.offline_alert);
             }
         });
     }
