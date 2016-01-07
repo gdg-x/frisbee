@@ -181,8 +181,8 @@
   <string name="feedback_invalid_email">إدخال عنوان بريد إلكتروني صحيح</string>
   <string name="drawer_subheader_games">ألعاب</string>
   <string name="fork_me">مفترق لي</string>
-  <string name="cd_arrowTagImage">Arrow Tagging Game</string>
-  <string name="cd_qrCode">QR Code</string>
-  <string name="invitation_title">Invite your friends to GDG app</string>
-  <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go.</string>
+  <string name="cd_arrowTagImage">لعبة أسهم الإشارة</string>
+  <string name="cd_qrCode">رمز QR</string>
+  <string name="invitation_title">أدع أصدقائك إلى تطبيق المجموعة</string>
+  <string name="invitation_message">حمّل تطبيق GDG و اكتشف محتوى مجموعة مطوري Google بينما يكون جاهزا للإطلاق.</string>
 </resources>
