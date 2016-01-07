@@ -20,6 +20,8 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
@@ -86,6 +88,8 @@ abstract class TrackableActivity extends AppCompatActivity implements ViewPager.
 
             // Send a screen view.
             t.send(new HitBuilders.AppViewBuilder().build());
+
+            Answers.getInstance().logContentView(new ContentViewEvent().putContentName(viewName));
         }
     }
 
