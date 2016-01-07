@@ -1,7 +1,5 @@
 package org.gdg.frisbee.android.arrow;
 
-import android.content.Context;
-
 import com.google.android.gms.appstate.AppStateManager;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -12,6 +10,7 @@ import com.google.android.gms.games.snapshot.SnapshotMetadataChange;
 import com.google.android.gms.games.snapshot.Snapshots;
 
 import org.gdg.frisbee.android.Const;
+import org.gdg.frisbee.android.common.TrackableActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
 
 /**
@@ -23,15 +22,24 @@ public class AppStateMigrationHelper {
 
     }
 
-    public static void checkSnapshotUpgrade(final Context context, final GoogleApiClient googleApiClient, final String description) {
-        if (PrefUtils.isAppStateMigrationSuccessful(context)) {
+    public static void checkSnapshotUpgrade(final TrackableActivity activity,
+                                            final GoogleApiClient googleApiClient,
+                                            final String description) {
+        if (PrefUtils.isAppStateMigrationSuccessful(activity)) {
             return;
         }
 
-        migrateFromAppStateToSnapshot(context, googleApiClient, description);
+        migrateFromAppStateToSnapshot(activity, googleApiClient, description);
+        activity.sendAnalyticsEvent(
+                "Play Games",
+                "Migration",
+                "Started"
+        );
     }
 
-    private static void migrateFromAppStateToSnapshot(final Context context, final GoogleApiClient googleApiClient, final String description) {
+    private static void migrateFromAppStateToSnapshot(final TrackableActivity activity,
+                                                      final GoogleApiClient googleApiClient,
+                                                      final String description) {
         AppStateManager.load(googleApiClient, Const.ARROW_DONE_STATE_KEY).setResultCallback(
                 new ResultCallback<AppStateManager.StateResult>() {
                     @Override
@@ -43,7 +51,12 @@ public class AppStateMigrationHelper {
                                         @Override
                                         public void onResult(Snapshots.OpenSnapshotResult stateResult) {
                                             saveSnapshot(stateResult, serializedOrganizers, description, googleApiClient);
-                                            PrefUtils.setAppStateMigrationSuccessful(context);
+                                            PrefUtils.setAppStateMigrationSuccessful(activity);
+                                            activity.sendAnalyticsEvent(
+                                                    "Play Games",
+                                                    "Migration",
+                                                    "Successful"
+                                            );
                                         }
                                     });
                         }
