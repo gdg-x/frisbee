@@ -17,16 +17,21 @@
 package org.gdg.frisbee.android.common;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
+import com.crashlytics.android.answers.CustomEvent;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.widget.FeedbackFragment;
+
+import timber.log.Timber;
 
 /**
  * Activity which provides handy mechanism for google analytics.
@@ -75,12 +80,18 @@ abstract class TrackableActivity extends AppCompatActivity implements ViewPager.
     public void onPageScrollStateChanged(int state) {
     }
 
-    protected void trackView() {
+    protected final void trackView() {
         trackView(getTrackedViewName());
     }
 
-    protected void trackView(String viewName) {
-        if (viewName != null) {
+    protected final void trackView(String viewName) {
+        if (viewName == null) {
+            return;
+        }
+
+        if (BuildConfig.DEBUG) {
+            Timber.tag("Analytics").d("Screen: " + viewName);
+        } else {
             Tracker t = App.getInstance().getTracker();
             // Set screen name.
             // Where path is a String representing the screen name.
@@ -91,6 +102,38 @@ abstract class TrackableActivity extends AppCompatActivity implements ViewPager.
 
             Answers.getInstance().logContentView(new ContentViewEvent().putContentName(viewName));
         }
+    }
+
+    protected final void sendAnalyticsEvent(@NonNull String category,
+                                   @NonNull String action,
+                                   @NonNull String label,
+                                   long value) {
+        if (BuildConfig.DEBUG) {
+            Timber.tag("Analytics").d("Event recorded:"
+                    + "\n\tCategory: " + category
+                    + "\n\tAction: " + action
+                    + "\n\tLabel: " + label
+                    + "\n\tValue: " + value);
+        } else {
+            App.getInstance().getTracker()
+                    .send(new HitBuilders.EventBuilder()
+                            .setCategory(category)
+                            .setAction(action)
+                            .setLabel(label)
+                            .setValue(value)
+                            .build());
+
+            Answers.getInstance()
+                    .logCustom(new CustomEvent(category)
+                            .putCustomAttribute(action, label)
+                            .putCustomAttribute("value", value));
+        }
+    }
+
+    protected final void sendAnalyticsEvent(@NonNull String category,
+                                   @NonNull String action,
+                                   @NonNull String label) {
+        sendAnalyticsEvent(category, action, label, 0);
     }
 
     protected void showFeedbackDialog() {
