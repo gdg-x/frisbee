@@ -4,9 +4,6 @@ import android.support.annotation.Nullable;
 
 import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Person;
-import com.squareup.okhttp.Interceptor;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.app.App;
@@ -16,11 +13,11 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import okhttp3.Interceptor;
+import okhttp3.Request;
+import okhttp3.Response;
 import timber.log.Timber;
 
-/**
- * Created by Said Tahsin Dane on 27/7/15.
- */
 public class PlusPersonDownloader implements Interceptor {
 
     private static final Pattern mPlusPattern
@@ -35,7 +32,7 @@ public class PlusPersonDownloader implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
 
-        Matcher matcher = mPlusPattern.matcher(request.urlString());
+        Matcher matcher = mPlusPattern.matcher(request.url().toString());
         if (!matcher.matches()) {
             return chain.proceed(request);
         }

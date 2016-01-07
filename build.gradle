@@ -52,7 +52,8 @@ ext {
     playServicesVersion = '7.8.0'
     jodaTimeVersion = '2.9.1'
     leakCanaryVersion = '1.3.1'
-    okHttpVersion = '2.6.0'
+    okHttpVersion = '3.0.0-RC1'
+    retrofitVersion = '2.0.0-beta3'
 
     //test dependencies
     junitVersion = '4.12'

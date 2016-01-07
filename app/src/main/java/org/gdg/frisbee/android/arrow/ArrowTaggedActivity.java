@@ -32,6 +32,7 @@ import com.google.android.gms.plus.Plus;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
@@ -42,8 +43,6 @@ import org.gdg.frisbee.android.view.DividerItemDecoration;
 import java.io.IOException;
 
 import butterknife.Bind;
-import retrofit.Callback;
-import retrofit.RetrofitError;
 import timber.log.Timber;
 
 public class ArrowTaggedActivity extends GdgActivity {
@@ -116,20 +115,12 @@ public class ArrowTaggedActivity extends GdgActivity {
                             }
                         }
 
-                        App.getInstance().getGdgXHub().getDirectory(
-                                new Callback<Directory>() {
-
-                                    @Override
-                                    public void success(final Directory directory, final retrofit.client.Response response) {
-                                        loadChapterOrganizers(directory);
-                                    }
-
-                                    @Override
-                                    public void failure(final RetrofitError error) {
-                                        Timber.e(error, "Error");
-                                    }
-                                }
-                        );
+                        App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
+                            @Override
+                            public void success(Directory directory) {
+                                loadChapterOrganizers(directory);
+                            }
+                        });
                     }
                 });
     }

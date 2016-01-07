@@ -42,6 +42,7 @@ import com.google.android.gms.plus.Plus;
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.GdgXHub;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
@@ -56,9 +57,6 @@ import org.gdg.frisbee.android.utils.PrefUtils;
 
 import java.io.IOException;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 import timber.log.Timber;
 
 public class SettingsFragment extends PreferenceFragment {
@@ -101,36 +99,26 @@ public class SettingsFragment extends PreferenceFragment {
                             }
 
                             GdgXHub client = App.getInstance().getGdgXHub();
-                            String token = GoogleAuthUtil.getToken(getActivity(), 
-                                    Plus.AccountApi.getAccountName(mGoogleApiClient), 
+                            String token = GoogleAuthUtil.getToken(getActivity(),
+                                    Plus.AccountApi.getAccountName(mGoogleApiClient),
                                     "oauth2: " + Scopes.PLUS_LOGIN);
 
                             if (!enableGcm) {
-                                client.unregisterGcm("Bearer " + token, new GcmRegistrationRequest(PrefUtils.getRegistrationId(getActivity())),
-                                        new Callback<GcmRegistrationResponse>() {
+                                client.unregisterGcm("Bearer " + token, new GcmRegistrationRequest(PrefUtils.getRegistrationId(getActivity())))
+                                        .enqueue(new Callback<GcmRegistrationResponse>() {
                                             @Override
-                                            public void success(GcmRegistrationResponse gcmRegistrationResponse, retrofit.client.Response response) {
+                                            public void success(GcmRegistrationResponse gcmRegistrationResponse) {
                                                 PrefUtils.setGcmSettings(getActivity(), false, null, null);
-                                            }
-
-                                            @Override
-                                            public void failure(RetrofitError error) {
-                                                Timber.e(error, "Fail");
                                             }
                                         });
                             } else {
                                 final String regId = mGcm.register(BuildConfig.GCM_SENDER_ID);
 
-                                client.registerGcm("Bearer " + token, new GcmRegistrationRequest(regId),
-                                        new Callback<GcmRegistrationResponse>() {
+                                client.registerGcm("Bearer " + token, new GcmRegistrationRequest(regId))
+                                        .enqueue(new Callback<GcmRegistrationResponse>() {
                                             @Override
-                                            public void success(GcmRegistrationResponse gcmRegistrationResponse, retrofit.client.Response response) {
+                                            public void success(GcmRegistrationResponse gcmRegistrationResponse) {
                                                 PrefUtils.setGcmSettings(getActivity(), true, regId, gcmRegistrationResponse.getNotificationKey());
-                                            }
-
-                                            @Override
-                                            public void failure(RetrofitError error) {
-                                                Timber.e(error, "Fail");
                                             }
                                         });
 
@@ -290,17 +278,8 @@ public class SettingsFragment extends PreferenceFragment {
                             "oauth2: " + Scopes.PLUS_LOGIN);
 
                     App.getInstance().getGdgXHub().setHomeGdg("Bearer " + token,
-                            new HomeGdgRequest(homeGdg),
-                            new Callback<Void>() {
-                                @Override
-                                public void success(Void aVoid, Response response) {
-                                }
-
-                                @Override
-                                public void failure(RetrofitError error) {
-                                    Timber.e(error, "Setting Home failed.");
-                                }
-                            });
+                            new HomeGdgRequest(homeGdg))
+                            .execute();
                 } catch (IOException | GoogleAuthException e) {
                     e.printStackTrace();
                 }

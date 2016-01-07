@@ -19,7 +19,6 @@ package org.gdg.frisbee.android.pulse;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,21 +26,18 @@ import android.widget.ListView;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.chapter.MainActivity;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Pulse;
 import org.gdg.frisbee.android.api.model.PulseEntry;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.common.GdgListFragment;
-import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
 import java.util.Map;
 
 import butterknife.ButterKnife;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import timber.log.Timber;
 
 public class PulseFragment extends GdgListFragment {
 
@@ -114,9 +110,9 @@ public class PulseFragment extends GdgListFragment {
 
     private void fetchPulseTask() {
         if (mTarget.equals(GLOBAL)) {
-            App.getInstance().getGroupDirectory().getPulse(new Callback<Pulse>() {
+            App.getInstance().getGroupDirectory().getPulse().enqueue(new Callback<Pulse>() {
                 @Override
-                public void success(final Pulse pulse, retrofit.client.Response response) {
+                public void success(final Pulse pulse) {
                     App.getInstance().getModelCache().putAsync(
                             Const.CACHE_KEY_PULSE + mTarget.toLowerCase(),
                             pulse,
@@ -130,19 +126,19 @@ public class PulseFragment extends GdgListFragment {
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
-                    if (isAdded()) {
-                        Snackbar snackbar = Snackbar.make(getView(), R.string.fetch_chapters_failed,
-                                Snackbar.LENGTH_SHORT);
-                        ColoredSnackBar.alert(snackbar).show();
-                    }
-                    Timber.e(error, "Couldn't fetch pulse");
+                public void failure(Throwable error) {
+                    showError(R.string.server_error);
+                }
+
+                @Override
+                public void networkFailure(Throwable error) {
+                    showError(R.string.offline_alert);
                 }
             });
         } else {
-            App.getInstance().getGroupDirectory().getCountryPulse(mTarget, new Callback<Pulse>() {
+            App.getInstance().getGroupDirectory().getCountryPulse(mTarget).enqueue(new Callback<Pulse>() {
                 @Override
-                public void success(final Pulse pulse, retrofit.client.Response response) {
+                public void success(final Pulse pulse) {
                     App.getInstance().getModelCache().putAsync(
                             Const.CACHE_KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
                             pulse,
@@ -156,13 +152,13 @@ public class PulseFragment extends GdgListFragment {
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
-                    if (isAdded()) {
-                        Snackbar snackbar = Snackbar.make(getView(), R.string.fetch_chapters_failed,
-                                Snackbar.LENGTH_SHORT);
-                        ColoredSnackBar.alert(snackbar).show();
-                    }
-                    Timber.e(error, "Couldn't fetch pulse");
+                public void failure(Throwable error) {
+                    showError(R.string.server_error);
+                }
+
+                @Override
+                public void networkFailure(Throwable error) {
+                    showError(R.string.offline_alert);
                 }
             });
         }

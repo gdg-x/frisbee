@@ -23,7 +23,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
@@ -48,24 +47,22 @@ import com.tasomaniac.android.widget.DelayedProgressBar;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.EventFullDetails;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.common.BaseFragment;
 import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.Utils;
-import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import timber.log.Timber;
 
-public class EventOverviewFragment extends Fragment {
+public class EventOverviewFragment extends BaseFragment {
 
     @Bind(R.id.title)
     TextView mTitle;
@@ -111,20 +108,20 @@ public class EventOverviewFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         final String eventId = getArguments().getString(Const.EXTRA_EVENT_ID);
-        App.getInstance().getGdgXHub().getEventDetail(eventId, new Callback<EventFullDetails>() {
+        App.getInstance().getGdgXHub().getEventDetail(eventId).enqueue(new Callback<EventFullDetails>() {
             @Override
-            public void success(EventFullDetails eventFullDetails, retrofit.client.Response response) {
-                onResponse(eventFullDetails);
+            public void success(EventFullDetails eventFullDetails) {
+                onSuccess(eventFullDetails);
             }
 
             @Override
-            public void failure(RetrofitError error) {
-                if (isAdded()) {
-                    Snackbar snackbar = Snackbar.make(getView(), R.string.server_error,
-                            Snackbar.LENGTH_SHORT);
-                    ColoredSnackBar.alert(snackbar).show();
-                }
-                Timber.d(error, "error while retrieving event %s", eventId);
+            public void failure(Throwable error) {
+                showError(R.string.server_error);
+            }
+
+            @Override
+            public void networkFailure(Throwable error) {
+                showError(R.string.offline_alert);
             }
         });
     }
@@ -164,7 +161,7 @@ public class EventOverviewFragment extends Fragment {
         return fmt.print(eventFullDetails.getStart());
     }
 
-    private void onResponse(final EventFullDetails eventFullDetails) {
+    private void onSuccess(final EventFullDetails eventFullDetails) {
         if (getActivity() == null) {
             return;
         }
@@ -186,28 +183,25 @@ public class EventOverviewFragment extends Fragment {
             @Override
             public void onNotFound(String key) {
                 if (Utils.isOnline(getActivity())) {
-                    App.getInstance().getGdgXHub().getDirectory(new Callback<Directory>() {
+                    App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
                         @Override
-                        public void success(Directory directory, retrofit.client.Response response) {
-
+                        public void success(Directory directory) {
                             mDirectory = directory;
                             updateGroupDetails(mDirectory.getGroupById(eventFullDetails.getChapter()));
                         }
 
                         @Override
-                        public void failure(RetrofitError error) {
-                            if (isAdded()) {
-                                Snackbar snackbar = Snackbar.make(getView(), R.string.fetch_chapters_failed,
-                                        Snackbar.LENGTH_SHORT);
-                                ColoredSnackBar.alert(snackbar).show();
-                            }
-                            Timber.e(error, "Could'nt fetch chapter list");
+                        public void failure(Throwable error) {
+                            showError(R.string.fetch_chapters_failed);
+                        }
+
+                        @Override
+                        public void networkFailure(Throwable error) {
+                            showError(R.string.offline_alert);
                         }
                     });
                 } else {
-                    Snackbar snackbar = Snackbar.make(getView(), R.string.offline_alert,
-                            Snackbar.LENGTH_SHORT);
-                    ColoredSnackBar.alert(snackbar).show();
+                    showError(R.string.offline_alert);
                 }
             }
         });
