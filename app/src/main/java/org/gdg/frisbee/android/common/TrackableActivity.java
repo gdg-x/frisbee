@@ -44,7 +44,7 @@ import timber.log.Timber;
  *
  * @author Bartosz Przybylski <bart.p.pl@gmail.com>
  */
-abstract class TrackableActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
+public abstract class TrackableActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
     private int mCurrentPage = 0;
 
@@ -84,7 +84,7 @@ abstract class TrackableActivity extends AppCompatActivity implements ViewPager.
         trackView(getTrackedViewName());
     }
 
-    protected final void trackView(String viewName) {
+    public final void trackView(String viewName) {
         if (viewName == null) {
             return;
         }
@@ -104,7 +104,7 @@ abstract class TrackableActivity extends AppCompatActivity implements ViewPager.
         }
     }
 
-    protected final void sendAnalyticsEvent(@NonNull String category,
+    public final void sendAnalyticsEvent(@NonNull String category,
                                    @NonNull String action,
                                    @NonNull String label,
                                    long value) {
@@ -130,7 +130,7 @@ abstract class TrackableActivity extends AppCompatActivity implements ViewPager.
         }
     }
 
-    protected final void sendAnalyticsEvent(@NonNull String category,
+    public final void sendAnalyticsEvent(@NonNull String category,
                                    @NonNull String action,
                                    @NonNull String label) {
         sendAnalyticsEvent(category, action, label, 0);
