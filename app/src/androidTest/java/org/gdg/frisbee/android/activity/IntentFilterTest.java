@@ -9,13 +9,13 @@ import android.support.annotation.NonNull;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import java.util.List;
-
 import org.assertj.core.api.Condition;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.chapter.MainActivity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -41,16 +41,16 @@ public class IntentFilterTest {
     }
 
     @Test
-    public void gdgroupEventsLinkWithoutIdLaunchesMainActivity() {
+    public void gdgroupsEventsLinkWithoutIdLaunchesParseDeepLinkActivity() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(Const.URL_GDGROUPS_ORG + "/" + Const.PATH_GDGROUPS_ORG_EVENT));
+        intent.setData(Uri.parse(Const.URL_GDGROUPS_ORG + "/" + Const.PATH_GDGROUPS_ORG_EVENT + "/"));
         final List<ResolveInfo> activities = InstrumentationRegistry.getTargetContext().getPackageManager().queryIntentActivities(intent, 0);
 
-        assertThat(activities).areAtLeastOne(ofType(MainActivity.class));
+        assertThat(activities).areAtLeastOne(ofType(ParseDeepLinkActivity.class));
     }
 
     @Test
-    public void gdgroupEventsLinkLaunchesParseDeepLinkActivity() {
+    public void gdgroupsEventsLinkLaunchesParseDeepLinkActivity() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(Const.URL_GDGROUPS_ORG + "/" + Const.PATH_GDGROUPS_ORG_EVENT + "/xyz"));
         final List<ResolveInfo> activities = InstrumentationRegistry.getTargetContext().getPackageManager().queryIntentActivities(intent, 0);
@@ -59,11 +59,11 @@ public class IntentFilterTest {
     }
 
     @NonNull
-    private static Condition<ResolveInfo> ofType(final Class<? extends Activity> activitiyClass) {
+    private static Condition<ResolveInfo> ofType(final Class<? extends Activity> activityClass) {
         return new Condition<ResolveInfo>() {
             @Override
             public boolean matches(final ResolveInfo value) {
-                return activitiyClass.getName().equals(value.activityInfo.name);
+                return activityClass.getName().equals(value.activityInfo.name);
             }
         };
     }
