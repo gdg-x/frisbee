@@ -58,10 +58,7 @@ public final class OkClientFactory {
                 EspressoIdlingResource.increment();
 
                 Request request = chain.request();
-                Response proceed = chain.proceed(request);
-
-                EspressoIdlingResource.decrement();
-                return proceed;
+                return chain.proceed(request);
             }
         };
     }
