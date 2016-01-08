@@ -53,7 +53,6 @@ public class EventActivityTest {
         Espresso.registerIdlingResources(EspressoIdlingResource.getIdlingResource());
     }
 
-
     @Test
     public void clickOnTitleOpensEventUrl() {
         onView(withId(R.id.title)).perform(click());

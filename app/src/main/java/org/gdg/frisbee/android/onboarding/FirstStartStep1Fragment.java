@@ -65,7 +65,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
     private ChapterAdapter mChapterAdapter;
     private Chapter mSelectedChapter;
     private ChapterComparator mLocationComparator;
-    
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -213,6 +213,9 @@ public class FirstStartStep1Fragment extends BaseFragment {
     }
 
     private void addChapters(List<Chapter> chapterList) {
+        if (mChapterSpinnerView == null) {
+            return;
+        }
         Collections.sort(chapterList, mLocationComparator);
         mChapterAdapter.clear();
         mChapterAdapter.addAll(chapterList);
