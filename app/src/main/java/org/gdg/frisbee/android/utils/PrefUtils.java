@@ -37,7 +37,8 @@ public final class PrefUtils {
     }
 
     public static SharedPreferences prefs(final Context context) {
-        return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        return context.getApplicationContext()
+                .getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
     public static boolean shouldOpenDrawerOnStart(Context context) {

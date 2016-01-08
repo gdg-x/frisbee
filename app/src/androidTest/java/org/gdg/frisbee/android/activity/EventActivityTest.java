@@ -50,7 +50,6 @@ public class EventActivityTest {
         // every test run. In this case all external Intents will be blocked.
         intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, null));
 
-
         Espresso.registerIdlingResources(EspressoIdlingResource.getIdlingResource());
     }
 

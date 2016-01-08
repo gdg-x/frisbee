@@ -1,5 +1,6 @@
 package org.gdg.frisbee.android.activity;
 
+import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
@@ -42,8 +43,10 @@ public class MainActivityTest {
     public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<MainActivity>(MainActivity.class) {
         @Override
         protected void beforeActivityLaunched() {
-            PrefUtils.setInitialSettings(InstrumentationRegistry.getTargetContext(), false, false, null, null);
-            PrefUtils.setHomeChapter(InstrumentationRegistry.getTargetContext(), CHAPTER_BRUSSELS);
+            Context context = InstrumentationRegistry.getTargetContext();
+            PrefUtils.setInitialSettings(context, false, false, null, null);
+            PrefUtils.setHomeChapter(context, CHAPTER_BRUSSELS);
+            PrefUtils.setShouldNotOpenDrawerOnStart(context);
         }
     };
 
