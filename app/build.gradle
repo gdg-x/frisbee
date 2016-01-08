@@ -138,10 +138,6 @@ android {
                 || variant.buildType.name.equals('alpha'))) {
             variant.setIgnore(true);
         }
-        if (ci && variant.getFlavors().get(0).name.equals('prod')
-                && variant.buildType.name.equals('debug')) {
-            variant.setIgnore(true);
-        }
     }
 
     lintOptions {
@@ -166,6 +162,8 @@ android {
     packagingOptions {
         exclude 'LICENSE.txt'
     }
+
+    testBuildType 'release'
     
     useLibrary 'org.apache.http.legacy'
 }

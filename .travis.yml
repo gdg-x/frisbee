@@ -1,9 +1,13 @@
 language: android
 
+jdk:
+ - oraclejdk8
+
 android:
   components:
   - platform-tools
   - tools
+  - android-$ANDROID_API_LEVEL
   - android-23
   - build-tools-23.0.2
   - extra-google-m2repository
@@ -27,7 +31,11 @@ script: "./gradlew check connectedCheck --stacktrace"
 env:
   global:
     - ADB_INSTALL_TIMEOUT=8
+  matrix:
+    - ANDROID_API_LEVEL=17
+    - ANDROID_API_LEVEL=19
     - ANDROID_API_LEVEL=21
+    - ANDROID_API_LEVEL=22
 
 branches:
   except:
