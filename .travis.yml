@@ -12,9 +12,15 @@ android:
 before_script:
 - GRADLE_OPTS="-Xms40m -Xmx3g -XX:MaxPermSize=3g"
 
-script: "./gradlew check -Dpre-dex=false"
+script: "./gradlew check"
 
 branches:
-  only:
-  - master
-  - develop
+  except:
+    - gh-pages
+
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/a9870bec6049c7309e68
+    on_success: change
+    on_failure: always
