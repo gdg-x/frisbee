@@ -6,9 +6,13 @@ import android.support.annotation.NonNull;
 import org.gdg.frisbee.android.BuildConfig;
 
 import java.io.File;
+import java.io.IOException;
 
 import okhttp3.Cache;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import timber.log.Timber;
 
@@ -39,5 +43,26 @@ public final class OkClientFactory {
             okHttpClient.addInterceptor(loggingInterceptor);
         }
         return okHttpClient.build();
+    }
+
+    public static OkHttpClient okHttpClientWithIdlingResources(OkHttpClient client) {
+        return client.newBuilder()
+                .addInterceptor(OkClientFactory.provideIdlingResourcesInterceptor())
+                .build();
+    }
+
+    private static Interceptor provideIdlingResourcesInterceptor() {
+        return new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                EspressoIdlingResource.increment();
+
+                Request request = chain.request();
+                Response proceed = chain.proceed(request);
+
+                EspressoIdlingResource.decrement();
+                return proceed;
+            }
+        };
     }
 }

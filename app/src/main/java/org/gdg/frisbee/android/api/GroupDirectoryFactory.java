@@ -35,10 +35,11 @@ public final class GroupDirectoryFactory {
                 return chain.proceed(compressedRequest);
             }
         });
+
         return new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create(Utils.getGson()))
-                    .client(client.build())
+                    .client(OkClientFactory.okHttpClientWithIdlingResources(client.build()))
                     .build();
     }
 
