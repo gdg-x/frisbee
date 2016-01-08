@@ -95,6 +95,7 @@ android {
             proguardFile '../settings/proguard/proguard-crashlytics.pro'
             proguardFile '../settings/proguard/proguard-joda-time.pro'
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            testProguardFile '../settings/proguard/proguard-project-test.pro'
             minifyEnabled true
             zipAlignEnabled true
             shrinkResources true
@@ -162,6 +163,8 @@ android {
     packagingOptions {
         exclude 'LICENSE.txt'
     }
+
+    testBuildType 'release'
     
     useLibrary 'org.apache.http.legacy'
 }

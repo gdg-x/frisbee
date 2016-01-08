@@ -159,6 +159,9 @@ public class FirstStartStep1Fragment extends BaseFragment {
     }
 
     private void addChapters(List<Chapter> chapterList) {
+        if (mChapterSpinner == null) {
+            return;
+        }
         Collections.sort(chapterList, mLocationComparator);
         mSpinnerAdapter.clear();
         mSpinnerAdapter.addAll(chapterList);

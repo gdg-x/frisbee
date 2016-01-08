@@ -1,13 +1,18 @@
 package org.gdg.frisbee.android.activity;
 
+import android.content.Context;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.EspressoIdlingResource;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,10 +43,17 @@ public class MainActivityTest {
     public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<MainActivity>(MainActivity.class) {
         @Override
         protected void beforeActivityLaunched() {
-            PrefUtils.setInitialSettings(InstrumentationRegistry.getTargetContext(), false, false, null, null);
-            PrefUtils.setHomeChapter(InstrumentationRegistry.getTargetContext(), CHAPTER_BRUSSELS);
+            Context context = InstrumentationRegistry.getTargetContext();
+            PrefUtils.setInitialSettings(context, false, false, null, null);
+            PrefUtils.setHomeChapter(context, CHAPTER_BRUSSELS);
+            PrefUtils.setShouldNotOpenDrawerOnStart(context);
         }
     };
+
+    @Before
+    public void registerIdlingResources() {
+        Espresso.registerIdlingResources(EspressoIdlingResource.getIdlingResource());
+    }
 
     @Test
     public void supportsChapterSwapping() {
@@ -75,5 +87,10 @@ public class MainActivityTest {
 
         onView(withId(R.id.actionbar_spinner))
                 .check(matches(withSpinnerText(CHAPTER_ISTANBUL.toString())));
+    }
+
+    @After
+    public void unregisterIdlingResource() {
+        Espresso.unregisterIdlingResources(EspressoIdlingResource.getIdlingResource());
     }
 }
