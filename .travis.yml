@@ -17,7 +17,7 @@ android:
 
 before_script:
   - GRADLE_OPTS="-Xms40m -Xmx3g -XX:MaxPermSize=3g"
-  - echo no | android create avd --force -n test -t "Google Inc.:Google APIs:"$ANDROID_API_LEVEL --abi google_apis/armeabi-v7a
+  - echo no | android create avd --force -n test -t "Google Inc.:Google APIs:"$ANDROID_API_LEVEL --abi google_apis/armeabi-v7a --skin WXGA720
   - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
   - sleep 10
