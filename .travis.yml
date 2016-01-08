@@ -1,18 +1,16 @@
 language: android
 
-env:
-  global:
-    - secure: "SBlXs4v/M3GD1tRaT6zmMXVpMCUaL/oNcSjGWdHgI56DO5NOmTBmDW5kJTT5y0u0U7aE1/Dq22iXPut8NLxWsEi/20xBq3bXQh9ngRkvOstNX7Y0LqnhKBtPixnMIx07xAjUPYCmunJakCT7Hr4fqZAGfUwA4a3ZzRa/KVeNx2A="
-    - secure: "OVfIL3ggaGcDgJJhdWxYTCo3u38SNPNUNPsv6adHp5wW0Y2n1CF1zcAnZXhTkGEjoGvi0RuV8ZLG9jbmQdqxd17qBeBf2XPWKxyG1SUfegDVSy9OPF8BY11Fsp9I5RP1W3T/c32KTc7zvhtAivq9mbcrBYJZhDCKpZkdTNliFQ0="
-
 android:
   components:
   - platform-tools
   - tools
+  - android-$ANDROID_API_LEVEL
   - android-23
   - build-tools-23.0.2
   - extra-google-m2repository
   - extra-android-m2repository
+  - addon-google_apis-google-$ANDROID_API_LEVEL
+  - sys-img-armeabi-v7a-addon-google_apis-google-$ANDROID_API_LEVEL
 
 before_install:
   - echo $GPG_PASS | gpg --passphrase-fd 0 local.properties.gpg
@@ -21,11 +19,27 @@ before_install:
 
 before_script:
   - GRADLE_OPTS="-Xms40m -Xmx3g -XX:MaxPermSize=3g"
+  - echo no | android create avd --force -n test -t "Google Inc.:Google APIs:"$ANDROID_API_LEVEL --abi google_apis/armeabi-v7a --skin WXGA720
+  - emulator -avd test -no-audio -no-window &
+  - android-wait-for-emulator
+  - adb shell settings put global window_animation_scale 0 &
+  - adb shell settings put global transition_animation_scale 0 &
+  - adb shell settings put global animator_duration_scale 0 &
+  - adb shell input keyevent 82 &
 
 after_success:
   - .buildscript/deploy_alpha.sh
 
-script: "./gradlew check"
+script: "./gradlew check connectedCheck --stacktrace"
+
+env:
+  global:
+    - secure: "SBlXs4v/M3GD1tRaT6zmMXVpMCUaL/oNcSjGWdHgI56DO5NOmTBmDW5kJTT5y0u0U7aE1/Dq22iXPut8NLxWsEi/20xBq3bXQh9ngRkvOstNX7Y0LqnhKBtPixnMIx07xAjUPYCmunJakCT7Hr4fqZAGfUwA4a3ZzRa/KVeNx2A="
+    - secure: "OVfIL3ggaGcDgJJhdWxYTCo3u38SNPNUNPsv6adHp5wW0Y2n1CF1zcAnZXhTkGEjoGvi0RuV8ZLG9jbmQdqxd17qBeBf2XPWKxyG1SUfegDVSy9OPF8BY11Fsp9I5RP1W3T/c32KTc7zvhtAivq9mbcrBYJZhDCKpZkdTNliFQ0="
+    - ADB_INSTALL_TIMEOUT=8
+  matrix:
+    - ANDROID_API_LEVEL=21
+    - ANDROID_API_LEVEL=22
 
 branches:
   except:
