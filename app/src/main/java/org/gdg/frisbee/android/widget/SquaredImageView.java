@@ -20,14 +20,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.view
- * <p/>
- * User: maui
- * Date: 25.06.13
- * Time: 17:40
- */
 public class SquaredImageView extends ImageView {
     public SquaredImageView(Context context) {
         super(context);

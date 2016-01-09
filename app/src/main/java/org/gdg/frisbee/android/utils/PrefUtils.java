@@ -27,6 +27,7 @@ public final class PrefUtils {
     private static final String PREFS_GCM_NOTIFICATION_KEY = "gcm_notification_key";
     private static final String PREFS_SEASONS_GREETINGS = "seasons_greetings";
     private static final String PREFS_ACHIEVEMENTS_PREFIX = "achievement_unlocked_";
+    private static final String PREFS_APP_STATE_MIGRATION_SUCCESSFUL = "app_state_migration_successful";
 
     private static final boolean PREFS_FIRST_START_DEFAULT = true;
 
@@ -176,6 +177,16 @@ public final class PrefUtils {
                                               @NonNull final String achievement) {
         prefs(context).edit()
                 .putBoolean(PREFS_ACHIEVEMENTS_PREFIX + achievement, true)
+                .apply();
+    }
+
+    public static boolean isAppStateMigrationSuccessful(final Context context) {
+        return prefs(context).getBoolean(PREFS_APP_STATE_MIGRATION_SUCCESSFUL, false);
+    }
+
+    public static void setAppStateMigrationSuccessful(@NonNull final Context context) {
+        prefs(context).edit()
+                .putBoolean(PREFS_APP_STATE_MIGRATION_SUCCESSFUL, true)
                 .apply();
     }
 }

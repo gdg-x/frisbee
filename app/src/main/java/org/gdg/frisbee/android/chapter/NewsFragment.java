@@ -70,8 +70,6 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Plus client = App.getInstance().getPlusClient();
-
         StaggeredGridLayoutManager layoutManager = 
                 new StaggeredGridLayoutManager(
                         getResources().getInteger(R.integer.news_fragment_column_count), 
@@ -131,11 +129,7 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
 
                 @Override
                 public void onNotFound(String key) {
-                    if (isAdded()) {
-                        Snackbar snackbar = Snackbar.make(getView(), R.string.offline_alert,
-                                Snackbar.LENGTH_SHORT);
-                        ColoredSnackBar.alert(snackbar).show();
-                    }
+                    showError(R.string.offline_alert);
                 }
             });
         }

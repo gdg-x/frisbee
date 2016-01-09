@@ -1,12 +1,6 @@
 package org.gdg.frisbee.android.api.model;
 
-/**
- * Created with IntelliJ IDEA.
- * User: maui
- * Date: 09.07.13
- * Time: 11:51
- * To change this template use File | Settings | File Templates.
- */
+
 public class EventDetail {
     private String mId, mTitle, mGplusEventUrl, mAbout;
 

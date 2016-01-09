@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.onboarding;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -37,6 +38,7 @@ import java.util.List;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
@@ -49,12 +51,15 @@ import org.gdg.frisbee.android.view.AutoCompleteSpinnerView;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 import timber.log.Timber;
+import java.util.Collections;
+import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class FirstStartStep1Fragment extends BaseFragment {
 
@@ -102,7 +107,8 @@ public class FirstStartStep1Fragment extends BaseFragment {
 
         super.onActivityCreated(savedInstanceState);
 
-        mLocationComparator = new ChapterComparator(PrefUtils.getHomeChapterId(getActivity()));
+        mLocationComparator = new ChapterComparator(PrefUtils.getHomeChapterId(getActivity()),
+                App.getInstance().getLastLocation());
 
         mChapterForCityName = new ChapterAdapter(getActivity(), R.layout.spinner_item_welcome);
         mChapterForCityName.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
@@ -168,13 +174,14 @@ public class FirstStartStep1Fragment extends BaseFragment {
 
     private void fetchChapters() {
 
-        App.getInstance().getGdgXHub().getDirectory(new Callback<Directory>() {
-
+        App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
             @Override
-            public void success(final Directory directory, Response response) {
+            public void success(Directory directory) {
 
-                addChapters(directory.getGroups());
-                mLoadSwitcher.setDisplayedChild(1);
+                if (isContextValid()) {
+                    addChapters(directory.getGroups());
+                    mLoadSwitcher.setDisplayedChild(1);
+                }
                 App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB,
                         directory,
                         DateTime.now().plusDays(4),
@@ -182,23 +189,34 @@ public class FirstStartStep1Fragment extends BaseFragment {
             }
 
             @Override
-            public void failure(RetrofitError error) {
-                try {
-                    Snackbar snackbar = Snackbar.make(getView(), R.string.fetch_chapters_failed,
-                            Snackbar.LENGTH_INDEFINITE);
-                    snackbar.setAction("Retry", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            fetchChapters();
-                        }
-                    });
-                    ColoredSnackBar.alert(snackbar).show();
-                } catch (IllegalStateException exception) {
-                    Toast.makeText(getActivity(), R.string.fetch_chapters_failed, Toast.LENGTH_SHORT).show();
-                }
-                Timber.e(error, "Could'nt fetch chapter list");
+            public void failure(Throwable error) {
+                showError(R.string.fetch_chapters_failed);
+            }
+
+            @Override
+            public void networkFailure(Throwable error) {
+                showError(R.string.offline_alert);
             }
         });
+    }
+
+    @Override
+    protected void showError(@StringRes int errorStringRes) {
+        if (isContextValid()) {
+            if (getView() != null) {
+                Snackbar snackbar = Snackbar.make(getView(), errorStringRes,
+                        Snackbar.LENGTH_INDEFINITE);
+                snackbar.setAction("Retry", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        fetchChapters();
+                    }
+                });
+                ColoredSnackBar.alert(snackbar).show();
+            } else {
+                Toast.makeText(getActivity(), errorStringRes, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void addChapters(List<Chapter> chapterList) {

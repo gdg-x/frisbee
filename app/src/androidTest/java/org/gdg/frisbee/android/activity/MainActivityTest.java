@@ -31,28 +31,30 @@ import static org.hamcrest.Matchers.is;
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
+    public static final Chapter CHAPTER_ISTANBUL = new Chapter("Istanbul", "100514812580249787371");
+    public static final Chapter CHAPTER_BRUSSELS = new Chapter("Brussels", "105068877693379070381");
 
     @Rule
     public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<MainActivity>(MainActivity.class) {
         @Override
         protected void beforeActivityLaunched() {
             PrefUtils.setInitialSettings(InstrumentationRegistry.getTargetContext(), false, false, null, null);
+            PrefUtils.setHomeChapter(InstrumentationRegistry.getTargetContext(), CHAPTER_BRUSSELS);
         }
     };
 
     @Test
     public void supportsChapterSwapping() {
-        final Chapter chapter = new Chapter("Istanbul", "100514812580249787371");
 
         onView(withId(R.id.actionbar_spinner)).perform(click());
-        onData(allOf(is(instanceOf(Chapter.class)), is(chapter)))
+        onData(allOf(is(instanceOf(Chapter.class)), is(CHAPTER_ISTANBUL)))
                 .perform(click());
         onView(withId(R.id.actionbar_spinner))
-                .check(matches(withSpinnerText(chapter.toString())));
+                .check(matches(withSpinnerText(CHAPTER_ISTANBUL.toString())));
 
         onView(withId(R.id.pager)).perform(swipeRight());
-        onView(withId(R.id.tagline)).check(matches(withText(containsString(chapter.toString()))));
-        onView(withId(R.id.about)).check(matches(withText(containsString(chapter.toString()))));
+        onView(withId(R.id.tagline)).check(matches(withText(containsString(CHAPTER_ISTANBUL.toString()))));
+        onView(withId(R.id.about)).check(matches(withText(containsString(CHAPTER_ISTANBUL.toString()))));
         onView(withId(R.id.pager)).perform(swipeLeft());
     }
 
@@ -62,18 +64,16 @@ public class MainActivityTest {
 
         onView(isRoot()).perform(orientationPortrait());
 
-        final Chapter chapter = new Chapter("Istanbul", "100514812580249787371");
-
         onView(withId(R.id.actionbar_spinner)).perform(click());
-        onData(allOf(is(instanceOf(Chapter.class)), is(chapter)))
+        onData(allOf(is(instanceOf(Chapter.class)), is(CHAPTER_ISTANBUL)))
                 .perform(click());
         onView(withId(R.id.actionbar_spinner))
-                .check(matches(withSpinnerText(chapter.toString())));
+                .check(matches(withSpinnerText(CHAPTER_ISTANBUL.toString())));
 
 
         onView(isRoot()).perform(orientationLandscape());
 
         onView(withId(R.id.actionbar_spinner))
-                .check(matches(withSpinnerText(chapter.toString())));
+                .check(matches(withSpinnerText(CHAPTER_ISTANBUL.toString())));
     }
 }

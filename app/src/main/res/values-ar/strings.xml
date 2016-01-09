@@ -161,7 +161,7 @@
   <string name="feedback_email_hint">بريدك الإلكتروني</string>
   <string name="feedback_message_hint">ما الذي يدور في ذهنك؟?</string>
   <string name="feedback_send">أرسل</string>
-  <string name="feedback_sending">جاري الإرسال…</string>
+  <string name="feedback_sending">جاري الإرسال&#8230;</string>
   <string name="for_leads">ليؤدي</string>
   <string name="leads_welcome_title">مرحبا</string>
   <string name="leads_welcome">كما تؤدي GDG، لديك حق الوصول إلى هذه الموارد في تنظيم الوحيد!</string>
@@ -181,6 +181,8 @@
   <string name="feedback_invalid_email">إدخال عنوان بريد إلكتروني صحيح</string>
   <string name="drawer_subheader_games">ألعاب</string>
   <string name="fork_me">مفترق لي</string>
-  <string name="cd_arrowTagImage">Arrow Tagging Game</string>
-  <string name="cd_qrCode">QR Code</string>
+  <string name="cd_arrowTagImage">لعبة أسهم الإشارة</string>
+  <string name="cd_qrCode">رمز QR</string>
+  <string name="invitation_title">أدع أصدقائك إلى تطبيق المجموعة</string>
+  <string name="invitation_message">حمّل تطبيق GDG و اكتشف محتوى مجموعة مطوري Google بينما يكون جاهزا للإطلاق.</string>
 </resources>

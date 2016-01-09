@@ -7,11 +7,9 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 
 import org.gdg.frisbee.android.Const;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.OrganizerCheckResponse;
 import org.gdg.frisbee.android.utils.PrefUtils;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
 
 public class OrganizerChecker {
     private boolean mIsOrganizer = false;
@@ -53,9 +51,9 @@ public class OrganizerChecker {
                 && (!currentId.equals(mCheckedId)
                 || System.currentTimeMillis() > mLastOrganizerCheck + Const.ORGANIZER_CHECK_MAX_TIME)) {
             mIsOrganizer = false;
-            App.getInstance().getGdgXHub().checkOrganizer(currentId, new Callback<OrganizerCheckResponse>() {
+            App.getInstance().getGdgXHub().checkOrganizer(currentId).enqueue(new Callback<OrganizerCheckResponse>() {
                 @Override
-                public void success(OrganizerCheckResponse organizerCheckResponse, retrofit.client.Response response) {
+                public void success(OrganizerCheckResponse organizerCheckResponse) {
                     mLastOrganizerCheck = System.currentTimeMillis();
                     mCheckedId = currentId;
                     mIsOrganizer = organizerCheckResponse.getChapters().size() > 0;
@@ -65,7 +63,7 @@ public class OrganizerChecker {
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
+                public void failure(Throwable error) {
                     mIsOrganizer = false;
                     responseHandler.onErrorResponse();
                 }

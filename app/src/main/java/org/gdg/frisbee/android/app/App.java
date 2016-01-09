@@ -35,11 +35,10 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.plus.Plus;
+import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
-import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.LruCache;
-import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 
 import net.danlew.android.joda.JodaTimeAndroid;
@@ -70,6 +69,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import io.fabric.sdk.android.Fabric;
+import okhttp3.OkHttpClient;
 import timber.log.Timber;
 
 public class App extends BaseApp implements LocationListener {
@@ -131,9 +131,7 @@ public class App extends BaseApp implements LocationListener {
         mOkHttpClient = OkClientFactory.provideOkHttpClient(this);
 
         //Initialize Plus Client which is used to get profile pictures and NewFeed of the chapters.
-        final HttpTransport mTransport = new GapiOkTransport.Builder()
-                .setOkHttpClient(mOkHttpClient)
-                .build();
+        final HttpTransport mTransport = new GapiOkTransport(mOkHttpClient);
         final JsonFactory mJsonFactory = new GsonFactory();
         plusClient = new Plus.Builder(mTransport, mJsonFactory, null)
                 .setGoogleClientRequestInitializer(
@@ -150,14 +148,13 @@ public class App extends BaseApp implements LocationListener {
         // When we clone mOkHttpClient, it will use all the same cache and everything.
         // Only the interceptors will be different.
         // We shouldn't have the below interceptor in other instances.
-        OkHttpClient picassoClient = mOkHttpClient.clone();
-        picassoClient.interceptors().add(new PlusPersonDownloader(plusClient));
+        OkHttpClient.Builder picassoClient = mOkHttpClient.newBuilder();
+        picassoClient.addInterceptor(new PlusPersonDownloader(plusClient));
 
         mPicasso = new Picasso.Builder(this)
-                .downloader(new OkHttpDownloader(picassoClient))
+                .downloader(new OkHttp3Downloader(picassoClient.build()))
                 .memoryCache(new LruCache(this))
                 .build();
-//        mPicasso.setIndicatorsEnabled(BuildConfig.DEBUG);
 
         JodaTimeAndroid.init(this);
 

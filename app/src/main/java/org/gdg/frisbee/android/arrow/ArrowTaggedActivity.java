@@ -21,15 +21,18 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.widget.Toast;
 
-import com.google.android.gms.appstate.AppStateManager;
-import com.google.android.gms.appstate.AppStateStatusCodes;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.games.Games;
+import com.google.android.gms.games.snapshot.Snapshot;
+import com.google.android.gms.games.snapshot.Snapshots;
 import com.google.android.gms.plus.People;
 import com.google.android.gms.plus.Plus;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
@@ -37,19 +40,14 @@ import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.view.DividerItemDecoration;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.IOException;
 
 import butterknife.Bind;
-import retrofit.Callback;
-import retrofit.RetrofitError;
 import timber.log.Timber;
 
 public class ArrowTaggedActivity extends GdgActivity {
 
     private static final String ID_SEPARATOR_FOR_SPLIT = "\\|";
-    private static final String ID_SPLIT_CHAR = "|";
 
     @Bind(R.id.taggedList)
     RecyclerView taggedList;
@@ -76,40 +74,6 @@ public class ArrowTaggedActivity extends GdgActivity {
         taggedList.setLayoutManager(new LinearLayoutManager(this));
         taggedList.addItemDecoration(new DividerItemDecoration(this, null));
         taggedList.setAdapter(adapter);
-
-        AppStateManager.load(getGoogleApiClient(), Const.ARROW_DONE_STATE_KEY)
-                .setResultCallback(new ResultCallback<AppStateManager.StateResult>() {
-
-                    @Override
-                    public void onResult(AppStateManager.StateResult stateResult) {
-                        AppStateManager.StateConflictResult conflictResult = stateResult.getConflictResult();
-                        AppStateManager.StateLoadedResult loadedResult = stateResult.getLoadedResult();
-                        serializedOrganizers = "";
-
-                        if (loadedResult != null) {
-                            final int statusCode = loadedResult.getStatus().getStatusCode();
-                            if (statusCode == AppStateStatusCodes.STATUS_OK) {
-                                serializedOrganizers = new String(loadedResult.getLocalData());
-                            }
-                        } else if (conflictResult != null) {
-                            serializedOrganizers = mergeIds(new String(conflictResult.getLocalData()),
-                                    new String(conflictResult.getServerData()));
-                        }
-
-                        App.getInstance().getGdgXHub().getDirectory(new Callback<Directory>() {
-
-                            @Override
-                            public void success(final Directory directory, final retrofit.client.Response response) {
-                                loadChapterOrganizers(directory);
-                            }
-
-                            @Override
-                            public void failure(final RetrofitError error) {
-                                Timber.e(error, "Error");
-                            }
-                        });
-                    }
-                });
     }
 
     @Override
@@ -119,6 +83,46 @@ public class ArrowTaggedActivity extends GdgActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        super.onConnected(bundle);
+
+        if (TextUtils.isEmpty(serializedOrganizers)) {
+            loadFromSnapshot();
+        }
+    }
+
+    private void loadFromSnapshot() {
+        Games.Snapshots.open(getGoogleApiClient(), Const.GAMES_SNAPSHOT_ID, false).setResultCallback(
+                new ResultCallback<Snapshots.OpenSnapshotResult>() {
+
+                    @Override
+                    public void onResult(Snapshots.OpenSnapshotResult stateResult) {
+                        if (!stateResult.getStatus().isSuccess()) {
+                            return;
+                        }
+
+                        Snapshot loadedResult = stateResult.getSnapshot();
+                        serializedOrganizers = "";
+                        if (loadedResult != null) {
+                            try {
+                                serializedOrganizers = new String(loadedResult.getSnapshotContents().readFully());
+                            } catch (IOException e) {
+                                Timber.w(e, "Could not store tagged organizer");
+                                Toast.makeText(ArrowTaggedActivity.this, R.string.arrow_oops, Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                        App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
+                            @Override
+                            public void success(Directory directory) {
+                                loadChapterOrganizers(directory);
+                            }
+                        });
+                    }
+                });
     }
 
     private void loadChapterOrganizers(Directory directory) {
@@ -149,23 +153,10 @@ public class ArrowTaggedActivity extends GdgActivity {
                             public void onResult(People.LoadPeopleResult loadPeopleResult) {
                                 organizer.setResolved(loadPeopleResult.getPersonBuffer().get(0));
                                 adapter.add(organizer);
-                                adapter.notifyDataSetChanged();
+                                adapter.notifyItemInserted(adapter.getItemCount() - 1);
                             }
                         });
             }
         }
-    }
-
-    private String mergeIds(String list1, String list2) {
-        String[] parts1 = list1.split(ID_SEPARATOR_FOR_SPLIT);
-        String[] parts2 = list2.split(ID_SEPARATOR_FOR_SPLIT);
-        Set<String> mergedSet = new HashSet<>(Arrays.asList(parts1));
-        mergedSet.addAll(Arrays.asList(parts2));
-        return TextUtils.join(ID_SPLIT_CHAR, mergedSet);
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        super.onConnected(bundle);
     }
 }

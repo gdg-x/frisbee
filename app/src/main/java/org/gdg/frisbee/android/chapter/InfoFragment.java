@@ -27,14 +27,13 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.api.services.plus.model.Person;
+import com.tasomaniac.android.widget.DelayedProgressBar;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -70,12 +69,12 @@ public class InfoFragment extends BaseFragment {
     LinearLayout mResourcesBox;
 
     @Bind(R.id.loading)
-    LinearLayout mProgressContainer;
+    DelayedProgressBar mProgressContainer;
 
     @Bind(R.id.container)
     ScrollView mContainer;
 
-    private boolean mLoading = true;
+    private boolean mLoading = false;
 
     private LayoutInflater mInflater;
 
@@ -121,6 +120,7 @@ public class InfoFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
 
         mInflater = LayoutInflater.from(getActivity());
+        setIsLoading(true);
 
         final String chapterPlusId = getArguments().getString(Const.EXTRA_PLUS_ID);
         if (Utils.isOnline(getActivity())) {
@@ -188,9 +188,7 @@ public class InfoFragment extends BaseFragment {
 
                 @Override
                 public void onNotFound(String key) {
-                    Snackbar snackbar = Snackbar.make(getView(), R.string.offline_alert,
-                            Snackbar.LENGTH_SHORT);
-                    ColoredSnackBar.alert(snackbar).show();
+                    showError(R.string.offline_alert);
                 }
             });
         }
@@ -326,29 +324,18 @@ public class InfoFragment extends BaseFragment {
 
         if (isLoading) {
             mContainer.setVisibility(View.GONE);
-            mProgressContainer.startAnimation(AnimationUtils.loadAnimation(
-                    getActivity(), android.R.anim.fade_in));
-            mProgressContainer.setVisibility(View.VISIBLE);
+            mProgressContainer.show(true);
         } else {
-            Animation fadeOut = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out);
-            fadeOut.setAnimationListener(new Animation.AnimationListener() {
+            mProgressContainer.hide(true, new Runnable() {
                 @Override
-                public void onAnimationStart(Animation animation) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    mProgressContainer.setVisibility(View.GONE);
-                    mContainer.startAnimation(AnimationUtils.loadAnimation(
-                            getActivity(), android.R.anim.fade_in));
-                    mContainer.setVisibility(View.VISIBLE);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
+                public void run() {
+                    if (mContainer != null) {
+                        mContainer.setAlpha(0.0f);
+                        mContainer.setVisibility(View.VISIBLE);
+                        mContainer.animate().alpha(1.0f);
+                    }
                 }
             });
-            mProgressContainer.startAnimation(fadeOut);
         }
     }
 

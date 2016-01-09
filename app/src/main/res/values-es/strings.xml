@@ -144,7 +144,7 @@
   <string name="feedback_email_hint">Tu dirección de e-mail</string>
   <string name="feedback_message_hint">¿En que estas pensando?</string>
   <string name="feedback_send">Enviar</string>
-  <string name="feedback_sending">Enviando…</string>
+  <string name="feedback_sending">Enviando&#8230;</string>
   <string name="for_leads">Para Organizadores</string>
   <string name="leads_welcome_title">Bienvenida(o)</string>
   <string name="leads_welcome">Como Organizador de GDG ¡Tienes acceso a recursos sólo para organizadores!</string>
@@ -166,4 +166,6 @@
   <string name="fork_me">Fork me</string>
   <string name="cd_arrowTagImage">Arrow Tagging Game</string>
   <string name="cd_qrCode">QR Code</string>
+  <string name="invitation_title">Invite your friends to GDG app</string>
+  <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go.</string>
 </resources>

@@ -34,14 +34,9 @@ Read the [Development Guide](https://github.com/gdg-x/frisbee/wiki/Developer-Doc
 
 
 ###Contributors
-* [Sebastian Mauer](https://github.com/mauimauer)
-* [Friedger Müffke](https://github.com/friedger)
-* [Henrique Rocha](https://github.com/HenriqueRocha)
-* [Said Tahsin Dane](https://github.com/tasomaniac)
-* [Stefan Hoth](https://github.com/stefanhoth)
-* [Bartek](https://github.com/przybylski)
-* [Jerrell Mardis](https://github.com/jerrellmardis)
-* [Paresh Mayani](https://github.com/PareshMayani)
+See [list of contributors](https://github.com/gdg-x/frisbee/graphs/contributors)
+
+Maintainer: [@tasomaniac](https://github.com/tasomaniac) and [@friedger](https://github.com/friedger).
 
 ###Translation
 

@@ -5,14 +5,6 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.view
- * <p/>
- * User: maui
- * Date: 14.06.13
- * Time: 03:20
- */
 public class NonSwipeableViewPager extends ViewPager {
 
     public NonSwipeableViewPager(Context context) {

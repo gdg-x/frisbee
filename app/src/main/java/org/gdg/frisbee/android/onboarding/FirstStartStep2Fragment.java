@@ -28,6 +28,7 @@ import android.widget.Button;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.drive.Drive;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.Plus;
 
@@ -93,9 +94,11 @@ public class FirstStartStep2Fragment extends BaseFragment implements
                 .addOnConnectionFailedListener(this)
                 .addApi(Plus.API)
                 .addApi(Games.API)
+                .addApi(Drive.API)
                 .addScope(Plus.SCOPE_PLUS_LOGIN)
                 .addScope(Plus.SCOPE_PLUS_PROFILE)
                 .addScope(Games.SCOPE_GAMES)
+                .addScope(Drive.SCOPE_APPFOLDER)
                 .build();
     }
 

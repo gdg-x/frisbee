@@ -57,7 +57,7 @@
   <string name="contributors">本 GDG  应用程序为社区贡献并开源。以下为贡献者：</string>
   <string name="get_involved">参与贡献！</string>
   <string name="get_involved_text">本 GDG 应用程序为社区开发，任何人都欢迎参与到开发中。\n\n请直接前往 Github 获取代码。\n\nhttps://github.com/imstand/GDG-China</string>
-  <string name="about_license">© 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof the Apache 2.0 License</string>
+  <string name="about_license">(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof the Apache 2.0 License</string>
   <string name="past_event">历史活动</string>
   <string name="upcoming_widget">GDG - 即将到来的活动</string>
   <string name="global">全球</string>
@@ -98,7 +98,7 @@
   <string name="media_route_menu_title">在线讲座</string>
   <string name="navigate_to">导航到活动现场</string>
   <string name="gde">Google Developer Experts</string>
-  <string name="fetch_gde_failed">Could not fetch GDE Directory…</string>
+  <string name="fetch_gde_failed">Could not fetch GDE Directory&#8230;</string>
   <string name="gde_who_title">Google 开发者专家是谁？</string>
   <string name="gde_who_desc">Google Developer Experts (GDEs) are experts in one or more Google developer technologies. The GDE program recognizes the exemplary work done by these rock stars for the Google Developers worldwide by inviting them to be part of the growing GDE community. GDEs are gurus, mentors and friends; they are developers just like you.\n\nGoogle Developers Experts speak in local and global events, have a strong online presence and an excellent technical background in their field. These independent developers bring their real-world experience and knowledge working with Google technologies to developer communities worldwide.</string>
   <string name="gde_what_title">GDE 们做哪些事情？</string>
@@ -140,7 +140,7 @@
   <string name="feedback_email_hint">您的电子邮件地址</string>
   <string name="feedback_message_hint">您在想什么呢？</string>
   <string name="feedback_send">发送​​</string>
-  <string name="feedback_sending">正在发送…</string>
+  <string name="feedback_sending">正在发送&#8230;</string>
   <string name="for_leads">For Leads</string>
   <string name="leads_welcome_title">欢迎</string>
   <string name="leads_welcome">As a GDG lead, you have access to these organizer-only resources!</string>
@@ -162,4 +162,6 @@
   <string name="fork_me">Fork me</string>
   <string name="cd_arrowTagImage">Arrow Tagging Game</string>
   <string name="cd_qrCode">QR Code</string>
+  <string name="invitation_title">Invite your friends to GDG app</string>
+  <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go.</string>
 </resources>

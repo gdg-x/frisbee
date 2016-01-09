@@ -18,7 +18,6 @@ package org.gdg.frisbee.android.pulse;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -31,26 +30,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.Spinner;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Pulse;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
-import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 import butterknife.Bind;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
-import timber.log.Timber;
 
 public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment.Callbacks {
 
@@ -60,9 +54,6 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
 
     @Bind(R.id.tabs)
     TabLayout mTabLayout;
-
-    @Bind(R.id.content_frame)
-    FrameLayout mContentLayout;
 
     private ArrayAdapter<String> mSpinnerAdapter;
     private PulsePagerAdapter mViewPagerAdapter;
@@ -97,7 +88,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
 
     @Override
     public void onBackPressed() {
-        if (!PulseFragment.GLOBAL.equals(mSpinner.getSelectedItem())) {
+        if (mSpinner != null && !PulseFragment.GLOBAL.equals(mSpinner.getSelectedItem())) {
             openPulse(PulseFragment.GLOBAL);
             return;
         }
@@ -105,9 +96,9 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
     }
 
     private void fetchPulse(final String selectedPulse) {
-        App.getInstance().getGroupDirectory().getPulse(new Callback<Pulse>() {
+        App.getInstance().getGroupDirectory().getPulse().enqueue(new Callback<Pulse>() {
             @Override
-            public void success(final Pulse pulse, Response response) {
+            public void success(final Pulse pulse) {
                 App.getInstance().getModelCache().putAsync(
                         Const.CACHE_KEY_PULSE_GLOBAL,
                         pulse,
@@ -122,14 +113,13 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
             }
 
             @Override
-            public void failure(RetrofitError error) {
-                try {
-                    Snackbar snackbar = Snackbar.make(mContentLayout, R.string.fetch_chapters_failed,
-                            Snackbar.LENGTH_SHORT);
-                    ColoredSnackBar.alert(snackbar).show();
-                } catch (IllegalStateException ignored) {
-                }
-                Timber.e(error, "Couldn't fetch chapter list");
+            public void failure(Throwable error) {
+                showError(R.string.fetch_chapters_failed);
+            }
+
+            @Override
+            public void networkFailure(Throwable error) {
+                showError(R.string.offline_alert);
             }
         });
     }
@@ -212,7 +202,9 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(INSTANCE_STATE_SELECTED_PULSE, (String) mSpinner.getSelectedItem());
+        if (mSpinner != null) {
+            outState.putString(INSTANCE_STATE_SELECTED_PULSE, (String) mSpinner.getSelectedItem());
+        }
     }
 
     public class PulsePagerAdapter extends FragmentStatePagerAdapter {

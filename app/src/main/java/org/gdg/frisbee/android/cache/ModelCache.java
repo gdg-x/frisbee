@@ -51,14 +51,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import timber.log.Timber;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.cache
- * <p/>
- * User: maui
- * Date: 27.05.13
- * Time: 23:51
- */
 public class ModelCache {
 
     public static class Builder {
@@ -516,7 +508,7 @@ public class ModelCache {
                 return mGson.fromJson(content, clazz);
             }
         } catch (IllegalArgumentException e) {
-            Timber.e("Deserializing from disk failed", e);
+            Timber.e(e, "Deserializing from disk failed");
             return null;
         } catch (ClassNotFoundException e) {
             throw new IOException(e.getMessage());
