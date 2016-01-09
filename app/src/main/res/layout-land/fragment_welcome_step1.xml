@@ -87,11 +87,13 @@
 
             <org.gdg.frisbee.android.view.AutoCompleteSpinnerView
               android:id="@+id/chapter_spinner"
-              android:layout_width="wrap_content"
+              android:gravity="center"
+              android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/keyline_1"
+              android:layout_marginRight="@dimen/keyline_1"
               android:minHeight="50dip"
-              android:minWidth="200dip"
-              android:spinnerMode="dropdown" />
+              android:minWidth="200dip" />
 
             <Button
               android:id="@+id/confirm"
