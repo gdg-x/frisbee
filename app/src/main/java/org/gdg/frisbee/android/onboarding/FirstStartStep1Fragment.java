@@ -48,6 +48,7 @@ import org.gdg.frisbee.android.chapter.ChapterComparator;
 import org.gdg.frisbee.android.common.BaseFragment;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.view.AutoCompleteSpinnerView;
+import org.gdg.frisbee.android.view.BaseTextWatcher;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
@@ -75,17 +76,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
     private Chapter mSelectedChapter;
     private ChapterComparator mLocationComparator;
 
-    private final TextWatcher disableConfirmAfterTextChanged = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
+    private final TextWatcher disableConfirmAfterTextChanged = new BaseTextWatcher(){
         @Override
         public void afterTextChanged(Editable s) {
             mConfirmButton.setEnabled(false);
