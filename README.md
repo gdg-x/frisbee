@@ -32,6 +32,8 @@ Read the [Contribution Guidelines](https://github.com/gdg-x/frisbee/blob/develop
 
 Read the [Development Guide](https://github.com/gdg-x/frisbee/wiki/Developer-Documentation).
 
+When sending pull requests please make sure to enable EditorConfig in Android Studio -> Settings -> Editor -> Code & Style -> EditorConfig.
+
 
 ###Contributors
 See [list of contributors](https://github.com/gdg-x/frisbee/graphs/contributors)
