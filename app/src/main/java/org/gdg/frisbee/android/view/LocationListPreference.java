@@ -47,7 +47,7 @@ public class LocationListPreference extends DialogPreference implements AdapterV
         listView.setOnItemClickListener(this);
 
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        CheckedItemAdapter adapter = new CheckedItemAdapter(
+        final CheckedItemAdapter adapter = new CheckedItemAdapter(
                 getContext(), android.R.layout.simple_list_item_single_choice,
                 android.R.id.text1, getEntries()
         );
@@ -55,16 +55,13 @@ public class LocationListPreference extends DialogPreference implements AdapterV
         clickedItemIndex = findIndexOfValue(getPersistedString(null));
         listView.setSelection(clickedItemIndex);
         listView.setItemChecked(clickedItemIndex, true);
-        listView.setTextFilterEnabled(true);
-        listView.setFilterListener(
-                new Filter.FilterListener() {
-                    @Override
-                    public void onFilterComplete(int count) {
-                        int index = findIndexByLabelInFilteredListView(getPersistedString(null));
-                        listView.setItemChecked(index, true);
-                    }
-                }
-        );
+        final Filter.FilterListener filterListener = new Filter.FilterListener() {
+            @Override
+            public void onFilterComplete(int count) {
+                int index = findIndexByLabelInFilteredListView(getPersistedString(null));
+                listView.setItemChecked(index, true);
+            }
+        };
 
         SearchView cityNameSearchView = (SearchView) view.findViewById(R.id.filter);
         cityNameSearchView.setOnQueryTextListener(
@@ -76,7 +73,7 @@ public class LocationListPreference extends DialogPreference implements AdapterV
 
                     @Override
                     public boolean onQueryTextChange(String newText) {
-                        listView.setFilterText(newText);
+                        adapter.getFilter().filter(newText, filterListener);
                         return true;
                     }
                 }
