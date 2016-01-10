@@ -138,8 +138,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
         autoCompleteSpinnerView.setOnItemClickListener(enableConfirmOnChapterClick);
         autoCompleteSpinnerView.addTextChangedListener(disableConfirmAfterTextChanged);
 
-        //autoCompleteSpinnerView.setOnTouchListener(new ChapterSpinnerTouchListener());
-        autoCompleteSpinnerView.setOnClickListener(new ChapterSpinnerClickListener());
+        autoCompleteSpinnerView.setOnTouchListener(new ChapterSpinnerTouchListener());
 
         mConfirmButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -241,22 +240,11 @@ public class FirstStartStep1Fragment extends BaseFragment {
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 if (event.getRawX() >= (autoCompleteSpinnerView.getRight()
                         - autoCompleteSpinnerView.getCompoundDrawables()[drawableRight].getBounds().width())) {
-                    if (autoCompleteSpinnerView.isPopupShowing()) {
-                        autoCompleteSpinnerView.dismissDropDown();
-                    } else {
-                        autoCompleteSpinnerView.showDropDown();
-                    }
+                    autoCompleteSpinnerView.showDropDown();
                     return true;
                 }
             }
             return false;
-        }
-    }
-
-    private class ChapterSpinnerClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            autoCompleteSpinnerView.showDropDown();
         }
     }
 }
