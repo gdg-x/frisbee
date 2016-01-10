@@ -16,8 +16,6 @@
 
 package org.gdg.frisbee.android.onboarding;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
@@ -55,12 +53,6 @@ import org.joda.time.DateTime;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import timber.log.Timber;
-import java.util.Collections;
-import java.util.List;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 public class FirstStartStep1Fragment extends BaseFragment {
 
@@ -72,11 +64,10 @@ public class FirstStartStep1Fragment extends BaseFragment {
     @Bind(R.id.viewSwitcher)
     ViewSwitcher mLoadSwitcher;
     private ChapterAdapter mChapterForCityName;
-    private ChapterAdapter mChapterForLocationAdapter;
     private Chapter mSelectedChapter;
     private ChapterComparator mLocationComparator;
 
-    private final TextWatcher disableConfirmAfterTextChanged = new BaseTextWatcher(){
+    private final TextWatcher disableConfirmAfterTextChanged = new BaseTextWatcher() {
         @Override
         public void afterTextChanged(Editable s) {
             mConfirmButton.setEnabled(false);
@@ -103,8 +94,6 @@ public class FirstStartStep1Fragment extends BaseFragment {
 
         mChapterForCityName = new ChapterAdapter(getActivity(), R.layout.spinner_item_welcome);
         mChapterForCityName.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-
-        mChapterForLocationAdapter = new ChapterAdapter(getActivity(), android.R.layout.simple_list_item_single_choice);
 
         if (savedInstanceState != null) {
             mSelectedChapter = savedInstanceState.getParcelable(ARG_SELECTED_CHAPTER);
@@ -149,7 +138,8 @@ public class FirstStartStep1Fragment extends BaseFragment {
         autoCompleteSpinnerView.setOnItemClickListener(enableConfirmOnChapterClick);
         autoCompleteSpinnerView.addTextChangedListener(disableConfirmAfterTextChanged);
 
-        autoCompleteSpinnerView.setOnTouchListener(new ChapterSpinnerTouchListener());
+        //autoCompleteSpinnerView.setOnTouchListener(new ChapterSpinnerTouchListener());
+        autoCompleteSpinnerView.setOnClickListener(new ChapterSpinnerClickListener());
 
         mConfirmButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -215,9 +205,6 @@ public class FirstStartStep1Fragment extends BaseFragment {
         mChapterForCityName.clear();
         mChapterForCityName.addAll(chapterList);
 
-        mChapterForLocationAdapter.clear();
-        mChapterForLocationAdapter.addAll(chapterList);
-
         autoCompleteSpinnerView.setAdapter(mChapterForCityName);
 
         if (mSelectedChapter != null) {
@@ -241,25 +228,12 @@ public class FirstStartStep1Fragment extends BaseFragment {
         return v;
     }
 
-    private void showAllChaptersByLocation() {
-        new AlertDialog.Builder(getContext())
-                .setAdapter(
-                        mChapterForLocationAdapter, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int position) {
-                                mSelectedChapter = mChapterForLocationAdapter.getItem(position);
-                                autoCompleteSpinnerView.setText(mSelectedChapter.toString(), false);
-                                mConfirmButton.setEnabled(true);
-                            }
-                        }
-                ).show();
-    }
-
     public interface Step1Listener {
         void onConfirmedChapter(Chapter chapter);
     }
 
     private class ChapterSpinnerTouchListener implements View.OnTouchListener {
+
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             final int drawableRight = 2;
@@ -267,11 +241,22 @@ public class FirstStartStep1Fragment extends BaseFragment {
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 if (event.getRawX() >= (autoCompleteSpinnerView.getRight()
                         - autoCompleteSpinnerView.getCompoundDrawables()[drawableRight].getBounds().width())) {
-                    showAllChaptersByLocation();
+                    if (autoCompleteSpinnerView.isPopupShowing()) {
+                        autoCompleteSpinnerView.dismissDropDown();
+                    } else {
+                        autoCompleteSpinnerView.showDropDown();
+                    }
                     return true;
                 }
             }
             return false;
+        }
+    }
+
+    private class ChapterSpinnerClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            autoCompleteSpinnerView.showDropDown();
         }
     }
 }

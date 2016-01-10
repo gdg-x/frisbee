@@ -63,7 +63,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:inAnimation="@anim/fade_in"
-          android:outAnimation="@anim/fade_out">
+          android:outAnimation="@anim/fade_out" >
 
           <LinearLayout
             android:layout_width="match_parent"
@@ -93,7 +93,8 @@
               android:layout_marginLeft="@dimen/keyline_1"
               android:layout_marginRight="@dimen/keyline_1"
               android:minHeight="50dip"
-              android:minWidth="200dip" />
+              android:minWidth="200dip"
+              android:drawableRight="@android:drawable/arrow_down_float" />
 
             <Button
               android:id="@+id/confirm"
