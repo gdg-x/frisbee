@@ -15,7 +15,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<RelativeLayout
+<FrameLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
@@ -33,7 +33,8 @@
     android:paddingTop="@dimen/keyline_1_minus_12dp"
     android:scrollbarStyle="outsideOverlay"
     android:visibility="gone"
-    tools:visibility="visible"/>
+    tools:visibility="visible"
+    tools:listitem ="@layout/list_event_item"  />
 
   <include layout="@layout/loading_animated_view"/>
 
@@ -62,4 +63,4 @@
       android:singleLine="true"
       android:text="@string/no_scheduled_events"/>
   </LinearLayout>
-</RelativeLayout>
+</FrameLayout>
