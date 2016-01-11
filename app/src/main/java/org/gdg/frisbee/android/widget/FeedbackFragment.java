@@ -47,7 +47,6 @@ import android.widget.EditText;
 
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.activity.GdgActivity;
 import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.Utils;
@@ -135,17 +134,7 @@ public class FeedbackFragment extends DialogFragment {
                 public void onClick(View v) {
 
                     if (isValidInput()) {
-                        mApi.setLoadingMessage(getActivity().getString(R.string.feedback_sending));
-                        mApi.setCallback(new RestCallback() {
-                            public void success(Object obj) {
-                                //TODO add feedback
-                                mMessageField.setText("");
-                                mProperties = new JSONObject();
-                            }
-                        });
-                        mApi.sendFeedback(mMessageField.getText().toString(),
-                                mEmailField.getText().toString(), mProperties, "");
-
+                        sendFeedback();
                         dialog.dismiss();
                     }
                 }
@@ -184,7 +173,7 @@ public class FeedbackFragment extends DialogFragment {
         mApi.setCallback(new RestCallback() {
             public void success(Object obj) {
                 //TODO add feedback
-//                                Toast.makeText(getActivity(), obj.toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), obj.toString(), Toast.LENGTH_SHORT).show();
                 mMessageField.setText("");
                 mProperties = new JSONObject();
 
