@@ -39,20 +39,21 @@ public class Const {
     public static final String EXTRA_TAGGED_EVENT = "org.gdg.frisbee.TAGGED_EVENT";
     public static final String EXTRA_TAGGED_EVENT_CACHEKEY = "org.gdg.frisbee.TAGGED_EVENT_CACHEKEY";
     //Special Events Dates
-    public static final DateTime START_TIME_IOEXTENDED =    new DateTime(2015, 5, 1, 0, 0);
-    public static final DateTime START_TIME_STUDY_JAMS =    new DateTime(2015, 2, 1, 0, 0);
-    public static final DateTime START_TIME_WTM =           new DateTime(2015, 2, 1, 0, 0);
+    public static final DateTime START_TIME_DEVFEST =       new DateTime(2015, 9, 1, 0, 0);
+    public static final DateTime START_TIME_WTM =           new DateTime(2016, 2, 1, 0, 0);
+    public static final DateTime START_TIME_STUDY_JAMS =    new DateTime(2016, 1, 15, 0, 0);
+    public static final DateTime START_TIME_IOEXTENDED =    new DateTime(2016, 5, 1, 0, 0);
 
-    public static final DateTime END_TIME_IOEXTENDED =      new DateTime(2015, 6, 1, 0, 0);
-    public static final DateTime END_TIME_STUDY_JAMS =      new DateTime(2015, 5, 1, 0, 0);
-    public static final DateTime END_TIME_WTM =             new DateTime(2015, 4, 1, 0, 0);
+    public static final DateTime END_TIME_DEVFEST =         new DateTime(2016, 1, 1, 0, 0);
+    public static final DateTime END_TIME_WTM =             new DateTime(2016, 4, 1, 0, 0);
+    public static final DateTime END_TIME_STUDY_JAMS =      new DateTime(2016, 5, 1, 0, 0);
+    public static final DateTime END_TIME_IOEXTENDED =      new DateTime(2016, 6, 1, 0, 0);
 
     public static final String EXTRA_PLUS_ID = "plus_id";
 
     //Navigation Drawer
     public static final int DRAWER_HOME = 0;
     public static final int DRAWER_PULSE = 2;
-    public static final int DRAWER_SPECIAL = 3;
     public static final int DRAWER_ACHIEVEMENTS = 4;
     public static final int DRAWER_GDE = 5;
     public static final int DRAWER_ARROW = 99;
@@ -60,6 +61,13 @@ public class Const {
     public static final int DRAWER_HELP = 101;
     public static final int DRAWER_FEEDBACK = 102;
     public static final int DRAWER_ABOUT = 103;
+    public static final int DRAWER_SUBMENU_GAMES = 1000;
+
+    // Drawer Special Event Items
+    public static final int DRAWER_DEVFEST = 30;
+    public static final int DRAWER_WTM = 31;
+    public static final int DRAWER_STUDY_JAM = 32;
+    public static final int DRAWER_IO_EXTENDED = 33;
 
     //Arrow
     public static final String QR_MSG_PREFIX = "gdgx://arrow?m=";
@@ -70,8 +78,8 @@ public class Const {
     public static final String ARROW_MIME = "application/vnd.org.gdgx.frisbee.arrow";
     public static final String ARROW_LB = "CgkIh5yNxL8MEAIQBw";
     public static final String ARROW_K = "XXXX111122223333";
+    public static final String GAMES_SNAPSHOT_ID = "tagged_organizers.json";
     public static final int ARROW_STATE_KEY = 1;
-
     public static final int ARROW_DONE_STATE_KEY = 2;
 
     public static final String EXTRA_EVENT_ID = "EXTRA_EVENT_ID";
@@ -81,6 +89,8 @@ public class Const {
     public static final String URL_GDG_RESOURCE_FOLDER = "https://drive.google.com/drive/#folders/0B55wxScz_BJtWW9aUnk2LUlNdEk";
     public static final String URL_GDG_WISDOM_BOOK = "http://gdg-wisdom.gitbooks.io/gdg-wisdom-2015/content/";
     public static final String URL_GDG_LEADS_GPLUS_COMMUNITY = "https://plus.google.com/communities/101119632372181012379";
+    public static final String URL_GDGROUPS_ORG = "https://gdgroups.org";
+    public static final String PATH_GDGROUPS_ORG_EVENT = "event";
 
     //Keys
     public static final String EXTRA_CHAPTER_ID = "org.gdg.frisbee.CHAPTER";

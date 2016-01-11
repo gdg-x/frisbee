@@ -17,45 +17,65 @@
 
 package org.gdg.frisbee.android.common;
 
+import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
+import android.widget.FrameLayout;
+import android.widget.Toast;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appstate.AppStateManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.drive.Drive;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.Plus;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.achievements.AchievementActionHandler;
+import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.PrefUtils;
-import org.gdg.frisbee.android.utils.ScopedBus;
+import org.gdg.frisbee.android.utils.RecentTasksStyler;
 import org.gdg.frisbee.android.utils.Utils;
+import org.gdg.frisbee.android.view.ColoredSnackBar;
 
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public abstract class GdgActivity extends TrackableActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
+    @Nullable
+    @Bind(R.id.content_frame)
+    FrameLayout mContentLayout;
 
     private static final int STATE_DEFAULT = 0;
     private static final int STATE_SIGN_IN = 1;
     private static final int STATE_IN_PROGRESS = 2;
     private static final int RC_SIGN_IN = 0;
     private static final int DIALOG_PLAY_SERVICES_ERROR = 0;
-    private final ScopedBus scopedBus = new ScopedBus();
     private AchievementActionHandler mAchievementActionHandler;
     private Handler mHandler = new Handler();
 
     // GoogleApiClient wraps our service connection to Google Play services and
     // provides access to the users sign in state and Google's APIs.
-    private GoogleApiClient mGoogleApiClient;
+    protected GoogleApiClient mGoogleApiClient;
 
     // We use mSignInProgress to track whether user has clicked sign in.
     // mSignInProgress can be one of three values:
@@ -80,10 +100,6 @@ public abstract class GdgActivity extends TrackableActivity implements
 
     private Toolbar mActionBarToolbar;
 
-    protected ScopedBus getBus() {
-        return scopedBus;
-    }
-
     public Handler getHandler() {
         return mHandler;
     }
@@ -107,28 +123,32 @@ public abstract class GdgActivity extends TrackableActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        RecentTasksStyler.styleRecentTasksEntry(this);
 
         if (!Utils.isEmulator()) {
-
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(Plus.API)
-                    .addApi(Games.API)
-                    .addApi(AppStateManager.API)
-                    .addScope(Plus.SCOPE_PLUS_LOGIN)
-                    .addScope(Plus.SCOPE_PLUS_PROFILE)
-                    .addScope(Games.SCOPE_GAMES)
-                    .build();
+            createGoogleApiClient();
         }
 
         mAchievementActionHandler =
                 new AchievementActionHandler(getHandler(), mGoogleApiClient, this);
     }
 
+    protected void createGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(Plus.API).addScope(Plus.SCOPE_PLUS_LOGIN).addScope(Plus.SCOPE_PLUS_PROFILE)
+                .addApi(Games.API).addScope(Games.SCOPE_GAMES)
+                .addApi(Drive.API).addScope(Drive.SCOPE_APPFOLDER)
+                .addApi(AppIndex.API)
+                .addApi(AppStateManager.API)
+                .build();
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
+
+        mGoogleApiClient.registerConnectionCallbacks(this);
+        mGoogleApiClient.registerConnectionFailedListener(this);
 
         if (PrefUtils.isSignedIn(this)) {
             mGoogleApiClient.connect();
@@ -139,25 +159,16 @@ public abstract class GdgActivity extends TrackableActivity implements
     protected void onStop() {
         super.onStop();
 
+        mGoogleApiClient.unregisterConnectionCallbacks(this);
+        mGoogleApiClient.unregisterConnectionFailedListener(this);
+
         if (PrefUtils.isSignedIn(this) && mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
     }
 
-    public AchievementActionHandler getAchievementActionHandler() {
+    protected AchievementActionHandler getAchievementActionHandler() {
         return mAchievementActionHandler;
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        getBus().paused();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        getBus().resumed();
     }
 
     @Override
@@ -171,6 +182,7 @@ public abstract class GdgActivity extends TrackableActivity implements
                         // If the error resolution was successful we should continue
                         // processing errors.
                         mSignInProgress = STATE_SIGN_IN;
+                        App.getInstance().resetOrganizer();
 
                         if (!mGoogleApiClient.isConnecting()) {
                             // If Google Play services resolved the issue with a dialog then
@@ -212,8 +224,10 @@ public abstract class GdgActivity extends TrackableActivity implements
                 // resolve the error currently preventing our connection to
                 // Google Play services.
                 mSignInProgress = STATE_IN_PROGRESS;
-                startIntentSenderForResult(mSignInIntent.getIntentSender(),
-                        RC_SIGN_IN, null, 0, 0, 0);
+                startIntentSenderForResult(
+                        mSignInIntent.getIntentSender(),
+                        RC_SIGN_IN, null, 0, 0, 0
+                );
             } catch (IntentSender.SendIntentException e) {
                 // The intent was canceled before it was sent.  Attempt to connect to
                 // get an updated ConnectionResult.
@@ -239,6 +253,28 @@ public abstract class GdgActivity extends TrackableActivity implements
         super.onBackPressed();
         if (!isLastActivityOnStack()) {
             overridePendingTransition(0, 0);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    protected boolean isContextValid() {
+        boolean isContextValid = !isFinishing()
+                && (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1 || !isDestroyed());
+        if (!isContextValid) {
+            Timber.d("Context is not valid");
+        }
+        return isContextValid;
+    }
+
+    protected void showError(@StringRes final int errorStringRes) {
+        if (isContextValid()) {
+            if (mContentLayout != null) {
+                Snackbar snackbar = Snackbar.make(mContentLayout, errorStringRes,
+                        Snackbar.LENGTH_SHORT);
+                ColoredSnackBar.alert(snackbar).show();
+            } else {
+                Toast.makeText(this, errorStringRes, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -279,5 +315,28 @@ public abstract class GdgActivity extends TrackableActivity implements
 
     public void setToolbarTitle(final String title) {
         getActionBarToolbar().setTitle(title);
+    }
+
+    protected void recordEndPageView(Action viewAction) {
+        PendingResult<Status> result = AppIndex.AppIndexApi.end(getGoogleApiClient(), viewAction);
+        result.setResultCallback(appIndexApiCallback("end " + viewAction));
+    }
+
+    protected void recordStartPageView(Action viewAction) {
+        PendingResult<Status> result = AppIndex.AppIndexApi.start(getGoogleApiClient(), viewAction);
+        result.setResultCallback(appIndexApiCallback("start " + viewAction));
+    }
+
+    protected ResultCallback<Status> appIndexApiCallback(final String label) {
+        return new ResultCallback<Status>() {
+            @Override
+            public void onResult(Status status) {
+                if (status.isSuccess()) {
+                    Timber.d("App Indexing API: Recorded event %s view successfully.", label);
+                } else {
+                    Timber.e("App Indexing API: There was an error recording the event view. Status = %s", status.toString());
+                }
+            }
+        };
     }
 }

@@ -2,22 +2,25 @@ language: android
 
 android:
   components:
-    - android-22
-    - build-tools-22.0.1
-    - platform-tools
-    - extra-google-m2repository
-    - extra-android-m2repository
-
-    # Specify at least one system image,
-    # if you need to run emulator(s) during your tests
-    # - sys-img-x86-android-22
+  - platform-tools
+  - tools
+  - android-23
+  - build-tools-23.0.2
+  - extra-google-m2repository
+  - extra-android-m2repository
 
 before_script:
-    - GRADLE_OPTS="-Xms40m -Xmx3g -XX:MaxPermSize=3g"
+- GRADLE_OPTS="-Xms40m -Xmx3g -XX:MaxPermSize=3g"
 
-script: "./gradlew clean build test -Dpre-dex=false"
+script: "./gradlew check"
 
 branches:
-  only:
-    - master
-    - develop
+  except:
+    - gh-pages
+
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/a9870bec6049c7309e68
+    on_success: change
+    on_failure: always

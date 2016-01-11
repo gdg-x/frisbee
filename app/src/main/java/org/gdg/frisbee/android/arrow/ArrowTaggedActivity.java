@@ -16,53 +16,43 @@
 
 package org.gdg.frisbee.android.arrow;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.view.MenuItem;
+import android.widget.Toast;
 
-import com.google.android.gms.appstate.AppStateManager;
-import com.google.android.gms.appstate.AppStateStatusCodes;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.games.Games;
+import com.google.android.gms.games.snapshot.Snapshot;
+import com.google.android.gms.games.snapshot.Snapshots;
 import com.google.android.gms.plus.People;
 import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.model.people.Person;
-import com.squareup.picasso.Picasso;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
+import org.gdg.frisbee.android.view.DividerItemDecoration;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.IOException;
 
 import butterknife.Bind;
-import retrofit.Callback;
-import retrofit.RetrofitError;
 import timber.log.Timber;
 
-public class ArrowTaggedActivity extends GdgNavDrawerActivity {
+public class ArrowTaggedActivity extends GdgActivity {
 
-    public static final String ID_SEPARATOR_FOR_SPLIT = "\\|";
-    public static final String ID_SPLIT_CHAR = "|";
+    private static final String ID_SEPARATOR_FOR_SPLIT = "\\|";
 
     @Bind(R.id.taggedList)
-    ListView taggedList;
-    String taggedOrganizers = "";
+    RecyclerView taggedList;
+
+    private String serializedOrganizers;
     private OrganizerAdapter adapter;
 
     @Override
@@ -74,144 +64,99 @@ public class ArrowTaggedActivity extends GdgNavDrawerActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arrow_tagged);
-
-        adapter = new OrganizerAdapter(this, 0);
+        getActionBarToolbar().setNavigationIcon(R.drawable.ic_up);
+        adapter = new OrganizerAdapter(this);
 
         if (!PrefUtils.isSignedIn(this)) {
             finish();
         }
 
+        taggedList.setLayoutManager(new LinearLayoutManager(this));
+        taggedList.addItemDecoration(new DividerItemDecoration(this, null));
         taggedList.setAdapter(adapter);
-        taggedList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Organizer item = adapter.getItem(i);
-
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/" + item.plusId + "/posts")));
-            }
-        });
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        AppStateManager.load(getGoogleApiClient(), Const.ARROW_DONE_STATE_KEY).setResultCallback(new ResultCallback<AppStateManager.StateResult>() {
-            @Override
-            public void onResult(AppStateManager.StateResult stateResult) {
-                AppStateManager.StateConflictResult conflictResult = stateResult.getConflictResult();
-                AppStateManager.StateLoadedResult loadedResult = stateResult.getLoadedResult();
-
-                taggedOrganizers = "";
-                if (loadedResult != null) {
-                    final int statusCode = loadedResult.getStatus().getStatusCode();
-                    if (statusCode == AppStateStatusCodes.STATUS_OK || statusCode == AppStateStatusCodes.STATUS_STATE_KEY_NOT_FOUND) {
-                        taggedOrganizers = "";
-
-                        if (statusCode == AppStateStatusCodes.STATUS_OK) {
-                            taggedOrganizers = new String(loadedResult.getLocalData());
-                        }
-                    }
-                } else if (conflictResult != null) {
-                    taggedOrganizers = mergeIds(new String(conflictResult.getLocalData()), new String(conflictResult.getServerData()));
-                }
-
-                App.getInstance().getGdgXHub().getDirectory(new Callback<Directory>() {
-
-                    @Override
-                    public void success(final Directory directory, final retrofit.client.Response response) {
-                        String[] orgas = taggedOrganizers.split("\\|");
-                        for (String orga : orgas) {
-                            Chapter orgaChapter = null;
-                            for (Chapter c : directory.getGroups()) {
-                                if (c.getOrganizers().contains(orga)) {
-                                    orgaChapter = c;
-                                    break;
-                                }
-                            }
-
-
-                            if (orgaChapter != null) {
-                                final Organizer organizer = new Organizer();
-                                organizer.plusId = orga;
-                                organizer.chapterName = orgaChapter.getName();
-                                organizer.chapterId = orgaChapter.getGplusId();
-
-                                Plus.PeopleApi.load(getGoogleApiClient(), organizer.plusId)
-                                        .setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
-                                            @Override
-                                            public void onResult(People.LoadPeopleResult loadPeopleResult) {
-                                                organizer.resolved = loadPeopleResult.getPersonBuffer().get(0);
-                                                adapter.add(organizer);
-                                                adapter.notifyDataSetChanged();
-                                            }
-                                        });
-                            }
-
-                        }
-                    }
-
-                    @Override
-                    public void failure(final RetrofitError error) {
-                        Timber.e(error, "Error");
-                    }
-                });
-            }
-        });
-    }
-
-    private String mergeIds(String list1, String list2) {
-        String[] parts1 = list1.split(ID_SEPARATOR_FOR_SPLIT);
-        String[] parts2 = list2.split(ID_SEPARATOR_FOR_SPLIT);
-        Set<String> mergedSet = new HashSet<>(Arrays.asList(parts1));
-        mergedSet.addAll(Arrays.asList(parts2));
-        return TextUtils.join(ID_SPLIT_CHAR, mergedSet);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onConnected(Bundle bundle) {
         super.onConnected(bundle);
+
+        if (TextUtils.isEmpty(serializedOrganizers)) {
+            loadFromSnapshot();
+        }
     }
 
-    public class Organizer {
-        public String plusId;
-        public String chapterId;
-        public String chapterName;
-        public Person resolved;
+    private void loadFromSnapshot() {
+        Games.Snapshots.open(getGoogleApiClient(), Const.GAMES_SNAPSHOT_ID, false).setResultCallback(
+                new ResultCallback<Snapshots.OpenSnapshotResult>() {
+
+                    @Override
+                    public void onResult(Snapshots.OpenSnapshotResult stateResult) {
+                        if (!stateResult.getStatus().isSuccess()) {
+                            return;
+                        }
+
+                        Snapshot loadedResult = stateResult.getSnapshot();
+                        serializedOrganizers = "";
+                        if (loadedResult != null) {
+                            try {
+                                serializedOrganizers = new String(loadedResult.getSnapshotContents().readFully());
+                            } catch (IOException e) {
+                                Timber.w(e, "Could not store tagged organizer");
+                                Toast.makeText(ArrowTaggedActivity.this, R.string.arrow_oops, Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                        App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
+                            @Override
+                            public void success(Directory directory) {
+                                loadChapterOrganizers(directory);
+                            }
+                        });
+                    }
+                });
     }
 
-    public class OrganizerAdapter extends ArrayAdapter<Organizer> {
-
-        private LayoutInflater inflater;
-
-        public OrganizerAdapter(Context context, int resource) {
-            super(context, resource);
-
-            inflater = LayoutInflater.from(context);
+    private void loadChapterOrganizers(Directory directory) {
+        if (TextUtils.isEmpty(serializedOrganizers)) {
+            return;
         }
 
-        @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-                convertView = inflater.inflate(R.layout.list_tagged_organizer_item, parent, false);
+        String[] organizers = serializedOrganizers.split(ID_SEPARATOR_FOR_SPLIT);
+
+        for (String organizerId : organizers) {
+            Chapter organizerChapter = null;
+            for (Chapter chapter : directory.getGroups()) {
+                if (chapter.getOrganizers().contains(organizerId)) {
+                    organizerChapter = chapter;
+                    break;
+                }
             }
 
-            Organizer o = getItem(position);
+            if (organizerChapter != null) {
+                final Organizer organizer = new Organizer();
+                organizer.setPlusId(organizerId);
+                organizer.setChapterName(organizerChapter.getName());
+                organizer.setChapterId(organizerChapter.getGplusId());
 
-            ImageView avatar = (ImageView) convertView.findViewById(R.id.avatar);
-            TextView name = (TextView) convertView.findViewById(R.id.organizerName);
-            TextView chapter = (TextView) convertView.findViewById(R.id.organizerChapter);
-
-            Picasso.with(getContext()).load(o.resolved.getImage().getUrl())
-                    .into(avatar);
-
-            name.setText(o.resolved.getDisplayName());
-            chapter.setText(o.chapterName);
-
-
-            return convertView;
+                Plus.PeopleApi.load(getGoogleApiClient(), organizer.getPlusId())
+                        .setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
+                            @Override
+                            public void onResult(People.LoadPeopleResult loadPeopleResult) {
+                                organizer.setResolved(loadPeopleResult.getPersonBuffer().get(0));
+                                adapter.add(organizer);
+                                adapter.notifyItemInserted(adapter.getItemCount() - 1);
+                            }
+                        });
+            }
         }
-
-
     }
 }

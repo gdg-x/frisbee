@@ -4,74 +4,69 @@ import android.location.Location;
 import android.support.annotation.Nullable;
 
 import org.gdg.frisbee.android.api.model.Chapter;
-import org.gdg.frisbee.android.app.App;
 
 import java.util.Comparator;
 
-/**
- * Created with IntelliJ IDEA.
- * User: maui
- * Date: 24.07.13
- * Time: 16:00
- * To change this template use File | Settings | File Templates.
- */
 public class ChapterComparator implements Comparator<Chapter> {
 
     private static final float MAX_DISTANCE = 500000;
-    private final String mHomeChapterId;
+    private final String homeChapterId;
+    private final Location lastLocation;
 
-    public ChapterComparator(@Nullable String homeChapterId) {
-        mHomeChapterId = homeChapterId;
+    public ChapterComparator(@Nullable String homeChapterId, @Nullable Location lastLocation) {
+        this.homeChapterId = homeChapterId;
+        this.lastLocation = lastLocation;
     }
 
     @Override
     public int compare(Chapter chapter, Chapter chapter2) {
-        float[] results = new float[1];
-        float[] results2 = new float[1];
 
-        if (chapter.getGplusId().equals(mHomeChapterId)) {
+        if (chapter.getGplusId().equals(homeChapterId)) {
             return -1;
         }
 
-        if (chapter2.getGplusId().equals(mHomeChapterId)) {
+        if (chapter2.getGplusId().equals(homeChapterId)) {
             return 1;
         }
 
-        Location lastLocation = App.getInstance().getLastLocation();
-        if (lastLocation == null) {
-            return chapter.getName().compareTo(chapter2.getName());
+        if (lastLocation == null || (chapter.getGeo() == null && chapter2.getGeo() == null)) {
+            return chapter.compareTo(chapter2);
         }
 
-        if (chapter.getGeo() == null) {
-            return 1;
-        }
-        if (chapter2.getGeo() == null) {
-            return -1;
+        final boolean closeEnough;
+        final boolean closeEnough2;
+        final float[] results = new float[1];
+        final float[] results2 = new float[1];
+
+        if (chapter.getGeo() != null) {
+            Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(),
+                    chapter.getGeo().getLat(), chapter.getGeo().getLng(), results);
+            closeEnough = results[0] <= MAX_DISTANCE;
+        } else {
+            closeEnough = false;
         }
 
-        Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(), 
-                chapter.getGeo().getLat(), chapter.getGeo().getLng(), results);
-        Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(), 
-                chapter2.getGeo().getLat(), chapter2.getGeo().getLng(), results2);
+        if (chapter2.getGeo() != null) {
+            Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(),
+                    chapter2.getGeo().getLat(), chapter2.getGeo().getLng(), results2);
+            closeEnough2 = results2[0] <= MAX_DISTANCE;
+        } else {
+            closeEnough2 = false;
+        }
 
-        final boolean closeEnough = results[0] <= MAX_DISTANCE;
-        final boolean closeEnough2 = results2[0] <= MAX_DISTANCE;
-        
         if (closeEnough && closeEnough2) {
-            if (results[0] == results2[0]) {
-                return 0;
-            } else if (results[0] > results2[0]) {
-                return 1;
-            } else {
-                return -1;
-            }
+            return integerCompare((int) results[0], (int) results2[0]);
         } else if (closeEnough) {
             return -1;
         } else if (closeEnough2) {
             return 1;
         } else {
-            return chapter.getName().compareTo(chapter2.getName());
+            return chapter.compareTo(chapter2);
         }
+    }
+
+    public static int integerCompare(int lhs, int rhs) {
+        return lhs < rhs ? -1 : (lhs == rhs ? 0 : 1);
     }
 
     @Override

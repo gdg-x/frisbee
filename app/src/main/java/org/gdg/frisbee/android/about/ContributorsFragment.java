@@ -16,60 +16,25 @@
 
 package org.gdg.frisbee.android.about;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListView;
-
-import com.google.gson.FieldNamingPolicy;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.GitHub;
-import org.gdg.frisbee.android.api.model.Contributor;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.ContributorList;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
-import org.gdg.frisbee.android.common.GdgListFragment;
+import org.gdg.frisbee.android.common.PeopleListFragment;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
-import butterknife.ButterKnife;
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.converter.GsonConverter;
-import timber.log.Timber;
-
-public class ContributorsFragment extends GdgListFragment {
-
-    protected ContributorAdapter mAdapter;
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        Timber.d("onSaveInstanceState()");
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Timber.d("onResume()");
-    }
+public class ContributorsFragment extends PeopleListFragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Timber.d("onActivityCreated()");
-
-        mAdapter = new ContributorAdapter(getActivity());
-        setListAdapter(mAdapter);
-
         loadContributors();
     }
 
@@ -89,52 +54,23 @@ public class ContributorsFragment extends GdgListFragment {
 
                 @Override
                 public void onNotFound(String key) {
-                    Snackbar snackbar = Snackbar.make(getView(), R.string.offline_alert, Snackbar.LENGTH_SHORT);
-                    ColoredSnackBar.alert(snackbar).show();
+                    showError(R.string.offline_alert);
                 }
             });
         }
     }
     
     private void fetchGitHubContributors() {
-        GitHub gitHubClient = new RestAdapter.Builder()
-                .setEndpoint("https://api.github.com")
-                .setConverter(new GsonConverter(Utils.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)))
-                .build().create(GitHub.class);
-        
-        gitHubClient.getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO, new Callback<ContributorList>() {
+        App.getInstance().getGithub().getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO).enqueue(new Callback<ContributorList>() {
             @Override
-            public void success(final ContributorList contributors, retrofit.client.Response response) {
+            public void success(final ContributorList contributors) {
+
+                mAdapter.addAll(contributors);
                 App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_FRISBEE_CONTRIBUTORS,
                         contributors,
                         DateTime.now().plusDays(1),
-                        new ModelCache.CachePutListener() {
-                            @Override
-                            public void onPutIntoCache() {
-                                mAdapter.addAll(contributors);
-                            }
-                        });
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-
+                        null);
             }
         });
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_gde_list, container, false);
-        ButterKnife.bind(this, v);
-        return v;
-    }
-
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        Contributor contributor = mAdapter.getItem(position);
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse(contributor.getHtmlUrl()));
-        startActivity(i);
     }
 }

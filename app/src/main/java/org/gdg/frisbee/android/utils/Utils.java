@@ -22,13 +22,13 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.customtabs.CustomTabsIntent;
 import android.util.DisplayMetrics;
 import android.util.Patterns;
 import android.util.TypedValue;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
@@ -48,24 +48,15 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import timber.log.Timber;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.utils
- * <p/>
- * User: maui
- * Date: 21.04.13
- * Time: 22:34
- */
 public class Utils {
     
     private Utils() {
-
+        // Prevent instances of this class being created.
     }
 
     /**
@@ -181,22 +172,6 @@ public class Utils {
         return sb.toString();
     }
 
-    public static ArrayList<View> findViewByType(ViewGroup root, Class clazz) {
-        ArrayList<View> views = new ArrayList<>();
-        int count = root.getChildCount();
-        for (int i = 0; i <= count; i++) {
-            View v = root.getChildAt(i);
-            if (v != null) {
-                if (v.getClass().equals(clazz)) {
-                    views.add(v);
-                } else if (v instanceof ViewGroup) {
-                    views.addAll(findViewByType((ViewGroup) v, clazz));
-                }
-            }
-        }
-        return views;
-    }
-
     public static Gson getGson() {
         return new GsonBuilder()
                 .registerTypeAdapter(DateTime.class, new DateTimeDeserializer())
@@ -228,8 +203,18 @@ public class Utils {
         return Patterns.EMAIL_ADDRESS.matcher(possibleEmail).matches();
     }
 
-
     public static boolean canLaunch(Context context, final Intent viewUrlIntent) {
         return context.getPackageManager().resolveActivity(viewUrlIntent, PackageManager.MATCH_DEFAULT_ONLY) != null;
+    }
+
+    @SuppressWarnings("deprecation")
+    public static Intent createExternalIntent(Context context, Uri uri) {
+        CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder()
+                .setToolbarColor(context.getResources().getColor(R.color.theme_primary))
+                .setShowTitle(true)
+                .build();
+        Intent intent = customTabsIntent.intent;
+        intent.setData(uri);
+        return intent;
     }
 }

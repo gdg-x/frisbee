@@ -23,8 +23,8 @@
     <item name="actionBarInsetStart">@dimen/keyline_2</item>
     <item name="spinnerBarInsetStart">@dimen/keyline_2_minus_16dp</item>
     <item name="android:windowContentOverlay">@null</item>
-    <item name="colorPrimary">@color/material_blue_500</item>
-    <item name="colorPrimaryDark">@color/material_blue_700</item>
+    <item name="colorPrimary">@color/theme_primary</item>
+    <item name="colorPrimaryDark">@color/theme_primary_dark</item>
 
     <item name="android:windowBackground">@color/default_bg</item>
     <item name="windowActionBar">false</item>
@@ -51,6 +51,17 @@
   
   <style name="Theme.GDG.Main" parent="Theme.GDG.WithNavDrawer">
     <item name="actionBarInsetStart">@dimen/keyline_2_minus_16dp</item>
+  </style>
+
+  <style name="Theme.GDG.Panel" parent="Theme.AppCompat.Light.Dialog">
+
+    <item name="colorPrimary">@color/theme_primary</item>
+    <item name="colorPrimaryDark">@color/theme_primary_dark</item>
+
+    <item name="android:windowBackground">@android:color/transparent</item>
+
+    <item name="windowActionBar">false</item>
+    <item name="android:windowNoTitle">true</item>
   </style>
 
   <!-- Special Event Series-->
@@ -90,5 +101,17 @@
 
     <item name="specialEventTitle">@string/ioextended</item>
     <item name="specialEventDescription">@string/ioextended_description</item>
+  </style>
+
+  <style name="Theme.GDG.Special.DevFest" parent="Theme.GDG.Special">
+    <item name="colorPrimary">@color/color_primary_devfest</item>
+    <item name="colorPrimaryDark">@color/color_primary_dark_devfest</item>
+
+    <item name="specialEventDrawerIcon">@drawable/ic_drawer_devfest</item>
+    <item name="specialEventDefaultIcon">@drawable/ic_devfest</item>
+    <item name="specialEventLogo">@drawable/ic_logo_devfest</item>
+
+    <item name="specialEventTitle">@string/devfest</item>
+    <item name="specialEventDescription">@string/devfest_description</item>
   </style>
 </resources>

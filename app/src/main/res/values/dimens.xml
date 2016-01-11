@@ -6,7 +6,6 @@
   <dimen name="logo_size">50dip</dimen>
   <dimen name="text_size_small">12sp</dimen>
   <dimen name="text_size_large">18sp</dimen>
-  <dimen name="navdrawer_width">260dp</dimen>
   <dimen name="navdrawer_image_height">140dp</dimen>
   <dimen name="navdrawer_user_picture_size">40dp</dimen>
   <dimen name="spinner_left_padding">16dp</dimen>
@@ -21,5 +20,8 @@
   
   <dimen name="icon_width_event">48dp</dimen>
   <dimen name="responsive_width">@dimen/match_parent</dimen>
+
+  <dimen name="list_item_avatar">46dp</dimen>
+  <dimen name="organizer_icon_size">32dp</dimen>
 
 </resources>

@@ -21,7 +21,6 @@ import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
@@ -33,19 +32,23 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.GdgActivity;
+import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.Utils;
 import org.json.JSONException;
@@ -73,8 +76,17 @@ public class FeedbackFragment extends DialogFragment {
     private static final String PROPERTY_APP_VERSION_CODE = "App Version Code";
 //    private static final String POWERED_BY_DOORBELL_TEXT = "Powered by <a href=\"https://doorbell.io\">Doorbell.io</a>";
 
-    @Bind(R.id.feedback_message_text) EditText mMessageField;
-    @Bind(R.id.feedback_email_text) AutoCompleteTextView mEmailField;
+    @Bind(R.id.feedback_message_text)
+    EditText mMessageField;
+
+    @Bind(R.id.feedback_email_text)
+    AutoCompleteTextView mEmailField;
+
+    @Bind(R.id.feedback_message_text_layout)
+    TextInputLayout mLayoutMessage;
+
+    @Bind(R.id.feedback_email_text_layout)
+    TextInputLayout mLayoutEmail;
 
     private JSONObject mProperties;
     private DoorbellApi mApi;
@@ -107,14 +119,64 @@ public class FeedbackFragment extends DialogFragment {
                 .setTitle(R.string.feedback)
                 .setCancelable(true)
                 .setNegativeButton(R.string.feedback_cancel, null)
-                .setPositiveButton(R.string.feedback_send, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        sendFeedback();
-                    }
-                });
+                .setPositiveButton(R.string.feedback_send, null);
 
         return builder.create();
+    }
+
+    public void onStart() {
+        super.onStart();
+        final AlertDialog dialog = (AlertDialog) getDialog();
+        if (dialog != null) {
+
+            Button positiveButton = dialog.getButton(Dialog.BUTTON_POSITIVE);
+            positiveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (isValidInput()) {
+                        mApi.setLoadingMessage(getActivity().getString(R.string.feedback_sending));
+                        mApi.setCallback(new RestCallback() {
+                            public void success(Object obj) {
+                                //TODO add feedback
+                                mMessageField.setText("");
+                                mProperties = new JSONObject();
+                            }
+                        });
+                        mApi.sendFeedback(mMessageField.getText().toString(),
+                                mEmailField.getText().toString(), mProperties, "");
+
+                        dialog.dismiss();
+                    }
+                }
+            });
+        }
+    }
+
+    private boolean isValidInput() {
+
+        boolean isValid;
+
+        String strMessage = mMessageField.getText().toString();
+        String strEmail = mEmailField.getText().toString();
+
+        if (!TextUtils.isEmpty(strMessage)) {
+            isValid = true;
+            mLayoutMessage.setError(null);
+        } else {
+            isValid = false;
+            mLayoutMessage.setError(getString(R.string.feedback_message_required));
+        }
+
+        if (!TextUtils.isEmpty(strEmail) && android.util.Patterns.EMAIL_ADDRESS.matcher(strEmail).matches()) {
+            isValid = isValid & true;
+            mLayoutEmail.setError(null);
+        } else {
+            isValid = false;
+            mLayoutEmail.setError(getString(R.string.feedback_invalid_email));
+        }
+
+        return isValid;
     }
 
     private void sendFeedback() {
@@ -170,9 +232,9 @@ public class FeedbackFragment extends DialogFragment {
 
         try {
             Class e1 = Class.forName(cm1.getClass().getName());
-            Method resolution = e1.getDeclaredMethod("getMobileDataEnabled", new Class[0]);
+            Method resolution = e1.getDeclaredMethod("getMobileDataEnabled");
             resolution.setAccessible(true);
-            mobileDataEnabled1 = (Boolean) resolution.invoke(cm1, new Object[0]);
+            mobileDataEnabled1 = (Boolean) resolution.invoke(cm1);
         } catch (Exception e) {
             Timber.d(e, "Mobil data problem.");
         }
@@ -213,7 +275,7 @@ public class FeedbackFragment extends DialogFragment {
         }
     }
 
-    public void addProperty(String key, Object value) {
+    private void addProperty(String key, Object value) {
         try {
             mProperties.put(key, value);
         } catch (JSONException e) {

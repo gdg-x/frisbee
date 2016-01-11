@@ -112,6 +112,10 @@ public class AchievementActionHandler {
 
 
     private void postAchievementUnlockedEvent(final String achievementName) {
+        if (PrefUtils.isAchievementUnlocked(mContext, achievementName)) {
+            return;
+        }
+
         if (!mGoogleApi.isConnected()) {
             mPending.add(achievementName);
         } else {
@@ -119,6 +123,7 @@ public class AchievementActionHandler {
                 @Override
                 public void run() {
                     Games.Achievements.unlock(mGoogleApi, achievementName);
+                    PrefUtils.setAchievementUnlocked(mContext, achievementName);
                 }
             }, ONE_SEC_IN_MILLISECONDS);
         }

@@ -22,7 +22,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
@@ -33,8 +33,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -45,27 +43,26 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+import com.tasomaniac.android.widget.DelayedProgressBar;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.common.GdgActivity;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.EventFullDetails;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.common.BaseFragment;
+import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.Utils;
-import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import timber.log.Timber;
+import butterknife.ButterKnife;
 
-public class EventOverviewFragment extends Fragment {
+public class EventOverviewFragment extends BaseFragment {
 
     @Bind(R.id.title)
     TextView mTitle;
@@ -80,10 +77,13 @@ public class EventOverviewFragment extends Fragment {
     TextView mEventDescription;
 
     @Bind(R.id.loading)
-    View mProgressContainer;
+    DelayedProgressBar mProgressContainer;
 
     @Bind(R.id.group_logo)
     ImageView mGroupLogo;
+
+    @Bind(R.id.container)
+    View mContainer;
 
     private boolean mLoading;
     private Directory mDirectory;
@@ -108,26 +108,37 @@ public class EventOverviewFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         final String eventId = getArguments().getString(Const.EXTRA_EVENT_ID);
-        App.getInstance().getGdgXHub().getEventDetail(eventId, new Callback<EventFullDetails>() {
+        App.getInstance().getGdgXHub().getEventDetail(eventId).enqueue(new Callback<EventFullDetails>() {
             @Override
-            public void success(EventFullDetails eventFullDetails, retrofit.client.Response response) {
-                onResponse(eventFullDetails);
+            public void success(EventFullDetails eventFullDetails) {
+                onSuccess(eventFullDetails);
             }
 
             @Override
-            public void failure(RetrofitError error) {
-                if (isAdded()) {
-                    Snackbar snackbar = Snackbar.make(getView(), R.string.server_error,
-                            Snackbar.LENGTH_SHORT);
-                    ColoredSnackBar.alert(snackbar).show();
-                }
-                Timber.d(error, "error while retrieving event %s", eventId);
+            public void failure(Throwable error) {
+                showError(R.string.server_error);
+            }
+
+            @Override
+            public void networkFailure(Throwable error) {
+                showError(R.string.offline_alert);
             }
         });
     }
 
-    public void updateWithDetails(EventFullDetails eventFullDetails) {
+    private void updateWithDetails(final EventFullDetails eventFullDetails) {
         mTitle.setText(eventFullDetails.getTitle());
+
+        final String eventUrl = eventFullDetails.getEventUrl();
+        if (eventUrl != null && !eventUrl.equals(getActivity().getIntent().getDataString())) {
+            mTitle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    launchUrl(eventUrl);
+                }
+            });
+        }
+
         String about = eventFullDetails.getAbout();
         if (about == null) {
             about = getString(R.string.no_description_available);
@@ -150,9 +161,12 @@ public class EventOverviewFragment extends Fragment {
         return fmt.print(eventFullDetails.getStart());
     }
 
-    public void onResponse(final EventFullDetails eventFullDetails) {
+    private void onSuccess(final EventFullDetails eventFullDetails) {
         if (getActivity() == null) {
             return;
+        }
+        if (getActivity() instanceof Callbacks) {
+            ((Callbacks) getActivity()).onEventLoaded(eventFullDetails);
         }
         mEvent = eventFullDetails;
 
@@ -169,28 +183,25 @@ public class EventOverviewFragment extends Fragment {
             @Override
             public void onNotFound(String key) {
                 if (Utils.isOnline(getActivity())) {
-                    App.getInstance().getGdgXHub().getDirectory(new Callback<Directory>() {
+                    App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
                         @Override
-                        public void success(Directory directory, retrofit.client.Response response) {
-
+                        public void success(Directory directory) {
                             mDirectory = directory;
                             updateGroupDetails(mDirectory.getGroupById(eventFullDetails.getChapter()));
                         }
 
                         @Override
-                        public void failure(RetrofitError error) {
-                            if (isAdded()) {
-                                Snackbar snackbar = Snackbar.make(getView(), R.string.fetch_chapters_failed,
-                                        Snackbar.LENGTH_SHORT);
-                                ColoredSnackBar.alert(snackbar).show();
-                            }
-                            Timber.e(error, "Could'nt fetch chapter list");
+                        public void failure(Throwable error) {
+                            showError(R.string.fetch_chapters_failed);
+                        }
+
+                        @Override
+                        public void networkFailure(Throwable error) {
+                            showError(R.string.offline_alert);
                         }
                     });
                 } else {
-                    Snackbar snackbar = Snackbar.make(getView(), R.string.offline_alert,
-                            Snackbar.LENGTH_SHORT);
-                    ColoredSnackBar.alert(snackbar).show();
+                    showError(R.string.offline_alert);
                 }
             }
         });
@@ -211,7 +222,7 @@ public class EventOverviewFragment extends Fragment {
                                 Picasso.with(getActivity()).load(gplusChapter.getImage().getUrl()).into(new Target() {
                                     @Override
                                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
-                                        if (isDetached()) {
+                                        if (!isAdded()) {
                                             return;
                                         }
                                         BitmapDrawable logo = new BitmapDrawable(getResources(), bitmap);
@@ -237,7 +248,7 @@ public class EventOverviewFragment extends Fragment {
         //mGroupLogo.setVisibility(View.INVISIBLE);  //commented as it's making group logo invisible without any condition
     }
 
-    public void setIsLoading(boolean isLoading) {
+    private void setIsLoading(boolean isLoading) {
 
         if (isLoading == mLoading || getActivity() == null) {
             return;
@@ -246,28 +257,19 @@ public class EventOverviewFragment extends Fragment {
         mLoading = isLoading;
 
         if (isLoading) {
-            mProgressContainer.startAnimation(AnimationUtils.loadAnimation(
-                    getActivity(), android.R.anim.fade_in));
-            mProgressContainer.setVisibility(View.VISIBLE);
+            mContainer.setVisibility(View.GONE);
+            mProgressContainer.show(true);
         } else {
-            Animation fadeOut = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out);
-            fadeOut.setAnimationListener(new Animation.AnimationListener() {
+            mProgressContainer.hide(true, new Runnable() {
                 @Override
-                public void onAnimationStart(Animation animation) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    if (mProgressContainer != null) {
-                        mProgressContainer.setVisibility(View.GONE);
+                public void run() {
+                    if (mContainer != null) {
+                        mContainer.setAlpha(0.0f);
+                        mContainer.setVisibility(View.VISIBLE);
+                        mContainer.animate().alpha(1.0f);
                     }
                 }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                }
             });
-            mProgressContainer.startAnimation(fadeOut);
         }
     }
 
@@ -275,11 +277,11 @@ public class EventOverviewFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (mEvent != null) {
             inflater.inflate(R.menu.event_menu, menu);
-            MenuItem shareMenuitem = menu.findItem(R.id.share);
+            MenuItem shareMenuItem = menu.findItem(R.id.share);
 
             if (mEvent.getEventUrl() != null) {
                 ShareActionProvider mShareActionProvider = 
-                        (ShareActionProvider) MenuItemCompat.getActionProvider(shareMenuitem);
+                        (ShareActionProvider) MenuItemCompat.getActionProvider(shareMenuItem);
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
                 shareIntent.putExtra(Intent.EXTRA_TEXT, mEvent.getEventUrl());
@@ -287,7 +289,7 @@ public class EventOverviewFragment extends Fragment {
                     mShareActionProvider.setShareIntent(shareIntent);
                 }
             } else {
-                shareMenuitem.setVisible(false);
+                shareMenuItem.setVisible(false);
                 menu.findItem(R.id.view_event_url).setVisible(false);
             }
         }
@@ -319,12 +321,14 @@ public class EventOverviewFragment extends Fragment {
     }
 
     private void launchUrl(String eventUrl) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(eventUrl));
-        startActivity(intent);
+        new CustomTabsIntent.Builder()
+                .setToolbarColor(getResources().getColor(R.color.theme_primary))
+                .setShowTitle(true)
+                .build()
+                .launchUrl(getActivity(), Uri.parse(eventUrl));
     }
 
-    public void addEventToCalendar() {
+    private void addEventToCalendar() {
         Intent intent = new Intent(Intent.ACTION_EDIT);
         intent.setType("vnd.android.cursor.item/event");
 
@@ -346,5 +350,9 @@ public class EventOverviewFragment extends Fragment {
         args.putString(Const.EXTRA_EVENT_ID, eventId);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public interface Callbacks {
+        void onEventLoaded(EventFullDetails eventFullDetails);
     }
 }

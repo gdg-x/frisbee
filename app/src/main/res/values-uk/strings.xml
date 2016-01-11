@@ -40,13 +40,11 @@
         Щоб використовувати ці функції, необхідно авторизуватися в Google.
     </string>
   <string name="or">або</string>
-  <string name="no_thanks">ні, дякую.</string>
   <string name="skip">Пропустити вхід</string>
   <string name="youtube_init_failed">Не вдалося ініціалізувати програвач YouTube.</string>
   <string name="achievements">Досягнення</string>
   <string name="settings">Налаштування</string>
-  <string name="about">Про...</string>
-  <string name="gdl">Google Developers Live</string>
+  <string name="about">Про</string>
   <plurals name="seconds_ago">
     <item quantity="one">щойно</item>
     <item quantity="few">%d секунд тому</item>
@@ -75,7 +73,7 @@
         вихідним кодом. Всі бажаючі можуть взяти участь у розвитку додатку.\n\nФоркайте нас на
         GitHub.\n\nhttps://github.com/gdg-x
     </string>
-  <string name="about_license">(c) 2013 Проект GDG Frisbee\nВсі права захищені.\n\nПоширюється під
+  <string name="about_license">© 2013 Проект GDG Frisbee\nВсі права захищені.\n\nПоширюється під
         ліцензією Apache 2.0
     </string>
   <string name="past_event">ВІДБУЛАСЬ</string>
@@ -109,12 +107,10 @@
     </string>
   <string name="enable_gcm">Включити сповіщення GDG (отримувати сповіщення про нові події)
     </string>
-  <string name="step3_text">Ще одна річ, перш ніж ми почнемо...</string>
+  <string name="step3_text">Ще одна річ, перш ніж ми почнемо&#8230;</string>
   <string name="share_on_gplus">Запросити друзів</string>
   <string name="join_me">Приєднуйтесь до мене на цій події!</string>
   <string name="name_not_known">Невідоме ім\'я</string>
-  <string name="signin_first">Ви повинні ввійти за допомогою G+, щоб використовувати цю функцію
-    </string>
   <string name="originally_shared">спочатку поділився:</string>
   <string name="server_error">Виникла помилка. Спробуйте ще раз.</string>
   <string name="search_hint">Пошук GDG групи</string>
@@ -130,12 +126,12 @@
         конференції, хакатони, techtalk\'и, демо шоу та багато іншого.\n\nЗнайдіть унікальний GDG DevFest поряд з
         вами!
     </string>
-  <string name="studyjams_description">Google Developers Study Jams is a free series of global, community-run, in-person study groups. The first Study Jams series is presented in partnership with Udacity and will follow their Android Fundamentals curriculum. Google Developer Group facilitators certified in the course will lead the Study Jams that meet once weekly for 8 - 9 weeks.</string>
+  <string name="studyjams_description">Google Developers Study Jams є серією безкоштовних навчальних груп, які проходять по всьому світу. Перша серія проводиться у партнерстві з Udacity і буде дотримуватися їхніх основ навчальної програми Android. Представники Google Developer Group, є сертифікованими лекторами, які проводять подію щотижня протягом 8 – 9 тижнів.</string>
   <string name="wtm_description">Women Techmakers це бренд Google і глобальна програма для жінок в ІТ. Стартувпла в 2012 році, за сприяння віце-президента Google[х] Меган Сміт.  Наразі Women Techmakers очолює Women in Technology  Advocate Natalie Villalobos і глобальна команда Google-рів, які захоплені розширенням прав і можливостей жінок в ІТ за рахунок збільшення спільноти, ресурсів і загальної видимості.\n\nКожна із наших зустрічей та самітів буде проведена місцевою групою Women Techmakers. Саміти і зустрічі по всьому світу можуть показати практичні семінари програмування, надихати доповідачів і знаходити друзів.\n\nВсі події проводяться протягом березня.</string>
   <string name="media_route_menu_title">Сесія зйомок</string>
   <string name="navigate_to">Перейти до події</string>
   <string name="gde">Google Developer Experts</string>
-  <string name="fetch_gde_failed">Could not fetch GDE Directory...</string>
+  <string name="fetch_gde_failed">Could not fetch GDE Directory&#8230;</string>
   <string name="gde_who_title">Хто такі Google Developer Experts?</string>
   <string name="gde_who_desc">Google Developer Experts (GDE-ти) - це експерти в одній або більше технологіях Google. Програма GDE визнає зразкову роботу, виконану цими рок-зірками для розробків Google  по всьому світу, запрошуючи їх бути частиною зростаючої спільноти GDE. GDE-ти є гуру, наставниками і друзями; вони є розробники такими як і ви.\n\nGDE роблять доповіді на як і на локальних, так і на глобальних подіях, маючи сильну онлайн присутність і глибокі знання в своїй області. Ці незалежні розробники приносять їх реальний досвід і знання роботи з технологіями Google для спільнот розробників по всьому світу.</string>
   <string name="gde_what_title">Що роблять GDE-ти?</string>
@@ -157,12 +153,12 @@
   <string name="event">Подія</string>
   <string name="no_description_available"><![CDATA[<i>Немає опису.</i>]]></string>
   <string name="starting_at">Починаючи з %1$s</string>
-  <string name="loading_data_failed">Не зміг завантажити список подій...</string>
+  <string name="loading_data_failed">Не зміг завантажити список подій…</string>
   <string name="share">Поширити</string>
   <string name="open_event_site">Переглянути сторінку події</string>
   <string name="arrow_tagged">Ви \"затегували\" організатора</string>
   <string name="get_involved_translation_text">Якщо ви хочете долучитися до локалізації додатка, тобто перекласти її на іншу мову або поліпшити існуючу, будь ласка, перейдіть на crowdin сторінку\n\nhttps://crowdin.com/project/gdgx-frisbee</string>
-  <string name="about_about">Про...</string>
+  <string name="about_about">Про</string>
   <string name="about_contributors">Розробники</string>
   <string name="about_translators">Перекладачі</string>
   <string name="about_changelog">Журнал змін</string>
@@ -177,14 +173,28 @@
   <string name="feedback_email_hint">Ваш адрес електронної пошти</string>
   <string name="feedback_message_hint">Що у Вас на думці?</string>
   <string name="feedback_send">Надіслати</string>
-  <string name="feedback_sending">Надсилання...</string>
+  <string name="feedback_sending">Надсилання&#8230;</string>
   <string name="for_leads">Для лідерів</string>
-  <string name="leads_welcome">Вітання організатору GDG!</string>
-  <string name="leads_resources">Перегляньте GDG ресурси в загальній папці на Google Drive. Натисніть, щоб переглянути документацію, графіку, лабораторії коду і багато іншого.</string>
-  <string name="leads_wisdom">Книга мудрості GDG на http://gdg-wisdom.gitbooks.io містить більш загальну інформацію. Ви можете зробити свій внесок і редагувати сторінки. Натисніть, щоб прочитати книгу.</string>
   <string name="leads_welcome_title">Ласкаво просимо</string>
+  <string name="leads_welcome">Як організатор GDG, ви маєте доступ до цих ресурсів!</string>
   <string name="leads_resources_title">GDG ресурси</string>
-  <string name="leads_wisdom_title">Мудрість GDG</string>
+  <string name="leads_resources">Ви можете знайти важливі ресурси GDG в цій папці на диску Google. Натисніть тут для перегляду слайдів, порад, графіки, лабораторії коду та багато іншого.</string>
+  <string name="leads_wisdom_title">Книга мудрості GDG</string>
+  <string name="leads_wisdom">Цей GitBook містить безліч загальної інформації про організацію GDG. Будь ласка, редагуйте сторінки і зробіть внесок у ці глобальні зусилля. Натисніть тут, щоб відкрити її.</string>
+  <string name="leads_gplus_community_title">Творча пісочниться GDG</string>
+  <string name="leads_gplus_community">Це є глобальна G+ сторінка для обміну досвідом і знаннями, пов\'язані із організацією GDG. Натисніть тут, щоб приєднатися до розмови!</string>
   <string name="message">Повідомлення</string>
   <string name="resource">Ресурс</string>
+  <string name="cd_navdrawer_image">Зображення групи в меню навігації</string>
+  <string name="cd_navdrawer_user_picture">Зображення профілю користувача</string>
+  <string name="title_signing_needed">Необхідний вхід</string>
+  <string name="signin">Вхід</string>
+  <string name="feedback_message_required">Потрібно повідомлення</string>
+  <string name="feedback_invalid_email">Введіть коректну адресу електронної пошти</string>
+  <string name="drawer_subheader_games">Ігри</string>
+  <string name="fork_me">Клонуй мене</string>
+  <string name="cd_arrowTagImage">Arrow Tagging Game</string>
+  <string name="cd_qrCode">QR Code</string>
+  <string name="invitation_title">Invite your friends to GDG app</string>
+  <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go.</string>
 </resources>

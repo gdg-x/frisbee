@@ -1,11 +1,15 @@
 package org.gdg.frisbee.android.api.model;
 
-import org.joda.time.DateTime;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
+import org.joda.time.DateTime;
+
 public class EventFullDetails {
-    String id, about, chapter, eventUrl, location, title;
+    @SerializedName("_id")
+    String id;
+    String about, chapter, eventUrl, location, title;
     Geo geo;
     DateTime start, end;
     ArrayList<String> tags;

@@ -19,7 +19,7 @@ package org.gdg.frisbee.android.eventseries;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.StringRes;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -33,34 +33,20 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.SimpleEvent;
 import org.gdg.frisbee.android.common.GdgListFragment;
 import org.gdg.frisbee.android.event.EventActivity;
-import org.gdg.frisbee.android.view.ColoredSnackBar;
 
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.fragment
- * <p/>
- * User: maui
- * Date: 22.04.13
- * Time: 23:10
- */
 public abstract class EventListFragment extends GdgListFragment {
 
     protected EventAdapter mAdapter;
 
     protected ArrayList<SimpleEvent> mEvents;
     
-    protected void onError(Throwable e) {
+    protected void onError(@StringRes int errorMessage) {
         setIsLoading(false);
-        e.printStackTrace();
-        if (isAdded()) {
-            Snackbar snackbar = Snackbar.make(getView(), R.string.fetch_events_failed,
-                    Snackbar.LENGTH_SHORT);
-            ColoredSnackBar.alert(snackbar).show();
-        }
+        showError(errorMessage);
     }
 
     @Override
@@ -75,6 +61,7 @@ public abstract class EventListFragment extends GdgListFragment {
 
         registerForContextMenu(getListView());
 
+        setIsLoading(true);
         mAdapter = createEventAdapter();
         setListAdapter(mAdapter);
         mEvents = new ArrayList<>();
@@ -134,7 +121,7 @@ public abstract class EventListFragment extends GdgListFragment {
         startActivity(intent);
     }
 
-    public void addEventToCalendar(SimpleEvent event) {
+    private void addEventToCalendar(SimpleEvent event) {
         Intent intent = new Intent(Intent.ACTION_EDIT);
         intent.setType("vnd.android.cursor.item/event");
 
@@ -155,5 +142,15 @@ public abstract class EventListFragment extends GdgListFragment {
         View v = inflater.inflate(R.layout.fragment_events, container, false);
         ButterKnife.bind(this, v);
         return v;
+    }
+
+    protected boolean checkValidCache(Object item) {
+        if (item instanceof ArrayList) {
+            ArrayList<?> result = (ArrayList) item;
+            if (result.size() > 0) {
+                return result.get(0) instanceof SimpleEvent;
+            }
+        }
+        return false;
     }
 }

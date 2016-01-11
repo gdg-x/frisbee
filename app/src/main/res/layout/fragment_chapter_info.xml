@@ -16,107 +16,36 @@
   ~ limitations under the License.
 -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <ScrollView
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:visibility="gone"
+    tools:visibility="visible">
 
-    <include layout="@layout/loading_animated_view" />
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:paddingBottom="5dip"
+      android:paddingLeft="10dip"
+      android:paddingRight="10dip"
+      android:paddingTop="5dip">
 
-    <ScrollView
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+      <include layout="@layout/card_about_box"/>
 
-        <LinearLayout
-            android:id="@+id/scrollView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="5dip"
-            android:paddingLeft="10dip"
-            android:paddingRight="10dip"
-            android:paddingTop="5dip">
+      <include layout="@layout/card_organizes_box"/>
 
-            <TextView
-                android:id="@+id/tagline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/about"
-                android:layout_marginLeft="5dip"
-                android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textStyle="bold" />
+      <include layout="@layout/card_resources_box"/>
 
-            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dip"
-                android:layout_marginBottom="5dip"
-                card_view:cardCornerRadius="5dp">
+    </LinearLayout>
+  </ScrollView>
 
-                <LinearLayout
-                    android:id="@+id/about_box"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center">
-
-                    <TextView
-                        android:id="@+id/about"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoLink="email|map|web"
-                        android:padding="8dip"/>
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dip"
-                android:layout_marginLeft="5dip"
-                android:text="@string/organizers"
-                android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textStyle="bold" />
-
-            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dip"
-                android:layout_marginBottom="5dip"
-                card_view:cardCornerRadius="5dp">
-
-                <LinearLayout
-                    android:id="@+id/organizer_box"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:orientation="vertical" />
-            </android.support.v7.widget.CardView>
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dip"
-                android:layout_marginLeft="5dip"
-                android:text="@string/resources"
-                android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textStyle="bold" />
-
-            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dip"
-                card_view:cardCornerRadius="5dp">
-
-                <LinearLayout
-                    android:id="@+id/resources_box"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:orientation="vertical" />
-            </android.support.v7.widget.CardView>
-        </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+  <include layout="@layout/loading_animated_view"/>
+</RelativeLayout>

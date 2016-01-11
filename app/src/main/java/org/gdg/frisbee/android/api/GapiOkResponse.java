@@ -29,8 +29,8 @@ public class GapiOkResponse extends LowLevelHttpResponse {
     private final HttpURLConnection connection;
     private final int responseCode;
     private final String responseMessage;
-    private final ArrayList<String> headerNames = new ArrayList<String>();
-    private final ArrayList<String> headerValues = new ArrayList<String>();
+    private final ArrayList<String> headerNames = new ArrayList<>();
+    private final ArrayList<String> headerValues = new ArrayList<>();
 
     GapiOkResponse(HttpURLConnection connection) throws IOException {
         this.connection = connection;

@@ -41,4 +41,7 @@ out/**
 .DS_Store
 app/res/values/keys.xml
 *.diff
+
+#Keystores
 release.keystore
+*.p12

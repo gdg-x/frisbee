@@ -2,9 +2,11 @@ package org.gdg.frisbee.android.eventseries;
 
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.util.Pair;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.api.model.SimpleEvent;
 import org.gdg.frisbee.android.app.App;
@@ -14,9 +16,9 @@ import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class GdgEventListFragment extends EventListFragment {
 
@@ -45,11 +47,10 @@ public class GdgEventListFragment extends EventListFragment {
 
 
         if (Utils.isOnline(getActivity())) {
-            App.getInstance().getGroupDirectory().getChapterEventList(mStart, mEnd, plusId, new Callback<ArrayList<Event>>() {
+            App.getInstance().getGroupDirectory().getChapterEventList(mStart, mEnd, plusId).enqueue(new Callback<ArrayList<Event>>() {
                 @Override
-                public void success(ArrayList<Event> events, retrofit.client.Response response) {
-                    mEvents.addAll(events);
-
+                public void success(ArrayList<Event> events) {
+                    splitEventsAndAddToAdapter(events);
                     App.getInstance().getModelCache().putAsync(cacheKey, mEvents, DateTime.now().plusHours(2), new ModelCache.CachePutListener() {
                         @Override
                         public void onPutIntoCache() {
@@ -60,8 +61,13 @@ public class GdgEventListFragment extends EventListFragment {
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
-                    onError(error);
+                public void failure(Throwable error) {
+                    onError(R.string.fetch_events_failed);
+                }
+
+                @Override
+                public void networkFailure(Throwable error) {
+                    onError(R.string.offline_alert);
                 }
             });
         } else {
@@ -71,8 +77,7 @@ public class GdgEventListFragment extends EventListFragment {
 
                     if (checkValidCache(item)) {
                         ArrayList<Event> events = (ArrayList<Event>) item;
-
-                        mAdapter.addAll(events);
+                        splitEventsAndAddToAdapter(events);
                         setIsLoading(false);
                         Snackbar snackbar = Snackbar.make(getView(), R.string.cached_content,
                                 Snackbar.LENGTH_SHORT);
@@ -90,21 +95,47 @@ public class GdgEventListFragment extends EventListFragment {
 
                 private void onNotFound() {
                     setIsLoading(false);
-                    Snackbar snackbar = Snackbar.make(getView(), R.string.offline_alert,
-                            Snackbar.LENGTH_SHORT);
-                    ColoredSnackBar.alert(snackbar).show();
+                    showError(R.string.offline_alert);
                 }
             });
         }
     }
 
-    private boolean checkValidCache(Object item) {
-        if (item instanceof ArrayList) {
-            ArrayList<?> result = (ArrayList) item;
-            if (result.size() > 0) {
-                return result.get(0) instanceof SimpleEvent;
+    /**
+     * Helper method that will split events into upcoming / past
+     * and add to the adapter of this list fragment
+     *
+     * @param events
+     *      The events list to be added
+     */
+    private void splitEventsAndAddToAdapter(Collection<? extends SimpleEvent> events) {
+        Pair<List<SimpleEvent>, List<SimpleEvent>> pair = splitEventsList(events);
+        mAdapter.addAll(pair.first);
+        mAdapter.addAll(pair.second);
+    }
+
+    /**
+     * Split a events list into Upcoming / Past events
+     *
+     * @param events
+     *      The events list that needs to be sorted
+     * @return
+     *      A pair containting the split list into Upcoming / Past events
+     */
+    private Pair<List<SimpleEvent>, List<SimpleEvent>> splitEventsList(Collection<? extends SimpleEvent> events) {
+        List<SimpleEvent> upcoming = new ArrayList<>();
+        List<SimpleEvent> past = new ArrayList<>();
+
+        DateTime now = DateTime.now();
+
+        for (SimpleEvent event : events) {
+            if (event.getStart().isBefore(now)) {
+                past.add(event);
+            } else {
+                upcoming.add(event);
             }
         }
-        return false;
+        Collections.reverse(past);
+        return new Pair<>(upcoming, past);
     }
 }

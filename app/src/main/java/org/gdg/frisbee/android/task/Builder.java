@@ -20,22 +20,14 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.task
- * <p/>
- * User: maui
- * Date: 22.04.13
- * Time: 00:32
- */
 public class Builder<Params, Result> {
 
     private CommonAsyncTask<Params, Result> mTask;
     private ArrayList<Params> mParams;
 
     public Builder(Class<Params> paramsType, Class<Result> resultType) {
-        mTask = new CommonAsyncTask<Params, Result>(paramsType, resultType);
-        mParams = new ArrayList<Params>();
+        mTask = new CommonAsyncTask<>(paramsType, resultType);
+        mParams = new ArrayList<>();
     }
 
     public Builder<Params, Result> addParameter(Params param) {
@@ -65,7 +57,7 @@ public class Builder<Params, Result> {
 
     public CommonAsyncTask<Params, Result> build() {
         Params[] p = (Params[]) Array.newInstance(mTask.getParamsType(), 0);
-        mTask.setParameters((Params[]) mParams.toArray(p));
+        mTask.setParameters(mParams.toArray(p));
         return mTask;
     }
 

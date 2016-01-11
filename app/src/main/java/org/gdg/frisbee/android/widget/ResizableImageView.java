@@ -5,14 +5,6 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.view
- * <p/>
- * User: maui
- * Date: 14.06.13
- * Time: 03:24
- */
 public class ResizableImageView extends ImageView {
 
     private int mWidth = -1, mHeight = -1;

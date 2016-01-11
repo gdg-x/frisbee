@@ -13,7 +13,7 @@
     android:layout_marginBottom="5dip"
     android:layout_marginLeft="5dip"
     android:layout_marginRight="5dip"
-    android:background="@color/cloud"></View>
+    android:background="@color/cloud" />
 
   <LinearLayout
     android:layout_width="match_parent"

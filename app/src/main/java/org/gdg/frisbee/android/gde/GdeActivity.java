@@ -2,7 +2,6 @@ package org.gdg.frisbee.android.gde;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,20 +9,17 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.SparseArray;
-import android.widget.FrameLayout;
-
-import com.google.gson.FieldNamingPolicy;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.GdeDirectory;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Gde;
 import org.gdg.frisbee.android.api.model.GdeList;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
+import org.gdg.frisbee.android.common.PlainLayoutFragment;
 import org.gdg.frisbee.android.utils.Utils;
-import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
 import java.lang.ref.WeakReference;
@@ -31,11 +27,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.Bind;
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.converter.GsonConverter;
-import timber.log.Timber;
 
 public class GdeActivity extends GdgNavDrawerActivity {
 
@@ -44,9 +35,6 @@ public class GdeActivity extends GdgNavDrawerActivity {
 
     @Bind(R.id.tabs)
     TabLayout mTabLayout;
-
-    @Bind(R.id.content_frame)
-    FrameLayout mContentLayout;
 
     private Handler mHandler = new Handler();
 
@@ -77,17 +65,12 @@ public class GdeActivity extends GdgNavDrawerActivity {
             }
         });
     }
-    
+
     private void fetchGdeDirectory() {
 
-        GdeDirectory gdeDirectoryClient = new RestAdapter.Builder()
-                .setEndpoint("https://gde-map.appspot.com")
-                .setConverter(new GsonConverter(Utils.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)))
-                .build().create(GdeDirectory.class);
-        
-        gdeDirectoryClient.getDirectory(new Callback<GdeList>() {
+        App.getInstance().getGdeDirectory().getDirectory().enqueue(new Callback<GdeList>() {
             @Override
-            public void success(final GdeList directory, retrofit.client.Response response) {
+            public void success(final GdeList directory) {
                 App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_GDE_LIST,
                         directory,
                         DateTime.now().plusDays(4),
@@ -100,15 +83,13 @@ public class GdeActivity extends GdgNavDrawerActivity {
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void failure(Throwable error) {
+                showError(R.string.fetch_gde_failed);
+            }
 
-                try {
-                    Snackbar snackbar = Snackbar.make(mContentLayout, R.string.fetch_gde_failed,
-                            Snackbar.LENGTH_SHORT);
-                    ColoredSnackBar.alert(snackbar).show();
-                } catch (IllegalStateException exception) {
-                }
-                Timber.e(error, "Could'nt fetch GDE list");
+            @Override
+            public void networkFailure(Throwable error) {
+                showError(R.string.offline_alert);
             }
         });
     }
@@ -166,7 +147,7 @@ public class GdeActivity extends GdgNavDrawerActivity {
                 return PlainLayoutFragment.newInstance(R.layout.fragment_gde_about);
             } else {
                 String key = mGdeMap.keySet().toArray(new String[mGdeMap.size()])[position - 1];
-                Fragment frag = GdeListFragment.newInstance(mGdeMap.get(key), position == mViewPager.getCurrentItem());
+                Fragment frag = GdeListFragment.newInstance(mGdeMap.get(key));
                 mFragments.append(position, new WeakReference<>(frag));
 
                 return frag;

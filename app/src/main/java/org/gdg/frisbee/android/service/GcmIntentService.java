@@ -34,9 +34,9 @@ import timber.log.Timber;
  */
 public class GcmIntentService extends IntentService {
 
-    public static final int NOTIFICATION_ID = 1;
-    public static final String UPCOMING_EVENT = "upcoming_event";
-    public static final String EXTRA_TYPE = "type";
+    private static final int NOTIFICATION_ID = 1;
+    private static final String UPCOMING_EVENT = "upcoming_event";
+    private static final String EXTRA_TYPE = "type";
 
     public GcmIntentService() {
         super("GcmIntentService");

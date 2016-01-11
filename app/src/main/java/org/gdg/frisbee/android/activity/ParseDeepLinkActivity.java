@@ -19,15 +19,27 @@ public class ParseDeepLinkActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent target;
 
-        String deepLinkId = PlusShare.getDeepLinkId(this.getIntent());
-        Intent target = parseDeepLinkId(deepLinkId);
+        String deepLinkId = PlusShare.getDeepLinkId(getIntent());
+        if (deepLinkId != null) {
+            target = parseDeepLinkId(deepLinkId);
+        } else {
+            if (Intent.ACTION_VIEW.equals(getIntent().getAction())) {
+                target = new Intent();
+                target.setClass(getApplicationContext(), EventActivity.class);
+                target.putExtra(Const.EXTRA_EVENT_ID, getIntent().getData().getLastPathSegment());
+                target.putExtra(Const.EXTRA_SECTION, EventActivity.EventPagerAdapter.SECTION_OVERVIEW);
+            } else {
+                target = null;
+            }
+        }
+
         if (target != null) {
             startActivity(target);
         }
 
         finish();
-
     }
 
     /**
@@ -37,6 +49,9 @@ public class ParseDeepLinkActivity extends Activity {
      * @return The intent corresponding to the deep-link ID.
      */
     private Intent parseDeepLinkId(String deepLinkId) {
+        if (deepLinkId == null) {
+            return null;
+        }
         Intent route = new Intent();
         Timber.d("Deep Link id: " + deepLinkId);
         String[] parts = deepLinkId.split("/");

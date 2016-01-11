@@ -16,7 +16,6 @@
 
 package org.gdg.frisbee.android.cache;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Looper;
 import android.os.Process;
@@ -52,14 +51,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import timber.log.Timber;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.cache
- * <p/>
- * User: maui
- * Date: 27.05.13
- * Time: 23:51
- */
 public class ModelCache {
 
     public static class Builder {
@@ -74,8 +65,6 @@ public class ModelCache {
             return Runtime.getRuntime().maxMemory();
         }
 
-        private Context mContext;
-
         private boolean mDiskCacheEnabled;
 
         private File mDiskCacheLocation;
@@ -87,12 +76,6 @@ public class ModelCache {
         private int mMemoryCacheMaxSize;
 
         public Builder() {
-            this(null);
-        }
-
-        public Builder(Context context) {
-            mContext = context;
-
             // Disk Cache is disabled by default, but it's default size is set
             mDiskCacheMaxSize = DEFAULT_DISK_CACHE_MAX_SIZE_MB * MEGABYTE;
 
@@ -102,7 +85,7 @@ public class ModelCache {
         }
 
         public ModelCache build() {
-            final ModelCache cache = new ModelCache(mContext);
+            final ModelCache cache = new ModelCache();
 
             if (isValidOptionsForMemoryCache()) {
                 cache.setMemoryCache(new LruCache<String, CacheItem>(mMemoryCacheMaxSize));
@@ -225,11 +208,7 @@ public class ModelCache {
     // Transient
     private ScheduledFuture<?> mDiskCacheFuture;
 
-    ModelCache(Context context) {
-        if (context != null) {
-            // Make sure we have the application context
-            context = context.getApplicationContext();
-        }
+    ModelCache() {
 
         mGson = new GsonBuilder()
                 .registerTypeAdapter(DateTime.class, new DateTimeDeserializer())
@@ -264,45 +243,7 @@ public class ModelCache {
     }
 
     public void getAsync(final String url, final boolean checkExpiration, final CacheListener mListener) {
-        new AsyncTask<Void, Void, Object>() {
-
-            @Override
-            protected Object doInBackground(Void... voids) {
-                return ModelCache.this.get(url, checkExpiration);
-            }
-
-            @Override
-            protected void onPostExecute(Object o) {
-                if (o != null) {
-                    mListener.onGet(o);
-                } else {
-                    mListener.onNotFound(url);
-                }
-            }
-        }.execute();
-    }
-
-    public void getAsync(final String url, final boolean checkExpiration, final boolean forceFetch, final CacheListener mListener) {
-        new AsyncTask<Void, Void, Object>() {
-
-            @Override
-            protected Object doInBackground(Void... voids) {
-                if (!forceFetch) {
-                    return ModelCache.this.get(url, checkExpiration);
-                } else {
-                    return null;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(Object o) {
-                if (o != null) {
-                    mListener.onGet(o);
-                } else {
-                    mListener.onNotFound(url);
-                }
-            }
-        }.execute();
+        new GetAsyncTask(ModelCache.this, url, checkExpiration, mListener).execute();
     }
 
     public Object get(String url) {
@@ -403,22 +344,7 @@ public class ModelCache {
     }
 
     public void putAsync(final String url, final Object obj, final DateTime expiresAt, final CachePutListener onDoneListener) {
-        new AsyncTask<Void, Void, Void>() {
-
-            @Override
-            protected Void doInBackground(Void... voids) {
-                put(url, obj, expiresAt);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                if (onDoneListener != null) {
-                    onDoneListener.onPutIntoCache();
-                }
-            }
-        }.execute();
+        new PutAsyncTask(ModelCache.this, url, obj, expiresAt, onDoneListener).execute();
     }
 
     public CacheItem put(final String url, final Object obj, DateTime expiresAt) {
@@ -530,7 +456,6 @@ public class ModelCache {
         out.close();
     }
 
-
     private void writeValueToDisk(OutputStream os, Object o) throws IOException {
 
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(os));
@@ -548,6 +473,7 @@ public class ModelCache {
 
         out.close();
     }
+
 
     private long readExpirationFromDisk(InputStream is) throws IOException {
         DataInputStream din = new DataInputStream(is);
@@ -582,7 +508,7 @@ public class ModelCache {
                 return mGson.fromJson(content, clazz);
             }
         } catch (IllegalArgumentException e) {
-            Timber.e("Deserializing from disk failed", e);
+            Timber.e(e, "Deserializing from disk failed");
             return null;
         } catch (ClassNotFoundException e) {
             throw new IOException(e.getMessage());
@@ -617,9 +543,9 @@ public class ModelCache {
     }
 
     public class CacheItem {
+
         private Object mValue;
         private DateTime mExpiresAt;
-
         public CacheItem(Object value, DateTime expiresAt) {
             mValue = value;
             mExpiresAt = expiresAt;
@@ -644,15 +570,15 @@ public class ModelCache {
     }
 
     public interface CachePutListener {
+
         void onPutIntoCache();
     }
-
     public interface CacheListener {
+
         void onGet(Object item);
-
         void onNotFound(String key);
-    }
 
+    }
     static final class DiskCacheFlushRunnable implements Runnable {
 
         private final DiskLruCache mDiskCache;
@@ -669,6 +595,75 @@ public class ModelCache {
                 mDiskCache.flush();
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+        }
+
+    }
+
+    public static class GetAsyncTask extends AsyncTask<Void, Void, Object> {
+
+        private ModelCache modelCache;
+        private CacheListener listener;
+        private String key;
+        private boolean checkExpiration;
+
+        public GetAsyncTask(ModelCache modelCache, String key, boolean checkExpiration, CacheListener listener) {
+            this.modelCache = modelCache;
+            this.key = key;
+            this.checkExpiration = checkExpiration;
+            this.listener = listener;
+        }
+
+        @Override
+        protected Object doInBackground(Void... voids) {
+            if (modelCache != null) {
+                return modelCache.get(key, checkExpiration);
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            if (listener != null) {
+                if (o != null) {
+                    listener.onGet(o);
+                } else {
+                    listener.onNotFound(key);
+                }
+            }
+        }
+    }
+
+    public static class PutAsyncTask extends AsyncTask<Void, Void, Object> {
+
+        private ModelCache modelCache;
+        private CachePutListener onDoneListener;
+        private String key;
+        private Object obj;
+        private DateTime expiresAt;
+
+        public PutAsyncTask(ModelCache modelCache, String key, Object obj, DateTime expiresAt, CachePutListener onDoneListener) {
+            this.modelCache = modelCache;
+            this.key = key;
+            this.obj = obj;
+            this.expiresAt = expiresAt;
+            this.onDoneListener = onDoneListener;
+        }
+
+        @Override
+        protected Object doInBackground(Void... voids) {
+            if (modelCache != null) {
+                return modelCache.put(key, obj, expiresAt);
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            if (onDoneListener != null) {
+                onDoneListener.onPutIntoCache();
             }
         }
     }

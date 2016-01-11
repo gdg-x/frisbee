@@ -17,14 +17,13 @@
 package org.gdg.frisbee.android.fragment;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import java.lang.ref.WeakReference;
 
@@ -55,15 +54,16 @@ public class SwipeRefreshRecyclerViewFragment extends GdgRecyclerFragment {
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT));
 
+        mSwipeRefreshLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mSwipeRefreshLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                mSwipeRefreshLayout.setRecyclerView(getListView());
+            }
+        });
+
         // Now return the SwipeRefreshLayout as this fragment's content view
         return mSwipeRefreshLayout;
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
-        mSwipeRefreshLayout.setRecyclerView(getListView());
-        return view;
     }
 
     /**
@@ -165,8 +165,8 @@ public class SwipeRefreshRecyclerViewFragment extends GdgRecyclerFragment {
                     return position != 0;
                 } else if (layoutManager instanceof StaggeredGridLayoutManager) {
                     int[] positions = ((StaggeredGridLayoutManager) layoutManager).findFirstCompletelyVisibleItemPositions(null);
-                    for (int i = 0; i < positions.length; i++) {
-                        if (positions[i] == 0) {
+                    for (int position : positions) {
+                        if (position == 0) {
                             return false;
                         }
                     }

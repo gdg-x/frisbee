@@ -28,6 +28,7 @@ import android.widget.Button;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.drive.Drive;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.Plus;
 
@@ -93,9 +94,11 @@ public class FirstStartStep2Fragment extends BaseFragment implements
                 .addOnConnectionFailedListener(this)
                 .addApi(Plus.API)
                 .addApi(Games.API)
+                .addApi(Drive.API)
                 .addScope(Plus.SCOPE_PLUS_LOGIN)
                 .addScope(Plus.SCOPE_PLUS_PROFILE)
                 .addScope(Games.SCOPE_GAMES)
+                .addScope(Drive.SCOPE_APPFOLDER)
                 .build();
     }
 
@@ -222,9 +225,11 @@ public class FirstStartStep2Fragment extends BaseFragment implements
                 // OnConnectionFailed callback.  This will allow the user to
                 // resolve the error currently preventing our connection to
                 // Google Play services.
-                mSignInProgress = STATE_IN_PROGRESS;
-                getActivity().startIntentSenderForResult(mSignInIntent.getIntentSender(),
-                        RC_SIGN_IN, null, 0, 0, 0);
+                if (getActivity() != null) {
+                    mSignInProgress = STATE_IN_PROGRESS;
+                    getActivity().startIntentSenderForResult(mSignInIntent.getIntentSender(),
+                            RC_SIGN_IN, null, 0, 0, 0);
+                }
             } catch (IntentSender.SendIntentException e) {
                 // The intent was canceled before it was sent.  Attempt to connect to
                 // get an updated ConnectionResult.
@@ -237,7 +242,9 @@ public class FirstStartStep2Fragment extends BaseFragment implements
             // dialog which may still start an intent on our behalf if the
             // user can resolve the issue.
             //TODO: replace this with the right Dialog implementation.
-            getActivity().showDialog(DIALOG_PLAY_SERVICES_ERROR);
+            if (getActivity() != null) {
+                getActivity().showDialog(DIALOG_PLAY_SERVICES_ERROR);
+            }
         }
     }
 

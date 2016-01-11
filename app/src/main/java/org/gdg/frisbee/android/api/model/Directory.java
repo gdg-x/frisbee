@@ -23,14 +23,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-/**
- * GDG Aachen
- * org.gdg.frisbee.android.api.model
- * <p/>
- * User: maui
- * Date: 21.04.13
- * Time: 22:30
- */
 public class Directory implements GdgResponse, Parcelable {
 
     @SerializedName("items")
@@ -40,34 +32,35 @@ public class Directory implements GdgResponse, Parcelable {
         groups = new ArrayList<>();
     }
 
-    public Directory(Parcel in) {
-        groups = new ArrayList<>();
-        in.readTypedList(groups, Chapter.CREATOR);
+    protected Directory(Parcel in) {
+        groups = in.createTypedArrayList(Chapter.CREATOR);
     }
 
-    public ArrayList<Chapter> getGroups() {
-        return groups;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(groups);
     }
 
     @Override
     public int describeContents() {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        return 0;
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeTypedList(groups);
-    }
-
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public Chapter createFromParcel(Parcel in) {
-            return new Chapter(in);
+    public static final Creator<Directory> CREATOR = new Creator<Directory>() {
+        @Override
+        public Directory createFromParcel(Parcel in) {
+            return new Directory(in);
         }
 
-        public Chapter[] newArray(int size) {
-            return new Chapter[size];
+        @Override
+        public Directory[] newArray(int size) {
+            return new Directory[size];
         }
     };
+
+    public ArrayList<Chapter> getGroups() {
+        return groups;
+    }
 
     public Chapter getGroupById(String chapterId) {
         for (Chapter group : groups) {

@@ -1,3 +1,6 @@
-* Material Design
-* Android Study Jam series
-* Women Techmakers series
+<strong>Release 2.2.3, released on 04 Jan 2016</strong>
+
+- Play Games CloudSave API migrated to Play Games Snapshots. All your Arrow tagged people should remain as it is.
+- Arrow game should work now.
+- App Indexing integration.
+- AppInvite is added. Go to About page and invite your friends.

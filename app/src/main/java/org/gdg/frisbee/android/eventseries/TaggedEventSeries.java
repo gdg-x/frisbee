@@ -22,12 +22,14 @@ public class TaggedEventSeries implements Parcelable {
     private int mDefaultIconResId;
     private int mLogoResId;
     private int mSpecialEventTheme;
+    private int mDrawerId;
     private DateTime mStartDateInMillis;
     private DateTime mEndDateInMillis;
 
     public TaggedEventSeries(Context context,
                              @StyleRes int specialEventTheme,
                              @NonNull String tag,
+                             int drawerId,
                              DateTime startDateInMillis,
                              DateTime endDateInMillis) {
 
@@ -37,7 +39,7 @@ public class TaggedEventSeries implements Parcelable {
         mDrawerIconResId = a.getResourceId(R.styleable.SpecialEvent_specialEventDrawerIcon, R.drawable.ic_drawer_ioextended);
         mDefaultIconResId = a.getResourceId(R.styleable.SpecialEvent_specialEventDefaultIcon, R.drawable.ic_ioextended);
         mLogoResId = a.getResourceId(R.styleable.SpecialEvent_specialEventLogo, R.drawable.ic_logo_ioextended);
-        
+
         mTitleResId = a.getResourceId(R.styleable.SpecialEvent_specialEventTitle, R.string.ioextended);
         mDescriptionResId = a.getResourceId(R.styleable.SpecialEvent_specialEventDescription, R.string.ioextended_description);
 
@@ -47,16 +49,18 @@ public class TaggedEventSeries implements Parcelable {
         mSpecialEventTheme = specialEventTheme;
         mStartDateInMillis = startDateInMillis;
         mEndDateInMillis = endDateInMillis;
+        mDrawerId = drawerId;
     }
 
     @SuppressWarnings("UnusedDeclaration")
     public TaggedEventSeries(@NonNull String tag,
-                             @DrawableRes int drawerIconResId, 
+                             @DrawableRes int drawerIconResId,
                              @StringRes int titleResId,
                              @StringRes int descriptionResId,
                              @DrawableRes int defaultIconResId,
                              @DrawableRes int logoResId,
                              @StyleRes int specialEventTheme,
+                             int drawerId,
                              DateTime startDateInMillis,
                              DateTime endDateInMillis) {
         mTag = tag;
@@ -66,6 +70,7 @@ public class TaggedEventSeries implements Parcelable {
         mDefaultIconResId = defaultIconResId;
         mLogoResId = logoResId;
         mSpecialEventTheme = specialEventTheme;
+        mDrawerId = drawerId;
         mStartDateInMillis = startDateInMillis;
         mEndDateInMillis = endDateInMillis;
     }
@@ -98,6 +103,10 @@ public class TaggedEventSeries implements Parcelable {
         return mSpecialEventTheme;
     }
 
+    public int getDrawerId() {
+        return mDrawerId;
+    }
+
     public DateTime getStartDateInMillis() {
         return mStartDateInMillis;
     }
@@ -120,6 +129,7 @@ public class TaggedEventSeries implements Parcelable {
         dest.writeInt(mDefaultIconResId);
         dest.writeInt(mLogoResId);
         dest.writeInt(mSpecialEventTheme);
+        dest.writeInt(mDrawerId);
         dest.writeLong(mStartDateInMillis.getMillis());
         dest.writeLong(mEndDateInMillis.getMillis());
     }
@@ -132,6 +142,7 @@ public class TaggedEventSeries implements Parcelable {
         mDefaultIconResId = in.readInt();
         mLogoResId = in.readInt();
         mSpecialEventTheme = in.readInt();
+        mDrawerId = in.readInt();
         mStartDateInMillis = new DateTime(in.readLong());
         mEndDateInMillis = new DateTime(in.readLong());
     }

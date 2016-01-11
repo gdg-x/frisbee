@@ -3,7 +3,7 @@ package org.gdg.frisbee.android.api.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Gde implements Parcelable {
+public class Gde implements GdgPerson, Parcelable {
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
         public Gde createFromParcel(Parcel in) {
@@ -17,7 +17,7 @@ public class Gde implements Parcelable {
     private String product, name, address, email, socialUrl;
     private double lat, lng;
 
-    public Gde(Parcel in) {
+    private Gde(Parcel in) {
         product = in.readString();
         name = in.readString();
         address = in.readString();
@@ -42,13 +42,7 @@ public class Gde implements Parcelable {
         return product.trim();
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public String getAddress() {
-        return address;
-    }
 
     public double getLat() {
         return lat;
@@ -63,6 +57,26 @@ public class Gde implements Parcelable {
     }
 
     public String getSocialUrl() {
+        return socialUrl;
+    }
+
+    @Override
+    public String getPrimaryText() {
+        return name;
+    }
+
+    @Override
+    public String getSecondaryText() {
+        return address;
+    }
+
+    @Override
+    public String getUrl() {
+        return socialUrl;
+    }
+
+    @Override
+    public String getImageUrl() {
         return socialUrl;
     }
 

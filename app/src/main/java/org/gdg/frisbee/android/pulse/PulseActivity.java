@@ -18,7 +18,6 @@ package org.gdg.frisbee.android.pulse;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -31,41 +30,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Pulse;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
-import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 import butterknife.Bind;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
-import timber.log.Timber;
 
 public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment.Callbacks {
 
+    private static final String INSTANCE_STATE_SELECTED_PULSE = "INSTANCE_STATE_SELECTED_PULSE";
     @Bind(R.id.pager)
     ViewPager mViewPager;
 
     @Bind(R.id.tabs)
     TabLayout mTabLayout;
 
-    @Bind(R.id.content_frame)
-    FrameLayout mContentLayout;
-
-    private CountriesSpinnerAdapter mSpinnerAdapter;
-    private MyAdapter mViewPagerAdapter;
+    private ArrayAdapter<String> mSpinnerAdapter;
+    private PulsePagerAdapter mViewPagerAdapter;
     private ArrayList<String> mPulseTargets;
     private Spinner mSpinner;
 
@@ -76,29 +67,38 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
         setContentView(R.layout.activity_pulse);
 
         mPulseTargets = new ArrayList<>();
+        mViewPagerAdapter = new PulsePagerAdapter(this, getSupportFragmentManager());
 
-        mViewPagerAdapter = new MyAdapter(this, getSupportFragmentManager());
-        mSpinnerAdapter = new CountriesSpinnerAdapter(this);
+        final String selectedPulse = savedInstanceState != null ? savedInstanceState.getString(INSTANCE_STATE_SELECTED_PULSE) : null;
 
         App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PULSE_GLOBAL, true, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 Pulse pulse = (Pulse) item;
                 mPulseTargets.addAll(pulse.keySet());
-                initSpinner();
+                initSpinner(selectedPulse);
             }
 
             @Override
             public void onNotFound(String key) {
-                fetchPulse();
+                fetchPulse(selectedPulse);
             }
         });
     }
 
-    private void fetchPulse() {
-        App.getInstance().getGroupDirectory().getPulse(new Callback<Pulse>() {
+    @Override
+    public void onBackPressed() {
+        if (mSpinner != null && !PulseFragment.GLOBAL.equals(mSpinner.getSelectedItem())) {
+            openPulse(PulseFragment.GLOBAL);
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    private void fetchPulse(final String selectedPulse) {
+        App.getInstance().getGroupDirectory().getPulse().enqueue(new Callback<Pulse>() {
             @Override
-            public void success(final Pulse pulse, Response response) {
+            public void success(final Pulse pulse) {
                 App.getInstance().getModelCache().putAsync(
                         Const.CACHE_KEY_PULSE_GLOBAL,
                         pulse,
@@ -107,24 +107,24 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
                             @Override
                             public void onPutIntoCache() {
                                 mPulseTargets.addAll(pulse.keySet());
-                                initSpinner();
+                                initSpinner(selectedPulse);
                             }
                         });
             }
 
             @Override
-            public void failure(RetrofitError error) {
-                try {
-                    Snackbar snackbar = Snackbar.make(mContentLayout, R.string.fetch_chapters_failed,
-                            Snackbar.LENGTH_SHORT);
-                    ColoredSnackBar.alert(snackbar).show();
-                } catch (IllegalStateException exception) {
-                }
-                Timber.e(error, "Couldn't fetch chapter list");
+            public void failure(Throwable error) {
+                showError(R.string.fetch_chapters_failed);
+            }
+
+            @Override
+            public void networkFailure(Throwable error) {
+                showError(R.string.offline_alert);
             }
         });
     }
 
+    @Override
     protected String getTrackedViewName() {
         if (mViewPager == null || mViewPagerAdapter.getSelectedPulseTarget() == null) {
             return "Pulse";
@@ -142,7 +142,10 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
                 + "/" + pageName;
     }
 
-    private void initSpinner() {
+    private void initSpinner(String selectedPulse) {
+        Collections.sort(mPulseTargets);
+        mPulseTargets.add(0, PulseFragment.GLOBAL);
+
         Toolbar toolbar = getActionBarToolbar();
         View spinnerContainer = LayoutInflater.from(this).inflate(R.layout.actionbar_spinner,
                 toolbar, false);
@@ -151,15 +154,17 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
         toolbar.addView(spinnerContainer, lp);
 
         mSpinner = (Spinner) spinnerContainer.findViewById(R.id.actionbar_spinner);
+
+        mSpinnerAdapter = new ArrayAdapter<>(this, R.layout.spinner_item_actionbar, mPulseTargets);
+        mSpinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         mSpinner.setAdapter(mSpinnerAdapter);
+
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
                 String previous = mViewPagerAdapter.getSelectedPulseTarget();
-                mViewPagerAdapter.setSelectedPulseTarget(mSpinnerAdapter.getItem(position));
                 if (!previous.equals(mSpinnerAdapter.getItem(position))) {
-                    Timber.d("Switching chapter!");
-                    mViewPagerAdapter.notifyDataSetChanged();
+                    refreshSpinner(mSpinnerAdapter.getItem(position));
                 }
             }
 
@@ -169,18 +174,23 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
             }
         });
 
-        Collections.sort(mPulseTargets);
-        mPulseTargets.add(0, "Global");
-        mViewPagerAdapter.setSelectedPulseTarget(mPulseTargets.get(0));
-        mSpinnerAdapter.clear();
+        refreshSpinner(selectedPulse);
+    }
 
-        mSpinnerAdapter.addAll(mPulseTargets);
+    private void refreshSpinner(String selectedPulse) {
 
+        if (selectedPulse == null) {
+            selectedPulse = mPulseTargets.get(0);
+        }
+        mSpinner.setSelection(mPulseTargets.indexOf(selectedPulse));
+
+        mViewPagerAdapter = new PulsePagerAdapter(this, getSupportFragmentManager());
+        mViewPagerAdapter.setSelectedPulseTarget(selectedPulse);
         mViewPager.setAdapter(mViewPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
     }
 
-    public ArrayList<String> getPulseTargets() {
+    private ArrayList<String> getPulseTargets() {
         return mPulseTargets;
     }
 
@@ -189,11 +199,19 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
         mSpinner.setSelection(getPulseTargets().indexOf(key));
     }
 
-    public class MyAdapter extends FragmentStatePagerAdapter {
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mSpinner != null) {
+            outState.putString(INSTANCE_STATE_SELECTED_PULSE, (String) mSpinner.getSelectedItem());
+        }
+    }
+
+    public class PulsePagerAdapter extends FragmentStatePagerAdapter {
         private Context mContext;
         private String mSelectedPulseTarget;
 
-        public MyAdapter(Context ctx, FragmentManager fm) {
+        public PulsePagerAdapter(Context ctx, FragmentManager fm) {
             super(fm);
             mContext = ctx;
         }
@@ -210,15 +228,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
 
         @Override
         public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return PulseFragment.newInstance(0, mSelectedPulseTarget);
-                case 1:
-                    return PulseFragment.newInstance(1, mSelectedPulseTarget);
-                case 2:
-                    return PulseFragment.newInstance(2, mSelectedPulseTarget);
-            }
-            return null;
+            return PulseFragment.newInstance(position, mSelectedPulseTarget);
         }
 
         @Override
@@ -244,26 +254,6 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
             }
 
             mSelectedPulseTarget = pulseTarget;
-        }
-    }
-
-    private class CountriesSpinnerAdapter extends ArrayAdapter<String> {
-        private final LayoutInflater mInflater;
-
-        public CountriesSpinnerAdapter(Context context) {
-            super(context, android.R.layout.simple_list_item_1, android.R.id.text1);
-            mInflater = LayoutInflater.from(context);
-        }
-
-        @Override
-        public View getView(final int position, final View convertView, final ViewGroup parent) {
-            View view = convertView;
-            if (view == null) {
-                view = mInflater.inflate(R.layout.spinner_item_actionbar, parent, false);
-            }
-            TextView textView = (TextView) view.findViewById(android.R.id.text1);
-            textView.setText(getItem(position));
-            return view;
         }
     }
 }

@@ -116,7 +116,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         return mActivities.size();
     }
 
-    public Item getItemInternal(int i) {
+    private Item getItemInternal(int i) {
         return mActivities.get(i);
     }
 
@@ -328,9 +328,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         attachmentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(attachment.getUrl()));
-                mContext.startActivity(i);
+                mContext.startActivity(Utils.createExternalIntent(mContext, Uri.parse(attachment.getUrl())));
             }
         });
     }
@@ -370,7 +368,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                         playVideoIntent.putExtra(YoutubeActivity.EXTRA_VIDEO_ID, videoId);
                         mContext.startActivity(playVideoIntent);
                     } else {
-                        Intent viewUrlIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(attachment.getUrl()));
+                        Intent viewUrlIntent = Utils.createExternalIntent(mContext, Uri.parse(attachment.getUrl()));
                         if (Utils.canLaunch(mContext, viewUrlIntent)) {
                             mContext.startActivity(viewUrlIntent);
                         }
@@ -455,10 +453,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         content.setText(attachment.getContent());
     }
 
-    public void openEventInGPlus(String uri) {
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse(uri));
-        mContext.startActivity(i);
+    private void openEventInGPlus(String uri) {
+        mContext.startActivity(Utils.createExternalIntent(mContext, Uri.parse(uri)));
 
     }
 
@@ -503,9 +499,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                 ssb.setSpan(new ClickableSpan() {
                     @Override
                     public void onClick(View view) {
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(url));
-                        mContext.startActivity(i);
+                        mContext.startActivity(Utils.createExternalIntent(mContext, Uri.parse(url)));
                     }
                 }, start, end, 33);
             }

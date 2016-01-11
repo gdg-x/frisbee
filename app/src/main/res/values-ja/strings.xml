@@ -38,13 +38,11 @@
   <string name="confirm">確認</string>
   <string name="signin_description">GDGアプリはGoogle+や他のGoogleサービスと統合しています。これらの機能を使用するには、Googleアカウントでログインしてください。</string>
   <string name="or">または</string>
-  <string name="no_thanks">やめておきます</string>
   <string name="skip">ログインしない</string>
   <string name="youtube_init_failed">YouTubeプレイヤーを初期化できませんでした</string>
   <string name="achievements">アチーブメント</string>
   <string name="settings">設定</string>
   <string name="about">アバウト</string>
-  <string name="gdl">Google Developers Live</string>
   <plurals name="seconds_ago">
     <item quantity="other">%d 秒前</item>
   </plurals>
@@ -87,7 +85,6 @@
   <string name="share_on_gplus">友達を招待</string>
   <string name="join_me">Join me at this event!</string>
   <string name="name_not_known">Name not known</string>
-  <string name="signin_first">You have to sign-in with G+ to use this feature</string>
   <string name="originally_shared">originally shared:</string>
   <string name="server_error">エラーが発生しました。もう一度やり直してください。</string>
   <string name="search_hint">GDGチャプターを検索</string>
@@ -97,7 +94,7 @@
   <string name="gcm_event_ticker">A new event at your home GDG has been scheduled.</string>
   <string name="ioextended_description">Google I/O Extended is about joining the Google conference at your local group.</string>
   <string name="devfest_description">GDG DevFests are large, community-run events that can offer speaker sessions across multiple product areas, all-day hack-a-thons, code labs, and more.\n\nEach GDG DevFest will be inspired by and uniquely tailored to the needs of the developer community that hosts it. While no two events will be exactly alike, each GDG DevFest will, at its core, be powered by a shared belief that when developers come together to exchange ideas, amazing things can happen.</string>
-  <string name="studyjams_description">Google Developers Study Jams is a free series of global, community–run, in-person study groups. The first Study Jams series is presented in partnership with Udacity and will follow their Android Fundamentals curriculum. Google Developer Group facilitators certified in the course will lead the Study Jams that meet once weekly for 8 - 9 weeks.</string>
+  <string name="studyjams_description">Google Developers Study Jams is a free series of global, community–run, in–person study groups. The first Study Jams series is presented in partnership with Udacity and will follow their Android Fundamentals curriculum. Google Developer Group facilitators certified in the course will lead the Study Jams that meet once weekly for 8 – 9 weeks.</string>
   <string name="wtm_description">Women Techmakers is Google\'s global program and brand for women in technology. Kicked off in 2012 by then VP of Google[x] Megan Smith, Women Techmakers is now led by Women in Technology Advocate Natalie Villalobos and a global team of Googlers who are passionate about empowering women in technology through increased visibility, community, and resources.\n\nEach of our summits and meetups will be catered to local communities of women in technology. Summits and meetups around the world may feature hands-on coding workshops, inspiring speakers, and networking opportunities.\n\nAll events will occur within the month of March.</string>
   <string name="media_route_menu_title">Cast session</string>
   <string name="navigate_to">イベントに移動</string>
@@ -144,14 +141,28 @@
   <string name="feedback_email_hint">あなたのメールアドレス</string>
   <string name="feedback_message_hint">何を考えていますか？</string>
   <string name="feedback_send">送信</string>
-  <string name="feedback_sending">送信中...</string>
+  <string name="feedback_sending">送信中&#8230;</string>
   <string name="for_leads">リーダ向け</string>
-  <string name="leads_welcome">GDGオーガナイザー、おめでとう！</string>
-  <string name="leads_resources">Googleドライブの公開フォルダからGDGリソースを確認して下さい。ドキュメント、グラフィック、コードラボなどを参照できます。</string>
-  <string name="leads_wisdom">GDGウィズダム http://gdg-wisdom.gitbooks.io には一般的な情報が含まれます。気軽にページを編集して貢献してください。本を読むをクリックします。</string>
   <string name="leads_welcome_title">ようこそ</string>
+  <string name="leads_welcome">GDGオーガナイザー、おめでとう！</string>
   <string name="leads_resources_title">GDGリソース</string>
+  <string name="leads_resources">Googleドライブの公開フォルダからGDGリソースを確認して下さい。ドキュメント、グラフィック、コードラボなどを参照できます。</string>
   <string name="leads_wisdom_title">GDGウィズダム</string>
+  <string name="leads_wisdom">GDGウィズダム http://gdg-wisdom.gitbooks.io には一般的な情報が含まれます。気軽にページを編集して貢献してください。本を読むをクリックします。</string>
+  <string name="leads_gplus_community_title">GDG Organizer Creative Sandbox</string>
+  <string name="leads_gplus_community">This global G+ community is about sharing experiences and knowledge related to running a GDG chapter. Tap to join the conversation!</string>
   <string name="message">メッセージ</string>
   <string name="resource">リソース</string>
+  <string name="cd_navdrawer_image">Navigation Drawer Chapter Image</string>
+  <string name="cd_navdrawer_user_picture">User Profile Image</string>
+  <string name="title_signing_needed">Sign-in Needed</string>
+  <string name="signin">Sign-in</string>
+  <string name="feedback_message_required">Message required</string>
+  <string name="feedback_invalid_email">Input valid email address</string>
+  <string name="drawer_subheader_games">Games</string>
+  <string name="fork_me">Fork me</string>
+  <string name="cd_arrowTagImage">Arrow Tagging Game</string>
+  <string name="cd_qrCode">QR Code</string>
+  <string name="invitation_title">Invite your friends to GDG app</string>
+  <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go.</string>
 </resources>

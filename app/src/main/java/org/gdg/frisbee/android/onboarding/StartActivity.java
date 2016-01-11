@@ -16,25 +16,24 @@
 
 package org.gdg.frisbee.android.onboarding;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.widget.Toast;
 
 import org.gdg.frisbee.android.BuildConfig;
-import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
 
-public class StartActivity extends AppCompatActivity {
+public class StartActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (BuildConfig.DEBUG && TextUtils.isEmpty(BuildConfig.PLAY_APP_ID)) {
-            Toast.makeText(this, "no API keys defined!", Toast.LENGTH_SHORT).show();
+        if (BuildConfig.DEBUG && TextUtils.isEmpty(BuildConfig.IP_SIMPLE_API_ACCESS_KEY)) {
+            Toast.makeText(this, "No API keys defined!\nPlease check Github project Wiki page for more detail.", Toast.LENGTH_LONG).show();
         }
 
         Intent intentForStart;
@@ -42,15 +41,11 @@ public class StartActivity extends AppCompatActivity {
             intentForStart = new Intent(StartActivity.this, FirstStartActivity.class);
         } else {
             intentForStart = new Intent(StartActivity.this, MainActivity.class);
-
-            final String selectedChapterGplusId = PrefUtils.getHomeChapterId(this);
-            if (selectedChapterGplusId != null) {
-                intentForStart.putExtra(Const.EXTRA_CHAPTER_ID, selectedChapterGplusId);
-            }
         }
-
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            intentForStart.putExtras(getIntent().getExtras());
+        }
         startActivity(intentForStart);
         finish();
     }
-
 }
