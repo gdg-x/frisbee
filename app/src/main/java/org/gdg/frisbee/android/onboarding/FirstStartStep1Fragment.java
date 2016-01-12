@@ -31,9 +31,6 @@ import android.widget.Filter;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
@@ -50,6 +47,8 @@ import org.gdg.frisbee.android.view.BaseTextWatcher;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
+import java.util.Collections;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -210,7 +209,8 @@ public class FirstStartStep1Fragment extends BaseFragment {
             int pos = mChapterForCityName.getPosition(mSelectedChapter);
             autoCompleteSpinnerView.setSelection(pos);
         } else {
-            if (chapterList.size() > 0) {
+            //if the location is available, select the first chapter by default.
+            if (App.getInstance().getLastLocation() != null && chapterList.size() > 0) {
                 mSelectedChapter = chapterList.get(0);
             }
         }
