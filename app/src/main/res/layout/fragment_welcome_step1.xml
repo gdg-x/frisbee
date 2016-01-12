@@ -80,10 +80,17 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <Spinner
+        <org.gdg.frisbee.android.view.AutoCompleteSpinnerView
           android:id="@+id/chapter_spinner"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content" />
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/home_gdg"
+          android:singleLine="true"
+          android:paddingLeft="@dimen/spinner_left_padding"
+          android:paddingRight="4dp"
+          android:layout_marginLeft="@dimen/keyline_2"
+          android:layout_marginRight="@dimen/keyline_2"
+          android:drawableRight="@drawable/spinner_arrow_dropdown"/>
 
         <Button
           android:id="@+id/confirm"

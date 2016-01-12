@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
-import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.annotation.NonNull;
@@ -39,6 +38,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.plus.Plus;
 
+import java.io.IOException;
+
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -54,8 +55,7 @@ import org.gdg.frisbee.android.appwidget.UpcomingEventWidgetProvider;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
-
-import java.io.IOException;
+import org.gdg.frisbee.android.view.LocationListPreference;
 
 import timber.log.Timber;
 
@@ -197,7 +197,7 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void initPreferences() {
-        final ListPreference prefHomeGdgList = (ListPreference) findPreference(PrefUtils.SETTINGS_HOME_GDG);
+        final LocationListPreference prefHomeGdgList = (LocationListPreference) findPreference(PrefUtils.SETTINGS_HOME_GDG);
         if (prefHomeGdgList != null) {
             prefHomeGdgList.setEnabled(false);
 
@@ -206,8 +206,8 @@ public class SettingsFragment extends PreferenceFragment {
                 public void onGet(Object item) {
                     Directory directory = (Directory) item;
 
-                    CharSequence[] entries = new String[directory.getGroups().size()];
-                    CharSequence[] entryValues = new String[directory.getGroups().size()];
+                    String[] entries = new String[directory.getGroups().size()];
+                    String[] entryValues = new String[directory.getGroups().size()];
 
                     int i = 0;
                     for (Chapter chapter : directory.getGroups()) {
