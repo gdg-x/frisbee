@@ -2,7 +2,6 @@ package org.gdg.frisbee.android.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.inputmethod.CompletionInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
 
