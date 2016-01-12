@@ -205,10 +205,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
 
         autoCompleteSpinnerView.setAdapter(mChapterAdapter);
 
-        if (mSelectedChapter != null) {
-            int pos = mChapterAdapter.getPosition(mSelectedChapter);
-            autoCompleteSpinnerView.setSelection(pos);
-        } else {
+        if (mSelectedChapter == null) {
             //if the location is available, select the first chapter by default.
             if (App.getInstance().getLastLocation() != null && chapterList.size() > 0) {
                 mSelectedChapter = chapterList.get(0);
@@ -216,6 +213,8 @@ public class FirstStartStep1Fragment extends BaseFragment {
         }
         if (mSelectedChapter != null) {
             autoCompleteSpinnerView.setText(mSelectedChapter.toString(), true);
+        } else {
+            autoCompleteSpinnerView.showDropDown();
         }
     }
 
