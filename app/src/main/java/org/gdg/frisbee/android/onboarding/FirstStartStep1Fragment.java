@@ -215,8 +215,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
             }
         }
         if (mSelectedChapter != null) {
-            autoCompleteSpinnerView.setText(mSelectedChapter.toString(), false);
-            mConfirmButton.setEnabled(true);
+            autoCompleteSpinnerView.setText(mSelectedChapter.toString(), true);
         }
     }
 
