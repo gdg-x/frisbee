@@ -62,7 +62,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
     Button mConfirmButton;
     @Bind(R.id.viewSwitcher)
     ViewSwitcher mLoadSwitcher;
-    private ChapterAdapter mChapterForCityName;
+    private ChapterAdapter mChapterAdapter;
     private Chapter mSelectedChapter;
     private ChapterComparator mLocationComparator;
 
@@ -77,7 +77,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        if (mChapterForCityName != null && mChapterForCityName.getCount() > 0) {
+        if (mChapterAdapter != null && mChapterAdapter.getCount() > 0) {
             outState.putParcelable(ARG_SELECTED_CHAPTER, mSelectedChapter);
         }
 
@@ -91,8 +91,8 @@ public class FirstStartStep1Fragment extends BaseFragment {
         mLocationComparator = new ChapterComparator(PrefUtils.getHomeChapterId(getActivity()),
                 App.getInstance().getLastLocation());
 
-        mChapterForCityName = new ChapterAdapter(getActivity(), R.layout.spinner_item_welcome);
-        mChapterForCityName.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        mChapterAdapter = new ChapterAdapter(getActivity(), R.layout.spinner_item_welcome);
+        mChapterAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
 
         if (savedInstanceState != null) {
             mSelectedChapter = savedInstanceState.getParcelable(ARG_SELECTED_CHAPTER);
@@ -121,14 +121,14 @@ public class FirstStartStep1Fragment extends BaseFragment {
             public void onFilterComplete(int count) {
                 mConfirmButton.setEnabled(count == 1);
                 if (count == 1) {
-                    mSelectedChapter = mChapterForCityName.getItem(0);
+                    mSelectedChapter = mChapterAdapter.getItem(0);
                 }
             }
         };
         AdapterView.OnItemClickListener enableConfirmOnChapterClick = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mSelectedChapter = mChapterForCityName.getItem(position);
+                mSelectedChapter = mChapterAdapter.getItem(position);
                 mConfirmButton.setEnabled(true);
             }
         };
@@ -200,13 +200,13 @@ public class FirstStartStep1Fragment extends BaseFragment {
 
     private void addChapters(List<Chapter> chapterList) {
         Collections.sort(chapterList, mLocationComparator);
-        mChapterForCityName.clear();
-        mChapterForCityName.addAll(chapterList);
+        mChapterAdapter.clear();
+        mChapterAdapter.addAll(chapterList);
 
-        autoCompleteSpinnerView.setAdapter(mChapterForCityName);
+        autoCompleteSpinnerView.setAdapter(mChapterAdapter);
 
         if (mSelectedChapter != null) {
-            int pos = mChapterForCityName.getPosition(mSelectedChapter);
+            int pos = mChapterAdapter.getPosition(mSelectedChapter);
             autoCompleteSpinnerView.setSelection(pos);
         } else {
             //if the location is available, select the first chapter by default.
