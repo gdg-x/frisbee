@@ -97,7 +97,7 @@
               android:layout_marginRight="@dimen/keyline_1"
               android:minHeight="50dip"
               android:minWidth="200dip"
-              android:drawableRight="@drawable/ic_expand_more_black_24dp" />
+              drawableRight="@drawable/spinner_arrow_dropdown" />
 
             <Button
               android:id="@+id/confirm"

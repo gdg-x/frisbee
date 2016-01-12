@@ -90,7 +90,7 @@
           android:paddingRight="4dp"
           android:layout_marginLeft="@dimen/keyline_2"
           android:layout_marginRight="@dimen/keyline_2"
-          android:drawableRight="@drawable/ic_expand_more_black_24dp"/>
+          android:drawableRight="@drawable/spinner_arrow_dropdown"/>
 
         <Button
           android:id="@+id/confirm"

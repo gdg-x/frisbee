@@ -14,21 +14,11 @@ public class AutoCompleteSpinnerView extends AutoCompleteTextView {
     }
 
     @Override
-    public void onCommitCompletion(CompletionInfo completion) {
-        super.onCommitCompletion(completion);
-    }
-
-    @Override
     public void onFilterComplete(int count) {
         super.onFilterComplete(count);
         if (mFilterListener != null) {
             mFilterListener.onFilterComplete(count);
         }
-    }
-
-    @Override
-    protected void replaceText(CharSequence text) {
-        super.replaceText(text);
     }
 
     public void setFilterCompletionListener(Filter.FilterListener filterListener) {
