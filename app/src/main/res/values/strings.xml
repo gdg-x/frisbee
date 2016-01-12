@@ -181,5 +181,4 @@
     <string name="action_deep_link" translatable="false">
         org.gdg.frisbee.android.DEEP_LINK_ACTION
     </string>
-    <string name="filter_gdg_by_name">City name to filter list of chapters</string>
 </resources>

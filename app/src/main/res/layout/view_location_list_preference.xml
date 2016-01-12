@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:layout_width="match_parent"
-  android:layout_height="match_parent">
-  <SearchView
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:paddingLeft="@dimen/keyline_1_minus_8dp"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+  <android.support.v7.widget.SearchView
     android:id="@+id/filter"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:iconifiedByDefault="false"
-    android:hint="@string/filter_gdg_by_name"/>
+    app:iconifiedByDefault="false"
+    android:layout_marginRight="4dp"
+    app:queryHint="@string/search_hint"
+    app:searchIcon="@null"/>
+
   <org.gdg.frisbee.android.view.FilterListView
     android:id="@android:id/list"
     android:layout_width="match_parent"
-    android:layout_height="150dp"/>
+    android:layout_height="match_parent"/>
 </LinearLayout>
