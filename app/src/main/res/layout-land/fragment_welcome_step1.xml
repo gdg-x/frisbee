@@ -87,9 +87,11 @@
 
             <org.gdg.frisbee.android.view.AutoCompleteSpinnerView
               android:id="@+id/chapter_spinner"
-              android:gravity="center"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:singleLine="true"
+              android:paddingLeft="@dimen/spinner_left_padding"
+              android:paddingRight="4dp"
               android:layout_marginLeft="@dimen/keyline_2"
               android:layout_marginRight="@dimen/keyline_2"
               android:minHeight="50dip"
