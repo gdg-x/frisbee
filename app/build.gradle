@@ -190,7 +190,7 @@ dependencies {
     compile "com.android.support:design:$rootProject.supportLibraryVersion"
     compile "com.android.support:customtabs:$rootProject.supportLibraryVersion"
     compile "com.android.support.test.espresso:espresso-idling-resource:$rootProject.espressoVersion"
-    devCompile 'com.android.support:multidex:1.0.1'
+    debugCompile 'com.android.support:multidex:1.0.1'
 
     //Play Services
     compile "com.google.android.gms:play-services-location:$rootProject.playServicesVersion"
