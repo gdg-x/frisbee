@@ -1,11 +1,11 @@
 package org.gdg.frisbee.android.view;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.util.AttributeSet;
-import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
 
-public class AutoCompleteSpinnerView extends AutoCompleteTextView {
+public class AutoCompleteSpinnerView extends AppCompatAutoCompleteTextView {
     private Filter.FilterListener mFilterListener;
 
     public AutoCompleteSpinnerView(Context context, AttributeSet attrs) {
