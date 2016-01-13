@@ -20,8 +20,6 @@ import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -44,7 +42,6 @@ import org.gdg.frisbee.android.chapter.ChapterComparator;
 import org.gdg.frisbee.android.common.BaseFragment;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.view.AutoCompleteSpinnerView;
-import org.gdg.frisbee.android.view.BaseTextWatcher;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
@@ -68,14 +65,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
     private ChapterAdapter mChapterAdapter;
     private Chapter mSelectedChapter;
     private ChapterComparator mLocationComparator;
-
-    private final TextWatcher disableConfirmAfterTextChanged = new BaseTextWatcher() {
-        @Override
-        public void afterTextChanged(Editable s) {
-            mConfirmButton.setEnabled(false);
-        }
-    };
-
+    
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -145,11 +135,9 @@ public class FirstStartStep1Fragment extends BaseFragment {
 
         mChapterSpinnerView.setFilterCompletionListener(enableConfirmOnUniqueFilterResult);
         mChapterSpinnerView.setOnItemClickListener(enableConfirmOnChapterClick);
-        mChapterSpinnerView.addTextChangedListener(disableConfirmAfterTextChanged);
-        mChapterSpinnerTextInputLayout.setErrorEnabled(true);
-
         mChapterSpinnerView.setOnTouchListener(new ChapterSpinnerTouchListener());
 
+        mChapterSpinnerTextInputLayout.setErrorEnabled(true);
 
         mConfirmButton.setOnClickListener(
                 new View.OnClickListener() {
