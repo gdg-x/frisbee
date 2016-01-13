@@ -26,6 +26,9 @@ Become a tester and VIP user by joining the [G+ Frisbee community] (https://plus
 
 Check http://github.com/gdg-x for more information about all development activities around GDGs.
 
+###For event organizers
+Please read https://github.com/gdg-x/frisbee/wiki/FAQ-for-organizers
+
 Development
 -----------
 Read the [Contribution Guidelines](https://github.com/gdg-x/frisbee/blob/develop/CONTRIBUTING.md).
