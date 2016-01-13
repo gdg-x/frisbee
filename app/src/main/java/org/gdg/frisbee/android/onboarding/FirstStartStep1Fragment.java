@@ -159,11 +159,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
     }
 
     private void updateAutoCompleteHint(Chapter selectedChapter) {
-        if (mChapterSpinnerView.getText().toString().equals(selectedChapter.toString())) {
-            resetAutoCompleteHint();
-        } else {
-            mChapterSpinnerTextInputLayout.setHint(getString(R.string.home_gdg_with_city, selectedChapter.toString()));
-        }
+        mChapterSpinnerTextInputLayout.setHint(getString(R.string.home_gdg_with_city, selectedChapter.toString()));
     }
 
     private void resetAutoCompleteHint() {
