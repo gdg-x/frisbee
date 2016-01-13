@@ -180,6 +180,19 @@ public final class PrefUtils {
                 .apply();
     }
 
+    public static boolean hasHigherAchievementSteps(Context context, String achievementName, int steps) {
+        SharedPreferences preferences = prefs(context);
+        String achievementKey = PREFS_ACHIEVEMENTS_PREFIX + achievementName;
+        return preferences.getInt(achievementKey, 0) > steps;
+    }
+
+    public static void setAchievementSteps(@NonNull final Context context,
+                                              @NonNull final String achievement, @NonNull final Integer steps) {
+        prefs(context).edit()
+                .putInt(PREFS_ACHIEVEMENTS_PREFIX + achievement, steps)
+                .apply();
+    }
+
     public static boolean isAppStateMigrationSuccessful(final Context context) {
         return prefs(context).getBoolean(PREFS_APP_STATE_MIGRATION_SUCCESSFUL, false);
     }

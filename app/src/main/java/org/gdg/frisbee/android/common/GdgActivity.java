@@ -130,7 +130,7 @@ public abstract class GdgActivity extends TrackableActivity implements
         }
 
         mAchievementActionHandler =
-                new AchievementActionHandler(getHandler(), mGoogleApiClient, this);
+                new AchievementActionHandler(mGoogleApiClient, this);
     }
 
     protected void createGoogleApiClient() {

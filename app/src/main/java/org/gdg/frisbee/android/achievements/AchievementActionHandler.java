@@ -17,7 +17,6 @@
 package org.gdg.frisbee.android.achievements;
 
 import android.content.Context;
-import android.os.Handler;
 import android.support.v4.util.Pair;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -33,18 +32,14 @@ import java.util.ArrayList;
  * @author Bartek Przybylski <bart.p.pl@gmail.com>
  */
 public class AchievementActionHandler {
-    private static final int ONE_SEC_IN_MILLISECONDS = 1000;
     private final Context mContext;
-    private final Handler mHandler;
     private final GoogleApiClient mGoogleApi;
     private final ArrayList<String> mPending;
     private final ArrayList<Pair<String, Integer>> mPendingIncremental;
 
-    public AchievementActionHandler(Handler handler,
-                                    GoogleApiClient googleApiClient, Context context) {
+    public AchievementActionHandler(GoogleApiClient googleApiClient, Context context) {
         mPending = new ArrayList<>();
         mPendingIncremental = new ArrayList<>();
-        mHandler = handler;
         mGoogleApi = googleApiClient;
         mContext = context;
     }
@@ -119,33 +114,30 @@ public class AchievementActionHandler {
         if (!mGoogleApi.isConnected()) {
             mPending.add(achievementName);
         } else {
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Games.Achievements.unlock(mGoogleApi, achievementName);
-                    PrefUtils.setAchievementUnlocked(mContext, achievementName);
-                }
-            }, ONE_SEC_IN_MILLISECONDS);
+            Games.Achievements.unlock(mGoogleApi, achievementName);
+            PrefUtils.setAchievementUnlocked(mContext, achievementName);
         }
     }
 
     private void postAchievementStepsEvent(final String achievementName, final int steps) {
-        final Pair<String, Integer> achievement = new Pair<>(achievementName, steps);
+        if (PrefUtils.hasHigherAchievementSteps(mContext, achievementName, steps)) {
+            return;
+        }
         if (!mGoogleApi.isConnected()) {
+            final Pair<String, Integer> achievement = new Pair<>(achievementName, steps);
             mPendingIncremental.add(achievement);
         } else {
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Games.Achievements.setSteps(mGoogleApi, achievement.first, achievement.second);
-                }
-            }, ONE_SEC_IN_MILLISECONDS);
+            Games.Achievements.setSteps(mGoogleApi, achievementName, steps);
+            PrefUtils.setAchievementSteps(mContext, achievementName, steps);
         }
     }
 
     public void onConnected() {
         for (String achievement : mPending) {
             postAchievementUnlockedEvent(achievement);
+        }
+        for (Pair<String, Integer> achievement: mPendingIncremental) {
+            postAchievementStepsEvent(achievement.first, achievement.second);
         }
         mPending.clear();
     }
