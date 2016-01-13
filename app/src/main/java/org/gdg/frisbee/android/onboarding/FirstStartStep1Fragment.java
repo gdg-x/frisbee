@@ -234,6 +234,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
             mChapterSpinnerView.setText(mSelectedChapter.toString(), true);
         } else {
             mChapterSpinnerView.showDropDown();
+            mConfirmButton.setEnabled(false);
         }
     }
 
