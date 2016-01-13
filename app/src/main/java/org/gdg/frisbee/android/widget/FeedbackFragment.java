@@ -32,6 +32,7 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
@@ -143,29 +144,29 @@ public class FeedbackFragment extends DialogFragment {
     }
 
     private boolean isValidInput() {
+        return checkMessageInputValid(mMessageField.getText())
+                && checkEmailInputValid(mEmailField.getText());
+    }
 
-        boolean isValid;
-
-        String strMessage = mMessageField.getText().toString();
-        String strEmail = mEmailField.getText().toString();
-
+    private boolean checkMessageInputValid(@Nullable final CharSequence strMessage) {
         if (!TextUtils.isEmpty(strMessage)) {
-            isValid = true;
             mLayoutMessage.setError(null);
+            return true;
         } else {
-            isValid = false;
             mLayoutMessage.setError(getString(R.string.feedback_message_required));
+            return false;
         }
+    }
 
-        if (!TextUtils.isEmpty(strEmail) && android.util.Patterns.EMAIL_ADDRESS.matcher(strEmail).matches()) {
-            isValid = isValid & true;
+    private boolean checkEmailInputValid(@Nullable final CharSequence strEmail) {
+        if (!TextUtils.isEmpty(strEmail)
+                && android.util.Patterns.EMAIL_ADDRESS.matcher(strEmail).matches()) {
             mLayoutEmail.setError(null);
+            return true;
         } else {
-            isValid = false;
             mLayoutEmail.setError(getString(R.string.feedback_invalid_email));
+            return false;
         }
-
-        return isValid;
     }
 
     private void sendFeedback() {
