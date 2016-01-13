@@ -126,6 +126,9 @@ public class FirstStartStep1Fragment extends BaseFragment {
                 if (count == 1) {
                     mSelectedChapter = mChapterAdapter.getItem(0);
                     updateAutoCompleteHint(mSelectedChapter);
+                    mChapterSpinnerView.dismissDropDown();
+                } else if (count == 0 && hasTrailingSpace(mChapterSpinnerView)) {
+                    mChapterSpinnerTextInputLayout.setError(getString(R.string.remove_trailing_spaces));
                 } else {
                     resetAutoCompleteHint();
                 }
@@ -134,23 +137,26 @@ public class FirstStartStep1Fragment extends BaseFragment {
         AdapterView.OnItemClickListener enableConfirmOnChapterClick = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mSelectedChapter = mChapterAdapter.getItem(position);
                 mConfirmButton.setEnabled(true);
-                resetAutoCompleteHint();
+                mSelectedChapter = mChapterAdapter.getItem(position);
+                updateAutoCompleteHint(mSelectedChapter);
             }
         };
 
         mChapterSpinnerView.setFilterCompletionListener(enableConfirmOnUniqueFilterResult);
         mChapterSpinnerView.setOnItemClickListener(enableConfirmOnChapterClick);
         mChapterSpinnerView.addTextChangedListener(disableConfirmAfterTextChanged);
+        mChapterSpinnerTextInputLayout.setErrorEnabled(true);
 
         mChapterSpinnerView.setOnTouchListener(new ChapterSpinnerTouchListener());
+
 
         mConfirmButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if (getActivity() instanceof Step1Listener) {
+                            //TODO re-order cached chapter list
                             ((Step1Listener) getActivity()).onConfirmedChapter(mSelectedChapter);
                         }
                     }
@@ -158,12 +164,18 @@ public class FirstStartStep1Fragment extends BaseFragment {
         );
     }
 
+    private boolean hasTrailingSpace(AutoCompleteSpinnerView chapterSpinnerView) {
+        return chapterSpinnerView.getText().toString().endsWith(" ");
+    }
+
     private void updateAutoCompleteHint(Chapter selectedChapter) {
         mChapterSpinnerTextInputLayout.setHint(getString(R.string.home_gdg_with_city, selectedChapter.toString()));
+        mChapterSpinnerTextInputLayout.setError(null);
     }
 
     private void resetAutoCompleteHint() {
         mChapterSpinnerTextInputLayout.setHint(getString(R.string.home_gdg));
+        mChapterSpinnerTextInputLayout.setError(null);
     }
 
     private void fetchChapters() {
@@ -254,7 +266,14 @@ public class FirstStartStep1Fragment extends BaseFragment {
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 if (event.getRawX() >= (mChapterSpinnerView.getRight()
                         - mChapterSpinnerView.getCompoundDrawables()[drawableRight].getBounds().width())) {
-                    mChapterSpinnerView.showDropDown();
+                    mChapterSpinnerView.setText("", true);
+                    resetAutoCompleteHint();
+                    mChapterSpinnerView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mChapterSpinnerView.showDropDown();
+                        }
+                    }, 100);
                     return true;
                 }
             }
