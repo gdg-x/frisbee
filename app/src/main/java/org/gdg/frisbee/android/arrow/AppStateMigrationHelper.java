@@ -46,16 +46,21 @@ public class AppStateMigrationHelper {
                     public void onResult(AppStateManager.StateResult stateResult) {
                         if (stateResult.getStatus().isSuccess()) {
                             final String serializedOrganizers = new String(stateResult.getLoadedResult().getLocalData());
+
                             Games.Snapshots.open(googleApiClient, Const.GAMES_SNAPSHOT_ID, true).setResultCallback(
                                     new ResultCallback<Snapshots.OpenSnapshotResult>() {
                                         @Override
                                         public void onResult(Snapshots.OpenSnapshotResult stateResult) {
-                                            saveSnapshot(activity,
-                                                    googleApiClient,
-                                                    description,
-                                                    stateResult,
-                                                    serializedOrganizers
-                                            );
+
+                                            final int statusCode = stateResult.getStatus().getStatusCode();
+                                            if (statusCode == GamesStatusCodes.STATUS_OK) {
+                                                saveSnapshot(activity,
+                                                        googleApiClient,
+                                                        description,
+                                                        serializedOrganizers,
+                                                        stateResult.getSnapshot()
+                                                );
+                                            }
                                         }
                                     });
                         }
@@ -66,36 +71,41 @@ public class AppStateMigrationHelper {
     private static void saveSnapshot(final GdgActivity activity,
                                      final GoogleApiClient googleApiClient,
                                      final String description,
-                                     final Snapshots.OpenSnapshotResult stateResult,
-                                     final String serializedOrganizers) {
+                                     final String serializedOrganizers,
+                                     final Snapshot snapshot) {
 
-        final Snapshot loadedResult = stateResult.getSnapshot();
-        final int statusCode = stateResult.getStatus().getStatusCode();
-        if (statusCode == GamesStatusCodes.STATUS_OK) {
-            loadedResult.getSnapshotContents().writeBytes(serializedOrganizers.getBytes());
-            int numberOfTaggedOrganizers = serializedOrganizers.split(ArrowActivity.ID_SEPARATOR_FOR_SPLIT).length - 1;
-            SnapshotMetadataChange metadataChange = new SnapshotMetadataChange.Builder()
-                    .setDescription(description + ": " + numberOfTaggedOrganizers)
-                    .build();
+        snapshot.getSnapshotContents().writeBytes(serializedOrganizers.getBytes());
+        int numberOfTaggedOrganizers = serializedOrganizers.split(ArrowActivity.ID_SEPARATOR_FOR_SPLIT).length - 1;
+        SnapshotMetadataChange metadataChange = new SnapshotMetadataChange.Builder()
+                .setDescription(description + ": " + numberOfTaggedOrganizers)
+                .build();
 
-            Games.Snapshots.commitAndClose(googleApiClient, loadedResult, metadataChange)
-                    .setResultCallback(
-                            new ResultCallback<Snapshots.CommitSnapshotResult>() {
-                                @Override
-                                public void onResult(Snapshots.CommitSnapshotResult result) {
+        Games.Snapshots.commitAndClose(googleApiClient, snapshot, metadataChange)
+                .setResultCallback(
+                        new ResultCallback<Snapshots.CommitSnapshotResult>() {
+                            @Override
+                            public void onResult(Snapshots.CommitSnapshotResult result) {
 
-                                    if (result.getStatus().isSuccess()) {
-                                        PrefUtils.setAppStateMigrationSuccessful(activity);
-                                        activity.sendAnalyticsEvent(
-                                                "Play Games",
-                                                "Migration",
-                                                "Successful"
-                                        );
-                                    }
+                                if (result.getStatus().isSuccess()) {
+                                    PrefUtils.setAppStateMigrationSuccessful(activity);
+                                    activity.sendAnalyticsEvent(
+                                            "Play Games",
+                                            "Migration",
+                                            "Successful"
+                                    );
                                 }
-                            });
+                            }
+                        });
 
-            activity.getAchievementActionHandler().handleFeelingSocial(numberOfTaggedOrganizers);
-        }
+        migrateFeelingSocialAchievement(activity, numberOfTaggedOrganizers);
+    }
+
+    /**
+     * Feeling Social achievement is added at the same time we do this API migration.
+     * On the first app open, we do this migration.
+     * While we already calculated the "numberOfTaggedOrganizers", it was a good idea to unlock the achievement.
+     */
+    private static void migrateFeelingSocialAchievement(GdgActivity activity, int numberOfTaggedOrganizers) {
+        activity.getAchievementActionHandler().handleFeelingSocial(numberOfTaggedOrganizers);
     }
 }
