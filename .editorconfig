@@ -20,6 +20,6 @@ trim_trailing_whitespace = true
 [*.md]
 trim_trailing_whitespace = false
 
-[*.java]
+[*.{java,gradle}]
 indent_style = space
 indent_size = 4
