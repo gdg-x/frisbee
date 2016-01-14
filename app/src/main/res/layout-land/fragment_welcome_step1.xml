@@ -85,19 +85,25 @@
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
-            <org.gdg.frisbee.android.view.AutoCompleteSpinnerView
-              android:id="@+id/chapter_spinner"
-              android:drawableRight="@drawable/spinner_arrow_dropdown"
+            <android.support.design.widget.TextInputLayout
+              android:id="@+id/chapter_spinner_text_input_layout"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginLeft="@dimen/keyline_1"
-              android:layout_marginRight="@dimen/keyline_1"
-              android:hint="@string/home_gdg"
-              android:minHeight="50dip"
-              android:minWidth="200dip"
-              android:paddingLeft="@dimen/spinner_left_padding"
-              android:paddingRight="4dp"
-              android:singleLine="true"/>
+              android:layout_height="wrap_content">
+
+              <org.gdg.frisbee.android.view.AutoCompleteSpinnerView
+                android:id="@+id/chapter_spinner"
+                android:drawableRight="@drawable/spinner_arrow_dropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/keyline_1"
+                android:layout_marginRight="@dimen/keyline_1"
+                android:hint="@string/home_gdg"
+                android:minHeight="50dip"
+                android:minWidth="200dip"
+                android:paddingLeft="@dimen/spinner_left_padding"
+                android:paddingRight="4dp"
+                android:singleLine="true"/>
+            </android.support.design.widget.TextInputLayout>
 
             <Button
               android:id="@+id/confirm"
