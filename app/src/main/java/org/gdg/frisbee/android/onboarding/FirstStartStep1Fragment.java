@@ -67,7 +67,6 @@ public class FirstStartStep1Fragment extends BaseFragment {
         if (mSpinnerAdapter != null && mSpinnerAdapter.getCount() > 0) {
             outState.putParcelable(ARG_SELECTED_CHAPTER, mSpinnerAdapter.getItem(mChapterSpinner.getSelectedItemPosition()));
         }
-
     }
 
     @Override
