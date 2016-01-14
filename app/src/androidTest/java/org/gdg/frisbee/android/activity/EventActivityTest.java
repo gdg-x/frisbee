@@ -4,19 +4,15 @@ import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.Espresso;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.support.test.runner.AndroidJUnit4;
 
 import org.gdg.frisbee.android.Const;
+import org.gdg.frisbee.android.IdlingTestCase;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.EspressoIdlingResource;
 import org.gdg.frisbee.android.event.EventActivity;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
@@ -32,8 +28,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.not;
 
-@RunWith(AndroidJUnit4.class)
-public class EventActivityTest {
+public class EventActivityTest extends IdlingTestCase {
     @Rule
     public final IntentsTestRule<EventActivity> rule = new IntentsTestRule<EventActivity>(EventActivity.class) {
         @Override
@@ -49,8 +44,6 @@ public class EventActivityTest {
         // By default Espresso Intents does not stub any Intents. Stubbing needs to be setup before
         // every test run. In this case all external Intents will be blocked.
         intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, null));
-
-        Espresso.registerIdlingResources(EspressoIdlingResource.getIdlingResource());
     }
 
     @Test
@@ -66,10 +59,5 @@ public class EventActivityTest {
         onView(withText(R.string.add_to_calendar)).perform(click());
 
         intended(allOf(hasAction(Intent.ACTION_EDIT), hasType("vnd.android.cursor.item/event")));
-    }
-
-    @After
-    public void unregisterIdlingResource() {
-        Espresso.unregisterIdlingResources(EspressoIdlingResource.getIdlingResource());
     }
 }

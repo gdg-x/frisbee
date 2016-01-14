@@ -2,20 +2,15 @@ package org.gdg.frisbee.android.activity;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
 
+import org.gdg.frisbee.android.IdlingTestCase;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.EspressoIdlingResource;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
@@ -34,8 +29,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
-@RunWith(AndroidJUnit4.class)
-public class MainActivityTest {
+public class MainActivityTest extends IdlingTestCase {
     public static final Chapter CHAPTER_ISTANBUL = new Chapter("Istanbul", "100514812580249787371");
     public static final Chapter CHAPTER_BRUSSELS = new Chapter("Brussels", "105068877693379070381");
 
@@ -49,11 +43,6 @@ public class MainActivityTest {
             PrefUtils.setShouldNotOpenDrawerOnStart(context);
         }
     };
-
-    @Before
-    public void registerIdlingResources() {
-        Espresso.registerIdlingResources(EspressoIdlingResource.getIdlingResource());
-    }
 
     @Test
     public void supportsChapterSwapping() {
@@ -87,10 +76,5 @@ public class MainActivityTest {
 
         onView(withId(R.id.actionbar_spinner))
                 .check(matches(withSpinnerText(CHAPTER_ISTANBUL.toString())));
-    }
-
-    @After
-    public void unregisterIdlingResource() {
-        Espresso.unregisterIdlingResources(EspressoIdlingResource.getIdlingResource());
     }
 }
