@@ -1,0 +1,30 @@
+<resources>
+  <string name="app_name">GDG</string>
+  <string name="label_configure">Customize</string>
+  <string name="label_setting_on">ON</string>
+  <string name="label_setting_off">OFF</string>
+
+  <string name="background_dark">Dark</string>
+  <string name="background_light">Light</string>
+
+  <string-array name="background_selection">
+    <item>@string/background_dark</item>
+    <item>@string/background_light</item>
+  </string-array>
+
+  <string name="color_black">Black</string>
+  <string name="color_white">White</string>
+  <string name="color_blue">Blue</string>
+  <string name="color_red">Red</string>
+  <string name="color_green">Green</string>
+  <string name="color_yellow">Yellow</string>
+
+  <string-array name="color_selection">
+    <item>@string/color_black</item>
+    <item>@string/color_white</item>
+    <item>@string/color_blue</item>
+    <item>@string/color_red</item>
+    <item>@string/color_green</item>
+    <item>@string/color_yellow</item>
+  </string-array>
+</resources>
