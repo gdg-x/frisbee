@@ -227,7 +227,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
             }
         }
         if (mSelectedChapter != null) {
-            mChapterSpinnerView.setText(mSelectedChapter.toString(), true);
+            mChapterSpinnerView.setText(mSelectedChapter.toString());
         } else {
             mChapterSpinnerView.showDropDown();
             mConfirmButton.setEnabled(false);
@@ -254,7 +254,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 if (event.getRawX() >= (mChapterSpinnerView.getRight()
                         - mChapterSpinnerView.getCompoundDrawables()[drawableRight].getBounds().width())) {
-                    mChapterSpinnerView.setText("", true);
+                    mChapterSpinnerView.setText("");
                     resetAutoCompleteHint();
                     mChapterSpinnerView.postDelayed(new Runnable() {
                         @Override
