@@ -96,12 +96,18 @@ android {
         dev {
             minSdkVersion 21
         }
+        mock {
+            minSdkVersion 21
+        }
     }
 
+    //For dev and mock flavors, we only have debug builds.
     variantFilter { variant ->
-        if (variant.getFlavors().get(0).name.equals('dev')
-                && (variant.buildType.name.equals('release')
-                || variant.buildType.name.equals('alpha'))) {
+        def flavorName = variant.flavors[0].name
+        def buildType = variant.buildType.name
+
+        if ((flavorName.equals('dev') || flavorName.equals('mock'))
+                && (buildType.equals('release') || buildType.equals('alpha'))) {
             variant.setIgnore(true);
         }
     }
@@ -183,10 +189,11 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
     compile "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
-    androidTestCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
+    mockCompile "com.squareup.retrofit2:retrofit-mock:$rootProject.retrofitVersion"
     debugCompile "com.squareup.leakcanary:leakcanary-android:$rootProject.leakCanaryVersion"
     alphaCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
     releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
+    androidTestCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
 
     //Jake Wharton
     compile 'com.jakewharton:butterknife:7.0.1'

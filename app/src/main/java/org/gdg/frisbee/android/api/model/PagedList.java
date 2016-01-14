@@ -9,6 +9,10 @@ public class PagedList<T> {
     int perPages;
     ArrayList<T> items;
 
+    public PagedList() {
+        this.items = new ArrayList<>();
+    }
+
     public ArrayList<T> getItems() {
         return items;
     }

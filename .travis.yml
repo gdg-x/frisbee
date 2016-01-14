@@ -31,7 +31,7 @@ before_script:
 after_success:
   - .buildscript/deploy_alpha.sh
 
-script: "./gradlew check connectedCheck --stacktrace"
+script: "./gradlew check connectedMockDebugAndroidTest"
 
 env:
   global:
