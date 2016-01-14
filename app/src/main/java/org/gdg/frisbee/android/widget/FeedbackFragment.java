@@ -18,6 +18,7 @@ package org.gdg.frisbee.android.widget;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -31,6 +32,7 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
@@ -46,6 +48,7 @@ import android.widget.EditText;
 
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.Utils;
 import org.json.JSONException;
@@ -132,17 +135,7 @@ public class FeedbackFragment extends DialogFragment {
                 public void onClick(View v) {
 
                     if (isValidInput()) {
-                        mApi.setLoadingMessage(getActivity().getString(R.string.feedback_sending));
-                        mApi.setCallback(new RestCallback() {
-                            public void success(Object obj) {
-                                //TODO add feedback
-                                mMessageField.setText("");
-                                mProperties = new JSONObject();
-                            }
-                        });
-                        mApi.sendFeedback(mMessageField.getText().toString(),
-                                mEmailField.getText().toString(), mProperties, "");
-
+                        sendFeedback();
                         dialog.dismiss();
                     }
                 }
@@ -151,29 +144,49 @@ public class FeedbackFragment extends DialogFragment {
     }
 
     private boolean isValidInput() {
+        return checkMessageInputValid(mMessageField.getText())
+                && checkEmailInputValid(mEmailField.getText());
+    }
 
-        boolean isValid;
-
-        String strMessage = mMessageField.getText().toString();
-        String strEmail = mEmailField.getText().toString();
-
+    private boolean checkMessageInputValid(@Nullable final CharSequence strMessage) {
         if (!TextUtils.isEmpty(strMessage)) {
-            isValid = true;
             mLayoutMessage.setError(null);
+            return true;
         } else {
-            isValid = false;
             mLayoutMessage.setError(getString(R.string.feedback_message_required));
+            return false;
         }
+    }
 
-        if (!TextUtils.isEmpty(strEmail) && android.util.Patterns.EMAIL_ADDRESS.matcher(strEmail).matches()) {
-            isValid = isValid & true;
+    private boolean checkEmailInputValid(@Nullable final CharSequence strEmail) {
+        if (!TextUtils.isEmpty(strEmail)
+                && android.util.Patterns.EMAIL_ADDRESS.matcher(strEmail).matches()) {
             mLayoutEmail.setError(null);
+            return true;
         } else {
-            isValid = false;
             mLayoutEmail.setError(getString(R.string.feedback_invalid_email));
+            return false;
         }
+    }
 
-        return isValid;
+    private void sendFeedback() {
+        mApi.setLoadingMessage(getActivity().getString(R.string.feedback_sending));
+        mApi.setCallback(new RestCallback() {
+            public void success(Object obj) {
+                //TODO add feedback
+                //Toast.makeText(getActivity(), obj.toString(), Toast.LENGTH_SHORT).show();
+                mMessageField.setText("");
+                mProperties = new JSONObject();
+
+                Activity activity = getActivity();
+                if (activity != null && activity instanceof GdgActivity) {
+                    ((GdgActivity) activity).getAchievementActionHandler()
+                            .handleKissesFromGdgXTeam();
+                }
+            }
+        });
+        mApi.sendFeedback(mMessageField.getText().toString(),
+                mEmailField.getText().toString(), mProperties, "");
     }
 
     private void setupEmailAutocomplete() {

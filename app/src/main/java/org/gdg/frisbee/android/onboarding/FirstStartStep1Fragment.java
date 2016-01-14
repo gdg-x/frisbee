@@ -73,7 +73,6 @@ public class FirstStartStep1Fragment extends BaseFragment {
         if (mChapterAdapter != null && mChapterAdapter.getCount() > 0) {
             outState.putParcelable(ARG_SELECTED_CHAPTER, mSelectedChapter);
         }
-
     }
 
     @Override

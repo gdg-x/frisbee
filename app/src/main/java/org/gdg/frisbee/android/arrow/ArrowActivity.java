@@ -90,6 +90,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
     ImageView scanImageView;
     @Bind(R.id.organizerPic)
     ImageView organizerPic;
+    private String taggedPeopleIds;
     private BaseArrowHandler mArrowHandler;
     private NfcAdapter mNfcAdapter;
     private String mPendingScore;
@@ -269,7 +270,6 @@ public class ArrowActivity extends GdgNavDrawerActivity {
                 Snapshot snapshot = openSnapshot();
                 if (snapshot != null) {
                     storeInSnapshot(snapshot, id);
-
                     String personName = getTaggedPersonName(id);
                     return "It worked...you tagged " + personName;
                 }
@@ -283,7 +283,6 @@ public class ArrowActivity extends GdgNavDrawerActivity {
 
         @Override
         protected void onPostExecute(String message) {
-
             if (message != null) {
                 Toast.makeText(ArrowActivity.this, message, Toast.LENGTH_LONG).show();
             } else {
@@ -336,6 +335,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
             }
 
             Games.Leaderboards.submitScore(getGoogleApiClient(), Const.ARROW_LB, numberOfTaggedOrganizers);
+            getAchievementActionHandler().handleFeelingSocial(numberOfTaggedOrganizers);
         }
 
         @WorkerThread
