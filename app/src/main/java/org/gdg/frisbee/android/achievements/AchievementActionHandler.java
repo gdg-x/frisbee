@@ -136,9 +136,10 @@ public class AchievementActionHandler {
         for (String achievement : mPending) {
             postAchievementUnlockedEvent(achievement);
         }
+        mPending.clear();
         for (Pair<String, Integer> achievement : mPendingIncremental) {
             postAchievementStepsEvent(achievement.first, achievement.second);
         }
-        mPending.clear();
+        mPendingIncremental.clear();
     }
 }
