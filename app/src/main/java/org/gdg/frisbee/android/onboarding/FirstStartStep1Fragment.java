@@ -94,9 +94,11 @@ public class FirstStartStep1Fragment extends BaseFragment {
                 Const.CACHE_KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
                     @Override
                     public void onGet(Object item) {
-                        Directory directory = (Directory) item;
-                        addChapters(directory.getGroups());
-                        mLoadSwitcher.setDisplayedChild(1);
+                        if (isContextValid()) {
+                            Directory directory = (Directory) item;
+                            addChapters(directory.getGroups());
+                            mLoadSwitcher.setDisplayedChild(1);
+                        }
                     }
 
                     @Override
@@ -213,9 +215,6 @@ public class FirstStartStep1Fragment extends BaseFragment {
     }
 
     private void addChapters(List<Chapter> chapterList) {
-        if (mChapterSpinnerView == null) {
-            return;
-        }
         Collections.sort(chapterList, mLocationComparator);
         mChapterAdapter.clear();
         mChapterAdapter.addAll(chapterList);
