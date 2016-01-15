@@ -68,6 +68,7 @@
   <string name="home_gdg">GDG หลักของคุณ</string>
   <string name="home_gdg_with_city">GDG หลักของคุณ: %1$s</string>
   <string name="home_gdg_summary">เลือก GDG หลักของคุณ</string>
+  <string name="remove_trailing_spaces">Please remove trailing spaces</string>
   <string name="analytics">การวิเคราะห์</string>
   <string name="analytics_summary_on">แอพพลิเคชันนี้ มีการส่งข้อมูลการใช้ในลักษณะไม่เปิดเผยตัวตนผู้ใช้ตลอดเวลา เพื่อนำข้อมูลไปใช้ในการพัฒนาแอพพลิเคชันให้ดีขึ้น</string>
   <string name="analytics_summary_off">แอพพลิเคชันนี้ ไม่มีการส่งข้อมูลการใช้</string>

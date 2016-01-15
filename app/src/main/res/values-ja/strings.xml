@@ -69,6 +69,7 @@
   <string name="home_gdg">ホームGDG</string>
   <string name="home_gdg_with_city">ホームGDG: %1$s</string>
   <string name="home_gdg_summary">あなたのメインのGDGを選択</string>
+  <string name="remove_trailing_spaces">Please remove trailing spaces</string>
   <string name="analytics">アナリティクス</string>
   <string name="analytics_summary_on">アプリケーションを改善するために、匿名の利用状況データを送信します。</string>
   <string name="analytics_summary_off">匿名の使用状況データを送信しません</string>

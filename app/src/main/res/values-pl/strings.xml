@@ -76,6 +76,7 @@
   <string name="home_gdg">Podstawowy GDG</string>
   <string name="home_gdg_with_city">Podstawowy GDG: %1$s</string>
   <string name="home_gdg_summary">Wybierz swój podstawowy GDG</string>
+  <string name="remove_trailing_spaces">Please remove trailing spaces</string>
   <string name="analytics">Statystyki</string>
   <string name="analytics_summary_on">Aplikacja aktualnie wysyła anonimowe informacje o użyciu, które pomagają nam w jej ulepszeniu</string>
   <string name="analytics_summary_off">Aplikacja aktualnie nie wysyła żadnych informacji o jej użyciu</string>

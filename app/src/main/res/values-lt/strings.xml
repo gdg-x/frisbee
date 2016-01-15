@@ -76,6 +76,7 @@
   <string name="home_gdg">Artimiausias GDG</string>
   <string name="home_gdg_with_city">Artimiausias GDG: %1$s</string>
   <string name="home_gdg_summary">Pasirink savo pagrindinį GDG</string>
+  <string name="remove_trailing_spaces">Please remove trailing spaces</string>
   <string name="analytics">Analizės</string>
   <string name="analytics_summary_on">Programėlė šiuo metu siunčia anonimizuotą naudojimosi informaciją programėlės tobulinimui.</string>
   <string name="analytics_summary_off">Programėlė šiuo metu nesiunčia anonimizuotos naudojimosi informacijos.</string>

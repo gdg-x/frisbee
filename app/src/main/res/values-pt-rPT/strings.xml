@@ -72,6 +72,7 @@
   <string name="home_gdg">Home GDG</string>
   <string name="home_gdg_with_city">Home GDG: %1$s</string>
   <string name="home_gdg_summary">Selecione seu primário GDG</string>
+  <string name="remove_trailing_spaces">Please remove trailing spaces</string>
   <string name="analytics">Analytics</string>
   <string name="analytics_summary_on">The app currently transmits anonymous usage data which allows us to improve the app</string>
   <string name="analytics_summary_off">The app currently does not transmit any anonymous usage data</string>

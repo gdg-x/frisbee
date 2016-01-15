@@ -68,6 +68,7 @@
   <string name="home_gdg">기본 GDG</string>
   <string name="home_gdg_with_city">기본 GDG: %1$s</string>
   <string name="home_gdg_summary">기본 GDG를 선택하세요</string>
+  <string name="remove_trailing_spaces">Please remove trailing spaces</string>
   <string name="analytics">Analytics</string>
   <string name="analytics_summary_on">앱을 개선하는 데 필요한 익명의 사용자 데이터를 전송합니다.</string>
   <string name="analytics_summary_off">어떠한 익명의 사용 데이터도 전송하지 않습니다.</string>

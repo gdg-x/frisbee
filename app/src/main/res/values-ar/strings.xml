@@ -89,6 +89,7 @@
   <string name="home_gdg">الصفحة الرئيسية</string>
   <string name="home_gdg_with_city">الصفحة الرئيسية: %1$s</string>
   <string name="home_gdg_summary">حدد GDG الأساسي</string>
+  <string name="remove_trailing_spaces">Please remove trailing spaces</string>
   <string name="analytics">تحليلات</string>
   <string name="analytics_summary_on">التطبيق ينقل حاليا بيانات الاستخدام المجهول الذي يسمح لنا لتحسين التطبيق</string>
   <string name="analytics_summary_off">التطبيق حاليا لا ينقل أي بيانات الاستخدام مجهولة الهوية</string>

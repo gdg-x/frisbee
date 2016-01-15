@@ -72,6 +72,7 @@
   <string name="home_gdg">Meine GDG</string>
   <string name="home_gdg_with_city">Meine GDG: %1$s</string>
   <string name="home_gdg_summary">Wähle deine primäre GDG</string>
+  <string name="remove_trailing_spaces">Please remove trailing spaces</string>
   <string name="analytics">Statistiken</string>
   <string name="analytics_summary_on">Derzeit werden anonyme Nutzungsdaten gesammelt</string>
   <string name="analytics_summary_off">Derzeit werden keine anonymen Nutzungsdaten gesendet</string>

@@ -68,6 +68,7 @@
   <string name="home_gdg">所在地 GDG</string>
   <string name="home_gdg_with_city">所在地 GDG: %1$s</string>
   <string name="home_gdg_summary">設定您主要的 GDG</string>
+  <string name="remove_trailing_spaces">Please remove trailing spaces</string>
   <string name="analytics">分析</string>
   <string name="analytics_summary_on">應用程式目前會傳送匿名使用資料作為改善參考</string>
   <string name="analytics_summary_off">應用程式目前不會傳送任何匿名使用資料</string>

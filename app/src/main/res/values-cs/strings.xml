@@ -76,6 +76,7 @@
   <string name="home_gdg">Domácí GDG</string>
   <string name="home_gdg_with_city">Domácí GDG: %1$s</string>
   <string name="home_gdg_summary">Vyber svoje domácí GDG</string>
+  <string name="remove_trailing_spaces">Please remove trailing spaces</string>
   <string name="analytics">Analytics</string>
   <string name="analytics_summary_on">Tato appka v současné době posílá anonymní statistická data za účelem vylepšování</string>
   <string name="analytics_summary_off">Tato appka nyní neposílá žádná anonymní statistická data.</string>

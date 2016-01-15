@@ -72,6 +72,7 @@
   <string name="home_gdg">आपका  जी डी जी</string>
   <string name="home_gdg_with_city">आपका  जी डी जी: %1$s</string>
   <string name="home_gdg_summary">अपना मुख्य जी डी जी चयन करें</string>
+  <string name="remove_trailing_spaces">Please remove trailing spaces</string>
   <string name="analytics">विश्लेषिकी</string>
   <string name="analytics_summary_on">यह एप्प इस समय गुमनाम रूप से प्रयोग की जानकारी एकत्र करती है, जिससे हमें यह एप्प सुधरने में सहायता हो।  </string>
   <string name="analytics_summary_off">यह एप्प इस समय गुमनाम रूप से कोई जानकारी एकत्र नहीं कर रही है। </string>

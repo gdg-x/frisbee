@@ -72,6 +72,7 @@
   <string name="home_gdg">Bulunduğunuz GDG</string>
   <string name="home_gdg_with_city">Bulunduğunuz GDG: %1$s</string>
   <string name="home_gdg_summary">Bulunduğunuz GDG\'yi seçiniz</string>
+  <string name="remove_trailing_spaces">Lütfen sondaki boşlukları kaldırınız</string>
   <string name="analytics">Analytics</string>
   <string name="analytics_summary_on">Uygulamanın gelişimine yardımcı olan anonim kullanım datası paylaşımı açık</string>
   <string name="analytics_summary_off">Anonim kullanım datası paylaşımı kapalı</string>

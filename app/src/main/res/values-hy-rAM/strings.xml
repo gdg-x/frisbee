@@ -72,6 +72,7 @@
   <string name="home_gdg">Իմ GDG-ն</string>
   <string name="home_gdg_with_city">Իմ GDG-ն: %1$s</string>
   <string name="home_gdg_summary">Ընտրեք ձեր հիմնական GDG-ն</string>
+  <string name="remove_trailing_spaces">Please remove trailing spaces</string>
   <string name="analytics">Ստատիստիկա</string>
   <string name="analytics_summary_on">Այս պահին հավելվածն անանուն ձևով տրամադրում է օգտագործման վերաբերյալ տվյալներ, որը թույլ է տալիս այն կատարելագործել:</string>
   <string name="analytics_summary_off">Այս պահին հավելվածն անանուն ձևով չի տրամադրում օգտագործման վերաբերյալ որևէ տվյալ:</string>

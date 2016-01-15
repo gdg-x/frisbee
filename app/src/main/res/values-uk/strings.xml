@@ -86,6 +86,7 @@
   <string name="home_gdg">Головна GDG</string>
   <string name="home_gdg_with_city">Головна GDG: %1$s</string>
   <string name="home_gdg_summary">Виберіть GDG поряд з вами</string>
+  <string name="remove_trailing_spaces">Please remove trailing spaces</string>
   <string name="analytics">Аналітика</string>
   <string name="analytics_summary_on">На даний час, програма передає анонімні дані про
         використання, що дозволяє нам покращити додаток
