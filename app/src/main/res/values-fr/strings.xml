@@ -75,6 +75,7 @@
   <string name="pulse_attendees">Participants</string>
   <string name="pulse_circlers">Followers Google+</string>
   <string name="home_gdg">Accueil GDG</string>
+  <string name="home_gdg_with_city">Accueil GDG: %1$s</string>
   <string name="home_gdg_summary">Sélectionnez votre primaire GDG</string>
   <string name="analytics">Analytics</string>
   <string name="analytics_summary_on">L\'application transmet actuellement des données d\'utilisation anonymes qui nous permettent d\'améliorer l\'application</string>

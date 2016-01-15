@@ -74,6 +74,7 @@
   <string name="pulse_attendees">Účastníci</string>
   <string name="pulse_circlers">Circlers</string>
   <string name="home_gdg">Domáca GDG</string>
+  <string name="home_gdg_with_city">Domáca GDG: %1$s</string>
   <string name="home_gdg_summary">Vyberte svoju domácu GDG</string>
   <string name="analytics">Analytics</string>
   <string name="analytics_summary_on">Aplikácia posiela anonymné dáta pre zlepšenie jej vývoja</string>

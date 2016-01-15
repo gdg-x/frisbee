@@ -70,6 +70,7 @@
   <string name="pulse_attendees">Participantes</string>
   <string name="pulse_circlers">Seguidores do grupo</string>
   <string name="home_gdg">Meu GDG </string>
+  <string name="home_gdg_with_city">Meu GDG : %1$s</string>
   <string name="home_gdg_summary">Selecione o seu GDG primário</string>
   <string name="analytics">Analítica</string>
   <string name="analytics_summary_on">O aplicativo está transmitindo os dados anônimos de utilização, o que nos permite melhorar o mesmo</string>

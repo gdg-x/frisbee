@@ -84,6 +84,7 @@
   <string name="pulse_attendees">Учасники</string>
   <string name="pulse_circlers">В колах Google+</string>
   <string name="home_gdg">Головна GDG</string>
+  <string name="home_gdg_with_city">Головна GDG: %1$s</string>
   <string name="home_gdg_summary">Виберіть GDG поряд з вами</string>
   <string name="analytics">Аналітика</string>
   <string name="analytics_summary_on">На даний час, програма передає анонімні дані про

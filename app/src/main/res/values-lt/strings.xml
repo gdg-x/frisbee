@@ -74,6 +74,7 @@
   <string name="pulse_attendees">Dalyviai</string>
   <string name="pulse_circlers">Skyriaus ratai</string>
   <string name="home_gdg">Artimiausias GDG</string>
+  <string name="home_gdg_with_city">Artimiausias GDG: %1$s</string>
   <string name="home_gdg_summary">Pasirink savo pagrindinį GDG</string>
   <string name="analytics">Analizės</string>
   <string name="analytics_summary_on">Programėlė šiuo metu siunčia anonimizuotą naudojimosi informaciją programėlės tobulinimui.</string>

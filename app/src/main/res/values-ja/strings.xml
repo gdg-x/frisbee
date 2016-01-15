@@ -67,6 +67,7 @@
   <string name="pulse_attendees">出席者</string>
   <string name="pulse_circlers">チャプターサークル</string>
   <string name="home_gdg">ホームGDG</string>
+  <string name="home_gdg_with_city">ホームGDG: %1$s</string>
   <string name="home_gdg_summary">あなたのメインのGDGを選択</string>
   <string name="analytics">アナリティクス</string>
   <string name="analytics_summary_on">アプリケーションを改善するために、匿名の利用状況データを送信します。</string>

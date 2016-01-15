@@ -66,6 +66,7 @@
   <string name="pulse_attendees">ผู้เข้าร่วมกิจกรรม</string>
   <string name="pulse_circlers">Chapter Circlers</string>
   <string name="home_gdg">GDG หลักของคุณ</string>
+  <string name="home_gdg_with_city">GDG หลักของคุณ: %1$s</string>
   <string name="home_gdg_summary">เลือก GDG หลักของคุณ</string>
   <string name="analytics">การวิเคราะห์</string>
   <string name="analytics_summary_on">แอพพลิเคชันนี้ มีการส่งข้อมูลการใช้ในลักษณะไม่เปิดเผยตัวตนผู้ใช้ตลอดเวลา เพื่อนำข้อมูลไปใช้ในการพัฒนาแอพพลิเคชันให้ดีขึ้น</string>

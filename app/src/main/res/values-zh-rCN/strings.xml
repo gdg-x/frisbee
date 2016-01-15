@@ -66,6 +66,7 @@
   <string name="pulse_attendees">参与者</string>
   <string name="pulse_circlers">官方G+的关注人数</string>
   <string name="home_gdg">当地 GDG</string>
+  <string name="home_gdg_with_city">当地 GDG: %1$s</string>
   <string name="home_gdg_summary">设置您主要的 GDG</string>
   <string name="analytics">分析</string>
   <string name="analytics_summary_on">应用程序目前发送匿名使用信息以改进程序</string>

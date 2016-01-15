@@ -70,6 +70,7 @@
   <string name="pulse_attendees">Teilnehmer</string>
   <string name="pulse_circlers">Circlers</string>
   <string name="home_gdg">Meine GDG</string>
+  <string name="home_gdg_with_city">Meine GDG: %1$s</string>
   <string name="home_gdg_summary">Wähle deine primäre GDG</string>
   <string name="analytics">Statistiken</string>
   <string name="analytics_summary_on">Derzeit werden anonyme Nutzungsdaten gesammelt</string>

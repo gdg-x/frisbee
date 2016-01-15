@@ -66,6 +66,7 @@
   <string name="pulse_attendees">참석자</string>
   <string name="pulse_circlers">Chapter를 서클에 추가</string>
   <string name="home_gdg">기본 GDG</string>
+  <string name="home_gdg_with_city">기본 GDG: %1$s</string>
   <string name="home_gdg_summary">기본 GDG를 선택하세요</string>
   <string name="analytics">Analytics</string>
   <string name="analytics_summary_on">앱을 개선하는 데 필요한 익명의 사용자 데이터를 전송합니다.</string>

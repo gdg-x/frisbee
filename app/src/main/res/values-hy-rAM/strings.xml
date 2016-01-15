@@ -70,6 +70,7 @@
   <string name="pulse_attendees">Մասնակիցները</string>
   <string name="pulse_circlers">Խմբի օղակի անձինք</string>
   <string name="home_gdg">Իմ GDG-ն</string>
+  <string name="home_gdg_with_city">Իմ GDG-ն: %1$s</string>
   <string name="home_gdg_summary">Ընտրեք ձեր հիմնական GDG-ն</string>
   <string name="analytics">Ստատիստիկա</string>
   <string name="analytics_summary_on">Այս պահին հավելվածն անանուն ձևով տրամադրում է օգտագործման վերաբերյալ տվյալներ, որը թույլ է տալիս այն կատարելագործել:</string>

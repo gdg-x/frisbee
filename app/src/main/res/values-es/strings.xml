@@ -70,6 +70,7 @@
   <string name="pulse_attendees">Asistentes</string>
   <string name="pulse_circlers">Círculos del Grupo</string>
   <string name="home_gdg">Mi GDG</string>
+  <string name="home_gdg_with_city">Mi GDG: %1$s</string>
   <string name="home_gdg_summary">Selecciona tu GDG principal</string>
   <string name="analytics">Analytics</string>
   <string name="analytics_summary_on">La app actualmente transmite datos anónimos de uso, lo que nos permite mejorarla</string>
