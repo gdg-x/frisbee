@@ -114,12 +114,12 @@ android {
 
     lintOptions {
         abortOnError true
-        checkReleaseBuilds false
 
         ignoreWarnings ci
         textReport true
         textOutput 'stdout'
 
+        warning 'ValidFragment'
         warning 'InvalidPackage'
         warning 'ImpliedQuantity'
         warning 'MissingQuantity'
