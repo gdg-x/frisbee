@@ -1,5 +1,9 @@
 language: android
 
+# Force Travis to run on new GCE Precise
+sudo: required
+dist: precise
+
 android:
   components:
   - platform-tools
