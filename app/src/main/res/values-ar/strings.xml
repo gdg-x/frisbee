@@ -140,7 +140,7 @@
   <string name="event_description">وصف</string>
   <string name="event">حدث</string>
   <string name="no_description_available"><![CDATA[<i> لا يوجد وصف متاح. </ I>]]></string>
-  <string name="starting_at">ابتداء من٪ 1 $</string>
+  <string name="starting_at">لا يداء من٪ %1$s</string>
   <string name="loading_data_failed">لا يمكن تحميل قائمة الأحداث..</string>
   <string name="share">نشر</string>
   <string name="open_event_site">مشاهدة صفحة الحدث</string>
