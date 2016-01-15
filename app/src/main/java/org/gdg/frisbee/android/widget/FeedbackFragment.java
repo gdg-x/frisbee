@@ -48,6 +48,7 @@ import android.widget.EditText;
 
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.achievements.AchievementActionHandler;
 import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.Utils;
@@ -90,6 +91,7 @@ public class FeedbackFragment extends DialogFragment {
 
     private JSONObject mProperties;
     private DoorbellApi mApi;
+    private AchievementActionHandler achievementHandler;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,6 +105,14 @@ public class FeedbackFragment extends DialogFragment {
         addProperty("loggedIn", PrefUtils.isSignedIn(getActivity())); // Optionally add some properties
         addProperty("appStarts", PrefUtils.getAppStarts(getActivity()));
         buildProperties();
+
+        setRetainInstance(true);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        achievementHandler = ((GdgActivity) activity).getAchievementActionHandler();
     }
 
     @NonNull
@@ -178,10 +188,8 @@ public class FeedbackFragment extends DialogFragment {
                 mMessageField.setText("");
                 mProperties = new JSONObject();
 
-                Activity activity = getActivity();
-                if (activity != null && activity instanceof GdgActivity) {
-                    ((GdgActivity) activity).getAchievementActionHandler()
-                            .handleKissesFromGdgXTeam();
+                if (achievementHandler != null) {
+                    achievementHandler.handleKissesFromGdgXTeam();
                 }
             }
         });
