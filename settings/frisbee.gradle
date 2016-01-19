@@ -1,0 +1,32 @@
+Properties local_properties = new Properties()
+File localPropertiesFile = project.rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    local_properties.load(localPropertiesFile.newDataInputStream())
+}
+
+android {
+    signingConfigs {
+        debug {
+            storeFile file("../settings/debug.keystore")
+            keyAlias "androiddebugkey"
+            storePassword "android"
+            keyPassword "android"
+        }
+        release {
+            storeFile file("../settings/" + (local_properties.release_keystore_name ?: "debug.keystore"))
+            keyAlias(local_properties.release_keystore_alias ?: "androiddebugkey")
+            storePassword(local_properties.release_keystore_pwd ?: "android")
+            keyPassword(local_properties.release_keystore_pwd2 ?: "android")
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
+}

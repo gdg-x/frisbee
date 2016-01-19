@@ -14,6 +14,8 @@ if (localPropertiesFile.exists()) {
     local_properties.load(localPropertiesFile.newDataInputStream())
 }
 
+apply from: '../settings/frisbee.gradle'
+
 def gitSha = org.ajoberstar.grgit.Grgit.open(dir: rootProject.file('.')).head().abbreviatedId
 def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone("UTC"))
 
@@ -54,21 +56,6 @@ android {
         resValue "string", "android_backup_key", local_properties.android_backup_key ?: ""
     }
 
-    signingConfigs {
-        debug {
-            storeFile file("../settings/debug.keystore")
-            keyAlias "androiddebugkey"
-            storePassword "android"
-            keyPassword "android"
-        }
-        release {
-            storeFile file("../settings/" + (local_properties.release_keystore_name ?: "debug.keystore"))
-            keyAlias(local_properties.release_keystore_alias ?: "androiddebugkey")
-            storePassword(local_properties.release_keystore_pwd ?: "android")
-            keyPassword(local_properties.release_keystore_pwd2 ?: "android")
-        }
-    }
-
     buildTypes {
         release {
             //Library specific proguard files
@@ -90,7 +77,6 @@ android {
             zipAlignEnabled true
             shrinkResources true
             debuggable false
-            signingConfig signingConfigs.release
 
             buildConfigField "String", "IP_SIMPLE_API_ACCESS_KEY", "\"$local_properties.ip_simple_api_access_key\""
             buildConfigField "String", "ANDROID_SIMPLE_API_ACCESS_KEY", "\"$local_properties.android_simple_api_access_key\""
@@ -106,7 +92,6 @@ android {
             debuggable true
             applicationIdSuffix ".debug"
             versionNameSuffix "-debug"
-            signingConfig signingConfigs.debug
 
             buildConfigField "String", "IP_SIMPLE_API_ACCESS_KEY", "\"$local_properties.ip_simple_api_access_key_debug\""
             buildConfigField "String", "ANDROID_SIMPLE_API_ACCESS_KEY", "\"$local_properties.android_simple_api_access_key_debug\""
