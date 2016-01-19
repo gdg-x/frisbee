@@ -77,20 +77,13 @@ public class AchievementActionHandler {
     }
 
     public void handleFeelingSocial(final int peopleMet) {
-
-        //If the user has met more than 5 people
-        //Unlock the 2nd level and increment the 3rd level.
-        if (peopleMet > 5) {
-            postAchievementStepsEvent(Achievements.ACHIEVEMENT_FEELING_POPULAR_LEVEL_3, peopleMet);
-            postAchievementUnlockedEvent(Achievements.ACHIEVEMENT_FEELING_SOCIAL_LEVEL_2);
-        } else if (peopleMet > 1) {
-            postAchievementStepsEvent(Achievements.ACHIEVEMENT_FEELING_SOCIAL_LEVEL_2, peopleMet);
+        if (peopleMet < 1) {
+            return;
         }
 
-        //This is not incremental
-        if (peopleMet >= 1) {
-            postAchievementUnlockedEvent(Achievements.ACHIEVEMENT_FEELING_SOCIAL_LEVEL_1);
-        }
+        postAchievementUnlockedEvent(Achievements.ACHIEVEMENT_FEELING_SOCIAL_LEVEL_1);
+        postAchievementStepsEvent(Achievements.ACHIEVEMENT_FEELING_SOCIAL_LEVEL_2, peopleMet);
+        postAchievementStepsEvent(Achievements.ACHIEVEMENT_FEELING_POPULAR_LEVEL_3, peopleMet);
     }
 
     public void handleKissesFromGdgXTeam() {

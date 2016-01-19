@@ -28,6 +28,7 @@ public final class PrefUtils {
     private static final String PREFS_SEASONS_GREETINGS = "seasons_greetings";
     private static final String PREFS_ACHIEVEMENTS_PREFIX = "achievement_unlocked_";
     private static final String PREFS_APP_STATE_MIGRATION_SUCCESSFUL = "app_state_migration_successful";
+    private static final String PREFS_WIDGET_ADDED = "widget_added";
 
     private static final boolean PREFS_FIRST_START_DEFAULT = true;
 
@@ -201,5 +202,15 @@ public final class PrefUtils {
         prefs(context).edit()
                 .putBoolean(PREFS_APP_STATE_MIGRATION_SUCCESSFUL, true)
                 .apply();
+    }
+
+    public static boolean isWidgetAdded(final Context context) {
+        return prefs(context).getBoolean(PREFS_WIDGET_ADDED, false);
+    }
+
+    public static void setWidgetAdded(@NonNull final Context context) {
+        prefs(context).edit()
+            .putBoolean(PREFS_WIDGET_ADDED, true)
+            .apply();
     }
 }

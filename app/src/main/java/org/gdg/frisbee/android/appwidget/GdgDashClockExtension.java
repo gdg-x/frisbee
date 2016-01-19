@@ -22,6 +22,8 @@ public class GdgDashClockExtension extends DashClockExtension {
 
     @Override
     protected void onUpdateData(int i) {
+        PrefUtils.setWidgetAdded(this);
+
         final String homeGdg = PrefUtils.getHomeChapterId(GdgDashClockExtension.this);
 
         if (homeGdg == null) {
@@ -30,35 +32,35 @@ public class GdgDashClockExtension extends DashClockExtension {
         }
         Timber.d("Fetching events");
         App.getInstance().getGroupDirectory().getChapterEventList(
-                (int) (new DateTime().getMillis() / 1000),
-                (int) (new DateTime().plusMonths(1).getMillis() / 1000),
-                homeGdg)
-                .enqueue(new Callback<ArrayList<Event>>() {
-                    @Override
-                    public void success(ArrayList<Event> events) {
-                        if (events.size() > 0) {
-                            if (events.get(0).getGPlusEventLink() != null) {
+            (int) (new DateTime().getMillis() / 1000),
+            (int) (new DateTime().plusMonths(1).getMillis() / 1000),
+            homeGdg)
+            .enqueue(new Callback<ArrayList<Event>>() {
+                @Override
+                public void success(ArrayList<Event> events) {
+                    if (events.size() > 0) {
+                        if (events.get(0).getGPlusEventLink() != null) {
 
-                                Event event = events.get(0);
+                            Event event = events.get(0);
 
-                                String expandedBody =
-                                        event.getStart()
-                                                .toLocalDateTime()
-                                                .toString(DateTimeFormat.patternForStyle("MS",
-                                                        getResources().getConfiguration().locale));
-                                publishUpdate(new ExtensionData()
-                                        .visible(true)
-                                        .icon(R.drawable.ic_dashclock)
-                                        .status("GDG")
-                                        .expandedTitle(event.getTitle())
-                                        .expandedBody(expandedBody)
-                                        .clickIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(event.getGPlusEventLink()))));
-                            }
-                        } else {
+                            String expandedBody =
+                                event.getStart()
+                                    .toLocalDateTime()
+                                    .toString(DateTimeFormat.patternForStyle("MS",
+                                        getResources().getConfiguration().locale));
                             publishUpdate(new ExtensionData()
-                                    .visible(false));
+                                .visible(true)
+                                .icon(R.drawable.ic_dashclock)
+                                .status("GDG")
+                                .expandedTitle(event.getTitle())
+                                .expandedBody(expandedBody)
+                                .clickIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(event.getGPlusEventLink()))));
                         }
+                    } else {
+                        publishUpdate(new ExtensionData()
+                            .visible(false));
                     }
-                });
+                }
+            });
     }
 }

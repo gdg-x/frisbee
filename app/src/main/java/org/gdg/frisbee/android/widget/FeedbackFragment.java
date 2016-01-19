@@ -33,6 +33,7 @@ import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
@@ -48,9 +49,11 @@ import android.widget.EditText;
 
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.achievements.AchievementActionHandler;
 import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.Utils;
+import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -62,6 +65,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.doorbell.android.DoorbellApi;
 import io.doorbell.android.manavo.rest.RestCallback;
+import io.doorbell.android.manavo.rest.RestErrorCallback;
 import timber.log.Timber;
 
 public class FeedbackFragment extends DialogFragment {
@@ -90,6 +94,7 @@ public class FeedbackFragment extends DialogFragment {
 
     private JSONObject mProperties;
     private DoorbellApi mApi;
+    private AchievementActionHandler achievementHandler;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,6 +108,14 @@ public class FeedbackFragment extends DialogFragment {
         addProperty("loggedIn", PrefUtils.isSignedIn(getActivity())); // Optionally add some properties
         addProperty("appStarts", PrefUtils.getAppStarts(getActivity()));
         buildProperties();
+
+        setRetainInstance(true);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        achievementHandler = ((GdgActivity) activity).getAchievementActionHandler();
     }
 
     @NonNull
@@ -173,16 +186,22 @@ public class FeedbackFragment extends DialogFragment {
         mApi.setLoadingMessage(getActivity().getString(R.string.feedback_sending));
         mApi.setCallback(new RestCallback() {
             public void success(Object obj) {
-                //TODO add feedback
-                //Toast.makeText(getActivity(), obj.toString(), Toast.LENGTH_SHORT).show();
                 mMessageField.setText("");
                 mProperties = new JSONObject();
 
-                Activity activity = getActivity();
-                if (activity != null && activity instanceof GdgActivity) {
-                    ((GdgActivity) activity).getAchievementActionHandler()
-                            .handleKissesFromGdgXTeam();
+                if (achievementHandler != null) {
+                    achievementHandler.handleKissesFromGdgXTeam();
+                } else {
+                    Snackbar snackbar = Snackbar.make(getView(), R.string.thanks_for_feedback, Snackbar.LENGTH_LONG);
+                    ColoredSnackBar.info(snackbar).show();
                 }
+            }
+        });
+        mApi.setErrorCallback(new RestErrorCallback() {
+            @Override
+            public void error(String s) {
+                Snackbar snackbar = Snackbar.make(getView(), s, Snackbar.LENGTH_LONG);
+                ColoredSnackBar.alert(snackbar).show();
             }
         });
         mApi.sendFeedback(mMessageField.getText().toString(),

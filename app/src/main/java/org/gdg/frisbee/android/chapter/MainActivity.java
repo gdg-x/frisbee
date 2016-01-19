@@ -352,6 +352,9 @@ public class MainActivity extends GdgNavDrawerActivity {
             getAchievementActionHandler().handleSignIn();
         }
         getAchievementActionHandler().handleAppStarted();
+        if (PrefUtils.isWidgetAdded(this)) {
+            getAchievementActionHandler().handlePowerUser();
+        }
     }
 
     private void addChapters(List<Chapter> chapterList) {
