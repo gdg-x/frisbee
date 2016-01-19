@@ -33,6 +33,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.support.wearable.watchface.CanvasWatchFaceService;
 import android.support.wearable.watchface.WatchFaceStyle;
 import android.text.format.Time;
@@ -52,6 +53,7 @@ import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.Wearable;
 
+import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
@@ -147,26 +149,26 @@ public class GdgWatchFace extends CanvasWatchFaceService {
             Resources resources = GdgWatchFace.this.getResources();
 
             mBackgroundPaint = new Paint();
-            mBackgroundPaint.setColor(resources.getColor(R.color.gdg_black));
+            mBackgroundPaint.setColor(ContextCompat.getColor(GdgWatchFace.this, R.color.gdg_black));
 
             mBackgroundBitmap = BitmapFactory.decodeResource(resources, R.drawable.gdg_black);
             mDarkBackgroundBitmap = BitmapFactory.decodeResource(resources, R.drawable.gdg_black);
             mLightBackgroundBitmap = BitmapFactory.decodeResource(resources, R.drawable.gdg_background);
 
             mHourHandPaint = new Paint();
-            mHourHandPaint.setColor(resources.getColor(R.color.gdg_gray));
+            mHourHandPaint.setColor(ContextCompat.getColor(GdgWatchFace.this, R.color.gdg_gray));
             mHourHandPaint.setStrokeWidth(resources.getDimension(R.dimen.watch_hand_stroke));
             mHourHandPaint.setAntiAlias(true);
             mHourHandPaint.setStrokeCap(Paint.Cap.ROUND);
 
             mMinuteHandPaint = new Paint();
-            mMinuteHandPaint.setColor(resources.getColor(R.color.gdg_gray));
+            mMinuteHandPaint.setColor(ContextCompat.getColor(GdgWatchFace.this, R.color.gdg_gray));
             mMinuteHandPaint.setStrokeWidth(resources.getDimension(R.dimen.watch_hand_stroke));
             mMinuteHandPaint.setAntiAlias(true);
             mMinuteHandPaint.setStrokeCap(Paint.Cap.ROUND);
 
             mSecondHandPaint = new Paint();
-            mSecondHandPaint.setColor(resources.getColor(R.color.gdg_white));
+            mSecondHandPaint.setColor(ContextCompat.getColor(GdgWatchFace.this, R.color.gdg_white));
             mSecondHandPaint.setStrokeWidth(resources.getDimension(R.dimen.second_hand_stroke));
             mSecondHandPaint.setAntiAlias(true);
             mSecondHandPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -177,7 +179,7 @@ public class GdgWatchFace extends CanvasWatchFaceService {
             mHourMarkerPaint.setAntiAlias(true);
 
             mTextPaint = new Paint();
-            mTextPaint.setColor(resources.getColor(R.color.gdg_white));
+            mTextPaint.setColor(ContextCompat.getColor(GdgWatchFace.this, R.color.gdg_white));
             mTextPaint.setTypeface(Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD));
             mTextPaint.setTextSize(resources.getDimension(R.dimen.font_hour_marker));
             mTextPaint.setAntiAlias(true);
@@ -454,14 +456,14 @@ public class GdgWatchFace extends CanvasWatchFaceService {
                 int ambientColor = mLightMode ? R.color.black : R.color.gdg_gray;
 
                 paint = new Paint(paint);
-                paint.setColor(GdgWatchFace.this.getResources().getColor(ambientColor));
+                paint.setColor(ContextCompat.getColor(GdgWatchFace.this, ambientColor));
             }
 
             return paint;
         }
 
         private String formatTwoDigitNumber(int number) {
-            return String.format("%02d", number);
+            return String.format(Locale.getDefault(), "%02d", number);
         }
 
         @Override
