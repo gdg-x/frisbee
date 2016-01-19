@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <dimen name="watch_hand_stroke">5dp</dimen>
+  <dimen name="second_hand_stroke">3dp</dimen>
+  <dimen name="hour_marker_stroke">2dp</dimen>
+
+  <dimen name="font_hour_marker">20sp</dimen>
+</resources>

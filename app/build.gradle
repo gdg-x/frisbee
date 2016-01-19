@@ -242,6 +242,9 @@ dependencies {
     //Local
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
+    // Android Wear
+    wearApp project(':wear')
+
     // Dependencies for local unit tests
     testCompile "junit:junit:$rootProject.junitVersion"
     testCompile "org.mockito:mockito-all:$rootProject.mockitoVersion"
