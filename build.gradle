@@ -41,6 +41,18 @@ task clean(type: Delete) {
 
 // Define versions in a single place
 ext {
+    ci = "true".equals(System.getenv("CI"))
+    preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
+
+    // Manifest version information!
+    versionMajor = 2
+    versionMinor = 2
+    versionPatch = 4
+    versionBuild = 0 // bump for dogfood builds, public betas, etc.
+
+    versionCode = versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
+    versionName = "${versionMajor}.${versionMinor}.${versionPatch}"
+
     // Sdk and tools
     minSdkVersion = 16
     targetSdkVersion = 21

@@ -21,9 +21,6 @@
     native <methods>;
 }
 
--keep class android.support.v4.app.** { *; }
--keep interface android.support.v4.app.** { *; }
-
 -dontwarn org.apache.**
 
 -keep class org.apache.commons.logging.**
