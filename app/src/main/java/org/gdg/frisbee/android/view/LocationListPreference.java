@@ -245,7 +245,6 @@ public class LocationListPreference extends DialogPreference implements AdapterV
     }
 
     private static class SavedState extends BaseSavedState {
-        int entriesSize;
         String value;
         String[] entries;
         String[] entryValues;
@@ -253,18 +252,14 @@ public class LocationListPreference extends DialogPreference implements AdapterV
         public SavedState(Parcel source) {
             super(source);
             value = source.readString();
-            entriesSize = source.readInt();
-            entries = new String[entriesSize];
-            source.readStringArray(entries);
-            entryValues = new String[entriesSize];
-            source.readStringArray(entryValues);
+            entries = source.createStringArray();
+            entryValues = source.createStringArray();
         }
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
             super.writeToParcel(dest, flags);
             dest.writeString(value);
-            dest.writeInt(entries.length);
             dest.writeStringArray(entries);
             dest.writeStringArray(entryValues);
         }
