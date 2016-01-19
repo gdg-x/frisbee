@@ -46,6 +46,8 @@ public class GapiOkHttpRequest extends LowLevelHttpRequest {
 
     @Override
     public LowLevelHttpResponse execute() throws IOException {
+        EspressoIdlingResource.increment();
+
         HttpURLConnection connection = this.connection;
         long startTime = System.currentTimeMillis();
         // write content
@@ -96,6 +98,7 @@ public class GapiOkHttpRequest extends LowLevelHttpRequest {
             if (!successfulConnection) {
                 connection.disconnect();
             }
+            EspressoIdlingResource.decrement();
         }
     }
 }
