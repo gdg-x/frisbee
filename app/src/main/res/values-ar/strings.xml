@@ -187,4 +187,5 @@
   <string name="cd_qrCode">رمز QR</string>
   <string name="invitation_title">أدع أصدقائك إلى تطبيق المجموعة</string>
   <string name="invitation_message">حمّل تطبيق GDG و اكتشف محتوى مجموعة مطوري Google بينما يكون جاهزا للإطلاق.</string>
+  <string name="thanks_for_feedback">Thank you for your Feedback!</string>
 </resources>
