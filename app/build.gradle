@@ -234,7 +234,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     // Android Wear
-    wearApp project(':wear')
+    prodWearApp project(':wear')
 
     // Dependencies for local unit tests
     testCompile "junit:junit:$rootProject.junitVersion"
