@@ -183,4 +183,5 @@
     <string name="action_deep_link" translatable="false">
         org.gdg.frisbee.android.DEEP_LINK_ACTION
     </string>
+  <string name="thanks_for_feedback">Thank you for your Feedback!</string>
 </resources>
