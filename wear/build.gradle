@@ -1,11 +1,4 @@
 apply plugin: 'com.android.application'
-
-Properties local_properties = new Properties()
-File localPropertiesFile = project.rootProject.file('local.properties')
-if (localPropertiesFile.exists()) {
-    local_properties.load(localPropertiesFile.newDataInputStream())
-}
-
 apply from: '../settings/frisbee.gradle'
 
 android {

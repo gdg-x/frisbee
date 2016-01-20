@@ -9,10 +9,7 @@ assemble.dependsOn('lint')
 check.dependsOn('checkstyle')
 
 Properties local_properties = new Properties()
-File localPropertiesFile = project.rootProject.file('local.properties')
-if (localPropertiesFile.exists()) {
-    local_properties.load(localPropertiesFile.newDataInputStream())
-}
+local_properties.load(new FileInputStream(rootProject.file('local.properties')))
 
 apply from: '../settings/frisbee.gradle'
 
