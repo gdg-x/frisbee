@@ -7,7 +7,7 @@
 
 SLUG="gdg-x/frisbee"
 JDK="oraclejdk8"
-BRANCH="develop"
+BRANCH="ci/417-continuous-dist"
 
 
 if [ "$TRAVIS_REPO_SLUG" != "$SLUG" ]; then
