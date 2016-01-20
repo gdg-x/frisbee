@@ -6,13 +6,10 @@
 # http://benlimmer.com/2013/12/26/automatically-publish-javadoc-to-gh-pages-with-travis-ci/
 
 SLUG="gdg-x/frisbee"
-JDK="oraclejdk8"
 BRANCH="ci/417-continuous-dist"
 
 if [ "$TRAVIS_REPO_SLUG" != "$SLUG" ]; then
   echo "Skipping alpha deployment: wrong repository. Expected '$SLUG' but was '$TRAVIS_REPO_SLUG'."
-elif [ "$TRAVIS_JDK_VERSION" != "$JDK" ]; then
-  echo "Skipping alpha deployment: wrong JDK. Expected '$JDK' but was '$TRAVIS_JDK_VERSION'."
 elif [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
   echo "Skipping alpha deployment: was pull request."
 elif [ "$TRAVIS_BRANCH" != "$BRANCH" ]; then
