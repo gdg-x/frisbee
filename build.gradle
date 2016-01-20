@@ -46,8 +46,8 @@ ext {
 
     // Manifest version information!
     versionMajor = 2
-    versionMinor = 2
-    versionPatch = 6
+    versionMinor = 3
+    versionPatch = 0
     versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
     versionCode = versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
