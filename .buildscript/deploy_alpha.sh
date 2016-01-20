@@ -6,7 +6,7 @@
 # http://benlimmer.com/2013/12/26/automatically-publish-javadoc-to-gh-pages-with-travis-ci/
 
 SLUG="gdg-x/frisbee"
-BRANCH="ci/417-continuous-dist"
+BRANCH="master"
 
 if [ "$TRAVIS_REPO_SLUG" != "$SLUG" ]; then
   echo "Skipping alpha deployment: wrong repository. Expected '$SLUG' but was '$TRAVIS_REPO_SLUG'."
