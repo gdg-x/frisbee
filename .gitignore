@@ -45,3 +45,4 @@ app/res/values/keys.xml
 #Keystores
 release.keystore
 *.p12
+service_account.json
