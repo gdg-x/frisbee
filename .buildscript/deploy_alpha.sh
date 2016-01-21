@@ -7,6 +7,7 @@
 
 SLUG="gdg-x/frisbee"
 BRANCH="master"
+TRACK="alpha"
 
 incrementVersion () {
   echo "Incrementing version number..."
@@ -56,7 +57,7 @@ else
   version=getVersionName
   updateWhatsNewFile
   echo "Deploying alpha APK version $version"
-  ./gradlew publishApkProdAlpha -Dtrack=alpha
+  ./gradlew publishApkProdAlpha -Dtrack=$TRACK
   if [ $? -eq 0 ]; then
     echo "Alpha APK successfully deployed!"
     commitAndPushToGit
