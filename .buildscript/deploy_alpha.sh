@@ -27,8 +27,8 @@ updateWhatsNewFile () {
 
 commitAndPushToGit () {
   local version=$1
-  git config user.email "GDG-X"
-  git config user.name "support@gdgx.io"
+  git config user.name "GDG-X"
+  git config user.email "support@gdgx.io"
   git add build.gradle
   git commit -m "Prepare for release $version"
   git tag -a $version -m "Version $version"
