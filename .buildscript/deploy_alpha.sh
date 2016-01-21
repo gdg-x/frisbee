@@ -6,8 +6,8 @@
 # http://benlimmer.com/2013/12/26/automatically-publish-javadoc-to-gh-pages-with-travis-ci/
 
 SLUG="gdg-x/frisbee"
-BRANCH="master"
-TRACK="alpha"
+ALPHA_BRANCH='master';
+BETA_BRANCH='release';
 
 incrementVersion () {
   echo "Incrementing version number..."
@@ -15,24 +15,27 @@ incrementVersion () {
 }
 
 getVersionName () {
-  return $(perl -ne 'print "$1." if /version(?:Major|Minor|Patch|Build)\s=\s(\d+)/' build.gradle | sed 's/\.$//')
+  echo $(perl -ne 'print "$1." if /version(?:Major|Minor|Patch|Build)\s=\s(\d+)/' build.gradle | sed 's/\.$//')
 }
 
 updateWhatsNewFile () {
-  echo -e "Automated alpha build from CI\n\nLatest git commit:\n" > app/src/alpha/play/en-US/whatsnew
-  git log -1 --oneline >> app/src/alpha/play/en-US/whatsnew
+  if [ "$TRACK" == "alpha" ]; then
+    echo -e "Automated alpha build from CI\n\nLatest git commit:\n" > app/src/alpha/play/en-US/whatsnew
+    git log -1 --oneline >> app/src/alpha/play/en-US/whatsnew
+  fi
 }
 
 commitAndPushToGit () {
-    git config user.email "GDG-X"
-    git config user.name "support@gdgx.io"
-    git add build.gradle
-    git commit -m "Prepare for release $version"
-    git tag -a $version -m "Version $version"
-    # Make sure to make the output quiet, or else the API token will leak!
-    # This works because the API key can replace your password.
-    git push -q https://gdg-x:$GITHUB_API_KEY@github.com/gdg-x/frisbee 2>/dev/null
-    git push -q --tags https://gdg-x:$GITHUB_API_KEY@github.com/gdg-x/frisbee 2>/dev/null
+  local version=$1
+  git config user.email "GDG-X"
+  git config user.name "support@gdgx.io"
+  git add build.gradle
+  git commit -m "Prepare for release $version"
+  git tag -a $version -m "Version $version"
+  # Make sure to make the output quiet, or else the API token will leak!
+  # This works because the API key can replace your password.
+  git push -q https://gdg-x:$GITHUB_API_KEY@github.com/gdg-x/frisbee 2>/dev/null
+  git push -q --tags https://gdg-x:$GITHUB_API_KEY@github.com/gdg-x/frisbee 2>/dev/null
 }
 
 isAlreadyDeployed () {
@@ -42,24 +45,36 @@ isAlreadyDeployed () {
   [ $? -eq 0 ]
 }
 
+if [ "$TRAVIS_BRANCH" == "$ALPHA_BRANCH" ]; then
+  BRANCH=$ALPHA_BRANCH
+  TRACK='alpha'
+  GRADLE_TASK='publishApkProdAlpha'
+elif [ "$TRAVIS_BRANCH" == "$BETA_BRANCH" ]; then
+  BRANCH=$BETA_BRANCH
+  TRACK='beta'
+  GRADLE_TASK='publishApkProdRelease'
+else
+  BRANCH=''
+fi
+
 if [ "$TRAVIS_REPO_SLUG" != "$SLUG" ]; then
-  echo "Skipping alpha deployment: wrong repository. Expected '$SLUG' but was '$TRAVIS_REPO_SLUG'."
+  echo "Skipping $TRACK deployment: wrong repository. Expected '$SLUG' but was '$TRAVIS_REPO_SLUG'."
 elif [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
-  echo "Skipping alpha deployment: was pull request."
-elif [ "$TRAVIS_BRANCH" != "$BRANCH" ]; then
-  echo "Skipping alpha deployment: wrong branch. Expected '$BRANCH' but was '$TRAVIS_BRANCH'."
+  echo "Skipping $TRACK deployment: was pull request."
+elif [ "$BRANCH" == '' ]; then
+  echo "Skipping $TRACK deployment: wrong branch. Expected '$ALPHA_BRANCH' or '$BETA_BRANCH' but was '$TRAVIS_BRANCH'."
 elif isAlreadyDeployed; then
-  echo "Skipping alpha deployment: commit already has a tag."
+  echo "Skipping $TRACK deployment: commit already has a tag."
 else
   echo "Checking out branch: $BRANCH"
   git checkout $BRANCH
   incrementVersion
-  version=getVersionName
+  version=$(getVersionName);
   updateWhatsNewFile
-  echo "Deploying alpha APK version $version"
-  ./gradlew publishApkProdAlpha -Dtrack=$TRACK
+  echo "Deploying $TRACK APK version $version"
+  ./gradlew $GRADLE_TASK -Dtrack=$TRACK
   if [ $? -eq 0 ]; then
-    echo "Alpha APK successfully deployed!"
-    commitAndPushToGit
+    echo "$TRACK APK successfully deployed!"
+    commitAndPushToGit $version
   fi
 fi
