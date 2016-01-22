@@ -33,6 +33,7 @@ import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.Event;
+import org.gdg.frisbee.android.api.model.PagedList;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.chapter.MainActivity;
@@ -42,6 +43,7 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -115,14 +117,14 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
         }
 
         private void fetchEvents(Chapter homeGdg, final RemoteViews views, final AppWidgetManager manager, final ComponentName thisWidget) {
-            App.getInstance().getGroupDirectory()
-                .getChapterEventList(
-                    (int) (new DateTime().getMillis() / 1000),
-                    (int) (new DateTime().plusMonths(1).getMillis() / 1000),
-                    homeGdg.getGplusId())
-                .enqueue(new Callback<ArrayList<Event>>() {
+            App.getInstance().getGdgXHub()
+                .getChapterEventList(homeGdg.getGplusId(),
+                    new DateTime(),
+                    new DateTime().plusMonths(1))
+                .enqueue(new Callback<PagedList<Event>>() {
                     @Override
-                    public void success(ArrayList<Event> events) {
+                    public void success(PagedList<Event> eventsPagedList) {
+                        List<Event> events = eventsPagedList.getItems();
                         Timber.d("Got events");
                         if (events.size() > 0) {
                             Event firstEvent = events.get(0);

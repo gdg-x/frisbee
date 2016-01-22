@@ -8,6 +8,7 @@ import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Event;
+import org.gdg.frisbee.android.api.model.PagedList;
 import org.gdg.frisbee.android.api.model.SimpleEvent;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
@@ -38,18 +39,18 @@ public class GdgEventListFragment extends EventListFragment {
     @Override
     void fetchEvents() {
         final DateTime now = DateTime.now();
-        int mStart = (int) (now.minusMonths(2).dayOfMonth().withMinimumValue().getMillis() / 1000);
-        int mEnd = (int) (now.plusYears(1).dayOfMonth().withMaximumValue().getMillis() / 1000);
+        DateTime start = now.minusMonths(2).dayOfMonth().withMinimumValue();
+        DateTime end = now.plusYears(1).dayOfMonth().withMaximumValue();
 
         setIsLoading(true);
         final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID);
         final String cacheKey = "event_" + plusId;
 
-
         if (Utils.isOnline(getActivity())) {
-            App.getInstance().getGroupDirectory().getChapterEventList(mStart, mEnd, plusId).enqueue(new Callback<ArrayList<Event>>() {
+            App.getInstance().getGdgXHub().getChapterEventList(plusId, start, end).enqueue(new Callback<PagedList<Event>>() {
                 @Override
-                public void success(ArrayList<Event> events) {
+                public void success(PagedList<Event> eventsPagedList) {
+                    List<Event> events = eventsPagedList.getItems();
                     splitEventsAndAddToAdapter(events);
                     App.getInstance().getModelCache().putAsync(cacheKey, mEvents, DateTime.now().plusHours(2), new ModelCache.CachePutListener() {
                         @Override

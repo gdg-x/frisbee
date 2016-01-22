@@ -62,13 +62,13 @@ public class PlusPersonDownloader implements Interceptor {
         if (cachedPerson instanceof Person) {
             person = (Person) cachedPerson;
             if (person.getImage() != null) {
-                Timber.d("Cache hit: " + gplusId);
+                Timber.d("Cache hit: %s", gplusId);
                 return person;
             }
         }
         if (cachedPerson != null) {
             App.getInstance().getModelCache().remove(cacheUrl);
-            Timber.d("Cache removal: " + gplusId);
+            Timber.d("Cache removal: %s", gplusId);
         }
 
         try {
@@ -77,7 +77,7 @@ public class PlusPersonDownloader implements Interceptor {
             person = request.execute();
             App.getInstance().getModelCache().put(cacheUrl, person, DateTime.now().plusDays(2));
 
-            Timber.d("Request: " + gplusId);
+            Timber.d("Request: %s", gplusId);
         } catch (IOException e) {
             Timber.e(e, "Error while getting profile URL.");
         }
