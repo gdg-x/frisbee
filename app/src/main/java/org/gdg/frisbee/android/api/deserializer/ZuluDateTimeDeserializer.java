@@ -20,6 +20,9 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -27,12 +30,18 @@ import org.joda.time.format.DateTimeFormatter;
 
 import java.lang.reflect.Type;
 
-public class ZuluDateTimeDeserializer implements JsonDeserializer<DateTime> {
+public class ZuluDateTimeDeserializer implements JsonDeserializer<DateTime>, JsonSerializer<DateTime> {
+
+    //2013-05-15T16:30:00.000Z
+    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ss.SSS'Z'");
+
     @Override
     public DateTime deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ss.SSS'Z'");
-        //2013-05-15T16:30:00.000Z
+        return DATE_TIME_FORMATTER.parseDateTime(jsonElement.getAsJsonPrimitive().getAsString());
+    }
 
-        return fmt.parseDateTime(jsonElement.getAsJsonPrimitive().getAsString());
+    @Override
+    public JsonElement serialize(DateTime src, Type typeOfSrc, JsonSerializationContext context) {
+        return new JsonPrimitive(src.toString(DATE_TIME_FORMATTER));
     }
 }

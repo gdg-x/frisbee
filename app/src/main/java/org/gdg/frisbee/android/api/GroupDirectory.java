@@ -16,15 +16,11 @@
 
 package org.gdg.frisbee.android.api;
 
-import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.api.model.Pulse;
-
-import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
-import retrofit2.http.Query;
 
 public interface GroupDirectory {
 
@@ -34,8 +30,4 @@ public interface GroupDirectory {
     @GET("groups/pulse_stats/{country}/")
     Call<Pulse> getCountryPulse(@Path("country") String country);
 
-    @GET("events/feed/json")
-    Call<ArrayList<Event>> getChapterEventList(@Query("start") final int start,
-                             @Query("end") final int end,
-                             @Query("group") final String chapterId);
 }
