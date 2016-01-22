@@ -16,15 +16,11 @@
 
 package org.gdg.frisbee.android.app;
 
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
-import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -117,23 +113,17 @@ public class App extends BaseApp implements LocationListener {
 
         mInstance = this;
 
-        try {
-            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-
-            int versionCode = PrefUtils.getVersionCode(this);
-            if (versionCode < pInfo.versionCode) {
-                migrate(versionCode, pInfo.versionCode);
-            }
-
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        int storedVersionCode = PrefUtils.getVersionCode(this);
+        if (storedVersionCode != 0 && storedVersionCode < BuildConfig.VERSION_CODE) {
+            onAppUpdate(storedVersionCode, BuildConfig.VERSION_CODE);
+            PrefUtils.setVersionCode(this, BuildConfig.VERSION_CODE);
         }
         mOkHttpClient = OkClientFactory.provideOkHttpClient(this);
 
         //Initialize Plus Client which is used to get profile pictures and NewFeed of the chapters.
-        final HttpTransport mTransport = new GapiOkTransport(mOkHttpClient);
-        final JsonFactory mJsonFactory = new GsonFactory();
-        plusClient = new Plus.Builder(mTransport, mJsonFactory, null)
+        final HttpTransport httpTransport = new GapiOkTransport(mOkHttpClient);
+        final JsonFactory jsonFactory = new GsonFactory();
+        plusClient = new Plus.Builder(httpTransport, jsonFactory, null)
                 .setGoogleClientRequestInitializer(
                         new CommonGoogleJsonClientRequestInitializer(BuildConfig.IP_SIMPLE_API_ACCESS_KEY))
                 .setApplicationName("GDG Frisbee")
@@ -217,27 +207,6 @@ public class App extends BaseApp implements LocationListener {
         }
     }
 
-    private void migrate(int oldVersion, int newVersion) {
-
-        if (oldVersion < 11100 || BuildConfig.ALPHA) {
-            PrefUtils.resetInitialSettings(this);
-            if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-                // SD-card available
-                String rootDirExt = Environment.getExternalStorageDirectory().getAbsolutePath()
-                        + "/Android/data/" + getPackageName() + "/cache";
-                deleteDirectory(new File(rootDirExt));
-            }
-
-            File internalCacheDir = getCacheDir();
-            deleteDirectory(new File(internalCacheDir.getAbsolutePath()));
-
-            if (BuildConfig.ALPHA) {
-                Toast.makeText(getApplicationContext(), "Alpha version always resets Preferences on update.", Toast.LENGTH_LONG).show();
-            }
-        }
-        PrefUtils.setVersionCode(this, newVersion);
-    }
-
     public void updateLastLocation() {
         if (Utils.isEmulator()) {
             return;
@@ -265,8 +234,8 @@ public class App extends BaseApp implements LocationListener {
     public Tracker getTracker() {
         if (mTracker == null) {
             // Initialize GA
-            GoogleAnalytics mGaInstance = GoogleAnalytics.getInstance(getApplicationContext());
-            mTracker = mGaInstance.newTracker(getString(R.string.ga_trackingId));
+            GoogleAnalytics gaInstance = GoogleAnalytics.getInstance(getApplicationContext());
+            mTracker = gaInstance.newTracker(getString(R.string.ga_trackingId));
 
             mTracker.setAppName(getString(R.string.app_name));
             mTracker.setAnonymizeIp(true);
@@ -294,16 +263,6 @@ public class App extends BaseApp implements LocationListener {
             mModelCache = builder.build();
         }
         return mModelCache;
-    }
-
-    private boolean deleteDirectory(File dir) {
-        if (dir.isDirectory()) {
-            for (File child : dir.listFiles()) {
-                deleteDirectory(child);
-            }
-        }
-
-        return dir.delete();
     }
 
     @Override

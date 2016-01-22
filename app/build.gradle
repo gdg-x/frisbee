@@ -41,9 +41,6 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        //CONFIGURATION
-        buildConfigField "Boolean", "ALPHA", "false"
-
         //KEYS
         buildConfigField "String", "HUB_CLIENT_ID", "\"" + (local_properties.hub_client_id ?: "") + "\""
         buildConfigField "String", "GCM_SENDER_ID", "\"" + (local_properties.gcm_sender_id ?: "") + "\""
@@ -80,9 +77,6 @@ android {
             resValue "string", "android_simple_api_access_key", local_properties.android_simple_api_access_key ?: ""
         }
         alpha.initWith(release)
-        alpha {
-            buildConfigField "Boolean", "ALPHA", "true"
-        }
         debug {
             ext.enableCrashlytics = false
             debuggable true
