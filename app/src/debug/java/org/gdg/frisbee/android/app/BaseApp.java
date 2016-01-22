@@ -11,4 +11,7 @@ public class BaseApp extends MultiDexApplication {
         super.attachBaseContext(base);
         MultiDex.install(this);
     }
+
+    protected void onAppUpdate(int oldVersion, int newVersion) {
+    }
 }
