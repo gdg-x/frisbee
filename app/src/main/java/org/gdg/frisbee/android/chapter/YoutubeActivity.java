@@ -28,9 +28,6 @@ import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.common.GdgActivity;
 
-/**
- * @author maui
- */
 public class YoutubeActivity extends GdgActivity implements YouTubePlayer.OnInitializedListener {
 
     public static final String EXTRA_VIDEO_ID = "video_id";
@@ -45,7 +42,7 @@ public class YoutubeActivity extends GdgActivity implements YouTubePlayer.OnInit
 
         setContentView(R.layout.activity_youtube);
 
-        YouTubePlayerSupportFragment mPlayerFragment = 
+        YouTubePlayerSupportFragment mPlayerFragment =
                 (YouTubePlayerSupportFragment) getSupportFragmentManager()
                         .findFragmentById(R.id.youtube_fragment);
         mPlayerFragment.initialize(BuildConfig.ANDROID_SIMPLE_API_ACCESS_KEY, this);

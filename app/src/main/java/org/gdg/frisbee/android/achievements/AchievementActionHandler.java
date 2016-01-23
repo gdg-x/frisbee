@@ -28,8 +28,6 @@ import java.util.ArrayList;
 
 /**
  * Simple Achievements action handler used not to clutter activity code with achievements unlocking.
- *
- * @author Bartek Przybylski <bart.p.pl@gmail.com>
  */
 public class AchievementActionHandler {
     private final Context mContext;
