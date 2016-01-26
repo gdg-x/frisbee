@@ -17,9 +17,10 @@ android:
   - sys-img-armeabi-v7a-addon-google_apis-google-$ANDROID_API_LEVEL
 
 before_install:
-  - echo $GPG_PASS | gpg --passphrase-fd 0 local.properties.gpg
-  - echo $GPG_PASS | gpg --passphrase-fd 0 settings/service_account.json.gpg
-  - echo $GPG_PASS | gpg --passphrase-fd 0 settings/release.keystore.gpg
+  # $GPG_PASS is not defined for forks, so just skip it.
+  - if [ -n "$GPG_PASS" ]; then echo $GPG_PASS | gpg --passphrase-fd 0 local.properties.gpg; fi
+  - if [ -n "$GPG_PASS" ]; then echo $GPG_PASS | gpg --passphrase-fd 0 settings/service_account.json.gpg; fi
+  - if [ -n "$GPG_PASS" ]; then echo $GPG_PASS | gpg --passphrase-fd 0 settings/release.keystore.gpg; fi
 
 before_script:
   - echo no | android create avd --force -n test -t "Google Inc.:Google APIs:"$ANDROID_API_LEVEL --abi google_apis/armeabi-v7a --skin WXGA720
@@ -32,7 +33,7 @@ before_script:
   - adb shell input keyevent 82 &
 
 after_success:
-  - .buildscript/deploy_alpha.sh
+  - if [ -n "$GITHUB_API_KEY" ]; then .buildscript/deploy_alpha.sh; fi
 
 script: "./gradlew check connectedMockDebugAndroidTest"
 
