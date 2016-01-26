@@ -38,29 +38,14 @@
 
   <include layout="@layout/loading_animated_view"/>
 
-
-  <LinearLayout
+  <TextView
     android:id="@+id/empty"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_centerInParent="true"
-    android:gravity="center_vertical|center_horizontal"
-    android:orientation="vertical"
-    android:visibility="gone">
-
-    <ImageView
-      android:id="@+id/imageView1"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:src="@drawable/no_events"/>
-
-    <TextView
-      android:id="@+id/textView"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="left"
-      android:layout_marginTop="15dip"
-      android:singleLine="true"
-      android:text="@string/no_scheduled_events"/>
-  </LinearLayout>
+    android:layout_gravity="center"
+    android:drawablePadding="15dp"
+    android:drawableTop="@drawable/no_events"
+    android:singleLine="true"
+    android:text="@string/no_scheduled_events"
+    android:visibility="gone"/>
 </FrameLayout>
