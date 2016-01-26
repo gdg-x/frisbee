@@ -60,6 +60,7 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.OrganizerChecker;
 import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.utils.CryptoUtils;
+import org.gdg.frisbee.android.utils.PlusUtils;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -246,7 +247,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
 
     private void score(final String id) {
 
-        if (id.equals(Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getId())) {
+        if (id.equals(PlusUtils.getCurrentPersonId(getGoogleApiClient()))) {
             Toast.makeText(this, R.string.arrow_selfie, Toast.LENGTH_LONG).show();
             return;
         }
@@ -361,9 +362,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
     private String getEncryptedMessage() throws Exception {
         if (getGoogleApiClient().isConnected()) {
             return CryptoUtils.encrypt(Const.ARROW_K,
-                    Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getId()
-                            + ID_SPLIT_CHAR
-                            + getNow());
+                PlusUtils.getCurrentPersonId(getGoogleApiClient()) + ID_SPLIT_CHAR + getNow());
         } else {
             return null;
         }

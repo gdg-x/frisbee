@@ -1,7 +1,6 @@
 package org.gdg.frisbee.android.arrow;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v4.util.SparseArrayCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +11,7 @@ import android.widget.TextView;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.utils.PlusUtils;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.BitmapBorderTransformation;
 
@@ -53,7 +53,7 @@ public class OrganizerAdapter extends RecyclerView.Adapter<OrganizerAdapter.View
             @Override
             public void onClick(View v) {
                 context.startActivity(Utils.createExternalIntent(context,
-                        Uri.parse("https://plus.google.com/" + organizer.getPlusId() + "/posts")));
+                    PlusUtils.createProfileUrl(organizer.getPlusId())));
             }
         });
     }
