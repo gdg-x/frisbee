@@ -43,10 +43,11 @@ public class AppInviteDeepLinkActivity extends GdgActivity {
     private Intent mCachedInvitationIntent;
 
     @Override
-    protected void createGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(AppInvite.API)
-                .build();
+    protected GoogleApiClient createGoogleApiClient() {
+        GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this)
+            .addApi(AppInvite.API)
+            .build();
+        return googleApiClient;
     }
 
     @Override

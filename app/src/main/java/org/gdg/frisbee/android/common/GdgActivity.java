@@ -1,7 +1,7 @@
 /*
  * Copyright 2013-2015 The GDG Frisbee Project
  *
- * Licensed under 
+ * Licensed under
  * * the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -34,7 +34,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appstate.AppStateManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -75,7 +74,7 @@ public abstract class GdgActivity extends TrackableActivity implements
 
     // GoogleApiClient wraps our service connection to Google Play services and
     // provides access to the users sign in state and Google's APIs.
-    protected GoogleApiClient mGoogleApiClient;
+    private GoogleApiClient mGoogleApiClient;
 
     // We use mSignInProgress to track whether user has clicked sign in.
     // mSignInProgress can be one of three values:
@@ -125,22 +124,23 @@ public abstract class GdgActivity extends TrackableActivity implements
         super.onCreate(savedInstanceState);
         RecentTasksStyler.styleRecentTasksEntry(this);
 
-        if (!Utils.isEmulator()) {
-            createGoogleApiClient();
-        }
+        mGoogleApiClient = createGoogleApiClient();
 
         mAchievementActionHandler =
                 new AchievementActionHandler(mGoogleApiClient, this);
     }
 
-    protected void createGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Plus.API).addScope(Plus.SCOPE_PLUS_LOGIN).addScope(Plus.SCOPE_PLUS_PROFILE)
+    protected GoogleApiClient createGoogleApiClient() {
+        GoogleApiClient.Builder builder = new GoogleApiClient.Builder(this)
+            .addApi(AppIndex.API);
+
+        if (PrefUtils.isSignedIn(this)) {
+            builder.addApi(Plus.API).addScope(Plus.SCOPE_PLUS_LOGIN).addScope(Plus.SCOPE_PLUS_PROFILE)
                 .addApi(Games.API).addScope(Games.SCOPE_GAMES)
-                .addApi(Drive.API).addScope(Drive.SCOPE_APPFOLDER)
-                .addApi(AppIndex.API)
-                .addApi(AppStateManager.API)
-                .build();
+                .addApi(Drive.API).addScope(Drive.SCOPE_APPFOLDER);
+        }
+
+        return builder.build();
     }
 
     @Override
@@ -150,9 +150,7 @@ public abstract class GdgActivity extends TrackableActivity implements
         mGoogleApiClient.registerConnectionCallbacks(this);
         mGoogleApiClient.registerConnectionFailedListener(this);
 
-        if (PrefUtils.isSignedIn(this)) {
-            mGoogleApiClient.connect();
-        }
+        mGoogleApiClient.connect();
     }
 
     @Override
@@ -162,7 +160,7 @@ public abstract class GdgActivity extends TrackableActivity implements
         mGoogleApiClient.unregisterConnectionCallbacks(this);
         mGoogleApiClient.unregisterConnectionFailedListener(this);
 
-        if (PrefUtils.isSignedIn(this) && mGoogleApiClient.isConnected()) {
+        if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
     }
