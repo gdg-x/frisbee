@@ -35,6 +35,7 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.games.Games;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.plus.Plus;
 
@@ -244,6 +245,7 @@ public class SettingsFragment extends PreferenceFragment {
                     if (!signedIn) {
                         if (mGoogleApiClient.isConnected()) {
                             Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+                            Games.signOut(mGoogleApiClient);
                             mGoogleApiClient.disconnect();
                             PrefUtils.setLoggedOut(getActivity());
                         }
