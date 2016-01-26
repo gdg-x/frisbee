@@ -309,8 +309,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         if (PrefUtils.shouldOpenDrawerOnStart(this)) {
             mDrawerLayout.openDrawer(GravityCompat.START);
         }
-
-        maybeRemoveUserPicture();
         maybeUpdateChapterImage();
     }
 
@@ -344,14 +342,9 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         }
     }
 
-    private void maybeRemoveUserPicture() {
-        if (!PrefUtils.isSignedIn(this)) {
-            mDrawerUserPicture.setImageDrawable(null);
-        }
-    }
-
     private void updateUserPicture() {
         if (!PrefUtils.isSignedIn(this)) {
+            mDrawerUserPicture.setImageDrawable(null);
             return;
         }
         final String gplusId = PlusUtils.getCurrentPersonId(getGoogleApiClient());
