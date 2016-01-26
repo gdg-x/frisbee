@@ -22,16 +22,6 @@ before_install:
   - if [ -n "$GPG_PASS" ]; then echo $GPG_PASS | gpg --passphrase-fd 0 settings/release.keystore.gpg; fi
   - if [ -z "$GPG_PASS"]; then touch local.properties; fi
 
-before_script:
-  - echo no | android create avd --force -n test -t "Google Inc.:Google APIs:"$ANDROID_API_LEVEL --abi google_apis/armeabi-v7a --skin WXGA720
-  - emulator -avd test -no-audio -no-window &
-  - android-wait-for-emulator
-  - sleep 10
-  - adb shell settings put global window_animation_scale 0 &
-  - adb shell settings put global transition_animation_scale 0 &
-  - adb shell settings put global animator_duration_scale 0 &
-  - adb shell input keyevent 82 &
-
 after_success:
   - if [ -n "$GITHUB_API_KEY" ]; then .buildscript/deploy_alpha.sh; fi
 
