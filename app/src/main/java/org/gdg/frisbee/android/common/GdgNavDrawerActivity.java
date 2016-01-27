@@ -51,6 +51,7 @@ import org.gdg.frisbee.android.gde.GdeActivity;
 import org.gdg.frisbee.android.pulse.PulseActivity;
 import org.gdg.frisbee.android.task.Builder;
 import org.gdg.frisbee.android.task.CommonAsyncTask;
+import org.gdg.frisbee.android.utils.PlusUtils;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.BitmapBorderTransformation;
@@ -308,8 +309,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         if (PrefUtils.shouldOpenDrawerOnStart(this)) {
             mDrawerLayout.openDrawer(GravityCompat.START);
         }
-
-        maybeRemoveUserPicture();
         maybeUpdateChapterImage();
     }
 
@@ -343,21 +342,14 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         }
     }
 
-    private void maybeRemoveUserPicture() {
+    private void updateUserPicture() {
         if (!PrefUtils.isSignedIn(this)) {
             mDrawerUserPicture.setImageDrawable(null);
-        }
-    }
-
-    private void updateUserPicture() {
-        com.google.android.gms.plus.model.people.Person user =
-                com.google.android.gms.plus.Plus.PeopleApi.getCurrentPerson(getGoogleApiClient());
-        if (user == null) {
             return;
         }
-        com.google.android.gms.plus.model.people.Person.Image userPicture = user.getImage();
-        if (userPicture != null && userPicture.hasUrl()) {
-            App.getInstance().getPicasso().load(userPicture.getUrl())
+        final String gplusId = PlusUtils.getCurrentPersonId(getGoogleApiClient());
+        if (gplusId != null) {
+            App.getInstance().getPicasso().load(PlusUtils.createProfileUrl(gplusId))
                     .transform(new BitmapBorderTransformation(2,
                             getResources().getDimensionPixelSize(R.dimen.navdrawer_user_picture_size) / 2,
                             ContextCompat.getColor(this, R.color.white)))
