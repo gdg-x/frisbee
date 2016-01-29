@@ -8,6 +8,7 @@ import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.OrganizerCheckResponse;
 import org.gdg.frisbee.android.utils.PlusUtils;
+import org.gdg.frisbee.android.utils.PrefUtils;
 
 public class OrganizerChecker {
     private boolean mIsOrganizer = false;
@@ -39,6 +40,13 @@ public class OrganizerChecker {
     }
 
     public void checkOrganizer(GoogleApiClient apiClient, final Callbacks responseHandler) {
+        if (!PrefUtils.isSignedIn(apiClient.getContext())) {
+            mIsOrganizer = false;
+            mCheckedId = null;
+            responseHandler.onOrganizerResponse(mIsOrganizer);
+            return;
+        }
+
         final String currentId = PlusUtils.getCurrentPersonId(apiClient);
 
         if (currentId != null
