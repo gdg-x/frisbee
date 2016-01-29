@@ -62,7 +62,7 @@ public final class PrefUtils {
                 .putBoolean(Const.PREF_ORGANIZER_STATE, false)
                 .putLong(Const.PREF_ORGANIZER_CHECK_TIME, 0)
                 .apply();
-        App.getInstance().resetOrganizer();
+        App.getInstance().initOrganizer();
     }
 
     @Nullable

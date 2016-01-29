@@ -17,10 +17,10 @@ public class OrganizerChecker {
 
     public OrganizerChecker(SharedPreferences preferences) {
         mPreferences = preferences;
-        resetOrganizer();
+        initOrganizer();
     }
 
-    public void resetOrganizer() {
+    public void initOrganizer() {
         mLastOrganizerCheck = mPreferences.getLong(Const.PREF_ORGANIZER_CHECK_TIME, 0);
         mCheckedId = mPreferences.getString(Const.PREF_ORGANIZER_CHECK_ID, null);
         mIsOrganizer = mPreferences.getBoolean(Const.PREF_ORGANIZER_STATE, false);
