@@ -28,6 +28,7 @@ import com.google.android.gms.appinvite.AppInviteReferral;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import org.gdg.frisbee.android.app.GoogleApiClientFactory;
 import org.gdg.frisbee.android.common.GdgActivity;
 
 import timber.log.Timber;
@@ -44,10 +45,7 @@ public class AppInviteDeepLinkActivity extends GdgActivity {
 
     @Override
     protected GoogleApiClient createGoogleApiClient() {
-        GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this)
-            .addApi(AppInvite.API)
-            .build();
-        return googleApiClient;
+        return GoogleApiClientFactory.createWithoutSignIn(this);
     }
 
     @Override
