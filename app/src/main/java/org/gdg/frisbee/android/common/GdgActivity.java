@@ -160,14 +160,14 @@ public abstract class GdgActivity extends TrackableActivity implements
     protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
         super.onActivityResult(requestCode, responseCode, intent);
 
-        if (PrefUtils.isSignedIn(this) && !Utils.isEmulator()) {
+        if (PrefUtils.isSignedIn(this)) {
             switch (requestCode) {
                 case RC_SIGN_IN:
                     if (responseCode == RESULT_OK) {
                         // If the error resolution was successful we should continue
                         // processing errors.
                         mSignInProgress = STATE_SIGN_IN;
-                        App.getInstance().resetOrganizer();
+                        PrefUtils.setLoggedOut(this);
 
                         if (!mGoogleApiClient.isConnecting()) {
                             // If Google Play services resolved the issue with a dialog then

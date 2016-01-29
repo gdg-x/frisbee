@@ -52,6 +52,7 @@ import org.gdg.frisbee.android.api.model.GcmRegistrationRequest;
 import org.gdg.frisbee.android.api.model.GcmRegistrationResponse;
 import org.gdg.frisbee.android.api.model.HomeGdgRequest;
 import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.app.GoogleApiClientFactory;
 import org.gdg.frisbee.android.appwidget.UpcomingEventWidgetProvider;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.GdgActivity;
@@ -241,21 +242,25 @@ public class SettingsFragment extends PreferenceFragment {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object o) {
                     boolean signedIn = (Boolean) o;
-
                     if (!signedIn) {
                         if (mGoogleApiClient.isConnected()) {
                             Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
                             Games.signOut(mGoogleApiClient);
                             mGoogleApiClient.disconnect();
                             PrefUtils.setLoggedOut(getActivity());
+
+                            mGoogleApiClient = GoogleApiClientFactory.createWith(getActivity());
+                            mGoogleApiClient.connect();
                         }
                     } else {
-                        if (!mGoogleApiClient.isConnected()) {
+                        if (mGoogleApiClient.isConnected()) {
+                            mGoogleApiClient.disconnect();
+                            PrefUtils.setSignedIn(getActivity());
+
+                            mGoogleApiClient = GoogleApiClientFactory.createWith(getActivity());
                             mGoogleApiClient.connect();
                         }
                     }
-                    // TODO: Re-implement logout....
-
                     return true;
                 }
             });
