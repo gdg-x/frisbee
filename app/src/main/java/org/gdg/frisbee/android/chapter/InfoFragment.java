@@ -79,33 +79,33 @@ public class InfoFragment extends BaseFragment {
     private LayoutInflater mInflater;
 
     private Builder<String, Person[]> mFetchOrganizerInfo = new Builder<>(String.class, Person[].class)
-            .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person[]>() {
-                @Override
-                public Person[] doInBackground(String... params) {
-                    if (params == null) {
-                        return null;
-                    }
+        .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person[]>() {
+            @Override
+            public Person[] doInBackground(String... params) {
+                if (params == null) {
+                    return null;
+                }
 
-                    Person[] people = new Person[params.length];
-                    for (int i = 0; i < params.length; i++) {
-                        Timber.d("Get Organizer " + params[i]);
-                        if (isAdded()) {
-                            people[i] = PlusPersonDownloader.getPersonSync(params[i]);
-                        } else {
-                            // fragment is not used anymore
-                            people[i] = null;
-                        }
+                Person[] people = new Person[params.length];
+                for (int i = 0; i < params.length; i++) {
+                    Timber.d("Get Organizer " + params[i]);
+                    if (isAdded()) {
+                        people[i] = PlusPersonDownloader.getPersonSync(params[i]);
+                    } else {
+                        // fragment is not used anymore
+                        people[i] = null;
                     }
-                    return people;
                 }
-            })
-            .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person[]>() {
-                @Override
-                public void onPostExecute(String[] params, final Person[] person) {
-                    addOrganizersToUI(person);
-                    setIsLoading(false);
-                }
-            });
+                return people;
+            }
+        })
+        .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person[]>() {
+            @Override
+            public void onPostExecute(String[] params, final Person[] person) {
+                addOrganizersToUI(person);
+                setIsLoading(false);
+            }
+        });
 
     public static InfoFragment newInstance(String plusId) {
         InfoFragment fragment = new InfoFragment();
@@ -125,27 +125,27 @@ public class InfoFragment extends BaseFragment {
         final String chapterPlusId = getArguments().getString(Const.EXTRA_PLUS_ID);
         if (Utils.isOnline(getActivity())) {
             new Builder<>(String.class, Person.class)
-                    .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person>() {
-                        @Override
-                        public Person doInBackground(String... params) {
-                            if (isAdded()) {
-                                return PlusPersonDownloader.getPersonSync(chapterPlusId);
-                            } else {
-                                // fragment is not used anymore
-                                return null;
-                            }
+                .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person>() {
+                    @Override
+                    public Person doInBackground(String... params) {
+                        if (isAdded()) {
+                            return PlusPersonDownloader.getPersonSync(chapterPlusId);
+                        } else {
+                            // fragment is not used anymore
+                            return null;
                         }
-                    })
-                    .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person>() {
-                        @Override
-                        public void onPostExecute(String[] params, Person person) {
-                            if (person != null && getActivity() != null) {
-                                updateChapterUIFrom(person);
-                                updateOrganizersOnline(person);
-                            }
+                    }
+                })
+                .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person>() {
+                    @Override
+                    public void onPostExecute(String[] params, Person person) {
+                        if (person != null && getActivity() != null) {
+                            updateChapterUIFrom(person);
+                            updateOrganizersOnline(person);
                         }
-                    })
-                    .buildAndExecute();
+                    }
+                })
+                .buildAndExecute();
         } else {
             App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PERSON + chapterPlusId, false, new ModelCache.CacheListener() {
                 @Override
@@ -179,7 +179,7 @@ public class InfoFragment extends BaseFragment {
                                 });
                             } catch (Exception ex) {
                                 Snackbar snackbar = Snackbar.make(getView(), getString(R.string.bogus_organizer, org),
-                                        Snackbar.LENGTH_SHORT);
+                                    Snackbar.LENGTH_SHORT);
                                 ColoredSnackBar.alert(snackbar).show();
                             }
                         }
@@ -266,7 +266,7 @@ public class InfoFragment extends BaseFragment {
                         } catch (Exception ex) {
                             if (isAdded()) {
                                 Snackbar snackbar = Snackbar.make(getView(), getString(R.string.bogus_organizer, org),
-                                        Snackbar.LENGTH_SHORT);
+                                    Snackbar.LENGTH_SHORT);
                                 ColoredSnackBar.alert(snackbar).show();
                             }
                         }
@@ -287,21 +287,6 @@ public class InfoFragment extends BaseFragment {
         if (personUrl.getValue().contains("+")) {
             try {
                 return "+" + URLDecoder.decode(personUrl.getValue()
-                        .replace("plus.google.com/", "")
-                        .replace("posts", "")
-                        .replace("/", "")
-                        .replace("about", "")
-                        .replace("u1", "")
-                        .replace("u0", "")
-                        .replace("https:", "")
-                        .replace("http:", "")
-                        .replace(plusId, ""), "UTF-8").trim();
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-                return personUrl.getValue();
-            }
-        } else {
-            return personUrl.getValue()
                     .replace("plus.google.com/", "")
                     .replace("posts", "")
                     .replace("/", "")
@@ -310,7 +295,22 @@ public class InfoFragment extends BaseFragment {
                     .replace("u0", "")
                     .replace("https:", "")
                     .replace("http:", "")
-                    .replace(plusId, "").replaceAll("[^\\d.]", "").substring(0, 21);
+                    .replace(plusId, ""), "UTF-8").trim();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+                return personUrl.getValue();
+            }
+        } else {
+            return personUrl.getValue()
+                .replace("plus.google.com/", "")
+                .replace("posts", "")
+                .replace("/", "")
+                .replace("about", "")
+                .replace("u1", "")
+                .replace("u0", "")
+                .replace("https:", "")
+                .replace("http:", "")
+                .replace(plusId, "").replaceAll("[^\\d.]", "").substring(0, 21);
         }
     }
 
@@ -351,12 +351,12 @@ public class InfoFragment extends BaseFragment {
         if (person != null) {
             if (person.getImage() != null) {
                 App.getInstance().getPicasso()
-                        .load(person.getImage().getUrl())
-                        .transform(new BitmapBorderTransformation(0,
-                                getResources().getDimensionPixelSize(R.dimen.organizer_icon_size) / 2,
-                                getResources().getColor(R.color.white)))
-                        .placeholder(R.drawable.ic_no_avatar)
-                        .into(picture);
+                    .load(person.getImage().getUrl())
+                    .transform(new BitmapBorderTransformation(0,
+                        getResources().getDimensionPixelSize(R.dimen.organizer_icon_size) / 2,
+                        getResources().getColor(R.color.white)))
+                    .placeholder(R.drawable.ic_no_avatar)
+                    .into(picture);
             }
 
             TextView title = (TextView) convertView.findViewById(R.id.title);

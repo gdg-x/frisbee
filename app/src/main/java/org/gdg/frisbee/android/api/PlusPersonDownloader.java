@@ -21,30 +21,11 @@ import timber.log.Timber;
 public class PlusPersonDownloader implements Interceptor {
 
     private static final Pattern mPlusPattern
-            = Pattern.compile("http[s]?:\\/\\/plus\\..*google\\.com.*(\\+[a-zA-Z] +|[0-9]{21}).*");
+        = Pattern.compile("http[s]?:\\/\\/plus\\..*google\\.com.*(\\+[a-zA-Z] +|[0-9]{21}).*");
     private Plus plusClient;
 
     public PlusPersonDownloader(Plus plusClient) {
         this.plusClient = plusClient;
-    }
-
-    @Override
-    public Response intercept(Chain chain) throws IOException {
-        Request request = chain.request();
-
-        Matcher matcher = mPlusPattern.matcher(request.url().toString());
-        if (!matcher.matches()) {
-            return chain.proceed(request);
-        }
-
-        String gplusId = matcher.group(1);
-        Person person = getPersonSync(plusClient, gplusId);
-        if (person != null && person.getImage() != null && person.getImage().getUrl() != null) {
-            String imageUrl = person.getImage().getUrl().replace("sz=50", "sz=196");
-            return chain.proceed(request.newBuilder().url(imageUrl).build());
-        }
-
-        return null;
     }
 
     @Nullable
@@ -83,5 +64,24 @@ public class PlusPersonDownloader implements Interceptor {
         }
 
         return person;
+    }
+
+    @Override
+    public Response intercept(Chain chain) throws IOException {
+        Request request = chain.request();
+
+        Matcher matcher = mPlusPattern.matcher(request.url().toString());
+        if (!matcher.matches()) {
+            return chain.proceed(request);
+        }
+
+        String gplusId = matcher.group(1);
+        Person person = getPersonSync(plusClient, gplusId);
+        if (person != null && person.getImage() != null && person.getImage().getUrl() != null) {
+            String imageUrl = person.getImage().getUrl().replace("sz=50", "sz=196");
+            return chain.proceed(request.newBuilder().url(imageUrl).build());
+        }
+
+        return null;
     }
 }

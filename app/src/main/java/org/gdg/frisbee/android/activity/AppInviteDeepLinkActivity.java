@@ -60,14 +60,14 @@ public class AppInviteDeepLinkActivity extends GdgActivity {
             @Override
             public Dialog onCreateDialog(Bundle savedInstanceState) {
                 return new AlertDialog.Builder(AppInviteDeepLinkActivity.this)
-                        .setTitle("Congrats!")
-                        .setMessage("You installed the app with an invite. Here is your reward!")
-                        .create();
+                    .setTitle("Congrats!")
+                    .setMessage("You installed the app with an invite. Here is your reward!")
+                    .create();
             }
         };
         dialogFragment.show(
-                getSupportFragmentManager(),
-                AppInviteDeepLinkActivity.class.getSimpleName()
+            getSupportFragmentManager(),
+            AppInviteDeepLinkActivity.class.getSimpleName()
         );
     }
 
@@ -108,7 +108,9 @@ public class AppInviteDeepLinkActivity extends GdgActivity {
     }
     // [END process_referral_intent]
 
-    /** Update the install and conversion status of an invite intent **/
+    /**
+     * Update the install and conversion status of an invite intent
+     **/
     // [START update_invitation_status]
     private void updateInvitationStatus(Intent intent) {
         String invitationId = AppInviteReferral.getInvitationId(intent);

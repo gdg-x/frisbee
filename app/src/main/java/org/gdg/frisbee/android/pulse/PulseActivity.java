@@ -100,16 +100,16 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
             @Override
             public void success(final Pulse pulse) {
                 App.getInstance().getModelCache().putAsync(
-                        Const.CACHE_KEY_PULSE_GLOBAL,
-                        pulse,
-                        DateTime.now().plusDays(1),
-                        new ModelCache.CachePutListener() {
-                            @Override
-                            public void onPutIntoCache() {
-                                mPulseTargets.addAll(pulse.keySet());
-                                initSpinner(selectedPulse);
-                            }
-                        });
+                    Const.CACHE_KEY_PULSE_GLOBAL,
+                    pulse,
+                    DateTime.now().plusDays(1),
+                    new ModelCache.CachePutListener() {
+                        @Override
+                        public void onPutIntoCache() {
+                            mPulseTargets.addAll(pulse.keySet());
+                            initSpinner(selectedPulse);
+                        }
+                    });
             }
 
             @Override
@@ -139,7 +139,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
         }
 
         return "Pulse/" + mViewPagerAdapter.getSelectedPulseTarget().replaceAll(" ", "-")
-                + "/" + pageName;
+            + "/" + pageName;
     }
 
     private void initSpinner(String selectedPulse) {
@@ -148,9 +148,9 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
 
         Toolbar toolbar = getActionBarToolbar();
         View spinnerContainer = LayoutInflater.from(this).inflate(R.layout.actionbar_spinner,
-                toolbar, false);
+            toolbar, false);
         ActionBar.LayoutParams lp = new ActionBar.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         toolbar.addView(spinnerContainer, lp);
 
         mSpinner = (Spinner) spinnerContainer.findViewById(R.id.actionbar_spinner);

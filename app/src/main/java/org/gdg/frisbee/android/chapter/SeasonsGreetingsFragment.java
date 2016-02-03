@@ -35,14 +35,14 @@ public class SeasonsGreetingsFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         View seasonView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_seasons_greetings, (ViewGroup) getView(), false);
         return new AlertDialog.Builder(getActivity())
-                .setView(seasonView)
-                .setNeutralButton(R.string.done, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dismiss();
-                    }
-                })
-                .create();
+            .setView(seasonView)
+            .setNeutralButton(R.string.done, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dismiss();
+                }
+            })
+            .create();
     }
 
 }

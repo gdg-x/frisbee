@@ -30,8 +30,9 @@ import org.gdg.frisbee.android.utils.Utils;
 import java.io.IOException;
 import java.io.InputStream;
 
-import butterknife.ButterKnife;
-import butterknife.Bind;
+import butterknife.Butte
+Knife;
+    import butterknife.Bind;
 
 public class ExtLibrariesFragment extends BaseFragment {
 

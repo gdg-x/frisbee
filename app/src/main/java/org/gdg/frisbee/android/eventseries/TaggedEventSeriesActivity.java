@@ -32,17 +32,19 @@ import butterknife.Bind;
 
 public class TaggedEventSeriesActivity extends GdgNavDrawerActivity {
 
-    @Nullable @Bind(R.id.special_logo)
+    @Nullable
+    @Bind(R.id.special_logo)
     ImageView mLogo;
 
-    @Nullable @Bind(R.id.special_description)
+    @Nullable
+    @Bind(R.id.special_description)
     TextView mDescription;
 
     private TaggedEventSeries mTaggedEventSeries;
 
     protected String getTrackedViewName() {
         return mTaggedEventSeries != null && !TextUtils.isEmpty(mTaggedEventSeries.getTag())
-                ? mTaggedEventSeries.getTag() : "SpecialEvent";
+            ? mTaggedEventSeries.getTag() : "SpecialEvent";
     }
 
     @Override
@@ -50,11 +52,11 @@ public class TaggedEventSeriesActivity extends GdgNavDrawerActivity {
         mTaggedEventSeries = getIntent().getParcelableExtra(Const.EXTRA_TAGGED_EVENT);
         if (mTaggedEventSeries == null) {
             throw new IllegalArgumentException("Special Event must be provided with "
-                    + Const.EXTRA_TAGGED_EVENT + " key as an Intent extra.");
+                + Const.EXTRA_TAGGED_EVENT + " key as an Intent extra.");
         }
         setTheme(mTaggedEventSeries.getSpecialEventTheme());
         super.onCreate(savedInstanceState);
-        
+
         setContentView(R.layout.activity_special);
 
         Toolbar toolbar = getActionBarToolbar();
@@ -70,8 +72,8 @@ public class TaggedEventSeriesActivity extends GdgNavDrawerActivity {
         FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
         final String cacheExtra = getIntent().getStringExtra(Const.EXTRA_TAGGED_EVENT_CACHEKEY);
         trans.replace(R.id.content_frame, TaggedEventSeriesFragment.newInstance(
-                cacheExtra != null ? cacheExtra : "specialevent",
-                mTaggedEventSeries,
+            cacheExtra != null ? cacheExtra : "specialevent",
+            mTaggedEventSeries,
                 /* addDescriptonAsHeader */ mDescription == null));
         trans.commit();
     }

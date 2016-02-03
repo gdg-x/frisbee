@@ -25,7 +25,8 @@ import butterknife.ButterKnife;
 
 public class PeopleAdapter extends ArrayAdapter<GdgPerson> {
 
-    @DrawableRes private int placeholder;
+    @DrawableRes
+    private int placeholder;
     private SparseBooleanArray mConsumedMap;
 
     public PeopleAdapter(Context ctx) {
@@ -69,8 +70,8 @@ public class PeopleAdapter extends ArrayAdapter<GdgPerson> {
 
         if (!TextUtils.isEmpty(gdgPerson.getImageUrl())) {
             RequestCreator creator = App.getInstance().getPicasso()
-                    .load(gdgPerson.getImageUrl());
-            if (placeholder  != 0) {
+                .load(gdgPerson.getImageUrl());
+            if (placeholder != 0) {
                 creator.placeholder(placeholder);
             }
             creator.into(holder.thumbnailView);
@@ -87,9 +88,12 @@ public class PeopleAdapter extends ArrayAdapter<GdgPerson> {
     }
 
     static class ViewHolder {
-        @Bind(android.R.id.text1) public TextView primaryTextView;
-        @Bind(android.R.id.text2) public TextView secondaryTextView;
-        @Bind(android.R.id.icon) public SquaredImageView thumbnailView;
+        @Bind(android.R.id.text1)
+        public TextView primaryTextView;
+        @Bind(android.R.id.text2)
+        public TextView secondaryTextView;
+        @Bind(android.R.id.icon)
+        public SquaredImageView thumbnailView;
 
         public ViewHolder(View v) {
             ButterKnife.bind(this, v);

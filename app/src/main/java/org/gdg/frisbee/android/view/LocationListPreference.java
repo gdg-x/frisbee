@@ -48,8 +48,8 @@ public class LocationListPreference extends DialogPreference implements AdapterV
 
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         final CheckedItemAdapter adapter = new CheckedItemAdapter(
-                getContext(), android.R.layout.simple_list_item_single_choice,
-                android.R.id.text1, getEntries()
+            getContext(), android.R.layout.simple_list_item_single_choice,
+            android.R.id.text1, getEntries()
         );
         listView.setAdapter(adapter);
         clickedItemIndex = findIndexOfValue(getPersistedString(null));
@@ -65,18 +65,18 @@ public class LocationListPreference extends DialogPreference implements AdapterV
 
         SearchView cityNameSearchView = (SearchView) view.findViewById(R.id.filter);
         cityNameSearchView.setOnQueryTextListener(
-                new SearchView.OnQueryTextListener() {
-                    @Override
-                    public boolean onQueryTextSubmit(String query) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onQueryTextChange(String newText) {
-                        adapter.getFilter().filter(newText, filterListener);
-                        return true;
-                    }
+            new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
                 }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    adapter.getFilter().filter(newText, filterListener);
+                    return true;
+                }
+            }
         );
         cityNameSearchView.requestFocus();
     }
@@ -92,20 +92,20 @@ public class LocationListPreference extends DialogPreference implements AdapterV
         }
     }
 
-    public void setEntries(String[] entries) {
-        mEntries = entries;
-    }
-
     public String[] getEntries() {
         return mEntries;
     }
 
-    public void setEntryValues(String[] entryValues) {
-        mEntryValues = entryValues;
+    public void setEntries(String[] entries) {
+        mEntries = entries;
     }
 
     public String[] getEntryValues() {
         return mEntryValues;
+    }
+
+    public void setEntryValues(String[] entryValues) {
+        mEntryValues = entryValues;
     }
 
     public String getValue() {
@@ -245,6 +245,16 @@ public class LocationListPreference extends DialogPreference implements AdapterV
     }
 
     private static class SavedState extends BaseSavedState {
+        public static final Parcelable.Creator<SavedState> CREATOR =
+            new Parcelable.Creator<SavedState>() {
+                public SavedState createFromParcel(Parcel in) {
+                    return new SavedState(in);
+                }
+
+                public SavedState[] newArray(int size) {
+                    return new SavedState[size];
+                }
+            };
         String value;
         String[] entries;
         String[] entryValues;
@@ -256,6 +266,10 @@ public class LocationListPreference extends DialogPreference implements AdapterV
             entryValues = source.createStringArray();
         }
 
+        public SavedState(Parcelable superState) {
+            super(superState);
+        }
+
         @Override
         public void writeToParcel(Parcel dest, int flags) {
             super.writeToParcel(dest, flags);
@@ -263,20 +277,5 @@ public class LocationListPreference extends DialogPreference implements AdapterV
             dest.writeStringArray(entries);
             dest.writeStringArray(entryValues);
         }
-
-        public SavedState(Parcelable superState) {
-            super(superState);
-        }
-
-        public static final Parcelable.Creator<SavedState> CREATOR =
-            new Parcelable.Creator<SavedState>() {
-                public SavedState createFromParcel(Parcel in) {
-                    return new SavedState(in);
-                }
-
-                public SavedState[] newArray(int size) {
-                    return new SavedState[size];
-                }
-            };
     }
 }

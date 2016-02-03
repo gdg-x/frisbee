@@ -25,17 +25,23 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 
 public class Chapter implements Comparable<Chapter>, Parcelable {
+    public static final Creator<Chapter> CREATOR = new Creator<Chapter>() {
+        @Override
+        public Chapter createFromParcel(Parcel in) {
+            return new Chapter(in);
+        }
+
+        @Override
+        public Chapter[] newArray(int size) {
+            return new Chapter[size];
+        }
+    };
     private String status, city, name, state;
-
     private Country country;
-
     @SerializedName("_id")
     private String gplusId;
-
     private ArrayList<String> organizers;
-
     private Geo geo;
-
     private String shortName;
 
     public Chapter() {
@@ -94,6 +100,11 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
         return geo;
     }
 
+    @VisibleForTesting
+    public void setGeo(Geo geo) {
+        this.geo = geo;
+    }
+
     @Override
     public String toString() {
         return getShortName();
@@ -129,18 +140,6 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
         dest.writeString(shortName);
     }
 
-    public static final Creator<Chapter> CREATOR = new Creator<Chapter>() {
-        @Override
-        public Chapter createFromParcel(Parcel in) {
-            return new Chapter(in);
-        }
-
-        @Override
-        public Chapter[] newArray(int size) {
-            return new Chapter[size];
-        }
-    };
-
     @Override
     public boolean equals(Object o) {
         if (o == null) {
@@ -163,10 +162,5 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
         } else {
             return super.hashCode();
         }
-    }
-
-    @VisibleForTesting
-    public void setGeo(Geo geo) {
-        this.geo = geo;
     }
 }

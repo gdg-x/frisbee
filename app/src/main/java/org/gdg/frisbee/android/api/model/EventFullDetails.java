@@ -4,7 +4,9 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-import org.joda.time.DateTime;
+i
+
+ort or .joda.time.DateTime;
 
 public class EventFullDetails {
     @SerializedName("_id")

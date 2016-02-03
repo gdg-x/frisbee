@@ -59,7 +59,7 @@ public class ContributorsFragment extends PeopleListFragment {
             });
         }
     }
-    
+
     private void fetchGitHubContributors() {
         App.getInstance().getGithub().getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO).enqueue(new Callback<ContributorList>() {
             @Override
@@ -67,9 +67,9 @@ public class ContributorsFragment extends PeopleListFragment {
 
                 mAdapter.addAll(contributors);
                 App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_FRISBEE_CONTRIBUTORS,
-                        contributors,
-                        DateTime.now().plusDays(1),
-                        null);
+                    contributors,
+                    DateTime.now().plusDays(1),
+                    null);
             }
         });
     }

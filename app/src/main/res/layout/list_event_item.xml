@@ -23,8 +23,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     card_view:cardCornerRadius="2dp"
-    card_view:cardUseCompatPadding="true"
-    card_view:cardElevation="4dp">
+    card_view:cardElevation="4dp"
+    card_view:cardUseCompatPadding="true">
 
     <RelativeLayout
       android:layout_width="match_parent"
@@ -48,8 +48,8 @@
         android:paddingTop="@dimen/content_padding"
         android:textAllCaps="true"
         android:textColor="?android:textColorPrimaryInverse"
-        tools:text="SAT, JUL 25"
-        tools:ignore="RelativeOverlap" />
+        tools:ignore="RelativeOverlap"
+        tools:text="SAT, JUL 25" />
 
       <ImageView
         android:id="@+id/icon"
@@ -67,11 +67,11 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/event_image_header"
         android:layout_alignWithParentIfMissing="true"
-        android:layout_toLeftOf="@+id/past"
+        android:layout_below="@id/event_image_header"
         android:layout_marginBottom="@dimen/keyline_1"
         android:layout_marginTop="@dimen/keyline_1"
+        android:layout_toLeftOf="@+id/past"
         android:layout_toRightOf="@+id/icon"
         android:orientation="vertical">
 
