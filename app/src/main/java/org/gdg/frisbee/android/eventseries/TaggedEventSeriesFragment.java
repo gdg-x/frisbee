@@ -30,9 +30,8 @@ import android.widget.TextView;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
-import org.gdg.frisbee.android.api.model.PagedL
-st;
-im ort org.gdg.frisbee.android.api.model.Event;
+import org.gdg.frisbee.android.api.model.PagedList;
+import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.Utils;

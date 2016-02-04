@@ -2,11 +2,9 @@ package org.gdg.frisbee.android.api.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
-
-i
-
-ort or .joda.time.DateTime;
 
 public class EventFullDetails {
     @SerializedName("_id")

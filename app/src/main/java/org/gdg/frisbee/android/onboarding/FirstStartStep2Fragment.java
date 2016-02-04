@@ -35,9 +35,8 @@ import com.google.android.gms.plus.Plus;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.common.BaseFragment;
 
-import butterknife.Butte
-Knife;
-    import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.Bind;
 
 public class FirstStartStep2Fragment extends BaseFragment implements
     GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {

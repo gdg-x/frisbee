@@ -27,9 +27,8 @@ import android.widget.LinearLayout;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.common.BaseFragment;
 
-import butterknife.Butte
-Knife;
-    import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.Bind;
 
 public class FirstStartStep3Fragment extends BaseFragment {
 

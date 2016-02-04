@@ -50,9 +50,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import butterknife.Butte
-Knife;
-    import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.Bind;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
