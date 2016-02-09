@@ -140,7 +140,7 @@ public class GdgWatchFace extends CanvasWatchFaceService {
                     .setCardPeekMode(WatchFaceStyle.PEEK_MODE_SHORT)
                     .setBackgroundVisibility(WatchFaceStyle.BACKGROUND_VISIBILITY_INTERRUPTIVE)
                     .setShowSystemUiTime(false)
-                    .setViewProtection(WatchFaceStyle.PROTECT_STATUS_BAR | WatchFaceStyle.PROTECT_HOTWORD_INDICATOR)
+                    .setViewProtectionMode(WatchFaceStyle.PROTECT_STATUS_BAR | WatchFaceStyle.PROTECT_HOTWORD_INDICATOR)
                     .setHotwordIndicatorGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL)
                     .setStatusBarGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL)
                     .setPeekOpacityMode(WatchFaceStyle.PEEK_OPACITY_MODE_TRANSLUCENT)
@@ -151,8 +151,8 @@ public class GdgWatchFace extends CanvasWatchFaceService {
             mBackgroundPaint = new Paint();
             mBackgroundPaint.setColor(ContextCompat.getColor(GdgWatchFace.this, R.color.gdg_black));
 
-            mBackgroundBitmap = BitmapFactory.decodeResource(resources, R.drawable.gdg_black);
-            mDarkBackgroundBitmap = BitmapFactory.decodeResource(resources, R.drawable.gdg_black);
+            mBackgroundBitmap = BitmapFactory.decodeResource(resources, R.drawable.gdg_new);
+            mDarkBackgroundBitmap = BitmapFactory.decodeResource(resources, R.drawable.gdg_new);
             mLightBackgroundBitmap = BitmapFactory.decodeResource(resources, R.drawable.gdg_background);
 
             mHourHandPaint = new Paint();
@@ -325,6 +325,7 @@ public class GdgWatchFace extends CanvasWatchFaceService {
             } else if (mAmbient) {//TODO gray ambient BG for light mode
                 canvas.drawBitmap(mGrayBackgroundBitmap, 0, 0, mBackgroundPaint);
             } else {
+                canvas.drawColor(Color.BLACK);
                 canvas.drawBitmap(mBackgroundBitmap, 0, 0, mBackgroundPaint);
             }
 
@@ -373,7 +374,7 @@ public class GdgWatchFace extends CanvasWatchFaceService {
 
             if (!mAmbient) {
                 canvas.rotate(secondsRotation - minutesRotation, mCenterX, mCenterY);
-                canvas.drawLine(mCenterX, mCenterY, mCenterX,
+                canvas.drawLine(mCenterX, mCenterY - HAND_END_CAP_RADIUS, mCenterX,
                         mCenterY - mSecondHandLength, mSecondHandPaint);
             }
 
