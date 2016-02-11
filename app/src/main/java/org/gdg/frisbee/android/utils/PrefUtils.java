@@ -150,7 +150,10 @@ public final class PrefUtils {
         return false;
     }
 
-    public static void setGcmSettings(final Context context, final boolean enabledGcm, final String regId, final String notificationKey) {
+    public static void setGcmSettings(final Context context,
+                                      final boolean enabledGcm,
+                                      final String regId,
+                                      final String notificationKey) {
         prefs(context).edit()
             .putBoolean(SETTINGS_GCM, enabledGcm)
             .putString(PREFS_GCM_REG_ID, regId)

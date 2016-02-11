@@ -227,7 +227,8 @@ public class ModelCache {
         putAsync(url, obj, new DateTime(0), onDoneListener);
     }
 
-    public void putAsync(final String url, final Object obj, final DateTime expiresAt, final CachePutListener onDoneListener) {
+    public void putAsync(final String url, final Object obj,
+                         final DateTime expiresAt, final CachePutListener onDoneListener) {
         new PutAsyncTask(ModelCache.this, url, obj, expiresAt, onDoneListener).execute();
     }
 
@@ -605,7 +606,8 @@ public class ModelCache {
         private Object obj;
         private DateTime expiresAt;
 
-        public PutAsyncTask(ModelCache modelCache, String key, Object obj, DateTime expiresAt, CachePutListener onDoneListener) {
+        public PutAsyncTask(ModelCache modelCache, String key, Object obj,
+                            DateTime expiresAt, CachePutListener onDoneListener) {
             this.modelCache = modelCache;
             this.key = key;
             this.obj = obj;

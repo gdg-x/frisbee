@@ -91,16 +91,18 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
                         setIsLoading(true);
                     }
                 })
-                .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, ActivityFeed>() {
-                    @Override
-                    public ActivityFeed doInBackground(String... params) {
-                        ActivityFeed feed = (ActivityFeed) App.getInstance().getModelCache().get(Const.CACHE_KEY_NEWS + params[0]);
-                        if (feed == null) {
-                            feed = getActivityFeedSync(params[0]);
+                .setOnBackgroundExecuteListener(
+                    new CommonAsyncTask.OnBackgroundExecuteListener<String, ActivityFeed>() {
+                        @Override
+                        public ActivityFeed doInBackground(String... params) {
+                            ActivityFeed feed =
+                                (ActivityFeed) App.getInstance().getModelCache().get(Const.CACHE_KEY_NEWS + params[0]);
+                            if (feed == null) {
+                                feed = getActivityFeedSync(params[0]);
+                            }
+                            return feed;
                         }
-                        return feed;
-                    }
-                })
+                    })
                 .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, ActivityFeed>() {
                     @Override
                     public void onPostExecute(String[] params, ActivityFeed activityFeed) {
@@ -112,26 +114,28 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
                 })
                 .buildAndExecute();
         } else {
-            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_NEWS + plusId, false, new ModelCache.CacheListener() {
-                @Override
-                public void onGet(Object item) {
-                    ActivityFeed feed = (ActivityFeed) item;
+            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_NEWS + plusId,
+                false,
+                new ModelCache.CacheListener() {
+                    @Override
+                    public void onGet(Object item) {
+                        ActivityFeed feed = (ActivityFeed) item;
 
-                    if (isAdded()) {
-                        Snackbar snackbar = Snackbar.make(getView(), R.string.cached_content,
-                            Snackbar.LENGTH_SHORT);
-                        ColoredSnackBar.info(snackbar).show();
+                        if (isAdded()) {
+                            Snackbar snackbar = Snackbar.make(getView(), R.string.cached_content,
+                                Snackbar.LENGTH_SHORT);
+                            ColoredSnackBar.info(snackbar).show();
+                        }
+
+                        mAdapter.addAll(feed.getItems());
+                        setIsLoading(false);
                     }
 
-                    mAdapter.addAll(feed.getItems());
-                    setIsLoading(false);
-                }
-
-                @Override
-                public void onNotFound(String key) {
-                    showError(R.string.offline_alert);
-                }
-            });
+                    @Override
+                    public void onNotFound(String key) {
+                        showError(R.string.offline_alert);
+                    }
+                });
         }
     }
 
@@ -169,12 +173,13 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
         if (Utils.isOnline(getActivity())) {
             new Builder<>(String.class, ActivityFeed.class)
                 .addParameter(getArguments().getString(Const.EXTRA_PLUS_ID))
-                .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, ActivityFeed>() {
-                    @Override
-                    public ActivityFeed doInBackground(String... params) {
-                        return getActivityFeedSync(params[0]);
-                    }
-                })
+                .setOnBackgroundExecuteListener(
+                    new CommonAsyncTask.OnBackgroundExecuteListener<String, ActivityFeed>() {
+                        @Override
+                        public ActivityFeed doInBackground(String... params) {
+                            return getActivityFeedSync(params[0]);
+                        }
+                    })
                 .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, ActivityFeed>() {
                     @Override
                     public void onPostExecute(String[] params, ActivityFeed activityFeed) {

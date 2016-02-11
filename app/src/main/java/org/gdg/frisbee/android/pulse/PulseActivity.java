@@ -69,7 +69,8 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
         mPulseTargets = new ArrayList<>();
         mViewPagerAdapter = new PulsePagerAdapter(this, getSupportFragmentManager());
 
-        final String selectedPulse = savedInstanceState != null ? savedInstanceState.getString(INSTANCE_STATE_SELECTED_PULSE) : null;
+        final String selectedPulse = savedInstanceState != null
+            ? savedInstanceState.getString(INSTANCE_STATE_SELECTED_PULSE) : null;
 
         App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PULSE_GLOBAL, true, new ModelCache.CacheListener() {
             @Override
@@ -161,7 +162,8 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
 
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
+            public void onItemSelected(final AdapterView<?> parent, final View view,
+                                       final int position, final long id) {
                 String previous = mViewPagerAdapter.getSelectedPulseTarget();
                 if (!previous.equals(mSpinnerAdapter.getItem(position))) {
                     refreshSpinner(mSpinnerAdapter.getItem(position));

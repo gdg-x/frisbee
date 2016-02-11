@@ -18,7 +18,9 @@ public class GithubFactory {
     private static Retrofit provideRestAdapter() {
         return new Retrofit.Builder()
             .baseUrl(API_URL)
-            .addConverterFactory(GsonConverterFactory.create(Utils.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)))
+            .addConverterFactory(
+                GsonConverterFactory.create(Utils.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES))
+            )
             .client(OkClientFactory.okHttpClientWithIdlingResources(App.getInstance().getOkHttpClient()))
             .build();
     }

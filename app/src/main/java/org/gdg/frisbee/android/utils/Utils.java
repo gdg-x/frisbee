@@ -54,7 +54,7 @@ import java.util.Map;
 import timber.log.Timber;
 
 public class Utils {
-    
+
     private Utils() {
         // Prevent instances of this class being created.
     }
@@ -84,7 +84,7 @@ public class Utils {
         return (int) TypedValue
                 .applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, res.getDisplayMetrics());
     }
-    
+
     public static float convertPixelsToDp(float px, Context context) {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
@@ -113,7 +113,8 @@ public class Utils {
         String[] pairs = query.split("&");
         for (String pair : pairs) {
             int idx = pair.indexOf("=");
-            queryPairs.put(URLDecoder.decode(pair.substring(0, idx), "UTF-8"), URLDecoder.decode(pair.substring(idx + 1), "UTF-8"));
+            queryPairs.put(URLDecoder.decode(pair.substring(0, idx), "UTF-8"),
+                URLDecoder.decode(pair.substring(idx + 1), "UTF-8"));
         }
         return queryPairs;
     }
@@ -123,16 +124,20 @@ public class Utils {
         Resources res = ctx.getResources();
         Period p = new Period(start, end);
 
-        if (p.getYears() == 0 && p.getMonths() == 0 && p.getWeeks() == 0 && p.getDays() == 0 && p.getHours() == 0 && p.getMinutes() == 0) {
+        if (p.getYears() == 0 && p.getMonths() == 0 && p.getWeeks() == 0
+            && p.getDays() == 0 && p.getHours() == 0 && p.getMinutes() == 0) {
             result = res.getQuantityString(R.plurals.seconds_ago, p.getSeconds(), p.getSeconds());
-        } else if (p.getYears() == 0 && p.getMonths() == 0 && p.getWeeks() == 0 && p.getDays() == 0 && p.getHours() == 0) {
+        } else if (p.getYears() == 0 && p.getMonths() == 0 && p.getWeeks() == 0
+            && p.getDays() == 0 && p.getHours() == 0) {
             result = res.getQuantityString(R.plurals.minutes_ago, p.getMinutes(), p.getMinutes());
         } else if (p.getYears() == 0 && p.getMonths() == 0 && p.getWeeks() == 0 && p.getDays() == 0) {
             result = res.getQuantityString(R.plurals.hours_ago, p.getHours(), p.getHours());
         } else if (p.getYears() == 0 && p.getMonths() == 0 && p.getWeeks() == 0) {
             result = res.getQuantityString(R.plurals.days_ago, p.getDays(), p.getDays());
         } else {
-            result = start.toLocalDateTime().toString(DateTimeFormat.patternForStyle("M-", res.getConfiguration().locale));
+            result = start.toLocalDateTime().toString(
+                DateTimeFormat.patternForStyle("M-", res.getConfiguration().locale)
+            );
         }
         return result;
     }

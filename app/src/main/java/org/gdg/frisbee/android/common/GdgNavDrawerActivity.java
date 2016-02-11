@@ -135,14 +135,22 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 .setIcon(taggedEventSeries.getDrawerIconResId());
         }
 
-        SubMenu subMenu = menu.addSubMenu(GAMES_GROUP_ID, Const.DRAWER_SUBMENU_GAMES, Menu.NONE, R.string.drawer_subheader_games);
-        subMenu.add(GAMES_GROUP_ID, Const.DRAWER_ACHIEVEMENTS, Menu.NONE, R.string.achievements).setIcon(R.drawable.ic_drawer_achievements);
-        subMenu.add(GAMES_GROUP_ID, Const.DRAWER_ARROW, Menu.NONE, R.string.arrow).setIcon(R.drawable.ic_drawer_arrow).setCheckable(true);
+        SubMenu subMenu =
+            menu.addSubMenu(GAMES_GROUP_ID, Const.DRAWER_SUBMENU_GAMES, Menu.NONE, R.string.drawer_subheader_games);
+        subMenu.add(GAMES_GROUP_ID, Const.DRAWER_ACHIEVEMENTS, Menu.NONE, R.string.achievements)
+            .setIcon(R.drawable.ic_drawer_achievements);
+        subMenu.add(GAMES_GROUP_ID, Const.DRAWER_ARROW, Menu.NONE, R.string.arrow)
+            .setIcon(R.drawable.ic_drawer_arrow)
+            .setCheckable(true);
 
-        menu.add(SETTINGS_GROUP_ID, Const.DRAWER_SETTINGS, Menu.NONE, R.string.settings).setIcon(R.drawable.ic_drawer_settings);
-        menu.add(SETTINGS_GROUP_ID, Const.DRAWER_HELP, Menu.NONE, R.string.help).setIcon(R.drawable.ic_drawer_help);
-        menu.add(SETTINGS_GROUP_ID, Const.DRAWER_FEEDBACK, Menu.NONE, R.string.feedback).setIcon(R.drawable.ic_drawer_feedback);
-        menu.add(SETTINGS_GROUP_ID, Const.DRAWER_ABOUT, Menu.NONE, R.string.about).setIcon(R.drawable.ic_drawer_about);
+        menu.add(SETTINGS_GROUP_ID, Const.DRAWER_SETTINGS, Menu.NONE, R.string.settings)
+            .setIcon(R.drawable.ic_drawer_settings);
+        menu.add(SETTINGS_GROUP_ID, Const.DRAWER_HELP, Menu.NONE, R.string.help)
+            .setIcon(R.drawable.ic_drawer_help);
+        menu.add(SETTINGS_GROUP_ID, Const.DRAWER_FEEDBACK, Menu.NONE, R.string.feedback)
+            .setIcon(R.drawable.ic_drawer_feedback);
+        menu.add(SETTINGS_GROUP_ID, Const.DRAWER_ABOUT, Menu.NONE, R.string.about)
+            .setIcon(R.drawable.ic_drawer_about);
 
         menu.setGroupCheckable(GROUP_ID, true, true);
 
@@ -388,6 +396,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     protected boolean isHomeChapterOutdated(final String currentHomeChapterId) {
-        return currentHomeChapterId != null && (mStoredHomeChapterId == null || !mStoredHomeChapterId.equals(currentHomeChapterId));
+        return currentHomeChapterId != null
+            && (mStoredHomeChapterId == null || !mStoredHomeChapterId.equals(currentHomeChapterId));
     }
 }

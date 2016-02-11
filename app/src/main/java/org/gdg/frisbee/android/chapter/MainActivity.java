@@ -82,7 +82,8 @@ public class MainActivity extends GdgNavDrawerActivity {
     };
     private static final int REQUEST_FIRST_START_WIZARD = 100;
     private static final int PLAY_SERVICE_DIALOG_REQUEST_CODE = 200;
-    private static final Uri APP_URI = AndroidAppUri.newAndroidAppUri(BuildConfig.APPLICATION_ID, Uri.parse(Const.URL_GDGROUPS_ORG)).toUri();
+    private static final Uri APP_URI =
+        AndroidAppUri.newAndroidAppUri(BuildConfig.APPLICATION_ID, Uri.parse(Const.URL_GDGROUPS_ORG)).toUri();
     @Bind(R.id.pager)
     ViewPager mViewPager;
     @Bind(R.id.tabs)
@@ -400,7 +401,8 @@ public class MainActivity extends GdgNavDrawerActivity {
         mSpinner.setOnItemSelectedListener(
             new AdapterView.OnItemSelectedListener() {
                 @Override
-                public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
+                public void onItemSelected(final AdapterView<?> parent, final View view,
+                                           final int position, final long id) {
 
                     Chapter selectedChapter = mChapterAdapter.getItem(position);
                     updateSelectionfor(selectedChapter.getGplusId());
