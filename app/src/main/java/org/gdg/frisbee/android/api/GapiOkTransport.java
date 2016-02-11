@@ -43,6 +43,7 @@ public class GapiOkTransport extends HttpTransport {
         HttpMethods.PUT,
         HttpMethods.TRACE
     };
+
     static {
         Arrays.sort(SUPPORTED_METHODS);
     }

@@ -72,14 +72,14 @@ public class GdeActivity extends GdgNavDrawerActivity {
             @Override
             public void success(final GdeList directory) {
                 App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_GDE_LIST,
-                        directory,
-                        DateTime.now().plusDays(4),
-                        new ModelCache.CachePutListener() {
-                            @Override
-                            public void onPutIntoCache() {
-                                addGdes(directory);
-                            }
-                        });
+                    directory,
+                    DateTime.now().plusDays(4),
+                    new ModelCache.CachePutListener() {
+                        @Override
+                        public void onPutIntoCache() {
+                            addGdes(directory);
+                        }
+                    });
             }
 
             @Override

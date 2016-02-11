@@ -53,167 +53,51 @@ import timber.log.Timber;
 
 public class ModelCache {
 
-    public static class Builder {
-
-        static final int MEGABYTE = 1024 * 1024;
-
-        static final int DEFAULT_MEM_CACHE_MAX_SIZE = 32;
-
-        static final int DEFAULT_DISK_CACHE_MAX_SIZE_MB = 10;
-
-        private static long getHeapSize() {
-            return Runtime.getRuntime().maxMemory();
-        }
-
-        private boolean mDiskCacheEnabled;
-
-        private File mDiskCacheLocation;
-
-        private long mDiskCacheMaxSize;
-
-        private boolean mMemoryCacheEnabled;
-
-        private int mMemoryCacheMaxSize;
-
-        public Builder() {
-            // Disk Cache is disabled by default, but it's default size is set
-            mDiskCacheMaxSize = DEFAULT_DISK_CACHE_MAX_SIZE_MB * MEGABYTE;
-
-            // Memory Cache is enabled by default, with a small maximum size
-            mMemoryCacheEnabled = true;
-            mMemoryCacheMaxSize = DEFAULT_MEM_CACHE_MAX_SIZE;
-        }
-
-        public ModelCache build() {
-            final ModelCache cache = new ModelCache();
-
-            if (isValidOptionsForMemoryCache()) {
-                cache.setMemoryCache(new LruCache<String, CacheItem>(mMemoryCacheMaxSize));
-            }
-
-            if (isValidOptionsForDiskCache()) {
-                new AsyncTask<Void, Void, DiskLruCache>() {
-
-                    @Override
-                    protected DiskLruCache doInBackground(Void... params) {
-                        try {
-                            DiskLruCache c = DiskLruCache.open(mDiskCacheLocation, 0, 2, mDiskCacheMaxSize);
-                            cache.setDiskCache(c);
-                            return c;
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            return null;
-                        }
-                    }
-
-                    @Override
-                    protected void onPostExecute(DiskLruCache result) {
-                        //cache.setDiskCache(result);
-                    }
-
-                }.execute();
-            }
-
-            return cache;
-        }
-
-        /**
-         * Set whether the Disk Cache should be enabled. Defaults to {@code false}.
-         *
-         * @return This Builder object to allow for chaining of calls to set methods.
-         */
-        public Builder setDiskCacheEnabled(boolean enabled) {
-            mDiskCacheEnabled = enabled;
-            return this;
-        }
-
-        /**
-         * Set the Disk Cache location. This location should be read-writeable.
-         *
-         * @return This Builder object to allow for chaining of calls to set methods.
-         */
-        public Builder setDiskCacheLocation(File location) {
-            mDiskCacheLocation = location;
-            return this;
-        }
-
-        /**
-         * Set the maximum number of bytes the Disk Cache should use to store values. Defaults to
-         * {@value #DEFAULT_DISK_CACHE_MAX_SIZE_MB}MB.
-         *
-         * @return This Builder object to allow for chaining of calls to set methods.
-         */
-        public Builder setDiskCacheMaxSize(long maxSize) {
-            mDiskCacheMaxSize = maxSize;
-            return this;
-        }
-
-        /**
-         * Set whether the Memory Cache should be enabled. Defaults to {@code true}.
-         *
-         * @return This Builder object to allow for chaining of calls to set methods.
-         */
-        public Builder setMemoryCacheEnabled(boolean enabled) {
-            mMemoryCacheEnabled = enabled;
-            return this;
-        }
-
-        /**
-         * Set the maximum number of bytes the Memory Cache should use to store values. Defaults to
-         * {@value #DEFAULT_MEM_CACHE_MAX_SIZE}MB.
-         *
-         * @return This Builder object to allow for chaining of calls to set methods.
-         */
-        public Builder setMemoryCacheMaxSize(int size) {
-            mMemoryCacheMaxSize = size;
-            return this;
-        }
-
-        private boolean isValidOptionsForDiskCache() {
-            if (mDiskCacheEnabled) {
-                if (null == mDiskCacheLocation) {
-                    return false;
-                } else if (!mDiskCacheLocation.canWrite()) {
-                    Timber.i("Disk Cache Location is not write-able, disabling disk caching.");
-                    return false;
-                }
-
-                return true;
-            }
-            return false;
-        }
-
-        private boolean isValidOptionsForMemoryCache() {
-            return mMemoryCacheEnabled && mMemoryCacheMaxSize > 0;
-        }
-    }
-
     static final int DISK_CACHE_FLUSH_DELAY_SECS = 5;
-
     final JsonFactory mJsonFactory = new GsonFactory();
-
     private Gson mGson;
-
     private LruCache<String, CacheItem> mMemoryCache;
-
     private DiskLruCache mDiskCache;
-
     // Variables which are only used when the Disk Cache is enabled
     private HashMap<String, ReentrantLock> mDiskCacheEditLocks;
-
     private ScheduledThreadPoolExecutor mDiskCacheFlusherExecutor;
-
     private DiskCacheFlushRunnable mDiskCacheFlusherRunnable;
-
     // Transient
     private ScheduledFuture<?> mDiskCacheFuture;
 
     ModelCache() {
 
         mGson = new GsonBuilder()
-                .registerTypeAdapter(DateTime.class, new DateTimeDeserializer())
-                .registerTypeAdapter(DateTime.class, new DateTimeSerializer())
-                .create();
+            .registerTypeAdapter(DateTime.class, new DateTimeDeserializer())
+            .registerTypeAdapter(DateTime.class, new DateTimeSerializer())
+            .create();
+    }
+
+    private static String transformUrlForDiskCacheKey(String url) {
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+            digest.update(url.getBytes());
+            byte[] messageDigest = digest.digest();
+
+            // Create Hex String
+            StringBuffer hexString = new StringBuffer();
+            for (int i = 0; i < messageDigest.length; i++) {
+                hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
+            }
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    private static void checkNotOnMainThread() {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            throw new IllegalStateException(
+                "This method should not be called from the main/UI thread.");
+        }
     }
 
     public boolean contains(String url) {
@@ -443,8 +327,8 @@ public class ModelCache {
 
         // Schedule a flush
         mDiskCacheFuture = mDiskCacheFlusherExecutor
-                .schedule(mDiskCacheFlusherRunnable, DISK_CACHE_FLUSH_DELAY_SECS,
-                        TimeUnit.SECONDS);
+            .schedule(mDiskCacheFlusherRunnable, DISK_CACHE_FLUSH_DELAY_SECS,
+                TimeUnit.SECONDS);
     }
 
     private void writeExpirationToDisk(OutputStream os, DateTime expiresAt) throws IOException {
@@ -473,7 +357,6 @@ public class ModelCache {
 
         out.close();
     }
-
 
     private long readExpirationFromDisk(InputStream is) throws IOException {
         DataInputStream din = new DataInputStream(is);
@@ -515,70 +398,149 @@ public class ModelCache {
         }
     }
 
-    private static String transformUrlForDiskCacheKey(String url) {
-        try {
-            // Create MD5 Hash
-            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
-            digest.update(url.getBytes());
-            byte[] messageDigest = digest.digest();
-
-            // Create Hex String
-            StringBuffer hexString = new StringBuffer();
-            for (int i = 0; i < messageDigest.length; i++) {
-                hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
-            }
-            return hexString.toString();
-
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
-    private static void checkNotOnMainThread() {
-        if (Looper.myLooper() == Looper.getMainLooper()) {
-            throw new IllegalStateException(
-                    "This method should not be called from the main/UI thread.");
-        }
-    }
-
-    public class CacheItem {
-
-        private Object mValue;
-        private DateTime mExpiresAt;
-        public CacheItem(Object value, DateTime expiresAt) {
-            mValue = value;
-            mExpiresAt = expiresAt;
-        }
-
-        public DateTime getExpiresAt() {
-            return mExpiresAt;
-        }
-
-        public void setExpiresAt(DateTime mExpiresAt) {
-            this.mExpiresAt = mExpiresAt;
-        }
-
-        public Object getValue() {
-            return mValue;
-        }
-
-        public void setValue(Object mValue) {
-            this.mValue = mValue;
-        }
-
-    }
-
     public interface CachePutListener {
 
         void onPutIntoCache();
     }
+
     public interface CacheListener {
 
         void onGet(Object item);
+
         void onNotFound(String key);
 
     }
+
+    public static class Builder {
+
+        static final int MEGABYTE = 1024 * 1024;
+
+        static final int DEFAULT_MEM_CACHE_MAX_SIZE = 32;
+
+        static final int DEFAULT_DISK_CACHE_MAX_SIZE_MB = 10;
+        private boolean mDiskCacheEnabled;
+        private File mDiskCacheLocation;
+        private long mDiskCacheMaxSize;
+        private boolean mMemoryCacheEnabled;
+        private int mMemoryCacheMaxSize;
+
+        public Builder() {
+            // Disk Cache is disabled by default, but it's default size is set
+            mDiskCacheMaxSize = DEFAULT_DISK_CACHE_MAX_SIZE_MB * MEGABYTE;
+
+            // Memory Cache is enabled by default, with a small maximum size
+            mMemoryCacheEnabled = true;
+            mMemoryCacheMaxSize = DEFAULT_MEM_CACHE_MAX_SIZE;
+        }
+
+        private static long getHeapSize() {
+            return Runtime.getRuntime().maxMemory();
+        }
+
+        public ModelCache build() {
+            final ModelCache cache = new ModelCache();
+
+            if (isValidOptionsForMemoryCache()) {
+                cache.setMemoryCache(new LruCache<String, CacheItem>(mMemoryCacheMaxSize));
+            }
+
+            if (isValidOptionsForDiskCache()) {
+                new AsyncTask<Void, Void, DiskLruCache>() {
+
+                    @Override
+                    protected DiskLruCache doInBackground(Void... params) {
+                        try {
+                            DiskLruCache c = DiskLruCache.open(mDiskCacheLocation, 0, 2, mDiskCacheMaxSize);
+                            cache.setDiskCache(c);
+                            return c;
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            return null;
+                        }
+                    }
+
+                    @Override
+                    protected void onPostExecute(DiskLruCache result) {
+                        //cache.setDiskCache(result);
+                    }
+
+                }.execute();
+            }
+
+            return cache;
+        }
+
+        /**
+         * Set whether the Disk Cache should be enabled. Defaults to {@code false}.
+         *
+         * @return This Builder object to allow for chaining of calls to set methods.
+         */
+        public Builder setDiskCacheEnabled(boolean enabled) {
+            mDiskCacheEnabled = enabled;
+            return this;
+        }
+
+        /**
+         * Set the Disk Cache location. This location should be read-writeable.
+         *
+         * @return This Builder object to allow for chaining of calls to set methods.
+         */
+        public Builder setDiskCacheLocation(File location) {
+            mDiskCacheLocation = location;
+            return this;
+        }
+
+        /**
+         * Set the maximum number of bytes the Disk Cache should use to store values. Defaults to
+         * {@value #DEFAULT_DISK_CACHE_MAX_SIZE_MB}MB.
+         *
+         * @return This Builder object to allow for chaining of calls to set methods.
+         */
+        public Builder setDiskCacheMaxSize(long maxSize) {
+            mDiskCacheMaxSize = maxSize;
+            return this;
+        }
+
+        /**
+         * Set whether the Memory Cache should be enabled. Defaults to {@code true}.
+         *
+         * @return This Builder object to allow for chaining of calls to set methods.
+         */
+        public Builder setMemoryCacheEnabled(boolean enabled) {
+            mMemoryCacheEnabled = enabled;
+            return this;
+        }
+
+        /**
+         * Set the maximum number of bytes the Memory Cache should use to store values. Defaults to
+         * {@value #DEFAULT_MEM_CACHE_MAX_SIZE}MB.
+         *
+         * @return This Builder object to allow for chaining of calls to set methods.
+         */
+        public Builder setMemoryCacheMaxSize(int size) {
+            mMemoryCacheMaxSize = size;
+            return this;
+        }
+
+        private boolean isValidOptionsForDiskCache() {
+            if (mDiskCacheEnabled) {
+                if (null == mDiskCacheLocation) {
+                    return false;
+                } else if (!mDiskCacheLocation.canWrite()) {
+                    Timber.i("Disk Cache Location is not write-able, disabling disk caching.");
+                    return false;
+                }
+
+                return true;
+            }
+            return false;
+        }
+
+        private boolean isValidOptionsForMemoryCache() {
+            return mMemoryCacheEnabled && mMemoryCacheMaxSize > 0;
+        }
+    }
+
     static final class DiskCacheFlushRunnable implements Runnable {
 
         private final DiskLruCache mDiskCache;
@@ -666,5 +628,33 @@ public class ModelCache {
                 onDoneListener.onPutIntoCache();
             }
         }
+    }
+
+    public class CacheItem {
+
+        private Object mValue;
+        private DateTime mExpiresAt;
+
+        public CacheItem(Object value, DateTime expiresAt) {
+            mValue = value;
+            mExpiresAt = expiresAt;
+        }
+
+        public DateTime getExpiresAt() {
+            return mExpiresAt;
+        }
+
+        public void setExpiresAt(DateTime mExpiresAt) {
+            this.mExpiresAt = mExpiresAt;
+        }
+
+        public Object getValue() {
+            return mValue;
+        }
+
+        public void setValue(Object mValue) {
+            this.mValue = mValue;
+        }
+
     }
 }

@@ -121,25 +121,25 @@ public class WearableConfigurationActivity extends Activity implements DataApi.D
         });
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Wearable.API)
-                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-                    @Override
-                    public void onConnected(Bundle bundle) {
-                        Log.d(TAG, "onConnected:" + bundle);
-                    }
+            .addApi(Wearable.API)
+            .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                @Override
+                public void onConnected(Bundle bundle) {
+                    Log.d(TAG, "onConnected:" + bundle);
+                }
 
-                    @Override
-                    public void onConnectionSuspended(int i) {
-                        Log.d(TAG, "onConnectionSuspended:" + i);
-                    }
-                })
-                .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(ConnectionResult connectionResult) {
-                        Log.d(TAG, "onConnectionFailed:");
-                    }
-                })
-                .build();
+                @Override
+                public void onConnectionSuspended(int i) {
+                    Log.d(TAG, "onConnectionSuspended:" + i);
+                }
+            })
+            .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
+                @Override
+                public void onConnectionFailed(ConnectionResult connectionResult) {
+                    Log.d(TAG, "onConnectionFailed:");
+                }
+            })
+            .build();
     }
 
     @Override
@@ -148,16 +148,16 @@ public class WearableConfigurationActivity extends Activity implements DataApi.D
         mGoogleApiClient.connect();
         Wearable.DataApi.addListener(mGoogleApiClient, this);
         Wearable.DataApi.getDataItems(mGoogleApiClient)
-                .setResultCallback(new ResultCallback<DataItemBuffer>() {
-                    @Override
-                    public void onResult(DataItemBuffer dataItems) {
-                        for (DataItem item : dataItems) {
-                            updateConfig(item);
-                        }
-
-                        dataItems.release();
+            .setResultCallback(new ResultCallback<DataItemBuffer>() {
+                @Override
+                public void onResult(DataItemBuffer dataItems) {
+                    for (DataItem item : dataItems) {
+                        updateConfig(item);
                     }
-                });
+
+                    dataItems.release();
+                }
+            });
     }
 
     private void updateConfig(DataItem item) {

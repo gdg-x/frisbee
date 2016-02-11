@@ -26,11 +26,6 @@ import butterknife.ButterKnife;
 public class LeadFragment extends ListFragment {
     private LeadAnnouncementsAdapter mAdapter;
 
-    @Override
-    public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_for_leads, container, false);
-    }
-
     public static Fragment newInstance(final String gplusId) {
         Fragment fragment = new LeadFragment();
         Bundle arguments = new Bundle();
@@ -40,20 +35,25 @@ public class LeadFragment extends ListFragment {
     }
 
     @Override
+    public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_for_leads, container, false);
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mAdapter = new LeadAnnouncementsAdapter(getActivity());
         setListAdapter(mAdapter);
         mAdapter.add(LeadMessage.newMessage(getString(R.string.leads_welcome_title),
-                getString(R.string.leads_welcome)));
+            getString(R.string.leads_welcome)));
         mAdapter.add(LeadMessage.newResource(getString(R.string.leads_resources_title),
-                getString(R.string.leads_resources),
-                Const.URL_GDG_RESOURCE_FOLDER));
+            getString(R.string.leads_resources),
+            Const.URL_GDG_RESOURCE_FOLDER));
         mAdapter.add(LeadMessage.newResource(getString(R.string.leads_wisdom_title),
-                getString(R.string.leads_wisdom),
-                Const.URL_GDG_WISDOM_BOOK));
+            getString(R.string.leads_wisdom),
+            Const.URL_GDG_WISDOM_BOOK));
         mAdapter.add(LeadMessage.newResource(getString(R.string.leads_gplus_community_title), getString(R.string.leads_gplus_community),
-                Const.URL_GDG_LEADS_GPLUS_COMMUNITY));
+            Const.URL_GDG_LEADS_GPLUS_COMMUNITY));
     }
 
     @Override
@@ -64,7 +64,7 @@ public class LeadFragment extends ListFragment {
             startActivity(Utils.createExternalIntent(activity, Uri.parse(item.getLinkUrl())));
             if (activity != null && activity instanceof GdgActivity) {
                 ((GdgActivity) activity).getAchievementActionHandler()
-                        .handleCuriousOrganizer();
+                    .handleCuriousOrganizer();
             }
         }
     }

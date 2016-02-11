@@ -73,9 +73,9 @@ public class AboutActivity extends GdgActivity {
             return true;
         } else if (R.id.action_app_invite == item.getItemId()) {
             Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
-                    .setMessage(getString(R.string.invitation_message))
-                    .setDeepLink(Uri.parse(getString(R.string.invitation_deep_link)))
-                    .build();
+                .setMessage(getString(R.string.invitation_message))
+                .setDeepLink(Uri.parse(getString(R.string.invitation_deep_link)))
+                .build();
             startActivityForResult(intent, REQUEST_INVITE);
             return true;
         }

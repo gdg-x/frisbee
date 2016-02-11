@@ -31,7 +31,7 @@ public final class OkClientFactory {
         Cache cache = new Cache(cacheDir, DISK_CACHE_SIZE);
 
         OkHttpClient.Builder okHttpClient = new OkHttpClient.Builder()
-                .cache(cache);
+            .cache(cache);
         if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
                 @Override
@@ -47,8 +47,8 @@ public final class OkClientFactory {
 
     public static OkHttpClient okHttpClientWithIdlingResources(OkHttpClient client) {
         return client.newBuilder()
-                .addInterceptor(OkClientFactory.provideIdlingResourcesInterceptor())
-                .build();
+            .addInterceptor(OkClientFactory.provideIdlingResourcesInterceptor())
+            .build();
     }
 
     private static Interceptor provideIdlingResourcesInterceptor() {

@@ -100,8 +100,8 @@ android {
 
     variantFilter { variant ->
         if (variant.getFlavors().get(0).name.equals('dev')
-                && (variant.buildType.name.equals('release')
-                || variant.buildType.name.equals('alpha'))) {
+            && (variant.buildType.name.equals('release')
+            || variant.buildType.name.equals('alpha'))) {
             variant.setIgnore(true);
         }
     }

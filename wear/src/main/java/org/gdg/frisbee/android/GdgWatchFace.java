@@ -88,7 +88,7 @@ public class GdgWatchFace extends CanvasWatchFaceService {
                     if (shouldTimerBeRunning()) {
                         long timeMs = System.currentTimeMillis();
                         long delayMs = INTERACTIVE_UPDATE_RATE_MS
-                                - (timeMs % INTERACTIVE_UPDATE_RATE_MS);
+                            - (timeMs % INTERACTIVE_UPDATE_RATE_MS);
                         mUpdateTimeHandler.sendEmptyMessageDelayed(R.id.message_update_time, delayMs);
                     }
                 }
@@ -137,14 +137,14 @@ public class GdgWatchFace extends CanvasWatchFaceService {
             super.onCreate(holder);
 
             setWatchFaceStyle(new WatchFaceStyle.Builder(GdgWatchFace.this)
-                    .setCardPeekMode(WatchFaceStyle.PEEK_MODE_SHORT)
-                    .setBackgroundVisibility(WatchFaceStyle.BACKGROUND_VISIBILITY_INTERRUPTIVE)
-                    .setShowSystemUiTime(false)
-                    .setViewProtection(WatchFaceStyle.PROTECT_STATUS_BAR | WatchFaceStyle.PROTECT_HOTWORD_INDICATOR)
-                    .setHotwordIndicatorGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL)
-                    .setStatusBarGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL)
-                    .setPeekOpacityMode(WatchFaceStyle.PEEK_OPACITY_MODE_TRANSLUCENT)
-                    .build());
+                .setCardPeekMode(WatchFaceStyle.PEEK_MODE_SHORT)
+                .setBackgroundVisibility(WatchFaceStyle.BACKGROUND_VISIBILITY_INTERRUPTIVE)
+                .setShowSystemUiTime(false)
+                .setViewProtection(WatchFaceStyle.PROTECT_STATUS_BAR | WatchFaceStyle.PROTECT_HOTWORD_INDICATOR)
+                .setHotwordIndicatorGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL)
+                .setStatusBarGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL)
+                .setPeekOpacityMode(WatchFaceStyle.PEEK_OPACITY_MODE_TRANSLUCENT)
+                .build());
 
             Resources resources = GdgWatchFace.this.getResources();
 
@@ -187,42 +187,42 @@ public class GdgWatchFace extends CanvasWatchFaceService {
             mTime = new Time();
 
             mGoogleApiClient = new GoogleApiClient.Builder(GdgWatchFace.this)
-                    .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-                        @Override
-                        public void onConnected(Bundle bundle) {
-                            Log.d(TAG, "onConnected:" + bundle);
-                            onApiClientConnected();
-                        }
+                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                    @Override
+                    public void onConnected(Bundle bundle) {
+                        Log.d(TAG, "onConnected:" + bundle);
+                        onApiClientConnected();
+                    }
 
-                        @Override
-                        public void onConnectionSuspended(int i) {
-                            Log.d(TAG, "onConnectionSuspended:" + i);
-                        }
-                    })
-                    .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
-                        @Override
-                        public void onConnectionFailed(ConnectionResult connectionResult) {
-                            Log.d(TAG, "onConnectionFailed");
-                        }
-                    })
-                    .addApi(Wearable.API)
-                    .build();
+                    @Override
+                    public void onConnectionSuspended(int i) {
+                        Log.d(TAG, "onConnectionSuspended:" + i);
+                    }
+                })
+                .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(ConnectionResult connectionResult) {
+                        Log.d(TAG, "onConnectionFailed");
+                    }
+                })
+                .addApi(Wearable.API)
+                .build();
         }
 
         private void onApiClientConnected() {
             Wearable.DataApi.addListener(mGoogleApiClient, Engine.this);
             Wearable.DataApi.getDataItems(mGoogleApiClient)
-                    .setResultCallback(new ResultCallback<DataItemBuffer>() {
-                        @Override
-                        public void onResult(DataItemBuffer dataItems) {
-                            for (DataItem item : dataItems) {
-                                updateConfig(item);
-                                invalidateIfNecessary();
-                            }
-
-                            dataItems.release();
+                .setResultCallback(new ResultCallback<DataItemBuffer>() {
+                    @Override
+                    public void onResult(DataItemBuffer dataItems) {
+                        for (DataItem item : dataItems) {
+                            updateConfig(item);
+                            invalidateIfNecessary();
                         }
-                    });
+
+                        dataItems.release();
+                    }
+                });
         }
 
         @Override
@@ -288,14 +288,14 @@ public class GdgWatchFace extends CanvasWatchFaceService {
             float scale = ((float) width / (float) mBackgroundBitmap.getWidth());
 
             mBackgroundBitmap = Bitmap.createScaledBitmap(mBackgroundBitmap,
-                    (int) (mBackgroundBitmap.getWidth() * scale),
-                    (int) (mBackgroundBitmap.getHeight() * scale), true);
+                (int) (mBackgroundBitmap.getWidth() * scale),
+                (int) (mBackgroundBitmap.getHeight() * scale), true);
             mDarkBackgroundBitmap = Bitmap.createScaledBitmap(mDarkBackgroundBitmap,
-                    (int) (mDarkBackgroundBitmap.getWidth() * scale),
-                    (int) (mDarkBackgroundBitmap.getHeight() * scale), true);
+                (int) (mDarkBackgroundBitmap.getWidth() * scale),
+                (int) (mDarkBackgroundBitmap.getHeight() * scale), true);
             mLightBackgroundBitmap = Bitmap.createScaledBitmap(mLightBackgroundBitmap,
-                    (int) (mLightBackgroundBitmap.getWidth() * scale),
-                    (int) (mLightBackgroundBitmap.getHeight() * scale), true);
+                (int) (mLightBackgroundBitmap.getWidth() * scale),
+                (int) (mLightBackgroundBitmap.getHeight() * scale), true);
             if (!mBurnInProtection || !mLowBitAmbient) {
                 initializeGrayBackgroundBitmap();
             }
@@ -338,17 +338,17 @@ public class GdgWatchFace extends CanvasWatchFaceService {
                 float outerX = (float) Math.sin(tickRot) * outerTickRadius;
                 float outerY = (float) -Math.cos(tickRot) * outerTickRadius;
                 canvas.drawLine(mCenterX + innerX, mCenterY + innerY,
-                        mCenterX + outerX, mCenterY + outerY, getAdjustedPaintColor(mHourMarkerPaint));
+                    mCenterX + outerX, mCenterY + outerY, getAdjustedPaintColor(mHourMarkerPaint));
 
             }
 
             if (mDisplayDate) {
                 canvas.drawText(formatTwoDigitNumber(mTime.monthDay), mCenterX + mMinuteHandLength,
-                        mCenterY - textHeightOffset, getAdjustedPaintColor(mTextPaint));
+                    mCenterY - textHeightOffset, getAdjustedPaintColor(mTextPaint));
             }
 
             canvas.drawText(formatTwoDigitNumber(mTime.hour) + ":" + formatTwoDigitNumber(mTime.minute),
-                    mCenterX - mSecondHandLength, mCenterY - textHeightOffset, getAdjustedPaintColor(mTextPaint));
+                mCenterX - mSecondHandLength, mCenterY - textHeightOffset, getAdjustedPaintColor(mTextPaint));
 
             /*
              * These calculations reflect the rotation in degrees per unit of
@@ -365,16 +365,16 @@ public class GdgWatchFace extends CanvasWatchFaceService {
 
             canvas.rotate(hoursRotation, mCenterX, mCenterY);
             canvas.drawLine(mCenterX, mCenterY - HAND_END_CAP_RADIUS, mCenterX,
-                    mCenterY - mHourHandLength, getAdjustedPaintColor(mHourHandPaint));
+                mCenterY - mHourHandLength, getAdjustedPaintColor(mHourHandPaint));
 
             canvas.rotate(minutesRotation - hoursRotation, mCenterX, mCenterY);
             canvas.drawLine(mCenterX, mCenterY - HAND_END_CAP_RADIUS, mCenterX,
-                    mCenterY - mMinuteHandLength, getAdjustedPaintColor(mMinuteHandPaint));
+                mCenterY - mMinuteHandLength, getAdjustedPaintColor(mMinuteHandPaint));
 
             if (!mAmbient) {
                 canvas.rotate(secondsRotation - minutesRotation, mCenterX, mCenterY);
                 canvas.drawLine(mCenterX, mCenterY, mCenterX,
-                        mCenterY - mSecondHandLength, mSecondHandPaint);
+                    mCenterY - mSecondHandLength, mSecondHandPaint);
             }
 
             canvas.drawCircle(mCenterX, mCenterY, HAND_END_CAP_RADIUS, getAdjustedPaintColor(mHourHandPaint));
@@ -483,27 +483,27 @@ public class GdgWatchFace extends CanvasWatchFaceService {
             DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
 
             if (WearableConfigurationActivity.PATH_BACKGROUND.equals(item.getUri().getPath()) &&
-                    dataMap.containsKey(WearableConfigurationActivity.CONFIG_BACKGROUND)) {
+                dataMap.containsKey(WearableConfigurationActivity.CONFIG_BACKGROUND)) {
                 int background = dataMap.getInt(WearableConfigurationActivity.CONFIG_BACKGROUND);
                 updateBackground(background);
             } else if (WearableConfigurationActivity.PATH_HOUR_HAND.equals(item.getUri().getPath()) &&
-                    dataMap.containsKey(WearableConfigurationActivity.CONFIG_HAND_HOUR)) {
+                dataMap.containsKey(WearableConfigurationActivity.CONFIG_HAND_HOUR)) {
                 int color = dataMap.getInt(WearableConfigurationActivity.CONFIG_HAND_HOUR);
                 updateHourHand(color);
             } else if (WearableConfigurationActivity.PATH_MINUTE_HAND.equals(item.getUri().getPath()) &&
-                    dataMap.containsKey(WearableConfigurationActivity.CONFIG_HAND_MINUTE)) {
+                dataMap.containsKey(WearableConfigurationActivity.CONFIG_HAND_MINUTE)) {
                 int color = dataMap.getInt(WearableConfigurationActivity.CONFIG_HAND_MINUTE);
                 updateMinuteHand(color);
             } else if (WearableConfigurationActivity.PATH_SECOND_HAND.equals(item.getUri().getPath()) &&
-                    dataMap.containsKey(WearableConfigurationActivity.CONFIG_HAND_SECOND)) {
+                dataMap.containsKey(WearableConfigurationActivity.CONFIG_HAND_SECOND)) {
                 int color = dataMap.getInt(WearableConfigurationActivity.CONFIG_HAND_SECOND);
                 updateSecondHand(color);
             } else if (WearableConfigurationActivity.PATH_HOUR_MARKER.equals(item.getUri().getPath()) &&
-                    dataMap.containsKey(WearableConfigurationActivity.CONFIG_HOUR_MARKER)) {
+                dataMap.containsKey(WearableConfigurationActivity.CONFIG_HOUR_MARKER)) {
                 int color = dataMap.getInt(WearableConfigurationActivity.CONFIG_HOUR_MARKER);
                 updateHourMarker(color);
             } else if (WearableConfigurationActivity.PATH_DATE.equals(item.getUri().getPath()) &&
-                    dataMap.containsKey(WearableConfigurationActivity.CONFIG_DATE)) {
+                dataMap.containsKey(WearableConfigurationActivity.CONFIG_DATE)) {
                 mDisplayDate = dataMap.getBoolean(WearableConfigurationActivity.CONFIG_DATE, true);
             }
 

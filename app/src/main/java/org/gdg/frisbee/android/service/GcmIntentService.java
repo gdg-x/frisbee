@@ -52,7 +52,7 @@ public class GcmIntentService extends IntentService {
 
         if (extras != null && !extras.isEmpty()) {
             if (GoogleCloudMessaging.
-                    MESSAGE_TYPE_MESSAGE.equals(messageType)) {
+                MESSAGE_TYPE_MESSAGE.equals(messageType)) {
 
                 Timber.i("Received: " + extras.toString());
 
@@ -68,15 +68,15 @@ public class GcmIntentService extends IntentService {
 
     private void sendEventNotification(Bundle extras) {
         NotificationManager mNotificationManager = (NotificationManager)
-                this.getSystemService(Context.NOTIFICATION_SERVICE);
+            this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Intent eventIntent = new Intent();
 
         App.getInstance().getTracker().send(new HitBuilders.EventBuilder()
-                .setCategory("gcm")
-                .setAction("clickedGcmEventNotification")
-                .setLabel(extras.getString("id"))
-                .build());
+            .setCategory("gcm")
+            .setAction("clickedGcmEventNotification")
+            .setLabel(extras.getString("id"))
+            .build());
 
         eventIntent.setClass(getApplicationContext(), EventActivity.class);
         eventIntent.putExtra(Const.EXTRA_CHAPTER_ID, extras.getString("chapter"));
@@ -84,7 +84,7 @@ public class GcmIntentService extends IntentService {
         eventIntent.putExtra(Const.EXTRA_SECTION, EventActivity.EventPagerAdapter.SECTION_OVERVIEW);
 
         final DateTimeFormatter df = DateTimeFormat
-                .forPattern("YYYY-MM-dd'T'HH:mm:ss.SSS'Z'");
+            .forPattern("YYYY-MM-dd'T'HH:mm:ss.SSS'Z'");
 
         DateTime start = df.parseDateTime(extras.getString("start"));
 //        DateTime end = df.parseDateTime(extras.getString("end"));
@@ -92,20 +92,20 @@ public class GcmIntentService extends IntentService {
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, eventIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-        final String contentText = 
-                start.toLocalDateTime().toString(DateTimeFormat.patternForStyle("MS", getResources().getConfiguration().locale));
+        final String contentText =
+            start.toLocalDateTime().toString(DateTimeFormat.patternForStyle("MS", getResources().getConfiguration().locale));
         NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_stat_gdg)
-                        .setContentTitle(extras.containsKey("title") ? extras.getString("title") : "")
-                        .setAutoCancel(true)
-                        .setTicker(getString(R.string.gcm_event_ticker))
-                        .setLights(0x0000FF00, 5000, 5000)
-                        .setOnlyAlertOnce(true)
-                        .setSound(alarmSound, AudioManager.STREAM_NOTIFICATION)
-                        .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(contentText))
-                        .setContentText(contentText);
+            new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_stat_gdg)
+                .setContentTitle(extras.containsKey("title") ? extras.getString("title") : "")
+                .setAutoCancel(true)
+                .setTicker(getString(R.string.gcm_event_ticker))
+                .setLights(0x0000FF00, 5000, 5000)
+                .setOnlyAlertOnce(true)
+                .setSound(alarmSound, AudioManager.STREAM_NOTIFICATION)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                    .bigText(contentText))
+                .setContentText(contentText);
 
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());

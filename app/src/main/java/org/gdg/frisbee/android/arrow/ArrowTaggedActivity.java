@@ -96,33 +96,33 @@ public class ArrowTaggedActivity extends GdgActivity {
 
     private void loadFromSnapshot() {
         Games.Snapshots.open(getGoogleApiClient(), Const.GAMES_SNAPSHOT_ID, false).setResultCallback(
-                new ResultCallback<Snapshots.OpenSnapshotResult>() {
+            new ResultCallback<Snapshots.OpenSnapshotResult>() {
 
-                    @Override
-                    public void onResult(Snapshots.OpenSnapshotResult stateResult) {
-                        if (!stateResult.getStatus().isSuccess()) {
-                            return;
-                        }
-
-                        Snapshot loadedResult = stateResult.getSnapshot();
-                        serializedOrganizers = "";
-                        if (loadedResult != null) {
-                            try {
-                                serializedOrganizers = new String(loadedResult.getSnapshotContents().readFully());
-                            } catch (IOException e) {
-                                Timber.w(e, "Could not store tagged organizer");
-                                Toast.makeText(ArrowTaggedActivity.this, R.string.arrow_oops, Toast.LENGTH_LONG).show();
-                            }
-                        }
-
-                        App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
-                            @Override
-                            public void success(Directory directory) {
-                                loadChapterOrganizers(directory);
-                            }
-                        });
+                @Override
+                public void onResult(Snapshots.OpenSnapshotResult stateResult) {
+                    if (!stateResult.getStatus().isSuccess()) {
+                        return;
                     }
-                });
+
+                    Snapshot loadedResult = stateResult.getSnapshot();
+                    serializedOrganizers = "";
+                    if (loadedResult != null) {
+                        try {
+                            serializedOrganizers = new String(loadedResult.getSnapshotContents().readFully());
+                        } catch (IOException e) {
+                            Timber.w(e, "Could not store tagged organizer");
+                            Toast.makeText(ArrowTaggedActivity.this, R.string.arrow_oops, Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
+                        @Override
+                        public void success(Directory directory) {
+                            loadChapterOrganizers(directory);
+                        }
+                    });
+                }
+            });
     }
 
     private void loadChapterOrganizers(Directory directory) {
@@ -148,14 +148,14 @@ public class ArrowTaggedActivity extends GdgActivity {
                 organizer.setChapterId(organizerChapter.getGplusId());
 
                 Plus.PeopleApi.load(getGoogleApiClient(), organizer.getPlusId())
-                        .setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
-                            @Override
-                            public void onResult(People.LoadPeopleResult loadPeopleResult) {
-                                organizer.setResolved(loadPeopleResult.getPersonBuffer().get(0));
-                                adapter.add(organizer);
-                                adapter.notifyItemInserted(adapter.getItemCount() - 1);
-                            }
-                        });
+                    .setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
+                        @Override
+                        public void onResult(People.LoadPeopleResult loadPeopleResult) {
+                            organizer.setResolved(loadPeopleResult.getPersonBuffer().get(0));
+                            adapter.add(organizer);
+                            adapter.notifyItemInserted(adapter.getItemCount() - 1);
+                        }
+                    });
             }
         }
     }

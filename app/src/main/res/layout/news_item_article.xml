@@ -47,9 +47,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autoLink="email|map|web"
-        tools:text="Content"
         android:textAppearance="@android:style/TextAppearance.Small"
-        android:textColor="@color/asbestos" />
+        android:textColor="@color/asbestos"
+        tools:text="Content" />
     </LinearLayout>
   </LinearLayout>
 </LinearLayout>

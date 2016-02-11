@@ -49,17 +49,17 @@ import butterknife.ButterKnife;
 
 class EventAdapter extends BaseAdapter {
 
+    private static final DateTime DATETIME_NOW = DateTime.now();
+    private final int mDefaultIcon;
     private Context mContext;
     private LayoutInflater mInflater;
     private ArrayList<Item> mEvents;
-    private final int mDefaultIcon;
     private boolean mFirstPastEvent = true;
-    private static final DateTime DATETIME_NOW = DateTime.now();
 
     public EventAdapter(Context ctx) {
         this(ctx, R.drawable.icon);
     }
-    
+
     public EventAdapter(Context ctx, @DrawableRes int defaultIcon) {
         mContext = ctx;
         mInflater = LayoutInflater.from(mContext);
@@ -125,7 +125,7 @@ class EventAdapter extends BaseAdapter {
         final LocalDateTime dateTime = event.getStart().toLocalDateTime();
         holder.eventDate.setText(dateTime.toString(DateTimeFormat.patternForStyle("S-", mContext.getResources().getConfiguration().locale)));
         holder.eventTime.setText(dateTime.toString(DateTimeFormat.patternForStyle("-S", mContext.getResources().getConfiguration().locale)));
-        
+
         holder.eventLocation.setText(event.getLocation());
 
         if (event.getStart().isBefore(DATETIME_NOW)) {
@@ -199,12 +199,18 @@ class EventAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        @Bind(R.id.event_title) TextView eventTitle;
-        @Bind(R.id.event_date) TextView eventDate;
-        @Bind(R.id.event_time) TextView eventTime;
-        @Bind(R.id.event_location) TextView eventLocation;
-        @Bind(R.id.past) TextView past;
-        @Bind(R.id.icon) ImageView icon;
+        @Bind(R.id.event_title)
+        TextView eventTitle;
+        @Bind(R.id.event_date)
+        TextView eventDate;
+        @Bind(R.id.event_time)
+        TextView eventTime;
+        @Bind(R.id.event_location)
+        TextView eventLocation;
+        @Bind(R.id.past)
+        TextView past;
+        @Bind(R.id.icon)
+        ImageView icon;
 //        @Bind(R.id.event_image_header) ImageView eventHeader;
 
         ViewHolder(View view) {

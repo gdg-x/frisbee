@@ -20,8 +20,8 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   card_view:cardCornerRadius="2dp"
-  card_view:cardUseCompatPadding="true"
-  card_view:cardElevation="4dp">
+  card_view:cardElevation="4dp"
+  card_view:cardUseCompatPadding="true">
 
   <RelativeLayout
     android:layout_width="match_parent"
@@ -45,18 +45,18 @@
       android:paddingTop="@dimen/content_padding"
       android:textAllCaps="true"
       android:textColor="?android:textColorPrimaryInverse"
-      tools:text="Message"
-      tools:ignore="RelativeOverlap" />
+      tools:ignore="RelativeOverlap"
+      tools:text="Message" />
 
     <ImageView
       android:id="@+id/msg_icon"
       android:layout_width="@dimen/icon_width_event"
       android:layout_height="@dimen/icon_width_event"
       android:layout_alignParentLeft="true"
-      android:layout_marginStart="8dp"
-      android:layout_marginLeft="8dp"
       android:layout_marginEnd="8dp"
+      android:layout_marginLeft="8dp"
       android:layout_marginRight="8dp"
+      android:layout_marginStart="8dp"
       android:layout_marginTop="24dp"
       android:contentDescription="@null"
       android:scaleType="fitXY"
@@ -66,14 +66,14 @@
       android:id="@+id/linearLayout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_below="@id/image_header"
       android:layout_alignWithParentIfMissing="true"
+      android:layout_below="@id/image_header"
       android:layout_marginBottom="@dimen/keyline_1"
-      android:layout_toRightOf="@+id/msg_icon"
-      android:layout_toEndOf="@+id/msg_icon"
       android:layout_marginEnd="8dp"
       android:layout_marginRight="8dp"
       android:layout_marginTop="@dimen/keyline_1"
+      android:layout_toEndOf="@+id/msg_icon"
+      android:layout_toRightOf="@+id/msg_icon"
       android:orientation="vertical">
 
       <TextView

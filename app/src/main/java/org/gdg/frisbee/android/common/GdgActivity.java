@@ -58,17 +58,16 @@ import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public abstract class GdgActivity extends TrackableActivity implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-
-    @Nullable
-    @Bind(R.id.content_frame)
-    FrameLayout mContentLayout;
+    GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final int STATE_DEFAULT = 0;
     private static final int STATE_SIGN_IN = 1;
     private static final int STATE_IN_PROGRESS = 2;
     private static final int RC_SIGN_IN = 0;
     private static final int DIALOG_PLAY_SERVICES_ERROR = 0;
+    @Nullable
+    @Bind(R.id.content_frame)
+    FrameLayout mContentLayout;
     private AchievementActionHandler mAchievementActionHandler;
     private Handler mHandler = new Handler();
 
@@ -127,7 +126,7 @@ public abstract class GdgActivity extends TrackableActivity implements
         mGoogleApiClient = createGoogleApiClient();
 
         mAchievementActionHandler =
-                new AchievementActionHandler(mGoogleApiClient, this);
+            new AchievementActionHandler(mGoogleApiClient, this);
     }
 
     protected GoogleApiClient createGoogleApiClient() {
@@ -223,8 +222,8 @@ public abstract class GdgActivity extends TrackableActivity implements
                 // Google Play services.
                 mSignInProgress = STATE_IN_PROGRESS;
                 startIntentSenderForResult(
-                        mSignInIntent.getIntentSender(),
-                        RC_SIGN_IN, null, 0, 0, 0
+                    mSignInIntent.getIntentSender(),
+                    RC_SIGN_IN, null, 0, 0, 0
                 );
             } catch (IntentSender.SendIntentException e) {
                 // The intent was canceled before it was sent.  Attempt to connect to
@@ -257,7 +256,7 @@ public abstract class GdgActivity extends TrackableActivity implements
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     protected boolean isContextValid() {
         boolean isContextValid = !isFinishing()
-                && (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1 || !isDestroyed());
+            && (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1 || !isDestroyed());
         if (!isContextValid) {
             Timber.d("Context is not valid");
         }
@@ -268,7 +267,7 @@ public abstract class GdgActivity extends TrackableActivity implements
         if (isContextValid()) {
             if (mContentLayout != null) {
                 Snackbar snackbar = Snackbar.make(mContentLayout, errorStringRes,
-                        Snackbar.LENGTH_SHORT);
+                    Snackbar.LENGTH_SHORT);
                 ColoredSnackBar.alert(snackbar).show();
             } else {
                 Toast.makeText(this, errorStringRes, Toast.LENGTH_SHORT).show();
@@ -282,7 +281,7 @@ public abstract class GdgActivity extends TrackableActivity implements
         List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
 
         return taskList.get(0).numActivities == 1
-                && taskList.get(0).topActivity.getClassName().equals(this.getClass().getName());
+            && taskList.get(0).topActivity.getClassName().equals(this.getClass().getName());
     }
 
     @Override

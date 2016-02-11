@@ -7,9 +7,17 @@ import com.google.gson.annotations.SerializedName;
 
 public class Country implements Parcelable {
 
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public Country createFromParcel(Parcel in) {
+            return new Country(in);
+        }
+
+        public Country[] newArray(int size) {
+            return new Country[size];
+        }
+    };
     @SerializedName("_id")
     private String isoCode;
-
     private String name;
 
     public Country() {
@@ -53,14 +61,4 @@ public class Country implements Parcelable {
         parcel.writeString(name);
         parcel.writeString(isoCode);
     }
-
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public Country createFromParcel(Parcel in) {
-            return new Country(in);
-        }
-
-        public Country[] newArray(int size) {
-            return new Country[size];
-        }
-    };
 }

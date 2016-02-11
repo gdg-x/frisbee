@@ -81,7 +81,7 @@ public class GapiOkHttpRequest extends LowLevelHttpRequest {
                 // cannot call setDoOutput(true) because it would change a GET method to POST
                 // for HEAD, OPTIONS, DELETE, or TRACE it would throw an exceptions
                 Preconditions.checkArgument(
-                        contentLength == 0, "%s with non-zero content length is not supported", requestMethod);
+                    contentLength == 0, "%s with non-zero content length is not supported", requestMethod);
             }
         }
         // connect

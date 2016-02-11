@@ -50,6 +50,12 @@ import timber.log.Timber;
 public class UpcomingEventWidgetProvider extends AppWidgetProvider {
     private static final int REQUEST_CODE_LAUNCH_FRISBEE = 1000;
 
+    @Override
+    public void onUpdate(Context context, final AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        PrefUtils.setWidgetAdded(context);
+        context.startService(new Intent(context, UpdateService.class));
+    }
+
     public static class UpdateService extends Service {
 
         private ArrayList<Chapter> mChapters;
@@ -169,11 +175,5 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
         private void showChild(RemoteViews views, int i) {
             views.setDisplayedChild(R.id.viewFlipper, i);
         }
-    }
-
-    @Override
-    public void onUpdate(Context context, final AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        PrefUtils.setWidgetAdded(context);
-        context.startService(new Intent(context, UpdateService.class));
     }
 }

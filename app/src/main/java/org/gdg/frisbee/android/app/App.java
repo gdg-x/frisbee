@@ -71,11 +71,6 @@ import timber.log.Timber;
 public class App extends BaseApp implements LocationListener {
 
     private static App mInstance = null;
-
-    public static App getInstance() {
-        return mInstance;
-    }
-
     private OkHttpClient mOkHttpClient;
     private GroupDirectory groupDirectoryInstance;
     private GdgXHub hubInstance;
@@ -91,6 +86,10 @@ public class App extends BaseApp implements LocationListener {
     private RefWatcher refWatcher;
     private Plus plusClient;
 
+    public static App getInstance() {
+        return mInstance;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -99,11 +98,11 @@ public class App extends BaseApp implements LocationListener {
             Timber.plant(new Timber.DebugTree());
 
             StrictMode.ThreadPolicy.Builder b = new StrictMode.ThreadPolicy.Builder()
-                    .detectDiskReads()
-                    .detectDiskWrites()
-                    .detectNetwork()
-                    .penaltyLog()
-                    .penaltyFlashScreen();
+                .detectDiskReads()
+                .detectDiskWrites()
+                .detectNetwork()
+                .penaltyLog()
+                .penaltyFlashScreen();
 
             StrictMode.setThreadPolicy(b.build());
         } else {
@@ -124,10 +123,10 @@ public class App extends BaseApp implements LocationListener {
         final HttpTransport httpTransport = new GapiOkTransport(mOkHttpClient);
         final JsonFactory jsonFactory = new GsonFactory();
         plusClient = new Plus.Builder(httpTransport, jsonFactory, null)
-                .setGoogleClientRequestInitializer(
-                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.IP_SIMPLE_API_ACCESS_KEY))
-                .setApplicationName("GDG Frisbee")
-                .build();
+            .setGoogleClientRequestInitializer(
+                new CommonGoogleJsonClientRequestInitializer(BuildConfig.IP_SIMPLE_API_ACCESS_KEY))
+            .setApplicationName("GDG Frisbee")
+            .build();
 
         // Initialize ModelCache and Volley
         getModelCache();
@@ -142,9 +141,9 @@ public class App extends BaseApp implements LocationListener {
         picassoClient.addInterceptor(new PlusPersonDownloader(plusClient));
 
         mPicasso = new Picasso.Builder(this)
-                .downloader(new OkHttp3Downloader(picassoClient.build()))
-                .memoryCache(new LruCache(this))
-                .build();
+            .downloader(new OkHttp3Downloader(picassoClient.build()))
+            .memoryCache(new LruCache(this))
+            .build();
 
         JodaTimeAndroid.init(this);
 
@@ -171,38 +170,38 @@ public class App extends BaseApp implements LocationListener {
         mTaggedEventSeriesList = new ArrayList<>();
         //Add DevFest
         addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
-                R.style.Theme_GDG_Special_DevFest,
-                "devfest",
-                Const.DRAWER_DEVFEST,
-                Const.START_TIME_DEVFEST,
-                Const.END_TIME_DEVFEST));
+            R.style.Theme_GDG_Special_DevFest,
+            "devfest",
+            Const.DRAWER_DEVFEST,
+            Const.START_TIME_DEVFEST,
+            Const.END_TIME_DEVFEST));
         //Add Women Techmakers
         addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
-                R.style.Theme_GDG_Special_Wtm,
-                "wtm",
-                Const.DRAWER_WTM,
-                Const.START_TIME_WTM,
-                Const.END_TIME_WTM));
+            R.style.Theme_GDG_Special_Wtm,
+            "wtm",
+            Const.DRAWER_WTM,
+            Const.START_TIME_WTM,
+            Const.END_TIME_WTM));
         //Add Android Fundamentals Study Jams
         addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
-                R.style.Theme_GDG_Special_StudyJams,
-                "studyjam",
-                Const.DRAWER_STUDY_JAM,
-                Const.START_TIME_STUDY_JAMS,
-                Const.END_TIME_STUDY_JAMS));
+            R.style.Theme_GDG_Special_StudyJams,
+            "studyjam",
+            Const.DRAWER_STUDY_JAM,
+            Const.START_TIME_STUDY_JAMS,
+            Const.END_TIME_STUDY_JAMS));
         //Add IO Extended
         addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
-                R.style.Theme_GDG_Special_IOExtended,
-                "i-oextended",
-                Const.DRAWER_IO_EXTENDED,
-                Const.START_TIME_IOEXTENDED,
-                Const.END_TIME_IOEXTENDED));
+            R.style.Theme_GDG_Special_IOExtended,
+            "i-oextended",
+            Const.DRAWER_IO_EXTENDED,
+            Const.START_TIME_IOEXTENDED,
+            Const.END_TIME_IOEXTENDED));
     }
 
     private void addTaggedEventSeriesIfDateFits(@NonNull TaggedEventSeries taggedEventSeries) {
         DateTime now = DateTime.now();
         if (BuildConfig.DEBUG || (now.isAfter(taggedEventSeries.getStartDateInMillis())
-                && now.isBefore(taggedEventSeries.getEndDateInMillis()))) {
+            && now.isBefore(taggedEventSeries.getEndDateInMillis()))) {
             mTaggedEventSeriesList.add(taggedEventSeries);
         }
     }
@@ -255,10 +254,10 @@ public class App extends BaseApp implements LocationListener {
             final File rootDir = new File(cacheDir, "/model_cache/");
 
             ModelCache.Builder builder = new ModelCache.Builder()
-                    .setMemoryCacheEnabled(true);
+                .setMemoryCacheEnabled(true);
             if (rootDir.isDirectory() || rootDir.mkdirs()) {
                 builder.setDiskCacheEnabled(true)
-                        .setDiskCacheLocation(rootDir);
+                    .setDiskCacheLocation(rootDir);
             }
             mModelCache = builder.build();
         }

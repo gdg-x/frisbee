@@ -69,10 +69,10 @@ public class OrganizerChecker {
 
     private void savePreferences() {
         mPreferences.edit()
-                .putLong(Const.PREF_ORGANIZER_CHECK_TIME, getLastOrganizerCheckTime())
-                .putString(Const.PREF_ORGANIZER_CHECK_ID, getLastOrganizerCheckId())
-                .putBoolean(Const.PREF_ORGANIZER_STATE, isOrganizer())
-                .apply();
+            .putLong(Const.PREF_ORGANIZER_CHECK_TIME, getLastOrganizerCheckTime())
+            .putString(Const.PREF_ORGANIZER_CHECK_ID, getLastOrganizerCheckId())
+            .putBoolean(Const.PREF_ORGANIZER_STATE, isOrganizer())
+            .apply();
     }
 
     public interface Callbacks {

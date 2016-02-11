@@ -36,8 +36,8 @@ public abstract class BaseFragment extends Fragment {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     protected boolean isContextValid() {
         boolean isContextValid = getActivity() != null
-                && !getActivity().isFinishing()
-                && (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1 || !getActivity().isDestroyed());
+            && !getActivity().isFinishing()
+            && (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1 || !getActivity().isDestroyed());
         if (!isContextValid) {
             Timber.d("Context is not valid");
         }
@@ -48,7 +48,7 @@ public abstract class BaseFragment extends Fragment {
         if (isContextValid()) {
             if (getView() != null) {
                 Snackbar snackbar = Snackbar.make(getView(), errorStringRes,
-                        Snackbar.LENGTH_SHORT);
+                    Snackbar.LENGTH_SHORT);
                 ColoredSnackBar.alert(snackbar).show();
             } else {
                 Toast.makeText(getActivity(), errorStringRes, Toast.LENGTH_SHORT).show();
