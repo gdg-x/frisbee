@@ -1,6 +1,8 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.gdg.frisbee.android">
-    <uses-feature android:name="android.hardware.type.watch" />
+<manifest package="org.gdg.frisbee.android"
+          xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <uses-feature android:name="android.hardware.type.watch"/>
+
   <uses-permission android:name="com.google.android.permission.PROVIDE_BACKGROUND"/>
   <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
@@ -30,6 +32,12 @@
         <action android:name="android.service.wallpaper.WallpaperService"/>
 
         <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE"/>
+      </intent-filter>
+    </service>
+
+    <service android:name=".GdgWatchFaceConfigListenerService">
+      <intent-filter>
+        <action android:name="com.google.android.gms.wearable.BIND_LISTENER"/>
       </intent-filter>
     </service>
 

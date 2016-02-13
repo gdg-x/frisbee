@@ -18,8 +18,6 @@ import com.google.android.gms.wearable.DataItem;
 import com.google.android.gms.wearable.DataItemBuffer;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
-import com.google.android.gms.wearable.PutDataMapRequest;
-import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 
 import java.util.ArrayList;
@@ -93,24 +91,20 @@ public class WearableConfigurationActivity extends Activity implements DataApi.D
                 } else if (CONFIG_DATE.equals(action)) {
                     TextView settingTextView = (TextView) layout.findViewById(R.id.subsetting_text_view);
                     CircledImageView circleImage = (CircledImageView) layout.findViewById(R.id.setting_circle);
-                    PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(PATH_DATE);
 
                     if (getString(R.string.label_setting_on).equals(settingTextView.getText().toString())) {
                         settingTextView.setText(getString(R.string.label_setting_off));
                         circleImage.setImageResource(R.drawable.ic_date_off);
-                        putDataMapRequest.getDataMap().putBoolean(action, false);
+                        saveBooleanConfig(action, false);
                         mDisplayDate = false;
                         updateConfigurations();
                     } else {
                         settingTextView.setText(getString(R.string.label_setting_on));
                         circleImage.setImageResource(R.drawable.ic_date_on);
-                        putDataMapRequest.getDataMap().putBoolean(action, true);
+                        saveBooleanConfig(action, true);
                         mDisplayDate = true;
                         updateConfigurations();
                     }
-
-                    PutDataRequest putDataRequest = putDataMapRequest.asPutDataRequest();
-                    Wearable.DataApi.putDataItem(mGoogleApiClient, putDataRequest);
                 }
             }
 
@@ -164,7 +158,7 @@ public class WearableConfigurationActivity extends Activity implements DataApi.D
         if (WearableConfigurationActivity.PATH_DATE.equals(item.getUri().getPath())) {
             DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
             if (dataMap.containsKey(WearableConfigurationActivity.CONFIG_DATE)) {
-                mDisplayDate = dataMap.getBoolean(WearableConfigurationActivity.CONFIG_DATE, true);
+                mDisplayDate = dataMap.getInt(WearableConfigurationActivity.CONFIG_DATE) == 1;
                 updateConfigurations();
             }
         }
@@ -188,26 +182,7 @@ public class WearableConfigurationActivity extends Activity implements DataApi.D
             int color = data.getIntExtra(ColorConfigActivity.CONFIG_COLOR, 0);
             String action = data.getStringExtra(ColorConfigActivity.CONFIG_HEADER);
 
-            PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(getDataPath(action));
-            putDataMapRequest.getDataMap().putInt(action, color);
-            PutDataRequest putDataRequest = putDataMapRequest.asPutDataRequest();
-            Wearable.DataApi.putDataItem(mGoogleApiClient, putDataRequest);
-        }
-    }
-
-    private String getDataPath(String action) {
-        if (CONFIG_BACKGROUND.equals(action)) {
-            return PATH_BACKGROUND;
-        } else if (CONFIG_HAND_HOUR.equals(action)) {
-            return PATH_HOUR_HAND;
-        } else if (CONFIG_HAND_MINUTE.equals(action)) {
-            return PATH_MINUTE_HAND;
-        } else if (CONFIG_HAND_SECOND.equals(action)) {
-            return PATH_SECOND_HAND;
-        } else if (CONFIG_HOUR_MARKER.equals(action)) {
-            return PATH_HOUR_MARKER;
-        } else {
-            return "";
+            saveIntConfig(action, color);
         }
     }
 
@@ -236,5 +211,16 @@ public class WearableConfigurationActivity extends Activity implements DataApi.D
         }
 
         dataEventBuffer.release();
+    }
+
+    private void saveIntConfig(String key, int value) {
+        DataMap configKeysToOverwrite = new DataMap();
+        configKeysToOverwrite.putInt(key, value);
+        WearableConfigurationUtil.updateKeysInConfigDataMap(mGoogleApiClient, WearableConfigurationUtil.PATH_ANALOG, configKeysToOverwrite);
+    }
+
+    private void saveBooleanConfig(String key, boolean value) {
+        saveIntConfig(key, value ? 1 : 0);
+
     }
 }
