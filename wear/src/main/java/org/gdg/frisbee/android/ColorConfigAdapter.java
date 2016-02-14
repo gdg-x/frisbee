@@ -32,14 +32,7 @@ public class ColorConfigAdapter extends WearableListView.Adapter {
         nameTextView.setText(mColors.get(position));
 
         CircledImageView circleImage = (CircledImageView) layout.findViewById(R.id.setting_circle);
-        String color = mColors.get(position);
-        if("Dark".equals(color)) {
-            circleImage.setCircleColor(Color.BLACK);
-        } else if("Light".equals(color)) {
-            circleImage.setCircleColor(Color.WHITE);
-        } else {
-            circleImage.setCircleColor(Color.parseColor(mColors.get(position)));
-        }
+        circleImage.setCircleColor(Color.parseColor(mColors.get(position)));
     }
 
     @Override
