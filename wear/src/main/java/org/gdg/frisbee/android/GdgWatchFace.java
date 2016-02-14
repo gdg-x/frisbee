@@ -98,7 +98,7 @@ public class GdgWatchFace extends CanvasWatchFaceService {
         Paint mMinuteHandPaint;
         Paint mSecondHandPaint;
         Paint mHourMarkerPaint;
-        Paint mTextPaint;
+        Paint mDateTimePaint;
         Bitmap mBackgroundBitmap;
         Bitmap mDarkBackgroundBitmap;
         Bitmap mLightBackgroundBitmap;
@@ -177,11 +177,11 @@ public class GdgWatchFace extends CanvasWatchFaceService {
             mHourMarkerPaint.setStrokeWidth(resources.getDimension(R.dimen.hour_marker_stroke));
             mHourMarkerPaint.setAntiAlias(true);
 
-            mTextPaint = new Paint();
-            mTextPaint.setColor(ContextCompat.getColor(GdgWatchFace.this, R.color.gdg_white));
-            mTextPaint.setTypeface(Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD));
-            mTextPaint.setTextSize(resources.getDimension(R.dimen.font_hour_marker));
-            mTextPaint.setAntiAlias(true);
+            mDateTimePaint = new Paint();
+            mDateTimePaint.setColor(ContextCompat.getColor(GdgWatchFace.this, R.color.gdg_white));
+            mDateTimePaint.setTypeface(Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD));
+            mDateTimePaint.setTextSize(resources.getDimension(R.dimen.font_hour_marker));
+            mDateTimePaint.setAntiAlias(true);
 
             mTime = new Time();
 
@@ -305,7 +305,7 @@ public class GdgWatchFace extends CanvasWatchFaceService {
                 canvas.drawBitmap(mBackgroundBitmap, 0, 0, mBackgroundPaint);
             }
 
-            float textHeightOffset = (mTextPaint.descent() + mTextPaint.ascent()) / 2f;
+            float textHeightOffset = (mDateTimePaint.descent() + mDateTimePaint.ascent()) / 2f;
             float innerTickRadius = mCenterX - 25;
             float outerTickRadius = mCenterX;
             for (int tickIndex = 0; tickIndex < 12; tickIndex++) {
@@ -321,11 +321,11 @@ public class GdgWatchFace extends CanvasWatchFaceService {
 
             if (mDisplayDate) {
                 canvas.drawText(formatTwoDigitNumber(mTime.monthDay), mCenterX + mMinuteHandLength,
-                        mCenterY - textHeightOffset, getAdjustedPaintColor(mTextPaint));
+                        mCenterY - textHeightOffset, getAdjustedPaintColor(mDateTimePaint));
             }
 
             canvas.drawText(formatTwoDigitNumber(mTime.hour) + ":" + formatTwoDigitNumber(mTime.minute),
-                    mCenterX - mSecondHandLength, mCenterY - textHeightOffset, getAdjustedPaintColor(mTextPaint));
+                    mCenterX - mSecondHandLength, mCenterY - textHeightOffset, getAdjustedPaintColor(mDateTimePaint));
 
             /*
              * These calculations reflect the rotation in degrees per unit of
@@ -489,6 +489,9 @@ public class GdgWatchFace extends CanvasWatchFaceService {
             if (dataMap.containsKey(WearableConfigurationUtil.CONFIG_BACKGROUND)) {
                 int background = dataMap.getInt(WearableConfigurationUtil.CONFIG_BACKGROUND);
                 updateBackground(background);
+            } else if (dataMap.containsKey(WearableConfigurationUtil.CONFIG_DATE_TIME)) {
+                int color = dataMap.getInt(WearableConfigurationUtil.CONFIG_DATE_TIME);
+                updateDateTimeColor(color);
             } else if (dataMap.containsKey(WearableConfigurationUtil.CONFIG_HAND_HOUR)) {
                 int color = dataMap.getInt(WearableConfigurationUtil.CONFIG_HAND_HOUR);
                 updateHourHand(color);
@@ -514,7 +517,10 @@ public class GdgWatchFace extends CanvasWatchFaceService {
             } else {
                 mBackgroundBitmap = mDarkBackgroundBitmap;
             }
+        }
 
+        private void updateDateTimeColor(int color) {
+            mDateTimePaint.setColor(color);
         }
 
         private void updateHourHand(int color) {

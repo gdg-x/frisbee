@@ -19,6 +19,7 @@ public class WearableConfigurationUtil {
 
     public static final String CONFIG_BACKGROUND = "Background";
     public static final String CONFIG_DATE = "Date";
+    public static final String CONFIG_DATE_TIME = "Date/Time Color";
     public static final String CONFIG_HAND_HOUR = "Hour Hand";
     public static final String CONFIG_HAND_MINUTE = "Minute Hand";
     public static final String CONFIG_HAND_SECOND = "Second Hand";

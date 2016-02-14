@@ -70,7 +70,7 @@ public class WearableConfigurationActivity extends Activity implements DataApi.D
 
                 TextView nameTextView = (TextView) layout.findViewById(R.id.setting_text_view);
                 String action = nameTextView.getText().toString();
-                if (action.contains("Background") || action.contains("Hand") || action.contains("Marker")) {
+                if (action.contains("Background") || action.contains("Hand") || action.contains("Marker") || action.contains("Color")) {
                     Intent intent = new Intent(WearableConfigurationActivity.this, ColorConfigActivity.class);
                     intent.putExtra(ColorConfigActivity.CONFIG_HEADER, action);
                     startActivityForResult(intent, REQUEST_COLOR);
@@ -180,6 +180,7 @@ public class WearableConfigurationActivity extends Activity implements DataApi.D
         List<WearableConfiguration> configurationList = new ArrayList<>();
 //        configurationList.add(new WearableConfiguration(R.drawable.ic_palette, WearableConfigurationUtil.CONFIG_BACKGROUND));
         configurationList.add(new WearableConfiguration(R.drawable.ic_date_on, WearableConfigurationUtil.CONFIG_DATE, mDisplayDate));
+        configurationList.add(new WearableConfiguration(R.drawable.ic_palette, WearableConfigurationUtil.CONFIG_DATE_TIME));
         configurationList.add(new WearableConfiguration(R.drawable.ic_palette, WearableConfigurationUtil.CONFIG_HAND_HOUR));
         configurationList.add(new WearableConfiguration(R.drawable.ic_palette, WearableConfigurationUtil.CONFIG_HAND_MINUTE));
         configurationList.add(new WearableConfiguration(R.drawable.ic_palette, WearableConfigurationUtil.CONFIG_HAND_SECOND));
