@@ -17,7 +17,7 @@ public class WearableConfiguration {
     }
 
     public int getIcon() {
-        if ("Date".equals(title)) {
+        if (WearableConfigurationUtil.CONFIG_DATE.equals(title)) {
             return isSelected() ? R.drawable.ic_date_on : R.drawable.ic_date_off;
         } else {
             return icon;
