@@ -178,7 +178,7 @@ public class WearableConfigurationActivity extends Activity implements DataApi.D
 
     private List<WearableConfiguration> getConfigurations() {
         List<WearableConfiguration> configurationList = new ArrayList<>();
-//        configurationList.add(new WearableConfiguration(R.drawable.ic_palette, WearableConfigurationUtil.CONFIG_BACKGROUND));
+        configurationList.add(new WearableConfiguration(R.drawable.ic_palette, WearableConfigurationUtil.CONFIG_BACKGROUND));
         configurationList.add(new WearableConfiguration(R.drawable.ic_date_on, WearableConfigurationUtil.CONFIG_DATE, mDisplayDate));
         configurationList.add(new WearableConfiguration(R.drawable.ic_palette, WearableConfigurationUtil.CONFIG_DATE_TIME));
         configurationList.add(new WearableConfiguration(R.drawable.ic_palette, WearableConfigurationUtil.CONFIG_HAND_HOUR));

@@ -7,10 +7,6 @@
   <string name="background_dark">Dark</string>
   <string name="background_light">Light</string>
 
-  <string-array name="background_selection">
-    <item>@string/background_dark</item>
-    <item>@string/background_light</item>
-  </string-array>
 
   <string name="color_black">Black</string>
   <string name="color_white">White</string>

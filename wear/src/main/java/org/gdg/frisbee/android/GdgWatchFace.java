@@ -100,9 +100,8 @@ public class GdgWatchFace extends CanvasWatchFaceService {
         Paint mHourMarkerPaint;
         Paint mDateTimePaint;
         Bitmap mBackgroundBitmap;
-        Bitmap mDarkBackgroundBitmap;
-        Bitmap mLightBackgroundBitmap;
         Bitmap mGrayBackgroundBitmap;
+        int backgroundColor;
         boolean mAmbient;
         boolean mLightMode = false;
         boolean mDisplayDate = true;
@@ -151,8 +150,8 @@ public class GdgWatchFace extends CanvasWatchFaceService {
             mBackgroundPaint.setColor(ContextCompat.getColor(GdgWatchFace.this, R.color.gdg_black));
 
             mBackgroundBitmap = BitmapFactory.decodeResource(resources, R.drawable.gdg_new);
-            mDarkBackgroundBitmap = BitmapFactory.decodeResource(resources, R.drawable.gdg_new);
-            mLightBackgroundBitmap = BitmapFactory.decodeResource(resources, R.drawable.gdg_background);
+
+            backgroundColor = Color.BLACK;
 
             mHourHandPaint = new Paint();
             mHourHandPaint.setColor(ContextCompat.getColor(GdgWatchFace.this, R.color.gdg_gray));
@@ -266,12 +265,6 @@ public class GdgWatchFace extends CanvasWatchFaceService {
             mBackgroundBitmap = Bitmap.createScaledBitmap(mBackgroundBitmap,
                     (int) (mBackgroundBitmap.getWidth() * scale),
                     (int) (mBackgroundBitmap.getHeight() * scale), true);
-            mDarkBackgroundBitmap = Bitmap.createScaledBitmap(mDarkBackgroundBitmap,
-                    (int) (mDarkBackgroundBitmap.getWidth() * scale),
-                    (int) (mDarkBackgroundBitmap.getHeight() * scale), true);
-            mLightBackgroundBitmap = Bitmap.createScaledBitmap(mLightBackgroundBitmap,
-                    (int) (mLightBackgroundBitmap.getWidth() * scale),
-                    (int) (mLightBackgroundBitmap.getHeight() * scale), true);
             if (!mBurnInProtection || !mLowBitAmbient) {
                 initializeGrayBackgroundBitmap();
             }
@@ -295,13 +288,12 @@ public class GdgWatchFace extends CanvasWatchFaceService {
         public void onDraw(Canvas canvas, Rect bounds) {
             mTime.setToNow();
 
-            // Draw the background.
             if (mAmbient && (mLowBitAmbient || mBurnInProtection)) {
                 canvas.drawColor(Color.BLACK);
             } else if (mAmbient) {//TODO gray ambient BG for light mode
                 canvas.drawBitmap(mGrayBackgroundBitmap, 0, 0, mBackgroundPaint);
             } else {
-                canvas.drawColor(Color.BLACK);
+                canvas.drawColor(backgroundColor);
                 canvas.drawBitmap(mBackgroundBitmap, 0, 0, mBackgroundPaint);
             }
 
@@ -512,11 +504,7 @@ public class GdgWatchFace extends CanvasWatchFaceService {
         }
 
         private void updateBackground(int background) {
-            if (background == Color.WHITE) {
-                mBackgroundBitmap = mLightBackgroundBitmap;
-            } else {
-                mBackgroundBitmap = mDarkBackgroundBitmap;
-            }
+            backgroundColor = background;
         }
 
         private void updateDateTimeColor(int color) {
