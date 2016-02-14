@@ -20,10 +20,14 @@ public class WearableConfigurationUtil {
     public static final String CONFIG_BACKGROUND = "Background";
     public static final String CONFIG_DATE = "Date";
     public static final String CONFIG_DATE_TIME = "Date/Time Color";
+    public static final String CONFIG_DIGITAL_TIME = "Digital Time";
     public static final String CONFIG_HAND_HOUR = "Hour Hand";
     public static final String CONFIG_HAND_MINUTE = "Minute Hand";
     public static final String CONFIG_HAND_SECOND = "Second Hand";
     public static final String CONFIG_HOUR_MARKER = "Hour Marker";
+
+    public static final int TIME_12_HOUR = 12;
+    public static final int TIME_24_HOUR = 24;
 
     public static void updateKeysInConfigDataMap(final GoogleApiClient googleApiClient, final String path,
                                                  final DataMap configKeysToUpdate) {

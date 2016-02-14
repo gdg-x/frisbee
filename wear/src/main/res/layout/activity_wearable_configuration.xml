@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/wearable_config_background"
-    tools:context="org.gdgph.watchface.WearableConfigurationActivity">
+    tools:context=".WearableConfigurationActivity">
 
     <TextView
         android:id="@+id/settings_header"
@@ -26,6 +26,6 @@
         android:background="@android:color/transparent"
         android:dividerHeight="0dp"
         android:scrollbars="none"
-        app:layout_box="left|right"></android.support.wearable.view.WearableListView>
+        app:layout_box="left|right" />
 
 </android.support.wearable.view.BoxInsetLayout>

@@ -59,6 +59,9 @@
     <activity
       android:name=".ColorConfigActivity"
       android:label="@string/label_configure"/>
+    <activity
+      android:name=".TimeConfigActivity"
+      android:label="@string/label_configure"/>
   </application>
 
 </manifest>

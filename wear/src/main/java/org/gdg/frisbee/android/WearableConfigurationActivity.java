@@ -25,6 +25,7 @@ import java.util.List;
 public class WearableConfigurationActivity extends Activity implements DataApi.DataListener {
     private static final String TAG = "WearableConfigActivity";
     private static final int REQUEST_COLOR = 0;
+    private static final int REQUEST_TIME = 1;
 
     private WearableListView mListView;
     private WearableConfigAdapter mAdapter;
@@ -74,6 +75,10 @@ public class WearableConfigurationActivity extends Activity implements DataApi.D
                     Intent intent = new Intent(WearableConfigurationActivity.this, ColorConfigActivity.class);
                     intent.putExtra(ColorConfigActivity.CONFIG_HEADER, action);
                     startActivityForResult(intent, REQUEST_COLOR);
+                } else if(WearableConfigurationUtil.CONFIG_DIGITAL_TIME.equals(action)) {
+                    Intent intent = new Intent(WearableConfigurationActivity.this, TimeConfigActivity.class);
+                    intent.putExtra(TimeConfigActivity.CONFIG_HEADER, action);
+                    startActivityForResult(intent, REQUEST_TIME);
                 } else if (WearableConfigurationUtil.CONFIG_DATE.equals(action)) {
                     TextView settingTextView = (TextView) layout.findViewById(R.id.subsetting_text_view);
                     CircledImageView circleImage = (CircledImageView) layout.findViewById(R.id.setting_circle);
@@ -169,6 +174,11 @@ public class WearableConfigurationActivity extends Activity implements DataApi.D
             String action = data.getStringExtra(ColorConfigActivity.CONFIG_HEADER);
 
             saveIntConfig(action, color);
+        } else if(requestCode == REQUEST_TIME && resultCode == RESULT_OK) {
+            int timeSetting = data.getIntExtra(TimeConfigActivity.CONFIG_VALUE, 0);
+            String action = data.getStringExtra(TimeConfigActivity.CONFIG_HEADER);
+
+            saveIntConfig(action, timeSetting);
         }
     }
 
@@ -180,6 +190,7 @@ public class WearableConfigurationActivity extends Activity implements DataApi.D
         List<WearableConfiguration> configurationList = new ArrayList<>();
         configurationList.add(new WearableConfiguration(R.drawable.ic_palette, WearableConfigurationUtil.CONFIG_BACKGROUND));
         configurationList.add(new WearableConfiguration(R.drawable.ic_date_on, WearableConfigurationUtil.CONFIG_DATE, mDisplayDate));
+        configurationList.add(new WearableConfiguration(R.drawable.ic_time, WearableConfigurationUtil.CONFIG_DIGITAL_TIME));
         configurationList.add(new WearableConfiguration(R.drawable.ic_palette, WearableConfigurationUtil.CONFIG_DATE_TIME));
         configurationList.add(new WearableConfiguration(R.drawable.ic_palette, WearableConfigurationUtil.CONFIG_HAND_HOUR));
         configurationList.add(new WearableConfiguration(R.drawable.ic_palette, WearableConfigurationUtil.CONFIG_HAND_MINUTE));
@@ -212,6 +223,5 @@ public class WearableConfigurationActivity extends Activity implements DataApi.D
 
     private void saveBooleanConfig(String key, boolean value) {
         saveIntConfig(key, value ? 1 : 0);
-
     }
 }

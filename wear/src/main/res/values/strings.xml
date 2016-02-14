@@ -7,7 +7,6 @@
   <string name="background_dark">Dark</string>
   <string name="background_light">Light</string>
 
-
   <string name="color_black">Black</string>
   <string name="color_white">White</string>
   <string name="color_blue">Blue</string>
@@ -22,5 +21,14 @@
     <item>@string/color_red</item>
     <item>@string/color_green</item>
     <item>@string/color_yellow</item>
+  </string-array>
+
+  <string name="time_0">Hidden</string>
+  <string name="time_12">12-hour</string>
+  <string name="time_24">24-hour</string>
+  <string-array name="time_selection">
+    <item>@string/time_12</item>
+    <item>@string/time_24</item>
+    <item>@string/time_0</item>
   </string-array>
 </resources>
