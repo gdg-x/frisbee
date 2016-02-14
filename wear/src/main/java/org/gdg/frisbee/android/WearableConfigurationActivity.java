@@ -17,26 +17,12 @@ import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataItem;
 import com.google.android.gms.wearable.DataItemBuffer;
 import com.google.android.gms.wearable.DataMap;
-import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.Wearable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class WearableConfigurationActivity extends Activity implements DataApi.DataListener {
-    public static final String PATH_BACKGROUND = "/watchface/background";
-    public static final String PATH_DATE = "/watchface/date";
-    public static final String PATH_HOUR_HAND = "/watchface/hour_hand";
-    public static final String PATH_MINUTE_HAND = "/watchface/minute_hand";
-    public static final String PATH_SECOND_HAND = "/watchface/second_hand";
-    public static final String PATH_HOUR_MARKER = "/watchface/hour_marker";
-    public static final String CONFIG_BACKGROUND = "Background";
-    public static final String CONFIG_DATE = "Date";
-    public static final String CONFIG_HAND_HOUR = "Hour Hand";
-    public static final String CONFIG_HAND_MINUTE = "Minute Hand";
-    public static final String CONFIG_HAND_SECOND = "Second Hand";
-    public static final String CONFIG_HOUR_MARKER = "Hour Marker";
-
     private static final String TAG = "WearableConfigActivity";
     private static final int REQUEST_COLOR = 0;
 
@@ -88,7 +74,7 @@ public class WearableConfigurationActivity extends Activity implements DataApi.D
                     Intent intent = new Intent(WearableConfigurationActivity.this, ColorConfigActivity.class);
                     intent.putExtra(ColorConfigActivity.CONFIG_HEADER, action);
                     startActivityForResult(intent, REQUEST_COLOR);
-                } else if (CONFIG_DATE.equals(action)) {
+                } else if (WearableConfigurationUtil.CONFIG_DATE.equals(action)) {
                     TextView settingTextView = (TextView) layout.findViewById(R.id.subsetting_text_view);
                     CircledImageView circleImage = (CircledImageView) layout.findViewById(R.id.setting_circle);
 
@@ -155,13 +141,13 @@ public class WearableConfigurationActivity extends Activity implements DataApi.D
     }
 
     private void updateConfig(DataItem item) {
-        if (WearableConfigurationActivity.PATH_DATE.equals(item.getUri().getPath())) {
-            DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-            if (dataMap.containsKey(WearableConfigurationActivity.CONFIG_DATE)) {
-                mDisplayDate = dataMap.getInt(WearableConfigurationActivity.CONFIG_DATE) == 1;
-                updateConfigurations();
-            }
-        }
+//        if (WearableConfigurationActivity.PATH_DATE.equals(item.getUri().getPath())) {
+//            DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+//            if (dataMap.containsKey(WearableConfigurationActivity.WearableConfigurationUtil.CONFIG_DATE)) {
+//                mDisplayDate = dataMap.getInt(WearableConfigurationActivity.WearableConfigurationUtil.CONFIG_DATE) == 1;
+//                updateConfigurations();
+//            }
+//        }
     }
 
     @Override
@@ -192,12 +178,12 @@ public class WearableConfigurationActivity extends Activity implements DataApi.D
 
     private List<WearableConfiguration> getConfigurations() {
         List<WearableConfiguration> configurationList = new ArrayList<>();
-//        configurationList.add(new WearableConfiguration(R.drawable.ic_palette, CONFIG_BACKGROUND));
-        configurationList.add(new WearableConfiguration(R.drawable.ic_date_on, CONFIG_DATE, mDisplayDate));
-        configurationList.add(new WearableConfiguration(R.drawable.ic_palette, CONFIG_HAND_HOUR));
-        configurationList.add(new WearableConfiguration(R.drawable.ic_palette, CONFIG_HAND_MINUTE));
-        configurationList.add(new WearableConfiguration(R.drawable.ic_palette, CONFIG_HAND_SECOND));
-        configurationList.add(new WearableConfiguration(R.drawable.ic_palette, CONFIG_HOUR_MARKER));
+//        configurationList.add(new WearableConfiguration(R.drawable.ic_palette, WearableConfigurationUtil.CONFIG_BACKGROUND));
+        configurationList.add(new WearableConfiguration(R.drawable.ic_date_on, WearableConfigurationUtil.CONFIG_DATE, mDisplayDate));
+        configurationList.add(new WearableConfiguration(R.drawable.ic_palette, WearableConfigurationUtil.CONFIG_HAND_HOUR));
+        configurationList.add(new WearableConfiguration(R.drawable.ic_palette, WearableConfigurationUtil.CONFIG_HAND_MINUTE));
+        configurationList.add(new WearableConfiguration(R.drawable.ic_palette, WearableConfigurationUtil.CONFIG_HAND_SECOND));
+        configurationList.add(new WearableConfiguration(R.drawable.ic_palette, WearableConfigurationUtil.CONFIG_HOUR_MARKER));
         return configurationList;
     }
 

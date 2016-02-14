@@ -486,23 +486,23 @@ public class GdgWatchFace extends CanvasWatchFaceService {
         }
 
         private void updateUi(DataMap dataMap) {
-            if (dataMap.containsKey(WearableConfigurationActivity.CONFIG_BACKGROUND)) {
-                int background = dataMap.getInt(WearableConfigurationActivity.CONFIG_BACKGROUND);
+            if (dataMap.containsKey(WearableConfigurationUtil.CONFIG_BACKGROUND)) {
+                int background = dataMap.getInt(WearableConfigurationUtil.CONFIG_BACKGROUND);
                 updateBackground(background);
-            } else if (dataMap.containsKey(WearableConfigurationActivity.CONFIG_HAND_HOUR)) {
-                int color = dataMap.getInt(WearableConfigurationActivity.CONFIG_HAND_HOUR);
+            } else if (dataMap.containsKey(WearableConfigurationUtil.CONFIG_HAND_HOUR)) {
+                int color = dataMap.getInt(WearableConfigurationUtil.CONFIG_HAND_HOUR);
                 updateHourHand(color);
-            } else if (dataMap.containsKey(WearableConfigurationActivity.CONFIG_HAND_MINUTE)) {
-                int color = dataMap.getInt(WearableConfigurationActivity.CONFIG_HAND_MINUTE);
+            } else if (dataMap.containsKey(WearableConfigurationUtil.CONFIG_HAND_MINUTE)) {
+                int color = dataMap.getInt(WearableConfigurationUtil.CONFIG_HAND_MINUTE);
                 updateMinuteHand(color);
-            } else if (dataMap.containsKey(WearableConfigurationActivity.CONFIG_HAND_SECOND)) {
-                int color = dataMap.getInt(WearableConfigurationActivity.CONFIG_HAND_SECOND);
+            } else if (dataMap.containsKey(WearableConfigurationUtil.CONFIG_HAND_SECOND)) {
+                int color = dataMap.getInt(WearableConfigurationUtil.CONFIG_HAND_SECOND);
                 updateSecondHand(color);
-            } else if (dataMap.containsKey(WearableConfigurationActivity.CONFIG_HOUR_MARKER)) {
-                int color = dataMap.getInt(WearableConfigurationActivity.CONFIG_HOUR_MARKER);
+            } else if (dataMap.containsKey(WearableConfigurationUtil.CONFIG_HOUR_MARKER)) {
+                int color = dataMap.getInt(WearableConfigurationUtil.CONFIG_HOUR_MARKER);
                 updateHourMarker(color);
-            } else if (dataMap.containsKey(WearableConfigurationActivity.CONFIG_DATE)) {
-                mDisplayDate = dataMap.getInt(WearableConfigurationActivity.CONFIG_DATE) == 1;
+            } else if (dataMap.containsKey(WearableConfigurationUtil.CONFIG_DATE)) {
+                mDisplayDate = dataMap.getInt(WearableConfigurationUtil.CONFIG_DATE) == 1;
             }
 
             invalidateIfNecessary();

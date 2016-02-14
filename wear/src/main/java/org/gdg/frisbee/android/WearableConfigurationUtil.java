@@ -17,6 +17,13 @@ public class WearableConfigurationUtil {
 
     public static final String PATH_ANALOG = "/watch_face_config/Analog";
 
+    public static final String CONFIG_BACKGROUND = "Background";
+    public static final String CONFIG_DATE = "Date";
+    public static final String CONFIG_HAND_HOUR = "Hour Hand";
+    public static final String CONFIG_HAND_MINUTE = "Minute Hand";
+    public static final String CONFIG_HAND_SECOND = "Second Hand";
+    public static final String CONFIG_HOUR_MARKER = "Hour Marker";
+
     public static void updateKeysInConfigDataMap(final GoogleApiClient googleApiClient, final String path,
                                                  final DataMap configKeysToUpdate) {
         fetchConfigDataMap(googleApiClient, path,
