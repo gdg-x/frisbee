@@ -13,9 +13,6 @@ local_properties.load(new FileInputStream(rootProject.file('local.properties')))
 
 apply from: '../settings/frisbee.gradle'
 
-def gitSha = org.ajoberstar.grgit.Grgit.open(dir: rootProject.file('.')).head().abbreviatedId
-def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone("UTC"))
-
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -34,8 +31,8 @@ android {
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
 
-        buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
-        buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
+        buildConfigField "String", "COMMIT_SHA", "\"${commitSha()}\""
+        buildConfigField "String", "COMMIT_TIME", "\"${commitTime()}\""
 
         resConfigs "en", "ar", "cs", "de", "es", "fr", "hi", "hy-rAM", "it", "ja", "ko", "lt", "nl", "pl", "pt-rBR", "pt-rPT", "ru", "sk", "th", "tr", "uk", "zh-rCN", "zh-rHK", "zh-rTW"
 
@@ -227,4 +224,31 @@ dependencies {
     // Espresso UI Testing dependencies.
     androidTestCompile "com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion"
     androidTestCompile "com.android.support.test.espresso:espresso-intents:$rootProject.espressoVersion"
+}
+
+def commitSha() {
+    def file = new File(project.buildDir, "commit-sha.txt")
+    if (file.exists()) {
+        return file.text
+    }
+
+    def value = org.ajoberstar.grgit.Grgit.open(dir: rootProject.file('.')).head().abbreviatedId
+
+    file.parentFile.mkdirs()
+    file.text = value
+    return value
+}
+
+def commitTime() {
+    def file = new File(project.buildDir, "commit-timestamp.txt")
+    if (file.exists()) {
+        return file.text
+    }
+
+    def date = org.ajoberstar.grgit.Grgit.open(dir: rootProject.file('.')).head().date
+    def value = date.format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone("UTC"))
+
+    file.parentFile.mkdirs()
+    file.text = value
+    return value
 }

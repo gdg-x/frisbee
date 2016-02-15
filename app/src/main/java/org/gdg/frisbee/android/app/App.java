@@ -107,6 +107,8 @@ public class App extends BaseApp implements LocationListener {
             StrictMode.setThreadPolicy(b.build());
         } else {
             Fabric.with(this, new Crashlytics());
+            Crashlytics.setString("commitSha", BuildConfig.COMMIT_SHA);
+            Crashlytics.setString("commitTime", BuildConfig.COMMIT_TIME);
             Timber.plant(new CrashlyticsTree());
         }
 
