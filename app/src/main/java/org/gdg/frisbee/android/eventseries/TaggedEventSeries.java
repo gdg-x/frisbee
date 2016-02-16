@@ -45,12 +45,17 @@ public class TaggedEventSeries implements Parcelable {
         final ContextThemeWrapper themeWrapper = new ContextThemeWrapper(context, specialEventTheme);
         final TypedArray a = themeWrapper.obtainStyledAttributes(R.styleable.SpecialEvent);
 
-        mDrawerIconResId = a.getResourceId(R.styleable.SpecialEvent_specialEventDrawerIcon, R.drawable.ic_drawer_ioextended);
-        mDefaultIconResId = a.getResourceId(R.styleable.SpecialEvent_specialEventDefaultIcon, R.drawable.ic_ioextended);
-        mLogoResId = a.getResourceId(R.styleable.SpecialEvent_specialEventLogo, R.drawable.ic_logo_ioextended);
+        mDrawerIconResId = a.getResourceId(R.styleable.SpecialEvent_specialEventDrawerIcon,
+            R.drawable.ic_drawer_ioextended);
+        mDefaultIconResId = a.getResourceId(R.styleable.SpecialEvent_specialEventDefaultIcon,
+            R.drawable.ic_ioextended);
+        mLogoResId = a.getResourceId(R.styleable.SpecialEvent_specialEventLogo,
+            R.drawable.ic_logo_ioextended);
 
-        mTitleResId = a.getResourceId(R.styleable.SpecialEvent_specialEventTitle, R.string.ioextended);
-        mDescriptionResId = a.getResourceId(R.styleable.SpecialEvent_specialEventDescription, R.string.ioextended_description);
+        mTitleResId = a.getResourceId(R.styleable.SpecialEvent_specialEventTitle,
+            R.string.ioextended);
+        mDescriptionResId = a.getResourceId(R.styleable.SpecialEvent_specialEventDescription,
+            R.string.ioextended_description);
 
         a.recycle();
 

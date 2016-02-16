@@ -23,7 +23,8 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
         a.recycle();
     }
 
-    public DividerItemDecoration(Context context, AttributeSet attrs, boolean showFirstDivider, boolean showLastDivider) {
+    public DividerItemDecoration(Context context, AttributeSet attrs,
+                                 boolean showFirstDivider, boolean showLastDivider) {
         this(context, attrs);
         mShowFirstDivider = showFirstDivider;
         mShowLastDivider = showLastDivider;

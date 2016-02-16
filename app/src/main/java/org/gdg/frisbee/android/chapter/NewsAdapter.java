@@ -204,7 +204,13 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
         if (activity.getPublished() != null) {
             holder.timeStamp.setVisibility(View.VISIBLE);
-            holder.timeStamp.setText(Utils.toHumanTimePeriod(mContext, new DateTime(activity.getPublished().getValue()), DateTime.now()));
+            holder.timeStamp.setText(
+                Utils.toHumanTimePeriod(
+                    mContext,
+                    new DateTime(activity.getPublished().getValue()),
+                    DateTime.now()
+                )
+            );
         } else {
             holder.timeStamp.setVisibility(View.GONE);
         }
@@ -295,7 +301,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         return attachmentView;
     }
 
-    private void populateArticle(ViewHolder mViewHolder, ViewGroup container, final Activity.PlusObject.Attachments attachment) {
+    private void populateArticle(ViewHolder mViewHolder,
+                                 ViewGroup container,
+                                 final Activity.PlusObject.Attachments attachment) {
         if (attachment == null) {
             return;
         }
@@ -343,7 +351,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         return null;
     }
 
-    private void populateVideo(ViewHolder mViewHolder, ViewGroup container, final Activity.PlusObject.Attachments attachment) {
+    private void populateVideo(ViewHolder mViewHolder,
+                               ViewGroup container,
+                               final Activity.PlusObject.Attachments attachment) {
         if (attachment == null) {
             return;
         }
@@ -380,11 +390,15 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         });
     }
 
-    private String getVideoIdFrom(final Activity.PlusObject.Attachments attachment) throws UnsupportedEncodingException, MalformedURLException {
+    private String getVideoIdFrom(final Activity.PlusObject.Attachments attachment)
+        throws UnsupportedEncodingException, MalformedURLException {
+
         return Utils.splitQuery(new URL(attachment.getUrl())).get("v");
     }
 
-    private void populatePhoto(ViewHolder mViewHolder, ViewGroup container, Activity.PlusObject.Attachments attachment) {
+    private void populatePhoto(ViewHolder mViewHolder,
+                               ViewGroup container,
+                               Activity.PlusObject.Attachments attachment) {
         if (attachment == null) {
             return;
         }
@@ -392,7 +406,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         createAttachmentView(mViewHolder, container, R.layout.news_item_photo, 3);
 
         // Precalc Image Size
-        if (attachment.getImage() != null && attachment.getImage().getUrl() != null && attachment.getImage().getWidth() != null) {
+        if (attachment.getImage() != null
+            && attachment.getImage().getUrl() != null
+            && attachment.getImage().getWidth() != null) {
             mViewHolder.photo.setDimensions(attachment.getImage().getWidth(), attachment.getImage().getHeight());
         }
 
@@ -404,7 +420,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     }
 
-    private void populateAlbum(ViewHolder mViewHolder, ViewGroup container, Activity.PlusObject.Attachments attachment) {
+    private void populateAlbum(ViewHolder mViewHolder,
+                               ViewGroup container,
+                               Activity.PlusObject.Attachments attachment) {
         if (attachment == null) {
             return;
         }
@@ -428,7 +446,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         }
     }
 
-    private void populateEvent(ViewHolder mViewHolder, ViewGroup container, final Activity.PlusObject.Attachments attachment) {
+    private void populateEvent(ViewHolder mViewHolder,
+                               ViewGroup container,
+                               final Activity.PlusObject.Attachments attachment) {
         createAttachmentView(mViewHolder, container, R.layout.news_item_event, 5);
 
         TextView title = mViewHolder.attachmentTitle;

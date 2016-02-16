@@ -19,7 +19,9 @@ public class GdeDirectoryFactory {
         return new Retrofit.Builder()
             .baseUrl(API_URL)
             .client(OkClientFactory.okHttpClientWithIdlingResources(App.getInstance().getOkHttpClient()))
-            .addConverterFactory(GsonConverterFactory.create(Utils.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)))
+            .addConverterFactory(
+                GsonConverterFactory.create(Utils.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES))
+            )
             .build();
     }
 

@@ -35,7 +35,9 @@ public class LeadFragment extends ListFragment {
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_for_leads, container, false);
     }
 
@@ -52,7 +54,8 @@ public class LeadFragment extends ListFragment {
         mAdapter.add(LeadMessage.newResource(getString(R.string.leads_wisdom_title),
             getString(R.string.leads_wisdom),
             Const.URL_GDG_WISDOM_BOOK));
-        mAdapter.add(LeadMessage.newResource(getString(R.string.leads_gplus_community_title), getString(R.string.leads_gplus_community),
+        mAdapter.add(LeadMessage.newResource(getString(R.string.leads_gplus_community_title),
+            getString(R.string.leads_gplus_community),
             Const.URL_GDG_LEADS_GPLUS_COMMUNITY));
     }
 
@@ -70,14 +73,18 @@ public class LeadFragment extends ListFragment {
     }
 
     private static class LeadAnnouncementsAdapter extends ArrayAdapter<LeadMessage> {
+
+        private LayoutInflater layoutInflater;
+
         public LeadAnnouncementsAdapter(final Context context) {
             super(context, R.layout.list_announcement_item);
+            layoutInflater = LayoutInflater.from(context);
         }
 
         @Override
         public View getView(final int position, View convertView, final ViewGroup parent) {
             if (convertView == null) {
-                convertView = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.list_announcement_item, parent, false);
+                convertView = layoutInflater.inflate(R.layout.list_announcement_item, parent, false);
                 final ViewHolder viewHolder = new ViewHolder(convertView);
                 convertView.setTag(viewHolder);
             }

@@ -66,29 +66,33 @@ public class SettingsFragment extends PreferenceFragment {
 
     private GoogleApiClient mGoogleApiClient;
 
-    private Preference.OnPreferenceChangeListener mOnHomeGdgPreferenceChange = new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object o) {
-            final String homeGdg = (String) o;
+    private Preference.OnPreferenceChangeListener mOnHomeGdgPreferenceChange =
+        new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                final String homeGdg = (String) o;
 
-            if (mGoogleApiClient.isConnected() && PrefUtils.isGcmEnabled(getActivity())) {
-                setHomeGdg(homeGdg);
+                if (mGoogleApiClient.isConnected() && PrefUtils.isGcmEnabled(getActivity())) {
+                    setHomeGdg(homeGdg);
+                }
+                // Update widgets to show newest chosen GdgHome events
+                App.getInstance().startService(new Intent(App.getInstance(),
+                    UpcomingEventWidgetProvider.UpdateService.class));
+
+                return true;
             }
-            // Update widgets to show newest chosen GdgHome events
-            // TODO: Make it into class which broadcasts update need to all interested entities like MainActivity and Widgets
-            App.getInstance().startService(new Intent(App.getInstance(), UpcomingEventWidgetProvider.UpdateService.class));
+        };
 
-            return true;
-        }
-    };
-    private Preference.OnPreferenceChangeListener mOnAnalyticsPreferenceChange = new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object o) {
-            boolean analytics = (Boolean) o;
-            GoogleAnalytics.getInstance(getActivity()).setAppOptOut(!analytics);
-            return true;
-        }
-    };
+    private Preference.OnPreferenceChangeListener mOnAnalyticsPreferenceChange =
+        new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                boolean analytics = (Boolean) o;
+                GoogleAnalytics.getInstance(getActivity()).setAppOptOut(!analytics);
+                return true;
+            }
+        };
+
     private LinearLayout mLoading;
     private Preference.OnPreferenceChangeListener mOnGcmPreferenceChange = new Preference.OnPreferenceChangeListener() {
         @Override
@@ -113,7 +117,9 @@ public class SettingsFragment extends PreferenceFragment {
                                 "oauth2: " + Scopes.PLUS_LOGIN);
 
                             if (!enableGcm) {
-                                client.unregisterGcm("Bearer " + token, new GcmRegistrationRequest(PrefUtils.getRegistrationId(getActivity())))
+                                GcmRegistrationRequest request =
+                                    new GcmRegistrationRequest(PrefUtils.getRegistrationId(getActivity()));
+                                client.unregisterGcm("Bearer " + token, request)
                                     .enqueue(new Callback<GcmRegistrationResponse>() {
                                         @Override
                                         public void success(GcmRegistrationResponse gcmRegistrationResponse) {
@@ -127,7 +133,12 @@ public class SettingsFragment extends PreferenceFragment {
                                     .enqueue(new Callback<GcmRegistrationResponse>() {
                                         @Override
                                         public void success(GcmRegistrationResponse gcmRegistrationResponse) {
-                                            PrefUtils.setGcmSettings(getActivity(), true, regId, gcmRegistrationResponse.getNotificationKey());
+                                            PrefUtils.setGcmSettings(
+                                                getActivity(),
+                                                true,
+                                                regId,
+                                                gcmRegistrationResponse.getNotificationKey()
+                                            );
                                         }
                                     });
 
@@ -196,34 +207,36 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void initPreferences() {
-        final LocationListPreference prefHomeGdgList = (LocationListPreference) findPreference(PrefUtils.SETTINGS_HOME_GDG);
+        final LocationListPreference prefHomeGdgList =
+            (LocationListPreference) findPreference(PrefUtils.SETTINGS_HOME_GDG);
         if (prefHomeGdgList != null) {
             prefHomeGdgList.setEnabled(false);
 
-            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, false, new ModelCache.CacheListener() {
-                @Override
-                public void onGet(Object item) {
-                    Directory directory = (Directory) item;
+            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, false,
+                new ModelCache.CacheListener() {
+                    @Override
+                    public void onGet(Object item) {
+                        Directory directory = (Directory) item;
 
-                    String[] entries = new String[directory.getGroups().size()];
-                    String[] entryValues = new String[directory.getGroups().size()];
+                        String[] entries = new String[directory.getGroups().size()];
+                        String[] entryValues = new String[directory.getGroups().size()];
 
-                    int i = 0;
-                    for (Chapter chapter : directory.getGroups()) {
-                        entries[i] = chapter.getName();
-                        entryValues[i] = chapter.getGplusId();
-                        i++;
+                        int i = 0;
+                        for (Chapter chapter : directory.getGroups()) {
+                            entries[i] = chapter.getName();
+                            entryValues[i] = chapter.getGplusId();
+                            i++;
+                        }
+                        prefHomeGdgList.setEntries(entries);
+                        prefHomeGdgList.setEntryValues(entryValues);
+                        prefHomeGdgList.setEnabled(true);
                     }
-                    prefHomeGdgList.setEntries(entries);
-                    prefHomeGdgList.setEntryValues(entryValues);
-                    prefHomeGdgList.setEnabled(true);
-                }
 
-                @Override
-                public void onNotFound(String key) {
+                    @Override
+                    public void onNotFound(String key) {
 
-                }
-            });
+                    }
+                });
 
             prefHomeGdgList.setOnPreferenceChangeListener(mOnHomeGdgPreferenceChange);
         }

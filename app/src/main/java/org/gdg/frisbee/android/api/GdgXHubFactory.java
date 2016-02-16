@@ -20,7 +20,9 @@ public final class GdgXHubFactory {
         return new Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(OkClientFactory.okHttpClientWithIdlingResources(App.getInstance().getOkHttpClient()))
-            .addConverterFactory(GsonConverterFactory.create(Utils.getGson(FieldNamingPolicy.IDENTITY, new ZuluDateTimeDeserializer())))
+            .addConverterFactory(
+                GsonConverterFactory.create(Utils.getGson(FieldNamingPolicy.IDENTITY, new ZuluDateTimeDeserializer()))
+            )
             .build();
     }
 
