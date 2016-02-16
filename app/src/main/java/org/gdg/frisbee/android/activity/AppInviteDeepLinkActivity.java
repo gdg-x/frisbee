@@ -44,28 +44,16 @@ public class AppInviteDeepLinkActivity extends GdgActivity {
 
     @Override
     protected GoogleApiClient createGoogleApiClient() {
-        GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this)
+        return new GoogleApiClient.Builder(this)
             .addApi(AppInvite.API)
             .build();
-        return googleApiClient;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final AppCompatDialogFragment dialogFragment = new AppCompatDialogFragment() {
-
-            @NonNull
-            @Override
-            public Dialog onCreateDialog(Bundle savedInstanceState) {
-                return new AlertDialog.Builder(AppInviteDeepLinkActivity.this)
-                    .setTitle("Congrats!")
-                    .setMessage("You installed the app with an invite. Here is your reward!")
-                    .create();
-            }
-        };
-        dialogFragment.show(
+        new AppInviteDialogFragment().show(
             getSupportFragmentManager(),
             AppInviteDeepLinkActivity.class.getSimpleName()
         );
@@ -151,6 +139,18 @@ public class AppInviteDeepLinkActivity extends GdgActivity {
         Timber.d("googleApiClient:onConnectionFailed:" + connectionResult.getErrorCode());
         if (connectionResult.getErrorCode() == ConnectionResult.API_UNAVAILABLE) {
             Timber.w("onConnectionFailed because an API was unavailable");
+        }
+    }
+
+    public static class AppInviteDialogFragment extends AppCompatDialogFragment {
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            return new AlertDialog.Builder(getActivity())
+                .setTitle("Congrats!")
+                .setMessage("You installed the app with an invite. Here is your reward!")
+                .create();
         }
     }
 }
