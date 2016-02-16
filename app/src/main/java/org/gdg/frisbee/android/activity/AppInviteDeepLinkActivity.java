@@ -82,7 +82,7 @@ public class AppInviteDeepLinkActivity extends GdgActivity {
         String invitationId = AppInviteReferral.getInvitationId(intent);
         String deepLink = AppInviteReferral.getDeepLink(intent);
 
-        Timber.d("Found Referral: " + invitationId + ":" + deepLink);
+        Timber.d("Found Referral: %s:%s", invitationId, deepLink);
 
         if (getGoogleApiClient().isConnected()) {
             // Notify the API of the install success and invitation conversion
@@ -136,7 +136,7 @@ public class AppInviteDeepLinkActivity extends GdgActivity {
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         super.onConnectionFailed(connectionResult);
-        Timber.d("googleApiClient:onConnectionFailed:" + connectionResult.getErrorCode());
+        Timber.d("googleApiClient:onConnectionFailed: %s", connectionResult.getErrorCode());
         if (connectionResult.getErrorCode() == ConnectionResult.API_UNAVAILABLE) {
             Timber.w("onConnectionFailed because an API was unavailable");
         }
