@@ -42,6 +42,7 @@ import com.google.android.gms.plus.Plus;
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.activity.SettingsActivity;
 import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.GdgXHub;
 import org.gdg.frisbee.android.api.model.Chapter;
@@ -84,8 +85,8 @@ public class SettingsFragment extends PreferenceFragment {
     };
     private Preference.OnPreferenceChangeListener mOnAnalyticsPreferenceChange = new Preference.OnPreferenceChangeListener() {
         @Override
-        public boolean onPreferenceChange(Preference preference, Object o) {
-            boolean analytics = (Boolean) o;
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            boolean analytics = (Boolean) newValue;
             GoogleAnalytics.getInstance(getActivity()).setAppOptOut(!analytics);
             return true;
         }
@@ -93,8 +94,8 @@ public class SettingsFragment extends PreferenceFragment {
     private LinearLayout mLoading;
     private Preference.OnPreferenceChangeListener mOnGcmPreferenceChange = new Preference.OnPreferenceChangeListener() {
         @Override
-        public boolean onPreferenceChange(Preference preference, Object o) {
-            final boolean enableGcm = (Boolean) o;
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            final boolean enableGcm = (Boolean) newValue;
 
             if (mGoogleApiClient.isConnected()) {
                 mLoading.setVisibility(View.VISIBLE);
@@ -142,8 +143,8 @@ public class SettingsFragment extends PreferenceFragment {
                     }
 
                     @Override
-                    protected void onPostExecute(Void o) {
-                        super.onPostExecute(o);
+                    protected void onPostExecute(Void aVoid) {
+                        super.onPostExecute(aVoid);
 
                         Animation fadeOut = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
                         fadeOut.setAnimationListener(new Animation.AnimationListener() {
@@ -238,25 +239,21 @@ public class SettingsFragment extends PreferenceFragment {
         if (prefGoogleSignIn != null) {
             prefGoogleSignIn.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
-                public boolean onPreferenceChange(Preference preference, Object o) {
-                    boolean signedIn = (Boolean) o;
-                    if (!signedIn) {
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    boolean signedIn = (Boolean) newValue;
+                    if (signedIn) {
                         if (mGoogleApiClient.isConnected()) {
-                            Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-                            Games.signOut(mGoogleApiClient);
-                            mGoogleApiClient.disconnect();
-                            PrefUtils.setLoggedOut(getActivity());
-
-                            mGoogleApiClient = GoogleApiClientFactory.createWith(getActivity());
-                            mGoogleApiClient.connect();
+                            disconnectGoogleApiClient();
+                            PrefUtils.setSignedIn(getActivity());
+                            createConnectedGoogleApiClient();
                         }
                     } else {
                         if (mGoogleApiClient.isConnected()) {
-                            mGoogleApiClient.disconnect();
-                            PrefUtils.setSignedIn(getActivity());
-
-                            mGoogleApiClient = GoogleApiClientFactory.createWith(getActivity());
-                            mGoogleApiClient.connect();
+                            Games.signOut(mGoogleApiClient);
+                            Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+                            disconnectGoogleApiClient();
+                            PrefUtils.setLoggedOut(getActivity());
+                            createConnectedGoogleApiClient();
                         }
                     }
                     return true;
@@ -268,6 +265,19 @@ public class SettingsFragment extends PreferenceFragment {
         if (prefAnalytics != null) {
             prefAnalytics.setOnPreferenceChangeListener(mOnAnalyticsPreferenceChange);
         }
+    }
+
+    private void createConnectedGoogleApiClient() {
+        mGoogleApiClient = GoogleApiClientFactory.createWith(getActivity());
+        mGoogleApiClient.registerConnectionCallbacks((SettingsActivity) getActivity());
+        mGoogleApiClient.registerConnectionFailedListener((SettingsActivity) getActivity());
+        mGoogleApiClient.connect();
+    }
+
+    private void disconnectGoogleApiClient() {
+        mGoogleApiClient.unregisterConnectionCallbacks((SettingsActivity) getActivity());
+        mGoogleApiClient.unregisterConnectionFailedListener((SettingsActivity) getActivity());
+        mGoogleApiClient.disconnect();
     }
 
     private void setHomeGdg(final String homeGdg) {

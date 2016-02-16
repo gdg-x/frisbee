@@ -93,6 +93,7 @@ public abstract class GdgActivity extends TrackableActivity implements
     private PendingIntent mSignInIntent;
 
     private Toolbar mActionBarToolbar;
+    private boolean isSignedIn;
 
     public Handler getHandler() {
         return mHandler;
@@ -126,6 +127,7 @@ public abstract class GdgActivity extends TrackableActivity implements
     }
 
     protected GoogleApiClient createGoogleApiClient() {
+        isSignedIn = PrefUtils.isSignedIn(this);
         return GoogleApiClientFactory.createWith(this);
     }
 
@@ -133,9 +135,11 @@ public abstract class GdgActivity extends TrackableActivity implements
     protected void onStart() {
         super.onStart();
 
+        if (isSignedIn != PrefUtils.isSignedIn(this)) {
+            mGoogleApiClient = createGoogleApiClient();
+        }
         mGoogleApiClient.registerConnectionCallbacks(this);
         mGoogleApiClient.registerConnectionFailedListener(this);
-
         mGoogleApiClient.connect();
     }
 
@@ -145,7 +149,6 @@ public abstract class GdgActivity extends TrackableActivity implements
 
         mGoogleApiClient.unregisterConnectionCallbacks(this);
         mGoogleApiClient.unregisterConnectionFailedListener(this);
-
         if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
@@ -166,8 +169,6 @@ public abstract class GdgActivity extends TrackableActivity implements
                         // If the error resolution was successful we should continue
                         // processing errors.
                         mSignInProgress = STATE_SIGN_IN;
-                        PrefUtils.setLoggedOut(this);
-
                         if (!mGoogleApiClient.isConnecting()) {
                             // If Google Play services resolved the issue with a dialog then
                             // onStart is not called so we need to re-attempt connection here.
