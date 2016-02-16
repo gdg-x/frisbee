@@ -33,9 +33,9 @@ class TaggedEventDistanceComparator implements Comparator<EventAdapter.Item> {
         }
 
         Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(),
-                event1.getLatLng().getLat(), event1.getLatLng().getLng(), results);
+            event1.getLatLng().getLat(), event1.getLatLng().getLng(), results);
         Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(),
-                event2.getLatLng().getLat(), event2.getLatLng().getLng(), results2);
+            event2.getLatLng().getLat(), event2.getLatLng().getLng(), results2);
 
         if (results[0] == results2[0]) {
             return 0;

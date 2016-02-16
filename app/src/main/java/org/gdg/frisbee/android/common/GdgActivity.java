@@ -56,15 +56,14 @@ import timber.log.Timber;
 public abstract class GdgActivity extends TrackableActivity implements
     GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    @Nullable
-    @Bind(R.id.content_frame)
-    FrameLayout mContentLayout;
-
     private static final int STATE_DEFAULT = 0;
     private static final int STATE_SIGN_IN = 1;
     private static final int STATE_IN_PROGRESS = 2;
     private static final int RC_SIGN_IN = 0;
     private static final int DIALOG_PLAY_SERVICES_ERROR = 0;
+    @Nullable
+    @Bind(R.id.content_frame)
+    FrameLayout mContentLayout;
     private AchievementActionHandler mAchievementActionHandler;
     private Handler mHandler = new Handler();
 

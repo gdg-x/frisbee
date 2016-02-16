@@ -68,7 +68,7 @@ public class PulseFragment extends GdgListFragment {
             mListener = (Callbacks) activity;
         } else {
             throw new ClassCastException("Activity " + activity.getClass().getSimpleName()
-                    + " must implement " + Pulse.class.getSimpleName() + " interface.");
+                + " must implement " + Pulse.class.getSimpleName() + " interface.");
         }
     }
 
@@ -86,26 +86,26 @@ public class PulseFragment extends GdgListFragment {
         mMode = getArguments().getInt(ARG_MODE);
 
         int[] positions = savedInstanceState != null
-                ? savedInstanceState.getIntArray(INSTANCE_STATE_POSITIONS) : null;
+            ? savedInstanceState.getIntArray(INSTANCE_STATE_POSITIONS) : null;
         mAdapter = new PulseAdapter(getActivity(), positions);
         setListAdapter(mAdapter);
 
         setIsLoading(true);
 
         App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
-                true,
-                new ModelCache.CacheListener() {
-                    @Override
-                    public void onGet(Object item) {
-                        Pulse pulse = (Pulse) item;
-                        initAdapter(pulse);
-                    }
+            true,
+            new ModelCache.CacheListener() {
+                @Override
+                public void onGet(Object item) {
+                    Pulse pulse = (Pulse) item;
+                    initAdapter(pulse);
+                }
 
-                    @Override
-                    public void onNotFound(String key) {
-                        fetchPulseTask();
-                    }
-                });
+                @Override
+                public void onNotFound(String key) {
+                    fetchPulseTask();
+                }
+            });
     }
 
     private void fetchPulseTask() {
@@ -114,15 +114,15 @@ public class PulseFragment extends GdgListFragment {
                 @Override
                 public void success(final Pulse pulse) {
                     App.getInstance().getModelCache().putAsync(
-                            Const.CACHE_KEY_PULSE + mTarget.toLowerCase(),
-                            pulse,
-                            DateTime.now().plusDays(1),
-                            new ModelCache.CachePutListener() {
-                                @Override
-                                public void onPutIntoCache() {
-                                    initAdapter(pulse);
-                                }
-                            });
+                        Const.CACHE_KEY_PULSE + mTarget.toLowerCase(),
+                        pulse,
+                        DateTime.now().plusDays(1),
+                        new ModelCache.CachePutListener() {
+                            @Override
+                            public void onPutIntoCache() {
+                                initAdapter(pulse);
+                            }
+                        });
                 }
 
                 @Override
@@ -140,15 +140,15 @@ public class PulseFragment extends GdgListFragment {
                 @Override
                 public void success(final Pulse pulse) {
                     App.getInstance().getModelCache().putAsync(
-                            Const.CACHE_KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
-                            pulse,
-                            DateTime.now().plusDays(1),
-                            new ModelCache.CachePutListener() {
-                                @Override
-                                public void onPutIntoCache() {
-                                    initAdapter(pulse);
-                                }
-                            });
+                        Const.CACHE_KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
+                        pulse,
+                        DateTime.now().plusDays(1),
+                        new ModelCache.CachePutListener() {
+                            @Override
+                            public void onPutIntoCache() {
+                                initAdapter(pulse);
+                            }
+                        });
                 }
 
                 @Override

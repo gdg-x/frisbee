@@ -31,8 +31,8 @@ public class OrganizerAdapter extends RecyclerView.Adapter<OrganizerAdapter.View
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view =  LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.list_tagged_organizer_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(
+            R.layout.list_tagged_organizer_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -41,11 +41,11 @@ public class OrganizerAdapter extends RecyclerView.Adapter<OrganizerAdapter.View
         final Organizer organizer = organizers.get(position);
 
         App.getInstance().getPicasso()
-                .load(organizer.getResolved().getImage().getUrl())
-                .transform(new BitmapBorderTransformation(0,
-                        context.getResources().getDimensionPixelSize(R.dimen.list_item_avatar) / 2,
-                        context.getResources().getColor(R.color.white)))
-                .into(holder.avatar);
+            .load(organizer.getResolved().getImage().getUrl())
+            .transform(new BitmapBorderTransformation(0,
+                context.getResources().getDimensionPixelSize(R.dimen.list_item_avatar) / 2,
+                context.getResources().getColor(R.color.white)))
+            .into(holder.avatar);
 
         holder.name.setText(organizer.getResolved().getDisplayName());
         holder.chapter.setText(organizer.getChapterName());

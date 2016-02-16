@@ -26,5 +26,5 @@ public interface GitHub {
 
     @GET("repos/{owner}/{repo}/contributors")
     Call<ContributorList> getContributors(@Path("owner") String user,
-                         @Path("repo") String repo);
+                                          @Path("repo") String repo);
 }

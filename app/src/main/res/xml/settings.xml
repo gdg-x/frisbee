@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <org.gdg.frisbee.android.view.LocationListPreference
-        android:key="gdg_home"
-        android:title="@string/home_gdg"
-        android:summary="@string/home_gdg_summary"
-        android:icon="@drawable/ic_home_gdg" />
-    <CheckBoxPreference
-            android:key="gdg_signed_in"
-            android:title="@string/google_signed_in"
-            android:summaryOn="@string/google_signed_in_on"
-            android:summaryOff="@string/google_signed_in_off"
-            android:icon="@drawable/ic_google" />
-    <CheckBoxPreference
-            android:key="gcm"
-            android:title="@string/gcm"
-            android:summaryOn="@string/gcm_summary_on"
-            android:summaryOff="@string/gcm_summary_off"
-            android:icon="@drawable/ic_gcm"
-            android:defaultValue="true"
-            android:dependency="gdg_signed_in" />
-    <CheckBoxPreference
-        android:key="analytics"
-        android:title="@string/analytics"
-        android:summaryOn="@string/analytics_summary_on"
-        android:summaryOff="@string/analytics_summary_off"
-        android:icon="@drawable/ic_analytics"
-        android:defaultValue="true" />
+  <org.gdg.frisbee.android.view.LocationListPreference
+    android:icon="@drawable/ic_home_gdg"
+    android:key="gdg_home"
+    android:summary="@string/home_gdg_summary"
+    android:title="@string/home_gdg" />
+  <CheckBoxPreference
+    android:icon="@drawable/ic_google"
+    android:key="gdg_signed_in"
+    android:summaryOff="@string/google_signed_in_off"
+    android:summaryOn="@string/google_signed_in_on"
+    android:title="@string/google_signed_in" />
+  <CheckBoxPreference
+    android:defaultValue="true"
+    android:dependency="gdg_signed_in"
+    android:icon="@drawable/ic_gcm"
+    android:key="gcm"
+    android:summaryOff="@string/gcm_summary_off"
+    android:summaryOn="@string/gcm_summary_on"
+    android:title="@string/gcm" />
+  <CheckBoxPreference
+    android:defaultValue="true"
+    android:icon="@drawable/ic_analytics"
+    android:key="analytics"
+    android:summaryOff="@string/analytics_summary_off"
+    android:summaryOn="@string/analytics_summary_on"
+    android:title="@string/analytics" />
 </PreferenceScreen>

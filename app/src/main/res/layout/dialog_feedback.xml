@@ -11,18 +11,18 @@
     android:id="@+id/feedback_message_text_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:hintTextAppearance="@style/TextAppearance.GDG.FloatLabel"
-    android:paddingTop="8dp">
+    android:paddingTop="8dp"
+    app:hintTextAppearance="@style/TextAppearance.GDG.FloatLabel">
 
     <EditText
       android:id="@+id/feedback_message_text"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:hint="@string/feedback_message_hint"
       android:gravity="top|left"
+      android:hint="@string/feedback_message_hint"
       android:inputType="textMultiLine|textCapSentences"
       android:maxLines="4"
-      android:minLines="1"/>
+      android:minLines="1" />
 
   </android.support.design.widget.TextInputLayout>
 
@@ -30,18 +30,18 @@
     android:id="@+id/feedback_email_text_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:hintTextAppearance="@style/TextAppearance.GDG.FloatLabel"
-    android:paddingTop="8dp">
+    android:paddingTop="8dp"
+    app:hintTextAppearance="@style/TextAppearance.GDG.FloatLabel">
 
     <AutoCompleteTextView
       android:id="@+id/feedback_email_text"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:completionThreshold="1"
       android:hint="@string/feedback_email_hint"
       android:imeOptions="actionDone"
       android:inputType="textEmailAddress"
-      android:singleLine="true"
-      android:completionThreshold="1"/>
+      android:singleLine="true" />
 
   </android.support.design.widget.TextInputLayout>
 

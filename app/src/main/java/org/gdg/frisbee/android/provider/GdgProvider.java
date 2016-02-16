@@ -37,7 +37,7 @@ public class GdgProvider extends ContentProvider {
 
     private static final String AUTHORITY = "org.gdg.frisbee.android.provider.GdgProvider";
 
-    private static final String[] CHAPTER_COLUMNS = new String[] {
+    private static final String[] CHAPTER_COLUMNS = new String[]{
         BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1,
         SearchManager.SUGGEST_COLUMN_TEXT_2, SearchManager.SUGGEST_COLUMN_INTENT_ACTION,
         SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID
@@ -85,7 +85,7 @@ public class GdgProvider extends ContentProvider {
 
         for (Chapter chapter : mDirectory.getGroups()) {
             if (chapter.getName().toLowerCase().contains(query.toLowerCase())) {
-                cursor.addRow(new Object[] {
+                cursor.addRow(new Object[]{
                     chapter.getGplusId(),
                     chapter.getName(),
                     chapter.getCity() + ", " + chapter.getCountry(),

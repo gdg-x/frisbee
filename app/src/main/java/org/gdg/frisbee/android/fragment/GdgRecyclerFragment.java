@@ -38,26 +38,19 @@ import butterknife.ButterKnife;
 public class GdgRecyclerFragment extends BaseFragment {
 
     private final Handler mHandler = new Handler();
-
+    RecyclerView.Adapter mAdapter;
+    RecyclerView mList;
+    @Bind(R.id.empty)
+    View mEmptyView;
+    @Bind(R.id.loading)
+    DelayedProgressBar mProgressContainer;
+    CharSequence mEmptyText;
+    boolean mListShown;
     private final Runnable mRequestFocus = new Runnable() {
         public void run() {
             getListView().focusableViewAvailable(mList);
         }
     };
-
-    RecyclerView.Adapter mAdapter;
-
-    RecyclerView mList;
-
-    @Bind(R.id.empty)
-    View mEmptyView;
-
-    @Bind(R.id.loading)
-    DelayedProgressBar mProgressContainer;
-
-    CharSequence mEmptyText;
-    boolean mListShown;
-
     boolean mLoading;
 
     public GdgRecyclerFragment() {
@@ -70,7 +63,7 @@ public class GdgRecyclerFragment extends BaseFragment {
      * is {@link android.R.id#list android.R.id.list} and can optionally
      * have a sibling view id {@link android.R.id#empty android.R.id.empty}
      * that is to be shown when the list is empty.
-     *
+     * <p/>
      * <p>If you are overriding this method with your own custom content,
      * consider including the standard layout {@link android.R.layout#list_content}
      * in your layout file, so that you continue to retain all of the standard
@@ -138,12 +131,12 @@ public class GdgRecyclerFragment extends BaseFragment {
             if (mAdapter == null || mAdapter.getItemCount() == 0) {
                 setListShown(false, true);
                 mEmptyView.startAnimation(AnimationUtils.loadAnimation(
-                        getActivity(), android.R.anim.fade_in));
+                    getActivity(), android.R.anim.fade_in));
                 mEmptyView.setVisibility(View.VISIBLE);
 
             } else {
                 mEmptyView.startAnimation(AnimationUtils.loadAnimation(
-                        getActivity(), android.R.anim.fade_out));
+                    getActivity(), android.R.anim.fade_out));
                 mEmptyView.setVisibility(View.GONE);
                 setListShown(true, true);
             }
@@ -186,7 +179,7 @@ public class GdgRecyclerFragment extends BaseFragment {
      * Control whether the list is being displayed.  You can make it not
      * displayed if you are waiting for the initial data to show in it.  During
      * this time an indeterminant progress indicator will be shown instead.
-     *
+     * <p/>
      * <p>Applications do not normally need to use this themselves.  The default
      * behavior of ListFragment is to start with the list not being shown, only
      * showing it once an adapter is given with .
@@ -194,7 +187,7 @@ public class GdgRecyclerFragment extends BaseFragment {
      * it will be do without the user ever seeing the hidden state.
      *
      * @param shown If true, the list view is shown; if false, the progress
-     * indicator.  The initial value is true.
+     *              indicator.  The initial value is true.
      */
     public void setListShown(boolean shown) {
         setListShown(shown, true);
@@ -213,10 +206,10 @@ public class GdgRecyclerFragment extends BaseFragment {
      * displayed if you are waiting for the initial data to show in it.  During
      * this time an indeterminant progress indicator will be shown instead.
      *
-     * @param shown If true, the list view is shown; if false, the progress
-     * indicator.  The initial value is true.
+     * @param shown   If true, the list view is shown; if false, the progress
+     *                indicator.  The initial value is true.
      * @param animate If true, an animation will be used to transition to the
-     * new state.
+     *                new state.
      */
     private void setListShown(boolean shown, boolean animate) {
         ensureRecyclerView();
@@ -269,23 +262,23 @@ public class GdgRecyclerFragment extends BaseFragment {
 
         if (mEmptyView == null) {
             throw new RuntimeException(
-                    "Your content must have a View whose id attribute is 'R.id.empty'");
+                "Your content must have a View whose id attribute is 'R.id.empty'");
         }
 
         if (mProgressContainer == null) {
             throw new RuntimeException(
-                    "Your content must have a View whose id attribute is 'R.id.loading'");
+                "Your content must have a View whose id attribute is 'R.id.loading'");
         }
         mProgressContainer.setVisibility(View.GONE);
 
         if (rawList == null) {
             throw new RuntimeException(
-                    "Your content must have a RecyclerView whose id attribute is 'R.id.list'");
+                "Your content must have a RecyclerView whose id attribute is 'R.id.list'");
         }
 
         if (!(rawList instanceof RecyclerView)) {
             throw new RuntimeException(
-                    "Content has view with id attribute 'R.id.list' that is not a RecyclerView class");
+                "Content has view with id attribute 'R.id.list' that is not a RecyclerView class");
         }
 
         mList = (RecyclerView) rawList;

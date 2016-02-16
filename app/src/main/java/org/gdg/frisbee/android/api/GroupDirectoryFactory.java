@@ -26,21 +26,21 @@ public final class GroupDirectoryFactory {
             public Response intercept(Chain chain) throws IOException {
 
                 Request compressedRequest = chain.request().newBuilder()
-                        .header("User-Agent", "GDG-Frisbee/0.1 (Android)")
-                        .header("Referrer", "https://developers.google.com/groups/directory/")
-                        .header("X-Requested-With", "XMLHttpRequest")
-                        .header("Cache-Control", "no-cache")
-                        .header("DNT", "1")
-                        .build();
+                    .header("User-Agent", "GDG-Frisbee/0.1 (Android)")
+                    .header("Referrer", "https://developers.google.com/groups/directory/")
+                    .header("X-Requested-With", "XMLHttpRequest")
+                    .header("Cache-Control", "no-cache")
+                    .header("DNT", "1")
+                    .build();
                 return chain.proceed(compressedRequest);
             }
         });
 
         return new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create(Utils.getGson()))
-                    .client(OkClientFactory.okHttpClientWithIdlingResources(client.build()))
-                    .build();
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create(Utils.getGson()))
+            .client(OkClientFactory.okHttpClientWithIdlingResources(client.build()))
+            .build();
     }
 
     public static GroupDirectory provideGroupDirectoryApi() {

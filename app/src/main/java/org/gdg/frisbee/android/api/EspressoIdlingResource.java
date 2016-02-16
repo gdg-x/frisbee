@@ -5,7 +5,7 @@ import android.support.test.espresso.IdlingResource;
 public class EspressoIdlingResource {
 
     private static NetworkIdlingResource mCountingIdlingResource =
-            new NetworkIdlingResource();
+        new NetworkIdlingResource();
 
     private EspressoIdlingResource() {
     }

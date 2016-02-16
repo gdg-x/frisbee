@@ -14,10 +14,10 @@ import org.joda.time.DateTime;
 public final class PrefUtils {
     public static final String PREF_NAME = "gdg";
     public static final String SETTINGS_HOME_GDG = "gdg_home";
-    private static final String SETTINGS_HOME_GDG_NAME = "gdg_home_name";
     public static final String SETTINGS_GCM = "gcm";
     public static final String SETTINGS_SIGNED_IN = "gdg_signed_in";
     public static final String SETTINGS_ANALYTICS = "analytics";
+    private static final String SETTINGS_HOME_GDG_NAME = "gdg_home_name";
     private static final String PREFS_VIDEOS_PLAYED = "gdg_app_videos_played";
     private static final String PREFS_OPEN_DRAWER_ON_START = "open_drawer_on_start";
     private static final String PREFS_FIRST_START = "gdg_first_start";
@@ -58,51 +58,51 @@ public final class PrefUtils {
 
     public static void setLoggedOut(Context context) {
         prefs(context).edit()
-                .putBoolean(SETTINGS_SIGNED_IN, false)
-                .putBoolean(Const.PREF_ORGANIZER_STATE, false)
-                .putLong(Const.PREF_ORGANIZER_CHECK_TIME, 0)
-                .apply();
+            .putBoolean(SETTINGS_SIGNED_IN, false)
+            .putBoolean(Const.PREF_ORGANIZER_STATE, false)
+            .putLong(Const.PREF_ORGANIZER_CHECK_TIME, 0)
+            .apply();
         App.getInstance().initOrganizer();
     }
 
     @Nullable
     public static String getHomeChapterId(final Context context) {
         return prefs(context)
-                .getString(SETTINGS_HOME_GDG, null);
+            .getString(SETTINGS_HOME_GDG, null);
     }
 
     @NonNull
     public static String getHomeChapterIdNotNull(final Context context) {
         return prefs(context)
-                .getString(SETTINGS_HOME_GDG, "");
+            .getString(SETTINGS_HOME_GDG, "");
     }
 
     public static void setHomeChapter(final Context context, final Chapter chapter) {
         prefs(context).edit()
-                .putString(SETTINGS_HOME_GDG, chapter.getGplusId())
-                .putString(SETTINGS_HOME_GDG_NAME, chapter.getName())
-                .apply();
+            .putString(SETTINGS_HOME_GDG, chapter.getGplusId())
+            .putString(SETTINGS_HOME_GDG_NAME, chapter.getName())
+            .apply();
     }
 
     public static void setInitialSettings(final Context context, final boolean enableGcm, final boolean enableAnalytics,
                                           final String regid, final String notificationKey) {
         prefs(context).edit()
-                .putBoolean(SETTINGS_GCM, enableGcm)
-                .putBoolean(SETTINGS_ANALYTICS, enableAnalytics)
-                .putBoolean(PREFS_FIRST_START, false)
-                .putString(PREFS_GCM_REG_ID, regid)
-                .putString(PREFS_GCM_NOTIFICATION_KEY, notificationKey)
-                .apply();
+            .putBoolean(SETTINGS_GCM, enableGcm)
+            .putBoolean(SETTINGS_ANALYTICS, enableAnalytics)
+            .putBoolean(PREFS_FIRST_START, false)
+            .putString(PREFS_GCM_REG_ID, regid)
+            .putString(PREFS_GCM_NOTIFICATION_KEY, notificationKey)
+            .apply();
     }
 
     public static boolean isFirstStart(Context context) {
         return prefs(context)
-                .getBoolean(PREFS_FIRST_START, PREFS_FIRST_START_DEFAULT);
+            .getBoolean(PREFS_FIRST_START, PREFS_FIRST_START_DEFAULT);
     }
 
     public static boolean isGcmEnabled(Context context) {
         return prefs(context)
-                .getBoolean(PREFS_FIRST_START, false);
+            .getBoolean(PREFS_FIRST_START, false);
     }
 
     @NonNull
@@ -143,7 +143,7 @@ public final class PrefUtils {
     public static boolean shouldShowSeasonsGreetings(final Context context) {
         DateTime now = DateTime.now();
         if (prefs(context).getInt(PREFS_SEASONS_GREETINGS, now.getYear() - 1) < now.getYear()
-                && (now.getDayOfYear() >= 354 && now.getDayOfYear() <= 366)) {
+            && (now.getDayOfYear() >= 354 && now.getDayOfYear() <= 366)) {
             prefs(context).edit().putInt(PREFS_SEASONS_GREETINGS, now.getYear()).apply();
             return true;
         }
@@ -152,10 +152,10 @@ public final class PrefUtils {
 
     public static void setGcmSettings(final Context context, final boolean enabledGcm, final String regId, final String notificationKey) {
         prefs(context).edit()
-                .putBoolean(SETTINGS_GCM, enabledGcm)
-                .putString(PREFS_GCM_REG_ID, regId)
-                .putString(PREFS_GCM_NOTIFICATION_KEY, notificationKey)
-                .apply();
+            .putBoolean(SETTINGS_GCM, enabledGcm)
+            .putString(PREFS_GCM_REG_ID, regId)
+            .putString(PREFS_GCM_NOTIFICATION_KEY, notificationKey)
+            .apply();
     }
 
     public static void setVersionCode(final Context context, final int newVersion) {
@@ -164,10 +164,10 @@ public final class PrefUtils {
 
     public static void resetInitialSettings(final Context context) {
         prefs(context).edit()
-                .remove(PREFS_GCM_REG_ID)
-                .clear()
-                .putBoolean(PREFS_FIRST_START, true)
-                .apply();
+            .remove(PREFS_GCM_REG_ID)
+            .clear()
+            .putBoolean(PREFS_FIRST_START, true)
+            .apply();
     }
 
     public static boolean isAchievementUnlocked(final Context context, final String achievement) {
@@ -177,8 +177,8 @@ public final class PrefUtils {
     public static void setAchievementUnlocked(@NonNull final Context context,
                                               @NonNull final String achievement) {
         prefs(context).edit()
-                .putBoolean(PREFS_ACHIEVEMENTS_PREFIX + achievement, true)
-                .apply();
+            .putBoolean(PREFS_ACHIEVEMENTS_PREFIX + achievement, true)
+            .apply();
     }
 
     public static boolean hasHigherAchievementSteps(Context context, String achievementName, int steps) {
@@ -188,10 +188,10 @@ public final class PrefUtils {
     }
 
     public static void setAchievementSteps(@NonNull final Context context,
-                                              @NonNull final String achievement, @NonNull final Integer steps) {
+                                           @NonNull final String achievement, @NonNull final Integer steps) {
         prefs(context).edit()
-                .putInt(PREFS_ACHIEVEMENTS_PREFIX + achievement, steps)
-                .apply();
+            .putInt(PREFS_ACHIEVEMENTS_PREFIX + achievement, steps)
+            .apply();
     }
 
     public static boolean isAppStateMigrationSuccessful(final Context context) {
@@ -200,8 +200,8 @@ public final class PrefUtils {
 
     public static void setAppStateMigrationSuccessful(@NonNull final Context context) {
         prefs(context).edit()
-                .putBoolean(PREFS_APP_STATE_MIGRATION_SUCCESSFUL, true)
-                .apply();
+            .putBoolean(PREFS_APP_STATE_MIGRATION_SUCCESSFUL, true)
+            .apply();
     }
 
     public static boolean isWidgetAdded(final Context context) {

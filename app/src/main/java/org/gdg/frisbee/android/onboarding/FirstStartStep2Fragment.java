@@ -39,7 +39,7 @@ import butterknife.ButterKnife;
 import butterknife.Bind;
 
 public class FirstStartStep2Fragment extends BaseFragment implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+    GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final int STATE_DEFAULT = 0;
     private static final int STATE_SIGN_IN = 1;
@@ -81,7 +81,7 @@ public class FirstStartStep2Fragment extends BaseFragment implements
 
         if (savedInstanceState != null) {
             mSignInProgress = savedInstanceState
-                    .getInt(SAVED_PROGRESS, STATE_DEFAULT);
+                .getInt(SAVED_PROGRESS, STATE_DEFAULT);
         }
     }
 
@@ -90,16 +90,16 @@ public class FirstStartStep2Fragment extends BaseFragment implements
         super.onActivityCreated(savedInstanceState);
 
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(Plus.API)
-                .addApi(Games.API)
-                .addApi(Drive.API)
-                .addScope(Plus.SCOPE_PLUS_LOGIN)
-                .addScope(Plus.SCOPE_PLUS_PROFILE)
-                .addScope(Games.SCOPE_GAMES)
-                .addScope(Drive.SCOPE_APPFOLDER)
-                .build();
+            .addConnectionCallbacks(this)
+            .addOnConnectionFailedListener(this)
+            .addApi(Plus.API)
+            .addApi(Games.API)
+            .addApi(Drive.API)
+            .addScope(Plus.SCOPE_PLUS_LOGIN)
+            .addScope(Plus.SCOPE_PLUS_PROFILE)
+            .addScope(Games.SCOPE_GAMES)
+            .addScope(Drive.SCOPE_APPFOLDER)
+            .build();
     }
 
     @Override
@@ -228,7 +228,7 @@ public class FirstStartStep2Fragment extends BaseFragment implements
                 if (getActivity() != null) {
                     mSignInProgress = STATE_IN_PROGRESS;
                     getActivity().startIntentSenderForResult(mSignInIntent.getIntentSender(),
-                            RC_SIGN_IN, null, 0, 0, 0);
+                        RC_SIGN_IN, null, 0, 0, 0);
                 }
             } catch (IntentSender.SendIntentException e) {
                 // The intent was canceled before it was sent.  Attempt to connect to

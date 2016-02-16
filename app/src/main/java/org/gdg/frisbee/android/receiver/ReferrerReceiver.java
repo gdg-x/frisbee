@@ -18,7 +18,7 @@ public class ReferrerReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         // Create deep link intent with correct action and add play store referral information
         Intent deepLinkIntent = AppInviteReferral.addPlayStoreReferrerToIntent(intent,
-                new Intent(context.getString(R.string.action_deep_link)));
+            new Intent(context.getString(R.string.action_deep_link)));
 
         // Let any listeners know about the change
         LocalBroadcastManager.getInstance(context).sendBroadcast(deepLinkIntent);

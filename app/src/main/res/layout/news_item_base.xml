@@ -94,8 +94,8 @@
         android:paddingTop="10dip">
 
         <com.google.android.gms.plus.PlusOneButton
-          android:id="@+id/plus_one_button"
           xmlns:plus="http://schemas.android.com/apk/lib/com.google.android.gms.plus"
+          android:id="@+id/plus_one_button"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           plus:annotation="inline"
@@ -107,8 +107,8 @@
           android:layout_height="wrap_content"
           android:gravity="right"
           android:paddingTop="2dip"
-          tools:text="01.01.2000"
-          android:textColor="@color/asbestos" />
+          android:textColor="@color/asbestos"
+          tools:text="01.01.2000" />
       </LinearLayout>
     </LinearLayout>
   </android.support.v7.widget.CardView>

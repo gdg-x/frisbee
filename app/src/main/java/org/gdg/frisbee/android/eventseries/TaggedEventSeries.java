@@ -15,6 +15,15 @@ import org.joda.time.DateTime;
 
 public class TaggedEventSeries implements Parcelable {
 
+    public static final Parcelable.Creator<TaggedEventSeries> CREATOR = new Parcelable.Creator<TaggedEventSeries>() {
+        public TaggedEventSeries createFromParcel(Parcel source) {
+            return new TaggedEventSeries(source);
+        }
+
+        public TaggedEventSeries[] newArray(int size) {
+            return new TaggedEventSeries[size];
+        }
+    };
     private String mTag;
     private int mDrawerIconResId;
     private int mTitleResId;
@@ -75,6 +84,19 @@ public class TaggedEventSeries implements Parcelable {
         mEndDateInMillis = endDateInMillis;
     }
 
+    private TaggedEventSeries(Parcel in) {
+        mTag = in.readString();
+        mDrawerIconResId = in.readInt();
+        mTitleResId = in.readInt();
+        mDescriptionResId = in.readInt();
+        mDefaultIconResId = in.readInt();
+        mLogoResId = in.readInt();
+        mSpecialEventTheme = in.readInt();
+        mDrawerId = in.readInt();
+        mStartDateInMillis = new DateTime(in.readLong());
+        mEndDateInMillis = new DateTime(in.readLong());
+    }
+
     public String getTag() {
         return mTag;
     }
@@ -133,27 +155,4 @@ public class TaggedEventSeries implements Parcelable {
         dest.writeLong(mStartDateInMillis.getMillis());
         dest.writeLong(mEndDateInMillis.getMillis());
     }
-
-    private TaggedEventSeries(Parcel in) {
-        mTag = in.readString();
-        mDrawerIconResId = in.readInt();
-        mTitleResId = in.readInt();
-        mDescriptionResId = in.readInt();
-        mDefaultIconResId = in.readInt();
-        mLogoResId = in.readInt();
-        mSpecialEventTheme = in.readInt();
-        mDrawerId = in.readInt();
-        mStartDateInMillis = new DateTime(in.readLong());
-        mEndDateInMillis = new DateTime(in.readLong());
-    }
-
-    public static final Parcelable.Creator<TaggedEventSeries> CREATOR = new Parcelable.Creator<TaggedEventSeries>() {
-        public TaggedEventSeries createFromParcel(Parcel source) {
-            return new TaggedEventSeries(source);
-        }
-
-        public TaggedEventSeries[] newArray(int size) {
-            return new TaggedEventSeries[size];
-        }
-    };
 }

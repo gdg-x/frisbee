@@ -23,13 +23,12 @@ import java.util.Arrays;
 
 public class CommonAsyncTask<Params, Result> extends AsyncTask<Params, Void, Result> {
 
+    private final Class<Params> mParamsType;
+    private final Class<Result> mResultType;
     private OnBackgroundExecuteListener<Params, Result> mBackgroundListener;
     private OnPostExecuteListener<Params, Result> mPostListener;
     private OnPreExecuteListener mPreListener;
     private Params[] mParams;
-
-    private final Class<Params> mParamsType;
-    private final Class<Result> mResultType;
 
     public CommonAsyncTask(Class<Params> paramsType, Class<Result> resultType) {
         super();
@@ -113,18 +112,6 @@ public class CommonAsyncTask<Params, Result> extends AsyncTask<Params, Void, Res
         this.mParams = mParams;
     }
 
-    public interface OnBackgroundExecuteListener<Params, Result> {
-        Result doInBackground(Params... params);
-    }
-
-    public interface OnPostExecuteListener<Params, Result> {
-        void onPostExecute(Params[] params, Result result);
-    }
-
-    public interface OnPreExecuteListener {
-        void onPreExecute();
-    }
-
     public CommonAsyncTask<Params, Result> execute() {
         super.execute(mParams);
         return this;
@@ -135,5 +122,17 @@ public class CommonAsyncTask<Params, Result> extends AsyncTask<Params, Void, Res
         System.arraycopy(p, 0, result, mParams.length, p.length);
         super.execute(result);
         return this;
+    }
+
+    public interface OnBackgroundExecuteListener<Params, Result> {
+        Result doInBackground(Params... params);
+    }
+
+    public interface OnPostExecuteListener<Params, Result> {
+        void onPostExecute(Params[] params, Result result);
+    }
+
+    public interface OnPreExecuteListener {
+        void onPreExecute();
     }
 }

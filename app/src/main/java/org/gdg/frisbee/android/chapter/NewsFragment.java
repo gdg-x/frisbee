@@ -45,7 +45,7 @@ import java.io.IOException;
 import butterknife.ButterKnife;
 
 public class NewsFragment extends SwipeRefreshRecyclerViewFragment
-        implements SwipeRefreshLayout.OnRefreshListener {
+    implements SwipeRefreshLayout.OnRefreshListener {
 
     private NewsAdapter mAdapter;
 
@@ -70,12 +70,12 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        StaggeredGridLayoutManager layoutManager = 
-                new StaggeredGridLayoutManager(
-                        getResources().getInteger(R.integer.news_fragment_column_count), 
-                        StaggeredGridLayoutManager.VERTICAL);
+        StaggeredGridLayoutManager layoutManager =
+            new StaggeredGridLayoutManager(
+                getResources().getInteger(R.integer.news_fragment_column_count),
+                StaggeredGridLayoutManager.VERTICAL);
         getListView().setLayoutManager(layoutManager);
-        
+
         mAdapter = new NewsAdapter(getActivity(), ((GdgActivity) getActivity()).getGoogleApiClient());
         setRecyclerAdapter(mAdapter);
 
@@ -84,33 +84,33 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
         final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID);
         if (Utils.isOnline(getActivity())) {
             new Builder<>(String.class, ActivityFeed.class)
-                    .addParameter(plusId)
-                    .setOnPreExecuteListener(new CommonAsyncTask.OnPreExecuteListener() {
-                        @Override
-                        public void onPreExecute() {
-                            setIsLoading(true);
+                .addParameter(plusId)
+                .setOnPreExecuteListener(new CommonAsyncTask.OnPreExecuteListener() {
+                    @Override
+                    public void onPreExecute() {
+                        setIsLoading(true);
+                    }
+                })
+                .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, ActivityFeed>() {
+                    @Override
+                    public ActivityFeed doInBackground(String... params) {
+                        ActivityFeed feed = (ActivityFeed) App.getInstance().getModelCache().get(Const.CACHE_KEY_NEWS + params[0]);
+                        if (feed == null) {
+                            feed = getActivityFeedSync(params[0]);
                         }
-                    })
-                    .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, ActivityFeed>() {
-                        @Override
-                        public ActivityFeed doInBackground(String... params) {
-                            ActivityFeed feed = (ActivityFeed) App.getInstance().getModelCache().get(Const.CACHE_KEY_NEWS + params[0]);
-                            if (feed == null) {
-                                feed = getActivityFeedSync(params[0]);
-                            }
-                            return feed;
+                        return feed;
+                    }
+                })
+                .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, ActivityFeed>() {
+                    @Override
+                    public void onPostExecute(String[] params, ActivityFeed activityFeed) {
+                        if (activityFeed != null) {
+                            mAdapter.addAll(activityFeed.getItems());
+                            setIsLoading(false);
                         }
-                    })
-                    .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, ActivityFeed>() {
-                        @Override
-                        public void onPostExecute(String[] params, ActivityFeed activityFeed) {
-                            if (activityFeed != null) {
-                                mAdapter.addAll(activityFeed.getItems());
-                                setIsLoading(false);
-                            }
-                        }
-                    })
-                    .buildAndExecute();
+                    }
+                })
+                .buildAndExecute();
         } else {
             App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_NEWS + plusId, false, new ModelCache.CacheListener() {
                 @Override
@@ -119,7 +119,7 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
 
                     if (isAdded()) {
                         Snackbar snackbar = Snackbar.make(getView(), R.string.cached_content,
-                                Snackbar.LENGTH_SHORT);
+                            Snackbar.LENGTH_SHORT);
                         ColoredSnackBar.info(snackbar).show();
                     }
 
@@ -168,27 +168,27 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
     public void onRefresh() {
         if (Utils.isOnline(getActivity())) {
             new Builder<>(String.class, ActivityFeed.class)
-                    .addParameter(getArguments().getString(Const.EXTRA_PLUS_ID))
-                    .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, ActivityFeed>() {
-                        @Override
-                        public ActivityFeed doInBackground(String... params) {
-                            return getActivityFeedSync(params[0]);
-                        }
-                    })
-                    .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, ActivityFeed>() {
-                        @Override
-                        public void onPostExecute(String[] params, ActivityFeed activityFeed) {
-                            if (activityFeed != null) {
-                                mAdapter.replaceAll(activityFeed.getItems(), 0);
-                                mAdapter.notifyDataSetChanged();
+                .addParameter(getArguments().getString(Const.EXTRA_PLUS_ID))
+                .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, ActivityFeed>() {
+                    @Override
+                    public ActivityFeed doInBackground(String... params) {
+                        return getActivityFeedSync(params[0]);
+                    }
+                })
+                .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, ActivityFeed>() {
+                    @Override
+                    public void onPostExecute(String[] params, ActivityFeed activityFeed) {
+                        if (activityFeed != null) {
+                            mAdapter.replaceAll(activityFeed.getItems(), 0);
+                            mAdapter.notifyDataSetChanged();
 
-                                if (getActivity() != null) {
-                                    setRefreshing(false);
-                                }
+                            if (getActivity() != null) {
+                                setRefreshing(false);
                             }
                         }
-                    })
-                    .buildAndExecute();
+                    }
+                })
+                .buildAndExecute();
         }
     }
 
@@ -200,9 +200,9 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
             Plus.Activities.List request = client.activities().list(param, "public");
             request.setMaxResults(10L);
             request.setFields(
-                    "nextPageToken,"
-                            + "items(id,published,url,object/content,verb,"
-                            + "object/attachments,annotation,object(plusoners,replies,resharers))");
+                "nextPageToken,"
+                    + "items(id,published,url,object/content,verb,"
+                    + "object/attachments,annotation,object(plusoners,replies,resharers))");
             ActivityFeed feed = request.execute();
 
             App.getInstance().getModelCache().put(Const.CACHE_KEY_NEWS + param, feed, DateTime.now().plusHours(1));

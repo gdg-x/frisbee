@@ -43,7 +43,7 @@ public class BackupAgent extends BackupAgentHelper {
     @Override
     public void onCreate() {
         SharedPreferencesBackupHelper helper =
-                new SharedPreferencesBackupHelper(this, PrefUtils.PREF_NAME);
+            new SharedPreferencesBackupHelper(this, PrefUtils.PREF_NAME);
         addHelper(PREFS_BACKUP_KEY, helper);
     }
 
@@ -53,10 +53,10 @@ public class BackupAgent extends BackupAgentHelper {
         Timber.d(String.format("Restoring from backup (was saved using version %d)", appVersionCode));
 
         App.getInstance().getTracker().send(new HitBuilders.EventBuilder()
-                .setCategory("backup")
-                .setAction("restore")
-                .setLabel("" + appVersionCode)
-                .build());
+            .setCategory("backup")
+            .setAction("restore")
+            .setLabel("" + appVersionCode)
+            .build());
     }
 
     @Override
@@ -64,9 +64,9 @@ public class BackupAgent extends BackupAgentHelper {
         super.onBackup(oldState, data, newState);    //To change body of overridden methods use File | Settings | File Templates.
 
         App.getInstance().getTracker().send(new HitBuilders.EventBuilder()
-                .setCategory("backup")
-                .setAction("backup")
-                .setLabel("")
-                .build());
+            .setCategory("backup")
+            .setAction("backup")
+            .setLabel("")
+            .build());
     }
 }

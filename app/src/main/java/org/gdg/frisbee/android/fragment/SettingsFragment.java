@@ -39,8 +39,6 @@ import com.google.android.gms.games.Games;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.plus.Plus;
 
-import java.io.IOException;
-
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -58,6 +56,8 @@ import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.view.LocationListPreference;
+
+import java.io.IOException;
 
 import timber.log.Timber;
 
@@ -82,7 +82,15 @@ public class SettingsFragment extends PreferenceFragment {
             return true;
         }
     };
-
+    private Preference.OnPreferenceChangeListener mOnAnalyticsPreferenceChange = new Preference.OnPreferenceChangeListener() {
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object o) {
+            boolean analytics = (Boolean) o;
+            GoogleAnalytics.getInstance(getActivity()).setAppOptOut(!analytics);
+            return true;
+        }
+    };
+    private LinearLayout mLoading;
     private Preference.OnPreferenceChangeListener mOnGcmPreferenceChange = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object o) {
@@ -102,27 +110,27 @@ public class SettingsFragment extends PreferenceFragment {
 
                             GdgXHub client = App.getInstance().getGdgXHub();
                             String token = GoogleAuthUtil.getToken(getActivity(),
-                                    Plus.AccountApi.getAccountName(mGoogleApiClient),
-                                    "oauth2: " + Scopes.PLUS_LOGIN);
+                                Plus.AccountApi.getAccountName(mGoogleApiClient),
+                                "oauth2: " + Scopes.PLUS_LOGIN);
 
                             if (!enableGcm) {
                                 client.unregisterGcm("Bearer " + token, new GcmRegistrationRequest(PrefUtils.getRegistrationId(getActivity())))
-                                        .enqueue(new Callback<GcmRegistrationResponse>() {
-                                            @Override
-                                            public void success(GcmRegistrationResponse gcmRegistrationResponse) {
-                                                PrefUtils.setGcmSettings(getActivity(), false, null, null);
-                                            }
-                                        });
+                                    .enqueue(new Callback<GcmRegistrationResponse>() {
+                                        @Override
+                                        public void success(GcmRegistrationResponse gcmRegistrationResponse) {
+                                            PrefUtils.setGcmSettings(getActivity(), false, null, null);
+                                        }
+                                    });
                             } else {
                                 final String regId = mGcm.register(BuildConfig.GCM_SENDER_ID);
 
                                 client.registerGcm("Bearer " + token, new GcmRegistrationRequest(regId))
-                                        .enqueue(new Callback<GcmRegistrationResponse>() {
-                                            @Override
-                                            public void success(GcmRegistrationResponse gcmRegistrationResponse) {
-                                                PrefUtils.setGcmSettings(getActivity(), true, regId, gcmRegistrationResponse.getNotificationKey());
-                                            }
-                                        });
+                                    .enqueue(new Callback<GcmRegistrationResponse>() {
+                                        @Override
+                                        public void success(GcmRegistrationResponse gcmRegistrationResponse) {
+                                            PrefUtils.setGcmSettings(getActivity(), true, regId, gcmRegistrationResponse.getNotificationKey());
+                                        }
+                                    });
 
                                 setHomeGdg(PrefUtils.getHomeChapterIdNotNull(getActivity()));
                             }
@@ -159,16 +167,6 @@ public class SettingsFragment extends PreferenceFragment {
             return true;
         }
     };
-
-    private Preference.OnPreferenceChangeListener mOnAnalyticsPreferenceChange = new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object o) {
-            boolean analytics = (Boolean) o;
-            GoogleAnalytics.getInstance(getActivity()).setAppOptOut(!analytics);
-            return true;
-        }
-    };
-    private LinearLayout mLoading;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -280,13 +278,13 @@ public class SettingsFragment extends PreferenceFragment {
                 try {
                     GdgActivity activity = (GdgActivity) getActivity();
                     String token = GoogleAuthUtil.getToken(
-                            activity,
-                            Plus.AccountApi.getAccountName(activity.getGoogleApiClient()),
-                            "oauth2: " + Scopes.PLUS_LOGIN);
+                        activity,
+                        Plus.AccountApi.getAccountName(activity.getGoogleApiClient()),
+                        "oauth2: " + Scopes.PLUS_LOGIN);
 
                     App.getInstance().getGdgXHub().setHomeGdg("Bearer " + token,
-                            new HomeGdgRequest(homeGdg))
-                            .execute();
+                        new HomeGdgRequest(homeGdg))
+                        .execute();
                 } catch (IOException | GoogleAuthException e) {
                     e.printStackTrace();
                 }

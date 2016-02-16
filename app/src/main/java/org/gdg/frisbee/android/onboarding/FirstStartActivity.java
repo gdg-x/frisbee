@@ -42,9 +42,9 @@ import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class FirstStartActivity extends AppCompatActivity implements
-        FirstStartStep1Fragment.Step1Listener, 
-        FirstStartStep2Fragment.Step2Listener, 
-        FirstStartStep3Fragment.Step3Listener {
+    FirstStartStep1Fragment.Step1Listener,
+    FirstStartStep2Fragment.Step2Listener,
+    FirstStartStep3Fragment.Step3Listener {
 
     public static final String ACTION_FIRST_START = "finish_first_start";
 
@@ -189,7 +189,7 @@ public class FirstStartActivity extends AppCompatActivity implements
 
         public FirstStartPageAdapter(FragmentManager fm) {
             super(fm);
-            mFragments = new Fragment[] {
+            mFragments = new Fragment[]{
                 new FirstStartStep1Fragment(),
                 new FirstStartStep2Fragment(),
                 new FirstStartStep3Fragment()
