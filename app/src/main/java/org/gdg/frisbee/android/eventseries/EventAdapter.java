@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -123,8 +124,9 @@ class EventAdapter extends BaseAdapter {
         holder.eventTitle.setText(event.getTitle());
 
         final LocalDateTime dateTime = event.getStart().toLocalDateTime();
-        holder.eventDate.setText(dateTime.toString(DateTimeFormat.patternForStyle("S-", mContext.getResources().getConfiguration().locale)));
-        holder.eventTime.setText(dateTime.toString(DateTimeFormat.patternForStyle("-S", mContext.getResources().getConfiguration().locale)));
+        Locale locale = mContext.getResources().getConfiguration().locale;
+        holder.eventDate.setText(dateTime.toString(DateTimeFormat.patternForStyle("S-", locale)));
+        holder.eventTime.setText(dateTime.toString(DateTimeFormat.patternForStyle("-S", locale)));
 
         holder.eventLocation.setText(event.getLocation());
 

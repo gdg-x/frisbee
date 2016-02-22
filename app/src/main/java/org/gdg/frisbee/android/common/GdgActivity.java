@@ -320,7 +320,8 @@ public abstract class GdgActivity extends TrackableActivity implements
                 if (status.isSuccess()) {
                     Timber.d("App Indexing API: Recorded event %s view successfully.", label);
                 } else {
-                    Timber.e("App Indexing API: There was an error recording the event view. Status = %s", status.toString());
+                    Timber.e("App Indexing API: There was an error recording the event view. Status = %s",
+                        status.toString());
                 }
             }
         };

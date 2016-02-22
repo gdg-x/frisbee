@@ -78,7 +78,6 @@ public class FeedbackFragment extends DialogFragment {
     private static final String PROPERTY_ACTIVITY = "Activity";
     private static final String PROPERTY_APP_VERSION_NAME = "App Version Name";
     private static final String PROPERTY_APP_VERSION_CODE = "App Version Code";
-//    private static final String POWERED_BY_DOORBELL_TEXT = "Powered by <a href=\"https://doorbell.io\">Doorbell.io</a>";
 
     @Bind(R.id.feedback_message_text)
     EditText mMessageField;

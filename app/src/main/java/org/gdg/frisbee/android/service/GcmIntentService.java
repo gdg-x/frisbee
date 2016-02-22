@@ -89,11 +89,12 @@ public class GcmIntentService extends IntentService {
         DateTime start = df.parseDateTime(extras.getString("start"));
 //        DateTime end = df.parseDateTime(extras.getString("end"));
 
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, eventIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent contentIntent =
+            PendingIntent.getActivity(this, 0, eventIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-        final String contentText =
-            start.toLocalDateTime().toString(DateTimeFormat.patternForStyle("MS", getResources().getConfiguration().locale));
+        final String contentText = start.toLocalDateTime()
+            .toString(DateTimeFormat.patternForStyle("MS", getResources().getConfiguration().locale));
         NotificationCompat.Builder mBuilder =
             new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_stat_gdg)

@@ -60,8 +60,10 @@ public class BackupAgent extends BackupAgentHelper {
     }
 
     @Override
-    public void onBackup(ParcelFileDescriptor oldState, BackupDataOutput data, ParcelFileDescriptor newState) throws IOException {
-        super.onBackup(oldState, data, newState);    //To change body of overridden methods use File | Settings | File Templates.
+    public void onBackup(ParcelFileDescriptor oldState,
+                         BackupDataOutput data,
+                         ParcelFileDescriptor newState) throws IOException {
+        super.onBackup(oldState, data, newState);
 
         App.getInstance().getTracker().send(new HitBuilders.EventBuilder()
             .setCategory("backup")

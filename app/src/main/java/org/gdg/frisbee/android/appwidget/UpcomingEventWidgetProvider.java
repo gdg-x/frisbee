@@ -91,38 +91,43 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
         public void buildUpdate(final Context context, final AppWidgetManager manager, final ComponentName thisWidget) {
             final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_upcoming_event);
             Intent mainIntent = new Intent(context, MainActivity.class);
-            final PendingIntent pi = PendingIntent.getActivity(context, REQUEST_CODE_LAUNCH_FRISBEE, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            final PendingIntent pi = PendingIntent.getActivity(context, REQUEST_CODE_LAUNCH_FRISBEE,
+                mainIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             views.setOnClickPendingIntent(R.id.container, pi);
 
-            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, false, new ModelCache.CacheListener() {
-                @Override
-                public void onGet(Object item) {
-                    mChapters = ((Directory) item).getGroups();
-                    final Chapter homeGdg = findChapter(PrefUtils.getHomeChapterId(UpdateService.this));
+            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, false,
+                new ModelCache.CacheListener() {
+                    @Override
+                    public void onGet(Object item) {
+                        mChapters = ((Directory) item).getGroups();
+                        final Chapter homeGdg = findChapter(PrefUtils.getHomeChapterId(UpdateService.this));
 
-                    if (homeGdg == null) {
-                        Timber.d("Got no Home GDG");
-                        showErrorChild(views, R.string.loading_data_failed, context);
+                        if (homeGdg == null) {
+                            Timber.d("Got no Home GDG");
+                            showErrorChild(views, R.string.loading_data_failed, context);
 
-                    } else {
-                        Timber.d("Fetching events");
-                        String groupName = homeGdg.getShortName();
-                        views.setTextViewText(R.id.groupName, groupName);
-                        views.setTextViewText(R.id.groupName2, groupName);
+                        } else {
+                            Timber.d("Fetching events");
+                            String groupName = homeGdg.getShortName();
+                            views.setTextViewText(R.id.groupName, groupName);
+                            views.setTextViewText(R.id.groupName2, groupName);
 
-                        fetchEvents(homeGdg, views, manager, thisWidget);
+                            fetchEvents(homeGdg, views, manager, thisWidget);
+                        }
                     }
-                }
 
-                @Override
-                public void onNotFound(String key) {
-                    //To change body of implemented methods use File | Settings | File Templates.
-                }
-            });
+                    @Override
+                    public void onNotFound(String key) {
+                        //To change body of implemented methods use File | Settings | File Templates.
+                    }
+                });
 
         }
 
-        private void fetchEvents(Chapter homeGdg, final RemoteViews views, final AppWidgetManager manager, final ComponentName thisWidget) {
+        private void fetchEvents(Chapter homeGdg,
+                                 final RemoteViews views,
+                                 final AppWidgetManager manager,
+                                 final ComponentName thisWidget) {
             App.getInstance().getGdgXHub()
                 .getChapterEventList(homeGdg.getGplusId(),
                     new DateTime(),
@@ -138,12 +143,14 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                             views.setTextViewText(R.id.location, firstEvent.getLocation());
                             views.setTextViewText(R.id.startDate,
                                 firstEvent.getStart().toLocalDateTime()
-                                    .toString(DateTimeFormat.patternForStyle("MS", getResources().getConfiguration().locale)));
+                                    .toString(DateTimeFormat.patternForStyle("MS",
+                                        getResources().getConfiguration().locale)));
                             showChild(views, 1);
 
                             Intent i = new Intent(UpdateService.this, EventActivity.class);
                             i.putExtra(Const.EXTRA_EVENT_ID, firstEvent.getId());
-                            views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(UpdateService.this, 0, i, 0));
+                            views.setOnClickPendingIntent(R.id.container,
+                                PendingIntent.getActivity(UpdateService.this, 0, i, 0));
 
                         } else {
                             showErrorChild(views, R.string.no_scheduled_events, UpdateService.this);

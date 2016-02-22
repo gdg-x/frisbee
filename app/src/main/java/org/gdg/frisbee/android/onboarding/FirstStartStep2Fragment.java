@@ -148,7 +148,10 @@ public class FirstStartStep2Fragment extends BaseFragment implements
     @Override
     public void onConnected(Bundle bundle) {
         if (getActivity() instanceof Step2Listener) {
-            ((Step2Listener) getActivity()).onSignedIn(mGoogleApiClient, Plus.AccountApi.getAccountName(mGoogleApiClient));
+            ((Step2Listener) getActivity()).onSignedIn(
+                mGoogleApiClient,
+                Plus.AccountApi.getAccountName(mGoogleApiClient)
+            );
         }
     }
 

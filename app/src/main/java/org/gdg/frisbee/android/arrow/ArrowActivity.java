@@ -487,7 +487,7 @@ public class ArrowActivity extends GdgNavDrawerActivity {
                 return new NdefMessage(new NdefRecord[]{mimeRecord});
             } catch (Exception e) {
                 Timber.e(e, "Error while trying to create NFC message");
-                Toast.makeText(ArrowActivity.this, ArrowActivity.this.getString(R.string.arrow_oops), Toast.LENGTH_LONG).show();
+                Toast.makeText(ArrowActivity.this, R.string.arrow_oops, Toast.LENGTH_LONG).show();
             }
             return null;
         }

@@ -147,50 +147,61 @@ public class InfoFragment extends BaseFragment {
                 })
                 .buildAndExecute();
         } else {
-            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PERSON + chapterPlusId, false, new ModelCache.CacheListener() {
-                @Override
-                public void onGet(Object item) {
-                    final Person chachedChapter = (Person) item;
-                    updateChapterUIFrom(chachedChapter);
+            App.getInstance().getModelCache().getAsync(
+                Const.CACHE_KEY_PERSON + chapterPlusId,
+                false,
+                new ModelCache.CacheListener() {
+                    @Override
+                    public void onGet(Object item) {
+                        final Person chachedChapter = (Person) item;
+                        updateChapterUIFrom(chachedChapter);
 
-                    for (int chapterIndex = 0; chapterIndex < chachedChapter.getUrls().size(); chapterIndex++) {
-                        Person.Urls url = chachedChapter.getUrls().get(chapterIndex);
-                        if (url.getValue().contains("plus.google.com/") && !url.getValue().contains("communities")) {
-                            String org = url.getValue();
-                            try {
-                                String id = getGPlusIdFromPersonUrl(url);
-                                final int indexAsFinal = chapterIndex;
-                                App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PERSON + id, false, new ModelCache.CacheListener() {
-                                    @Override
-                                    public void onGet(Object item) {
-                                        addOrganizerToUI((Person) item);
-                                        if (indexAsFinal == chachedChapter.getUrls().size()) {
-                                            setIsLoading(false);
-                                        }
-                                    }
+                        for (int chapterIndex = 0; chapterIndex < chachedChapter.getUrls().size(); chapterIndex++) {
+                            Person.Urls url = chachedChapter.getUrls().get(chapterIndex);
+                            if (url.getValue().contains("plus.google.com/")
+                                && !url.getValue().contains("communities")) {
 
-                                    @Override
-                                    public void onNotFound(String key) {
-                                        addUnknowOrganizerToUI();
-                                        if (indexAsFinal == chachedChapter.getUrls().size()) {
-                                            setIsLoading(false);
-                                        }
-                                    }
-                                });
-                            } catch (Exception ex) {
-                                Snackbar snackbar = Snackbar.make(getView(), getString(R.string.bogus_organizer, org),
-                                    Snackbar.LENGTH_SHORT);
-                                ColoredSnackBar.alert(snackbar).show();
+                                String org = url.getValue();
+                                try {
+                                    String id = getGPlusIdFromPersonUrl(url);
+                                    final int indexAsFinal = chapterIndex;
+                                    App.getInstance().getModelCache().getAsync(
+                                        Const.CACHE_KEY_PERSON + id,
+                                        false,
+                                        new ModelCache.CacheListener() {
+                                            @Override
+                                            public void onGet(Object item) {
+                                                addOrganizerToUI((Person) item);
+                                                if (indexAsFinal == chachedChapter.getUrls().size()) {
+                                                    setIsLoading(false);
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onNotFound(String key) {
+                                                addUnknowOrganizerToUI();
+                                                if (indexAsFinal == chachedChapter.getUrls().size()) {
+                                                    setIsLoading(false);
+                                                }
+                                            }
+                                        });
+                                } catch (Exception ex) {
+                                    Snackbar snackbar = Snackbar.make(
+                                        getView(),
+                                        getString(R.string.bogus_organizer, org),
+                                        Snackbar.LENGTH_SHORT
+                                    );
+                                    ColoredSnackBar.alert(snackbar).show();
+                                }
                             }
                         }
                     }
-                }
 
-                @Override
-                public void onNotFound(String key) {
-                    showError(R.string.offline_alert);
-                }
-            });
+                    @Override
+                    public void onNotFound(String key) {
+                        showError(R.string.offline_alert);
+                    }
+                });
         }
     }
 
@@ -272,7 +283,8 @@ public class InfoFragment extends BaseFragment {
                         }
                     }
                 } else {
-                    TextView tv = (TextView) mInflater.inflate(R.layout.list_resource_item, (ViewGroup) getView(), false);
+                    TextView tv = (TextView) mInflater
+                        .inflate(R.layout.list_resource_item, (ViewGroup) getView(), false);
                     tv.setText(Html.fromHtml("<a href='" + url.getValue() + "'>" + url.get("label") + "</a>"));
                     mResourcesBox.addView(tv);
                 }

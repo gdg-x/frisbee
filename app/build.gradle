@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'
 apply plugin: 'com.github.triplet.play'
 apply plugin: 'checkstyle'
@@ -166,8 +165,8 @@ dependencies {
     compile "com.google.android.gms:play-services-appindexing:$rootProject.playServicesVersion"
 
     //Google
-    compile 'com.google.http-client:google-http-client-gson:1.20.0'
-    compile 'com.google.apis:google-api-services-plus:v1-rev126-1.18.0-rc'
+    compile 'com.google.http-client:google-http-client-gson:1.21.0'
+    compile 'com.google.apis:google-api-services-plus:v1-rev329-1.21.0'
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
     compile 'com.google.zxing:android-integration:3.2.1'
     compile 'com.google.zxing:core:3.2.1'
@@ -192,12 +191,12 @@ dependencies {
     compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.1'
 
     //Others
-    compile 'io.doorbell:android-sdk:0.2.2@aar'
+    compile 'io.doorbell:android-sdk:0.2.6@aar'
     compile 'org.jsoup:jsoup:1.8.2'
     compile "net.danlew:android.joda:$rootProject.jodaTimeVersion"
     compile 'com.tasomaniac:delayed-progress:0.3'
     compile 'com.google.code.findbugs:jsr305:2.0.1'
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.4@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
 
@@ -225,6 +224,8 @@ dependencies {
     androidTestCompile "com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion"
     androidTestCompile "com.android.support.test.espresso:espresso-intents:$rootProject.espressoVersion"
 }
+
+apply plugin: 'com.google.gms.google-services'
 
 def commitSha() {
     def file = new File(project.buildDir, "commit-sha.txt")
