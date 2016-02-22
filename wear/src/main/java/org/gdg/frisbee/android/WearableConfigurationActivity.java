@@ -149,6 +149,7 @@ public class WearableConfigurationActivity extends Activity implements DataApi.D
                             if (dataMap.containsKey(WearableConfigurationUtil.CONFIG_DATE)) {
                                 mDisplayDate = dataMap.getInt(WearableConfigurationUtil.CONFIG_DATE) == 1;
                             }
+                            updateConfigurations();
                         }
                     }
                 }
@@ -209,6 +210,7 @@ public class WearableConfigurationActivity extends Activity implements DataApi.D
                 if (dataMap.containsKey(WearableConfigurationUtil.CONFIG_DATE)) {
                     mDisplayDate = dataMap.getInt(WearableConfigurationUtil.CONFIG_DATE) == 1;
                 }
+                updateConfigurations();
             }
         }
 
