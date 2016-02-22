@@ -115,7 +115,9 @@ public class SettingsFragment extends PreferenceFragment {
                                 "oauth2: " + Scopes.PLUS_LOGIN);
 
                             if (!enableGcm) {
-                                client.unregisterGcm("Bearer " + token, new GcmRegistrationRequest(PrefUtils.getRegistrationId(getActivity())))
+                                GcmRegistrationRequest request =
+                                    new GcmRegistrationRequest(PrefUtils.getRegistrationId(getActivity()));
+                                client.unregisterGcm("Bearer " + token, request)
                                     .enqueue(new Callback<GcmRegistrationResponse>() {
                                         @Override
                                         public void success(GcmRegistrationResponse gcmRegistrationResponse) {
@@ -129,7 +131,11 @@ public class SettingsFragment extends PreferenceFragment {
                                     .enqueue(new Callback<GcmRegistrationResponse>() {
                                         @Override
                                         public void success(GcmRegistrationResponse gcmRegistrationResponse) {
-                                            PrefUtils.setGcmSettings(getActivity(), true, regId, gcmRegistrationResponse.getNotificationKey());
+                                            PrefUtils.setGcmSettings(
+                                                getActivity(),
+                                                true,
+                                                regId,
+                                                gcmRegistrationResponse.getNotificationKey());
                                         }
                                     });
 
@@ -198,34 +204,36 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void initPreferences() {
-        final LocationListPreference prefHomeGdgList = (LocationListPreference) findPreference(PrefUtils.SETTINGS_HOME_GDG);
+        final LocationListPreference prefHomeGdgList =
+            (LocationListPreference) findPreference(PrefUtils.SETTINGS_HOME_GDG);
         if (prefHomeGdgList != null) {
             prefHomeGdgList.setEnabled(false);
 
-            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, false, new ModelCache.CacheListener() {
-                @Override
-                public void onGet(Object item) {
-                    Directory directory = (Directory) item;
+            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, false,
+                new ModelCache.CacheListener() {
+                    @Override
+                    public void onGet(Object item) {
+                        Directory directory = (Directory) item;
 
-                    String[] entries = new String[directory.getGroups().size()];
-                    String[] entryValues = new String[directory.getGroups().size()];
+                        String[] entries = new String[directory.getGroups().size()];
+                        String[] entryValues = new String[directory.getGroups().size()];
 
-                    int i = 0;
-                    for (Chapter chapter : directory.getGroups()) {
-                        entries[i] = chapter.getName();
-                        entryValues[i] = chapter.getGplusId();
-                        i++;
+                        int i = 0;
+                        for (Chapter chapter : directory.getGroups()) {
+                            entries[i] = chapter.getName();
+                            entryValues[i] = chapter.getGplusId();
+                            i++;
+                        }
+                        prefHomeGdgList.setEntries(entries);
+                        prefHomeGdgList.setEntryValues(entryValues);
+                        prefHomeGdgList.setEnabled(true);
                     }
-                    prefHomeGdgList.setEntries(entries);
-                    prefHomeGdgList.setEntryValues(entryValues);
-                    prefHomeGdgList.setEnabled(true);
-                }
 
-                @Override
-                public void onNotFound(String key) {
+                    @Override
+                    public void onNotFound(String key) {
 
-                }
-            });
+                    }
+                });
 
             prefHomeGdgList.setOnPreferenceChangeListener(mOnHomeGdgPreferenceChange);
         }
