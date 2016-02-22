@@ -61,6 +61,7 @@ public abstract class GdgActivity extends TrackableActivity implements
     private static final int STATE_IN_PROGRESS = 2;
     private static final int RC_SIGN_IN = 0;
     private static final int DIALOG_PLAY_SERVICES_ERROR = 0;
+    private static final String SAVED_PROGRESS = "SAVED_PROGRESS";
     @Nullable
     @Bind(R.id.content_frame)
     FrameLayout mContentLayout;
@@ -120,6 +121,10 @@ public abstract class GdgActivity extends TrackableActivity implements
         super.onCreate(savedInstanceState);
         RecentTasksStyler.styleRecentTasksEntry(this);
 
+        if (savedInstanceState != null) {
+            mSignInProgress = savedInstanceState.getInt(SAVED_PROGRESS, STATE_DEFAULT);
+        }
+
         mGoogleApiClient = createGoogleApiClient();
 
         mAchievementActionHandler =
@@ -129,6 +134,12 @@ public abstract class GdgActivity extends TrackableActivity implements
     protected GoogleApiClient createGoogleApiClient() {
         isSignedIn = PrefUtils.isSignedIn(this);
         return GoogleApiClientFactory.createWith(getApplicationContext());
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(SAVED_PROGRESS, mSignInProgress);
     }
 
     @Override
