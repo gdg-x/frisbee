@@ -28,15 +28,14 @@ import android.widget.Button;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.drive.Drive;
-import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.Plus;
 
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.app.GoogleApiClientFactory;
 import org.gdg.frisbee.android.common.BaseFragment;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class FirstStartStep2Fragment extends BaseFragment implements
     GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -89,22 +88,14 @@ public class FirstStartStep2Fragment extends BaseFragment implements
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-            .addConnectionCallbacks(this)
-            .addOnConnectionFailedListener(this)
-            .addApi(Plus.API)
-            .addApi(Games.API)
-            .addApi(Drive.API)
-            .addScope(Plus.SCOPE_PLUS_LOGIN)
-            .addScope(Plus.SCOPE_PLUS_PROFILE)
-            .addScope(Games.SCOPE_GAMES)
-            .addScope(Drive.SCOPE_APPFOLDER)
-            .build();
+        mGoogleApiClient = GoogleApiClientFactory.createWith(getActivity().getApplicationContext());
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        mGoogleApiClient.registerConnectionCallbacks(this);
+        mGoogleApiClient.registerConnectionFailedListener(this);
         mGoogleApiClient.connect();
     }
 

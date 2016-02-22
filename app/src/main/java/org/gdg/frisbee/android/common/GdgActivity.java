@@ -128,7 +128,7 @@ public abstract class GdgActivity extends TrackableActivity implements
 
     protected GoogleApiClient createGoogleApiClient() {
         isSignedIn = PrefUtils.isSignedIn(this);
-        return GoogleApiClientFactory.createWith(this);
+        return GoogleApiClientFactory.createWith(getApplicationContext());
     }
 
     @Override
@@ -136,6 +136,9 @@ public abstract class GdgActivity extends TrackableActivity implements
         super.onStart();
 
         if (isSignedIn != PrefUtils.isSignedIn(this)) {
+            mGoogleApiClient.unregisterConnectionCallbacks(this);
+            mGoogleApiClient.unregisterConnectionFailedListener(this);
+            mGoogleApiClient.disconnect();
             mGoogleApiClient = createGoogleApiClient();
         }
         mGoogleApiClient.registerConnectionCallbacks(this);
@@ -149,9 +152,7 @@ public abstract class GdgActivity extends TrackableActivity implements
 
         mGoogleApiClient.unregisterConnectionCallbacks(this);
         mGoogleApiClient.unregisterConnectionFailedListener(this);
-        if (mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-        }
+        mGoogleApiClient.disconnect();
     }
 
     public AchievementActionHandler getAchievementActionHandler() {

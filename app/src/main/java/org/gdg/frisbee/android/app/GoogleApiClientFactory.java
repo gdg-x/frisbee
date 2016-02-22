@@ -15,10 +15,18 @@ public final class GoogleApiClientFactory {
 
 
     public static GoogleApiClient createWith(Context context) {
+        return createClient(context, PrefUtils.isSignedIn(context));
+    }
+
+    public static GoogleApiClient createWithoutSignIn(Context context) {
+        return createClient(context, false);
+    }
+
+    private static GoogleApiClient createClient(Context context, boolean withSignIn) {
         GoogleApiClient.Builder builder = new GoogleApiClient.Builder(context)
             .addApi(AppIndex.API);
 
-        if (PrefUtils.isSignedIn(context)) {
+        if (withSignIn) {
             builder.addApi(Plus.API).addScope(Plus.SCOPE_PLUS_LOGIN).addScope(Plus.SCOPE_PLUS_PROFILE)
                 .addApi(Games.API).addScope(Games.SCOPE_GAMES)
                 .addApi(Drive.API).addScope(Drive.SCOPE_APPFOLDER);
@@ -27,9 +35,4 @@ public final class GoogleApiClientFactory {
         return builder.build();
     }
 
-    public static GoogleApiClient createWithoutSignIn(Context context) {
-        GoogleApiClient.Builder builder = new GoogleApiClient.Builder(context)
-            .addApi(AppIndex.API);
-        return builder.build();
-    }
 }

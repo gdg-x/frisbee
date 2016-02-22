@@ -244,17 +244,17 @@ public class SettingsFragment extends PreferenceFragment {
                     if (signedIn) {
                         if (mGoogleApiClient.isConnected()) {
                             disconnectGoogleApiClient();
-                            PrefUtils.setSignedIn(getActivity());
-                            createConnectedGoogleApiClient();
                         }
+                        PrefUtils.setSignedIn(getActivity());
+                        createConnectedGoogleApiClient();
                     } else {
                         if (mGoogleApiClient.isConnected()) {
                             Games.signOut(mGoogleApiClient);
                             Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
                             disconnectGoogleApiClient();
-                            PrefUtils.setLoggedOut(getActivity());
-                            createConnectedGoogleApiClient();
                         }
+                        PrefUtils.setLoggedOut(getActivity());
+                        createConnectedGoogleApiClient();
                     }
                     return true;
                 }
@@ -268,7 +268,7 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void createConnectedGoogleApiClient() {
-        mGoogleApiClient = GoogleApiClientFactory.createWith(getActivity());
+        mGoogleApiClient = GoogleApiClientFactory.createWith(getActivity().getApplicationContext());
         mGoogleApiClient.registerConnectionCallbacks((SettingsActivity) getActivity());
         mGoogleApiClient.registerConnectionFailedListener((SettingsActivity) getActivity());
         mGoogleApiClient.connect();

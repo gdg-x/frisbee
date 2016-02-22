@@ -45,7 +45,7 @@ public class AppInviteDeepLinkActivity extends GdgActivity {
 
     @Override
     protected GoogleApiClient createGoogleApiClient() {
-        return GoogleApiClientFactory.createWithoutSignIn(this);
+        return GoogleApiClientFactory.createWithoutSignIn(getApplicationContext());
     }
 
     @Override
