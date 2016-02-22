@@ -65,10 +65,11 @@ import timber.log.Timber;
 public class SettingsFragment extends PreferenceFragment {
 
     private GoogleCloudMessaging mGcm;
-
     private GoogleApiClient mGoogleApiClient;
+    private LinearLayout mLoading;
 
-    private Preference.OnPreferenceChangeListener mOnHomeGdgPreferenceChange = new Preference.OnPreferenceChangeListener() {
+    private Preference.OnPreferenceChangeListener mOnHomeGdgPreferenceChange =
+        new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object o) {
             final String homeGdg = (String) o;
@@ -78,102 +79,106 @@ public class SettingsFragment extends PreferenceFragment {
             }
             // Update widgets to show newest chosen GdgHome events
             // TODO: Make it into class which broadcasts update need to all interested entities like MainActivity and Widgets
-            App.getInstance().startService(new Intent(App.getInstance(), UpcomingEventWidgetProvider.UpdateService.class));
+            App.getInstance().startService(new Intent(App.getInstance(),
+                UpcomingEventWidgetProvider.UpdateService.class));
 
             return true;
         }
     };
-    private Preference.OnPreferenceChangeListener mOnAnalyticsPreferenceChange = new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object newValue) {
-            boolean analytics = (Boolean) newValue;
-            GoogleAnalytics.getInstance(getActivity()).setAppOptOut(!analytics);
-            return true;
-        }
-    };
-    private LinearLayout mLoading;
-    private Preference.OnPreferenceChangeListener mOnGcmPreferenceChange = new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object newValue) {
-            final boolean enableGcm = (Boolean) newValue;
 
-            if (mGoogleApiClient.isConnected()) {
-                mLoading.setVisibility(View.VISIBLE);
-                mLoading.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in));
-
-                new AsyncTask<Void, Void, Void>() {
-                    @Override
-                    protected Void doInBackground(Void... voids) {
-                        try {
-                            if (!mGoogleApiClient.isConnected()) {
-                                mGoogleApiClient.blockingConnect();
-                            }
-
-                            GdgXHub client = App.getInstance().getGdgXHub();
-                            String token = GoogleAuthUtil.getToken(getActivity(),
-                                Plus.AccountApi.getAccountName(mGoogleApiClient),
-                                "oauth2: " + Scopes.PLUS_LOGIN);
-
-                            if (!enableGcm) {
-                                GcmRegistrationRequest request =
-                                    new GcmRegistrationRequest(PrefUtils.getRegistrationId(getActivity()));
-                                client.unregisterGcm("Bearer " + token, request)
-                                    .enqueue(new Callback<GcmRegistrationResponse>() {
-                                        @Override
-                                        public void success(GcmRegistrationResponse gcmRegistrationResponse) {
-                                            PrefUtils.setGcmSettings(getActivity(), false, null, null);
-                                        }
-                                    });
-                            } else {
-                                final String regId = mGcm.register(BuildConfig.GCM_SENDER_ID);
-
-                                client.registerGcm("Bearer " + token, new GcmRegistrationRequest(regId))
-                                    .enqueue(new Callback<GcmRegistrationResponse>() {
-                                        @Override
-                                        public void success(GcmRegistrationResponse gcmRegistrationResponse) {
-                                            PrefUtils.setGcmSettings(
-                                                getActivity(),
-                                                true,
-                                                regId,
-                                                gcmRegistrationResponse.getNotificationKey());
-                                        }
-                                    });
-
-                                setHomeGdg(PrefUtils.getHomeChapterIdNotNull(getActivity()));
-                            }
-                        } catch (IOException | GoogleAuthException e) {
-                            Timber.e(e, "(Un)Register GCM failed");
-                            e.printStackTrace();
-                        }
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Void aVoid) {
-                        super.onPostExecute(aVoid);
-
-                        Animation fadeOut = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
-                        fadeOut.setAnimationListener(new Animation.AnimationListener() {
-                            @Override
-                            public void onAnimationStart(Animation animation) {
-                            }
-
-                            @Override
-                            public void onAnimationEnd(Animation animation) {
-                                mLoading.setVisibility(View.GONE);
-                            }
-
-                            @Override
-                            public void onAnimationRepeat(Animation animation) {
-                            }
-                        });
-                        mLoading.startAnimation(fadeOut);
-                    }
-                }.execute();
+    private Preference.OnPreferenceChangeListener mOnAnalyticsPreferenceChange =
+        new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                boolean analytics = (Boolean) newValue;
+                GoogleAnalytics.getInstance(getActivity()).setAppOptOut(!analytics);
+                return true;
             }
-            return true;
-        }
-    };
+        };
+
+    private Preference.OnPreferenceChangeListener mOnGcmPreferenceChange =
+        new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                final boolean enableGcm = (Boolean) newValue;
+
+                if (mGoogleApiClient.isConnected()) {
+                    mLoading.setVisibility(View.VISIBLE);
+                    mLoading.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in));
+
+                    new AsyncTask<Void, Void, Void>() {
+                        @Override
+                        protected Void doInBackground(Void... voids) {
+                            try {
+                                if (!mGoogleApiClient.isConnected()) {
+                                    mGoogleApiClient.blockingConnect();
+                                }
+
+                                GdgXHub client = App.getInstance().getGdgXHub();
+                                String token = GoogleAuthUtil.getToken(getActivity(),
+                                    Plus.AccountApi.getAccountName(mGoogleApiClient),
+                                    "oauth2: " + Scopes.PLUS_LOGIN);
+
+                                if (!enableGcm) {
+                                    GcmRegistrationRequest request =
+                                        new GcmRegistrationRequest(PrefUtils.getRegistrationId(getActivity()));
+                                    client.unregisterGcm("Bearer " + token, request)
+                                        .enqueue(new Callback<GcmRegistrationResponse>() {
+                                            @Override
+                                            public void success(GcmRegistrationResponse gcmRegistrationResponse) {
+                                                PrefUtils.setGcmSettings(getActivity(), false, null, null);
+                                            }
+                                        });
+                                } else {
+                                    final String regId = mGcm.register(BuildConfig.GCM_SENDER_ID);
+
+                                    client.registerGcm("Bearer " + token, new GcmRegistrationRequest(regId))
+                                        .enqueue(new Callback<GcmRegistrationResponse>() {
+                                            @Override
+                                            public void success(GcmRegistrationResponse gcmRegistrationResponse) {
+                                                PrefUtils.setGcmSettings(
+                                                    getActivity(),
+                                                    true,
+                                                    regId,
+                                                    gcmRegistrationResponse.getNotificationKey());
+                                            }
+                                        });
+
+                                    setHomeGdg(PrefUtils.getHomeChapterIdNotNull(getActivity()));
+                                }
+                            } catch (IOException | GoogleAuthException e) {
+                                Timber.e(e, "(Un)Register GCM failed");
+                                e.printStackTrace();
+                            }
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void aVoid) {
+                            super.onPostExecute(aVoid);
+
+                            Animation fadeOut = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
+                            fadeOut.setAnimationListener(new Animation.AnimationListener() {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+                                    mLoading.setVisibility(View.GONE);
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
+                                }
+                            });
+                            mLoading.startAnimation(fadeOut);
+                        }
+                    }.execute();
+                }
+                return true;
+            }
+        };
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
