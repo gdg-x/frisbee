@@ -78,7 +78,6 @@ public class SettingsFragment extends PreferenceFragment {
                 setHomeGdg(homeGdg);
             }
             // Update widgets to show newest chosen GdgHome events
-            // TODO: Make it into class which broadcasts update need to all interested entities like MainActivity and Widgets
             App.getInstance().startService(new Intent(App.getInstance(),
                 UpcomingEventWidgetProvider.UpdateService.class));
 
