@@ -151,7 +151,7 @@ public class GdgWatchFace extends CanvasWatchFaceService {
             mBackgroundPaint = new Paint();
             mBackgroundPaint.setColor(ContextCompat.getColor(GdgWatchFace.this, R.color.gdg_black));
 
-            mBackgroundBitmap = BitmapFactory.decodeResource(resources, R.drawable.gdg_new);
+            mBackgroundBitmap = BitmapFactory.decodeResource(resources, R.drawable.gdg_logo);
 
             backgroundColor = Color.BLACK;
 
