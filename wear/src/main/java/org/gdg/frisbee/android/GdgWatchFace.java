@@ -101,12 +101,12 @@ public class GdgWatchFace extends CanvasWatchFaceService {
         Paint mDateTimePaint;
         Bitmap mBackgroundBitmap;
         Bitmap mGrayBackgroundBitmap;
-        int backgroundColor;
-        int timeSetting;
+        int mBackgroundColor;
+        int mTimeSetting;
         boolean mAmbient;
         boolean mLightMode = false;
         boolean mDisplayDate = true;
-        boolean displayTime = true;
+        boolean mDisplayTime = true;
         Time mTime;
         final BroadcastReceiver mTimeZoneReceiver = new BroadcastReceiver() {
             @Override
@@ -153,7 +153,7 @@ public class GdgWatchFace extends CanvasWatchFaceService {
 
             mBackgroundBitmap = BitmapFactory.decodeResource(resources, R.drawable.gdg_logo);
 
-            backgroundColor = Color.BLACK;
+            mBackgroundColor = Color.BLACK;
 
             mHourHandPaint = new Paint();
             mHourHandPaint.setColor(ContextCompat.getColor(GdgWatchFace.this, R.color.gdg_gray));
@@ -295,7 +295,7 @@ public class GdgWatchFace extends CanvasWatchFaceService {
             } else if (mAmbient) {//TODO gray ambient BG for light mode
                 canvas.drawBitmap(mGrayBackgroundBitmap, 0, 0, mBackgroundPaint);
             } else {
-                canvas.drawColor(backgroundColor);
+                canvas.drawColor(mBackgroundColor);
                 canvas.drawBitmap(mBackgroundBitmap, 0, 0, mBackgroundPaint);
             }
 
@@ -318,7 +318,7 @@ public class GdgWatchFace extends CanvasWatchFaceService {
                         mCenterY - textHeightOffset, getAdjustedPaintColor(mDateTimePaint));
             }
 
-            if(displayTime) {
+            if(mDisplayTime) {
                 canvas.drawText(formatHour(mTime.hour) + ":" + formatTwoDigitNumber(mTime.minute),
                     mCenterX - mSecondHandLength, mCenterY - textHeightOffset, getAdjustedPaintColor(mDateTimePaint));
             }
@@ -440,7 +440,7 @@ public class GdgWatchFace extends CanvasWatchFaceService {
 
         private String formatHour(int hour) {
             int hourToDisplay = hour;
-            if(timeSetting == WearableConfigurationUtil.TIME_12_HOUR) {
+            if(mTimeSetting == WearableConfigurationUtil.TIME_12_HOUR) {
                 hourToDisplay = (hour % WearableConfigurationUtil.TIME_12_HOUR) == 0 ?
                     WearableConfigurationUtil.TIME_12_HOUR : hour%WearableConfigurationUtil.TIME_12_HOUR;
             }
@@ -527,15 +527,15 @@ public class GdgWatchFace extends CanvasWatchFaceService {
             }
 
             if (dataMap.containsKey(WearableConfigurationUtil.CONFIG_DIGITAL_TIME)) {
-                timeSetting = dataMap.getInt(WearableConfigurationUtil.CONFIG_DIGITAL_TIME);
-                displayTime =  timeSetting > 0;
+                mTimeSetting = dataMap.getInt(WearableConfigurationUtil.CONFIG_DIGITAL_TIME);
+                mDisplayTime =  mTimeSetting > 0;
             }
 
             invalidateIfNecessary();
         }
 
         private void updateBackground(int background) {
-            backgroundColor = background;
+            mBackgroundColor = background;
         }
 
         private void updateDateTimeColor(int color) {
