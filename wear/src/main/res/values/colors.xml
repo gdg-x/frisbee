@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="gdg_black">#000000</color>
+  <color name="gdg_gray">#cccccc</color>
+  <color name="gdg_white">#FFFFFF</color>
+
+  <color name="wearable_config_background">#434343</color>
+  <color name="wearable_config_circle_border">#424242</color>
+  <color name="wearable_config_header">#959595</color>
+  <color name="wearable_config_white">#FFFFFF</color>
+  <color name="wearable_config_blue">#2878ff</color>
+  <color name="wearable_config_gray">#c1c1c1</color>
+</resources>

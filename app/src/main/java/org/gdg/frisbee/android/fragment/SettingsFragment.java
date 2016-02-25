@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
-import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.annotation.NonNull;
@@ -36,12 +35,14 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.games.Games;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.plus.Plus;
 
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.GdgXHub;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
@@ -53,12 +54,10 @@ import org.gdg.frisbee.android.appwidget.UpcomingEventWidgetProvider;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
+import org.gdg.frisbee.android.view.LocationListPreference;
 
 import java.io.IOException;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 import timber.log.Timber;
 
 public class SettingsFragment extends PreferenceFragment {
@@ -67,22 +66,34 @@ public class SettingsFragment extends PreferenceFragment {
 
     private GoogleApiClient mGoogleApiClient;
 
-    private Preference.OnPreferenceChangeListener mOnHomeGdgPreferenceChange = new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object o) {
-            final String homeGdg = (String) o;
+    private Preference.OnPreferenceChangeListener mOnHomeGdgPreferenceChange =
+        new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                final String homeGdg = (String) o;
 
-            if (mGoogleApiClient.isConnected() && PrefUtils.isGcmEnabled(getActivity())) {
-                setHomeGdg(homeGdg);
+                if (mGoogleApiClient.isConnected() && PrefUtils.isGcmEnabled(getActivity())) {
+                    setHomeGdg(homeGdg);
+                }
+                // Update widgets to show newest chosen GdgHome events
+                App.getInstance().startService(new Intent(App.getInstance(),
+                    UpcomingEventWidgetProvider.UpdateService.class));
+
+                return true;
             }
-            // Update widgets to show newest chosen GdgHome events
-            // TODO: Make it into class which broadcasts update need to all interested entities like MainActivity and Widgets
-            App.getInstance().startService(new Intent(App.getInstance(), UpcomingEventWidgetProvider.UpdateService.class));
+        };
 
-            return true;
-        }
-    };
+    private Preference.OnPreferenceChangeListener mOnAnalyticsPreferenceChange =
+        new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                boolean analytics = (Boolean) o;
+                GoogleAnalytics.getInstance(getActivity()).setAppOptOut(!analytics);
+                return true;
+            }
+        };
 
+    private LinearLayout mLoading;
     private Preference.OnPreferenceChangeListener mOnGcmPreferenceChange = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object o) {
@@ -101,38 +112,35 @@ public class SettingsFragment extends PreferenceFragment {
                             }
 
                             GdgXHub client = App.getInstance().getGdgXHub();
-                            String token = GoogleAuthUtil.getToken(getActivity(), 
-                                    Plus.AccountApi.getAccountName(mGoogleApiClient), 
-                                    "oauth2: " + Scopes.PLUS_LOGIN);
+                            String token = GoogleAuthUtil.getToken(getActivity(),
+                                Plus.AccountApi.getAccountName(mGoogleApiClient),
+                                "oauth2: " + Scopes.PLUS_LOGIN);
 
                             if (!enableGcm) {
-                                client.unregisterGcm("Bearer " + token, new GcmRegistrationRequest(PrefUtils.getRegistrationId(getActivity())),
-                                        new Callback<GcmRegistrationResponse>() {
-                                            @Override
-                                            public void success(GcmRegistrationResponse gcmRegistrationResponse, retrofit.client.Response response) {
-                                                PrefUtils.setGcmSettings(getActivity(), false, null, null);
-                                            }
-
-                                            @Override
-                                            public void failure(RetrofitError error) {
-                                                Timber.e(error, "Fail");
-                                            }
-                                        });
+                                GcmRegistrationRequest request =
+                                    new GcmRegistrationRequest(PrefUtils.getRegistrationId(getActivity()));
+                                client.unregisterGcm("Bearer " + token, request)
+                                    .enqueue(new Callback<GcmRegistrationResponse>() {
+                                        @Override
+                                        public void success(GcmRegistrationResponse gcmRegistrationResponse) {
+                                            PrefUtils.setGcmSettings(getActivity(), false, null, null);
+                                        }
+                                    });
                             } else {
                                 final String regId = mGcm.register(BuildConfig.GCM_SENDER_ID);
 
-                                client.registerGcm("Bearer " + token, new GcmRegistrationRequest(regId),
-                                        new Callback<GcmRegistrationResponse>() {
-                                            @Override
-                                            public void success(GcmRegistrationResponse gcmRegistrationResponse, retrofit.client.Response response) {
-                                                PrefUtils.setGcmSettings(getActivity(), true, regId, gcmRegistrationResponse.getNotificationKey());
-                                            }
-
-                                            @Override
-                                            public void failure(RetrofitError error) {
-                                                Timber.e(error, "Fail");
-                                            }
-                                        });
+                                client.registerGcm("Bearer " + token, new GcmRegistrationRequest(regId))
+                                    .enqueue(new Callback<GcmRegistrationResponse>() {
+                                        @Override
+                                        public void success(GcmRegistrationResponse gcmRegistrationResponse) {
+                                            PrefUtils.setGcmSettings(
+                                                getActivity(),
+                                                true,
+                                                regId,
+                                                gcmRegistrationResponse.getNotificationKey()
+                                            );
+                                        }
+                                    });
 
                                 setHomeGdg(PrefUtils.getHomeChapterIdNotNull(getActivity()));
                             }
@@ -170,16 +178,6 @@ public class SettingsFragment extends PreferenceFragment {
         }
     };
 
-    private Preference.OnPreferenceChangeListener mOnAnalyticsPreferenceChange = new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object o) {
-            boolean analytics = (Boolean) o;
-            GoogleAnalytics.getInstance(getActivity()).setAppOptOut(!analytics);
-            return true;
-        }
-    };
-    private LinearLayout mLoading;
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -209,34 +207,36 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void initPreferences() {
-        final ListPreference prefHomeGdgList = (ListPreference) findPreference(PrefUtils.SETTINGS_HOME_GDG);
+        final LocationListPreference prefHomeGdgList =
+            (LocationListPreference) findPreference(PrefUtils.SETTINGS_HOME_GDG);
         if (prefHomeGdgList != null) {
             prefHomeGdgList.setEnabled(false);
 
-            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, false, new ModelCache.CacheListener() {
-                @Override
-                public void onGet(Object item) {
-                    Directory directory = (Directory) item;
+            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, false,
+                new ModelCache.CacheListener() {
+                    @Override
+                    public void onGet(Object item) {
+                        Directory directory = (Directory) item;
 
-                    CharSequence[] entries = new String[directory.getGroups().size()];
-                    CharSequence[] entryValues = new String[directory.getGroups().size()];
+                        String[] entries = new String[directory.getGroups().size()];
+                        String[] entryValues = new String[directory.getGroups().size()];
 
-                    int i = 0;
-                    for (Chapter chapter : directory.getGroups()) {
-                        entries[i] = chapter.getName();
-                        entryValues[i] = chapter.getGplusId();
-                        i++;
+                        int i = 0;
+                        for (Chapter chapter : directory.getGroups()) {
+                            entries[i] = chapter.getName();
+                            entryValues[i] = chapter.getGplusId();
+                            i++;
+                        }
+                        prefHomeGdgList.setEntries(entries);
+                        prefHomeGdgList.setEntryValues(entryValues);
+                        prefHomeGdgList.setEnabled(true);
                     }
-                    prefHomeGdgList.setEntries(entries);
-                    prefHomeGdgList.setEntryValues(entryValues);
-                    prefHomeGdgList.setEnabled(true);
-                }
 
-                @Override
-                public void onNotFound(String key) {
+                    @Override
+                    public void onNotFound(String key) {
 
-                }
-            });
+                    }
+                });
 
             prefHomeGdgList.setOnPreferenceChangeListener(mOnHomeGdgPreferenceChange);
         }
@@ -256,6 +256,7 @@ public class SettingsFragment extends PreferenceFragment {
                     if (!signedIn) {
                         if (mGoogleApiClient.isConnected()) {
                             Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+                            Games.signOut(mGoogleApiClient);
                             mGoogleApiClient.disconnect();
                             PrefUtils.setLoggedOut(getActivity());
                         }
@@ -285,22 +286,13 @@ public class SettingsFragment extends PreferenceFragment {
                 try {
                     GdgActivity activity = (GdgActivity) getActivity();
                     String token = GoogleAuthUtil.getToken(
-                            activity,
-                            Plus.AccountApi.getAccountName(activity.getGoogleApiClient()),
-                            "oauth2: " + Scopes.PLUS_LOGIN);
+                        activity,
+                        Plus.AccountApi.getAccountName(activity.getGoogleApiClient()),
+                        "oauth2: " + Scopes.PLUS_LOGIN);
 
                     App.getInstance().getGdgXHub().setHomeGdg("Bearer " + token,
-                            new HomeGdgRequest(homeGdg),
-                            new Callback<Void>() {
-                                @Override
-                                public void success(Void aVoid, Response response) {
-                                }
-
-                                @Override
-                                public void failure(RetrofitError error) {
-                                    Timber.e(error, "Setting Home failed.");
-                                }
-                            });
+                        new HomeGdgRequest(homeGdg))
+                        .execute();
                 } catch (IOException | GoogleAuthException e) {
                     e.printStackTrace();
                 }

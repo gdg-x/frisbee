@@ -61,7 +61,7 @@ public class GapiOkResponse extends LowLevelHttpResponse {
     public InputStream getContent() throws IOException {
         HttpURLConnection connection = this.connection;
         return HttpStatusCodes.isSuccess(responseCode)
-                ? connection.getInputStream() : connection.getErrorStream();
+            ? connection.getInputStream() : connection.getErrorStream();
     }
 
     @Override

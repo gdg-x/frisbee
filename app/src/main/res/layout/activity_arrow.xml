@@ -17,8 +17,8 @@
 -->
 
 <android.support.v4.widget.DrawerLayout
-  android:id="@+id/drawer"
   xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/drawer"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:fitsSystemWindows="true"
@@ -51,9 +51,9 @@
           android:layout_gravity="center"
           android:layout_marginTop="10dip"
           android:layout_weight="1"
+          android:contentDescription="@string/cd_arrowTagImage"
           android:scaleType="fitCenter"
-          android:src="@drawable/arrow_tagf"
-          android:contentDescription="@string/cd_arrowTagImage"/>
+          android:src="@drawable/arrow_tagf" />
 
         <TextView
           android:id="@+id/textView"
@@ -101,8 +101,8 @@
           android:layout_height="0dp"
           android:layout_gravity="center"
           android:layout_weight="1"
-          android:scaleType="fitCenter"
-          android:contentDescription="@string/cd_qrCode"/>
+          android:contentDescription="@string/cd_qrCode"
+          android:scaleType="fitCenter" />
 
         <TextView
           android:id="@+id/textView2"

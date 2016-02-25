@@ -18,6 +18,7 @@ package org.gdg.frisbee.android.widget;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -31,6 +32,8 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
@@ -46,8 +49,11 @@ import android.widget.EditText;
 
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.achievements.AchievementActionHandler;
+import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.Utils;
+import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -59,6 +65,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.doorbell.android.DoorbellApi;
 import io.doorbell.android.manavo.rest.RestCallback;
+import io.doorbell.android.manavo.rest.RestErrorCallback;
 import timber.log.Timber;
 
 public class FeedbackFragment extends DialogFragment {
@@ -71,7 +78,6 @@ public class FeedbackFragment extends DialogFragment {
     private static final String PROPERTY_ACTIVITY = "Activity";
     private static final String PROPERTY_APP_VERSION_NAME = "App Version Name";
     private static final String PROPERTY_APP_VERSION_CODE = "App Version Code";
-//    private static final String POWERED_BY_DOORBELL_TEXT = "Powered by <a href=\"https://doorbell.io\">Doorbell.io</a>";
 
     @Bind(R.id.feedback_message_text)
     EditText mMessageField;
@@ -87,6 +93,7 @@ public class FeedbackFragment extends DialogFragment {
 
     private JSONObject mProperties;
     private DoorbellApi mApi;
+    private AchievementActionHandler achievementHandler;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -100,6 +107,14 @@ public class FeedbackFragment extends DialogFragment {
         addProperty("loggedIn", PrefUtils.isSignedIn(getActivity())); // Optionally add some properties
         addProperty("appStarts", PrefUtils.getAppStarts(getActivity()));
         buildProperties();
+
+        setRetainInstance(true);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        achievementHandler = ((GdgActivity) activity).getAchievementActionHandler();
     }
 
     @NonNull
@@ -107,16 +122,16 @@ public class FeedbackFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         View feedbackView = LayoutInflater.from(getActivity())
-                .inflate(R.layout.dialog_feedback, (ViewGroup) getView(), false);
+            .inflate(R.layout.dialog_feedback, (ViewGroup) getView(), false);
         ButterKnife.bind(this, feedbackView);
         setupEmailAutocomplete();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                .setView(feedbackView)
-                .setTitle(R.string.feedback)
-                .setCancelable(true)
-                .setNegativeButton(R.string.feedback_cancel, null)
-                .setPositiveButton(R.string.feedback_send, null);
+            .setView(feedbackView)
+            .setTitle(R.string.feedback)
+            .setCancelable(true)
+            .setNegativeButton(R.string.feedback_cancel, null)
+            .setPositiveButton(R.string.feedback_send, null);
 
         return builder.create();
     }
@@ -132,17 +147,7 @@ public class FeedbackFragment extends DialogFragment {
                 public void onClick(View v) {
 
                     if (isValidInput()) {
-                        mApi.setLoadingMessage(getActivity().getString(R.string.feedback_sending));
-                        mApi.setCallback(new RestCallback() {
-                            public void success(Object obj) {
-                                //TODO add feedback
-                                mMessageField.setText("");
-                                mProperties = new JSONObject();
-                            }
-                        });
-                        mApi.sendFeedback(mMessageField.getText().toString(),
-                                mEmailField.getText().toString(), mProperties, "");
-
+                        sendFeedback();
                         dialog.dismiss();
                     }
                 }
@@ -151,35 +156,61 @@ public class FeedbackFragment extends DialogFragment {
     }
 
     private boolean isValidInput() {
+        return checkMessageInputValid(mMessageField.getText())
+            && checkEmailInputValid(mEmailField.getText());
+    }
 
-        boolean isValid;
-
-        String strMessage = mMessageField.getText().toString();
-        String strEmail = mEmailField.getText().toString();
-
+    private boolean checkMessageInputValid(@Nullable final CharSequence strMessage) {
         if (!TextUtils.isEmpty(strMessage)) {
-            isValid = true;
             mLayoutMessage.setError(null);
+            return true;
         } else {
-            isValid = false;
             mLayoutMessage.setError(getString(R.string.feedback_message_required));
+            return false;
         }
+    }
 
-        if (!TextUtils.isEmpty(strEmail) && android.util.Patterns.EMAIL_ADDRESS.matcher(strEmail).matches()) {
-            isValid = isValid & true;
+    private boolean checkEmailInputValid(@Nullable final CharSequence strEmail) {
+        if (!TextUtils.isEmpty(strEmail)
+            && android.util.Patterns.EMAIL_ADDRESS.matcher(strEmail).matches()) {
             mLayoutEmail.setError(null);
+            return true;
         } else {
-            isValid = false;
             mLayoutEmail.setError(getString(R.string.feedback_invalid_email));
+            return false;
         }
+    }
 
-        return isValid;
+    private void sendFeedback() {
+        mApi.setLoadingMessage(getActivity().getString(R.string.feedback_sending));
+        mApi.setCallback(new RestCallback() {
+            public void success(Object obj) {
+                mMessageField.setText("");
+                mProperties = new JSONObject();
+
+                if (achievementHandler != null) {
+                    achievementHandler.handleKissesFromGdgXTeam();
+                } else {
+                    Snackbar snackbar = Snackbar.make(getView(), R.string.thanks_for_feedback, Snackbar.LENGTH_LONG);
+                    ColoredSnackBar.info(snackbar).show();
+                }
+            }
+        });
+        mApi.setErrorCallback(new RestErrorCallback() {
+            @Override
+            public void error(String s) {
+                Snackbar snackbar = Snackbar.make(getView(), s, Snackbar.LENGTH_LONG);
+                ColoredSnackBar.alert(snackbar).show();
+            }
+        });
+        mApi.sendFeedback(mMessageField.getText().toString(),
+            mEmailField.getText().toString(), mProperties, "");
     }
 
     private void setupEmailAutocomplete() {
         //Set email AutoCompleteTextView
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
-                android.R.layout.select_dialog_item);
+            android.R.layout.select_dialog_item);
         Set<String> accountsSet = new HashSet<>();
         Account[] deviceAccounts = AccountManager.get(getActivity()).getAccounts();
         for (Account account : deviceAccounts) {

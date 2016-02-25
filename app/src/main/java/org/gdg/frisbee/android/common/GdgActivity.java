@@ -1,7 +1,7 @@
 /*
  * Copyright 2013-2015 The GDG Frisbee Project
  *
- * Licensed under 
+ * Licensed under
  * * the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -25,11 +25,15 @@ import android.content.IntentSender;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
+import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appstate.AppStateManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -45,26 +49,31 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.RecentTasksStyler;
 import org.gdg.frisbee.android.utils.Utils;
+import org.gdg.frisbee.android.view.ColoredSnackBar;
 
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public abstract class GdgActivity extends TrackableActivity implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+    GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final int STATE_DEFAULT = 0;
     private static final int STATE_SIGN_IN = 1;
     private static final int STATE_IN_PROGRESS = 2;
     private static final int RC_SIGN_IN = 0;
     private static final int DIALOG_PLAY_SERVICES_ERROR = 0;
+    @Nullable
+    @Bind(R.id.content_frame)
+    FrameLayout mContentLayout;
     private AchievementActionHandler mAchievementActionHandler;
     private Handler mHandler = new Handler();
 
     // GoogleApiClient wraps our service connection to Google Play services and
     // provides access to the users sign in state and Google's APIs.
-    protected GoogleApiClient mGoogleApiClient;
+    private GoogleApiClient mGoogleApiClient;
 
     // We use mSignInProgress to track whether user has clicked sign in.
     // mSignInProgress can be one of three values:
@@ -114,22 +123,23 @@ public abstract class GdgActivity extends TrackableActivity implements
         super.onCreate(savedInstanceState);
         RecentTasksStyler.styleRecentTasksEntry(this);
 
-        if (!Utils.isEmulator()) {
-            createGoogleApiClient();
-        }
+        mGoogleApiClient = createGoogleApiClient();
 
         mAchievementActionHandler =
-                new AchievementActionHandler(getHandler(), mGoogleApiClient, this);
+            new AchievementActionHandler(mGoogleApiClient, this);
     }
 
-    protected void createGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Plus.API).addScope(Plus.SCOPE_PLUS_LOGIN).addScope(Plus.SCOPE_PLUS_PROFILE)
+    protected GoogleApiClient createGoogleApiClient() {
+        GoogleApiClient.Builder builder = new GoogleApiClient.Builder(this)
+            .addApi(AppIndex.API);
+
+        if (PrefUtils.isSignedIn(this)) {
+            builder.addApi(Plus.API).addScope(Plus.SCOPE_PLUS_LOGIN).addScope(Plus.SCOPE_PLUS_PROFILE)
                 .addApi(Games.API).addScope(Games.SCOPE_GAMES)
-                .addApi(Drive.API).addScope(Drive.SCOPE_APPFOLDER)
-                .addApi(AppIndex.API)
-                .addApi(AppStateManager.API)
-                .build();
+                .addApi(Drive.API).addScope(Drive.SCOPE_APPFOLDER);
+        }
+
+        return builder.build();
     }
 
     @Override
@@ -139,9 +149,7 @@ public abstract class GdgActivity extends TrackableActivity implements
         mGoogleApiClient.registerConnectionCallbacks(this);
         mGoogleApiClient.registerConnectionFailedListener(this);
 
-        if (PrefUtils.isSignedIn(this)) {
-            mGoogleApiClient.connect();
-        }
+        mGoogleApiClient.connect();
     }
 
     @Override
@@ -151,12 +159,12 @@ public abstract class GdgActivity extends TrackableActivity implements
         mGoogleApiClient.unregisterConnectionCallbacks(this);
         mGoogleApiClient.unregisterConnectionFailedListener(this);
 
-        if (PrefUtils.isSignedIn(this) && mGoogleApiClient.isConnected()) {
+        if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
     }
 
-    protected AchievementActionHandler getAchievementActionHandler() {
+    public AchievementActionHandler getAchievementActionHandler() {
         return mAchievementActionHandler;
     }
 
@@ -214,8 +222,8 @@ public abstract class GdgActivity extends TrackableActivity implements
                 // Google Play services.
                 mSignInProgress = STATE_IN_PROGRESS;
                 startIntentSenderForResult(
-                        mSignInIntent.getIntentSender(),
-                        RC_SIGN_IN, null, 0, 0, 0
+                    mSignInIntent.getIntentSender(),
+                    RC_SIGN_IN, null, 0, 0, 0
                 );
             } catch (IntentSender.SendIntentException e) {
                 // The intent was canceled before it was sent.  Attempt to connect to
@@ -248,11 +256,23 @@ public abstract class GdgActivity extends TrackableActivity implements
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     protected boolean isContextValid() {
         boolean isContextValid = !isFinishing()
-                && (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1 || !isDestroyed());
+            && (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1 || !isDestroyed());
         if (!isContextValid) {
             Timber.d("Context is not valid");
         }
         return isContextValid;
+    }
+
+    protected void showError(@StringRes final int errorStringRes) {
+        if (isContextValid()) {
+            if (mContentLayout != null) {
+                Snackbar snackbar = Snackbar.make(mContentLayout, errorStringRes,
+                    Snackbar.LENGTH_SHORT);
+                ColoredSnackBar.alert(snackbar).show();
+            } else {
+                Toast.makeText(this, errorStringRes, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private boolean isLastActivityOnStack() {
@@ -261,7 +281,7 @@ public abstract class GdgActivity extends TrackableActivity implements
         List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
 
         return taskList.get(0).numActivities == 1
-                && taskList.get(0).topActivity.getClassName().equals(this.getClass().getName());
+            && taskList.get(0).topActivity.getClassName().equals(this.getClass().getName());
     }
 
     @Override
@@ -311,7 +331,8 @@ public abstract class GdgActivity extends TrackableActivity implements
                 if (status.isSuccess()) {
                     Timber.d("App Indexing API: Recorded event %s view successfully.", label);
                 } else {
-                    Timber.e("App Indexing API: There was an error recording the event view. Status = %s", status.toString());
+                    Timber.e("App Indexing API: There was an error recording the event view. Status = %s",
+                        status.toString());
                 }
             }
         };

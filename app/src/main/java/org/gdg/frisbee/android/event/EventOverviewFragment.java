@@ -23,7 +23,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
@@ -48,24 +47,22 @@ import com.tasomaniac.android.widget.DelayedProgressBar;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.EventFullDetails;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.common.BaseFragment;
 import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.Utils;
-import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import timber.log.Timber;
 
-public class EventOverviewFragment extends Fragment {
+public class EventOverviewFragment extends BaseFragment {
 
     @Bind(R.id.title)
     TextView mTitle;
@@ -92,6 +89,14 @@ public class EventOverviewFragment extends Fragment {
     private Directory mDirectory;
     private EventFullDetails mEvent;
 
+    public static Fragment createfor(String eventId) {
+        EventOverviewFragment fragment = new EventOverviewFragment();
+        Bundle args = new Bundle();
+        args.putString(Const.EXTRA_EVENT_ID, eventId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_event_overview, parent, false);
@@ -111,20 +116,20 @@ public class EventOverviewFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         final String eventId = getArguments().getString(Const.EXTRA_EVENT_ID);
-        App.getInstance().getGdgXHub().getEventDetail(eventId, new Callback<EventFullDetails>() {
+        App.getInstance().getGdgXHub().getEventDetail(eventId).enqueue(new Callback<EventFullDetails>() {
             @Override
-            public void success(EventFullDetails eventFullDetails, retrofit.client.Response response) {
-                onResponse(eventFullDetails);
+            public void success(EventFullDetails eventFullDetails) {
+                onSuccess(eventFullDetails);
             }
 
             @Override
-            public void failure(RetrofitError error) {
-                if (isAdded()) {
-                    Snackbar snackbar = Snackbar.make(getView(), R.string.server_error,
-                            Snackbar.LENGTH_SHORT);
-                    ColoredSnackBar.alert(snackbar).show();
-                }
-                Timber.d(error, "error while retrieving event %s", eventId);
+            public void failure(Throwable error) {
+                showError(R.string.server_error);
+            }
+
+            @Override
+            public void networkFailure(Throwable error) {
+                showError(R.string.offline_alert);
             }
         });
     }
@@ -164,7 +169,7 @@ public class EventOverviewFragment extends Fragment {
         return fmt.print(eventFullDetails.getStart());
     }
 
-    private void onResponse(final EventFullDetails eventFullDetails) {
+    private void onSuccess(final EventFullDetails eventFullDetails) {
         if (getActivity() == null) {
             return;
         }
@@ -186,28 +191,25 @@ public class EventOverviewFragment extends Fragment {
             @Override
             public void onNotFound(String key) {
                 if (Utils.isOnline(getActivity())) {
-                    App.getInstance().getGdgXHub().getDirectory(new Callback<Directory>() {
+                    App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
                         @Override
-                        public void success(Directory directory, retrofit.client.Response response) {
-
+                        public void success(Directory directory) {
                             mDirectory = directory;
                             updateGroupDetails(mDirectory.getGroupById(eventFullDetails.getChapter()));
                         }
 
                         @Override
-                        public void failure(RetrofitError error) {
-                            if (isAdded()) {
-                                Snackbar snackbar = Snackbar.make(getView(), R.string.fetch_chapters_failed,
-                                        Snackbar.LENGTH_SHORT);
-                                ColoredSnackBar.alert(snackbar).show();
-                            }
-                            Timber.e(error, "Could'nt fetch chapter list");
+                        public void failure(Throwable error) {
+                            showError(R.string.fetch_chapters_failed);
+                        }
+
+                        @Override
+                        public void networkFailure(Throwable error) {
+                            showError(R.string.offline_alert);
                         }
                     });
                 } else {
-                    Snackbar snackbar = Snackbar.make(getView(), R.string.offline_alert,
-                            Snackbar.LENGTH_SHORT);
-                    ColoredSnackBar.alert(snackbar).show();
+                    showError(R.string.offline_alert);
                 }
             }
         });
@@ -219,39 +221,38 @@ public class EventOverviewFragment extends Fragment {
         }
 
         Plus.PeopleApi.load(((GdgActivity) getActivity()).getGoogleApiClient(), group.getGplusId())
-                .setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
-                    @Override
-                    public void onResult(People.LoadPeopleResult loadPeopleResult) {
-                        if (loadPeopleResult.getStatus().getStatusCode() == CommonStatusCodes.SUCCESS) {
-                            Person gplusChapter = loadPeopleResult.getPersonBuffer().get(0);
-                            if (gplusChapter.getImage().hasUrl()) {
-                                Picasso.with(getActivity()).load(gplusChapter.getImage().getUrl()).into(new Target() {
-                                    @Override
-                                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
-                                        if (!isAdded()) {
-                                            return;
-                                        }
-                                        BitmapDrawable logo = new BitmapDrawable(getResources(), bitmap);
-                                        mGroupLogo.setVisibility(View.VISIBLE);
-                                        mGroupLogo.setImageDrawable(logo);
+            .setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
+                @Override
+                public void onResult(People.LoadPeopleResult loadPeopleResult) {
+                    if (loadPeopleResult.getStatus().getStatusCode() == CommonStatusCodes.SUCCESS) {
+                        Person gplusChapter = loadPeopleResult.getPersonBuffer().get(0);
+                        if (gplusChapter.getImage().hasUrl()) {
+                            Picasso.with(getActivity()).load(gplusChapter.getImage().getUrl()).into(new Target() {
+                                @Override
+                                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
+                                    if (!isAdded()) {
+                                        return;
                                     }
+                                    BitmapDrawable logo = new BitmapDrawable(getResources(), bitmap);
+                                    mGroupLogo.setVisibility(View.VISIBLE);
+                                    mGroupLogo.setImageDrawable(logo);
+                                }
 
-                                    @Override
-                                    public void onBitmapFailed(Drawable drawable) {
-                                        mGroupLogo.setVisibility(View.INVISIBLE);
-                                    }
+                                @Override
+                                public void onBitmapFailed(Drawable drawable) {
+                                    mGroupLogo.setVisibility(View.INVISIBLE);
+                                }
 
-                                    @Override
-                                    public void onPrepareLoad(Drawable drawable) {
+                                @Override
+                                public void onPrepareLoad(Drawable drawable) {
 
-                                    }
-                                });
-                            }
+                                }
+                            });
                         }
                     }
-                });
+                }
+            });
         ((GdgActivity) getActivity()).setToolbarTitle(group.getShortName());
-        //mGroupLogo.setVisibility(View.INVISIBLE);  //commented as it's making group logo invisible without any condition
     }
 
     private void setIsLoading(boolean isLoading) {
@@ -286,8 +287,8 @@ public class EventOverviewFragment extends Fragment {
             MenuItem shareMenuItem = menu.findItem(R.id.share);
 
             if (mEvent.getEventUrl() != null) {
-                ShareActionProvider mShareActionProvider = 
-                        (ShareActionProvider) MenuItemCompat.getActionProvider(shareMenuItem);
+                ShareActionProvider mShareActionProvider =
+                    (ShareActionProvider) MenuItemCompat.getActionProvider(shareMenuItem);
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
                 shareIntent.putExtra(Intent.EXTRA_TEXT, mEvent.getEventUrl());
@@ -328,10 +329,10 @@ public class EventOverviewFragment extends Fragment {
 
     private void launchUrl(String eventUrl) {
         new CustomTabsIntent.Builder()
-                .setToolbarColor(getResources().getColor(R.color.theme_primary))
-                .setShowTitle(true)
-                .build()
-                .launchUrl(getActivity(), Uri.parse(eventUrl));
+            .setToolbarColor(getResources().getColor(R.color.theme_primary))
+            .setShowTitle(true)
+            .build()
+            .launchUrl(getActivity(), Uri.parse(eventUrl));
     }
 
     private void addEventToCalendar() {
@@ -348,14 +349,6 @@ public class EventOverviewFragment extends Fragment {
         }
 
         startActivity(intent);
-    }
-
-    public static Fragment createfor(String eventId) {
-        EventOverviewFragment fragment = new EventOverviewFragment();
-        Bundle args = new Bundle();
-        args.putString(Const.EXTRA_EVENT_ID, eventId);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     public interface Callbacks {

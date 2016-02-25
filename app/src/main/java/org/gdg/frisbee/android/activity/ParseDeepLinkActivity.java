@@ -57,10 +57,10 @@ public class ParseDeepLinkActivity extends Activity {
         String[] parts = deepLinkId.split("/");
 
         App.getInstance().getTracker().send(new HitBuilders.EventBuilder()
-                .setCategory("gplus")
-                .setAction("deepLink")
-                .setLabel(deepLinkId)
-                .build());
+            .setCategory("gplus")
+            .setAction("deepLink")
+            .setLabel(deepLinkId)
+            .build());
 
         // Our deep links look like this: https://developers.google.com/events/<eventId>/join,
         // or <plus_id>/events/<eventId>/join    join is optional

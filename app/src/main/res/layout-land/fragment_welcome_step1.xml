@@ -28,11 +28,11 @@
         <LinearLayout
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:layout_gravity="center_horizontal"
           android:layout_marginBottom="25dip"
           android:layout_marginLeft="10dip"
           android:layout_marginTop="10dip"
           android:orientation="vertical"
-          android:layout_gravity="center_horizontal"
           android:padding="5dip">
 
           <TextView
@@ -42,9 +42,9 @@
             android:linksClickable="false"
             android:singleLine="true"
             android:text="@string/welcome"
+            android:textAppearance="@android:style/TextAppearance.Large"
             android:textColor="@color/asbestos"
-            android:textIsSelectable="false"
-            android:textAppearance="@android:style/TextAppearance.Large"/>
+            android:textIsSelectable="false" />
 
           <TextView
             android:id="@+id/textView1"
@@ -53,9 +53,9 @@
             android:linksClickable="false"
             android:singleLine="true"
             android:text="@string/choose_home_gdg"
+            android:textAppearance="@android:style/TextAppearance.Large"
             android:textColor="@color/asbestos"
-            android:textIsSelectable="false"
-            android:textAppearance="@android:style/TextAppearance.Large"/>
+            android:textIsSelectable="false" />
         </LinearLayout>
 
         <ViewSwitcher
@@ -85,13 +85,25 @@
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
-            <Spinner
-              android:id="@+id/chapter_spinner"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:minHeight="50dip"
-              android:minWidth="200dip"
-              android:spinnerMode="dropdown" />
+            <android.support.design.widget.TextInputLayout
+              android:id="@+id/chapter_spinner_text_input_layout"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+              <org.gdg.frisbee.android.view.AutoCompleteSpinnerView
+                android:id="@+id/chapter_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/keyline_1"
+                android:layout_marginRight="@dimen/keyline_1"
+                android:drawableRight="@drawable/spinner_arrow_dropdown"
+                android:hint="@string/home_gdg"
+                android:minHeight="50dip"
+                android:minWidth="200dip"
+                android:paddingLeft="@dimen/spinner_left_padding"
+                android:paddingRight="4dp"
+                android:singleLine="true" />
+            </android.support.design.widget.TextInputLayout>
 
             <Button
               android:id="@+id/confirm"
@@ -116,6 +128,6 @@
     android:id="@+id/imageView1"
     android:layout_width="match_parent"
     android:layout_height="15dip"
-    android:contentDescription="@null"
-    android:background="@drawable/googly_bar" />
+    android:background="@drawable/googly_bar"
+    android:contentDescription="@null" />
 </LinearLayout>

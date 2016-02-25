@@ -19,7 +19,6 @@ package org.gdg.frisbee.android.pulse;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,21 +26,18 @@ import android.widget.ListView;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.chapter.MainActivity;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Pulse;
 import org.gdg.frisbee.android.api.model.PulseEntry;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.common.GdgListFragment;
-import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
 import java.util.Map;
 
 import butterknife.ButterKnife;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import timber.log.Timber;
 
 public class PulseFragment extends GdgListFragment {
 
@@ -72,7 +68,7 @@ public class PulseFragment extends GdgListFragment {
             mListener = (Callbacks) activity;
         } else {
             throw new ClassCastException("Activity " + activity.getClass().getSimpleName()
-                    + " must implement " + Pulse.class.getSimpleName() + " interface.");
+                + " must implement " + Pulse.class.getSimpleName() + " interface.");
         }
     }
 
@@ -90,79 +86,79 @@ public class PulseFragment extends GdgListFragment {
         mMode = getArguments().getInt(ARG_MODE);
 
         int[] positions = savedInstanceState != null
-                ? savedInstanceState.getIntArray(INSTANCE_STATE_POSITIONS) : null;
+            ? savedInstanceState.getIntArray(INSTANCE_STATE_POSITIONS) : null;
         mAdapter = new PulseAdapter(getActivity(), positions);
         setListAdapter(mAdapter);
 
         setIsLoading(true);
 
         App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
-                true,
-                new ModelCache.CacheListener() {
-                    @Override
-                    public void onGet(Object item) {
-                        Pulse pulse = (Pulse) item;
-                        initAdapter(pulse);
-                    }
+            true,
+            new ModelCache.CacheListener() {
+                @Override
+                public void onGet(Object item) {
+                    Pulse pulse = (Pulse) item;
+                    initAdapter(pulse);
+                }
 
-                    @Override
-                    public void onNotFound(String key) {
-                        fetchPulseTask();
-                    }
-                });
+                @Override
+                public void onNotFound(String key) {
+                    fetchPulseTask();
+                }
+            });
     }
 
     private void fetchPulseTask() {
         if (mTarget.equals(GLOBAL)) {
-            App.getInstance().getGroupDirectory().getPulse(new Callback<Pulse>() {
+            App.getInstance().getGroupDirectory().getPulse().enqueue(new Callback<Pulse>() {
                 @Override
-                public void success(final Pulse pulse, retrofit.client.Response response) {
+                public void success(final Pulse pulse) {
                     App.getInstance().getModelCache().putAsync(
-                            Const.CACHE_KEY_PULSE + mTarget.toLowerCase(),
-                            pulse,
-                            DateTime.now().plusDays(1),
-                            new ModelCache.CachePutListener() {
-                                @Override
-                                public void onPutIntoCache() {
-                                    initAdapter(pulse);
-                                }
-                            });
+                        Const.CACHE_KEY_PULSE + mTarget.toLowerCase(),
+                        pulse,
+                        DateTime.now().plusDays(1),
+                        new ModelCache.CachePutListener() {
+                            @Override
+                            public void onPutIntoCache() {
+                                initAdapter(pulse);
+                            }
+                        });
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
-                    if (isAdded()) {
-                        Snackbar snackbar = Snackbar.make(getView(), R.string.fetch_chapters_failed,
-                                Snackbar.LENGTH_SHORT);
-                        ColoredSnackBar.alert(snackbar).show();
-                    }
-                    Timber.e(error, "Couldn't fetch pulse");
+                public void failure(Throwable error) {
+                    showError(R.string.server_error);
+                }
+
+                @Override
+                public void networkFailure(Throwable error) {
+                    showError(R.string.offline_alert);
                 }
             });
         } else {
-            App.getInstance().getGroupDirectory().getCountryPulse(mTarget, new Callback<Pulse>() {
+            App.getInstance().getGroupDirectory().getCountryPulse(mTarget).enqueue(new Callback<Pulse>() {
                 @Override
-                public void success(final Pulse pulse, retrofit.client.Response response) {
+                public void success(final Pulse pulse) {
                     App.getInstance().getModelCache().putAsync(
-                            Const.CACHE_KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
-                            pulse,
-                            DateTime.now().plusDays(1),
-                            new ModelCache.CachePutListener() {
-                                @Override
-                                public void onPutIntoCache() {
-                                    initAdapter(pulse);
-                                }
-                            });
+                        Const.CACHE_KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
+                        pulse,
+                        DateTime.now().plusDays(1),
+                        new ModelCache.CachePutListener() {
+                            @Override
+                            public void onPutIntoCache() {
+                                initAdapter(pulse);
+                            }
+                        });
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
-                    if (isAdded()) {
-                        Snackbar snackbar = Snackbar.make(getView(), R.string.fetch_chapters_failed,
-                                Snackbar.LENGTH_SHORT);
-                        ColoredSnackBar.alert(snackbar).show();
-                    }
-                    Timber.e(error, "Couldn't fetch pulse");
+                public void failure(Throwable error) {
+                    showError(R.string.server_error);
+                }
+
+                @Override
+                public void networkFailure(Throwable error) {
+                    showError(R.string.offline_alert);
                 }
             });
         }

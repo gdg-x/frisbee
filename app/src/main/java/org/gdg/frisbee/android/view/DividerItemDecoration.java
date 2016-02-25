@@ -10,13 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 
-/**
- * Created by <a href="mailto:marcusandreog@gmail.com">Marcus Gabilheri</a>
- *
- * @author Marcus Gabilheri
- * @version 1.0
- * @since 7/26/15.
- */
 public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
     private Drawable mDivider;
@@ -30,7 +23,8 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
         a.recycle();
     }
 
-    public DividerItemDecoration(Context context, AttributeSet attrs, boolean showFirstDivider, boolean showLastDivider) {
+    public DividerItemDecoration(Context context, AttributeSet attrs,
+                                 boolean showFirstDivider, boolean showLastDivider) {
         this(context, attrs);
         mShowFirstDivider = showFirstDivider;
         mShowLastDivider = showLastDivider;
@@ -133,7 +127,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
             return layoutManager.getOrientation();
         } else {
             throw new IllegalStateException(
-                    "DividerItemDecoration can only be used with a LinearLayoutManager.");
+                "DividerItemDecoration can only be used with a LinearLayoutManager.");
         }
     }
 
@@ -143,7 +137,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
             return layoutManager.getReverseLayout();
         } else {
             throw new IllegalStateException(
-                    "DividerItemDecoration can only be used with a LinearLayoutManager.");
+                "DividerItemDecoration can only be used with a LinearLayoutManager.");
         }
     }
 }

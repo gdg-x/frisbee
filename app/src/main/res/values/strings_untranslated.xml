@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2013-2015 The GDG Frisbee Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,17 +15,17 @@
   -->
 
 <resources>
-    <string-array name="about_tabs">
-        <item>@string/about_about</item>
-        <item>@string/about_contributors</item>
-        <item>@string/about_translators</item>
-        <item>@string/about_changelog</item>
-        <item>@string/about_get_involved</item>
-        <item>@string/about_third_party_libraries</item>
-    </string-array>
-    <string-array name="event_tabs">
-        <item>@string/event_info</item>
-        <item>@string/event_agenda</item>
-        <item>@string/event_more</item>
-    </string-array>
+  <string-array name="about_tabs">
+    <item>@string/about_about</item>
+    <item>@string/about_contributors</item>
+    <item>@string/about_translators</item>
+    <item>@string/about_changelog</item>
+    <item>@string/about_get_involved</item>
+    <item>@string/about_third_party_libraries</item>
+  </string-array>
+  <string-array name="event_tabs">
+    <item>@string/event_info</item>
+    <item>@string/event_agenda</item>
+    <item>@string/event_more</item>
+  </string-array>
 </resources>

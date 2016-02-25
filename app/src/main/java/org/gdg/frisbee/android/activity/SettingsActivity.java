@@ -19,11 +19,7 @@ package org.gdg.frisbee.android.activity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.fragment.SettingsFragment;
 
@@ -38,19 +34,16 @@ public class SettingsActivity extends GdgActivity {
         getActionBarToolbar().setTitle(R.string.settings);
         getActionBarToolbar().setNavigationIcon(R.drawable.ic_up);
 
-        Tracker t = App.getInstance().getTracker();
-        // Set screen name.
-        // Where path is a String representing the screen name.
-        t.setScreenName("/Settings");
-
-        // Send a screen view.
-        t.send(new HitBuilders.AppViewBuilder().build());
-
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.settings_fragment, new SettingsFragment())
-                    .commit();
+                .add(R.id.settings_fragment, new SettingsFragment())
+                .commit();
         }
+    }
+
+    @Override
+    protected String getTrackedViewName() {
+        return "/Settings";
     }
 
     @Override

@@ -10,12 +10,12 @@ import org.gdg.frisbee.android.service.GcmIntentService;
 import org.gdg.frisbee.android.utils.PrefUtils;
 
 public class GCMReceiver extends WakefulBroadcastReceiver {
-    
+
     @Override
     public void onReceive(Context context, Intent intent) {
         if (PrefUtils.isGcmEnabled(context)) {
             ComponentName comp = new ComponentName(context.getPackageName(),
-                    GcmIntentService.class.getName());
+                GcmIntentService.class.getName());
             // Start the service, keeping the device awake while it is launching.
             startWakefulService(context, intent.setComponent(comp));
         }

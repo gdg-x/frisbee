@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'
 apply plugin: 'com.github.triplet.play'
 apply plugin: 'checkstyle'
@@ -9,30 +8,17 @@ assemble.dependsOn('lint')
 check.dependsOn('checkstyle')
 
 Properties local_properties = new Properties()
-File localPropertiesFile = project.rootProject.file('local.properties')
-if (localPropertiesFile.exists()) {
-    local_properties.load(localPropertiesFile.newDataInputStream())
-}
+local_properties.load(new FileInputStream(rootProject.file('local.properties')))
 
-def gitSha = org.ajoberstar.grgit.Grgit.open(dir: rootProject.file('.')).head().abbreviatedId
-def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone("UTC"))
-
-def isTravis = "true".equals(System.getenv("TRAVIS"))
-def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
-
-// Manifest version information!
-def versionMajor = 2
-def versionMinor = 2
-def versionPatch = 3
-def versionBuild = 3 // bump for dogfood builds, public betas, etc.
+apply from: '../settings/frisbee.gradle'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     dexOptions {
-        // Skip pre-dexing when running on Travis CI or when disabled via -Dpre-dex=false.
-        preDexLibraries = preDexEnabled && !isTravis
+        // Skip pre-dexing when running on CI or when disabled via -Dpre-dex=false.
+        preDexLibraries = rootProject.ext.preDexEnabled && !rootProject.ext.ci
 
         javaMaxHeapSize "3g"
     }
@@ -41,19 +27,16 @@ android {
         applicationId "org.gdg.frisbee.android"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
-        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
 
-        buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
-        buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
+        buildConfigField "String", "COMMIT_SHA", "\"${commitSha()}\""
+        buildConfigField "String", "COMMIT_TIME", "\"${commitTime()}\""
 
         resConfigs "en", "ar", "cs", "de", "es", "fr", "hi", "hy-rAM", "it", "ja", "ko", "lt", "nl", "pl", "pt-rBR", "pt-rPT", "ru", "sk", "th", "tr", "uk", "zh-rCN", "zh-rHK", "zh-rTW"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        //CONFIGURATION
-        buildConfigField "Boolean", "ALPHA", "false"
-        
         //KEYS
         buildConfigField "String", "HUB_CLIENT_ID", "\"" + (local_properties.hub_client_id ?: "") + "\""
         buildConfigField "String", "GCM_SENDER_ID", "\"" + (local_properties.gcm_sender_id ?: "") + "\""
@@ -61,21 +44,6 @@ android {
         buildConfigField "String", "DOORBELL_APP_KEY", "\"" + (local_properties.doorbell_app_key ?: "") + "\""
         resValue "string", "play_app_id", "429371117063"
         resValue "string", "android_backup_key", local_properties.android_backup_key ?: ""
-    }
-
-    signingConfigs {
-        debug {
-            storeFile file("../settings/debug.keystore")
-            keyAlias "androiddebugkey"
-            storePassword "android"
-            keyPassword "android"
-        }
-        release {
-            storeFile file("../settings/" + (local_properties.release_keystore_name ?: "debug.keystore"))
-            keyAlias(local_properties.release_keystore_alias ?: "androiddebugkey")
-            storePassword(local_properties.release_keystore_pwd ?: "android")
-            keyPassword(local_properties.release_keystore_pwd2 ?: "android")
-        }
     }
 
     buildTypes {
@@ -88,9 +56,9 @@ android {
             proguardFile '../settings/proguard/proguard-google-analytics.pro'
             proguardFile '../settings/proguard/proguard-gson.pro'
             proguardFile '../settings/proguard/proguard-square-okio.pro'
-            proguardFile '../settings/proguard/proguard-square-okhttp.pro'
+            proguardFile '../settings/proguard/proguard-square-okhttp3.pro'
             proguardFile '../settings/proguard/proguard-square-picasso.pro'
-            proguardFile '../settings/proguard/proguard-square-retrofit.pro'
+            proguardFile '../settings/proguard/proguard-square-retrofit2.pro'
             proguardFile '../settings/proguard/proguard-butterknife.pro'
             proguardFile '../settings/proguard/proguard-crashlytics.pro'
             proguardFile '../settings/proguard/proguard-joda-time.pro'
@@ -99,23 +67,17 @@ android {
             zipAlignEnabled true
             shrinkResources true
             debuggable false
-            signingConfig signingConfigs.release
 
             buildConfigField "String", "IP_SIMPLE_API_ACCESS_KEY", "\"$local_properties.ip_simple_api_access_key\""
             buildConfigField "String", "ANDROID_SIMPLE_API_ACCESS_KEY", "\"$local_properties.android_simple_api_access_key\""
             resValue "string", "android_simple_api_access_key", local_properties.android_simple_api_access_key ?: ""
         }
         alpha.initWith(release)
-        alpha {
-            debuggable true
-            buildConfigField "Boolean", "ALPHA", "true"
-        }
         debug {
             ext.enableCrashlytics = false
             debuggable true
             applicationIdSuffix ".debug"
             versionNameSuffix "-debug"
-            signingConfig signingConfigs.debug
 
             buildConfigField "String", "IP_SIMPLE_API_ACCESS_KEY", "\"$local_properties.ip_simple_api_access_key_debug\""
             buildConfigField "String", "ANDROID_SIMPLE_API_ACCESS_KEY", "\"$local_properties.android_simple_api_access_key_debug\""
@@ -134,8 +96,8 @@ android {
 
     variantFilter { variant ->
         if (variant.getFlavors().get(0).name.equals('dev')
-                && (variant.buildType.name.equals('release')
-                || variant.buildType.name.equals('alpha'))) {
+            && (variant.buildType.name.equals('release')
+            || variant.buildType.name.equals('alpha'))) {
             variant.setIgnore(true);
         }
     }
@@ -144,7 +106,7 @@ android {
         abortOnError true
         checkReleaseBuilds false
 
-        ignoreWarnings isTravis
+        ignoreWarnings ci
         textReport true
         textOutput 'stdout'
 
@@ -162,14 +124,13 @@ android {
     packagingOptions {
         exclude 'LICENSE.txt'
     }
-    
+
     useLibrary 'org.apache.http.legacy'
 }
 
 play {
-    serviceAccountEmail = local_properties.play_service_account ?: ''
-    pk12File = file(local_properties.play_key_file?:'no-file.p12')
-    track = 'alpha'
+    jsonFile = file(local_properties.service_account_json_file ?: 'no-file.json')
+    track = System.getProperty('track', 'alpha')
 }
 
 configurations {
@@ -189,7 +150,8 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
     compile "com.android.support:design:$rootProject.supportLibraryVersion"
     compile "com.android.support:customtabs:$rootProject.supportLibraryVersion"
-    devCompile 'com.android.support:multidex:1.0.1'
+    compile "com.android.support.test.espresso:espresso-idling-resource:$rootProject.espressoVersion"
+    debugCompile 'com.android.support:multidex:1.0.1'
 
     //Play Services
     compile "com.google.android.gms:play-services-location:$rootProject.playServicesVersion"
@@ -203,18 +165,21 @@ dependencies {
     compile "com.google.android.gms:play-services-appindexing:$rootProject.playServicesVersion"
 
     //Google
-    compile 'com.google.http-client:google-http-client-gson:1.20.0'
-    compile 'com.google.apis:google-api-services-plus:v1-rev126-1.18.0-rc'
+    compile 'com.google.http-client:google-http-client-gson:1.21.0'
+    compile 'com.google.apis:google-api-services-plus:v1-rev329-1.21.0'
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
     compile 'com.google.zxing:android-integration:3.2.1'
     compile 'com.google.zxing:core:3.2.1'
 
     //Square
-    compile "com.squareup.okhttp:okhttp:$rootProject.okHttpVersion"
-    compile "com.squareup.okhttp:okhttp-urlconnection:$rootProject.okHttpVersion"
+    compile "com.squareup.okhttp3:okhttp:$rootProject.okHttpVersion"
+    compile "com.squareup.okhttp3:okhttp-urlconnection:$rootProject.okHttpVersion"
+    compile "com.squareup.okhttp3:logging-interceptor:$rootProject.okHttpVersion"
     compile 'com.squareup.okio:okio:1.6.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.squareup.retrofit:retrofit:1.9.0'
+    compile "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
+    compile "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
+    androidTestCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
     debugCompile "com.squareup.leakcanary:leakcanary-android:$rootProject.leakCanaryVersion"
     alphaCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
     releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
@@ -223,19 +188,23 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.jakewharton.timber:timber:4.1.0'
     compile 'com.jakewharton:disklrucache:2.0.2'
+    compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.1'
 
     //Others
-    compile 'io.doorbell:android-sdk:0.2.2@aar'
+    compile 'io.doorbell:android-sdk:0.2.6@aar'
     compile 'org.jsoup:jsoup:1.8.2'
     compile "net.danlew:android.joda:$rootProject.jodaTimeVersion"
     compile 'com.tasomaniac:delayed-progress:0.3'
     compile 'com.google.code.findbugs:jsr305:2.0.1'
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.4@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
 
     //Local
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Android Wear
+    prodWearApp project(':wear')
 
     // Dependencies for local unit tests
     testCompile "junit:junit:$rootProject.junitVersion"
@@ -254,4 +223,33 @@ dependencies {
     // Espresso UI Testing dependencies.
     androidTestCompile "com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion"
     androidTestCompile "com.android.support.test.espresso:espresso-intents:$rootProject.espressoVersion"
+}
+
+apply plugin: 'com.google.gms.google-services'
+
+def commitSha() {
+    def file = new File(project.buildDir, "commit-sha.txt")
+    if (file.exists()) {
+        return file.text
+    }
+
+    def value = org.ajoberstar.grgit.Grgit.open(dir: rootProject.file('.')).head().abbreviatedId
+
+    file.parentFile.mkdirs()
+    file.text = value
+    return value
+}
+
+def commitTime() {
+    def file = new File(project.buildDir, "commit-timestamp.txt")
+    if (file.exists()) {
+        return file.text
+    }
+
+    def date = org.ajoberstar.grgit.Grgit.open(dir: rootProject.file('.')).head().date
+    def value = date.format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone("UTC"))
+
+    file.parentFile.mkdirs()
+    file.text = value
+    return value
 }

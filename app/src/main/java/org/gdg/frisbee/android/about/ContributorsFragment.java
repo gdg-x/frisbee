@@ -21,6 +21,7 @@ import android.support.design.widget.Snackbar;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.ContributorList;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
@@ -28,9 +29,6 @@ import org.gdg.frisbee.android.common.PeopleListFragment;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
 
 public class ContributorsFragment extends PeopleListFragment {
 
@@ -44,41 +42,37 @@ public class ContributorsFragment extends PeopleListFragment {
         if (Utils.isOnline(getActivity())) {
             fetchGitHubContributors();
         } else {
-            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_FRISBEE_CONTRIBUTORS, false, new ModelCache.CacheListener() {
-                @Override
-                public void onGet(Object item) {
-                    ContributorList contributors = (ContributorList) item;
+            App.getInstance().getModelCache().getAsync(
+                Const.CACHE_KEY_FRISBEE_CONTRIBUTORS, false, new ModelCache.CacheListener() {
+                    @Override
+                    public void onGet(Object item) {
+                        ContributorList contributors = (ContributorList) item;
 
-                    Snackbar snackbar = Snackbar.make(getView(), R.string.cached_content, Snackbar.LENGTH_SHORT);
-                    ColoredSnackBar.info(snackbar).show();
-                    mAdapter.addAll(contributors);
-                }
+                        Snackbar snackbar = Snackbar.make(getView(), R.string.cached_content, Snackbar.LENGTH_SHORT);
+                        ColoredSnackBar.info(snackbar).show();
+                        mAdapter.addAll(contributors);
+                    }
 
-                @Override
-                public void onNotFound(String key) {
-                    Snackbar snackbar = Snackbar.make(getView(), R.string.offline_alert, Snackbar.LENGTH_SHORT);
-                    ColoredSnackBar.alert(snackbar).show();
-                }
-            });
+                    @Override
+                    public void onNotFound(String key) {
+                        showError(R.string.offline_alert);
+                    }
+                });
         }
     }
-    
-    private void fetchGitHubContributors() {
-        App.getInstance().getGithub().getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO, new Callback<ContributorList>() {
-            @Override
-            public void success(final ContributorList contributors, retrofit.client.Response response) {
 
-                mAdapter.addAll(contributors);
-                App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_FRISBEE_CONTRIBUTORS,
+    private void fetchGitHubContributors() {
+        App.getInstance().getGithub().getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO)
+            .enqueue(new Callback<ContributorList>() {
+                @Override
+                public void success(final ContributorList contributors) {
+
+                    mAdapter.addAll(contributors);
+                    App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_FRISBEE_CONTRIBUTORS,
                         contributors,
                         DateTime.now().plusDays(1),
                         null);
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-
-            }
-        });
+                }
+            });
     }
 }

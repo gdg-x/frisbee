@@ -15,6 +15,15 @@ import org.joda.time.DateTime;
 
 public class TaggedEventSeries implements Parcelable {
 
+    public static final Parcelable.Creator<TaggedEventSeries> CREATOR = new Parcelable.Creator<TaggedEventSeries>() {
+        public TaggedEventSeries createFromParcel(Parcel source) {
+            return new TaggedEventSeries(source);
+        }
+
+        public TaggedEventSeries[] newArray(int size) {
+            return new TaggedEventSeries[size];
+        }
+    };
     private String mTag;
     private int mDrawerIconResId;
     private int mTitleResId;
@@ -36,12 +45,17 @@ public class TaggedEventSeries implements Parcelable {
         final ContextThemeWrapper themeWrapper = new ContextThemeWrapper(context, specialEventTheme);
         final TypedArray a = themeWrapper.obtainStyledAttributes(R.styleable.SpecialEvent);
 
-        mDrawerIconResId = a.getResourceId(R.styleable.SpecialEvent_specialEventDrawerIcon, R.drawable.ic_drawer_ioextended);
-        mDefaultIconResId = a.getResourceId(R.styleable.SpecialEvent_specialEventDefaultIcon, R.drawable.ic_ioextended);
-        mLogoResId = a.getResourceId(R.styleable.SpecialEvent_specialEventLogo, R.drawable.ic_logo_ioextended);
+        mDrawerIconResId = a.getResourceId(R.styleable.SpecialEvent_specialEventDrawerIcon,
+            R.drawable.ic_drawer_ioextended);
+        mDefaultIconResId = a.getResourceId(R.styleable.SpecialEvent_specialEventDefaultIcon,
+            R.drawable.ic_ioextended);
+        mLogoResId = a.getResourceId(R.styleable.SpecialEvent_specialEventLogo,
+            R.drawable.ic_logo_ioextended);
 
-        mTitleResId = a.getResourceId(R.styleable.SpecialEvent_specialEventTitle, R.string.ioextended);
-        mDescriptionResId = a.getResourceId(R.styleable.SpecialEvent_specialEventDescription, R.string.ioextended_description);
+        mTitleResId = a.getResourceId(R.styleable.SpecialEvent_specialEventTitle,
+            R.string.ioextended);
+        mDescriptionResId = a.getResourceId(R.styleable.SpecialEvent_specialEventDescription,
+            R.string.ioextended_description);
 
         a.recycle();
 
@@ -73,6 +87,19 @@ public class TaggedEventSeries implements Parcelable {
         mDrawerId = drawerId;
         mStartDateInMillis = startDateInMillis;
         mEndDateInMillis = endDateInMillis;
+    }
+
+    private TaggedEventSeries(Parcel in) {
+        mTag = in.readString();
+        mDrawerIconResId = in.readInt();
+        mTitleResId = in.readInt();
+        mDescriptionResId = in.readInt();
+        mDefaultIconResId = in.readInt();
+        mLogoResId = in.readInt();
+        mSpecialEventTheme = in.readInt();
+        mDrawerId = in.readInt();
+        mStartDateInMillis = new DateTime(in.readLong());
+        mEndDateInMillis = new DateTime(in.readLong());
     }
 
     public String getTag() {
@@ -133,27 +160,4 @@ public class TaggedEventSeries implements Parcelable {
         dest.writeLong(mStartDateInMillis.getMillis());
         dest.writeLong(mEndDateInMillis.getMillis());
     }
-
-    private TaggedEventSeries(Parcel in) {
-        mTag = in.readString();
-        mDrawerIconResId = in.readInt();
-        mTitleResId = in.readInt();
-        mDescriptionResId = in.readInt();
-        mDefaultIconResId = in.readInt();
-        mLogoResId = in.readInt();
-        mSpecialEventTheme = in.readInt();
-        mDrawerId = in.readInt();
-        mStartDateInMillis = new DateTime(in.readLong());
-        mEndDateInMillis = new DateTime(in.readLong());
-    }
-
-    public static final Parcelable.Creator<TaggedEventSeries> CREATOR = new Parcelable.Creator<TaggedEventSeries>() {
-        public TaggedEventSeries createFromParcel(Parcel source) {
-            return new TaggedEventSeries(source);
-        }
-
-        public TaggedEventSeries[] newArray(int size) {
-            return new TaggedEventSeries[size];
-        }
-    };
 }

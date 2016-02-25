@@ -14,12 +14,9 @@
 
 package org.gdg.frisbee.android.api;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.google.api.client.http.LowLevelHttpRequest;
 import com.google.api.client.http.LowLevelHttpResponse;
 import com.google.api.client.util.Preconditions;
-
-import org.gdg.frisbee.android.app.App;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -84,7 +81,7 @@ public class GapiOkHttpRequest extends LowLevelHttpRequest {
                 // cannot call setDoOutput(true) because it would change a GET method to POST
                 // for HEAD, OPTIONS, DELETE, or TRACE it would throw an exceptions
                 Preconditions.checkArgument(
-                        contentLength == 0, "%s with non-zero content length is not supported", requestMethod);
+                    contentLength == 0, "%s with non-zero content length is not supported", requestMethod);
             }
         }
         // connect
@@ -93,13 +90,6 @@ public class GapiOkHttpRequest extends LowLevelHttpRequest {
             connection.connect();
             GapiOkResponse response = new GapiOkResponse(connection);
             successfulConnection = true;
-
-            App.getInstance().getTracker().send(new HitBuilders.TimingBuilder()
-                    .setCategory("net")
-                    .setValue(System.currentTimeMillis() - startTime)
-                    .setVariable("gapi")
-                    .setLabel("gapi")
-                    .build());
 
             return response;
         } finally {

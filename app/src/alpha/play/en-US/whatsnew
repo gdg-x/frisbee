@@ -1,6 +1,11 @@
-<strong>Release 2.2.3, released on 04 Jan 2016</strong>
+<strong>Release 2.2.5</strong>
 
-- Play Games CloudSave API migrated to Play Games Snapshots. All your Arrow tagged people should remain as it is.
+- New GDG Watch Face! Thanks to Jomar Tigcal
+- New achievements. Most of them are secret. So use the app :)
+- New chapter selector in the intro and settings screen. We have 719 chapters globally. So scrolling them to find yours became hard. We have autocomplete now!
+
+<strong>Release 2.2.4</strong>
+
 - Arrow game should work now.
 - App Indexing integration.
 - AppInvite is added. Go to About page and invite your friends.

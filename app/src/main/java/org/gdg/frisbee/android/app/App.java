@@ -16,15 +16,11 @@
 
 package org.gdg.frisbee.android.app;
 
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
-import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -35,11 +31,10 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.plus.Plus;
+import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
-import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.LruCache;
-import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 
 import net.danlew.android.joda.JodaTimeAndroid;
@@ -70,16 +65,12 @@ import java.io.File;
 import java.util.ArrayList;
 
 import io.fabric.sdk.android.Fabric;
+import okhttp3.OkHttpClient;
 import timber.log.Timber;
 
 public class App extends BaseApp implements LocationListener {
 
     private static App mInstance = null;
-
-    public static App getInstance() {
-        return mInstance;
-    }
-
     private OkHttpClient mOkHttpClient;
     private GroupDirectory groupDirectoryInstance;
     private GdgXHub hubInstance;
@@ -95,6 +86,10 @@ public class App extends BaseApp implements LocationListener {
     private RefWatcher refWatcher;
     private Plus plusClient;
 
+    public static App getInstance() {
+        return mInstance;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -103,43 +98,37 @@ public class App extends BaseApp implements LocationListener {
             Timber.plant(new Timber.DebugTree());
 
             StrictMode.ThreadPolicy.Builder b = new StrictMode.ThreadPolicy.Builder()
-                    .detectDiskReads()
-                    .detectDiskWrites()
-                    .detectNetwork()
-                    .penaltyLog()
-                    .penaltyFlashScreen();
+                .detectDiskReads()
+                .detectDiskWrites()
+                .detectNetwork()
+                .penaltyLog()
+                .penaltyFlashScreen();
 
             StrictMode.setThreadPolicy(b.build());
         } else {
             Fabric.with(this, new Crashlytics());
+            Crashlytics.setString("commitSha", BuildConfig.COMMIT_SHA);
+            Crashlytics.setString("commitTime", BuildConfig.COMMIT_TIME);
             Timber.plant(new CrashlyticsTree());
         }
 
         mInstance = this;
 
-        try {
-            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-
-            int versionCode = PrefUtils.getVersionCode(this);
-            if (versionCode < pInfo.versionCode) {
-                migrate(versionCode, pInfo.versionCode);
-            }
-
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        int storedVersionCode = PrefUtils.getVersionCode(this);
+        if (storedVersionCode != 0 && storedVersionCode < BuildConfig.VERSION_CODE) {
+            onAppUpdate(storedVersionCode, BuildConfig.VERSION_CODE);
+            PrefUtils.setVersionCode(this, BuildConfig.VERSION_CODE);
         }
         mOkHttpClient = OkClientFactory.provideOkHttpClient(this);
 
         //Initialize Plus Client which is used to get profile pictures and NewFeed of the chapters.
-        final HttpTransport mTransport = new GapiOkTransport.Builder()
-                .setOkHttpClient(mOkHttpClient)
-                .build();
-        final JsonFactory mJsonFactory = new GsonFactory();
-        plusClient = new Plus.Builder(mTransport, mJsonFactory, null)
-                .setGoogleClientRequestInitializer(
-                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.IP_SIMPLE_API_ACCESS_KEY))
-                .setApplicationName("GDG Frisbee")
-                .build();
+        final HttpTransport httpTransport = new GapiOkTransport(mOkHttpClient);
+        final JsonFactory jsonFactory = new GsonFactory();
+        plusClient = new Plus.Builder(httpTransport, jsonFactory, null)
+            .setGoogleClientRequestInitializer(
+                new CommonGoogleJsonClientRequestInitializer(BuildConfig.IP_SIMPLE_API_ACCESS_KEY))
+            .setApplicationName("GDG Frisbee")
+            .build();
 
         // Initialize ModelCache and Volley
         getModelCache();
@@ -150,14 +139,13 @@ public class App extends BaseApp implements LocationListener {
         // When we clone mOkHttpClient, it will use all the same cache and everything.
         // Only the interceptors will be different.
         // We shouldn't have the below interceptor in other instances.
-        OkHttpClient picassoClient = mOkHttpClient.clone();
-        picassoClient.interceptors().add(new PlusPersonDownloader(plusClient));
+        OkHttpClient.Builder picassoClient = mOkHttpClient.newBuilder();
+        picassoClient.addInterceptor(new PlusPersonDownloader(plusClient));
 
         mPicasso = new Picasso.Builder(this)
-                .downloader(new OkHttpDownloader(picassoClient))
-                .memoryCache(new LruCache(this))
-                .build();
-//        mPicasso.setIndicatorsEnabled(BuildConfig.DEBUG);
+            .downloader(new OkHttp3Downloader(picassoClient.build()))
+            .memoryCache(new LruCache(this))
+            .build();
 
         JodaTimeAndroid.init(this);
 
@@ -184,61 +172,40 @@ public class App extends BaseApp implements LocationListener {
         mTaggedEventSeriesList = new ArrayList<>();
         //Add DevFest
         addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
-                R.style.Theme_GDG_Special_DevFest,
-                "devfest",
-                Const.DRAWER_DEVFEST,
-                Const.START_TIME_DEVFEST,
-                Const.END_TIME_DEVFEST));
+            R.style.Theme_GDG_Special_DevFest,
+            "devfest",
+            Const.DRAWER_DEVFEST,
+            Const.START_TIME_DEVFEST,
+            Const.END_TIME_DEVFEST));
         //Add Women Techmakers
         addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
-                R.style.Theme_GDG_Special_Wtm,
-                "wtm",
-                Const.DRAWER_WTM,
-                Const.START_TIME_WTM,
-                Const.END_TIME_WTM));
+            R.style.Theme_GDG_Special_Wtm,
+            "wtm",
+            Const.DRAWER_WTM,
+            Const.START_TIME_WTM,
+            Const.END_TIME_WTM));
         //Add Android Fundamentals Study Jams
         addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
-                R.style.Theme_GDG_Special_StudyJams,
-                "studyjam",
-                Const.DRAWER_STUDY_JAM,
-                Const.START_TIME_STUDY_JAMS,
-                Const.END_TIME_STUDY_JAMS));
+            R.style.Theme_GDG_Special_StudyJams,
+            "studyjam",
+            Const.DRAWER_STUDY_JAM,
+            Const.START_TIME_STUDY_JAMS,
+            Const.END_TIME_STUDY_JAMS));
         //Add IO Extended
         addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
-                R.style.Theme_GDG_Special_IOExtended,
-                "i-oextended",
-                Const.DRAWER_IO_EXTENDED,
-                Const.START_TIME_IOEXTENDED,
-                Const.END_TIME_IOEXTENDED));
+            R.style.Theme_GDG_Special_IOExtended,
+            "i-oextended",
+            Const.DRAWER_IO_EXTENDED,
+            Const.START_TIME_IOEXTENDED,
+            Const.END_TIME_IOEXTENDED));
     }
 
     private void addTaggedEventSeriesIfDateFits(@NonNull TaggedEventSeries taggedEventSeries) {
         DateTime now = DateTime.now();
         if (BuildConfig.DEBUG || (now.isAfter(taggedEventSeries.getStartDateInMillis())
-                && now.isBefore(taggedEventSeries.getEndDateInMillis()))) {
+            && now.isBefore(taggedEventSeries.getEndDateInMillis()))) {
             mTaggedEventSeriesList.add(taggedEventSeries);
         }
-    }
-
-    private void migrate(int oldVersion, int newVersion) {
-
-        if (oldVersion < 11100 || BuildConfig.ALPHA) {
-            PrefUtils.resetInitialSettings(this);
-            if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-                // SD-card available
-                String rootDirExt = Environment.getExternalStorageDirectory().getAbsolutePath()
-                        + "/Android/data/" + getPackageName() + "/cache";
-                deleteDirectory(new File(rootDirExt));
-            }
-
-            File internalCacheDir = getCacheDir();
-            deleteDirectory(new File(internalCacheDir.getAbsolutePath()));
-
-            if (BuildConfig.ALPHA) {
-                Toast.makeText(getApplicationContext(), "Alpha version always resets Preferences on update.", Toast.LENGTH_LONG).show();
-            }
-        }
-        PrefUtils.setVersionCode(this, newVersion);
     }
 
     public void updateLastLocation() {
@@ -268,8 +235,8 @@ public class App extends BaseApp implements LocationListener {
     public Tracker getTracker() {
         if (mTracker == null) {
             // Initialize GA
-            GoogleAnalytics mGaInstance = GoogleAnalytics.getInstance(getApplicationContext());
-            mTracker = mGaInstance.newTracker(getString(R.string.ga_trackingId));
+            GoogleAnalytics gaInstance = GoogleAnalytics.getInstance(getApplicationContext());
+            mTracker = gaInstance.newTracker(getString(R.string.ga_trackingId));
 
             mTracker.setAppName(getString(R.string.app_name));
             mTracker.setAnonymizeIp(true);
@@ -289,24 +256,14 @@ public class App extends BaseApp implements LocationListener {
             final File rootDir = new File(cacheDir, "/model_cache/");
 
             ModelCache.Builder builder = new ModelCache.Builder()
-                    .setMemoryCacheEnabled(true);
+                .setMemoryCacheEnabled(true);
             if (rootDir.isDirectory() || rootDir.mkdirs()) {
                 builder.setDiskCacheEnabled(true)
-                        .setDiskCacheLocation(rootDir);
+                    .setDiskCacheLocation(rootDir);
             }
             mModelCache = builder.build();
         }
         return mModelCache;
-    }
-
-    private boolean deleteDirectory(File dir) {
-        if (dir.isDirectory()) {
-            for (File child : dir.listFiles()) {
-                deleteDirectory(child);
-            }
-        }
-
-        return dir.delete();
     }
 
     @Override

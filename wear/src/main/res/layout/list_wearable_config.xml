@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?><!--<org.gdgph.watchface.WearableListItemLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <android.support.wearable.view.CircledImageView
+    android:id="@+id/setting_circle"
+    android:layout_width="52dp"
+    android:layout_height="52dp"
+    android:layout_gravity="center_vertical"
+    android:layout_marginLeft="16dp"
+    android:alpha="0.6"
+    android:scaleX="0.8"
+    android:scaleY="0.8"
+    android:src="@drawable/wearable_config_circle"
+    app:circle_border_color="@color/wearable_config_white"
+    app:circle_border_width="2dp"
+    app:circle_radius="26dp" />
+
+  <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:layout_marginLeft="72dp"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/setting_text_view"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:alpha="0.6"
+      android:fontFamily="sans-serif-condensed-light"
+      android:lineSpacingExtra="-4sp"
+      android:scaleX="0.8"
+      android:scaleY="0.8"
+      android:textColor="@color/wearable_config_white"
+      android:textSize="18sp" />
+
+    <TextView
+      android:id="@+id/subsetting_text_view"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:alpha="0.6"
+      android:fontFamily="sans-serif-condensed-light"
+      android:lineSpacingExtra="-4sp"
+      android:scaleX="0.8"
+      android:scaleY="0.8"
+      android:text="ON"
+      android:textColor="@color/wearable_config_white"
+      android:textSize="18sp"
+      android:visibility="gone" />
+  </LinearLayout>
+
+
+</merge>

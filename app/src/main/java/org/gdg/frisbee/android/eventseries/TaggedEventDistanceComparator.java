@@ -2,7 +2,7 @@ package org.gdg.frisbee.android.eventseries;
 
 import android.location.Location;
 
-import org.gdg.frisbee.android.api.model.TaggedEvent;
+import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.app.App;
 
 import java.util.Comparator;
@@ -17,8 +17,8 @@ class TaggedEventDistanceComparator implements Comparator<EventAdapter.Item> {
         float[] results = new float[1];
         float[] results2 = new float[1];
 
-        TaggedEvent event1 = (TaggedEvent) eventItem1.getEvent();
-        TaggedEvent event2 = (TaggedEvent) eventItem2.getEvent();
+        Event event1 = (Event) eventItem1.getEvent();
+        Event event2 = (Event) eventItem2.getEvent();
 
         Location lastLocation = App.getInstance().getLastLocation();
         if (lastLocation == null) {
@@ -32,10 +32,10 @@ class TaggedEventDistanceComparator implements Comparator<EventAdapter.Item> {
             return -1;
         }
 
-        Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(), 
-                event1.getLatLng().getLat(), event1.getLatLng().getLng(), results);
-        Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(), 
-                event2.getLatLng().getLat(), event2.getLatLng().getLng(), results2);
+        Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(),
+            event1.getLatLng().getLat(), event1.getLatLng().getLng(), results);
+        Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(),
+            event2.getLatLng().getLat(), event2.getLatLng().getLng(), results2);
 
         if (results[0] == results2[0]) {
             return 0;

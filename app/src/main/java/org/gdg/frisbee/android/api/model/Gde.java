@@ -43,7 +43,6 @@ public class Gde implements GdgPerson, Parcelable {
     }
 
 
-
     public double getLat() {
         return lat;
     }
