@@ -442,7 +442,7 @@ public class GdgWatchFace extends CanvasWatchFaceService {
             int hourToDisplay = hour;
             if(mTimeSetting == WearableConfigurationUtil.TIME_12_HOUR) {
                 hourToDisplay = (hour % WearableConfigurationUtil.TIME_12_HOUR) == 0 ?
-                    WearableConfigurationUtil.TIME_12_HOUR : hour%WearableConfigurationUtil.TIME_12_HOUR;
+                    WearableConfigurationUtil.TIME_12_HOUR : hour % WearableConfigurationUtil.TIME_12_HOUR;
             }
 
             return String.format(Locale.getDefault(), "%02d", hourToDisplay);

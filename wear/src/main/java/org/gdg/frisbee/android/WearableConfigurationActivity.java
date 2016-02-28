@@ -71,31 +71,40 @@ public class WearableConfigurationActivity extends Activity implements DataApi.D
 
                 TextView nameTextView = (TextView) layout.findViewById(R.id.setting_text_view);
                 String action = nameTextView.getText().toString();
-                if (action.contains("Background") || action.contains("Hand") || action.contains("Marker") || action.contains("Color")) {
-                    Intent intent = new Intent(WearableConfigurationActivity.this, ColorConfigActivity.class);
-                    intent.putExtra(ColorConfigActivity.CONFIG_HEADER, action);
-                    startActivityForResult(intent, REQUEST_COLOR);
-                } else if(WearableConfigurationUtil.CONFIG_DIGITAL_TIME.equals(action)) {
-                    Intent intent = new Intent(WearableConfigurationActivity.this, TimeConfigActivity.class);
-                    intent.putExtra(TimeConfigActivity.CONFIG_HEADER, action);
-                    startActivityForResult(intent, REQUEST_TIME);
-                } else if (WearableConfigurationUtil.CONFIG_DATE.equals(action)) {
-                    TextView settingTextView = (TextView) layout.findViewById(R.id.subsetting_text_view);
-                    CircledImageView circleImage = (CircledImageView) layout.findViewById(R.id.setting_circle);
+                switch (action) {
+                    case WearableConfigurationUtil.CONFIG_BACKGROUND:
+                    case WearableConfigurationUtil.CONFIG_DATE_TIME:
+                    case WearableConfigurationUtil.CONFIG_HAND_HOUR:
+                    case WearableConfigurationUtil.CONFIG_HAND_MINUTE:
+                    case WearableConfigurationUtil.CONFIG_HAND_SECOND:
+                    case WearableConfigurationUtil.CONFIG_HOUR_MARKER:
+                        Intent intent = new Intent(WearableConfigurationActivity.this, ColorConfigActivity.class);
+                        intent.putExtra(ColorConfigActivity.CONFIG_HEADER, action);
+                        startActivityForResult(intent, REQUEST_COLOR);
+                        break;
+                    case WearableConfigurationUtil.CONFIG_DIGITAL_TIME:
+                        intent = new Intent(WearableConfigurationActivity.this, TimeConfigActivity.class);
+                        intent.putExtra(TimeConfigActivity.CONFIG_HEADER, action);
+                        startActivityForResult(intent, REQUEST_TIME);
+                        break;
+                    case WearableConfigurationUtil.CONFIG_DATE:
+                        TextView settingTextView = (TextView) layout.findViewById(R.id.subsetting_text_view);
+                        CircledImageView circleImage = (CircledImageView) layout.findViewById(R.id.setting_circle);
 
-                    if (getString(R.string.label_setting_on).equals(settingTextView.getText().toString())) {
-                        settingTextView.setText(getString(R.string.label_setting_off));
-                        circleImage.setImageResource(R.drawable.ic_date_off);
-                        saveBooleanConfig(action, false);
-                        mDisplayDate = false;
-                        updateConfigurations();
-                    } else {
-                        settingTextView.setText(getString(R.string.label_setting_on));
-                        circleImage.setImageResource(R.drawable.ic_date_on);
-                        saveBooleanConfig(action, true);
-                        mDisplayDate = true;
-                        updateConfigurations();
-                    }
+                        if (getString(R.string.label_setting_on).equals(settingTextView.getText().toString())) {
+                            settingTextView.setText(getString(R.string.label_setting_off));
+                            circleImage.setImageResource(R.drawable.ic_date_off);
+                            saveBooleanConfig(action, false);
+                            mDisplayDate = false;
+                            updateConfigurations();
+                        } else {
+                            settingTextView.setText(getString(R.string.label_setting_on));
+                            circleImage.setImageResource(R.drawable.ic_date_on);
+                            saveBooleanConfig(action, true);
+                            mDisplayDate = true;
+                            updateConfigurations();
+                        }
+                        break;
                 }
             }
 
