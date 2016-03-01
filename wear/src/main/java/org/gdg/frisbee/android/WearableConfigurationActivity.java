@@ -1,11 +1,10 @@
 package org.gdg.frisbee.android;
 
-import android.content.Intent;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.wearable.view.CircledImageView;
 import android.support.wearable.view.WearableListView;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -21,6 +20,8 @@ import com.google.android.gms.wearable.Wearable;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 public class WearableConfigurationActivity extends Activity implements DataApi.DataListener {
     private static final String TAG = "WearableConfigActivity";
@@ -119,20 +120,20 @@ public class WearableConfigurationActivity extends Activity implements DataApi.D
             .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
                 @Override
                 public void onConnected(Bundle bundle) {
-                    Log.d(TAG, "onConnected:" + bundle);
+                    Timber.d("onConnected:" + bundle);
                     Wearable.DataApi.addListener(mGoogleApiClient, WearableConfigurationActivity.this);
                     updateConfigDataItemAndUi();
                 }
 
                 @Override
                 public void onConnectionSuspended(int i) {
-                    Log.d(TAG, "onConnectionSuspended:" + i);
+                    Timber.d("onConnectionSuspended:" + i);
                 }
             })
             .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
                 @Override
                 public void onConnectionFailed(ConnectionResult connectionResult) {
-                    Log.d(TAG, "onConnectionFailed:");
+                    Timber.d("onConnectionFailed:");
                 }
             })
             .build();

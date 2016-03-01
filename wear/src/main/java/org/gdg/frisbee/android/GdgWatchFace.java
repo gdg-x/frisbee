@@ -56,6 +56,8 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import timber.log.Timber;
+
 /**
  * Analog watch face with a ticking second hand. In ambient mode, the second hand isn't shown. On
  * devices with low-bit ambient mode, the hands are drawn without anti-aliasing in ambient mode.
@@ -190,20 +192,20 @@ public class GdgWatchFace extends CanvasWatchFaceService {
                     .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
                         @Override
                         public void onConnected(Bundle bundle) {
-                            Log.d(TAG, "onConnected:" + bundle);
+                            Timber.d("onConnected:" + bundle);
                             Wearable.DataApi.addListener(mGoogleApiClient, Engine.this);
                             updateConfigDataItemAndUi();
                         }
 
                         @Override
                         public void onConnectionSuspended(int i) {
-                            Log.d(TAG, "onConnectionSuspended:" + i);
+                            Timber.d("onConnectionSuspended:" + i);
                         }
                     })
                     .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
                         @Override
                         public void onConnectionFailed(ConnectionResult connectionResult) {
-                            Log.d(TAG, "onConnectionFailed");
+                            Timber.d("onConnectionFailed");
                         }
                     })
                     .addApi(Wearable.API)
@@ -466,9 +468,7 @@ public class GdgWatchFace extends CanvasWatchFaceService {
 
                 DataMapItem dataMapItem = DataMapItem.fromDataItem(dataItem);
                 DataMap dataMap = dataMapItem.getDataMap();
-                if (Log.isLoggable(TAG, Log.DEBUG)) {
-                    Log.d(TAG, "Config DataItem updated:" + dataMap);
-                }
+                Timber.d("Config DataItem updated:" + dataMap);
                 updateUi(dataMap);
             }
         }

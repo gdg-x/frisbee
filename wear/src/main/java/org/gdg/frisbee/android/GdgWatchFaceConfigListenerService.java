@@ -14,6 +14,8 @@ import com.google.android.gms.wearable.WearableListenerService;
 
 import java.util.concurrent.TimeUnit;
 
+import timber.log.Timber;
+
 public class GdgWatchFaceConfigListenerService extends WearableListenerService
     implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = "WatchFaceConfigService";
@@ -30,7 +32,7 @@ public class GdgWatchFaceConfigListenerService extends WearableListenerService
 
         byte[] rawData = messageEvent.getData();
         DataMap configKeys = DataMap.fromByteArray(rawData);
-        Log.d(TAG, "configKeys = [" + configKeys + "]");
+        Timber.d("configKeys = [" + configKeys + "]");
 
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this).addConnectionCallbacks(this)
@@ -51,16 +53,16 @@ public class GdgWatchFaceConfigListenerService extends WearableListenerService
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Log.d(TAG, "onConnected: " + bundle);
+        Timber.d("onConnected: " + bundle);
     }
 
     @Override
     public void onConnectionSuspended(int cause) {
-        Log.d(TAG, "onConnectionSuspended: " + cause);
+        Timber.d("onConnectionSuspended: " + cause);
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.d(TAG, "onConnectionFailed: " + connectionResult);
+        Timber.d("onConnectionFailed: " + connectionResult);
     }
 }

@@ -1,7 +1,6 @@
 package org.gdg.frisbee.android;
 
 import android.net.Uri;
-import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -12,6 +11,8 @@ import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.Wearable;
+
+import timber.log.Timber;
 
 public class WearableConfigurationUtil {
 
@@ -79,7 +80,7 @@ public class WearableConfigurationUtil {
             .setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
                 @Override
                 public void onResult(DataApi.DataItemResult dataItemResult) {
-                    Log.d("WearableConfig", "putDataItem result status: " + dataItemResult.getStatus());
+                    Timber.d("putDataItem result status: " + dataItemResult.getStatus());
                 }
             });
     }
