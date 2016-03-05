@@ -37,6 +37,14 @@ Read the [Development Guide](https://github.com/gdg-x/frisbee/wiki/Developer-Doc
 
 When sending pull requests please make sure to enable EditorConfig in Android Studio -> Settings -> Editor -> Code & Style -> EditorConfig.
 
+####Speeding up debug builds
+
+The project uses multidex. To speed up the builds you need to set `minSdkLevel` to 21 and above. Our project uses 
+`minSdk` property to override `minSdkLevel`. To do that, you should open Android Studio Compiler Settings and add a 
+command line property like below: `-PminSdk=21`
+
+![Android Studio Compiler Settings]
+(https://cloud.githubusercontent.com/assets/763339/13549170/1f9fa1c8-e2f8-11e5-846d-fcd37616692c.png)
 
 ###Contributors
 See [list of contributors](https://github.com/gdg-x/frisbee/graphs/contributors)
