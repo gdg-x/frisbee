@@ -78,7 +78,6 @@ public class FeedbackFragment extends DialogFragment {
     private static final String PROPERTY_ACTIVITY = "Activity";
     private static final String PROPERTY_APP_VERSION_NAME = "App Version Name";
     private static final String PROPERTY_APP_VERSION_CODE = "App Version Code";
-//    private static final String POWERED_BY_DOORBELL_TEXT = "Powered by <a href=\"https://doorbell.io\">Doorbell.io</a>";
 
     @Bind(R.id.feedback_message_text)
     EditText mMessageField;
@@ -123,16 +122,16 @@ public class FeedbackFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         View feedbackView = LayoutInflater.from(getActivity())
-                .inflate(R.layout.dialog_feedback, (ViewGroup) getView(), false);
+            .inflate(R.layout.dialog_feedback, (ViewGroup) getView(), false);
         ButterKnife.bind(this, feedbackView);
         setupEmailAutocomplete();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                .setView(feedbackView)
-                .setTitle(R.string.feedback)
-                .setCancelable(true)
-                .setNegativeButton(R.string.feedback_cancel, null)
-                .setPositiveButton(R.string.feedback_send, null);
+            .setView(feedbackView)
+            .setTitle(R.string.feedback)
+            .setCancelable(true)
+            .setNegativeButton(R.string.feedback_cancel, null)
+            .setPositiveButton(R.string.feedback_send, null);
 
         return builder.create();
     }
@@ -158,7 +157,7 @@ public class FeedbackFragment extends DialogFragment {
 
     private boolean isValidInput() {
         return checkMessageInputValid(mMessageField.getText())
-                && checkEmailInputValid(mEmailField.getText());
+            && checkEmailInputValid(mEmailField.getText());
     }
 
     private boolean checkMessageInputValid(@Nullable final CharSequence strMessage) {
@@ -173,7 +172,7 @@ public class FeedbackFragment extends DialogFragment {
 
     private boolean checkEmailInputValid(@Nullable final CharSequence strEmail) {
         if (!TextUtils.isEmpty(strEmail)
-                && android.util.Patterns.EMAIL_ADDRESS.matcher(strEmail).matches()) {
+            && android.util.Patterns.EMAIL_ADDRESS.matcher(strEmail).matches()) {
             mLayoutEmail.setError(null);
             return true;
         } else {
@@ -205,13 +204,13 @@ public class FeedbackFragment extends DialogFragment {
             }
         });
         mApi.sendFeedback(mMessageField.getText().toString(),
-                mEmailField.getText().toString(), mProperties, "");
+            mEmailField.getText().toString(), mProperties, "");
     }
 
     private void setupEmailAutocomplete() {
         //Set email AutoCompleteTextView
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
-                android.R.layout.select_dialog_item);
+            android.R.layout.select_dialog_item);
         Set<String> accountsSet = new HashSet<>();
         Account[] deviceAccounts = AccountManager.get(getActivity()).getAccounts();
         for (Account account : deviceAccounts) {

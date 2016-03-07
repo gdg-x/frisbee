@@ -16,15 +16,13 @@
 
 package org.gdg.frisbee.android.about;
 
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.common.BaseFragment;
 
@@ -47,12 +45,13 @@ public class AboutFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        try {
-            FragmentActivity activity = getActivity();
-            PackageInfo packageInfo = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0);
-            mVersion.setText(packageInfo.versionName);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+        mVersion.setText(BuildConfig.VERSION_NAME);
+
+        if (BuildConfig.DEBUG || BuildConfig.BUILD_TYPE.equals("alpha")) {
+            mVersion.append("\nCommit SHA: ");
+            mVersion.append(BuildConfig.COMMIT_SHA);
+            mVersion.append("\nCommit Time: ");
+            mVersion.append(BuildConfig.COMMIT_TIME);
         }
     }
 }

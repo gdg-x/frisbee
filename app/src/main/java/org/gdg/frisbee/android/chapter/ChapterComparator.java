@@ -18,6 +18,10 @@ public class ChapterComparator implements Comparator<Chapter> {
         this.lastLocation = lastLocation;
     }
 
+    public static int integerCompare(int lhs, int rhs) {
+        return lhs < rhs ? -1 : (lhs == rhs ? 0 : 1);
+    }
+
     @Override
     public int compare(Chapter chapter, Chapter chapter2) {
 
@@ -40,7 +44,7 @@ public class ChapterComparator implements Comparator<Chapter> {
 
         if (chapter.getGeo() != null) {
             Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(),
-                    chapter.getGeo().getLat(), chapter.getGeo().getLng(), results);
+                chapter.getGeo().getLat(), chapter.getGeo().getLng(), results);
             closeEnough = results[0] <= MAX_DISTANCE;
         } else {
             closeEnough = false;
@@ -48,7 +52,7 @@ public class ChapterComparator implements Comparator<Chapter> {
 
         if (chapter2.getGeo() != null) {
             Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(),
-                    chapter2.getGeo().getLat(), chapter2.getGeo().getLng(), results2);
+                chapter2.getGeo().getLat(), chapter2.getGeo().getLng(), results2);
             closeEnough2 = results2[0] <= MAX_DISTANCE;
         } else {
             closeEnough2 = false;
@@ -63,10 +67,6 @@ public class ChapterComparator implements Comparator<Chapter> {
         } else {
             return chapter.compareTo(chapter2);
         }
-    }
-
-    public static int integerCompare(int lhs, int rhs) {
-        return lhs < rhs ? -1 : (lhs == rhs ? 0 : 1);
     }
 
     @Override

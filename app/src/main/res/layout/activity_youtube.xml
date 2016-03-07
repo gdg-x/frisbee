@@ -17,8 +17,8 @@
   -->
 
 <LinearLayout
-  android:id="@+id/videoContainer"
   xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/videoContainer"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="@color/semi_transparent"

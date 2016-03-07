@@ -29,10 +29,12 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class CryptoUtils {
 
+    private static final String HEX = "0123456789ABCDEF";
+
     private CryptoUtils() {
 
     }
-    
+
     public static String encrypt(String seed, String cleartext) throws Exception {
         byte[] rawKey = getRawKey(seed.getBytes());
         byte[] result = encrypt(rawKey, cleartext.getBytes());
@@ -51,7 +53,6 @@ public class CryptoUtils {
         return skey.getEncoded();
     }
 
-
     private static byte[] encrypt(byte[] raw, byte[] clear) throws Exception {
         SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
         Cipher cipher = Cipher.getInstance("AES");
@@ -69,6 +70,7 @@ public class CryptoUtils {
     public static String toHex(String txt) {
         return toHex(txt.getBytes());
     }
+
     public static String fromHex(String hex) {
         return new String(toByte(hex));
     }
@@ -92,7 +94,7 @@ public class CryptoUtils {
         }
         return result.toString();
     }
-    private static final String HEX = "0123456789ABCDEF";
+
     private static void appendHex(StringBuffer sb, byte b) {
         sb.append(HEX.charAt((b >> 4) & 0x0f)).append(HEX.charAt(b & 0x0f));
     }

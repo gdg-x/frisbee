@@ -44,30 +44,18 @@ public class AppInviteDeepLinkActivity extends GdgActivity {
 
     @Override
     protected GoogleApiClient createGoogleApiClient() {
-        GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this)
+        return new GoogleApiClient.Builder(this)
             .addApi(AppInvite.API)
             .build();
-        return googleApiClient;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final AppCompatDialogFragment dialogFragment = new AppCompatDialogFragment() {
-
-            @NonNull
-            @Override
-            public Dialog onCreateDialog(Bundle savedInstanceState) {
-                return new AlertDialog.Builder(AppInviteDeepLinkActivity.this)
-                        .setTitle("Congrats!")
-                        .setMessage("You installed the app with an invite. Here is your reward!")
-                        .create();
-            }
-        };
-        dialogFragment.show(
-                getSupportFragmentManager(),
-                AppInviteDeepLinkActivity.class.getSimpleName()
+        new AppInviteDialogFragment().show(
+            getSupportFragmentManager(),
+            AppInviteDeepLinkActivity.class.getSimpleName()
         );
     }
 
@@ -94,7 +82,7 @@ public class AppInviteDeepLinkActivity extends GdgActivity {
         String invitationId = AppInviteReferral.getInvitationId(intent);
         String deepLink = AppInviteReferral.getDeepLink(intent);
 
-        Timber.d("Found Referral: " + invitationId + ":" + deepLink);
+        Timber.d("Found Referral: %s:%s", invitationId, deepLink);
 
         if (getGoogleApiClient().isConnected()) {
             // Notify the API of the install success and invitation conversion
@@ -108,7 +96,9 @@ public class AppInviteDeepLinkActivity extends GdgActivity {
     }
     // [END process_referral_intent]
 
-    /** Update the install and conversion status of an invite intent **/
+    /**
+     * Update the install and conversion status of an invite intent
+     **/
     // [START update_invitation_status]
     private void updateInvitationStatus(Intent intent) {
         String invitationId = AppInviteReferral.getInvitationId(intent);
@@ -146,9 +136,21 @@ public class AppInviteDeepLinkActivity extends GdgActivity {
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         super.onConnectionFailed(connectionResult);
-        Timber.d("googleApiClient:onConnectionFailed:" + connectionResult.getErrorCode());
+        Timber.d("googleApiClient:onConnectionFailed: %s", connectionResult.getErrorCode());
         if (connectionResult.getErrorCode() == ConnectionResult.API_UNAVAILABLE) {
             Timber.w("onConnectionFailed because an API was unavailable");
+        }
+    }
+
+    public static class AppInviteDialogFragment extends AppCompatDialogFragment {
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            return new AlertDialog.Builder(getActivity())
+                .setTitle("Congrats!")
+                .setMessage("You installed the app with an invite. Here is your reward!")
+                .create();
         }
     }
 }

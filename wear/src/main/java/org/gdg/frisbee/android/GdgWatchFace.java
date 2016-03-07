@@ -89,7 +89,7 @@ public class GdgWatchFace extends CanvasWatchFaceService {
                     if (shouldTimerBeRunning()) {
                         long timeMs = System.currentTimeMillis();
                         long delayMs = INTERACTIVE_UPDATE_RATE_MS
-                                - (timeMs % INTERACTIVE_UPDATE_RATE_MS);
+                            - (timeMs % INTERACTIVE_UPDATE_RATE_MS);
                         mUpdateTimeHandler.sendEmptyMessageDelayed(R.id.message_update_time, delayMs);
                     }
                 }
@@ -139,14 +139,14 @@ public class GdgWatchFace extends CanvasWatchFaceService {
             super.onCreate(holder);
 
             setWatchFaceStyle(new WatchFaceStyle.Builder(GdgWatchFace.this)
-                    .setCardPeekMode(WatchFaceStyle.PEEK_MODE_SHORT)
-                    .setBackgroundVisibility(WatchFaceStyle.BACKGROUND_VISIBILITY_INTERRUPTIVE)
-                    .setShowSystemUiTime(false)
-                    .setViewProtectionMode(WatchFaceStyle.PROTECT_STATUS_BAR | WatchFaceStyle.PROTECT_HOTWORD_INDICATOR)
-                    .setHotwordIndicatorGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL)
-                    .setStatusBarGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL)
-                    .setPeekOpacityMode(WatchFaceStyle.PEEK_OPACITY_MODE_TRANSLUCENT)
-                    .build());
+                .setCardPeekMode(WatchFaceStyle.PEEK_MODE_SHORT)
+                .setBackgroundVisibility(WatchFaceStyle.BACKGROUND_VISIBILITY_INTERRUPTIVE)
+                .setShowSystemUiTime(false)
+                .setViewProtectionMode(WatchFaceStyle.PROTECT_STATUS_BAR | WatchFaceStyle.PROTECT_HOTWORD_INDICATOR)
+                .setHotwordIndicatorGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL)
+                .setStatusBarGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL)
+                .setPeekOpacityMode(WatchFaceStyle.PEEK_OPACITY_MODE_TRANSLUCENT)
+                .build());
 
             Resources resources = GdgWatchFace.this.getResources();
 
@@ -189,27 +189,27 @@ public class GdgWatchFace extends CanvasWatchFaceService {
             mTime = new Time();
 
             mGoogleApiClient = new GoogleApiClient.Builder(GdgWatchFace.this)
-                    .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-                        @Override
-                        public void onConnected(Bundle bundle) {
-                            Timber.d("onConnected:" + bundle);
-                            Wearable.DataApi.addListener(mGoogleApiClient, Engine.this);
-                            updateConfigDataItemAndUi();
-                        }
+                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                    @Override
+                    public void onConnected(Bundle bundle) {
+                        Timber.d("onConnected:" + bundle);
+                        Wearable.DataApi.addListener(mGoogleApiClient, Engine.this);
+                        updateConfigDataItemAndUi();
+                    }
 
-                        @Override
-                        public void onConnectionSuspended(int i) {
-                            Timber.d("onConnectionSuspended:" + i);
-                        }
-                    })
-                    .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
-                        @Override
-                        public void onConnectionFailed(ConnectionResult connectionResult) {
-                            Timber.d("onConnectionFailed");
-                        }
-                    })
-                    .addApi(Wearable.API)
-                    .build();
+                    @Override
+                    public void onConnectionSuspended(int i) {
+                        Timber.d("onConnectionSuspended:" + i);
+                    }
+                })
+                .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(ConnectionResult connectionResult) {
+                        Timber.d("onConnectionFailed");
+                    }
+                })
+                .addApi(Wearable.API)
+                .build();
         }
 
 
@@ -267,8 +267,8 @@ public class GdgWatchFace extends CanvasWatchFaceService {
             float scale = ((float) width / (float) mBackgroundBitmap.getWidth());
 
             mBackgroundBitmap = Bitmap.createScaledBitmap(mBackgroundBitmap,
-                    (int) (mBackgroundBitmap.getWidth() * scale),
-                    (int) (mBackgroundBitmap.getHeight() * scale), true);
+                (int) (mBackgroundBitmap.getWidth() * scale),
+                (int) (mBackgroundBitmap.getHeight() * scale), true);
             if (!mBurnInProtection || !mLowBitAmbient) {
                 initializeGrayBackgroundBitmap();
             }
@@ -311,13 +311,13 @@ public class GdgWatchFace extends CanvasWatchFaceService {
                 float outerX = (float) Math.sin(tickRot) * outerTickRadius;
                 float outerY = (float) -Math.cos(tickRot) * outerTickRadius;
                 canvas.drawLine(mCenterX + innerX, mCenterY + innerY,
-                        mCenterX + outerX, mCenterY + outerY, getAdjustedPaintColor(mHourMarkerPaint));
+                    mCenterX + outerX, mCenterY + outerY, getAdjustedPaintColor(mHourMarkerPaint));
 
             }
 
             if (mDisplayDate) {
                 canvas.drawText(formatTwoDigitNumber(mTime.monthDay), mCenterX + mMinuteHandLength,
-                        mCenterY - textHeightOffset, getAdjustedPaintColor(mDateTimePaint));
+                    mCenterY - textHeightOffset, getAdjustedPaintColor(mDateTimePaint));
             }
 
             if(mDisplayTime) {
@@ -340,16 +340,16 @@ public class GdgWatchFace extends CanvasWatchFaceService {
 
             canvas.rotate(hoursRotation, mCenterX, mCenterY);
             canvas.drawLine(mCenterX, mCenterY - HAND_END_CAP_RADIUS, mCenterX,
-                    mCenterY - mHourHandLength, getAdjustedPaintColor(mHourHandPaint));
+                mCenterY - mHourHandLength, getAdjustedPaintColor(mHourHandPaint));
 
             canvas.rotate(minutesRotation - hoursRotation, mCenterX, mCenterY);
             canvas.drawLine(mCenterX, mCenterY - HAND_END_CAP_RADIUS, mCenterX,
-                    mCenterY - mMinuteHandLength, getAdjustedPaintColor(mMinuteHandPaint));
+                mCenterY - mMinuteHandLength, getAdjustedPaintColor(mMinuteHandPaint));
 
             if (!mAmbient) {
                 canvas.rotate(secondsRotation - minutesRotation, mCenterX, mCenterY);
                 canvas.drawLine(mCenterX, mCenterY - HAND_END_CAP_RADIUS, mCenterX,
-                        mCenterY - mSecondHandLength, mSecondHandPaint);
+                    mCenterY - mSecondHandLength, mSecondHandPaint);
             }
 
             canvas.drawCircle(mCenterX, mCenterY, HAND_END_CAP_RADIUS, getAdjustedPaintColor(mHourHandPaint));

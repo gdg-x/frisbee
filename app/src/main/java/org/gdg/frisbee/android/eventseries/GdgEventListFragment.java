@@ -47,30 +47,34 @@ public class GdgEventListFragment extends EventListFragment {
         final String cacheKey = "event_" + plusId;
 
         if (Utils.isOnline(getActivity())) {
-            App.getInstance().getGdgXHub().getChapterEventList(plusId, start, end).enqueue(new Callback<PagedList<Event>>() {
-                @Override
-                public void success(PagedList<Event> eventsPagedList) {
-                    List<Event> events = eventsPagedList.getItems();
-                    splitEventsAndAddToAdapter(events);
-                    App.getInstance().getModelCache().putAsync(cacheKey, mEvents, DateTime.now().plusHours(2), new ModelCache.CachePutListener() {
-                        @Override
-                        public void onPutIntoCache() {
-                            mAdapter.addAll(mEvents);
-                            setIsLoading(false);
-                        }
-                    });
-                }
+            App.getInstance().getGdgXHub().getChapterEventList(plusId, start, end).enqueue(
+                new Callback<PagedList<Event>>() {
+                    @Override
+                    public void success(PagedList<Event> eventsPagedList) {
+                        List<Event> events = eventsPagedList.getItems();
+                        splitEventsAndAddToAdapter(events);
+                        App.getInstance().getModelCache().putAsync(cacheKey,
+                            mEvents,
+                            DateTime.now().plusHours(2),
+                            new ModelCache.CachePutListener() {
+                                @Override
+                                public void onPutIntoCache() {
+                                    mAdapter.addAll(mEvents);
+                                    setIsLoading(false);
+                                }
+                            });
+                    }
 
-                @Override
-                public void failure(Throwable error) {
-                    onError(R.string.fetch_events_failed);
-                }
+                    @Override
+                    public void failure(Throwable error) {
+                        onError(R.string.fetch_events_failed);
+                    }
 
-                @Override
-                public void networkFailure(Throwable error) {
-                    onError(R.string.offline_alert);
-                }
-            });
+                    @Override
+                    public void networkFailure(Throwable error) {
+                        onError(R.string.offline_alert);
+                    }
+                });
         } else {
             App.getInstance().getModelCache().getAsync(cacheKey, false, new ModelCache.CacheListener() {
                 @Override

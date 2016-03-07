@@ -69,7 +69,8 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
         mPulseTargets = new ArrayList<>();
         mViewPagerAdapter = new PulsePagerAdapter(this, getSupportFragmentManager());
 
-        final String selectedPulse = savedInstanceState != null ? savedInstanceState.getString(INSTANCE_STATE_SELECTED_PULSE) : null;
+        final String selectedPulse = savedInstanceState != null
+            ? savedInstanceState.getString(INSTANCE_STATE_SELECTED_PULSE) : null;
 
         App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PULSE_GLOBAL, true, new ModelCache.CacheListener() {
             @Override
@@ -100,16 +101,16 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
             @Override
             public void success(final Pulse pulse) {
                 App.getInstance().getModelCache().putAsync(
-                        Const.CACHE_KEY_PULSE_GLOBAL,
-                        pulse,
-                        DateTime.now().plusDays(1),
-                        new ModelCache.CachePutListener() {
-                            @Override
-                            public void onPutIntoCache() {
-                                mPulseTargets.addAll(pulse.keySet());
-                                initSpinner(selectedPulse);
-                            }
-                        });
+                    Const.CACHE_KEY_PULSE_GLOBAL,
+                    pulse,
+                    DateTime.now().plusDays(1),
+                    new ModelCache.CachePutListener() {
+                        @Override
+                        public void onPutIntoCache() {
+                            mPulseTargets.addAll(pulse.keySet());
+                            initSpinner(selectedPulse);
+                        }
+                    });
             }
 
             @Override
@@ -139,7 +140,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
         }
 
         return "Pulse/" + mViewPagerAdapter.getSelectedPulseTarget().replaceAll(" ", "-")
-                + "/" + pageName;
+            + "/" + pageName;
     }
 
     private void initSpinner(String selectedPulse) {
@@ -148,9 +149,9 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
 
         Toolbar toolbar = getActionBarToolbar();
         View spinnerContainer = LayoutInflater.from(this).inflate(R.layout.actionbar_spinner,
-                toolbar, false);
+            toolbar, false);
         ActionBar.LayoutParams lp = new ActionBar.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         toolbar.addView(spinnerContainer, lp);
 
         mSpinner = (Spinner) spinnerContainer.findViewById(R.id.actionbar_spinner);
@@ -161,7 +162,8 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
 
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
+            public void onItemSelected(final AdapterView<?> parent, final View view,
+                                       final int position, final long id) {
                 String previous = mViewPagerAdapter.getSelectedPulseTarget();
                 if (!previous.equals(mSpinnerAdapter.getItem(position))) {
                     refreshSpinner(mSpinnerAdapter.getItem(position));

@@ -43,7 +43,7 @@ public abstract class EventListFragment extends GdgListFragment {
     protected EventAdapter mAdapter;
 
     protected ArrayList<SimpleEvent> mEvents;
-    
+
     protected void onError(@StringRes int errorMessage) {
         setIsLoading(false);
         showError(errorMessage);

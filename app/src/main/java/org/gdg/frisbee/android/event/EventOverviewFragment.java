@@ -89,6 +89,14 @@ public class EventOverviewFragment extends BaseFragment {
     private Directory mDirectory;
     private EventFullDetails mEvent;
 
+    public static Fragment createfor(String eventId) {
+        EventOverviewFragment fragment = new EventOverviewFragment();
+        Bundle args = new Bundle();
+        args.putString(Const.EXTRA_EVENT_ID, eventId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_event_overview, parent, false);
@@ -213,39 +221,38 @@ public class EventOverviewFragment extends BaseFragment {
         }
 
         Plus.PeopleApi.load(((GdgActivity) getActivity()).getGoogleApiClient(), group.getGplusId())
-                .setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
-                    @Override
-                    public void onResult(People.LoadPeopleResult loadPeopleResult) {
-                        if (loadPeopleResult.getStatus().getStatusCode() == CommonStatusCodes.SUCCESS) {
-                            Person gplusChapter = loadPeopleResult.getPersonBuffer().get(0);
-                            if (gplusChapter.getImage().hasUrl()) {
-                                Picasso.with(getActivity()).load(gplusChapter.getImage().getUrl()).into(new Target() {
-                                    @Override
-                                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
-                                        if (!isAdded()) {
-                                            return;
-                                        }
-                                        BitmapDrawable logo = new BitmapDrawable(getResources(), bitmap);
-                                        mGroupLogo.setVisibility(View.VISIBLE);
-                                        mGroupLogo.setImageDrawable(logo);
+            .setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
+                @Override
+                public void onResult(People.LoadPeopleResult loadPeopleResult) {
+                    if (loadPeopleResult.getStatus().getStatusCode() == CommonStatusCodes.SUCCESS) {
+                        Person gplusChapter = loadPeopleResult.getPersonBuffer().get(0);
+                        if (gplusChapter.getImage().hasUrl()) {
+                            Picasso.with(getActivity()).load(gplusChapter.getImage().getUrl()).into(new Target() {
+                                @Override
+                                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
+                                    if (!isAdded()) {
+                                        return;
                                     }
+                                    BitmapDrawable logo = new BitmapDrawable(getResources(), bitmap);
+                                    mGroupLogo.setVisibility(View.VISIBLE);
+                                    mGroupLogo.setImageDrawable(logo);
+                                }
 
-                                    @Override
-                                    public void onBitmapFailed(Drawable drawable) {
-                                        mGroupLogo.setVisibility(View.INVISIBLE);
-                                    }
+                                @Override
+                                public void onBitmapFailed(Drawable drawable) {
+                                    mGroupLogo.setVisibility(View.INVISIBLE);
+                                }
 
-                                    @Override
-                                    public void onPrepareLoad(Drawable drawable) {
+                                @Override
+                                public void onPrepareLoad(Drawable drawable) {
 
-                                    }
-                                });
-                            }
+                                }
+                            });
                         }
                     }
-                });
+                }
+            });
         ((GdgActivity) getActivity()).setToolbarTitle(group.getShortName());
-        //mGroupLogo.setVisibility(View.INVISIBLE);  //commented as it's making group logo invisible without any condition
     }
 
     private void setIsLoading(boolean isLoading) {
@@ -280,8 +287,8 @@ public class EventOverviewFragment extends BaseFragment {
             MenuItem shareMenuItem = menu.findItem(R.id.share);
 
             if (mEvent.getEventUrl() != null) {
-                ShareActionProvider mShareActionProvider = 
-                        (ShareActionProvider) MenuItemCompat.getActionProvider(shareMenuItem);
+                ShareActionProvider mShareActionProvider =
+                    (ShareActionProvider) MenuItemCompat.getActionProvider(shareMenuItem);
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
                 shareIntent.putExtra(Intent.EXTRA_TEXT, mEvent.getEventUrl());
@@ -322,10 +329,10 @@ public class EventOverviewFragment extends BaseFragment {
 
     private void launchUrl(String eventUrl) {
         new CustomTabsIntent.Builder()
-                .setToolbarColor(getResources().getColor(R.color.theme_primary))
-                .setShowTitle(true)
-                .build()
-                .launchUrl(getActivity(), Uri.parse(eventUrl));
+            .setToolbarColor(getResources().getColor(R.color.theme_primary))
+            .setShowTitle(true)
+            .build()
+            .launchUrl(getActivity(), Uri.parse(eventUrl));
     }
 
     private void addEventToCalendar() {
@@ -342,14 +349,6 @@ public class EventOverviewFragment extends BaseFragment {
         }
 
         startActivity(intent);
-    }
-
-    public static Fragment createfor(String eventId) {
-        EventOverviewFragment fragment = new EventOverviewFragment();
-        Bundle args = new Bundle();
-        args.putString(Const.EXTRA_EVENT_ID, eventId);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     public interface Callbacks {

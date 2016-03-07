@@ -17,10 +17,12 @@ public class GdeDirectoryFactory {
 
     private static Retrofit provideRestAdapter() {
         return new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .client(OkClientFactory.okHttpClientWithIdlingResources(App.getInstance().getOkHttpClient()))
-                .addConverterFactory(GsonConverterFactory.create(Utils.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)))
-                .build();
+            .baseUrl(API_URL)
+            .client(OkClientFactory.okHttpClientWithIdlingResources(App.getInstance().getOkHttpClient()))
+            .addConverterFactory(
+                GsonConverterFactory.create(Utils.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES))
+            )
+            .build();
     }
 
     public static GdeDirectory provideGdeApi() {

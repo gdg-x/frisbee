@@ -21,6 +21,15 @@ import android.os.Parcelable;
 import android.support.annotation.VisibleForTesting;
 
 public class Geo implements Parcelable {
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public Geo createFromParcel(Parcel in) {
+            return new Geo(in);
+        }
+
+        public Geo[] newArray(int size) {
+            return new Geo[size];
+        }
+    };
     private double lat;
     private double lng;
 
@@ -53,14 +62,4 @@ public class Geo implements Parcelable {
         parcel.writeDouble(lat);
         parcel.writeDouble(lng);
     }
-
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public Geo createFromParcel(Parcel in) {
-            return new Geo(in);
-        }
-
-        public Geo[] newArray(int size) {
-            return new Geo[size];
-        }
-    };
 }

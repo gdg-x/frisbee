@@ -25,6 +25,17 @@ import java.util.ArrayList;
 
 public class Directory implements GdgResponse, Parcelable {
 
+    public static final Creator<Directory> CREATOR = new Creator<Directory>() {
+        @Override
+        public Directory createFromParcel(Parcel in) {
+            return new Directory(in);
+        }
+
+        @Override
+        public Directory[] newArray(int size) {
+            return new Directory[size];
+        }
+    };
     @SerializedName("items")
     private ArrayList<Chapter> groups;
 
@@ -45,18 +56,6 @@ public class Directory implements GdgResponse, Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<Directory> CREATOR = new Creator<Directory>() {
-        @Override
-        public Directory createFromParcel(Parcel in) {
-            return new Directory(in);
-        }
-
-        @Override
-        public Directory[] newArray(int size) {
-            return new Directory[size];
-        }
-    };
 
     public ArrayList<Chapter> getGroups() {
         return groups;

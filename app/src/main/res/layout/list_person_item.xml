@@ -41,8 +41,8 @@
           android:layout_height="wrap_content"
           android:ellipsize="end"
           android:maxLines="1"
-          tools:text="GDE Name"
-          android:textStyle="bold" />
+          android:textStyle="bold"
+          tools:text="GDE Name" />
 
         <TextView
           android:id="@android:id/text2"

@@ -42,7 +42,7 @@ public class BitmapBorderTransformation implements Transformation {
             canvas.drawRect(rect, paint);
         } else {
             canvas.drawRoundRect(new RectF(rect),
-                    this.mCornerRadius, this.mCornerRadius, paint);
+                this.mCornerRadius, this.mCornerRadius, paint);
         }
 
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
@@ -81,9 +81,9 @@ public class BitmapBorderTransformation implements Transformation {
     @Override
     public String key() {
         return "bitmapBorder("
-                + "borderSize="
-                + this.mBorderSize + ", "
-                + "cornerRadius=" + this.mCornerRadius + ", "
-                + "color=" + this.mColor + ")";
+            + "borderSize="
+            + this.mBorderSize + ", "
+            + "cornerRadius=" + this.mCornerRadius + ", "
+            + "color=" + this.mColor + ")";
     }
 }

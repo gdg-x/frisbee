@@ -42,35 +42,37 @@ public class ContributorsFragment extends PeopleListFragment {
         if (Utils.isOnline(getActivity())) {
             fetchGitHubContributors();
         } else {
-            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_FRISBEE_CONTRIBUTORS, false, new ModelCache.CacheListener() {
-                @Override
-                public void onGet(Object item) {
-                    ContributorList contributors = (ContributorList) item;
+            App.getInstance().getModelCache().getAsync(
+                Const.CACHE_KEY_FRISBEE_CONTRIBUTORS, false, new ModelCache.CacheListener() {
+                    @Override
+                    public void onGet(Object item) {
+                        ContributorList contributors = (ContributorList) item;
 
-                    Snackbar snackbar = Snackbar.make(getView(), R.string.cached_content, Snackbar.LENGTH_SHORT);
-                    ColoredSnackBar.info(snackbar).show();
-                    mAdapter.addAll(contributors);
-                }
+                        Snackbar snackbar = Snackbar.make(getView(), R.string.cached_content, Snackbar.LENGTH_SHORT);
+                        ColoredSnackBar.info(snackbar).show();
+                        mAdapter.addAll(contributors);
+                    }
 
-                @Override
-                public void onNotFound(String key) {
-                    showError(R.string.offline_alert);
-                }
-            });
+                    @Override
+                    public void onNotFound(String key) {
+                        showError(R.string.offline_alert);
+                    }
+                });
         }
     }
-    
-    private void fetchGitHubContributors() {
-        App.getInstance().getGithub().getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO).enqueue(new Callback<ContributorList>() {
-            @Override
-            public void success(final ContributorList contributors) {
 
-                mAdapter.addAll(contributors);
-                App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_FRISBEE_CONTRIBUTORS,
+    private void fetchGitHubContributors() {
+        App.getInstance().getGithub().getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO)
+            .enqueue(new Callback<ContributorList>() {
+                @Override
+                public void success(final ContributorList contributors) {
+
+                    mAdapter.addAll(contributors);
+                    App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_FRISBEE_CONTRIBUTORS,
                         contributors,
                         DateTime.now().plusDays(1),
                         null);
-            }
-        });
+                }
+            });
     }
 }

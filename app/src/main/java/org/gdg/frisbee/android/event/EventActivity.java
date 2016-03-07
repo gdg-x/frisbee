@@ -86,8 +86,8 @@ public class EventActivity extends GdgActivity implements EventOverviewFragment.
     }
 
     protected String getTrackedViewName() {
-        return "Event/" + getResources().getStringArray(R.array.event_tabs)[getCurrentPage()] 
-                + "/" + getEventIdFrom(getIntent());
+        return "Event/" + getResources().getStringArray(R.array.event_tabs)[getCurrentPage()]
+            + "/" + getEventIdFrom(getIntent());
     }
 
     private void recordStartPageView() {
@@ -107,7 +107,7 @@ public class EventActivity extends GdgActivity implements EventOverviewFragment.
     @NonNull
     private Action createAppIndexAction(String title, String eventId) {
         final Uri hostUri = Uri.parse(Const.URL_GDGROUPS_ORG).buildUpon().appendPath(Const.PATH_GDGROUPS_ORG_EVENT)
-                .appendPath(eventId).build();
+            .appendPath(eventId).build();
         final Uri appUri = AndroidAppUri.newAndroidAppUri(BuildConfig.APPLICATION_ID, hostUri).toUri();
         return Action.newAction(Action.TYPE_VIEW, title, hostUri, appUri);
     }
