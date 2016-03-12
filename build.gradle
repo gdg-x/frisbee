@@ -54,7 +54,7 @@ ext {
     versionName = "${versionMajor}.${versionMinor}.${versionPatch}"
 
     // Sdk and tools
-    minSdkVersion = 16
+    minSdkVersion = project.hasProperty("minSdk") ? minSdk : 16
     targetSdkVersion = 21
     compileSdkVersion = 23
     buildToolsVersion = '23.0.2'

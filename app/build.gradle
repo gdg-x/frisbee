@@ -90,21 +90,6 @@ android {
         }
     }
 
-    productFlavors {
-        prod
-        dev {
-            minSdkVersion 21
-        }
-    }
-
-    variantFilter { variant ->
-        if (variant.getFlavors().get(0).name.equals('dev')
-            && (variant.buildType.name.equals('release')
-            || variant.buildType.name.equals('alpha'))) {
-            variant.setIgnore(true);
-        }
-    }
-
     lintOptions {
         abortOnError true
         checkReleaseBuilds false
@@ -207,7 +192,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     // Android Wear
-    prodWearApp project(':wear')
+    wearApp project(':wear')
 
     // Dependencies for local unit tests
     testCompile "junit:junit:$rootProject.junitVersion"
