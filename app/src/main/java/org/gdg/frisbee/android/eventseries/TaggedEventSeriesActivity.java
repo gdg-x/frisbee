@@ -42,6 +42,10 @@ public class TaggedEventSeriesActivity extends GdgNavDrawerActivity {
 
     private TaggedEventSeries mTaggedEventSeries;
 
+    public TaggedEventSeries getTaggedEventSeries() {
+        return mTaggedEventSeries;
+    }
+
     protected String getTrackedViewName() {
         return mTaggedEventSeries != null && !TextUtils.isEmpty(mTaggedEventSeries.getTag())
             ? mTaggedEventSeries.getTag() : "SpecialEvent";
