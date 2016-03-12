@@ -46,8 +46,6 @@ import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.RecentTasksStyler;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
 
-import java.util.List;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import timber.log.Timber;
@@ -110,6 +108,10 @@ public abstract class GdgActivity extends TrackableActivity implements
         return mGoogleApiClient;
     }
 
+    public AchievementActionHandler getAchievementActionHandler() {
+        return mAchievementActionHandler;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,30 +127,39 @@ public abstract class GdgActivity extends TrackableActivity implements
             new AchievementActionHandler(mGoogleApiClient, this);
     }
 
-    protected GoogleApiClient createGoogleApiClient() {
-        isSignedIn = PrefUtils.isSignedIn(this);
-        return GoogleApiClientFactory.createWith(getApplicationContext());
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(SAVED_PROGRESS, mSignInProgress);
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
 
+        recreateGoogleApiClientIfNeeded();
+        mGoogleApiClient.connect();
+    }
+
+    protected final void recreateGoogleApiClientIfNeeded() {
         if (isSignedIn != PrefUtils.isSignedIn(this)) {
             mGoogleApiClient.unregisterConnectionCallbacks(this);
             mGoogleApiClient.unregisterConnectionFailedListener(this);
             mGoogleApiClient.disconnect();
+
             mGoogleApiClient = createGoogleApiClient();
         }
-        mGoogleApiClient.registerConnectionCallbacks(this);
-        mGoogleApiClient.registerConnectionFailedListener(this);
-        mGoogleApiClient.connect();
+
+        if (!mGoogleApiClient.isConnectionCallbacksRegistered(this)) {
+            mGoogleApiClient.registerConnectionCallbacks(this);
+        }
+        if (!mGoogleApiClient.isConnectionFailedListenerRegistered(this)) {
+            mGoogleApiClient.registerConnectionFailedListener(this);
+        }
+    }
+
+    /**
+     * Create {@link GoogleApiClient}. This can be overridden to change the scope of the GoogleApiClient
+     *
+     * @return {@link GoogleApiClient} without connecting. {@code connect()} must be called afterwards.
+     */
+    protected GoogleApiClient createGoogleApiClient() {
+        isSignedIn = PrefUtils.isSignedIn(this);
+        return GoogleApiClientFactory.createWith(getApplicationContext());
     }
 
     @Override
@@ -160,8 +171,10 @@ public abstract class GdgActivity extends TrackableActivity implements
         mGoogleApiClient.disconnect();
     }
 
-    public AchievementActionHandler getAchievementActionHandler() {
-        return mAchievementActionHandler;
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(SAVED_PROGRESS, mSignInProgress);
     }
 
     @Override

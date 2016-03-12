@@ -23,29 +23,28 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.chapter.MainActivity;
+import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.widget.NonSwipeableViewPager;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
-public class FirstStartActivity extends AppCompatActivity implements
+public class FirstStartActivity extends GdgActivity implements
     FirstStartStep1Fragment.Step1Listener,
     FirstStartStep2Fragment.Step2Listener,
     FirstStartStep3Fragment.Step3Listener {
 
+    private static final String SIGN_IN_REQUESTED = "SIGN_IN_REQUESTED";
     public static final String ACTION_FIRST_START = "finish_first_start";
 
     @Bind(R.id.pager)
@@ -55,17 +54,19 @@ public class FirstStartActivity extends AppCompatActivity implements
     FrameLayout mContentLayout;
 
     private FirstStartPageAdapter mViewPagerAdapter;
-
-    private GoogleApiClient mGoogleApiClient = null;
+    private boolean signInRequested;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_start);
+        ButterKnife.bind(this);
 
         App.getInstance().updateLastLocation();
 
-        ButterKnife.bind(this);
+        if (savedInstanceState != null) {
+            signInRequested = savedInstanceState.getBoolean(SIGN_IN_REQUESTED);
+        }
 
         mViewPagerAdapter = new FirstStartPageAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);
@@ -95,14 +96,10 @@ public class FirstStartActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onConfirmedChapter(Chapter chapter) {
-        PrefUtils.setHomeChapter(this, chapter);
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 
-        if (mGoogleApiClient == null) {
-            mViewPager.setCurrentItem(1, true);
-        } else {
-            mViewPager.setCurrentItem(2, true);
-        }
+        outState.putBoolean(SIGN_IN_REQUESTED, signInRequested);
     }
 
     @Override
@@ -127,50 +124,64 @@ public class FirstStartActivity extends AppCompatActivity implements
     @Override
     public void onBackPressed() {
         if (mViewPager.getCurrentItem() > 0) {
-            mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1, true);
+            mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
         } else {
             super.finish();
         }
     }
 
     @Override
-    public void onSignedIn(GoogleApiClient client, String accountName) {
+    public void onConfirmedChapter(Chapter chapter) {
+        PrefUtils.setHomeChapter(this, chapter);
 
-        mGoogleApiClient = client;
+        if (PrefUtils.isSignedIn(this)) {
+            mViewPager.setCurrentItem(2);
+        } else {
+            mViewPager.setCurrentItem(1);
+        }
+    }
 
-        Timber.d("Signed in.");
-        FirstStartStep3Fragment step3 = (FirstStartStep3Fragment) mViewPagerAdapter.getItem(2);
-        step3.setSignedIn(true);
-
+    @Override
+    public void onSignedIn() {
         PrefUtils.setSignedIn(this);
+        recreateGoogleApiClientIfNeeded();
+        getGoogleApiClient().connect();
 
-        if (mViewPager.getCurrentItem() >= 1) {
-            mViewPager.setCurrentItem(2, true);
+        signInRequested = true;
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        super.onConnected(bundle);
+
+        if (signInRequested) {
+            signInRequested = false;
+
+            FirstStartStep3Fragment step3 = (FirstStartStep3Fragment) mViewPagerAdapter.getItem(2);
+            step3.setSignedIn(true);
+
+            mViewPager.setCurrentItem(2);
         }
     }
 
     @Override
     public void onSkippedSignIn() {
         PrefUtils.setLoggedOut(this);
+
         FirstStartStep3Fragment step3 = (FirstStartStep3Fragment) mViewPagerAdapter.getItem(2);
         step3.setSignedIn(false);
 
-        mViewPager.setCurrentItem(2, true);
+        mViewPager.setCurrentItem(2);
     }
 
     @Override
-    public void finish() {
-
+    public void onComplete(final boolean enableAnalytics, final boolean enableGcm) {
+        PrefUtils.setInitialSettings(FirstStartActivity.this, enableGcm, enableAnalytics, null, null);
         requestBackup();
 
-        Intent resultData = new Intent(this, MainActivity.class);
-        resultData.setAction(ACTION_FIRST_START);
-        if (getIntent().getExtras() != null) {
-            resultData.putExtras(getIntent().getExtras());
-        }
-        startActivity(resultData);
+        startMainActivity();
 
-        super.finish();
+        finish();
     }
 
     private void requestBackup() {
@@ -178,10 +189,13 @@ public class FirstStartActivity extends AppCompatActivity implements
         bm.dataChanged();
     }
 
-    @Override
-    public void onComplete(final boolean enableAnalytics, final boolean enableGcm) {
-        PrefUtils.setInitialSettings(FirstStartActivity.this, enableGcm, enableAnalytics, null, null);
-        finish();
+    private void startMainActivity() {
+        Intent resultData = new Intent(this, MainActivity.class);
+        resultData.setAction(ACTION_FIRST_START);
+        if (getIntent().getExtras() != null) {
+            resultData.putExtras(getIntent().getExtras());
+        }
+        startActivity(resultData);
     }
 
     public class FirstStartPageAdapter extends FragmentStatePagerAdapter {
@@ -209,11 +223,6 @@ public class FirstStartActivity extends AppCompatActivity implements
         @Override
         public Fragment getItem(int position) {
             return mFragments[position];
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return "";
         }
     }
 }
