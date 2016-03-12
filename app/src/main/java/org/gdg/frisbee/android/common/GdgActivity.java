@@ -24,7 +24,6 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
@@ -66,7 +65,6 @@ public abstract class GdgActivity extends TrackableActivity implements
     @Bind(R.id.content_frame)
     FrameLayout mContentLayout;
     private AchievementActionHandler mAchievementActionHandler;
-    private Handler mHandler = new Handler();
 
     // GoogleApiClient wraps our service connection to Google Play services and
     // provides access to the users sign in state and Google's APIs.
@@ -95,10 +93,6 @@ public abstract class GdgActivity extends TrackableActivity implements
 
     private Toolbar mActionBarToolbar;
     private boolean isSignedIn;
-
-    public Handler getHandler() {
-        return mHandler;
-    }
 
     @Override
     public void setContentView(int layoutResId) {

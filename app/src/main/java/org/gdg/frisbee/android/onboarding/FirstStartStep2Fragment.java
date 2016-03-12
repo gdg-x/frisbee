@@ -21,6 +21,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -161,7 +162,7 @@ public class FirstStartStep2Fragment extends BaseFragment implements
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult result) {
+    public void onConnectionFailed(@NonNull ConnectionResult result) {
         if (mSignInProgress != STATE_IN_PROGRESS) {
             // We do not have an intent in progress so we should store the latest
             // error resolution intent for use when the sign in button is clicked.
@@ -207,7 +208,7 @@ public class FirstStartStep2Fragment extends BaseFragment implements
        * the user to consent to the permissions being requested by your app, a
        * setting to enable device networking, etc.
        */
-    private void resolveSignInError() {
+    void resolveSignInError() {
         if (mSignInIntent != null) {
             // We have an intent which will allow our user to sign in or
             // resolve an error.  For example if the user needs to

@@ -13,7 +13,6 @@ import org.gdg.frisbee.android.utils.PrefUtils;
 public final class GoogleApiClientFactory {
     private GoogleApiClientFactory() { }
 
-
     public static GoogleApiClient createWith(Context context) {
         return createClient(context, PrefUtils.isSignedIn(context));
     }
