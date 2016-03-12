@@ -66,6 +66,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     private static final String EXTRA_SELECTED_DRAWER_ITEM_ID = "SELECTED_DRAWER_ITEM_ID";
     private static final String DRAWER_ITEM_ID_TO_NAVIGATE_AFTER_SIGN_IN = "DRAWER_ITEM_ID_TO_NAVIGATE_AFTER_SIGN_IN";
 
+    private static final int INVALID_ITEM_ID = -1;
     private static final int GROUP_ID = 1;
     private static final int GAMES_GROUP_ID = 2;
     private static final int SETTINGS_GROUP_ID = 3;
@@ -79,14 +80,15 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     ImageView mDrawerUserPicture;
     private ActionBarDrawerToggle mDrawerToggle;
 
-    int drawerItemIdToNavigateAfterSignIn = -1;
+    int drawerItemIdToNavigateAfterSignIn = INVALID_ITEM_ID;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null) {
-            drawerItemIdToNavigateAfterSignIn = savedInstanceState.getInt(DRAWER_ITEM_ID_TO_NAVIGATE_AFTER_SIGN_IN, -1);
+            drawerItemIdToNavigateAfterSignIn
+                = savedInstanceState.getInt(DRAWER_ITEM_ID_TO_NAVIGATE_AFTER_SIGN_IN, INVALID_ITEM_ID);
         }
     }
 
@@ -258,7 +260,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    drawerItemIdToNavigateAfterSignIn = -1;
+                    drawerItemIdToNavigateAfterSignIn = INVALID_ITEM_ID;
                 }
             })
             .setPositiveButton(R.string.signin, new DialogInterface.OnClickListener() {
@@ -349,9 +351,9 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         super.onConnected(bundle);
         updateUserPicture();
 
-        if (drawerItemIdToNavigateAfterSignIn != -1) {
+        if (drawerItemIdToNavigateAfterSignIn != INVALID_ITEM_ID) {
             onDrawerItemClick(drawerItemIdToNavigateAfterSignIn);
-            drawerItemIdToNavigateAfterSignIn = -1;
+            drawerItemIdToNavigateAfterSignIn = INVALID_ITEM_ID;
         }
     }
 
