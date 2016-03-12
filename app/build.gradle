@@ -169,7 +169,7 @@ dependencies {
 
     //Google
     compile 'com.google.http-client:google-http-client-gson:1.21.0'
-    compile 'com.google.apis:google-api-services-plus:v1-rev329-1.21.0'
+    compile 'com.google.apis:google-api-services-plus:v1-rev353-1.21.0'
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
     compile 'com.google.zxing:android-integration:3.2.1'
     compile 'com.google.zxing:core:3.2.1'
@@ -189,9 +189,9 @@ dependencies {
 
     //Jake Wharton
     compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.jakewharton.timber:timber:4.1.0'
+    compile 'com.jakewharton.timber:timber:4.1.1'
     compile 'com.jakewharton:disklrucache:2.0.2'
-    compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.1'
+    compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.2'
 
     //Others
     compile 'io.doorbell:android-sdk:0.2.6@aar'
