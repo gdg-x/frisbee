@@ -133,7 +133,7 @@ public class AppInviteDeepLinkActivity extends GdgActivity {
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         super.onConnectionFailed(connectionResult);
         Timber.d("googleApiClient:onConnectionFailed: %s", connectionResult.getErrorCode());
         if (connectionResult.getErrorCode() == ConnectionResult.API_UNAVAILABLE) {

@@ -18,12 +18,12 @@
 package org.gdg.frisbee.android.common;
 
 import android.annotation.TargetApi;
-import android.app.ActivityManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
@@ -234,19 +234,6 @@ public abstract class GdgActivity extends TrackableActivity implements
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        if (!isLastActivityOnStack()) {
-            overridePendingTransition(0, 0);
-        }
-    }
-
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     protected boolean isContextValid() {
         boolean isContextValid = !isFinishing()
@@ -269,15 +256,6 @@ public abstract class GdgActivity extends TrackableActivity implements
         }
     }
 
-    private boolean isLastActivityOnStack() {
-        ActivityManager mngr = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-
-        List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
-
-        return taskList.get(0).numActivities == 1
-            && taskList.get(0).topActivity.getClassName().equals(this.getClass().getName());
-    }
-
     @Override
     public void onConnected(Bundle bundle) {
         mAchievementActionHandler.onConnected();
@@ -289,7 +267,7 @@ public abstract class GdgActivity extends TrackableActivity implements
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult result) {
+    public void onConnectionFailed(@NonNull ConnectionResult result) {
         if (mSignInProgress != STATE_IN_PROGRESS) {
             // We do not have an intent in progress so we should store the latest
             // error resolution intent for use when the sign in button is clicked.
@@ -321,7 +299,7 @@ public abstract class GdgActivity extends TrackableActivity implements
     protected ResultCallback<Status> appIndexApiCallback(final String label) {
         return new ResultCallback<Status>() {
             @Override
-            public void onResult(Status status) {
+            public void onResult(@NonNull Status status) {
                 if (status.isSuccess()) {
                     Timber.d("App Indexing API: Recorded event %s view successfully.", label);
                 } else {
