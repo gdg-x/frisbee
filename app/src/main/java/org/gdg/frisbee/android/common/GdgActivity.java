@@ -197,6 +197,7 @@ public abstract class GdgActivity extends TrackableActivity implements
                         // If the error resolution was not successful or the user canceled,
                         // we should stop processing errors.
                         mSignInProgress = STATE_DEFAULT;
+                        PrefUtils.setLoggedOut(this);
                     }
                     break;
             }

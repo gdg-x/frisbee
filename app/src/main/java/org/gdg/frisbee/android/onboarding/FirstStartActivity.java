@@ -145,22 +145,22 @@ public class FirstStartActivity extends GdgActivity implements
     public void onSignedIn() {
         PrefUtils.setSignedIn(this);
         recreateGoogleApiClientIfNeeded();
-        getGoogleApiClient().connect();
 
-        signInRequested = true;
+        if (getGoogleApiClient().isConnected()) {
+            moveToStep3(true);
+        } else {
+            getGoogleApiClient().connect();
+            signInRequested = true;
+        }
     }
 
     @Override
     public void onConnected(Bundle bundle) {
         super.onConnected(bundle);
 
-        if (signInRequested) {
+        if (signInRequested && PrefUtils.isSignedIn(this)) {
             signInRequested = false;
-
-            FirstStartStep3Fragment step3 = (FirstStartStep3Fragment) mViewPagerAdapter.getItem(2);
-            step3.setSignedIn(true);
-
-            mViewPager.setCurrentItem(2);
+            moveToStep3(true);
         }
     }
 
@@ -168,8 +168,12 @@ public class FirstStartActivity extends GdgActivity implements
     public void onSkippedSignIn() {
         PrefUtils.setLoggedOut(this);
 
+        moveToStep3(false);
+    }
+
+    private void moveToStep3(final boolean isSignedIn) {
         FirstStartStep3Fragment step3 = (FirstStartStep3Fragment) mViewPagerAdapter.getItem(2);
-        step3.setSignedIn(false);
+        step3.setSignedIn(isSignedIn);
 
         mViewPager.setCurrentItem(2);
     }
