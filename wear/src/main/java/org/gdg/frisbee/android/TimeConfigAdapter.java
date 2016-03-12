@@ -1,7 +1,6 @@
 package org.gdg.frisbee.android;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.wearable.view.CircledImageView;
 import android.support.wearable.view.WearableListView;
 import android.view.ViewGroup;
@@ -9,14 +8,14 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class ColorConfigAdapter extends WearableListView.Adapter {
+public class TimeConfigAdapter extends WearableListView.Adapter {
 
     private final Context mContext;
-    private final List<String> mColors;
+    private final List<String> timeSettings;
 
-    public ColorConfigAdapter(Context context, List<String> mColors) {
+    public TimeConfigAdapter(Context context, List<String> timeSettings) {
         mContext = context;
-        this.mColors = mColors;
+        this.timeSettings = timeSettings;
     }
 
     @Override
@@ -29,14 +28,14 @@ public class ColorConfigAdapter extends WearableListView.Adapter {
         WearableListItemLayout layout = (WearableListItemLayout) holder.itemView;
 
         TextView nameTextView = (TextView) layout.findViewById(R.id.setting_text_view);
-        nameTextView.setText(mColors.get(position));
+        nameTextView.setText(timeSettings.get(position));
 
         CircledImageView circleImage = (CircledImageView) layout.findViewById(R.id.setting_circle);
-        circleImage.setCircleColor(Color.parseColor(mColors.get(position)));
+        circleImage.setImageResource(R.drawable.ic_time);
     }
 
     @Override
     public int getItemCount() {
-        return mColors.size();
+        return timeSettings.size();
     }
 }

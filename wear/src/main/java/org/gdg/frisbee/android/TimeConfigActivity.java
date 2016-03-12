@@ -3,16 +3,15 @@ package org.gdg.frisbee.android;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.wearable.view.CircledImageView;
 import android.support.wearable.view.WearableListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ColorConfigActivity extends Activity {
-    public static final String CONFIG_HEADER = "org.gdgph.watchface.CONFIG_HEADER";
-    public static final String CONFIG_COLOR = "org.gdgph.watchface.CONFIG_COLOR";
+public class TimeConfigActivity extends Activity {
+    public static final String CONFIG_HEADER = "org.gdgph.watchface.time.header";
+    public static final String CONFIG_VALUE = "org.gdgph.watchface.time.value";
 
     private String mHeader;
 
@@ -55,28 +54,28 @@ public class ColorConfigActivity extends Activity {
             }
         });
 
-        displayColorSelections();
+        displayTimeSelection();
     }
 
-    private void displayColorSelections() {
-        List<String> colorList = new ArrayList<>();
+    private void displayTimeSelection() {
+        List<String> timeSettings = new ArrayList<>();
 
-        String[] colors = getResources().getStringArray(R.array.color_selection);
-        for (String color : colors) {
-            colorList.add(color);
+        String[] timeSetting = getResources().getStringArray(R.array.time_selection);
+        for (String setting : timeSetting) {
+            timeSettings.add(setting);
         }
 
-        ColorConfigAdapter adapter = new ColorConfigAdapter(this, colorList);
+        TimeConfigAdapter adapter = new TimeConfigAdapter(this, timeSettings);
         mListView.setAdapter(adapter);
         mListView.setClickListener(new WearableListView.ClickListener() {
             @Override
             public void onClick(WearableListView.ViewHolder viewHolder) {
                 WearableListItemLayout layout = (WearableListItemLayout) viewHolder.itemView;
-                CircledImageView circleImage = (CircledImageView) layout.findViewById(R.id.setting_circle);
+                TextView nameTextView = (TextView) layout.findViewById(R.id.setting_text_view);
 
                 Intent intent = new Intent();
                 intent.putExtra(CONFIG_HEADER, mHeader);
-                intent.putExtra(CONFIG_COLOR, circleImage.getDefaultCircleColor());
+                intent.putExtra(CONFIG_VALUE, getTimeValue(nameTextView.getText().toString()));
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -86,5 +85,15 @@ public class ColorConfigActivity extends Activity {
 
             }
         });
+    }
+
+    private int getTimeValue(String timeSetting) {
+        if(getString(R.string.time_12).equals(timeSetting)) {
+            return WearableConfigurationUtil.TIME_12_HOUR;
+        } else if(getString(R.string.time_24).equals(timeSetting)) {
+            return WearableConfigurationUtil.TIME_24_HOUR;
+        } else {
+            return 0;
+        }
     }
 }
