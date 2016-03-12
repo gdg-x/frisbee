@@ -229,7 +229,7 @@ public class MainActivity extends GdgNavDrawerActivity {
             && isShowingStoredHomeChapter()) {
             int position = mChapterAdapter.getPosition(homeChapterId);
             if (position != -1) {
-                updateSelectionfor(homeChapterId);
+                updateSelectionFor(homeChapterId);
             }
         }
     }
@@ -293,7 +293,7 @@ public class MainActivity extends GdgNavDrawerActivity {
         );
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.setOffscreenPageLimit(3);
-        updateSelectionfor(selectedChapterId);
+        updateSelectionFor(selectedChapterId);
 
         recordStartPageView();
 
@@ -405,7 +405,7 @@ public class MainActivity extends GdgNavDrawerActivity {
                                            final int position, final long id) {
 
                     Chapter selectedChapter = mChapterAdapter.getItem(position);
-                    updateSelectionfor(selectedChapter.getGplusId());
+                    updateSelectionFor(selectedChapter.getGplusId());
                 }
 
                 @Override
@@ -416,7 +416,7 @@ public class MainActivity extends GdgNavDrawerActivity {
         );
     }
 
-    void updateSelectionfor(final String newChapterId) {
+    void updateSelectionFor(final String newChapterId) {
         mViewPagerAdapter.setSelectedChapter(newChapterId);
         mSpinner.setSelection(mChapterAdapter.getPosition(newChapterId));
         if (!selectedChapterId.equals(newChapterId)) {
