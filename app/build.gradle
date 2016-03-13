@@ -64,7 +64,6 @@ android {
             proguardFile '../settings/proguard/proguard-square-retrofit2.pro'
             proguardFile '../settings/proguard/proguard-butterknife.pro'
             proguardFile '../settings/proguard/proguard-crashlytics.pro'
-            proguardFile '../settings/proguard/proguard-joda-time.pro'
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             minifyEnabled true
             zipAlignEnabled true
