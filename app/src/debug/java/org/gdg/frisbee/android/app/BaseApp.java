@@ -6,6 +6,12 @@ import android.support.multidex.MultiDexApplication;
 
 public class BaseApp extends MultiDexApplication {
 
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
+
     protected void onAppUpdate(int oldVersion, int newVersion) {
     }
 }

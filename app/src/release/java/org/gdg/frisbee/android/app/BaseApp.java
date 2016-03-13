@@ -1,8 +1,8 @@
 package org.gdg.frisbee.android.app;
 
-import android.support.multidex.MultiDexApplication;
+import android.app.Application;
 
-public class BaseApp extends MultiDexApplication {
+public class BaseApp extends Application {
 
     protected void onAppUpdate(int oldVersion, int newVersion) {
     }

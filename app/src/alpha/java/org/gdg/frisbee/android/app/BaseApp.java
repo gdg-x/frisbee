@@ -1,8 +1,6 @@
 package org.gdg.frisbee.android.app;
 
-import android.content.Context;
-import android.support.multidex.MultiDex;
-import android.support.multidex.MultiDexApplication;
+import android.app.Application;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
@@ -10,7 +8,7 @@ import org.gdg.frisbee.android.utils.PrefUtils;
 
 import java.io.File;
 
-public class BaseApp extends MultiDexApplication {
+public class BaseApp extends Application {
 
     protected void onAppUpdate(int oldVersion, int newVersion) {
         PrefUtils.resetInitialSettings(this);
