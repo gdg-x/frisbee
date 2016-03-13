@@ -33,6 +33,8 @@ android {
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
 
+        multiDexEnabled true
+
         buildConfigField "String", "COMMIT_SHA", "\"${commitSha()}\""
         buildConfigField "String", "COMMIT_TIME", "\"${commitTime()}\""
 
@@ -85,8 +87,6 @@ android {
             buildConfigField "String", "IP_SIMPLE_API_ACCESS_KEY", "\"$local_properties.ip_simple_api_access_key_debug\""
             buildConfigField "String", "ANDROID_SIMPLE_API_ACCESS_KEY", "\"$local_properties.android_simple_api_access_key_debug\""
             resValue "string", "android_simple_api_access_key", local_properties.android_simple_api_access_key_debug ?: ""
-
-            multiDexEnabled true
         }
     }
 
@@ -139,7 +139,7 @@ dependencies {
     compile "com.android.support:design:$rootProject.supportLibraryVersion"
     compile "com.android.support:customtabs:$rootProject.supportLibraryVersion"
     compile "com.android.support.test.espresso:espresso-idling-resource:$rootProject.espressoVersion"
-    debugCompile 'com.android.support:multidex:1.0.1'
+    compile 'com.android.support:multidex:1.0.1'
 
     //Play Services
     compile "com.google.android.gms:play-services-location:$rootProject.playServicesVersion"
