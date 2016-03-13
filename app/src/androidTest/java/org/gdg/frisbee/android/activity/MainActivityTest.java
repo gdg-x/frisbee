@@ -38,7 +38,7 @@ public class MainActivityTest {
     public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<MainActivity>(MainActivity.class) {
         @Override
         protected void beforeActivityLaunched() {
-            PrefUtils.setInitialSettings(InstrumentationRegistry.getTargetContext(), false, false, null, null);
+            PrefUtils.setInitialSettings(InstrumentationRegistry.getTargetContext(), false);
             PrefUtils.setHomeChapter(InstrumentationRegistry.getTargetContext(), CHAPTER_BRUSSELS);
         }
     };
