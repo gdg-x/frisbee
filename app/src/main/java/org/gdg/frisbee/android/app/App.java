@@ -291,8 +291,8 @@ public class App extends BaseApp implements LocationListener {
         mOrganizerChecker.checkOrganizer(apiClient, responseHandler);
     }
 
-    public void resetOrganizer() {
-        mOrganizerChecker.resetOrganizer();
+    public void initOrganizer() {
+        mOrganizerChecker.initOrganizer();
     }
 
     /**
