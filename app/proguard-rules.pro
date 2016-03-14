@@ -33,3 +33,7 @@
 -keepnames class * implements android.os.Parcelable {
     public static final ** CREATOR;
 }
+
+-dontnote com.google.vending.licensing.ILicensingService
+-dontnote sun.misc.Unsafe
+-dontwarn sun.misc.Unsafe

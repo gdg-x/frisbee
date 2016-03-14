@@ -64,12 +64,10 @@ android {
             proguardFile '../settings/proguard/proguard-square-retrofit2.pro'
             proguardFile '../settings/proguard/proguard-butterknife.pro'
             proguardFile '../settings/proguard/proguard-crashlytics.pro'
-            proguardFile '../settings/proguard/proguard-joda-time.pro'
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             minifyEnabled true
             zipAlignEnabled true
             shrinkResources true
-            debuggable false
 
             buildConfigField "String", "IP_SIMPLE_API_ACCESS_KEY", "\"$local_properties.ip_simple_api_access_key\""
             buildConfigField "String", "ANDROID_SIMPLE_API_ACCESS_KEY", "\"$local_properties.android_simple_api_access_key\""
@@ -142,9 +140,7 @@ dependencies {
     debugCompile 'com.android.support:multidex:1.0.1'
 
     //Play Services
-    compile "com.google.android.gms:play-services-location:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-games:$rootProject.playServicesVersion"
-    compile "com.google.android.gms:play-services-identity:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-plus:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-appstate:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-analytics:$rootProject.playServicesVersion"
@@ -153,7 +149,7 @@ dependencies {
 
     //Google
     compile 'com.google.http-client:google-http-client-gson:1.21.0'
-    compile 'com.google.apis:google-api-services-plus:v1-rev353-1.21.0'
+    compile 'com.google.apis:google-api-services-plus:v1-rev126-1.18.0-rc'
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
     compile 'com.google.zxing:android-integration:3.2.1'
     compile 'com.google.zxing:core:3.2.1'
