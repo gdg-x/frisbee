@@ -44,6 +44,8 @@
   <color name="color_primary_dark_wtm">#3D9B86</color>
   <color name="color_primary_ioextended">#50B8D0</color>
   <color name="color_primary_dark_ioextended">#30A1BC</color>
+  <color name="color_primary_gcpnext">#1565C0</color>
+  <color name="color_primary_dark_gcpnext">#01579B</color>
   <color name="color_primary_devfest">#2B5797</color>
   <color name="color_primary_dark_devfest">#17417F</color>
 </resources>
