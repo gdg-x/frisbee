@@ -48,11 +48,11 @@ isAlreadyDeployed () {
 if [ "$TRAVIS_BRANCH" == "$ALPHA_BRANCH" ]; then
   BRANCH=$ALPHA_BRANCH
   TRACK='alpha'
-  GRADLE_TASK='publishApkProdAlpha'
+  GRADLE_TASK='publishApkAlpha'
 elif [ "$TRAVIS_BRANCH" == "$BETA_BRANCH" ]; then
   BRANCH=$BETA_BRANCH
   TRACK='beta'
-  GRADLE_TASK='publishApkProdRelease'
+  GRADLE_TASK='publishApkRelease'
 else
   BRANCH=''
 fi
