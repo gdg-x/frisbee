@@ -224,6 +224,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             case Const.DRAWER_WTM:
             case Const.DRAWER_STUDY_JAM:
             case Const.DRAWER_IO_EXTENDED:
+            case Const.DRAWER_GCPNEXT:
                 onDrawerSpecialItemClick(itemId, data);
                 break;
             case Const.DRAWER_PULSE:
