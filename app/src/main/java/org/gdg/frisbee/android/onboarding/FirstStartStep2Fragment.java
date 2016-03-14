@@ -21,16 +21,24 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.common.BaseFragment;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class FirstStartStep2Fragment extends BaseFragment {
 
     Step2Listener listener = Step2Listener.EMPTY;
+
+    @Bind(R.id.googleSignin)
+    Button googleSigninButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,6 +51,10 @@ public class FirstStartStep2Fragment extends BaseFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
+        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context)
+            == ConnectionResult.SERVICE_MISSING) {
+            googleSigninButton.setEnabled(false);
+        }
         if (context instanceof Step2Listener) {
             listener = (Step2Listener) context;
         }
