@@ -180,7 +180,7 @@ public class FirstStartActivity extends GdgActivity implements
 
     @Override
     public void onComplete(final boolean enableAnalytics, final boolean enableGcm) {
-        PrefUtils.setInitialSettings(FirstStartActivity.this, enableGcm, enableAnalytics, null, null);
+        PrefUtils.setInitialSettings(FirstStartActivity.this, enableAnalytics);
         requestBackup();
 
         startMainActivity();
