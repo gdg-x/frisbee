@@ -7,7 +7,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.0.0-beta6'
-        classpath 'com.google.gms:google-services:1.3.1'
+        classpath 'com.google.gms:google-services:2.0.0-beta6'
 
         classpath 'io.fabric.tools:gradle:1.21.5'
         classpath 'com.github.triplet.gradle:play-publisher:1.1.4'
@@ -48,7 +48,7 @@ ext {
     versionMajor = 2
     versionMinor = 3
     versionPatch = 0
-    versionBuild = 5 // bump for dogfood builds, public betas, etc.
+    versionBuild = 7 // bump for dogfood builds, public betas, etc.
 
     versionCode = versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
     versionName = "${versionMajor}.${versionMinor}.${versionPatch}"
@@ -60,7 +60,7 @@ ext {
     buildToolsVersion = '23.0.2'
 
     // App dependencies
-    supportLibraryVersion = '23.1.1'
+    supportLibraryVersion = '23.2.1'
     playServicesVersion = '8.4.0'
     jodaTimeVersion = '2.9.2'
     leakCanaryVersion = '1.3.1'
