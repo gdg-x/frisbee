@@ -55,7 +55,6 @@ class EventAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater mInflater;
     private ArrayList<Item> mEvents;
-    private boolean mFirstPastEvent = true;
 
     public EventAdapter(Context ctx) {
         this(ctx, R.drawable.icon);

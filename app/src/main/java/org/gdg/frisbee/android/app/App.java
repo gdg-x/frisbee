@@ -198,6 +198,14 @@ public class App extends BaseApp implements LocationListener {
             Const.DRAWER_IO_EXTENDED,
             Const.START_TIME_IOEXTENDED,
             Const.END_TIME_IOEXTENDED));
+        //Add GCP NEXT
+        addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
+            R.style.Theme_GDG_Special_GCPNEXT,
+            "gcpnext",
+            Const.DRAWER_GCPNEXT,
+            Const.START_TIME_GCPNEXT,
+            Const.END_TIME_GCPNEXT));
+
     }
 
     private void addTaggedEventSeriesIfDateFits(@NonNull TaggedEventSeries taggedEventSeries) {

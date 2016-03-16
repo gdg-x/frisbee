@@ -49,7 +49,9 @@ command line property like below: `-PminSdk=21`
 ###Contributors
 See [list of contributors](https://github.com/gdg-x/frisbee/graphs/contributors)
 
-Maintainer: [@tasomaniac](https://github.com/tasomaniac) and [@friedger](https://github.com/friedger).
+Maintainers are listed in [MAINTAINERS](https://github.com/gdg-x/frisbee/blob/develop/MAINTAINERS) file.
+ 
+At least 1 approval is needed by the maintainers for PRs to be merged.
 
 ###Translation
 
