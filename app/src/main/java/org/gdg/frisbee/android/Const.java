@@ -73,8 +73,7 @@ public class Const {
     public static final String ARROW_LB = "CgkIh5yNxL8MEAIQBw";
     public static final String ARROW_K = "XXXX111122223333";
     public static final String GAMES_SNAPSHOT_ID = "tagged_organizers.json";
-    public static final int ARROW_STATE_KEY = 1;
-    public static final int ARROW_DONE_STATE_KEY = 2;
+
     public static final String EXTRA_EVENT_ID = "EXTRA_EVENT_ID";
     public static final String EXTRA_SECTION = "EXTRA_SECTION";
     public static final String URL_DEVELOPERS_GOOGLE_COM = "https://developers.google.com";
@@ -95,11 +94,6 @@ public class Const {
     public static final String CACHE_KEY_PERSON = "person_";
     public static final String CACHE_KEY_NEWS = "news_";
     public static final String CACHE_KEY_PULSE = "pulse_";
-    public static final String GOOGLE_DEVELOPERS_YT_ID = "UC_x5XG1OV2P6uZZ5FSM9Ttw";
-    public static final String ANDROID_DEVELOPERS_YT_ID = "UCVHFbqXqoYvEWM1Ddxl0QDg";
-    public static final String YOUTUBE_DEVELOPERS_YT_ID = "UCtVd0c0tGXuTSbU5d8cSBUg";
-    public static final String TRUSTSTORE_PW = "VU%&ibkr45pnq39v53x";
-
 
     private Const() {
     }
