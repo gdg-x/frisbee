@@ -51,10 +51,6 @@ public class FirstStartStep2Fragment extends BaseFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context)
-            == ConnectionResult.SERVICE_MISSING) {
-            googleSigninButton.setEnabled(false);
-        }
         if (context instanceof Step2Listener) {
             listener = (Step2Listener) context;
         }

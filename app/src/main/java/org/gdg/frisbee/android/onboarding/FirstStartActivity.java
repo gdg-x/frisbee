@@ -27,6 +27,8 @@ import android.widget.FrameLayout;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Chapter;
@@ -135,7 +137,10 @@ public class FirstStartActivity extends GdgActivity implements
         PrefUtils.setHomeChapter(this, chapter);
 
         if (PrefUtils.isSignedIn(this)) {
-            mViewPager.setCurrentItem(2);
+            moveToStep3(true);
+        } else if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)
+            == ConnectionResult.SERVICE_MISSING) {
+            moveToStep3(false);
         } else {
             mViewPager.setCurrentItem(1);
         }
