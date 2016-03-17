@@ -274,11 +274,11 @@ public abstract class GdgActivity extends TrackableActivity implements
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult result) {
         if (mSignInProgress != STATE_IN_PROGRESS) {
-            if (!GoogleApiAvailability.getInstance().isUserResolvableError(result.getErrorCode())) {
+            if (isFatalPlayServiceError(result.getErrorCode())) {
                 if (!PrefUtils.shouldShowFatalPlayServiceMessage(this)) {
+                    // early exit as we showed the fatal error message already
                     return;
                 }
-                PrefUtils.setFatalPlayServiceMessageShown(this);
             }
 
             // We do not have an intent in progress so we should store the latest
@@ -298,6 +298,10 @@ public abstract class GdgActivity extends TrackableActivity implements
                 }
             }
         }
+    }
+
+    private boolean isFatalPlayServiceError(int errorCode) {
+        return !GoogleApiAvailability.getInstance().isUserResolvableError(errorCode);
     }
 
     public void setToolbarTitle(final String title) {

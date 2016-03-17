@@ -34,9 +34,6 @@ public class FirstStartStep2Fragment extends BaseFragment {
 
     Step2Listener listener = Step2Listener.EMPTY;
 
-    @Bind(R.id.googleSignin)
-    Button googleSigninButton;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_welcome_step2, container, false);
