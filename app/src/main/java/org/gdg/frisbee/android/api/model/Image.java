@@ -11,12 +11,4 @@ public class Image {
     public boolean isDefault() {
         return isDefault;
     }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public void setDefault(boolean aDefault) {
-        isDefault = aDefault;
-    }
 }

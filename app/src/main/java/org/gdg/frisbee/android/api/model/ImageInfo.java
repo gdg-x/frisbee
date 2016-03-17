@@ -6,8 +6,4 @@ public class ImageInfo {
     public Image getImage() {
         return image;
     }
-
-    public void setImage(Image image) {
-        this.image = image;
-    }
 }
