@@ -6,7 +6,7 @@ public class Person {
     private String url;
     private String tagline;
     private String aboutMe;
-    private ImageInfo image;
+    private Image image;
     private Cover cover;
     private List<Urls> urls;
     private String displayName;
@@ -23,7 +23,7 @@ public class Person {
         return aboutMe;
     }
 
-    public ImageInfo getImage() {
+    public Image getImage() {
         return image;
     }
 

@@ -15,6 +15,7 @@ public class PlusApiFactory {
         return new Retrofit.Builder()
             .baseUrl(API_URL)
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(SynchronousCallAdapterFactory.create())
             .client(OkClientFactory.okHttpClientWithIdlingResources(App.getInstance().getOkHttpClient()))
             .build();
     }

@@ -276,6 +276,7 @@ public class InfoFragment extends BaseFragment {
                             mFetchOrganizerInfo.addParameter(organizerParameter);
                         } catch (Exception ex) {
                             if (isAdded()) {
+                                Timber.d(ex, "Could not parse organizer id " + org);
                                 Snackbar snackbar = Snackbar.make(getView(), getString(R.string.bogus_organizer, org),
                                     Snackbar.LENGTH_SHORT);
                                 ColoredSnackBar.alert(snackbar).show();
