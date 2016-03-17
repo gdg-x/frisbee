@@ -275,10 +275,10 @@ public abstract class GdgActivity extends TrackableActivity implements
     public void onConnectionFailed(@NonNull ConnectionResult result) {
         if (mSignInProgress != STATE_IN_PROGRESS) {
             if (isFatalPlayServiceError(result.getErrorCode())) {
-                if (!PrefUtils.shouldShowFatalPlayServiceMessage(this)) {
-                    // early exit as we showed the fatal error message already
-                    return;
+                if (PrefUtils.shouldShowFatalPlayServiceMessage(this)) {
+                    showFatalPlayServiceMessage(result);
                 }
+                return;
             }
 
             // We do not have an intent in progress so we should store the latest
@@ -292,12 +292,16 @@ public abstract class GdgActivity extends TrackableActivity implements
                 // dialog which may still start an intent on our behalf if the
                 // user can resolve the issue.
                 if (PrefUtils.shouldShowFatalPlayServiceMessage(this)) {
-                    Timber.e("Google Play Service did not resolve error");
-                    GoogleApiAvailability.getInstance().showErrorNotification(this, result.getErrorCode());
-                    PrefUtils.setFatalPlayServiceMessageShown(this);
+                    showFatalPlayServiceMessage(result);
                 }
             }
         }
+    }
+
+    private void showFatalPlayServiceMessage(@NonNull ConnectionResult result) {
+        Timber.e("Google Play Service did not resolve error");
+        GoogleApiAvailability.getInstance().showErrorNotification(this, result.getErrorCode());
+        PrefUtils.setFatalPlayServiceMessageShown(this);
     }
 
     private boolean isFatalPlayServiceError(int errorCode) {
