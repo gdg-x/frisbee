@@ -52,7 +52,9 @@ import org.gdg.frisbee.android.api.GithubFactory;
 import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.GroupDirectoryFactory;
 import org.gdg.frisbee.android.api.OkClientFactory;
-import org.gdg.frisbee.android.api.PlusPersonDownloader;
+import org.gdg.frisbee.android.api.PlusApi;
+import org.gdg.frisbee.android.api.PlusApiFactory;
+import org.gdg.frisbee.android.api.PlusImageResizer;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.utils.CrashlyticsTree;
@@ -85,6 +87,7 @@ public class App extends BaseApp implements LocationListener {
     private ArrayList<TaggedEventSeries> mTaggedEventSeriesList;
     private RefWatcher refWatcher;
     private Plus plusClient;
+    private PlusApi plusApiInstance;
 
     public static App getInstance() {
         return mInstance;
@@ -140,7 +143,7 @@ public class App extends BaseApp implements LocationListener {
         // Only the interceptors will be different.
         // We shouldn't have the below interceptor in other instances.
         OkHttpClient.Builder picassoClient = mOkHttpClient.newBuilder();
-        picassoClient.addInterceptor(new PlusPersonDownloader(plusClient));
+        picassoClient.addInterceptor(new PlusImageResizer());
 
         mPicasso = new Picasso.Builder(this)
             .downloader(new OkHttp3Downloader(picassoClient.build()))
@@ -340,6 +343,13 @@ public class App extends BaseApp implements LocationListener {
             gitHubInstance = GithubFactory.provideGitHubApi();
         }
         return gitHubInstance;
+    }
+
+    public PlusApi getPlusApi() {
+        if (plusApiInstance == null) {
+            plusApiInstance = PlusApiFactory.providePlusApi();
+        }
+        return plusApiInstance;
     }
 
     public OkHttpClient getOkHttpClient() {
