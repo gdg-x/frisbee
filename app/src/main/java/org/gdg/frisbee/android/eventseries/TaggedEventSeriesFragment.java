@@ -49,7 +49,8 @@ public class TaggedEventSeriesFragment extends EventListFragment {
 
     private String mCacheKey = "";
     private TaggedEventSeries mTaggedEventSeries;
-    private Comparator<EventAdapter.Item> mLocationComparator = new TaggedEventDistanceComparator();
+    private Comparator<EventAdapter.Item> mLocationComparator =
+        new TaggedEventDistanceComparator(App.getInstance().getLastLocation());
     private Comparator<EventAdapter.Item> mCurrentComparator = mLocationComparator;
     private Comparator<EventAdapter.Item> mDateComparator = new EventDateComparator();
 
