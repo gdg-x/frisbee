@@ -56,7 +56,6 @@ android {
             proguardFile '../settings/proguard/proguard-support-v7-appcompat.pro'
             proguardFile '../settings/proguard/proguard-support-v7-cardview.pro'
             proguardFile '../settings/proguard/proguard-google-play-services.pro'
-            proguardFile '../settings/proguard/proguard-google-analytics.pro'
             proguardFile '../settings/proguard/proguard-gson.pro'
             proguardFile '../settings/proguard/proguard-square-okio.pro'
             proguardFile '../settings/proguard/proguard-square-okhttp3.pro'
