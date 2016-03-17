@@ -1,4 +1,4 @@
-package org.gdg.frisbee.android.api.model;
+package org.gdg.frisbee.android.api.model.plus;
 
 public class Image {
     private String url;

@@ -35,13 +35,12 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.google.android.gms.games.Games;
-import com.google.api.services.plus.model.Person;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.about.AboutActivity;
 import org.gdg.frisbee.android.activity.SettingsActivity;
-import org.gdg.frisbee.android.api.PlusPersonDownloader;
+import org.gdg.frisbee.android.api.model.plus.Person;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.arrow.ArrowActivity;
 import org.gdg.frisbee.android.chapter.MainActivity;
@@ -401,7 +400,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                     @Override
                     public Person doInBackground(String... params) {
 
-                        return PlusPersonDownloader.getPersonSync(params[0]);
+                        return App.getInstance().getPlusApi().getPerson(params[0]);
                     }
                 })
                 .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person>() {

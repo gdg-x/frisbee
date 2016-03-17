@@ -32,12 +32,12 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.google.api.services.plus.model.Person;
 import com.tasomaniac.android.widget.DelayedProgressBar;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.PlusPersonDownloader;
+import org.gdg.frisbee.android.api.model.plus.Person;
+import org.gdg.frisbee.android.api.model.plus.Urls;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.BaseFragment;
@@ -90,7 +90,7 @@ public class InfoFragment extends BaseFragment {
                 for (int i = 0; i < params.length; i++) {
                     Timber.d("Get Organizer " + params[i]);
                     if (isAdded()) {
-                        people[i] = PlusPersonDownloader.getPersonSync(params[i]);
+                        people[i] = App.getInstance().getPlusApi().getPerson(params[i]);
                     } else {
                         // fragment is not used anymore
                         people[i] = null;
@@ -129,7 +129,7 @@ public class InfoFragment extends BaseFragment {
                     @Override
                     public Person doInBackground(String... params) {
                         if (isAdded()) {
-                            return PlusPersonDownloader.getPersonSync(chapterPlusId);
+                            return App.getInstance().getPlusApi().getPerson(chapterPlusId);
                         } else {
                             // fragment is not used anymore
                             return null;
@@ -153,11 +153,11 @@ public class InfoFragment extends BaseFragment {
                 new ModelCache.CacheListener() {
                     @Override
                     public void onGet(Object item) {
-                        final Person chachedChapter = (Person) item;
-                        updateChapterUIFrom(chachedChapter);
+                        final Person cachedChapter = (Person) item;
+                        updateChapterUIFrom(cachedChapter);
 
-                        for (int chapterIndex = 0; chapterIndex < chachedChapter.getUrls().size(); chapterIndex++) {
-                            Person.Urls url = chachedChapter.getUrls().get(chapterIndex);
+                        for (int chapterIndex = 0; chapterIndex < cachedChapter.getUrls().size(); chapterIndex++) {
+                            Urls url = cachedChapter.getUrls().get(chapterIndex);
                             if (url.getValue().contains("plus.google.com/")
                                 && !url.getValue().contains("communities")) {
 
@@ -172,7 +172,7 @@ public class InfoFragment extends BaseFragment {
                                             @Override
                                             public void onGet(Object item) {
                                                 addOrganizerToUI((Person) item);
-                                                if (indexAsFinal == chachedChapter.getUrls().size()) {
+                                                if (indexAsFinal == cachedChapter.getUrls().size()) {
                                                     setIsLoading(false);
                                                 }
                                             }
@@ -180,7 +180,7 @@ public class InfoFragment extends BaseFragment {
                                             @Override
                                             public void onNotFound(String key) {
                                                 addUnknowOrganizerToUI();
-                                                if (indexAsFinal == chachedChapter.getUrls().size()) {
+                                                if (indexAsFinal == cachedChapter.getUrls().size()) {
                                                     setIsLoading(false);
                                                 }
                                             }
@@ -265,7 +265,7 @@ public class InfoFragment extends BaseFragment {
 
     private void updateOrganizersOnline(final Person person) {
         if (person.getUrls() != null) {
-            for (Person.Urls url : person.getUrls()) {
+            for (Urls url : person.getUrls()) {
                 if (url.getValue().contains("plus.google.com/")) {
                     if (url.getValue().contains("communities")) {
                         // TODO
@@ -285,7 +285,7 @@ public class InfoFragment extends BaseFragment {
                 } else {
                     TextView tv = (TextView) mInflater
                         .inflate(R.layout.list_resource_item, (ViewGroup) getView(), false);
-                    tv.setText(Html.fromHtml("<a href='" + url.getValue() + "'>" + url.get("label") + "</a>"));
+                    tv.setText(Html.fromHtml("<a href='" + url.getValue() + "'>" + url.getLabel() + "</a>"));
                     mResourcesBox.addView(tv);
                 }
 
@@ -294,7 +294,7 @@ public class InfoFragment extends BaseFragment {
         }
     }
 
-    private String getGPlusIdFromPersonUrl(Person.Urls personUrl) {
+    private String getGPlusIdFromPersonUrl(Urls personUrl) {
         final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID, "");
         if (personUrl.getValue().contains("+")) {
             try {

@@ -46,7 +46,7 @@ import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.EventFullDetails;
-import org.gdg.frisbee.android.api.model.ImageInfo;
+import org.gdg.frisbee.android.api.model.plus.ImageInfo;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.BaseFragment;
@@ -228,8 +228,7 @@ public class EventOverviewFragment extends BaseFragment {
             @Override
             public void onResponse(Call<ImageInfo> call, Response<ImageInfo> response) {
                 if (response.isSuccessful()) {
-                    String imageUrl = response.body().getImage().getUrl().replace("sz=50", "sz=196");
-                    Picasso.with(getActivity()).load(imageUrl).into(new Target() {
+                    App.getInstance().getPicasso().load(response.body().getImage().getUrl()).into(new Target() {
                         @Override
                         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
                             if (!isAdded()) {
