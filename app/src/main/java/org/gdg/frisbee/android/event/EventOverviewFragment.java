@@ -57,8 +57,6 @@ import org.joda.time.format.DateTimeFormatter;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Response;
 
 public class EventOverviewFragment extends BaseFragment {
 
@@ -218,45 +216,46 @@ public class EventOverviewFragment extends BaseFragment {
             return;
         }
 
-        loadChapterImageInto(group.getGplusId(), mGroupLogo);
+        loadChapterImage(group.getGplusId());
 
         ((GdgActivity) getActivity()).setToolbarTitle(group.getShortName());
     }
 
-    private void loadChapterImageInto(String gplusId, ImageView groupLogo) {
-        App.getInstance().getPlusApi().getImageInfo(gplusId).enqueue(new retrofit2.Callback<ImageInfo>() {
+    private void loadChapterImage(String gplusId) {
+        App.getInstance().getPlusApi().getImageInfo(gplusId).enqueue(new Callback<ImageInfo>() {
             @Override
-            public void onResponse(Call<ImageInfo> call, Response<ImageInfo> response) {
-                if (response.isSuccessful()) {
-                    String imageUrl = response.body().getImage().getUrl().replace("sz=50", "sz=196");
-                    Picasso.with(getActivity()).load(imageUrl).into(new Target() {
-                        @Override
-                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
-                            if (!isAdded()) {
-                                return;
-                            }
-                            BitmapDrawable logo = new BitmapDrawable(getResources(), bitmap);
-                            mGroupLogo.setVisibility(View.VISIBLE);
-                            mGroupLogo.setImageDrawable(logo);
+            public void success(ImageInfo imageInfo) {
+                String imageUrl = imageInfo.getImage().getUrl().replace("sz=50", "sz=196");
+                Picasso.with(getActivity()).load(imageUrl).into(new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
+                        if (!isAdded()) {
+                            return;
                         }
+                        BitmapDrawable logo = new BitmapDrawable(getResources(), bitmap);
+                        mGroupLogo.setVisibility(View.VISIBLE);
+                        mGroupLogo.setImageDrawable(logo);
+                    }
 
-                        @Override
-                        public void onBitmapFailed(Drawable drawable) {
-                            mGroupLogo.setVisibility(View.INVISIBLE);
-                        }
+                    @Override
+                    public void onBitmapFailed(Drawable drawable) {
+                        mGroupLogo.setVisibility(View.INVISIBLE);
+                    }
 
-                        @Override
-                        public void onPrepareLoad(Drawable drawable) {
+                    @Override
+                    public void onPrepareLoad(Drawable drawable) {
 
-                        }
-                    });
-                } else {
-                    mGroupLogo.setVisibility(View.INVISIBLE);
-                }
+                    }
+                });
             }
 
             @Override
-            public void onFailure(Call<ImageInfo> call, Throwable t) {
+            public void failure(Throwable error) {
+                mGroupLogo.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void networkFailure(Throwable error) {
                 mGroupLogo.setVisibility(View.INVISIBLE);
             }
         });
