@@ -36,11 +36,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.plus.People;
-import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.model.people.Person;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.tasomaniac.android.widget.DelayedProgressBar;
@@ -51,6 +46,7 @@ import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.EventFullDetails;
+import org.gdg.frisbee.android.api.model.ImageInfo;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.BaseFragment;
@@ -61,6 +57,8 @@ import org.joda.time.format.DateTimeFormatter;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Response;
 
 public class EventOverviewFragment extends BaseFragment {
 
@@ -220,39 +218,48 @@ public class EventOverviewFragment extends BaseFragment {
             return;
         }
 
-        Plus.PeopleApi.load(((GdgActivity) getActivity()).getGoogleApiClient(), group.getGplusId())
-            .setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
-                @Override
-                public void onResult(People.LoadPeopleResult loadPeopleResult) {
-                    if (loadPeopleResult.getStatus().getStatusCode() == CommonStatusCodes.SUCCESS) {
-                        Person gplusChapter = loadPeopleResult.getPersonBuffer().get(0);
-                        if (gplusChapter.getImage().hasUrl()) {
-                            Picasso.with(getActivity()).load(gplusChapter.getImage().getUrl()).into(new Target() {
-                                @Override
-                                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
-                                    if (!isAdded()) {
-                                        return;
-                                    }
-                                    BitmapDrawable logo = new BitmapDrawable(getResources(), bitmap);
-                                    mGroupLogo.setVisibility(View.VISIBLE);
-                                    mGroupLogo.setImageDrawable(logo);
-                                }
+        loadChapterImageInto(group.getGplusId(), mGroupLogo);
 
-                                @Override
-                                public void onBitmapFailed(Drawable drawable) {
-                                    mGroupLogo.setVisibility(View.INVISIBLE);
-                                }
-
-                                @Override
-                                public void onPrepareLoad(Drawable drawable) {
-
-                                }
-                            });
-                        }
-                    }
-                }
-            });
         ((GdgActivity) getActivity()).setToolbarTitle(group.getShortName());
+    }
+
+    private void loadChapterImageInto(String gplusId, ImageView groupLogo) {
+        App.getInstance().getPlusApi().getImageInfo(gplusId).enqueue(new retrofit2.Callback<ImageInfo>() {
+            @Override
+            public void onResponse(Call<ImageInfo> call, Response<ImageInfo> response) {
+                if (response.isSuccessful()) {
+                    String imageUrl = response.body().getImage().getUrl().replace("sz=50", "sz=196");
+                    Picasso.with(getActivity()).load(imageUrl).into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
+                            if (!isAdded()) {
+                                return;
+                            }
+                            BitmapDrawable logo = new BitmapDrawable(getResources(), bitmap);
+                            mGroupLogo.setVisibility(View.VISIBLE);
+                            mGroupLogo.setImageDrawable(logo);
+                        }
+
+                        @Override
+                        public void onBitmapFailed(Drawable drawable) {
+                            mGroupLogo.setVisibility(View.INVISIBLE);
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable drawable) {
+
+                        }
+                    });
+                } else {
+                    mGroupLogo.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ImageInfo> call, Throwable t) {
+                mGroupLogo.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     private void setIsLoading(boolean isLoading) {
