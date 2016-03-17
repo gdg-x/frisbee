@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -57,7 +58,6 @@ public abstract class GdgActivity extends TrackableActivity implements
     private static final int STATE_SIGN_IN = 1;
     private static final int STATE_IN_PROGRESS = 2;
     private static final int RC_SIGN_IN = 101;
-    private static final int DIALOG_PLAY_SERVICES_ERROR = 0;
     private static final String SAVED_PROGRESS = "SAVED_PROGRESS";
     @Nullable
     @Bind(R.id.content_frame)
@@ -216,34 +216,26 @@ public abstract class GdgActivity extends TrackableActivity implements
     }
 
     private void resolveSignInError() {
-        if (mSignInIntent != null) {
-            // We have an intent which will allow our user to sign in or
-            // resolve an error.  For example if the user needs to
-            // select an account to sign in with, or if they need to consent
-            // to the permissions your app is requesting.
+        // We have an intent which will allow our user to sign in or
+        // resolve an error.  For example if the user needs to
+        // select an account to sign in with, or if they need to consent
+        // to the permissions your app is requesting.
 
-            try {
-                // Send the pending intent that we stored on the most recent
-                // OnConnectionFailed callback.  This will allow the user to
-                // resolve the error currently preventing our connection to
-                // Google Play services.
-                mSignInProgress = STATE_IN_PROGRESS;
-                startIntentSenderForResult(
-                    mSignInIntent.getIntentSender(),
-                    RC_SIGN_IN, null, 0, 0, 0
-                );
-            } catch (IntentSender.SendIntentException e) {
-                // The intent was canceled before it was sent.  Attempt to connect to
-                // get an updated ConnectionResult.
-                mSignInProgress = STATE_SIGN_IN;
-                mGoogleApiClient.connect();
-            }
-        } else {
-            // Google Play services wasn't able to provide an intent for some
-            // error types, so we show the default Google Play services error
-            // dialog which may still start an intent on our behalf if the
-            // user can resolve the issue.
-            showDialog(DIALOG_PLAY_SERVICES_ERROR);
+        try {
+            // Send the pending intent that we stored on the most recent
+            // OnConnectionFailed callback.  This will allow the user to
+            // resolve the error currently preventing our connection to
+            // Google Play services.
+            mSignInProgress = STATE_IN_PROGRESS;
+            startIntentSenderForResult(
+                mSignInIntent.getIntentSender(),
+                RC_SIGN_IN, null, 0, 0, 0
+            );
+        } catch (IntentSender.SendIntentException e) {
+            // The intent was canceled before it was sent.  Attempt to connect to
+            // get an updated ConnectionResult.
+            mSignInProgress = STATE_SIGN_IN;
+            mGoogleApiClient.connect();
         }
     }
 
@@ -282,17 +274,38 @@ public abstract class GdgActivity extends TrackableActivity implements
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult result) {
         if (mSignInProgress != STATE_IN_PROGRESS) {
+            if (isFatalPlayServiceError(result.getErrorCode())) {
+                if (PrefUtils.shouldShowFatalPlayServiceMessage(this)) {
+                    showFatalPlayServiceMessage(result);
+                }
+                return;
+            }
+
             // We do not have an intent in progress so we should store the latest
             // error resolution intent for use when the sign in button is clicked.
             mSignInIntent = result.getResolution();
-
-            //if (mSignInProgress == STATE_SIGN_IN) {
-            // STATE_SIGN_IN indicates the user already clicked the sign in button
-            // so we should continue processing errors until the user is signed in
-            // or they click cancel.
-            resolveSignInError();
-            //}
+            if (mSignInIntent != null) {
+                resolveSignInError();
+            } else {
+                // Google Play services wasn't able to provide an intent for some
+                // error types, so we show the default Google Play services error
+                // dialog which may still start an intent on our behalf if the
+                // user can resolve the issue.
+                if (PrefUtils.shouldShowFatalPlayServiceMessage(this)) {
+                    showFatalPlayServiceMessage(result);
+                }
+            }
         }
+    }
+
+    private void showFatalPlayServiceMessage(@NonNull ConnectionResult result) {
+        Timber.e("Google Play Service did not resolve error");
+        GoogleApiAvailability.getInstance().showErrorNotification(this, result.getErrorCode());
+        PrefUtils.setFatalPlayServiceMessageShown(this);
+    }
+
+    private boolean isFatalPlayServiceError(int errorCode) {
+        return !GoogleApiAvailability.getInstance().isUserResolvableError(errorCode);
     }
 
     public void setToolbarTitle(final String title) {
