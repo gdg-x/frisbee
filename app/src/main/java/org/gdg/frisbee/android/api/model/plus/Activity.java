@@ -1,10 +1,13 @@
 package org.gdg.frisbee.android.api.model.plus;
 
+import org.gdg.frisbee.android.api.deserializer.ZuluDateTimeDeserializer;
+import org.joda.time.DateTime;
+
 import java.util.List;
 
 public class Activity {
     String id;
-    DateTime published;
+    String published;
     String url;
     String content;
     String verb;
@@ -17,7 +20,7 @@ public class Activity {
     }
 
     public DateTime getPublished() {
-        return published;
+        return ZuluDateTimeDeserializer.DATE_TIME_FORMATTER.parseDateTime(published);
     }
 
     public String getUrl() {

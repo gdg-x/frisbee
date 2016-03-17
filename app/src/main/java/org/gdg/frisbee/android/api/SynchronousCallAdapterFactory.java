@@ -18,7 +18,7 @@ public class SynchronousCallAdapterFactory extends CallAdapter.Factory {
     @Override
     public CallAdapter<Object> get(final Type returnType, Annotation[] annotations, Retrofit retrofit) {
         // if returnType is retrofit2.Call, do nothing
-        if (returnType.getClass().getName().contains("retrofit2.Call")) {
+        if (returnType.toString().contains("retrofit2.Call")) {
             return null;
         }
 

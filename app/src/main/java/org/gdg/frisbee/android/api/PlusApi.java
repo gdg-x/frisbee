@@ -19,7 +19,7 @@ public interface PlusApi {
         + BuildConfig.IP_SIMPLE_API_ACCESS_KEY)
     @Nullable Person getPerson(@Path("gplusId") String gplusId);
 
-    @GET("activities/{gplusId}?query=public&fields="
+    @GET("people/{gplusId}/activities/public?fields="
         + "nextPageToken,"
         + "items(id,published,url,object/content,verb,"
         + "object/attachments,annotation,object(plusoners,replies,resharers))"

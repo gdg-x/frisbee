@@ -208,7 +208,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             holder.timeStamp.setText(
                 Utils.toHumanTimePeriod(
                     mContext,
-                    new DateTime(activity.getPublished().getValue()),
+                    activity.getPublished(),
                     DateTime.now()
                 )
             );
