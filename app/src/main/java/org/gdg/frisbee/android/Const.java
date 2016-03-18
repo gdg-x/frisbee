@@ -91,8 +91,8 @@ public class Const {
     public static final String CACHE_KEY_PULSE_GLOBAL = "pulse_global";
     public static final String CACHE_KEY_GDE_LIST = "gde_list";
     public static final String CACHE_KEY_FRISBEE_CONTRIBUTORS = "frisbee_contributor_list";
-    public static final String CACHE_KEY_PERSON = "person_";
-    public static final String CACHE_KEY_NEWS = "news_";
+    public static final String CACHE_KEY_PERSON = "person2_";
+    public static final String CACHE_KEY_NEWS = "news2_";
     public static final String CACHE_KEY_PULSE = "pulse_";
 
     private Const() {

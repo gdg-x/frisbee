@@ -48,7 +48,7 @@ import org.gdg.frisbee.android.api.GroupDirectoryFactory;
 import org.gdg.frisbee.android.api.OkClientFactory;
 import org.gdg.frisbee.android.api.PlusApi;
 import org.gdg.frisbee.android.api.PlusApiFactory;
-import org.gdg.frisbee.android.api.PlusImageResizer;
+import org.gdg.frisbee.android.api.PlusImageUrlConverter;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.utils.CrashlyticsTree;
@@ -127,7 +127,7 @@ public class App extends BaseApp implements LocationListener {
         // Only the interceptors will be different.
         // We shouldn't have the below interceptor in other instances.
         OkHttpClient.Builder picassoClient = mOkHttpClient.newBuilder();
-        picassoClient.addInterceptor(new PlusImageResizer());
+        picassoClient.addInterceptor(new PlusImageUrlConverter());
 
         mPicasso = new Picasso.Builder(this)
             .downloader(new OkHttp3Downloader(picassoClient.build()))

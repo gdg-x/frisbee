@@ -45,10 +45,13 @@ public final class OkClientFactory {
         return okHttpClient.build();
     }
 
-    public static OkHttpClient okHttpClientWithIdlingResources(OkHttpClient client) {
-        return client.newBuilder()
-            .addInterceptor(OkClientFactory.provideIdlingResourcesInterceptor())
-            .build();
+    public static OkHttpClient okHttpClientWithIdlingResources(OkHttpClient client, Interceptor ... interceptors) {
+        OkHttpClient.Builder builder = client.newBuilder()
+            .addInterceptor(OkClientFactory.provideIdlingResourcesInterceptor());
+        for (Interceptor interceptor : interceptors) {
+            builder.addInterceptor(interceptor);
+        }
+        return builder.build();
     }
 
     private static Interceptor provideIdlingResourcesInterceptor() {

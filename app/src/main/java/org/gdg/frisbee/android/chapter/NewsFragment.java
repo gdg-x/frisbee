@@ -17,7 +17,6 @@
 package org.gdg.frisbee.android.chapter;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -27,13 +26,12 @@ import android.view.ViewGroup;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.plus.Activities;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.fragment.SwipeRefreshRecyclerViewFragment;
-import org.gdg.frisbee.android.task.Builder;
-import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
@@ -79,36 +77,32 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
 
         final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID);
         if (Utils.isOnline(getActivity())) {
-            new Builder<>(String.class, Activities.class)
-                .addParameter(plusId)
-                .setOnPreExecuteListener(new CommonAsyncTask.OnPreExecuteListener() {
+            setIsLoading(true);
+            App.getInstance().getModelCache()
+                .getAsync(Const.CACHE_KEY_NEWS + plusId, new ModelCache.CacheListener() {
                     @Override
-                    public void onPreExecute() {
-                        setIsLoading(true);
+                    public void onGet(Object item) {
+                        Activities activityFeed = (Activities) item;
+                        mAdapter.addAll(activityFeed.getItems());
+                        setIsLoading(false);
                     }
-                })
-                .setOnBackgroundExecuteListener(
-                    new CommonAsyncTask.OnBackgroundExecuteListener<String, Activities>() {
-                        @Override
-                        public Activities doInBackground(String... params) {
-                            Activities feed =
-                                (Activities) App.getInstance().getModelCache().get(Const.CACHE_KEY_NEWS + params[0]);
-                            if (feed == null) {
-                                feed = getActivityFeedSync(params[0]);
-                            }
-                            return feed;
-                        }
-                    })
-                .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Activities>() {
+
                     @Override
-                    public void onPostExecute(String[] params, Activities activityFeed) {
-                        if (activityFeed != null) {
-                            mAdapter.addAll(activityFeed.getItems());
-                            setIsLoading(false);
-                        }
+                    public void onNotFound(String key) {
+                        App.getInstance().getPlusApi().getActivities(plusId).enqueue(
+                            new Callback<Activities>() {
+                                @Override
+                                public void success(Activities activityFeed) {
+                                    if (activityFeed != null) {
+                                        mAdapter.addAll(activityFeed.getItems());
+                                    } else {
+                                        // TODO show empty view
+                                    }
+                                    setIsLoading(false);
+                                }
+                            });
                     }
-                })
-                .buildAndExecute();
+                });
         } else {
             App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_NEWS + plusId,
                 false,
@@ -167,19 +161,13 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
     @Override
     public void onRefresh() {
         if (Utils.isOnline(getActivity())) {
-            new Builder<>(String.class, Activities.class)
-                .addParameter(getArguments().getString(Const.EXTRA_PLUS_ID))
-                .setOnBackgroundExecuteListener(
-                    new CommonAsyncTask.OnBackgroundExecuteListener<String, Activities>() {
-                        @Override
-                        public Activities doInBackground(String... params) {
-                            return getActivityFeedSync(params[0]);
-                        }
-                    })
-                .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Activities>() {
+            final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID);
+            App.getInstance().getPlusApi().getActivities(plusId).enqueue(
+                new Callback<Activities>() {
                     @Override
-                    public void onPostExecute(String[] params, Activities activityFeed) {
+                    public void success(Activities activityFeed) {
                         if (activityFeed != null) {
+                            cacheActivityFeed(plusId, activityFeed);
                             mAdapter.replaceAll(activityFeed.getItems(), 0);
                             mAdapter.notifyDataSetChanged();
 
@@ -188,15 +176,11 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
                             }
                         }
                     }
-                })
-                .buildAndExecute();
+                });
         }
     }
 
-    @Nullable
-    private Activities getActivityFeedSync(String param) {
-        Activities feed = App.getInstance().getPlusApi().getActivities(param);
-        App.getInstance().getModelCache().put(Const.CACHE_KEY_NEWS + param, feed, DateTime.now().plusHours(1));
-        return feed;
+    public void cacheActivityFeed(String plusId, Activities feed) {
+        App.getInstance().getModelCache().put(Const.CACHE_KEY_NEWS + plusId, feed, DateTime.now().plusHours(1));
     }
 }
