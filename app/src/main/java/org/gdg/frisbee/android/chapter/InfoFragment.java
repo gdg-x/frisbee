@@ -92,23 +92,24 @@ public class InfoFragment extends BaseFragment {
         setIsLoading(true);
 
         final String chapterPlusId = getArguments().getString(Const.EXTRA_PLUS_ID);
-        if (Utils.isOnline(getActivity())) {
-            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PERSON + chapterPlusId,
-                true, new ModelCache.CacheListener() {
-                    @Override
-                    public void onGet(Object item) {
-                        updateUIOnlineFrom((Person) item);
-                    }
 
-                    @Override
-                    public void onNotFound(String key) {
+        final boolean online = Utils.isOnline(getActivity());
+        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PERSON + chapterPlusId,
+            online, new ModelCache.CacheListener() {
+                @Override
+                public void onGet(Object item) {
+                    updateUIFrom((Person) item, online);
+                }
+
+                @Override
+                public void onNotFound(String key) {
+                    if (online) {
                         App.getInstance().getPlusApi().getPerson(chapterPlusId).enqueue(
                             new Callback<Person>() {
                                 @Override
                                 public void success(Person person) {
                                     putPersonInCache(chapterPlusId, person);
-                                    updateUIOnlineFrom(person);
-                                    setIsLoading(false);
+                                    updateUIFrom(person, true);
                                 }
 
                                 @Override
@@ -123,32 +124,18 @@ public class InfoFragment extends BaseFragment {
                                     setIsLoading(false);
                                 }
                             });
-                    }
-                });
-        } else {
-            App.getInstance().getModelCache().getAsync(
-                Const.CACHE_KEY_PERSON + chapterPlusId,
-                false,
-                new ModelCache.CacheListener() {
-                    @Override
-                    public void onGet(Object item) {
-                        final Person cachedChapter = (Person) item;
-                        updateChapterUIFrom(cachedChapter);
-                        addOrganizers(cachedChapter, false);
-                    }
-
-                    @Override
-                    public void onNotFound(String key) {
+                    } else {
                         showError(R.string.offline_alert);
+                        setIsLoading(false);
                     }
-                });
-        }
+                }
+            });
     }
 
-    private void updateUIOnlineFrom(Person person) {
+    private void updateUIFrom(Person chapter, boolean online) {
         if (getActivity() != null) {
-            updateChapterUIFrom(person);
-            addOrganizers(person, true);
+            updateChapterUIFrom(chapter);
+            addOrganizers(chapter, online);
         }
     }
 
@@ -309,7 +296,6 @@ public class InfoFragment extends BaseFragment {
     }
 
     private void setIsLoading(boolean isLoading) {
-
         if (isLoading == mLoading || getActivity() == null) {
             return;
         }
