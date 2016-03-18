@@ -407,7 +407,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                             @Override
                             public void success(Person person) {
                                 if (person != null) {
-                                    App.getInstance().getModelCache().put(key, person);
+                                    App.getInstance().getModelCache().putAsync(key, person, null);
                                     updateChapterImage(person, homeChapterId);
                                 }
                             }

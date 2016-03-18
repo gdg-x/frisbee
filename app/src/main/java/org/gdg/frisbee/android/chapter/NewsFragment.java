@@ -181,6 +181,7 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
     }
 
     public void cacheActivityFeed(String plusId, Activities feed) {
-        App.getInstance().getModelCache().put(Const.CACHE_KEY_NEWS + plusId, feed, DateTime.now().plusHours(1));
+        App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_NEWS + plusId, feed,
+            DateTime.now().plusHours(1), null);
     }
 }

@@ -44,13 +44,11 @@ import org.gdg.frisbee.android.common.BaseFragment;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.BitmapBorderTransformation;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import retrofit2.Response;
 import timber.log.Timber;
 
 public class InfoFragment extends BaseFragment {
@@ -104,27 +102,27 @@ public class InfoFragment extends BaseFragment {
 
                     @Override
                     public void onNotFound(String key) {
-                        App.getInstance().getPlusApi()
-                            .getPerson(chapterPlusId).enqueue(new Callback<Person>() {
-                            @Override
-                            public void success(Person person) {
-                                putPersonInCache(chapterPlusId, person);
-                                updateUIOnlineFrom(person);
-                                setIsLoading(false);
-                            }
+                        App.getInstance().getPlusApi().getPerson(chapterPlusId).enqueue(
+                            new Callback<Person>() {
+                                @Override
+                                public void success(Person person) {
+                                    putPersonInCache(chapterPlusId, person);
+                                    updateUIOnlineFrom(person);
+                                    setIsLoading(false);
+                                }
 
-                            @Override
-                            public void failure(Throwable error) {
-                                super.failure(error);
-                                setIsLoading(false);
-                            }
+                                @Override
+                                public void failure(Throwable error) {
+                                    super.failure(error);
+                                    setIsLoading(false);
+                                }
 
-                            @Override
-                            public void networkFailure(Throwable error) {
-                                super.networkFailure(error);
-                                setIsLoading(false);
-                            }
-                        });
+                                @Override
+                                public void networkFailure(Throwable error) {
+                                    super.networkFailure(error);
+                                    setIsLoading(false);
+                                }
+                            });
                     }
                 });
         } else {
@@ -154,21 +152,15 @@ public class InfoFragment extends BaseFragment {
         }
     }
 
-    private void addOrganizers(final Person cachedChapter, boolean offline) {
+    private void addOrganizers(final Person cachedChapter, boolean online) {
         if (cachedChapter.getUrls() != null) {
             for (int chapterIndex = 0; chapterIndex < cachedChapter.getUrls().size(); chapterIndex++) {
                 Urls url = cachedChapter.getUrls().get(chapterIndex);
                 if (isNonCommunityPlusUrl(url)) {
-
                     String org = url.getValue();
                     try {
                         String id = getGPlusIdFromPersonUrl(url);
-                        Person person = getPersonSync(id, offline);
-                        if (person == null) {
-                            addUnknownOrganizerToUI();
-                        } else {
-                            addOrganizerToUI(person);
-                        }
+                        addOrganizerAsync(id, online);
                     } catch (Exception ex) {
                         if (isAdded()) {
                             addUrlToUI(url);
@@ -238,25 +230,42 @@ public class InfoFragment extends BaseFragment {
         return Html.fromHtml(aboutText);
     }
 
-    private Person getPersonSync(String gplusId, boolean online) {
-        Person person = (Person) App.getInstance().getModelCache().get(
-            Const.CACHE_KEY_PERSON + gplusId, online);
-        if (person != null) {
-            return person;
-        } else {
-            if (online) {
-                try {
-                    Response<Person> response = App.getInstance().getPlusApi().getPerson(gplusId).execute();
-                    if (response.isSuccessful()) {
-                        putPersonInCache(gplusId, response.body());
-                        return response.body();
-                    }
-                } catch (IOException e) {
-                    // ignore
+    private void addOrganizerAsync(final String gplusId, final boolean online) {
+        App.getInstance().getModelCache().getAsync(
+            Const.CACHE_KEY_PERSON + gplusId, online, new ModelCache.CacheListener() {
+                @Override
+                public void onGet(Object item) {
+                    addOrganizerToUI((Person) item);
                 }
-            }
-        }
-        return null;
+
+                @Override
+                public void onNotFound(String key) {
+                    if (online) {
+                        App.getInstance().getPlusApi().getPerson(gplusId).enqueue(new Callback<Person>() {
+                            @Override
+                            public void success(Person organizer) {
+                                putPersonInCache(gplusId, organizer);
+                                addOrganizerToUI(organizer);
+                            }
+
+                            @Override
+                            public void failure(Throwable error) {
+                                super.failure(error);
+                                addUnknownOrganizerToUI();
+                            }
+
+                            @Override
+                            public void networkFailure(Throwable error) {
+                                super.networkFailure(error);
+                                addUnknownOrganizerToUI();
+                            }
+                        });
+
+                    } else {
+                        addUnknownOrganizerToUI();
+                    }
+                }
+            });
     }
 
     private void putPersonInCache(String plusId, Person person) {
