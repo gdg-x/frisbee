@@ -35,6 +35,7 @@ import com.tasomaniac.android.widget.DelayedProgressBar;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.plus.Person;
 import org.gdg.frisbee.android.api.model.plus.Urls;
 import org.gdg.frisbee.android.app.App;
@@ -103,17 +104,27 @@ public class InfoFragment extends BaseFragment {
 
                     @Override
                     public void onNotFound(String key) {
-                        try {
-                            Response<Person> response = App.getInstance().getPlusApi()
-                                .getPerson(chapterPlusId).execute();
-                            if (response.isSuccessful()) {
-                                Person person = response.body();
+                        App.getInstance().getPlusApi()
+                            .getPerson(chapterPlusId).enqueue(new Callback<Person>() {
+                            @Override
+                            public void success(Person person) {
                                 putPersonInCache(chapterPlusId, person);
                                 updateUIOnlineFrom(person);
+                                setIsLoading(false);
                             }
-                        } catch (IOException e) {
-                            setIsLoading(false);
-                        }
+
+                            @Override
+                            public void failure(Throwable error) {
+                                super.failure(error);
+                                setIsLoading(false);
+                            }
+
+                            @Override
+                            public void networkFailure(Throwable error) {
+                                super.networkFailure(error);
+                                setIsLoading(false);
+                            }
+                        });
                     }
                 });
         } else {
