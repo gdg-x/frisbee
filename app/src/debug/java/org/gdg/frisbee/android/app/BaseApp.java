@@ -1,16 +1,8 @@
 package org.gdg.frisbee.android.app;
 
-import android.content.Context;
-import android.support.multidex.MultiDex;
-import android.support.multidex.MultiDexApplication;
+import android.app.Application;
 
-public class BaseApp extends MultiDexApplication {
-
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(this);
-    }
+public class BaseApp extends Application {
 
     protected void onAppUpdate(int oldVersion, int newVersion) {
     }
