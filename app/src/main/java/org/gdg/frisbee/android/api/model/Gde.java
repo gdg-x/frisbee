@@ -3,6 +3,9 @@ package org.gdg.frisbee.android.api.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Gde implements GdgPerson, Parcelable {
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
@@ -14,11 +17,12 @@ public class Gde implements GdgPerson, Parcelable {
             return new Gde[size];
         }
     };
-    private String product, name, address, email, socialUrl;
+    private String name, address, email, socialUrl;
+    private List<String> product = new ArrayList<>();
     private double lat, lng;
 
     private Gde(Parcel in) {
-        product = in.readString();
+        in.readStringList(product);
         name = in.readString();
         address = in.readString();
         lat = in.readDouble();
@@ -29,7 +33,7 @@ public class Gde implements GdgPerson, Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(product);
+        parcel.writeStringList(product);
         parcel.writeString(name);
         parcel.writeString(address);
         parcel.writeDouble(lat);
@@ -38,8 +42,8 @@ public class Gde implements GdgPerson, Parcelable {
         parcel.writeString(socialUrl);
     }
 
-    public String getProduct() {
-        return product.trim();
+    public List<String> getProduct() {
+        return product;
     }
 
 
