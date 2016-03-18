@@ -55,16 +55,4 @@ public abstract class BaseFragment extends Fragment {
             }
         }
     }
-
-    protected void showError(String errorString) {
-        if (isContextValid()) {
-            if (getView() != null) {
-                Snackbar snackbar = Snackbar.make(getView(), errorString,
-                    Snackbar.LENGTH_SHORT);
-                ColoredSnackBar.alert(snackbar).show();
-            } else {
-                Toast.makeText(getActivity(), errorString, Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
 }

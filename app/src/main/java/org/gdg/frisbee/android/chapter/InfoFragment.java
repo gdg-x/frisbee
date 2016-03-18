@@ -164,7 +164,7 @@ public class InfoFragment extends BaseFragment {
                     } catch (Exception ex) {
                         if (isAdded()) {
                             addUrlToUI(url);
-                            showError(getString(R.string.bogus_organizer, org));
+                            Timber.w(ex, "Could not parse organizer " + org);
                         }
                     }
                 } else {
