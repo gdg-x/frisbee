@@ -50,7 +50,11 @@ public class PeopleAdapter extends ArrayAdapter<GdgPerson> {
 
     @Override
     public long getItemId(int i) {
-        return Utils.stringToLong(getItem(i).getUrl());
+        if (getItem(i).getUrl() != null) {
+            return Utils.stringToLong(getItem(i).getUrl());
+        } else {
+            return Utils.stringToLong(getItem(i).getPrimaryText());
+        }
     }
 
     @Override
