@@ -19,7 +19,6 @@ package org.gdg.frisbee.android.chapter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.SpannedString;
@@ -32,20 +31,18 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.google.api.services.plus.model.Person;
 import com.tasomaniac.android.widget.DelayedProgressBar;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.PlusPersonDownloader;
+import org.gdg.frisbee.android.api.Callback;
+import org.gdg.frisbee.android.api.model.plus.Person;
+import org.gdg.frisbee.android.api.model.plus.Urls;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.BaseFragment;
-import org.gdg.frisbee.android.task.Builder;
-import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.BitmapBorderTransformation;
-import org.gdg.frisbee.android.view.ColoredSnackBar;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -78,34 +75,6 @@ public class InfoFragment extends BaseFragment {
 
     private LayoutInflater mInflater;
 
-    private Builder<String, Person[]> mFetchOrganizerInfo = new Builder<>(String.class, Person[].class)
-        .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person[]>() {
-            @Override
-            public Person[] doInBackground(String... params) {
-                if (params == null) {
-                    return null;
-                }
-
-                Person[] people = new Person[params.length];
-                for (int i = 0; i < params.length; i++) {
-                    Timber.d("Get Organizer " + params[i]);
-                    if (isAdded()) {
-                        people[i] = PlusPersonDownloader.getPersonSync(params[i]);
-                    } else {
-                        // fragment is not used anymore
-                        people[i] = null;
-                    }
-                }
-                return people;
-            }
-        })
-        .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person[]>() {
-            @Override
-            public void onPostExecute(String[] params, final Person[] person) {
-                addOrganizersToUI(person);
-                setIsLoading(false);
-            }
-        });
 
     public static InfoFragment newInstance(String plusId) {
         InfoFragment fragment = new InfoFragment();
@@ -123,99 +92,84 @@ public class InfoFragment extends BaseFragment {
         setIsLoading(true);
 
         final String chapterPlusId = getArguments().getString(Const.EXTRA_PLUS_ID);
-        if (Utils.isOnline(getActivity())) {
-            new Builder<>(String.class, Person.class)
-                .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person>() {
-                    @Override
-                    public Person doInBackground(String... params) {
-                        if (isAdded()) {
-                            return PlusPersonDownloader.getPersonSync(chapterPlusId);
-                        } else {
-                            // fragment is not used anymore
-                            return null;
-                        }
-                    }
-                })
-                .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person>() {
-                    @Override
-                    public void onPostExecute(String[] params, Person person) {
-                        if (person != null && getActivity() != null) {
-                            updateChapterUIFrom(person);
-                            updateOrganizersOnline(person);
-                        }
-                    }
-                })
-                .buildAndExecute();
-        } else {
-            App.getInstance().getModelCache().getAsync(
-                Const.CACHE_KEY_PERSON + chapterPlusId,
-                false,
-                new ModelCache.CacheListener() {
-                    @Override
-                    public void onGet(Object item) {
-                        final Person chachedChapter = (Person) item;
-                        updateChapterUIFrom(chachedChapter);
 
-                        for (int chapterIndex = 0; chapterIndex < chachedChapter.getUrls().size(); chapterIndex++) {
-                            Person.Urls url = chachedChapter.getUrls().get(chapterIndex);
-                            if (url.getValue().contains("plus.google.com/")
-                                && !url.getValue().contains("communities")) {
+        final boolean online = Utils.isOnline(getActivity());
+        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PERSON + chapterPlusId,
+            online, new ModelCache.CacheListener() {
+                @Override
+                public void onGet(Object item) {
+                    updateUIFrom((Person) item, online);
+                }
 
-                                String org = url.getValue();
-                                try {
-                                    String id = getGPlusIdFromPersonUrl(url);
-                                    final int indexAsFinal = chapterIndex;
-                                    App.getInstance().getModelCache().getAsync(
-                                        Const.CACHE_KEY_PERSON + id,
-                                        false,
-                                        new ModelCache.CacheListener() {
-                                            @Override
-                                            public void onGet(Object item) {
-                                                addOrganizerToUI((Person) item);
-                                                if (indexAsFinal == chachedChapter.getUrls().size()) {
-                                                    setIsLoading(false);
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onNotFound(String key) {
-                                                addUnknowOrganizerToUI();
-                                                if (indexAsFinal == chachedChapter.getUrls().size()) {
-                                                    setIsLoading(false);
-                                                }
-                                            }
-                                        });
-                                } catch (Exception ex) {
-                                    Snackbar snackbar = Snackbar.make(
-                                        getView(),
-                                        getString(R.string.bogus_organizer, org),
-                                        Snackbar.LENGTH_SHORT
-                                    );
-                                    ColoredSnackBar.alert(snackbar).show();
+                @Override
+                public void onNotFound(String key) {
+                    if (online) {
+                        App.getInstance().getPlusApi().getPerson(chapterPlusId).enqueue(
+                            new Callback<Person>() {
+                                @Override
+                                public void success(Person person) {
+                                    putPersonInCache(chapterPlusId, person);
+                                    updateUIFrom(person, true);
                                 }
-                            }
-                        }
-                    }
 
-                    @Override
-                    public void onNotFound(String key) {
+                                @Override
+                                public void failure(Throwable error) {
+                                    super.failure(error);
+                                    setIsLoading(false);
+                                }
+
+                                @Override
+                                public void networkFailure(Throwable error) {
+                                    super.networkFailure(error);
+                                    setIsLoading(false);
+                                }
+                            });
+                    } else {
                         showError(R.string.offline_alert);
+                        setIsLoading(false);
                     }
-                });
+                }
+            });
+    }
+
+    private void updateUIFrom(Person chapter, boolean online) {
+        if (getActivity() != null) {
+            updateChapterUIFrom(chapter);
+            addOrganizers(chapter, online);
         }
     }
 
-    private void addOrganizersToUI(final Person[] people) {
-        if (people == null) {
-            addUnknowOrganizerToUI();
-        } else {
-            for (Person person : people) {
-                addOrganizerToUI(person);
+    private void addOrganizers(final Person cachedChapter, boolean online) {
+        if (cachedChapter.getUrls() != null) {
+            for (int chapterIndex = 0; chapterIndex < cachedChapter.getUrls().size(); chapterIndex++) {
+                Urls url = cachedChapter.getUrls().get(chapterIndex);
+                if (isNonCommunityPlusUrl(url)) {
+                    String org = url.getValue();
+                    try {
+                        String id = getGPlusIdFromPersonUrl(url);
+                        addOrganizerAsync(id, online);
+                    } catch (Exception ex) {
+                        if (isAdded()) {
+                            addUrlToUI(url);
+                            Timber.w(ex, "Could not parse organizer " + org);
+                        }
+                    }
+                } else {
+                    addUrlToUI(url);
+                }
             }
         }
+        setIsLoading(false);
     }
 
-    private void addUnknowOrganizerToUI() {
+    private void addUrlToUI(Urls url) {
+        TextView tv = (TextView) mInflater
+            .inflate(R.layout.list_resource_item, (ViewGroup) getView(), false);
+        tv.setText(Html.fromHtml("<a href='" + url.getValue() + "'>" + url.getLabel() + "</a>"));
+        mResourcesBox.addView(tv);
+    }
+
+    private void addUnknownOrganizerToUI() {
         Timber.d("null person");
         View v = getUnknownOrganizerView();
         if (mOrganizerBox != null) {
@@ -225,7 +179,7 @@ public class InfoFragment extends BaseFragment {
 
     private void addOrganizerToUI(final Person organizer) {
         if (organizer == null) {
-            addUnknowOrganizerToUI();
+            addUnknownOrganizerToUI();
         } else {
             View v = createOrganizerView(organizer);
             if (v != null) {
@@ -263,38 +217,53 @@ public class InfoFragment extends BaseFragment {
         return Html.fromHtml(aboutText);
     }
 
-    private void updateOrganizersOnline(final Person person) {
-        if (person.getUrls() != null) {
-            for (Person.Urls url : person.getUrls()) {
-                if (url.getValue().contains("plus.google.com/")) {
-                    if (url.getValue().contains("communities")) {
-                        // TODO
-                    } else {
-                        String org = url.getValue();
-                        try {
-                            String organizerParameter = getGPlusIdFromPersonUrl(url);
-                            mFetchOrganizerInfo.addParameter(organizerParameter);
-                        } catch (Exception ex) {
-                            if (isAdded()) {
-                                Snackbar snackbar = Snackbar.make(getView(), getString(R.string.bogus_organizer, org),
-                                    Snackbar.LENGTH_SHORT);
-                                ColoredSnackBar.alert(snackbar).show();
-                            }
-                        }
-                    }
-                } else {
-                    TextView tv = (TextView) mInflater
-                        .inflate(R.layout.list_resource_item, (ViewGroup) getView(), false);
-                    tv.setText(Html.fromHtml("<a href='" + url.getValue() + "'>" + url.get("label") + "</a>"));
-                    mResourcesBox.addView(tv);
+    private void addOrganizerAsync(final String gplusId, final boolean online) {
+        App.getInstance().getModelCache().getAsync(
+            Const.CACHE_KEY_PERSON + gplusId, online, new ModelCache.CacheListener() {
+                @Override
+                public void onGet(Object item) {
+                    addOrganizerToUI((Person) item);
                 }
 
-            }
-            mFetchOrganizerInfo.buildAndExecute();
-        }
+                @Override
+                public void onNotFound(String key) {
+                    if (online) {
+                        App.getInstance().getPlusApi().getPerson(gplusId).enqueue(new Callback<Person>() {
+                            @Override
+                            public void success(Person organizer) {
+                                putPersonInCache(gplusId, organizer);
+                                addOrganizerToUI(organizer);
+                            }
+
+                            @Override
+                            public void failure(Throwable error) {
+                                super.failure(error);
+                                addUnknownOrganizerToUI();
+                            }
+
+                            @Override
+                            public void networkFailure(Throwable error) {
+                                super.networkFailure(error);
+                                addUnknownOrganizerToUI();
+                            }
+                        });
+
+                    } else {
+                        addUnknownOrganizerToUI();
+                    }
+                }
+            });
     }
 
-    private String getGPlusIdFromPersonUrl(Person.Urls personUrl) {
+    private void putPersonInCache(String plusId, Person person) {
+        App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_PERSON + plusId, person, null);
+    }
+
+    private boolean isNonCommunityPlusUrl(Urls url) {
+        return url.getValue().contains("plus.google.com/") && !url.getValue().contains("communities");
+    }
+
+    private String getGPlusIdFromPersonUrl(Urls personUrl) {
         final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID, "");
         if (personUrl.getValue().contains("+")) {
             try {
@@ -327,7 +296,6 @@ public class InfoFragment extends BaseFragment {
     }
 
     private void setIsLoading(boolean isLoading) {
-
         if (isLoading == mLoading || getActivity() == null) {
             return;
         }

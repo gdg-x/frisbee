@@ -26,11 +26,6 @@ import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.services.plus.Plus;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
@@ -42,7 +37,6 @@ import net.danlew.android.joda.JodaTimeAndroid;
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.GapiOkTransport;
 import org.gdg.frisbee.android.api.GdeDirectory;
 import org.gdg.frisbee.android.api.GdeDirectoryFactory;
 import org.gdg.frisbee.android.api.GdgXHub;
@@ -54,7 +48,7 @@ import org.gdg.frisbee.android.api.GroupDirectoryFactory;
 import org.gdg.frisbee.android.api.OkClientFactory;
 import org.gdg.frisbee.android.api.PlusApi;
 import org.gdg.frisbee.android.api.PlusApiFactory;
-import org.gdg.frisbee.android.api.PlusPersonDownloader;
+import org.gdg.frisbee.android.api.PlusImageUrlConverter;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.utils.CrashlyticsTree;
@@ -86,7 +80,6 @@ public class App extends BaseApp implements LocationListener {
     private OrganizerChecker mOrganizerChecker;
     private ArrayList<TaggedEventSeries> mTaggedEventSeriesList;
     private RefWatcher refWatcher;
-    private Plus plusClient;
     private PlusApi plusApiInstance;
 
     public static App getInstance() {
@@ -124,15 +117,6 @@ public class App extends BaseApp implements LocationListener {
         }
         mOkHttpClient = OkClientFactory.provideOkHttpClient(this);
 
-        //Initialize Plus Client which is used to get profile pictures and NewFeed of the chapters.
-        final HttpTransport httpTransport = new GapiOkTransport(mOkHttpClient);
-        final JsonFactory jsonFactory = new GsonFactory();
-        plusClient = new Plus.Builder(httpTransport, jsonFactory, null)
-            .setGoogleClientRequestInitializer(
-                new CommonGoogleJsonClientRequestInitializer(BuildConfig.IP_SIMPLE_API_ACCESS_KEY))
-            .setApplicationName("GDG Frisbee")
-            .build();
-
         // Initialize ModelCache and Volley
         getModelCache();
 
@@ -143,7 +127,7 @@ public class App extends BaseApp implements LocationListener {
         // Only the interceptors will be different.
         // We shouldn't have the below interceptor in other instances.
         OkHttpClient.Builder picassoClient = mOkHttpClient.newBuilder();
-        picassoClient.addInterceptor(new PlusPersonDownloader(plusClient));
+        picassoClient.addInterceptor(new PlusImageUrlConverter());
 
         mPicasso = new Picasso.Builder(this)
             .downloader(new OkHttp3Downloader(picassoClient.build()))
@@ -229,10 +213,6 @@ public class App extends BaseApp implements LocationListener {
         if (loc != null) {
             mLastLocation = loc;
         }
-    }
-
-    public Plus getPlusClient() {
-        return plusClient;
     }
 
     public Location getLastLocation() {

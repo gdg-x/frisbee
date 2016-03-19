@@ -35,22 +35,21 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.google.android.gms.games.Games;
-import com.google.api.services.plus.model.Person;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.about.AboutActivity;
 import org.gdg.frisbee.android.activity.SettingsActivity;
-import org.gdg.frisbee.android.api.PlusPersonDownloader;
+import org.gdg.frisbee.android.api.Callback;
+import org.gdg.frisbee.android.api.model.plus.Person;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.arrow.ArrowActivity;
+import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeriesActivity;
 import org.gdg.frisbee.android.gde.GdeActivity;
 import org.gdg.frisbee.android.pulse.PulseActivity;
-import org.gdg.frisbee.android.task.Builder;
-import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.PlusUtils;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.Utils;
@@ -395,29 +394,35 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     private void maybeUpdateChapterImage() {
         final String homeChapterId = getCurrentHomeChapterId();
         if (isHomeChapterOutdated(homeChapterId)) {
-            new Builder<>(String.class, Person.class)
-                .addParameter(homeChapterId)
-                .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person>() {
+            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PERSON + homeChapterId,
+                true, new ModelCache.CacheListener() {
                     @Override
-                    public Person doInBackground(String... params) {
+                    public void onGet(Object person) {
+                        updateChapterImage((Person) person, homeChapterId);
+                    }
 
-                        return PlusPersonDownloader.getPersonSync(params[0]);
-                    }
-                })
-                .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person>() {
                     @Override
-                    public void onPostExecute(String[] params, Person person) {
-                        if (person != null) {
-                            mStoredHomeChapterId = homeChapterId;
-                            if (person.getCover() != null) {
-                                App.getInstance().getPicasso()
-                                    .load(person.getCover().getCoverPhoto().getUrl())
-                                    .into(mDrawerImage);
+                    public void onNotFound(final String key) {
+                        App.getInstance().getPlusApi().getPerson(homeChapterId).enqueue(new Callback<Person>() {
+                            @Override
+                            public void success(Person person) {
+                                if (person != null) {
+                                    App.getInstance().getModelCache().putAsync(key, person, null);
+                                    updateChapterImage(person, homeChapterId);
+                                }
                             }
-                        }
+                        });
                     }
-                })
-                .buildAndExecute();
+                });
+        }
+    }
+
+    private void updateChapterImage(Person person, String homeChapterId) {
+        mStoredHomeChapterId = homeChapterId;
+        if (person.getCover() != null) {
+            App.getInstance().getPicasso()
+                .load(person.getCover().getCoverPhoto().getUrl())
+                .into(mDrawerImage);
         }
     }
 

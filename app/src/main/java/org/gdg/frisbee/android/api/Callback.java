@@ -15,10 +15,10 @@ public abstract class Callback<T> implements retrofit2.Callback<T> {
         } else {
             try {
                 final Exception e = new Exception(response.errorBody().string());
-                Timber.e(e, "Network Error!");
+                Timber.e(e, "Response error!");
                 failure(e);
             } catch (IOException e) {
-                Timber.e(e, "Network Error!");
+                Timber.e(e, "Network error after response error!");
                 failure(e);
             }
         }
@@ -26,7 +26,7 @@ public abstract class Callback<T> implements retrofit2.Callback<T> {
 
     @Override
     public final void onFailure(Call<T> call, Throwable t) {
-        Timber.d(t, "Network Failure!");
+        Timber.d(t, "Network failure!");
         networkFailure(t);
     }
 
