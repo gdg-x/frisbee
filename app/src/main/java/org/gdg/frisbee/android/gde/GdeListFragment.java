@@ -9,9 +9,6 @@ import org.gdg.frisbee.android.common.PeopleListFragment;
 
 import java.util.ArrayList;
 
-/**
- * Created by tasomaniac on 27/7/15.
- */
 public class GdeListFragment extends PeopleListFragment {
 
     private static final String ARG_PEOPLE_ARRAY = "people";

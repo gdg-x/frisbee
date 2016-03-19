@@ -8,39 +8,47 @@ import java.util.List;
 
 public class Gde implements GdgPerson, Parcelable {
 
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public Gde createFromParcel(Parcel in) {
-            return new Gde(in);
-        }
-
-        public Gde[] newArray(int size) {
-            return new Gde[size];
-        }
-    };
     private String name, address, email, socialUrl;
     private List<String> product = new ArrayList<>();
     private double lat, lng;
 
-    private Gde(Parcel in) {
-        in.readStringList(product);
+    protected Gde(Parcel in) {
         name = in.readString();
         address = in.readString();
-        lat = in.readDouble();
-        lng = in.readDouble();
         email = in.readString();
         socialUrl = in.readString();
+        product = in.createStringArrayList();
+        lat = in.readDouble();
+        lng = in.readDouble();
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeStringList(product);
-        parcel.writeString(name);
-        parcel.writeString(address);
-        parcel.writeDouble(lat);
-        parcel.writeDouble(lng);
-        parcel.writeString(email);
-        parcel.writeString(socialUrl);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(address);
+        dest.writeString(email);
+        dest.writeString(socialUrl);
+        dest.writeStringList(product);
+        dest.writeDouble(lat);
+        dest.writeDouble(lng);
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Gde> CREATOR = new Creator<Gde>() {
+        @Override
+        public Gde createFromParcel(Parcel in) {
+            return new Gde(in);
+        }
+
+        @Override
+        public Gde[] newArray(int size) {
+            return new Gde[size];
+        }
+    };
 
     public List<String> getProduct() {
         return product;
@@ -83,8 +91,4 @@ public class Gde implements GdgPerson, Parcelable {
         return socialUrl;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 }
