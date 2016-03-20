@@ -58,9 +58,6 @@
     <meta-data
       android:name="com.google.android.gms.version"
       android:value="@integer/google_play_services_version" />
-    <meta-data
-      android:name="android.app.default_searchable"
-      android:value=".activity.SearchActivity" />
 
     <activity
       android:name=".chapter.MainActivity"
@@ -178,26 +175,9 @@
       android:name=".activity.AppInviteDeepLinkActivity"
       android:theme="@style/Theme.GDG.Panel"></activity>
     <activity
-      android:name=".activity.SearchActivity"
-      android:launchMode="singleTop">
-      <intent-filter>
-        <action android:name="android.intent.action.SEARCH" />
-        <category android:name="android.intent.category.DEFAULT" />
-      </intent-filter>
-      <meta-data
-        android:name="android.app.searchable"
-        android:resource="@xml/searchable" />
-    </activity>
-    <activity
       android:name=".event.EventActivity"
       android:parentActivityName=".chapter.MainActivity"
       android:theme="@style/Theme.GDG"></activity>
-
-    <provider
-      android:name=".provider.GdgProvider"
-      android:authorities="${applicationId}.provider.GdgProvider"
-      android:exported="true"
-      android:syncable="false" />
 
     <receiver
       android:name=".appwidget.UpcomingEventWidgetProvider"
