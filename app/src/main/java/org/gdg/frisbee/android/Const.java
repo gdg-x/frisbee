@@ -20,12 +20,6 @@ import android.text.format.DateUtils;
 
 import org.joda.time.DateTime;
 
-/**
- * Created with IntelliJ IDEA.
- * User: maui
- * Date: 20.04.13
- * Time: 12:19
- */
 public class Const {
 
     //GitHub
@@ -39,12 +33,12 @@ public class Const {
     public static final DateTime START_TIME_WTM = new DateTime(2016, 2, 1, 0, 0);
     public static final DateTime START_TIME_STUDY_JAMS = new DateTime(2016, 1, 15, 0, 0);
     public static final DateTime START_TIME_IOEXTENDED = new DateTime(2016, 5, 1, 0, 0);
-    public static final DateTime START_TIME_GCPNEXT = new DateTime(2016, 3, 15, 0, 0);
+    public static final DateTime START_TIME_GCP_NEXT = new DateTime(2016, 3, 15, 0, 0);
     public static final DateTime END_TIME_DEVFEST = new DateTime(2016, 1, 1, 0, 0);
     public static final DateTime END_TIME_WTM = new DateTime(2016, 4, 1, 0, 0);
     public static final DateTime END_TIME_STUDY_JAMS = new DateTime(2016, 5, 1, 0, 0);
     public static final DateTime END_TIME_IOEXTENDED = new DateTime(2016, 6, 1, 0, 0);
-    public static final DateTime END_TIME_GCPNEXT = new DateTime(2016, 4, 15, 0, 0);
+    public static final DateTime END_TIME_GCP_NEXT = new DateTime(2016, 4, 15, 0, 0);
     public static final String EXTRA_PLUS_ID = "plus_id";
     //Navigation Drawer
     public static final int DRAWER_HOME = 0;
@@ -62,7 +56,7 @@ public class Const {
     public static final int DRAWER_WTM = 31;
     public static final int DRAWER_STUDY_JAM = 32;
     public static final int DRAWER_IO_EXTENDED = 33;
-    public static final int DRAWER_GCPNEXT = 34;
+    public static final int DRAWER_GCP_NEXT = 34;
     //Arrow
     public static final String QR_MSG_PREFIX = "gdgx://arrow?m=";
     public static final String PREF_ORGANIZER_CHECK_TIME = "pref_organizer_check_time";

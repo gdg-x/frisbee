@@ -189,9 +189,9 @@ public class App extends BaseApp implements LocationListener {
         addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
             R.style.Theme_GDG_Special_GCPNEXT,
             "gcpnext",
-            Const.DRAWER_GCPNEXT,
-            Const.START_TIME_GCPNEXT,
-            Const.END_TIME_GCPNEXT));
+            Const.DRAWER_GCP_NEXT,
+            Const.START_TIME_GCP_NEXT,
+            Const.END_TIME_GCP_NEXT));
 
     }
 
