@@ -54,6 +54,7 @@ import org.gdg.frisbee.android.utils.PlusUtils;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.BitmapBorderTransformation;
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 
@@ -407,7 +408,8 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                             @Override
                             public void success(Person person) {
                                 if (person != null) {
-                                    App.getInstance().getModelCache().putAsync(key, person, null);
+                                    App.getInstance().getModelCache().putAsync(key, person,
+                                        DateTime.now().plusDays(1), null);
                                     updateChapterImage(person, homeChapterId);
                                 }
                             }
