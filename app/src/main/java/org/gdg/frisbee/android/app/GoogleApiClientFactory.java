@@ -1,6 +1,6 @@
 package org.gdg.frisbee.android.app;
 
-import android.content.Context;
+import android.app.Activity;
 
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -11,19 +11,21 @@ import com.google.android.gms.plus.Plus;
 import org.gdg.frisbee.android.utils.PrefUtils;
 
 public final class GoogleApiClientFactory {
-    private GoogleApiClientFactory() { }
+    private GoogleApiClientFactory() {
+    }
 
-    public static GoogleApiClient createWith(Context context) {
+    public static GoogleApiClient createWith(Activity context) {
         return createClient(context, PrefUtils.isSignedIn(context));
     }
 
-    public static GoogleApiClient createWithoutSignIn(Context context) {
+    public static GoogleApiClient createWithoutSignIn(Activity context) {
         return createClient(context, false);
     }
 
-    private static GoogleApiClient createClient(Context context, boolean withSignIn) {
+    private static GoogleApiClient createClient(Activity context, boolean withSignIn) {
         GoogleApiClient.Builder builder = new GoogleApiClient.Builder(context)
-            .addApi(AppIndex.API);
+            .addApi(AppIndex.API)
+            .setViewForPopups(context.findViewById(android.R.id.content));
 
         if (withSignIn) {
             builder.addApi(Plus.API).addScope(Plus.SCOPE_PLUS_LOGIN).addScope(Plus.SCOPE_PLUS_PROFILE)
