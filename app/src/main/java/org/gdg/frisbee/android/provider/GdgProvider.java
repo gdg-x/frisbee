@@ -88,7 +88,7 @@ public class GdgProvider extends ContentProvider {
                 cursor.addRow(new Object[]{
                     chapter.getGplusId().hashCode(),
                     chapter.getName(),
-                    chapter.getCity() + ", " + chapter.getCountry(),
+                    chapter.getCity() + ", " + chapter.getCountry().getName(),
                     SearchActivity.ACTION_FOUND,
                     chapter.getGplusId()
                 });
