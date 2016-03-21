@@ -178,7 +178,7 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void createConnectedGoogleApiClient() {
-        mGoogleApiClient = GoogleApiClientFactory.createWith(getActivity().getApplicationContext());
+        mGoogleApiClient = GoogleApiClientFactory.createWith(getActivity());
         mGoogleApiClient.registerConnectionCallbacks((SettingsActivity) getActivity());
         mGoogleApiClient.registerConnectionFailedListener((SettingsActivity) getActivity());
         mGoogleApiClient.connect();
