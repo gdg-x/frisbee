@@ -238,7 +238,7 @@ public class ModelCache {
             return null;
         }
 
-        Timber.d(String.format("put(%s)", url));
+        Timber.d("put(%s)", url);
         CacheItem d = new CacheItem(obj, expiresAt);
 
         if (null != mMemoryCache) {
