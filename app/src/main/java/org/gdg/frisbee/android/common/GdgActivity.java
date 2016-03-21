@@ -274,12 +274,6 @@ public abstract class GdgActivity extends TrackableActivity implements
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult result) {
         if (mSignInProgress != STATE_IN_PROGRESS) {
-            if (isFatalPlayServiceError(result.getErrorCode())) {
-                if (PrefUtils.shouldShowFatalPlayServiceMessage(this)) {
-                    showFatalPlayServiceMessage(result);
-                }
-                return;
-            }
 
             // We do not have an intent in progress so we should store the latest
             // error resolution intent for use when the sign in button is clicked.
@@ -302,10 +296,6 @@ public abstract class GdgActivity extends TrackableActivity implements
         Timber.e("Google Play Service did not resolve error");
         GoogleApiAvailability.getInstance().showErrorNotification(this, result.getErrorCode());
         PrefUtils.setFatalPlayServiceMessageShown(this);
-    }
-
-    private boolean isFatalPlayServiceError(int errorCode) {
-        return !GoogleApiAvailability.getInstance().isUserResolvableError(errorCode);
     }
 
     public void setToolbarTitle(final String title) {
