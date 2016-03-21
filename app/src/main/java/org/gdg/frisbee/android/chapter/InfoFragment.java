@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.chapter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.SpannedString;
@@ -43,9 +44,11 @@ import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.BaseFragment;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.BitmapBorderTransformation;
+import org.joda.time.DateTime;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -74,6 +77,7 @@ public class InfoFragment extends BaseFragment {
     private boolean mLoading = false;
 
     private LayoutInflater mInflater;
+    private String chapterPlusId;
 
 
     public static InfoFragment newInstance(String plusId) {
@@ -91,7 +95,7 @@ public class InfoFragment extends BaseFragment {
         mInflater = LayoutInflater.from(getActivity());
         setIsLoading(true);
 
-        final String chapterPlusId = getArguments().getString(Const.EXTRA_PLUS_ID);
+        chapterPlusId = getArguments().getString(Const.EXTRA_PLUS_ID);
 
         final boolean online = Utils.isOnline(getActivity());
         App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PERSON + chapterPlusId,
@@ -107,20 +111,18 @@ public class InfoFragment extends BaseFragment {
                         App.getInstance().getPlusApi().getPerson(chapterPlusId).enqueue(
                             new Callback<Person>() {
                                 @Override
-                                public void success(Person person) {
-                                    putPersonInCache(chapterPlusId, person);
-                                    updateUIFrom(person, true);
+                                public void success(Person chapter) {
+                                    putPersonInCache(chapterPlusId, chapter);
+                                    updateUIFrom(chapter, true);
                                 }
 
                                 @Override
                                 public void failure(Throwable error) {
-                                    super.failure(error);
                                     setIsLoading(false);
                                 }
 
                                 @Override
                                 public void networkFailure(Throwable error) {
-                                    super.networkFailure(error);
                                     setIsLoading(false);
                                 }
                             });
@@ -132,80 +134,19 @@ public class InfoFragment extends BaseFragment {
             });
     }
 
-    private void updateUIFrom(Person chapter, boolean online) {
+    void updateUIFrom(Person chapter, boolean online) {
         if (getActivity() != null) {
             updateChapterUIFrom(chapter);
             addOrganizers(chapter, online);
         }
     }
 
-    private void addOrganizers(final Person cachedChapter, boolean online) {
-        if (cachedChapter.getUrls() != null) {
-            for (int chapterIndex = 0; chapterIndex < cachedChapter.getUrls().size(); chapterIndex++) {
-                Urls url = cachedChapter.getUrls().get(chapterIndex);
-                if (isNonCommunityPlusUrl(url)) {
-                    String org = url.getValue();
-                    try {
-                        String id = getGPlusIdFromPersonUrl(url);
-                        addOrganizerAsync(id, online);
-                    } catch (Exception ex) {
-                        if (isAdded()) {
-                            addUrlToUI(url);
-                            Timber.w(ex, "Could not parse organizer " + org);
-                        }
-                    }
-                } else {
-                    addUrlToUI(url);
-                }
-            }
-        }
-        setIsLoading(false);
-    }
-
-    private void addUrlToUI(Urls url) {
-        TextView tv = (TextView) mInflater
-            .inflate(R.layout.list_resource_item, (ViewGroup) getView(), false);
-        tv.setText(Html.fromHtml("<a href='" + url.getValue() + "'>" + url.getLabel() + "</a>"));
-        mResourcesBox.addView(tv);
-    }
-
-    private void addUnknownOrganizerToUI() {
-        Timber.d("null person");
-        View v = getUnknownOrganizerView();
-        if (mOrganizerBox != null) {
-            mOrganizerBox.addView(v);
-        }
-    }
-
-    private void addOrganizerToUI(final Person organizer) {
-        if (organizer == null) {
-            addUnknownOrganizerToUI();
-        } else {
-            View v = createOrganizerView(organizer);
-            if (v != null) {
-                v.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String url = organizer.getUrl();
-                        if (!TextUtils.isEmpty(url)) {
-                            startActivity(Utils.createExternalIntent(getActivity(), Uri.parse(url)));
-                        }
-                    }
-                });
-                registerForContextMenu(v);
-                if (mOrganizerBox != null) {
-                    mOrganizerBox.addView(v);
-                }
-            }
-        }
-    }
-
-    private void updateChapterUIFrom(final Person person) {
+    private void updateChapterUIFrom(Person chapter) {
         if (mTagline != null) {
-            mTagline.setText(person.getTagline());
+            mTagline.setText(chapter.getTagline());
         }
         if (mAbout != null) {
-            mAbout.setText(getAboutText(person));
+            mAbout.setText(getAboutText(chapter));
         }
     }
 
@@ -217,9 +158,46 @@ public class InfoFragment extends BaseFragment {
         return Html.fromHtml(aboutText);
     }
 
+    private void addOrganizers(Person cachedChapter, boolean online) {
+        List<Urls> urls = cachedChapter.getUrls();
+        if (urls != null) {
+            for (int chapterIndex = 0, size = urls.size(); chapterIndex < size; chapterIndex++) {
+                Urls url = urls.get(chapterIndex);
+                if (isNonCommunityPlusUrl(url)) {
+                    String org = url.getValue();
+                    try {
+                        String id = getGPlusIdFromPersonUrl(url);
+                        addOrganizerAsync(id, online);
+                    } catch (Exception ex) {
+                        if (isContextValid()) {
+                            addUrlToUI(url);
+                            Timber.w(ex, "Could not parse organizer: %s", org);
+                        }
+                    }
+                } else {
+                    addUrlToUI(url);
+                }
+            }
+        }
+        setIsLoading(false);
+    }
+
+    private boolean isNonCommunityPlusUrl(Urls url) {
+        return url.getValue().contains("plus.google.com/") && !url.getValue().contains("communities");
+    }
+
+    private void addUrlToUI(Urls url) {
+        TextView tv = (TextView) mInflater
+            .inflate(R.layout.list_resource_item, (ViewGroup) getView(), false);
+        tv.setText(Html.fromHtml("<a href='" + url.getValue() + "'>" + url.getLabel() + "</a>"));
+        mResourcesBox.addView(tv);
+    }
+
     private void addOrganizerAsync(final String gplusId, final boolean online) {
         App.getInstance().getModelCache().getAsync(
-            Const.CACHE_KEY_PERSON + gplusId, online, new ModelCache.CacheListener() {
+            Const.CACHE_KEY_PERSON + gplusId,
+            online,
+            new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
                     addOrganizerToUI((Person) item);
@@ -237,13 +215,11 @@ public class InfoFragment extends BaseFragment {
 
                             @Override
                             public void failure(Throwable error) {
-                                super.failure(error);
                                 addUnknownOrganizerToUI();
                             }
 
                             @Override
                             public void networkFailure(Throwable error) {
-                                super.networkFailure(error);
                                 addUnknownOrganizerToUI();
                             }
                         });
@@ -252,19 +228,86 @@ public class InfoFragment extends BaseFragment {
                         addUnknownOrganizerToUI();
                     }
                 }
+            }
+        );
+    }
+
+    private void addOrganizerToUI(final Person organizer) {
+        if (organizer == null) {
+            addUnknownOrganizerToUI();
+            return;
+        }
+
+        View v = createOrganizerView(organizer);
+        if (v != null) {
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String url = organizer.getUrl();
+                    if (!TextUtils.isEmpty(url)) {
+                        startActivity(Utils.createExternalIntent(getActivity(), Uri.parse(url)));
+                    }
+                }
             });
+            if (mOrganizerBox != null) {
+                mOrganizerBox.addView(v);
+            }
+        }
+    }
+
+    @Nullable
+    private View createOrganizerView(Person person) {
+        if (!isContextValid()) {
+            return null;
+        }
+        View convertView = mInflater.inflate(R.layout.list_organizer_item, (ViewGroup) getView(), false);
+
+        ImageView picture = (ImageView) convertView.findViewById(R.id.icon);
+
+        if (person.getImage() != null) {
+            App.getInstance().getPicasso()
+                .load(person.getImage().getUrl())
+                .transform(new BitmapBorderTransformation(0,
+                    getResources().getDimensionPixelSize(R.dimen.organizer_icon_size) / 2,
+                    ContextCompat.getColor(getContext(), R.color.white)))
+                .placeholder(R.drawable.ic_no_avatar)
+                .into(picture);
+        }
+
+        TextView title = (TextView) convertView.findViewById(R.id.title);
+        title.setText(person.getDisplayName());
+
+        return convertView;
+    }
+
+    private void addUnknownOrganizerToUI() {
+        Timber.d("null person");
+        View v = getUnknownOrganizerView();
+        if (mOrganizerBox != null) {
+            mOrganizerBox.addView(v);
+        }
+    }
+
+    private View getUnknownOrganizerView() {
+        View convertView = mInflater.inflate(R.layout.list_organizer_item, (ViewGroup) getView(), false);
+
+        ImageView picture = (ImageView) convertView.findViewById(R.id.icon);
+        picture.setImageResource(R.drawable.ic_no_avatar);
+        TextView title = (TextView) convertView.findViewById(R.id.title);
+        title.setText(R.string.name_not_known);
+        return convertView;
     }
 
     private void putPersonInCache(String plusId, Person person) {
-        App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_PERSON + plusId, person, null);
-    }
-
-    private boolean isNonCommunityPlusUrl(Urls url) {
-        return url.getValue().contains("plus.google.com/") && !url.getValue().contains("communities");
+        App.getInstance().getModelCache().putAsync(
+            Const.CACHE_KEY_PERSON + plusId,
+            person,
+            DateTime.now().plusDays(1),
+            null
+        );
     }
 
     private String getGPlusIdFromPersonUrl(Urls personUrl) {
-        final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID, "");
         if (personUrl.getValue().contains("+")) {
             try {
                 return "+" + URLDecoder.decode(personUrl.getValue()
@@ -276,7 +319,7 @@ public class InfoFragment extends BaseFragment {
                     .replace("u0", "")
                     .replace("https:", "")
                     .replace("http:", "")
-                    .replace(plusId, ""), "UTF-8").trim();
+                    .replace(chapterPlusId, ""), "UTF-8").trim();
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
                 return personUrl.getValue();
@@ -291,11 +334,11 @@ public class InfoFragment extends BaseFragment {
                 .replace("u0", "")
                 .replace("https:", "")
                 .replace("http:", "")
-                .replace(plusId, "").replaceAll("[^\\d.]", "").substring(0, 21);
+                .replace(chapterPlusId, "").replaceAll("[^\\d.]", "").substring(0, 21);
         }
     }
 
-    private void setIsLoading(boolean isLoading) {
+    void setIsLoading(boolean isLoading) {
         if (isLoading == mLoading || getActivity() == null) {
             return;
         }
@@ -317,43 +360,6 @@ public class InfoFragment extends BaseFragment {
                 }
             });
         }
-    }
-
-    @Nullable
-    private View createOrganizerView(Person person) {
-        if (getActivity() == null) {
-            return null;
-        }
-        View convertView = mInflater.inflate(R.layout.list_organizer_item, (ViewGroup) getView(), false);
-
-        ImageView picture = (ImageView) convertView.findViewById(R.id.icon);
-
-        if (person != null) {
-            if (person.getImage() != null) {
-                App.getInstance().getPicasso()
-                    .load(person.getImage().getUrl())
-                    .transform(new BitmapBorderTransformation(0,
-                        getResources().getDimensionPixelSize(R.dimen.organizer_icon_size) / 2,
-                        getResources().getColor(R.color.white)))
-                    .placeholder(R.drawable.ic_no_avatar)
-                    .into(picture);
-            }
-
-            TextView title = (TextView) convertView.findViewById(R.id.title);
-            title.setText(person.getDisplayName());
-        }
-
-        return convertView;
-    }
-
-    private View getUnknownOrganizerView() {
-        View convertView = mInflater.inflate(R.layout.list_organizer_item, (ViewGroup) getView(), false);
-
-        ImageView picture = (ImageView) convertView.findViewById(R.id.icon);
-        picture.setImageResource(R.drawable.ic_no_avatar);
-        TextView title = (TextView) convertView.findViewById(R.id.title);
-        title.setText(R.string.name_not_known);
-        return convertView;
     }
 
     @Override
