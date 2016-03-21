@@ -71,6 +71,7 @@ android {
             buildConfigField "String", "IP_SIMPLE_API_ACCESS_KEY", "\"$local_properties.ip_simple_api_access_key\""
             buildConfigField "String", "ANDROID_SIMPLE_API_ACCESS_KEY", "\"$local_properties.android_simple_api_access_key\""
             resValue "string", "android_simple_api_access_key", local_properties.android_simple_api_access_key ?: ""
+            resValue "string", "authority", "org.gdg.frisbee.android.provider"
         }
         alpha.initWith(release)
         debug {
@@ -82,6 +83,7 @@ android {
             buildConfigField "String", "IP_SIMPLE_API_ACCESS_KEY", "\"$local_properties.ip_simple_api_access_key_debug\""
             buildConfigField "String", "ANDROID_SIMPLE_API_ACCESS_KEY", "\"$local_properties.android_simple_api_access_key_debug\""
             resValue "string", "android_simple_api_access_key", local_properties.android_simple_api_access_key_debug ?: ""
+            resValue "string", "authority", "org.gdg.frisbee.android.debug.provider"
         }
     }
 
