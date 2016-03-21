@@ -195,7 +195,7 @@
 
     <provider
       android:name=".provider.GdgProvider"
-      android:authorities="${applicationId}.provider.GdgProvider"
+      android:authorities="${applicationId}.provider"
       android:exported="true"
       android:syncable="false" />
 

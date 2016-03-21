@@ -25,6 +25,7 @@ import android.database.MatrixCursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.activity.SearchActivity;
 import org.gdg.frisbee.android.api.model.Chapter;
@@ -34,8 +35,6 @@ import org.gdg.frisbee.android.app.App;
 import timber.log.Timber;
 
 public class GdgProvider extends ContentProvider {
-
-    private static final String AUTHORITY = "org.gdg.frisbee.android.provider.GdgProvider";
 
     private static final String[] CHAPTER_COLUMNS = new String[]{
         BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1,
@@ -49,7 +48,8 @@ public class GdgProvider extends ContentProvider {
 
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        uriMatcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY, SEARCH_SUGGEST);
+        uriMatcher.addURI(BuildConfig.APPLICATION_ID + ".provider",
+            SearchManager.SUGGEST_URI_PATH_QUERY, SEARCH_SUGGEST);
     }
 
     private Directory mDirectory;
@@ -86,7 +86,7 @@ public class GdgProvider extends ContentProvider {
         for (Chapter chapter : mDirectory.getGroups()) {
             if (chapter.getName().toLowerCase().contains(query.toLowerCase())) {
                 cursor.addRow(new Object[]{
-                    chapter.getGplusId(),
+                    chapter.getGplusId().hashCode(),
                     chapter.getName(),
                     chapter.getCity() + ", " + chapter.getCountry(),
                     SearchActivity.ACTION_FOUND,
