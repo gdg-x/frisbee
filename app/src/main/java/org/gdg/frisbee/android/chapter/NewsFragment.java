@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.chapter;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,8 +56,13 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
     public void onResume() {
         super.onResume();
 
-        for (int i = 0; i <= getListView().getChildCount(); i++) {
-            mAdapter.updatePlusOne(getListView().getChildAt(i));
+        RecyclerView recyclerView = getListView();
+        for (int i = 0; i <= recyclerView.getChildCount(); i++) {
+            View child = recyclerView.getChildAt(i);
+            if (child != null) {
+                mAdapter.updatePlusOne((NewsAdapter.ViewHolder)
+                    recyclerView.getChildViewHolder(child));
+            }
         }
     }
 
