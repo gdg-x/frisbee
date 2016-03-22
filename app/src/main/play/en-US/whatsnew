@@ -1,8 +1,4 @@
-<strong>Release 2.3</strong>
-
-- New GDG Watch Face! Thanks to Jomar Tigcal
-- New achievements. Most of them are secret. So use the app :)
-- New chapter selector in the intro and settings screen. We have 719 chapters globally. So scrolling them to find yours became hard. We have autocomplete now!
-- Arrow game is fixed and it uses new Play Games Snapshots API.
-- App Indexing integration.
-- AppInvite is added. Go to About page and invite your friends.
+<strong>Release 2.4</strong>
+- Google Sign-in improvements. Devices without Google Play Services will work now.
+- GCP NEXT Extended events are added to the drawer.
+- GDE page fixed.
