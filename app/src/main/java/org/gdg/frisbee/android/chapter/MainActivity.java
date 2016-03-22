@@ -42,8 +42,6 @@ import android.widget.Spinner;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AndroidAppUri;
 import com.google.android.gms.appinvite.AppInviteReferral;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
@@ -82,7 +80,6 @@ public class MainActivity extends GdgNavDrawerActivity {
         R.string.news, R.string.info, R.string.events, R.string.for_leads
     };
     private static final int REQUEST_FIRST_START_WIZARD = 100;
-    private static final int PLAY_SERVICE_DIALOG_REQUEST_CODE = 200;
     private static final Uri APP_URI =
         AndroidAppUri.newAndroidAppUri(BuildConfig.APPLICATION_ID, Uri.parse(Const.URL_GDGROUPS_ORG)).toUri();
     @Bind(R.id.pager)
@@ -190,10 +187,6 @@ public class MainActivity extends GdgNavDrawerActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        int playServiceStatus = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        if (ConnectionResult.SUCCESS != playServiceStatus) {
-            GooglePlayServicesUtil.getErrorDialog(playServiceStatus, this, PLAY_SERVICE_DIALOG_REQUEST_CODE).show();
-        }
         checkHomeChapterValid();
         updateChapterPages();
     }
@@ -460,7 +453,7 @@ public class MainActivity extends GdgNavDrawerActivity {
      * Launch AppInviteActivity with an intent containing App Invite information
      */
     void launchAppInviteActivity(Intent intent) {
-        Timber.d("launchAppInviteActivity:" + intent);
+        Timber.d("launchAppInviteActivity: %s", intent);
         Intent newIntent = new Intent(intent).setClass(this, AppInviteDeepLinkActivity.class);
         startActivity(newIntent);
     }
