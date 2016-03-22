@@ -159,7 +159,7 @@ public abstract class GdgActivity extends TrackableActivity implements
      */
     protected GoogleApiClient createGoogleApiClient() {
         isSignedIn = PrefUtils.isSignedIn(this);
-        return GoogleApiClientFactory.createWith(getApplicationContext());
+        return GoogleApiClientFactory.createWith(this);
     }
 
     @Override
@@ -305,7 +305,7 @@ public abstract class GdgActivity extends TrackableActivity implements
     }
 
     private boolean isFatalPlayServiceError(int errorCode) {
-        return !GoogleApiAvailability.getInstance().isUserResolvableError(errorCode);
+        return GoogleApiAvailability.getInstance().isUserResolvableError(errorCode);
     }
 
     public void setToolbarTitle(final String title) {
