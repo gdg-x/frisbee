@@ -24,6 +24,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -100,7 +101,8 @@ public class MainActivity extends GdgNavDrawerActivity {
     private String selectedChapterId;
 
     // Local Broadcast receiver for receiving invites
-    private BroadcastReceiver mDeepLinkReceiver = null;
+    @Nullable private BroadcastReceiver mDeepLinkReceiver;
+    @Nullable private OrganizerCheckCallback organizerCheckCallback;
 
     /**
      * Called when the activity is first created.
@@ -197,30 +199,34 @@ public class MainActivity extends GdgNavDrawerActivity {
     }
 
     @Override
+    protected void onPause() {
+        if (organizerCheckCallback != null) {
+            organizerCheckCallback.cancel();
+            organizerCheckCallback = null;
+        }
+        super.onPause();
+    }
+
+    @Override
     public void onConnected(Bundle bundle) {
         super.onConnected(bundle);
         updateChapterPages();
     }
 
     private void updateChapterPages() {
-        final boolean wasOrganizer = mViewPagerAdapter != null
-            && mViewPagerAdapter.getCount() == ORGANIZER_PAGES.length;
+        if (organizerCheckCallback != null) {
+            organizerCheckCallback.cancel();
+        }
+        organizerCheckCallback = new OrganizerCheckCallback(isOrganizerFragmentShown());
         App.getInstance().checkOrganizer(
             getGoogleApiClient(),
-            new OrganizerChecker.Callbacks() {
-                @Override
-                public void onOrganizerResponse(boolean isOrganizer) {
-                    if (mViewPagerAdapter != null && wasOrganizer != isOrganizer) {
-                        mViewPagerAdapter.notifyDataSetChanged(false /* forceUpdate */);
-                        mTabLayout.setTabsFromPagerAdapter(mViewPagerAdapter);
-                    }
-                }
-
-                @Override
-                public void onErrorResponse() {
-                }
-            }
+            organizerCheckCallback
         );
+    }
+
+    private boolean isOrganizerFragmentShown() {
+        return mViewPagerAdapter != null
+            && mViewPagerAdapter.getCount() == ORGANIZER_PAGES.length;
     }
 
     private void checkHomeChapterValid() {
@@ -532,6 +538,34 @@ public class MainActivity extends GdgNavDrawerActivity {
         public void setSelectedChapter(@NonNull String chapterId) {
             trackView();
             mSelectedChapterId = chapterId;
+        }
+    }
+
+    private class OrganizerCheckCallback implements OrganizerChecker.Callbacks {
+        private final boolean wasOrganizer;
+        private boolean cancelled = false;
+
+        public OrganizerCheckCallback(boolean wasOrganizer) {
+            this.wasOrganizer = wasOrganizer;
+        }
+
+        @Override
+        public void onOrganizerResponse(boolean isOrganizer) {
+            if (cancelled) {
+                return;
+            }
+            if (mViewPagerAdapter != null && wasOrganizer != isOrganizer) {
+                mViewPagerAdapter.notifyDataSetChanged(false /* forceUpdate */);
+                mTabLayout.setTabsFromPagerAdapter(mViewPagerAdapter);
+            }
+        }
+
+        @Override
+        public void onErrorResponse() {
+        }
+
+        public void cancel() {
+            cancelled = true;
         }
     }
 }
