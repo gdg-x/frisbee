@@ -219,14 +219,6 @@ public class ModelCache {
         return null != mMemoryCache;
     }
 
-    public CacheItem put(final String url, final Object obj) {
-        return put(url, obj, new DateTime(0));
-    }
-
-    public void putAsync(final String url, final Object obj, final CachePutListener onDoneListener) {
-        putAsync(url, obj, new DateTime(0), onDoneListener);
-    }
-
     public void putAsync(final String url, final Object obj,
                          final DateTime expiresAt, final CachePutListener onDoneListener) {
         new PutAsyncTask(ModelCache.this, url, obj, expiresAt, onDoneListener).execute();
