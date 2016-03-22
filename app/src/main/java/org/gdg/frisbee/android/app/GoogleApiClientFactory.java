@@ -26,8 +26,12 @@ public final class GoogleApiClientFactory {
             .addApi(AppIndex.API);
 
         if (withSignIn) {
-            builder.addApi(Plus.API).addScope(Plus.SCOPE_PLUS_LOGIN).addScope(Plus.SCOPE_PLUS_PROFILE)
-                .addApi(Games.API).addScope(Games.SCOPE_GAMES)
+            Games.GamesOptions gamesOptions = Games.GamesOptions.builder()
+                .setRequireGooglePlus(true)
+                .setShowConnectingPopup(false).build();
+
+            builder.addApi(Plus.API).addScope(Plus.SCOPE_PLUS_PROFILE)
+                .addApi(Games.API, gamesOptions)
                 .addApi(Drive.API).addScope(Drive.SCOPE_APPFOLDER);
         }
 
