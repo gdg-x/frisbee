@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceScreen;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +32,8 @@ import android.widget.LinearLayout;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
@@ -59,20 +62,20 @@ public class SettingsFragment extends PreferenceFragment {
 
     private Preference.OnPreferenceChangeListener mOnHomeGdgPreferenceChange =
         new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object o) {
-            final String homeGdg = (String) o;
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                final String homeGdg = (String) o;
 
-            if (mGoogleApiClient.isConnected()) {
-                setHomeGdg(homeGdg);
+                if (mGoogleApiClient.isConnected()) {
+                    setHomeGdg(homeGdg);
+                }
+                // Update widgets to show newest chosen GdgHome events
+                App.getInstance().startService(new Intent(App.getInstance(),
+                    UpcomingEventWidgetProvider.UpdateService.class));
+
+                return true;
             }
-            // Update widgets to show newest chosen GdgHome events
-            App.getInstance().startService(new Intent(App.getInstance(),
-                UpcomingEventWidgetProvider.UpdateService.class));
-
-            return true;
-        }
-    };
+        };
 
     private Preference.OnPreferenceChangeListener mOnAnalyticsPreferenceChange =
         new Preference.OnPreferenceChangeListener() {
@@ -147,28 +150,34 @@ public class SettingsFragment extends PreferenceFragment {
 
         CheckBoxPreference prefGoogleSignIn = (CheckBoxPreference) findPreference(PrefUtils.SETTINGS_SIGNED_IN);
         if (prefGoogleSignIn != null) {
-            prefGoogleSignIn.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    boolean signedIn = (Boolean) newValue;
-                    if (signedIn) {
-                        if (mGoogleApiClient.isConnected()) {
-                            disconnectGoogleApiClient();
+            if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(getActivity())
+                == ConnectionResult.SUCCESS) {
+                prefGoogleSignIn.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                    @Override
+                    public boolean onPreferenceChange(Preference preference, Object newValue) {
+                        boolean signedIn = (Boolean) newValue;
+                        if (signedIn) {
+                            if (mGoogleApiClient.isConnected()) {
+                                disconnectGoogleApiClient();
+                            }
+                            PrefUtils.setSignedIn(getActivity());
+                            createConnectedGoogleApiClient();
+                        } else {
+                            if (mGoogleApiClient.isConnected()) {
+                                Games.signOut(mGoogleApiClient);
+                                Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+                                disconnectGoogleApiClient();
+                            }
+                            PrefUtils.setLoggedOut(getActivity());
+                            createConnectedGoogleApiClient();
                         }
-                        PrefUtils.setSignedIn(getActivity());
-                        createConnectedGoogleApiClient();
-                    } else {
-                        if (mGoogleApiClient.isConnected()) {
-                            Games.signOut(mGoogleApiClient);
-                            Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-                            disconnectGoogleApiClient();
-                        }
-                        PrefUtils.setLoggedOut(getActivity());
-                        createConnectedGoogleApiClient();
+                        return true;
                     }
-                    return true;
-                }
-            });
+                });
+            } else {
+                PreferenceScreen root = (PreferenceScreen) findPreference(PrefUtils.SETTINGS_ROOT);
+                root.removePreference(prefGoogleSignIn);
+            }
         }
 
         CheckBoxPreference prefAnalytics = (CheckBoxPreference) findPreference(PrefUtils.SETTINGS_ANALYTICS);

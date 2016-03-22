@@ -34,6 +34,8 @@ import android.view.SubMenu;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.games.Games;
 
 import org.gdg.frisbee.android.Const;
@@ -157,13 +159,16 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 .setIcon(taggedEventSeries.getDrawerIconResId());
         }
 
-        SubMenu subMenu =
-            menu.addSubMenu(GAMES_GROUP_ID, Const.DRAWER_SUBMENU_GAMES, Menu.NONE, R.string.drawer_subheader_games);
-        subMenu.add(GAMES_GROUP_ID, Const.DRAWER_ACHIEVEMENTS, Menu.NONE, R.string.achievements)
-            .setIcon(R.drawable.ic_drawer_achievements);
-        subMenu.add(GAMES_GROUP_ID, Const.DRAWER_ARROW, Menu.NONE, R.string.arrow)
-            .setIcon(R.drawable.ic_drawer_arrow)
-            .setCheckable(true);
+        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)
+            == ConnectionResult.SUCCESS) {
+            SubMenu subMenu =
+                menu.addSubMenu(GAMES_GROUP_ID, Const.DRAWER_SUBMENU_GAMES, Menu.NONE, R.string.drawer_subheader_games);
+            subMenu.add(GAMES_GROUP_ID, Const.DRAWER_ACHIEVEMENTS, Menu.NONE, R.string.achievements)
+                .setIcon(R.drawable.ic_drawer_achievements);
+            subMenu.add(GAMES_GROUP_ID, Const.DRAWER_ARROW, Menu.NONE, R.string.arrow)
+                .setIcon(R.drawable.ic_drawer_arrow)
+                .setCheckable(true);
+        }
 
         menu.add(SETTINGS_GROUP_ID, Const.DRAWER_SETTINGS, Menu.NONE, R.string.settings)
             .setIcon(R.drawable.ic_drawer_settings);
