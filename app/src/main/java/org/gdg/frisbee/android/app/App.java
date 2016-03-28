@@ -29,7 +29,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
-import com.squareup.picasso.LruCache;
 import com.squareup.picasso.Picasso;
 
 import net.danlew.android.joda.JodaTimeAndroid;
@@ -125,10 +124,8 @@ public class App extends BaseApp implements LocationListener {
         // Initialize Picasso
         OkHttpClient.Builder picassoClient = mOkHttpClient.newBuilder();
         picassoClient.addInterceptor(new PlusImageUrlConverter());
-
         mPicasso = new Picasso.Builder(this)
             .downloader(new OkHttp3Downloader(picassoClient.build()))
-            .memoryCache(new LruCache(this))
             .build();
 
         JodaTimeAndroid.init(this);
