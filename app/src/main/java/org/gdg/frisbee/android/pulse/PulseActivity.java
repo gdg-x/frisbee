@@ -55,10 +55,10 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
     @Bind(R.id.tabs)
     TabLayout mTabLayout;
 
-    private ArrayAdapter<String> mSpinnerAdapter;
-    private PulsePagerAdapter mViewPagerAdapter;
-    private ArrayList<String> mPulseTargets;
-    private Spinner mSpinner;
+    ArrayAdapter<String> mSpinnerAdapter;
+    PulsePagerAdapter mViewPagerAdapter;
+    ArrayList<String> mPulseTargets = new ArrayList<>();
+    Spinner mSpinner;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
