@@ -4,6 +4,7 @@ import android.app.Application;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
+import org.gdg.frisbee.android.utils.FileUtils;
 import org.gdg.frisbee.android.utils.PrefUtils;
 
 import java.io.File;
@@ -22,19 +23,10 @@ public class BaseApp extends Application {
         File[] cacheDirs = ContextCompat.getExternalCacheDirs(this);
         for (File cacheDir : cacheDirs) {
             if (cacheDir != null) {
-                deleteDirectory(cacheDir);
+                FileUtils.deleteDirectory(cacheDir);
             }
         }
-        deleteDirectory(getCacheDir());
+        FileUtils.deleteDirectory(getCacheDir());
     }
 
-    private boolean deleteDirectory(File dir) {
-        if (dir.isDirectory()) {
-            for (File child : dir.listFiles()) {
-                deleteDirectory(child);
-            }
-        }
-
-        return dir.delete();
-    }
 }
