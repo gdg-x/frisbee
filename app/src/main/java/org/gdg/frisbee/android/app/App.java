@@ -123,9 +123,6 @@ public class App extends BaseApp implements LocationListener {
         PrefUtils.increaseAppStartCount(this);
 
         // Initialize Picasso
-        // When we clone mOkHttpClient, it will use all the same cache and everything.
-        // Only the interceptors will be different.
-        // We shouldn't have the below interceptor in other instances.
         OkHttpClient.Builder picassoClient = mOkHttpClient.newBuilder();
         picassoClient.addInterceptor(new PlusImageUrlConverter());
 
