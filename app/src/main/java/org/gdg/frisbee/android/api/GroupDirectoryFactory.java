@@ -38,8 +38,8 @@ public final class GroupDirectoryFactory {
 
         return new Retrofit.Builder()
             .baseUrl(BASE_URL)
+            .client(client.build())
             .addConverterFactory(GsonConverterFactory.create(Utils.getGson()))
-            .client(OkClientFactory.okHttpClientWithIdlingResources(client.build()))
             .build();
     }
 
