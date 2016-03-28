@@ -117,7 +117,7 @@ public class App extends BaseApp implements LocationListener {
         }
         mOkHttpClient = OkClientFactory.provideOkHttpClient(this);
 
-        // Initialize ModelCache and Volley
+        // Initialize ModelCache
         getModelCache();
 
         PrefUtils.increaseAppStartCount(this);
@@ -246,7 +246,7 @@ public class App extends BaseApp implements LocationListener {
             }
             final File rootDir = new File(cacheDir, "/model_cache/");
 
-            ModelCache.Builder builder = new ModelCache.Builder()
+            ModelCache.Builder builder = new ModelCache.Builder(this)
                 .setMemoryCacheEnabled(true);
             if (rootDir.isDirectory() || rootDir.mkdirs()) {
                 builder.setDiskCacheEnabled(true)
