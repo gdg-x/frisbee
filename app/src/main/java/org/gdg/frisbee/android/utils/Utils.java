@@ -18,12 +18,10 @@ package org.gdg.frisbee.android.utils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.Uri;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
 import android.util.DisplayMetrics;
@@ -51,26 +49,10 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
-import timber.log.Timber;
-
 public class Utils {
 
     private Utils() {
         // Prevent instances of this class being created.
-    }
-
-    /**
-     * @return Application's version code from the {@code PackageManager}.
-     */
-    public static int getAppVersion(Context context) {
-        try {
-            PackageInfo packageInfo = context.getPackageManager()
-                    .getPackageInfo(context.getPackageName(), 0);
-            return packageInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            // should never happen
-            throw new RuntimeException("Could not get package name: " + e);
-        }
     }
 
     /**
@@ -150,11 +132,6 @@ public class Utils {
                 && mConMgr.getActiveNetworkInfo().isConnected();
     }
 
-    public static boolean isEmulator() {
-        Timber.d(Build.PRODUCT);
-        return Build.PRODUCT.equals("google_sdk");
-    }
-
     public static long stringToLong(String str) {
         long l = 0;
         for (int i = 0; i < str.length(); i++) {
@@ -222,4 +199,5 @@ public class Utils {
         intent.setData(uri);
         return intent;
     }
+
 }

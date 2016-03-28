@@ -198,10 +198,6 @@ public class App extends BaseApp implements LocationListener {
     }
 
     public void updateLastLocation() {
-        if (Utils.isEmulator()) {
-            return;
-        }
-
         Location loc = mLocationFinder.getLastBestLocation(5000, 60 * 60 * 1000);
 
         if (loc != null) {
