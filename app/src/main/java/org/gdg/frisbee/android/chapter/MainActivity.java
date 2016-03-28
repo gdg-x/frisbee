@@ -549,7 +549,6 @@ public class MainActivity extends GdgNavDrawerActivity {
             }
             if (mViewPagerAdapter != null && wasOrganizer != isOrganizer) {
                 mViewPagerAdapter.notifyDataSetChanged(false /* forceUpdate */);
-                mTabLayout.setTabsFromPagerAdapter(mViewPagerAdapter);
             }
         }
 
