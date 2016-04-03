@@ -1,3 +1,6 @@
+import org.ajoberstar.grgit.Commit
+import org.ajoberstar.grgit.Grgit
+
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'com.github.triplet.play'
@@ -53,7 +56,6 @@ android {
             proguardFile '../settings/proguard/proguard-support-v7-appcompat.pro'
             proguardFile '../settings/proguard/proguard-support-v7-cardview.pro'
             proguardFile '../settings/proguard/proguard-google-play-services.pro'
-            proguardFile '../settings/proguard/proguard-google-analytics.pro'
             proguardFile '../settings/proguard/proguard-gson.pro'
             proguardFile '../settings/proguard/proguard-square-okio.pro'
             proguardFile '../settings/proguard/proguard-square-okhttp3.pro'
@@ -61,16 +63,15 @@ android {
             proguardFile '../settings/proguard/proguard-square-retrofit2.pro'
             proguardFile '../settings/proguard/proguard-butterknife.pro'
             proguardFile '../settings/proguard/proguard-crashlytics.pro'
-            proguardFile '../settings/proguard/proguard-joda-time.pro'
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             minifyEnabled true
             zipAlignEnabled true
             shrinkResources true
-            debuggable false
 
             buildConfigField "String", "IP_SIMPLE_API_ACCESS_KEY", "\"$local_properties.ip_simple_api_access_key\""
             buildConfigField "String", "ANDROID_SIMPLE_API_ACCESS_KEY", "\"$local_properties.android_simple_api_access_key\""
             resValue "string", "android_simple_api_access_key", local_properties.android_simple_api_access_key ?: ""
+            resValue "string", "authority", "org.gdg.frisbee.android.provider"
         }
         alpha.initWith(release)
         debug {
@@ -82,23 +83,7 @@ android {
             buildConfigField "String", "IP_SIMPLE_API_ACCESS_KEY", "\"$local_properties.ip_simple_api_access_key_debug\""
             buildConfigField "String", "ANDROID_SIMPLE_API_ACCESS_KEY", "\"$local_properties.android_simple_api_access_key_debug\""
             resValue "string", "android_simple_api_access_key", local_properties.android_simple_api_access_key_debug ?: ""
-
-            multiDexEnabled true
-        }
-    }
-
-    productFlavors {
-        prod
-        dev {
-            minSdkVersion 21
-        }
-    }
-
-    variantFilter { variant ->
-        if (variant.getFlavors().get(0).name.equals('dev')
-            && (variant.buildType.name.equals('release')
-            || variant.buildType.name.equals('alpha'))) {
-            variant.setIgnore(true);
+            resValue "string", "authority", "org.gdg.frisbee.android.debug.provider"
         }
     }
 
@@ -151,29 +136,23 @@ dependencies {
     compile "com.android.support:design:$rootProject.supportLibraryVersion"
     compile "com.android.support:customtabs:$rootProject.supportLibraryVersion"
     compile "com.android.support.test.espresso:espresso-idling-resource:$rootProject.espressoVersion"
-    debugCompile 'com.android.support:multidex:1.0.1'
 
     //Play Services
-    compile "com.google.android.gms:play-services-location:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-games:$rootProject.playServicesVersion"
-    compile "com.google.android.gms:play-services-identity:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-plus:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-appstate:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-analytics:$rootProject.playServicesVersion"
-    compile "com.google.android.gms:play-services-gcm:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-appinvite:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-appindexing:$rootProject.playServicesVersion"
 
     //Google
     compile 'com.google.http-client:google-http-client-gson:1.21.0'
-    compile 'com.google.apis:google-api-services-plus:v1-rev329-1.21.0'
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
     compile 'com.google.zxing:android-integration:3.2.1'
     compile 'com.google.zxing:core:3.2.1'
 
     //Square
     compile "com.squareup.okhttp3:okhttp:$rootProject.okHttpVersion"
-    compile "com.squareup.okhttp3:okhttp-urlconnection:$rootProject.okHttpVersion"
     compile "com.squareup.okhttp3:logging-interceptor:$rootProject.okHttpVersion"
     compile 'com.squareup.okio:okio:1.6.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
@@ -186,9 +165,9 @@ dependencies {
 
     //Jake Wharton
     compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.jakewharton.timber:timber:4.1.0'
+    compile 'com.jakewharton.timber:timber:4.1.1'
     compile 'com.jakewharton:disklrucache:2.0.2'
-    compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.1'
+    compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.2'
 
     //Others
     compile 'io.doorbell:android-sdk:0.2.6@aar'
@@ -204,7 +183,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     // Android Wear
-    prodWearApp project(':wear')
+    wearApp project(':wear')
 
     // Dependencies for local unit tests
     testCompile "junit:junit:$rootProject.junitVersion"
@@ -233,7 +212,7 @@ def commitSha() {
         return file.text
     }
 
-    def value = org.ajoberstar.grgit.Grgit.open(dir: rootProject.file('.')).head().abbreviatedId
+    def value = getHeadGitCommit().abbreviatedId
 
     file.parentFile.mkdirs()
     file.text = value
@@ -246,10 +225,15 @@ def commitTime() {
         return file.text
     }
 
-    def date = org.ajoberstar.grgit.Grgit.open(dir: rootProject.file('.')).head().date
+    def date = getHeadGitCommit().date
     def value = date.format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone("UTC"))
 
     file.parentFile.mkdirs()
     file.text = value
     return value
+}
+
+@SuppressWarnings("GroovyAssignabilityCheck")
+private Commit getHeadGitCommit() {
+    Grgit.open(dir: rootProject.file('.')).head()
 }

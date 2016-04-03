@@ -65,6 +65,6 @@ public class SearchActivity extends GdgNavDrawerActivity {
     }
 
     private void doSearch(String query) {
-
+        startSearch(query, false, null, false);
     }
 }

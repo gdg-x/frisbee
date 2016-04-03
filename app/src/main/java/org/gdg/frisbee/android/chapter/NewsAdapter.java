@@ -36,9 +36,10 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.PlusOneButton;
-import com.google.api.services.plus.model.Activity;
 
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.model.plus.Activity;
+import org.gdg.frisbee.android.api.model.plus.Attachment;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.widget.ResizableImageView;
@@ -145,7 +146,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                 || activity.getObject().getAttachments().isEmpty()) {
                 return 0;
             } else {
-                Activity.PlusObject.Attachments attachment = activity.getObject().getAttachments().get(0);
+                Attachment attachment = activity.getObject().getAttachments().get(0);
                 String objectType = attachment.getObjectType();
 
                 switch (objectType) {
@@ -207,7 +208,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             holder.timeStamp.setText(
                 Utils.toHumanTimePeriod(
                     mContext,
-                    new DateTime(activity.getPublished().getValue()),
+                    activity.getPublished(),
                     DateTime.now()
                 )
             );
@@ -224,7 +225,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
         if (activity.getObject().getAttachments() != null && activity.getObject().getAttachments().size() > 0) {
 
-            final Activity.PlusObject.Attachments attachment = activity.getObject().getAttachments().get(0);
+            final Attachment attachment = activity.getObject().getAttachments().get(0);
 
             switch (getItemViewType(i)) {
                 case VIEWTYPE_ARTICLE:
@@ -303,7 +304,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     private void populateArticle(ViewHolder mViewHolder,
                                  ViewGroup container,
-                                 final Activity.PlusObject.Attachments attachment) {
+                                 final Attachment attachment) {
         if (attachment == null) {
             return;
         }
@@ -342,7 +343,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     }
 
     @Nullable
-    private String getAttachmentImageUrl(final Activity.PlusObject.Attachments attachment) {
+    private String getAttachmentImageUrl(final Attachment attachment) {
         if (attachment.getFullImage() != null) {
             return attachment.getFullImage().getUrl();
         } else if (attachment.getImage() != null) {
@@ -353,7 +354,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     private void populateVideo(ViewHolder mViewHolder,
                                ViewGroup container,
-                               final Activity.PlusObject.Attachments attachment) {
+                               final Attachment attachment) {
         if (attachment == null) {
             return;
         }
@@ -390,7 +391,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         });
     }
 
-    private String getVideoIdFrom(final Activity.PlusObject.Attachments attachment)
+    private String getVideoIdFrom(final Attachment attachment)
         throws UnsupportedEncodingException, MalformedURLException {
 
         return Utils.splitQuery(new URL(attachment.getUrl())).get("v");
@@ -398,7 +399,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     private void populatePhoto(ViewHolder mViewHolder,
                                ViewGroup container,
-                               Activity.PlusObject.Attachments attachment) {
+                               Attachment attachment) {
         if (attachment == null) {
             return;
         }
@@ -422,7 +423,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     private void populateAlbum(ViewHolder mViewHolder,
                                ViewGroup container,
-                               Activity.PlusObject.Attachments attachment) {
+                               Attachment attachment) {
         if (attachment == null) {
             return;
         }
@@ -448,7 +449,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     private void populateEvent(ViewHolder mViewHolder,
                                ViewGroup container,
-                               final Activity.PlusObject.Attachments attachment) {
+                               final Attachment attachment) {
         createAttachmentView(mViewHolder, container, R.layout.news_item_event, 5);
 
         TextView title = mViewHolder.attachmentTitle;

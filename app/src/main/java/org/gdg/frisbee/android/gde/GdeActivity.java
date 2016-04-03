@@ -101,11 +101,17 @@ public class GdeActivity extends GdgNavDrawerActivity {
                 HashMap<String, GdeList> gdeMap = new HashMap<>();
 
                 for (Gde gde : directory) {
-                    if (!gdeMap.containsKey(gde.getProduct())) {
-                        gdeMap.put(gde.getProduct(), new GdeList());
+                    if (gde.getProduct() == null) {
+                        continue;
                     }
+                    for (String p : gde.getProduct()) {
+                        String product = p.trim();
+                        if (!gdeMap.containsKey(product)) {
+                            gdeMap.put(product, new GdeList());
+                        }
 
-                    gdeMap.get(gde.getProduct()).add(gde);
+                        gdeMap.get(product).add(gde);
+                    }
                 }
 
                 mViewPagerAdapter.addMap(gdeMap);

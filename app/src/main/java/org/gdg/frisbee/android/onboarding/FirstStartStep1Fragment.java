@@ -95,8 +95,10 @@ public class FirstStartStep1Fragment extends BaseFragment {
                 @Override
                 public void onGet(Object item) {
                     Directory directory = (Directory) item;
-                    addChapters(directory.getGroups());
-                    mLoadSwitcher.setDisplayedChild(1);
+                    if (isContextValid()) {
+                        addChapters(directory.getGroups());
+                        mLoadSwitcher.setDisplayedChild(1);
+                    }
                 }
 
                 @Override

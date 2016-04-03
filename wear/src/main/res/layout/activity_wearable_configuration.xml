@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.wearable.view.BoxInsetLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:background="@color/wearable_config_background"
-  tools:context="org.gdgph.watchface.WearableConfigurationActivity">
+                                              xmlns:app="http://schemas.android.com/apk/res-auto"
+                                              xmlns:tools="http://schemas.android.com/tools"
+                                              android:layout_width="match_parent"
+                                              android:layout_height="match_parent"
+                                              android:background="@color/wearable_config_background"
+                                              tools:context=".WearableConfigurationActivity">
 
   <TextView
     android:id="@+id/settings_header"
@@ -26,6 +26,6 @@
     android:background="@android:color/transparent"
     android:dividerHeight="0dp"
     android:scrollbars="none"
-    app:layout_box="left|right"></android.support.wearable.view.WearableListView>
+    app:layout_box="left|right" />
 
 </android.support.wearable.view.BoxInsetLayout>

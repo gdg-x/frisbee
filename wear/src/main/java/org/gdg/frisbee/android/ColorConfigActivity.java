@@ -61,16 +61,9 @@ public class ColorConfigActivity extends Activity {
     private void displayColorSelections() {
         List<String> colorList = new ArrayList<>();
 
-        if (mHeader.contains("Background")) {
-            String[] backgrounds = getResources().getStringArray(R.array.background_selection);
-            for (String background : backgrounds) {
-                colorList.add(background);
-            }
-        } else {
-            String[] colors = getResources().getStringArray(R.array.color_selection);
-            for (String color : colors) {
-                colorList.add(color);
-            }
+        String[] colors = getResources().getStringArray(R.array.color_selection);
+        for (String color : colors) {
+            colorList.add(color);
         }
 
         ColorConfigAdapter adapter = new ColorConfigAdapter(this, colorList);

@@ -35,26 +35,26 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.google.android.gms.games.Games;
-import com.google.api.services.plus.model.Person;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.about.AboutActivity;
 import org.gdg.frisbee.android.activity.SettingsActivity;
-import org.gdg.frisbee.android.api.PlusPersonDownloader;
+import org.gdg.frisbee.android.api.Callback;
+import org.gdg.frisbee.android.api.model.plus.Person;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.arrow.ArrowActivity;
+import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeriesActivity;
 import org.gdg.frisbee.android.gde.GdeActivity;
 import org.gdg.frisbee.android.pulse.PulseActivity;
-import org.gdg.frisbee.android.task.Builder;
-import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.PlusUtils;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.BitmapBorderTransformation;
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 
@@ -64,9 +64,13 @@ import butterknife.ButterKnife;
 public abstract class GdgNavDrawerActivity extends GdgActivity {
 
     private static final String EXTRA_SELECTED_DRAWER_ITEM_ID = "SELECTED_DRAWER_ITEM_ID";
+    private static final String DRAWER_ITEM_ID_TO_NAVIGATE_AFTER_SIGN_IN = "DRAWER_ITEM_ID_TO_NAVIGATE_AFTER_SIGN_IN";
+
+    private static final int INVALID_ITEM_ID = -1;
     private static final int GROUP_ID = 1;
     private static final int GAMES_GROUP_ID = 2;
     private static final int SETTINGS_GROUP_ID = 3;
+
     protected String mStoredHomeChapterId;
     @Bind(R.id.drawer)
     DrawerLayout mDrawerLayout;
@@ -75,7 +79,25 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     ImageView mDrawerImage;
     ImageView mDrawerUserPicture;
     private ActionBarDrawerToggle mDrawerToggle;
-    private MenuItem drawerItemToNavigateAfterSignIn = null;
+
+    int drawerItemIdToNavigateAfterSignIn = INVALID_ITEM_ID;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            drawerItemIdToNavigateAfterSignIn
+                = savedInstanceState.getInt(DRAWER_ITEM_ID_TO_NAVIGATE_AFTER_SIGN_IN, INVALID_ITEM_ID);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt(DRAWER_ITEM_ID_TO_NAVIGATE_AFTER_SIGN_IN, drawerItemIdToNavigateAfterSignIn);
+    }
 
     @Override
     public void setContentView(int layoutResId) {
@@ -165,7 +187,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             new NavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(MenuItem menuItem) {
-                    onDrawerItemClick(menuItem);
+                    onDrawerItemClick(menuItem.getItemId());
                     mDrawerLayout.closeDrawers();
                     return true;
                 }
@@ -175,20 +197,20 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         mDrawerUserPicture = ButterKnife.findById(headerView, R.id.navdrawer_user_picture);
     }
 
-    private void onDrawerItemClick(final MenuItem item) {
+    void onDrawerItemClick(int itemId) {
 
         if (PrefUtils.shouldOpenDrawerOnStart(GdgNavDrawerActivity.this)) {
             PrefUtils.setShouldNotOpenDrawerOnStart(GdgNavDrawerActivity.this);
         }
         Bundle data = new Bundle();
-        data.putInt(EXTRA_SELECTED_DRAWER_ITEM_ID, item.getItemId());
+        data.putInt(EXTRA_SELECTED_DRAWER_ITEM_ID, itemId);
 
-        switch (item.getItemId()) {
+        switch (itemId) {
             case Const.DRAWER_ACHIEVEMENTS:
                 if (PrefUtils.isSignedIn(this) && getGoogleApiClient().isConnected()) {
                     startActivityForResult(Games.Achievements.getAchievementsIntent(getGoogleApiClient()), 0);
                 } else {
-                    drawerItemToNavigateAfterSignIn = item;
+                    drawerItemIdToNavigateAfterSignIn = itemId;
                     showLoginErrorDialog(R.string.achievements_need_signin);
                 }
                 break;
@@ -202,7 +224,8 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             case Const.DRAWER_WTM:
             case Const.DRAWER_STUDY_JAM:
             case Const.DRAWER_IO_EXTENDED:
-                onDrawerSpecialItemClick(item, data);
+            case Const.DRAWER_GCP_NEXT:
+                onDrawerSpecialItemClick(itemId, data);
                 break;
             case Const.DRAWER_PULSE:
                 navigateTo(PulseActivity.class, data);
@@ -211,7 +234,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 if (PrefUtils.isSignedIn(this) && getGoogleApiClient().isConnected()) {
                     navigateTo(ArrowActivity.class, data);
                 } else {
-                    drawerItemToNavigateAfterSignIn = item;
+                    drawerItemIdToNavigateAfterSignIn = itemId;
                     showLoginErrorDialog(R.string.arrow_need_games);
                 }
                 break;
@@ -235,31 +258,38 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         new AlertDialog.Builder(this)
             .setTitle(R.string.title_signing_needed)
             .setMessage(errorMessage)
-            .setNegativeButton(android.R.string.cancel, null)
+            .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    drawerItemIdToNavigateAfterSignIn = INVALID_ITEM_ID;
+                }
+            })
             .setPositiveButton(R.string.signin, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     PrefUtils.setSignedIn(GdgNavDrawerActivity.this);
-                    if (!getGoogleApiClient().isConnected()) {
-                        getGoogleApiClient().connect();
-                    }
+
+                    recreateGoogleApiClientIfNeeded();
+                    getGoogleApiClient().connect();
                 }
             })
             .show();
     }
 
-    private void onDrawerSpecialItemClick(MenuItem item, Bundle data) {
-        // If title is null them we are not in a SpecialEventActivity
-        if (getSupportActionBar() != null && getSupportActionBar().getTitle() != null
-            && getSupportActionBar().getTitle().equals(item.getTitle())) {
-            return;
-        }
+    private void onDrawerSpecialItemClick(int itemId, Bundle data) {
+        if (this instanceof TaggedEventSeriesActivity) {
+            TaggedEventSeriesActivity activity = (TaggedEventSeriesActivity) this;
+            TaggedEventSeries taggedEventSeries = activity.getTaggedEventSeries();
 
+            if (taggedEventSeries.getDrawerId() == itemId) {
+                return;
+            }
+        }
 
         final ArrayList<TaggedEventSeries> currentEventSeries =
             App.getInstance().currentTaggedEventSeries();
         for (TaggedEventSeries taggedEventSeries : currentEventSeries) {
-            if (taggedEventSeries.getDrawerId() == item.getItemId()) {
+            if (taggedEventSeries.getDrawerId() == itemId) {
 
                 data.putString(Const.EXTRA_TAGGED_EVENT_CACHEKEY, taggedEventSeries.getTag());
                 data.putParcelable(Const.EXTRA_TAGGED_EVENT, taggedEventSeries);
@@ -322,9 +352,9 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         super.onConnected(bundle);
         updateUserPicture();
 
-        if (drawerItemToNavigateAfterSignIn != null) {
-            onDrawerItemClick(drawerItemToNavigateAfterSignIn);
-            drawerItemToNavigateAfterSignIn = null;
+        if (drawerItemIdToNavigateAfterSignIn != INVALID_ITEM_ID) {
+            onDrawerItemClick(drawerItemIdToNavigateAfterSignIn);
+            drawerItemIdToNavigateAfterSignIn = INVALID_ITEM_ID;
         }
     }
 
@@ -365,29 +395,36 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     private void maybeUpdateChapterImage() {
         final String homeChapterId = getCurrentHomeChapterId();
         if (isHomeChapterOutdated(homeChapterId)) {
-            new Builder<>(String.class, Person.class)
-                .addParameter(homeChapterId)
-                .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, Person>() {
+            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PERSON + homeChapterId,
+                true, new ModelCache.CacheListener() {
                     @Override
-                    public Person doInBackground(String... params) {
+                    public void onGet(Object person) {
+                        updateChapterImage((Person) person, homeChapterId);
+                    }
 
-                        return PlusPersonDownloader.getPersonSync(params[0]);
-                    }
-                })
-                .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, Person>() {
                     @Override
-                    public void onPostExecute(String[] params, Person person) {
-                        if (person != null) {
-                            mStoredHomeChapterId = homeChapterId;
-                            if (person.getCover() != null) {
-                                App.getInstance().getPicasso()
-                                    .load(person.getCover().getCoverPhoto().getUrl())
-                                    .into(mDrawerImage);
+                    public void onNotFound(final String key) {
+                        App.getInstance().getPlusApi().getPerson(homeChapterId).enqueue(new Callback<Person>() {
+                            @Override
+                            public void success(Person person) {
+                                if (person != null) {
+                                    App.getInstance().getModelCache().putAsync(key, person,
+                                        DateTime.now().plusDays(1), null);
+                                    updateChapterImage(person, homeChapterId);
+                                }
                             }
-                        }
+                        });
                     }
-                })
-                .buildAndExecute();
+                });
+        }
+    }
+
+    private void updateChapterImage(Person person, String homeChapterId) {
+        mStoredHomeChapterId = homeChapterId;
+        if (person.getCover() != null) {
+            App.getInstance().getPicasso()
+                .load(person.getCover().getCoverPhoto().getUrl())
+                .into(mDrawerImage);
         }
     }
 

@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.onboarding;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import android.widget.LinearLayout;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.common.BaseFragment;
+import org.gdg.frisbee.android.utils.PrefUtils;
 
 import butterknife.ButterKnife;
 import butterknife.Bind;
@@ -44,7 +46,14 @@ public class FirstStartStep3Fragment extends BaseFragment {
     @Bind(R.id.enable_analytics)
     CheckBox mEnableAnalytics;
 
-    private boolean mIsSignedIn = false;
+    private boolean isSignedIn = false;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        isSignedIn = PrefUtils.isSignedIn(getContext());
+    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -65,7 +74,7 @@ public class FirstStartStep3Fragment extends BaseFragment {
     public void onResume() {
         super.onResume();
 
-        if (!mIsSignedIn) {
+        if (!isSignedIn) {
             mGcmContainer.setVisibility(View.GONE);
         } else {
             mGcmContainer.setVisibility(View.VISIBLE);
@@ -80,7 +89,7 @@ public class FirstStartStep3Fragment extends BaseFragment {
     }
 
     public void setSignedIn(boolean mIsSignedIn) {
-        this.mIsSignedIn = mIsSignedIn;
+        this.isSignedIn = mIsSignedIn;
 
         if (mGcmContainer != null) {
             if (!mIsSignedIn) {

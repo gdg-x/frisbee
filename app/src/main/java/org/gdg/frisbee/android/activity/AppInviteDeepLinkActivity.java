@@ -28,6 +28,7 @@ import com.google.android.gms.appinvite.AppInviteReferral;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import org.gdg.frisbee.android.app.GoogleApiClientFactory;
 import org.gdg.frisbee.android.common.GdgActivity;
 
 import timber.log.Timber;
@@ -44,9 +45,7 @@ public class AppInviteDeepLinkActivity extends GdgActivity {
 
     @Override
     protected GoogleApiClient createGoogleApiClient() {
-        return new GoogleApiClient.Builder(this)
-            .addApi(AppInvite.API)
-            .build();
+        return GoogleApiClientFactory.createWithoutSignIn(this);
     }
 
     @Override
@@ -134,7 +133,7 @@ public class AppInviteDeepLinkActivity extends GdgActivity {
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         super.onConnectionFailed(connectionResult);
         Timber.d("googleApiClient:onConnectionFailed: %s", connectionResult.getErrorCode());
         if (connectionResult.getErrorCode() == ConnectionResult.API_UNAVAILABLE) {
