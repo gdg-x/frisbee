@@ -32,5 +32,5 @@ dependencies {
     compile "com.android.support:support-v4:$rootProject.supportLibraryVersion"
     compile "com.google.android.gms:play-services-wearable:$rootProject.playServicesVersion"
 
-    compile 'com.jakewharton.timber:timber:4.1.0'
+    compile "com.jakewharton.timber:timber:$rootProject.timberVersion"
 }
