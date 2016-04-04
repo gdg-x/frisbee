@@ -29,7 +29,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
-import com.squareup.picasso.LruCache;
 import com.squareup.picasso.Picasso;
 
 import net.danlew.android.joda.JodaTimeAndroid;
@@ -54,7 +53,6 @@ import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.utils.CrashlyticsTree;
 import org.gdg.frisbee.android.utils.GingerbreadLastLocationFinder;
 import org.gdg.frisbee.android.utils.PrefUtils;
-import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
 
 import java.io.File;
@@ -123,15 +121,10 @@ public class App extends BaseApp implements LocationListener {
         PrefUtils.increaseAppStartCount(this);
 
         // Initialize Picasso
-        // When we clone mOkHttpClient, it will use all the same cache and everything.
-        // Only the interceptors will be different.
-        // We shouldn't have the below interceptor in other instances.
         OkHttpClient.Builder picassoClient = mOkHttpClient.newBuilder();
         picassoClient.addInterceptor(new PlusImageUrlConverter());
-
         mPicasso = new Picasso.Builder(this)
             .downloader(new OkHttp3Downloader(picassoClient.build()))
-            .memoryCache(new LruCache(this))
             .build();
 
         JodaTimeAndroid.init(this);
@@ -204,10 +197,6 @@ public class App extends BaseApp implements LocationListener {
     }
 
     public void updateLastLocation() {
-        if (Utils.isEmulator()) {
-            return;
-        }
-
         Location loc = mLocationFinder.getLastBestLocation(5000, 60 * 60 * 1000);
 
         if (loc != null) {
