@@ -461,12 +461,16 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         implements NfcAdapter.OnNdefPushCompleteCallback, NfcAdapter.CreateNdefMessageCallback {
 
         public void enablePush() {
-            mNfcAdapter.setNdefPushMessageCallback(this, ArrowActivity.this);
-            mNfcAdapter.setOnNdefPushCompleteCallback(this, ArrowActivity.this);
+            if (isContextValid()) {
+                mNfcAdapter.setNdefPushMessageCallback(this, ArrowActivity.this);
+                mNfcAdapter.setOnNdefPushCompleteCallback(this, ArrowActivity.this);
+            }
         }
 
         public void disablePush() {
-            mNfcAdapter.setNdefPushMessage(null, ArrowActivity.this);
+            if (isContextValid()) {
+                mNfcAdapter.setNdefPushMessage(null, ArrowActivity.this);
+            }
         }
 
         @Nullable
