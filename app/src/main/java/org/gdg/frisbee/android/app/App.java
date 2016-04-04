@@ -51,6 +51,7 @@ import org.gdg.frisbee.android.api.PlusImageUrlConverter;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.utils.CrashlyticsTree;
+import org.gdg.frisbee.android.utils.FileUtils;
 import org.gdg.frisbee.android.utils.GingerbreadLastLocationFinder;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.joda.time.DateTime;
@@ -115,7 +116,7 @@ public class App extends BaseApp implements LocationListener {
         }
         mOkHttpClient = OkClientFactory.provideOkHttpClient(this);
 
-        // Initialize ModelCache and Volley
+        // Initialize ModelCache
         getModelCache();
 
         PrefUtils.increaseAppStartCount(this);
@@ -143,6 +144,13 @@ public class App extends BaseApp implements LocationListener {
         initTaggedEventSeries();
     }
 
+    @Override
+    protected void onAppUpdate(int oldVersion, int newVersion) {
+        super.onAppUpdate(oldVersion, newVersion);
+
+        File diskCacheLocation = getDiskCacheLocation();
+        FileUtils.deleteDirectory(diskCacheLocation);
+    }
 
     /**
      * Init TaggedEventSeries.
@@ -225,25 +233,28 @@ public class App extends BaseApp implements LocationListener {
         return mTracker;
     }
 
-    @NonNull
     public ModelCache getModelCache() {
         if (mModelCache == null) {
 
-            File cacheDir = getExternalCacheDir();
-            if (cacheDir == null) {
-                cacheDir = getCacheDir();
-            }
-            final File rootDir = new File(cacheDir, "/model_cache/");
+            final File rootDir = getDiskCacheLocation();
 
-            ModelCache.Builder builder = new ModelCache.Builder()
+            ModelCache.Builder builder = new ModelCache.Builder(this)
                 .setMemoryCacheEnabled(true);
-            if (rootDir.isDirectory() || rootDir.mkdirs()) {
+            if (rootDir.mkdirs() || rootDir.isDirectory()) {
                 builder.setDiskCacheEnabled(true)
                     .setDiskCacheLocation(rootDir);
             }
             mModelCache = builder.build();
         }
         return mModelCache;
+    }
+
+    private File getDiskCacheLocation() {
+        File cacheDir = getExternalCacheDir();
+        if (cacheDir == null) {
+            cacheDir = getCacheDir();
+        }
+        return new File(cacheDir, "/model_cache/");
     }
 
     @Override
