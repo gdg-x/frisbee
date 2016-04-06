@@ -94,6 +94,7 @@
   <string name="order_by_distance">按距离排序</string>
   <string name="gcm_event_ticker">你的主场 GDG 有新活动</string>
   <string name="ioextended_description">Google I/O Extended 就是在你的本地社区参与 Google I/O 大会。</string>
+  <string name="gcpnext_description">GCP NEXT Extended events bring the local developer community together to experience talks, in-depth product demos, and behind-the-scenes interviews. All keynote and technical sessions will be available on-line for time-shifted viewing. The event can also offer other unique activities for developers, such cloud codelabs or hackathons.</string>
   <string name="devfest_description">GDG DevFest 为社区发起的大型聚会，提供多种产品的演讲议程、一整天的黑客松、程序开发教学…等活动\n\n每个GDG DevFest 皆由主办的开发者社区依据需求量身订做，虽然每场活动内容都不一样，但每个GDG DevFest 都是为了一个共同的信念而生，那就是当开发者们同聚一堂交换彼此的想法时，总是可以激荡出令人惊叹的火花</string>
   <string name="studyjams_description">谷歌开发者学习班由一系列免费的、和全球同步的课程组成，由社区自发组织，需要您现场参与。本系列第一个课程是由 Google 和 Udacity 共同制作, 通过 Udacity 教学网站可以访问的 Android 基础课。本课程将由 Google 开发者社区获得该课程认证的讲师来带领，需要8、9周的时间，每周一次聚会。</string>
   <string name="wtm_description">Women Techmakers 是 Google 为技术领域的女性设立的品牌和全球项目。帮助女性提升知名度，营造社区，和争取资源，以推动女性在技术领域的创新和参与。其活动宗旨是为了促进一个让女性能够融入技术领域的环境，同时颂扬引领该产业的女性。我们想要发展，壮大和颂扬女性开发者，设计师，和技术创业者。</string>

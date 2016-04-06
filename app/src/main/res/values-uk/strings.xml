@@ -122,6 +122,7 @@
   <string name="order_by_distance">Сортування за відстанню</string>
   <string name="gcm_event_ticker">Додана нова подія у вашій домашній GDG.</string>
   <string name="ioextended_description">Google I/O Extended - долучіться до конференції Google у вашій місцевій групі.</string>
+  <string name="gcpnext_description">GCP NEXT Extended events bring the local developer community together to experience talks, in-depth product demos, and behind-the-scenes interviews. All keynote and technical sessions will be available on-line for time-shifted viewing. The event can also offer other unique activities for developers, such cloud codelabs or hackathons.</string>
   <string name="devfest_description"><b>DevFest</b> - це щорічна подія, організована силами
         ком\'юніті Google Developers Group. Основна мета — зустріч всіх, хто цікавиться технологіями
         Google для обміну досвідом, знайомств і навчання. Зазвичай в програму DevFest\'у входять
