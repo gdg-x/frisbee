@@ -201,7 +201,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
             if (getView() != null) {
                 Snackbar snackbar = Snackbar.make(getView(), errorStringRes,
                     Snackbar.LENGTH_INDEFINITE);
-                snackbar.setAction("Retry", new View.OnClickListener() {
+                snackbar.setAction(R.string.retry, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         fetchChapters();
