@@ -6,7 +6,7 @@ buildscript {
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.0.0-beta6'
+        classpath 'com.android.tools.build:gradle:2.1.0-alpha5'
         classpath 'com.google.gms:google-services:2.0.0-beta6'
 
         classpath 'io.fabric.tools:gradle:1.21.5'
@@ -47,8 +47,8 @@ ext {
     // Manifest version information!
     versionMajor = 2
     versionMinor = 4
-    versionPatch = 0
-    versionBuild = 2 // bump for dogfood builds, public betas, etc.
+    versionPatch = 1
+    versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
     versionCode = versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
     versionName = "${versionMajor}.${versionMinor}.${versionPatch}"
