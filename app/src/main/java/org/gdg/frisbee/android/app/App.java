@@ -29,7 +29,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
-import com.squareup.picasso.LruCache;
 import com.squareup.picasso.Picasso;
 
 import net.danlew.android.joda.JodaTimeAndroid;
@@ -52,9 +51,9 @@ import org.gdg.frisbee.android.api.PlusImageUrlConverter;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.utils.CrashlyticsTree;
+import org.gdg.frisbee.android.utils.FileUtils;
 import org.gdg.frisbee.android.utils.GingerbreadLastLocationFinder;
 import org.gdg.frisbee.android.utils.PrefUtils;
-import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
 
 import java.io.File;
@@ -117,21 +116,16 @@ public class App extends BaseApp implements LocationListener {
         }
         mOkHttpClient = OkClientFactory.provideOkHttpClient(this);
 
-        // Initialize ModelCache and Volley
+        // Initialize ModelCache
         getModelCache();
 
         PrefUtils.increaseAppStartCount(this);
 
         // Initialize Picasso
-        // When we clone mOkHttpClient, it will use all the same cache and everything.
-        // Only the interceptors will be different.
-        // We shouldn't have the below interceptor in other instances.
         OkHttpClient.Builder picassoClient = mOkHttpClient.newBuilder();
         picassoClient.addInterceptor(new PlusImageUrlConverter());
-
         mPicasso = new Picasso.Builder(this)
             .downloader(new OkHttp3Downloader(picassoClient.build()))
-            .memoryCache(new LruCache(this))
             .build();
 
         JodaTimeAndroid.init(this);
@@ -150,6 +144,13 @@ public class App extends BaseApp implements LocationListener {
         initTaggedEventSeries();
     }
 
+    @Override
+    protected void onAppUpdate(int oldVersion, int newVersion) {
+        super.onAppUpdate(oldVersion, newVersion);
+
+        File diskCacheLocation = getDiskCacheLocation();
+        FileUtils.deleteDirectory(diskCacheLocation);
+    }
 
     /**
      * Init TaggedEventSeries.
@@ -204,10 +205,6 @@ public class App extends BaseApp implements LocationListener {
     }
 
     public void updateLastLocation() {
-        if (Utils.isEmulator()) {
-            return;
-        }
-
         Location loc = mLocationFinder.getLastBestLocation(5000, 60 * 60 * 1000);
 
         if (loc != null) {
@@ -236,25 +233,28 @@ public class App extends BaseApp implements LocationListener {
         return mTracker;
     }
 
-    @NonNull
     public ModelCache getModelCache() {
         if (mModelCache == null) {
 
-            File cacheDir = getExternalCacheDir();
-            if (cacheDir == null) {
-                cacheDir = getCacheDir();
-            }
-            final File rootDir = new File(cacheDir, "/model_cache/");
+            final File rootDir = getDiskCacheLocation();
 
-            ModelCache.Builder builder = new ModelCache.Builder()
+            ModelCache.Builder builder = new ModelCache.Builder(this)
                 .setMemoryCacheEnabled(true);
-            if (rootDir.isDirectory() || rootDir.mkdirs()) {
+            if (rootDir.mkdirs() || rootDir.isDirectory()) {
                 builder.setDiskCacheEnabled(true)
                     .setDiskCacheLocation(rootDir);
             }
             mModelCache = builder.build();
         }
         return mModelCache;
+    }
+
+    private File getDiskCacheLocation() {
+        File cacheDir = getExternalCacheDir();
+        if (cacheDir == null) {
+            cacheDir = getCacheDir();
+        }
+        return new File(cacheDir, "/model_cache/");
     }
 
     @Override

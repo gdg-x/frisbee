@@ -165,7 +165,7 @@ dependencies {
 
     //Jake Wharton
     compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.jakewharton.timber:timber:4.1.1'
+    compile "com.jakewharton.timber:timber:$rootProject.timberVersion"
     compile 'com.jakewharton:disklrucache:2.0.2'
     compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.2'
 

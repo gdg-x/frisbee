@@ -17,9 +17,6 @@
 package org.gdg.frisbee.android.event;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
@@ -36,8 +33,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.tasomaniac.android.widget.DelayedProgressBar;
 
 import org.gdg.frisbee.android.Const;
@@ -225,38 +220,24 @@ public class EventOverviewFragment extends BaseFragment {
         App.getInstance().getPlusApi().getImageInfo(gplusId).enqueue(new Callback<ImageInfo>() {
             @Override
             public void success(ImageInfo imageInfo) {
-                String imageUrl = imageInfo.getImage().getUrl().replace("sz=50", "sz=196");
-                Picasso.with(getActivity()).load(imageUrl).into(new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
-                        if (!isAdded()) {
-                            return;
-                        }
-                        BitmapDrawable logo = new BitmapDrawable(getResources(), bitmap);
-                        mGroupLogo.setVisibility(View.VISIBLE);
-                        mGroupLogo.setImageDrawable(logo);
-                    }
-
-                    @Override
-                    public void onBitmapFailed(Drawable drawable) {
-                        mGroupLogo.setVisibility(View.INVISIBLE);
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable drawable) {
-
-                    }
-                });
+                if (isContextValid()) {
+                    String imageUrl = imageInfo.getImage().getUrl().replace("sz=50", "sz=196");
+                    App.getInstance().getPicasso().load(imageUrl).into(mGroupLogo);
+                }
             }
 
             @Override
             public void failure(Throwable error) {
-                mGroupLogo.setVisibility(View.INVISIBLE);
+                if (isContextValid()) {
+                    mGroupLogo.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
             public void networkFailure(Throwable error) {
-                mGroupLogo.setVisibility(View.INVISIBLE);
+                if (isContextValid()) {
+                    mGroupLogo.setVisibility(View.INVISIBLE);
+                }
             }
         });
     }

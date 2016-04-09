@@ -16,6 +16,8 @@
 
 package org.gdg.frisbee.android.cache;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Looper;
 import android.os.Process;
@@ -135,7 +137,7 @@ public class ModelCache {
     }
 
     public Object get(String url, boolean checkExpiration) {
-        Timber.d(String.format("get(%s)", url));
+        Timber.d("get(%s)", url);
         CacheItem result;
 
         // First try Memory Cache
@@ -291,7 +293,7 @@ public class ModelCache {
         mDiskCache = diskCache;
 
         if (null != diskCache) {
-            mDiskCacheEditLocks = new HashMap<String, ReentrantLock>();
+            mDiskCacheEditLocks = new HashMap<>();
             mDiskCacheFlusherExecutor = new ScheduledThreadPoolExecutor(1);
             mDiskCacheFlusherRunnable = new DiskCacheFlushRunnable(diskCache);
         }
@@ -408,8 +410,6 @@ public class ModelCache {
 
         static final int MEGABYTE = 1024 * 1024;
 
-        static final int DEFAULT_MEM_CACHE_MAX_SIZE = 32;
-
         static final int DEFAULT_DISK_CACHE_MAX_SIZE_MB = 10;
         private boolean mDiskCacheEnabled;
         private File mDiskCacheLocation;
@@ -417,13 +417,20 @@ public class ModelCache {
         private boolean mMemoryCacheEnabled;
         private int mMemoryCacheMaxSize;
 
-        public Builder() {
+        public Builder(Context context) {
             // Disk Cache is disabled by default, but it's default size is set
             mDiskCacheMaxSize = DEFAULT_DISK_CACHE_MAX_SIZE_MB * MEGABYTE;
 
             // Memory Cache is enabled by default, with a small maximum size
             mMemoryCacheEnabled = true;
-            mMemoryCacheMaxSize = DEFAULT_MEM_CACHE_MAX_SIZE;
+            mMemoryCacheMaxSize = calculateMemoryCacheSize(context);
+        }
+
+        static int calculateMemoryCacheSize(Context context) {
+            ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            int memoryClass = am.getMemoryClass();
+            // Target ~6% of the available heap.
+            return MEGABYTE * memoryClass / 16;
         }
 
         private static long getHeapSize() {
@@ -505,8 +512,8 @@ public class ModelCache {
         }
 
         /**
-         * Set the maximum number of bytes the Memory Cache should use to store values. Defaults to
-         * {@value #DEFAULT_MEM_CACHE_MAX_SIZE}MB.
+         * Set the maximum number of bytes the Memory Cache should use to store values.
+         * Defaults to 1/16 of the available memory.
          *
          * @return This Builder object to allow for chaining of calls to set methods.
          */
