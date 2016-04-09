@@ -57,7 +57,7 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
         super.onResume();
 
         RecyclerView recyclerView = getListView();
-        for (int i = 0; i <= recyclerView.getChildCount(); i++) {
+        for (int i = 0, size = recyclerView.getChildCount(); i <= size; i++) {
             View child = recyclerView.getChildAt(i);
             if (child != null) {
                 mAdapter.updatePlusOne((NewsAdapter.ViewHolder)

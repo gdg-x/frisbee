@@ -173,6 +173,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             if (shouldShowGPlusButton()) {
                 viewHolder.plusButton.setVisibility(View.VISIBLE);
                 viewHolder.plusButton.initialize(viewHolder.url, ACTIVITY_REQUEST_CODE_GPLUS_BUTTON);
+            } else {
+                viewHolder.plusButton.setVisibility(View.GONE);
             }
         }
     }
@@ -199,14 +201,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         final Activity activity = item.getActivity();
 
         holder.url = activity.getUrl();
-
-        if (shouldShowGPlusButton()) {
-            holder.plusButton.setVisibility(View.VISIBLE);
-            holder.plusButton.initialize(activity.getUrl(), ACTIVITY_REQUEST_CODE_GPLUS_BUTTON);
-        } else {
-            holder.plusButton.setVisibility(View.GONE);
-        }
-
+        updatePlusOne(holder);
         if (activity.getPublished() != null) {
             holder.timeStamp.setVisibility(View.VISIBLE);
             holder.timeStamp.setText(
