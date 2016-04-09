@@ -210,7 +210,7 @@ public class MainActivity extends GdgNavDrawerActivity {
         if (organizerCheckCallback != null) {
             organizerCheckCallback.cancel();
         }
-        organizerCheckCallback = new OrganizerCheckCallback(isOrganizerFragmentShown());
+        organizerCheckCallback = new OrganizerCheckCallback(mViewPagerAdapter, isOrganizerFragmentShown());
         App.getInstance().checkOrganizer(
             getGoogleApiClient(),
             organizerCheckCallback
@@ -534,12 +534,15 @@ public class MainActivity extends GdgNavDrawerActivity {
         }
     }
 
-    private class OrganizerCheckCallback implements OrganizerChecker.Callbacks {
+    private static class OrganizerCheckCallback implements OrganizerChecker.Callbacks {
         private final boolean wasOrganizer;
+        private final ChapterFragmentPagerAdapter mViewPagerAdapter;
+
         private boolean cancelled = false;
 
-        public OrganizerCheckCallback(boolean wasOrganizer) {
+        public OrganizerCheckCallback(ChapterFragmentPagerAdapter mViewPagerAdapter, boolean wasOrganizer) {
             this.wasOrganizer = wasOrganizer;
+            this.mViewPagerAdapter = mViewPagerAdapter;
         }
 
         @Override
@@ -549,7 +552,6 @@ public class MainActivity extends GdgNavDrawerActivity {
             }
             if (mViewPagerAdapter != null && wasOrganizer != isOrganizer) {
                 mViewPagerAdapter.notifyDataSetChanged(false /* forceUpdate */);
-                mTabLayout.setTabsFromPagerAdapter(mViewPagerAdapter);
             }
         }
 
