@@ -35,6 +35,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.PlusOneButton;
 
 import org.gdg.frisbee.android.R;
@@ -51,8 +52,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
@@ -61,6 +62,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     private static final int VIEWTYPE_PHOTO = 3;
     private static final int VIEWTYPE_ALBUM = 4;
     private static final int VIEWTYPE_EVENT = 5;
+    public static final int ACTIVITY_REQUEST_CODE_GPLUS_BUTTON = 1;
 
     private Context mContext;
     private LayoutInflater mInflater;
@@ -166,15 +168,19 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         return 0;
     }
 
-    public void updatePlusOne(View v) {
-        if (v != null && v.getTag() != null) {
-            ViewHolder viewHolder = (ViewHolder) v.getTag();
-
-            if (mPlusClient != null && mPlusClient.isConnected()) {
+    public void updatePlusOne(ViewHolder viewHolder) {
+        if (viewHolder != null) {
+            if (shouldShowGPlusButton()) {
                 viewHolder.plusButton.setVisibility(View.VISIBLE);
-                viewHolder.plusButton.initialize(viewHolder.url, 1);
+                viewHolder.plusButton.initialize(viewHolder.url, ACTIVITY_REQUEST_CODE_GPLUS_BUTTON);
+            } else {
+                viewHolder.plusButton.setVisibility(View.GONE);
             }
         }
+    }
+
+    private boolean shouldShowGPlusButton() {
+        return mPlusClient != null && mPlusClient.hasConnectedApi(Plus.API);
     }
 
     @Override
@@ -195,14 +201,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         final Activity activity = item.getActivity();
 
         holder.url = activity.getUrl();
-
-        if (mPlusClient != null && mPlusClient.isConnected()) {
-            holder.plusButton.setVisibility(View.VISIBLE);
-            holder.plusButton.initialize(activity.getUrl(), 1);
-        } else {
-            holder.plusButton.setVisibility(View.GONE);
-        }
-
+        updatePlusOne(holder);
         if (activity.getPublished() != null) {
             holder.timeStamp.setVisibility(View.VISIBLE);
             holder.timeStamp.setText(

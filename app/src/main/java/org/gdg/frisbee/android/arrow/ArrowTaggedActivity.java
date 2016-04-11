@@ -27,14 +27,13 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.snapshot.Snapshot;
 import com.google.android.gms.games.snapshot.Snapshots;
-import com.google.android.gms.plus.People;
-import com.google.android.gms.plus.Plus;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
+import org.gdg.frisbee.android.api.model.plus.Person;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
@@ -147,15 +146,14 @@ public class ArrowTaggedActivity extends GdgActivity {
                 organizer.setChapterName(organizerChapter.getName());
                 organizer.setChapterId(organizerChapter.getGplusId());
 
-                Plus.PeopleApi.load(getGoogleApiClient(), organizer.getPlusId())
-                    .setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
-                        @Override
-                        public void onResult(People.LoadPeopleResult loadPeopleResult) {
-                            organizer.setResolved(loadPeopleResult.getPersonBuffer().get(0));
-                            adapter.add(organizer);
-                            adapter.notifyItemInserted(adapter.getItemCount() - 1);
-                        }
-                    });
+                App.getInstance().getPlusApi().getPerson(organizer.getPlusId()).enqueue(new Callback<Person>() {
+                    @Override
+                    public void success(Person person) {
+                        organizer.setResolved(person);
+                        adapter.add(organizer);
+                        adapter.notifyItemInserted(adapter.getItemCount() - 1);
+                    }
+                });
             }
         }
     }
