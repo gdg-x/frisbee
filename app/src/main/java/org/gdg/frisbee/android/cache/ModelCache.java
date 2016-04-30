@@ -21,6 +21,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Looper;
 import android.os.Process;
+import android.support.annotation.Nullable;
 import android.support.v4.util.LruCache;
 
 import com.google.api.client.json.JsonFactory;
@@ -53,7 +54,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import timber.log.Timber;
 
-public class ModelCache {
+public final class ModelCache {
 
     static final int DISK_CACHE_FLUSH_DELAY_SECS = 5;
     final JsonFactory mJsonFactory = new GsonFactory();
@@ -83,7 +84,7 @@ public class ModelCache {
             byte[] messageDigest = digest.digest();
 
             // Create Hex String
-            StringBuffer hexString = new StringBuffer();
+            StringBuilder hexString = new StringBuilder();
             for (int i = 0; i < messageDigest.length; i++) {
                 hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
             }
@@ -93,13 +94,6 @@ public class ModelCache {
             e.printStackTrace();
         }
         return "";
-    }
-
-    private static void checkNotOnMainThread() {
-        if (Looper.myLooper() == Looper.getMainLooper()) {
-            throw new IllegalStateException(
-                "This method should not be called from the main/UI thread.");
-        }
     }
 
     public boolean contains(String url) {
@@ -132,10 +126,12 @@ public class ModelCache {
         new GetAsyncTask(ModelCache.this, url, checkExpiration, mListener).execute();
     }
 
+    @Nullable
     public Object get(String url) {
         return get(url, true);
     }
 
+    @Nullable
     public Object get(String url, boolean checkExpiration) {
         Timber.d("get(%s)", url);
         CacheItem result;
@@ -155,47 +151,49 @@ public class ModelCache {
         }
     }
 
-    public CacheItem getFromDiskCache(final String url, boolean checkExpiration) {
+    @Nullable
+    private CacheItem getFromDiskCache(final String url, boolean checkExpiration) {
         CacheItem result = null;
 
-        if (null != mDiskCache) {
-            checkNotOnMainThread();
+        if (mDiskCache == null) {
+            return null;
+        }
+        checkNotOnMainThread();
 
-            try {
-                final String key = transformUrlForDiskCacheKey(url);
-                DiskLruCache.Snapshot snapshot = mDiskCache.get(key);
-                if (null != snapshot) {
+        try {
+            final String key = transformUrlForDiskCacheKey(url);
+            DiskLruCache.Snapshot snapshot = mDiskCache.get(key);
+            if (null != snapshot) {
 
-                    Object value = readValueFromDisk(snapshot.getInputStream(0));
-                    DateTime expiresAt = new DateTime(readExpirationFromDisk(snapshot.getInputStream(1)));
+                Object value = readValueFromDisk(snapshot.getInputStream(0));
+                DateTime expiresAt = new DateTime(readExpirationFromDisk(snapshot.getInputStream(1)));
 
-                    if (value != null) {
+                if (value != null) {
 
-                        if (checkExpiration && expiresAt.isBeforeNow()) {
-                            mDiskCache.remove(key);
-                            scheduleDiskCacheFlush();
-                        } else {
-                            result = new CacheItem(value, expiresAt);
-                            if (null != mMemoryCache) {
-                                mMemoryCache.put(url, result);
-                            }
-                        }
-                    } else {
-                        // If we get here, the file in the cache can't be
-                        // decoded. Remove it and schedule a flush.
+                    if (checkExpiration && expiresAt.isBeforeNow()) {
                         mDiskCache.remove(key);
                         scheduleDiskCacheFlush();
+                    } else {
+                        result = new CacheItem(value, expiresAt);
+                        if (null != mMemoryCache) {
+                            mMemoryCache.put(url, result);
+                        }
                     }
+                } else {
+                    // If we get here, the file in the cache can't be
+                    // decoded. Remove it and schedule a flush.
+                    mDiskCache.remove(key);
+                    scheduleDiskCacheFlush();
                 }
-            } catch (IOException e) {
-                Timber.e(e, "getFromDiskCache failed.");
             }
+        } catch (Exception e) {
+            Timber.e(e, "getFromDiskCache failed for key: %s", url);
         }
 
         return result;
     }
 
-    public CacheItem getFromMemoryCache(final String url, boolean checkExpiration) {
+    private CacheItem getFromMemoryCache(final String url, boolean checkExpiration) {
         CacheItem result = null;
 
         if (null != mMemoryCache) {
@@ -226,7 +224,7 @@ public class ModelCache {
         new PutAsyncTask(ModelCache.this, url, obj, expiresAt, onDoneListener).execute();
     }
 
-    public CacheItem put(final String url, final Object obj, DateTime expiresAt) {
+    CacheItem put(final String url, final Object obj, DateTime expiresAt) {
 
         if (obj == null) {
             return null;
@@ -250,8 +248,8 @@ public class ModelCache {
                 writeValueToDisk(editor.newOutputStream(0), obj);
                 writeExpirationToDisk(editor.newOutputStream(1), expiresAt);
                 editor.commit();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                Timber.e(e, "Error while putting %s with key:%s to ModelCache", obj.toString(), url);
             } finally {
                 lock.unlock();
                 scheduleDiskCacheFlush();
@@ -261,7 +259,18 @@ public class ModelCache {
         return d;
     }
 
-    public void remove(String url) {
+    public void removeAsync(final String url) {
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+                remove(url);
+                return null;
+            }
+        }.execute();
+    }
+
+    void remove(String url) {
         if (null != mMemoryCache) {
             mMemoryCache.remove(url);
         }
@@ -272,21 +281,10 @@ public class ModelCache {
             try {
                 mDiskCache.remove(transformUrlForDiskCacheKey(url));
                 scheduleDiskCacheFlush();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                Timber.e(e, "Error while removing key: %s", url);
             }
         }
-    }
-
-    public void removeAsync(final String url) {
-        new AsyncTask<Void, Void, Void>() {
-
-            @Override
-            protected Void doInBackground(Void... voids) {
-                ModelCache.this.remove(url);
-                return null;
-            }
-        }.execute();
     }
 
     synchronized void setDiskCache(DiskLruCache diskCache) {
@@ -360,7 +358,7 @@ public class ModelCache {
         return expiration;
     }
 
-    private Object readValueFromDisk(InputStream is) throws IOException {
+    private Object readValueFromDisk(InputStream is) throws IOException, ClassNotFoundException {
         BufferedReader fss = new BufferedReader(new InputStreamReader(is, "UTF-8"));
         String className = fss.readLine();
 
@@ -368,7 +366,7 @@ public class ModelCache {
             return null;
         }
 
-        String line = null;
+        String line;
         String content = "";
         while ((line = fss.readLine()) != null) {
             content += line;
@@ -376,26 +374,19 @@ public class ModelCache {
 
         fss.close();
 
-        Class<?> clazz;
-        try {
-            if (className.contains("google")) {
-                clazz = Class.forName(className);
-                return mJsonFactory.createJsonParser(content).parseAndClose(clazz, null);
-            } else {
-                clazz = Class.forName(className);
-                return mGson.fromJson(content, clazz);
-            }
-        } catch (IllegalArgumentException e) {
-            Timber.e(e, "Deserializing from disk failed");
-            return null;
-        } catch (ClassNotFoundException e) {
-            throw new IOException(e.getMessage());
+        if (className.contains("google")) {
+            Class<?> clazz = Class.forName(className);
+            return mJsonFactory.createJsonParser(content).parseAndClose(clazz, null);
+        } else {
+            Class<?> clazz = Class.forName(className);
+            return mGson.fromJson(content, clazz);
         }
     }
 
     public interface CachePutListener {
 
         void onPutIntoCache();
+
     }
 
     public interface CacheListener {
@@ -411,6 +402,7 @@ public class ModelCache {
         static final int MEGABYTE = 1024 * 1024;
 
         static final int DEFAULT_DISK_CACHE_MAX_SIZE_MB = 10;
+
         private boolean mDiskCacheEnabled;
         private File mDiskCacheLocation;
         private long mDiskCacheMaxSize;
@@ -539,6 +531,7 @@ public class ModelCache {
         private boolean isValidOptionsForMemoryCache() {
             return mMemoryCacheEnabled && mMemoryCacheMaxSize > 0;
         }
+
     }
 
     static final class DiskCacheFlushRunnable implements Runnable {
@@ -565,6 +558,7 @@ public class ModelCache {
     public static class GetAsyncTask extends AsyncTask<Void, Void, Object> {
 
         private ModelCache modelCache;
+
         private CacheListener listener;
         private String key;
         private boolean checkExpiration;
@@ -580,19 +574,21 @@ public class ModelCache {
         protected Object doInBackground(Void... voids) {
             if (modelCache != null) {
                 return modelCache.get(key, checkExpiration);
-            } else {
-                return null;
             }
+
+            return null;
         }
 
         @Override
         protected void onPostExecute(Object o) {
-            if (listener != null) {
-                if (o != null) {
-                    listener.onGet(o);
-                } else {
-                    listener.onNotFound(key);
-                }
+            if (listener == null) {
+                return;
+            }
+
+            if (o != null) {
+                listener.onGet(o);
+            } else {
+                listener.onNotFound(key);
             }
         }
     }
@@ -600,6 +596,7 @@ public class ModelCache {
     public static class PutAsyncTask extends AsyncTask<Void, Void, Object> {
 
         private ModelCache modelCache;
+
         private CachePutListener onDoneListener;
         private String key;
         private Object obj;
@@ -629,11 +626,13 @@ public class ModelCache {
                 onDoneListener.onPutIntoCache();
             }
         }
+
     }
 
     public class CacheItem {
 
         private Object mValue;
+
         private DateTime mExpiresAt;
 
         public CacheItem(Object value, DateTime expiresAt) {
@@ -657,5 +656,12 @@ public class ModelCache {
             this.mValue = mValue;
         }
 
+    }
+
+    private static void checkNotOnMainThread() {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            throw new IllegalStateException(
+                "This method should not be called from the main/UI thread.");
+        }
     }
 }
