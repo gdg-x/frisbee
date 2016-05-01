@@ -68,7 +68,7 @@ import org.joda.time.DateTimeZone;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import timber.log.Timber;
 
 public class ArrowActivity extends GdgNavDrawerActivity {
@@ -79,17 +79,17 @@ public class ArrowActivity extends GdgNavDrawerActivity {
     private static final int REQUEST_LEADERBOARD = 1;
     private static final int WHITE = 0xFFFFFFFF;
     private static final int BLACK = 0xFF000000;
-    @Bind(R.id.viewFlipper)
+    @BindView(R.id.viewFlipper)
     ViewFlipper viewFlipper;
-    @Bind(R.id.switchToSend)
+    @BindView(R.id.switchToSend)
     Button switchToSend;
-    @Bind(R.id.switchToTag)
+    @BindView(R.id.switchToTag)
     Button switchToReceive;
-    @Bind(R.id.organizerOnly)
+    @BindView(R.id.organizerOnly)
     LinearLayout organizerOnly;
-    @Bind(R.id.imageView)
+    @BindView(R.id.imageView)
     ImageView scanImageView;
-    @Bind(R.id.organizerPic)
+    @BindView(R.id.organizerPic)
     ImageView organizerPic;
     private String taggedPeopleIds;
     private BaseArrowHandler mArrowHandler;

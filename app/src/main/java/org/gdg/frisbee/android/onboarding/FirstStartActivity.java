@@ -38,7 +38,7 @@ import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.widget.NonSwipeableViewPager;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class FirstStartActivity extends GdgActivity implements
@@ -49,10 +49,10 @@ public class FirstStartActivity extends GdgActivity implements
     private static final String SIGN_IN_REQUESTED = "SIGN_IN_REQUESTED";
     public static final String ACTION_FIRST_START = "finish_first_start";
 
-    @Bind(R.id.pager)
+    @BindView(R.id.pager)
     NonSwipeableViewPager mViewPager;
 
-    @Bind(R.id.contentLayout)
+    @BindView(R.id.contentLayout)
     FrameLayout mContentLayout;
 
     private FirstStartPageAdapter mViewPagerAdapter;

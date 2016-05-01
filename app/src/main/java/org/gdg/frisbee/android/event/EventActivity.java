@@ -37,14 +37,14 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.EventFullDetails;
 import org.gdg.frisbee.android.common.GdgActivity;
 
-import butterknife.Bind;
+import butterknife.BindView;
 
 public class EventActivity extends GdgActivity implements EventOverviewFragment.Callbacks {
 
-    @Bind(R.id.pager)
+    @BindView(R.id.pager)
     ViewPager mViewPager;
 
-    @Bind(R.id.tabs)
+    @BindView(R.id.tabs)
     TabLayout mTabLayout;
 
     private String mEventId;

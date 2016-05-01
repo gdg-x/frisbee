@@ -41,14 +41,14 @@ import org.gdg.frisbee.android.view.DividerItemDecoration;
 
 import java.io.IOException;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import timber.log.Timber;
 
 public class ArrowTaggedActivity extends GdgActivity {
 
     private static final String ID_SEPARATOR_FOR_SPLIT = "\\|";
 
-    @Bind(R.id.taggedList)
+    @BindView(R.id.taggedList)
     RecyclerView taggedList;
 
     private String serializedOrganizers;

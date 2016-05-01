@@ -2,6 +2,7 @@ import org.ajoberstar.grgit.Commit
 import org.ajoberstar.grgit.Grgit
 
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'io.fabric'
 apply plugin: 'com.github.triplet.play'
 apply plugin: 'checkstyle'
@@ -164,7 +165,8 @@ dependencies {
     releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
 
     //Jake Wharton
-    compile 'com.jakewharton:butterknife:7.0.1'
+    compile "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
+    apt "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
     compile "com.jakewharton.timber:timber:$rootProject.timberVersion"
     compile 'com.jakewharton:disklrucache:2.0.2'
     compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.2'

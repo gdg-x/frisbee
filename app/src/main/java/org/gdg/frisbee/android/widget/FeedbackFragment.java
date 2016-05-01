@@ -61,7 +61,7 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.doorbell.android.DoorbellApi;
 import io.doorbell.android.manavo.rest.RestCallback;
@@ -79,16 +79,16 @@ public class FeedbackFragment extends DialogFragment {
     private static final String PROPERTY_APP_VERSION_NAME = "App Version Name";
     private static final String PROPERTY_APP_VERSION_CODE = "App Version Code";
 
-    @Bind(R.id.feedback_message_text)
+    @BindView(R.id.feedback_message_text)
     EditText mMessageField;
 
-    @Bind(R.id.feedback_email_text)
+    @BindView(R.id.feedback_email_text)
     AutoCompleteTextView mEmailField;
 
-    @Bind(R.id.feedback_message_text_layout)
+    @BindView(R.id.feedback_message_text_layout)
     TextInputLayout mLayoutMessage;
 
-    @Bind(R.id.feedback_email_text_layout)
+    @BindView(R.id.feedback_email_text_layout)
     TextInputLayout mLayoutEmail;
 
     private JSONObject mProperties;

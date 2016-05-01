@@ -64,7 +64,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import timber.log.Timber;
 
 public class MainActivity extends GdgNavDrawerActivity {
@@ -82,9 +82,9 @@ public class MainActivity extends GdgNavDrawerActivity {
     private static final int REQUEST_FIRST_START_WIZARD = 100;
     private static final Uri APP_URI =
         AndroidAppUri.newAndroidAppUri(BuildConfig.APPLICATION_ID, Uri.parse(Const.URL_GDGROUPS_ORG)).toUri();
-    @Bind(R.id.pager)
+    @BindView(R.id.pager)
     ViewPager mViewPager;
-    @Bind(R.id.tabs)
+    @BindView(R.id.tabs)
     TabLayout mTabLayout;
 
     private Handler mHandler = new Handler();

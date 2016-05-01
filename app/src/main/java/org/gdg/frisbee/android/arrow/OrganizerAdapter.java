@@ -15,7 +15,7 @@ import org.gdg.frisbee.android.utils.PlusUtils;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.BitmapBorderTransformation;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class OrganizerAdapter extends RecyclerView.Adapter<OrganizerAdapter.ViewHolder> {
@@ -69,13 +69,13 @@ public class OrganizerAdapter extends RecyclerView.Adapter<OrganizerAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.avatar)
+        @BindView(R.id.avatar)
         ImageView avatar;
 
-        @Bind(R.id.organizerName)
+        @BindView(R.id.organizerName)
         TextView name;
 
-        @Bind(R.id.organizerChapter)
+        @BindView(R.id.organizerChapter)
         TextView chapter;
 
         public ViewHolder(View itemView) {

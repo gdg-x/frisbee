@@ -26,14 +26,14 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 
 public class GdeActivity extends GdgNavDrawerActivity {
 
-    @Bind(R.id.pager)
+    @BindView(R.id.pager)
     ViewPager mViewPager;
 
-    @Bind(R.id.tabs)
+    @BindView(R.id.tabs)
     TabLayout mTabLayout;
 
     private Handler mHandler = new Handler();

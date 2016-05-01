@@ -48,19 +48,18 @@ import org.joda.time.DateTime;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import butterknife.BindView;
 
 public class FirstStartStep1Fragment extends BaseFragment {
 
     private static final String ARG_SELECTED_CHAPTER = "selected_chapter";
-    @Bind(R.id.chapter_spinner)
+    @BindView(R.id.chapter_spinner)
     AutoCompleteSpinnerView mChapterSpinnerView;
-    @Bind(R.id.chapter_spinner_text_input_layout)
+    @BindView(R.id.chapter_spinner_text_input_layout)
     TextInputLayout mChapterSpinnerTextInputLayout;
-    @Bind(R.id.confirm)
+    @BindView(R.id.confirm)
     Button mConfirmButton;
-    @Bind(R.id.viewSwitcher)
+    @BindView(R.id.viewSwitcher)
     ViewSwitcher mLoadSwitcher;
     private ChapterAdapter mChapterAdapter;
     private Chapter mSelectedChapter;
@@ -237,9 +236,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_welcome_step1, container, false);
-        ButterKnife.bind(this, v);
-        return v;
+        return inflateView(inflater, R.layout.fragment_welcome_step1, container);
     }
 
     public interface Step1Listener {

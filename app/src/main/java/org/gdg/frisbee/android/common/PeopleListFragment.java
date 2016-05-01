@@ -11,8 +11,6 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.GdgPerson;
 import org.gdg.frisbee.android.utils.Utils;
 
-import butterknife.ButterKnife;
-
 public class PeopleListFragment extends GdgListFragment {
 
     protected PeopleAdapter mAdapter;
@@ -20,9 +18,7 @@ public class PeopleListFragment extends GdgListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_people_list, container, false);
-        ButterKnife.bind(this, v);
-        return v;
+        return inflateView(inflater, R.layout.fragment_people_list, container);
     }
 
     @Override

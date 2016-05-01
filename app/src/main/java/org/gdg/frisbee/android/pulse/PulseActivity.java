@@ -45,15 +45,15 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import butterknife.Bind;
+import butterknife.BindView;
 
 public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment.Callbacks {
 
     private static final String INSTANCE_STATE_SELECTED_PULSE = "INSTANCE_STATE_SELECTED_PULSE";
-    @Bind(R.id.pager)
+    @BindView(R.id.pager)
     ViewPager mViewPager;
 
-    @Bind(R.id.tabs)
+    @BindView(R.id.tabs)
     TabLayout mTabLayout;
 
     ArrayAdapter<String> mSpinnerAdapter;

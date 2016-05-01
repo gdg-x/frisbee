@@ -26,19 +26,16 @@ import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.common.BaseFragment;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import butterknife.BindView;
 
 public class AboutFragment extends BaseFragment {
 
-    @Bind(R.id.version)
+    @BindView(R.id.version)
     TextView mVersion;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_about, container, false);
-        ButterKnife.bind(this, v);
-        return v;
+        return inflateView(inflater, R.layout.fragment_about, container);
     }
 
     @Override

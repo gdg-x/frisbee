@@ -30,20 +30,17 @@ import org.gdg.frisbee.android.utils.Utils;
 import java.io.IOException;
 import java.io.InputStream;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import butterknife.BindView;
 import timber.log.Timber;
 
 public class ChangelogFragment extends BaseFragment {
 
-    @Bind(R.id.changelog)
+    @BindView(R.id.changelog)
     TextView mChangelog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_changelog, container, false);
-        ButterKnife.bind(this, v);
-        return v;
+        return inflateView(inflater, R.layout.fragment_changelog, container);
     }
 
     @Override

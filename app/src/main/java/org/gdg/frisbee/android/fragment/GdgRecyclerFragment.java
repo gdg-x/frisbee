@@ -31,8 +31,7 @@ import com.tasomaniac.android.widget.DelayedProgressBar;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.common.BaseFragment;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import butterknife.BindView;
 
 
 public class GdgRecyclerFragment extends BaseFragment {
@@ -40,9 +39,9 @@ public class GdgRecyclerFragment extends BaseFragment {
     private final Handler mHandler = new Handler();
     RecyclerView.Adapter mAdapter;
     RecyclerView mList;
-    @Bind(R.id.empty)
+    @BindView(R.id.empty)
     View mEmptyView;
-    @Bind(R.id.loading)
+    @BindView(R.id.loading)
     DelayedProgressBar mProgressContainer;
     CharSequence mEmptyText;
     boolean mListShown;
@@ -72,9 +71,7 @@ public class GdgRecyclerFragment extends BaseFragment {
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_recycler_view, container, false);
-        ButterKnife.bind(this, v);
-        return v;
+        return inflateView(inflater, R.layout.fragment_recycler_view, container);
     }
 
     /**

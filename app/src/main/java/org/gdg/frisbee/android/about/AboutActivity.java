@@ -29,17 +29,17 @@ import com.google.android.gms.appinvite.AppInviteInvitation;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.common.GdgActivity;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import timber.log.Timber;
 
 public class AboutActivity extends GdgActivity {
 
     private static final int REQUEST_INVITE = 101;
 
-    @Bind(R.id.pager)
+    @BindView(R.id.pager)
     ViewPager mViewPager;
 
-    @Bind(R.id.tabs)
+    @BindView(R.id.tabs)
     TabLayout mTabLayout;
 
     @Override
