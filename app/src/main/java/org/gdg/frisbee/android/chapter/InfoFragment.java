@@ -50,28 +50,27 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import butterknife.BindView;
 import timber.log.Timber;
 
 public class InfoFragment extends BaseFragment {
 
-    @Bind(R.id.about)
+    @BindView(R.id.about)
     TextView mAbout;
 
-    @Bind(R.id.tagline)
+    @BindView(R.id.tagline)
     TextView mTagline;
 
-    @Bind(R.id.organizer_box)
+    @BindView(R.id.organizer_box)
     LinearLayout mOrganizerBox;
 
-    @Bind(R.id.resources_box)
+    @BindView(R.id.resources_box)
     LinearLayout mResourcesBox;
 
-    @Bind(R.id.loading)
+    @BindView(R.id.loading)
     DelayedProgressBar mProgressContainer;
 
-    @Bind(R.id.container)
+    @BindView(R.id.container)
     ScrollView mContainer;
 
     private boolean mLoading = false;
@@ -364,8 +363,6 @@ public class InfoFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_chapter_info, container, false);
-        ButterKnife.bind(this, v);
-        return v;
+        return inflateView(inflater, R.layout.fragment_chapter_info, container);
     }
 }

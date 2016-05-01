@@ -29,21 +29,20 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.common.BaseFragment;
 import org.gdg.frisbee.android.utils.PrefUtils;
 
-import butterknife.ButterKnife;
-import butterknife.Bind;
+import butterknife.BindView;
 
 public class FirstStartStep3Fragment extends BaseFragment {
 
-    @Bind(R.id.complete)
+    @BindView(R.id.complete)
     Button mCompleteButton;
 
-    @Bind(R.id.gcmContainer)
+    @BindView(R.id.gcmContainer)
     LinearLayout mGcmContainer;
 
-    @Bind(R.id.enable_gcm)
+    @BindView(R.id.enable_gcm)
     CheckBox mEnableGcm;
 
-    @Bind(R.id.enable_analytics)
+    @BindView(R.id.enable_analytics)
     CheckBox mEnableAnalytics;
 
     private boolean isSignedIn = false;
@@ -83,9 +82,7 @@ public class FirstStartStep3Fragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_welcome_step3, container, false);
-        ButterKnife.bind(this, v);
-        return v;
+        return inflateView(inflater, R.layout.fragment_welcome_step3, container);
     }
 
     public void setSignedIn(boolean mIsSignedIn) {

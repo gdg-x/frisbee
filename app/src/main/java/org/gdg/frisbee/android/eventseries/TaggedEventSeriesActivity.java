@@ -28,16 +28,16 @@ import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 
-import butterknife.Bind;
+import butterknife.BindView;
 
 public class TaggedEventSeriesActivity extends GdgNavDrawerActivity {
 
     @Nullable
-    @Bind(R.id.special_logo)
+    @BindView(R.id.special_logo)
     ImageView mLogo;
 
     @Nullable
-    @Bind(R.id.special_description)
+    @BindView(R.id.special_description)
     TextView mDescription;
 
     private TaggedEventSeries mTaggedEventSeries;

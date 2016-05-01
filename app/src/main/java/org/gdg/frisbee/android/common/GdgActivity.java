@@ -47,7 +47,7 @@ import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.RecentTasksStyler;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
@@ -60,7 +60,7 @@ public abstract class GdgActivity extends TrackableActivity implements
     private static final int RC_SIGN_IN = 101;
     private static final String SAVED_PROGRESS = "SAVED_PROGRESS";
     @Nullable
-    @Bind(R.id.content_frame)
+    @BindView(R.id.content_frame)
     FrameLayout mContentLayout;
     private AchievementActionHandler mAchievementActionHandler;
 

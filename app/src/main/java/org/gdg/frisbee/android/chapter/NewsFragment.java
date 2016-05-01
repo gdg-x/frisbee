@@ -37,8 +37,6 @@ import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
-import butterknife.ButterKnife;
-
 public class NewsFragment extends SwipeRefreshRecyclerViewFragment
     implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -159,8 +157,7 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_news, container, false);
-        ButterKnife.bind(this, v);
+        View v = inflateView(inflater, R.layout.fragment_news, container);
         return createSwipeRefresh(v);
     }
 

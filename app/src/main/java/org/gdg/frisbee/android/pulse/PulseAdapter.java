@@ -33,7 +33,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 class PulseAdapter extends BaseAdapter {
@@ -138,11 +138,11 @@ class PulseAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        @Bind(R.id.position)
+        @BindView(R.id.position)
         public TextView position;
-        @Bind(R.id.key)
+        @BindView(R.id.key)
         public TextView key;
-        @Bind(R.id.value)
+        @BindView(R.id.value)
         public TextView value;
 
         public ViewHolder(View v) {

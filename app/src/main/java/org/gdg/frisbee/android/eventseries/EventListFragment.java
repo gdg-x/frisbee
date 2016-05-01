@@ -36,8 +36,6 @@ import org.gdg.frisbee.android.event.EventActivity;
 
 import java.util.ArrayList;
 
-import butterknife.ButterKnife;
-
 public abstract class EventListFragment extends GdgListFragment {
 
     protected EventAdapter mAdapter;
@@ -139,9 +137,7 @@ public abstract class EventListFragment extends GdgListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_events, container, false);
-        ButterKnife.bind(this, v);
-        return v;
+        return inflateView(inflater, R.layout.fragment_events, container);
     }
 
     protected boolean checkValidCache(Object item) {

@@ -20,7 +20,7 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.widget.SquaredImageView;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class PeopleAdapter extends ArrayAdapter<GdgPerson> {
@@ -92,11 +92,11 @@ public class PeopleAdapter extends ArrayAdapter<GdgPerson> {
     }
 
     static class ViewHolder {
-        @Bind(android.R.id.text1)
+        @BindView(android.R.id.text1)
         public TextView primaryTextView;
-        @Bind(android.R.id.text2)
+        @BindView(android.R.id.text2)
         public TextView secondaryTextView;
-        @Bind(android.R.id.icon)
+        @BindView(android.R.id.icon)
         public SquaredImageView thumbnailView;
 
         public ViewHolder(View v) {

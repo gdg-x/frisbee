@@ -52,7 +52,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
@@ -556,17 +556,17 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView attachmentTitle;
-        @Bind(R.id.plus_one_button)
+        @BindView(R.id.plus_one_button)
         PlusOneButton plusButton;
-        @Bind(R.id.attachmentContainer)
+        @BindView(R.id.attachmentContainer)
         ViewGroup container;
-        @Bind(R.id.shareContainer)
+        @BindView(R.id.shareContainer)
         ViewGroup shareContainer;
-        @Bind(R.id.timestamp)
+        @BindView(R.id.timestamp)
         TextView timeStamp;
-        @Bind(R.id.content)
+        @BindView(R.id.content)
         TextView content;
-        @Bind(R.id.shareContent)
+        @BindView(R.id.shareContent)
         TextView shareContent;
         ImageView articleImage;
         TextView title;

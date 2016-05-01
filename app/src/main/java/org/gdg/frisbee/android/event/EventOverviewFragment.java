@@ -50,30 +50,29 @@ import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import butterknife.BindView;
 
 public class EventOverviewFragment extends BaseFragment {
 
-    @Bind(R.id.title)
+    @BindView(R.id.title)
     TextView mTitle;
 
-    @Bind(R.id.date)
+    @BindView(R.id.date)
     TextView mDate;
 
-    @Bind(R.id.start_time)
+    @BindView(R.id.start_time)
     TextView mStartTime;
 
-    @Bind(R.id.event_description)
+    @BindView(R.id.event_description)
     TextView mEventDescription;
 
-    @Bind(R.id.loading)
+    @BindView(R.id.loading)
     DelayedProgressBar mProgressContainer;
 
-    @Bind(R.id.group_logo)
+    @BindView(R.id.group_logo)
     ImageView mGroupLogo;
 
-    @Bind(R.id.container)
+    @BindView(R.id.container)
     View mContainer;
 
     private boolean mLoading;
@@ -90,9 +89,7 @@ public class EventOverviewFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_event_overview, parent, false);
-        ButterKnife.bind(this, v);
-
+        View v = inflateView(inflater, R.layout.fragment_event_overview, parent);
         setHasOptionsMenu(true);
         return v;
     }

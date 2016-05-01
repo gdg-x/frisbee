@@ -60,7 +60,7 @@ import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public abstract class GdgNavDrawerActivity extends GdgActivity {
@@ -74,9 +74,9 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     private static final int SETTINGS_GROUP_ID = 3;
 
     protected String mStoredHomeChapterId;
-    @Bind(R.id.drawer)
+    @BindView(R.id.drawer)
     DrawerLayout mDrawerLayout;
-    @Bind(R.id.nav_view)
+    @BindView(R.id.nav_view)
     NavigationView mNavigationView;
     ImageView mDrawerImage;
     ImageView mDrawerUserPicture;

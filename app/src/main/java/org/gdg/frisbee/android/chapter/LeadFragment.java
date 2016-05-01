@@ -20,7 +20,7 @@ import org.gdg.frisbee.android.api.model.LeadMessage;
 import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.Utils;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class LeadFragment extends ListFragment {
@@ -98,11 +98,11 @@ public class LeadFragment extends ListFragment {
     }
 
     public static class ViewHolder {
-        @Bind(R.id.msg_title)
+        @BindView(R.id.msg_title)
         TextView title;
-        @Bind(R.id.msg_details)
+        @BindView(R.id.msg_details)
         TextView details;
-        @Bind(R.id.msg_type)
+        @BindView(R.id.msg_type)
         TextView type;
 
         public ViewHolder(View view) {

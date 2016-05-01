@@ -25,7 +25,6 @@ import android.view.ViewGroup;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.common.BaseFragment;
 
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class FirstStartStep2Fragment extends BaseFragment {
@@ -34,9 +33,7 @@ public class FirstStartStep2Fragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_welcome_step2, container, false);
-        ButterKnife.bind(this, v);
-        return v;
+        return inflateView(inflater, R.layout.fragment_welcome_step2, container);
     }
 
     @Override

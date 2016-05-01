@@ -45,7 +45,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Locale;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 class EventAdapter extends BaseAdapter {
@@ -200,19 +200,19 @@ class EventAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        @Bind(R.id.event_title)
+        @BindView(R.id.event_title)
         TextView eventTitle;
-        @Bind(R.id.event_date)
+        @BindView(R.id.event_date)
         TextView eventDate;
-        @Bind(R.id.event_time)
+        @BindView(R.id.event_time)
         TextView eventTime;
-        @Bind(R.id.event_location)
+        @BindView(R.id.event_location)
         TextView eventLocation;
-        @Bind(R.id.past)
+        @BindView(R.id.past)
         TextView past;
-        @Bind(R.id.icon)
+        @BindView(R.id.icon)
         ImageView icon;
-//        @Bind(R.id.event_image_header) ImageView eventHeader;
+//        @BindView(R.id.event_image_header) ImageView eventHeader;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

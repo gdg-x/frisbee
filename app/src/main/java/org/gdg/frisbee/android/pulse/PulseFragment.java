@@ -37,8 +37,6 @@ import org.joda.time.DateTime;
 
 import java.util.Map;
 
-import butterknife.ButterKnife;
-
 public class PulseFragment extends GdgListFragment {
 
     public static final String GLOBAL = "Global";
@@ -172,9 +170,7 @@ public class PulseFragment extends GdgListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_pulse, container, false);
-        ButterKnife.bind(this, v);
-        return v;
+        return inflateView(inflater, R.layout.fragment_pulse, container);
     }
 
     @Override
