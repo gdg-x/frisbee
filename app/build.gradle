@@ -62,7 +62,6 @@ android {
             proguardFile '../settings/proguard/proguard-square-okhttp3.pro'
             proguardFile '../settings/proguard/proguard-square-picasso.pro'
             proguardFile '../settings/proguard/proguard-square-retrofit2.pro'
-            proguardFile '../settings/proguard/proguard-butterknife.pro'
             proguardFile '../settings/proguard/proguard-crashlytics.pro'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             minifyEnabled true
