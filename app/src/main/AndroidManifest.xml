@@ -240,6 +240,20 @@
         tools:ignore="ManifestResource" />
     </service>
 
+    <receiver
+      android:name=".arrow.SummitNotificationReceiver"
+      android:enabled="true"
+      android:exported="false">
+      <intent-filter>
+        <action android:name="org.gdg.frisbee.android.ACTION_SUMMIT_NOTIFICATION"/>
+      </intent-filter>
+    </receiver>
+
+    <service
+      android:name=".arrow.SummitNotificationService"
+      android:enabled="true"
+      android:exported="false"/>
+
     <meta-data
       android:name="com.crashlytics.ApiKey"
       android:value="39ee8135e5c4935b35bda31d7302a6d39b65570d" />
