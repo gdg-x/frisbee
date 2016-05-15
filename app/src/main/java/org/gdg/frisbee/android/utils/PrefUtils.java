@@ -26,6 +26,7 @@ public final class PrefUtils {
     private static final String PREFS_ACHIEVEMENTS_PREFIX = "achievement_unlocked_";
     private static final String PREFS_WIDGET_ADDED = "widget_added";
     private static final String PREFS_FATAL_GOOGLE_PLAY_SERVICE = "fatal_google_play_service";
+    private static final String PREFS_SUMMIT_NOTIFICATION_SENT = "summit_notification_sent";
 
     private static final boolean PREFS_FIRST_START_DEFAULT = true;
 
@@ -179,5 +180,13 @@ public final class PrefUtils {
 
     public static void setFatalPlayServiceMessageShown(Context context) {
         prefs(context).edit().putBoolean(PREFS_FATAL_GOOGLE_PLAY_SERVICE, false).apply();
+    }
+
+    public static boolean isSummitNotificationSent(Context context) {
+        return prefs(context).getBoolean(PREFS_SUMMIT_NOTIFICATION_SENT, false);
+    }
+
+    public static void setSummitNotificationSent(Context context) {
+        prefs(context).edit().putBoolean(PREFS_SUMMIT_NOTIFICATION_SENT, true).apply();
     }
 }
