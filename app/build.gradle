@@ -146,7 +146,6 @@ dependencies {
     compile "com.google.android.gms:play-services-appindexing:$rootProject.playServicesVersion"
 
     //Google
-    compile 'com.google.http-client:google-http-client-gson:1.21.0'
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
     compile 'com.google.zxing:android-integration:3.2.1'
     compile 'com.google.zxing:core:3.2.1'
@@ -154,7 +153,6 @@ dependencies {
     //Square
     compile "com.squareup.okhttp3:okhttp:$rootProject.okHttpVersion"
     compile "com.squareup.okhttp3:logging-interceptor:$rootProject.okHttpVersion"
-    compile 'com.squareup.okio:okio:1.6.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
     compile "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
