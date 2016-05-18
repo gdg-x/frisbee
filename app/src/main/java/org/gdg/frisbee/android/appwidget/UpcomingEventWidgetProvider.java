@@ -92,7 +92,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
             final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_upcoming_event);
             Intent mainIntent = new Intent(context, MainActivity.class);
             final PendingIntent pi = PendingIntent.getActivity(context, REQUEST_CODE_LAUNCH_FRISBEE,
-                mainIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    mainIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             views.setOnClickPendingIntent(R.id.container, pi);
 
             App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, false,
@@ -123,7 +123,18 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                 });
 
         }
-
+        private Event getNextEvent(List<Event> eListEvents) {
+            if (eListEvents.size() == 0) {
+                return null;
+            }
+            Event ret = eListEvents.get(0);
+            for (Event e : eListEvents) {
+                if (e.getStart().isBefore(ret.getStart())) {
+                    ret = e;
+                }
+            }
+            return  ret;
+        }
         private void fetchEvents(Chapter homeGdg,
                                  final RemoteViews views,
                                  final AppWidgetManager manager,
@@ -138,19 +149,19 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                         List<Event> events = eventsPagedList.getItems();
                         Timber.d("Got events");
                         if (events.size() > 0) {
-                            Event firstEvent = events.get(0);
+                            Event firstEvent = getNextEvent(events);
                             views.setTextViewText(R.id.title, firstEvent.getTitle());
                             views.setTextViewText(R.id.location, firstEvent.getLocation());
                             views.setTextViewText(R.id.startDate,
-                                firstEvent.getStart().toLocalDateTime()
-                                    .toString(DateTimeFormat.patternForStyle("MS",
-                                        getResources().getConfiguration().locale)));
+                                    firstEvent.getStart().toLocalDateTime()
+                                            .toString(DateTimeFormat.patternForStyle("MS",
+                                                    getResources().getConfiguration().locale)));
                             showChild(views, 1);
 
                             Intent i = new Intent(UpdateService.this, EventActivity.class);
                             i.putExtra(Const.EXTRA_EVENT_ID, firstEvent.getId());
                             views.setOnClickPendingIntent(R.id.container,
-                                PendingIntent.getActivity(UpdateService.this, 0, i, 0));
+                                    PendingIntent.getActivity(UpdateService.this, 0, i, 0));
 
                         } else {
                             showErrorChild(views, R.string.no_scheduled_events, UpdateService.this);
