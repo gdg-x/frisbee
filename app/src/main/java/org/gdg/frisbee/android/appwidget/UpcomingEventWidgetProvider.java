@@ -123,12 +123,12 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                 });
 
         }
-        private Event getNextEvent(List<Event> eListEvents) {
-            if (eListEvents.size() == 0) {
+        private Event getNextEvent(List<Event> listEvents) {
+            if (listEvents == null || listEvents.size() == 0) {
                 return null;
             }
-            Event ret = eListEvents.get(0);
-            for (Event e : eListEvents) {
+            Event ret = listEvents.get(0);
+            for (Event e : listEvents) {
                 if (e.getStart().isBefore(ret.getStart())) {
                     ret = e;
                 }
@@ -150,18 +150,23 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                         Timber.d("Got events");
                         if (events.size() > 0) {
                             Event firstEvent = getNextEvent(events);
-                            views.setTextViewText(R.id.title, firstEvent.getTitle());
-                            views.setTextViewText(R.id.location, firstEvent.getLocation());
-                            views.setTextViewText(R.id.startDate,
+                            if(firstEvent != null) {
+                                views.setTextViewText(R.id.title, firstEvent.getTitle());
+                                views.setTextViewText(R.id.location, firstEvent.getLocation());
+                                views.setTextViewText(R.id.startDate,
                                     firstEvent.getStart().toLocalDateTime()
-                                            .toString(DateTimeFormat.patternForStyle("MS",
-                                                    getResources().getConfiguration().locale)));
-                            showChild(views, 1);
+                                        .toString(DateTimeFormat.patternForStyle("MS",
+                                            getResources().getConfiguration().locale)));
+                                showChild(views, 1);
 
-                            Intent i = new Intent(UpdateService.this, EventActivity.class);
-                            i.putExtra(Const.EXTRA_EVENT_ID, firstEvent.getId());
-                            views.setOnClickPendingIntent(R.id.container,
+                                Intent i = new Intent(UpdateService.this, EventActivity.class);
+                                i.putExtra(Const.EXTRA_EVENT_ID, firstEvent.getId());
+                                views.setOnClickPendingIntent(R.id.container,
                                     PendingIntent.getActivity(UpdateService.this, 0, i, 0));
+                            }
+                            else{
+                                showErrorChild(views, R.string.no_scheduled_events, UpdateService.this);
+                            }
 
                         } else {
                             showErrorChild(views, R.string.no_scheduled_events, UpdateService.this);
