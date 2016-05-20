@@ -150,7 +150,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                         Timber.d("Got events");
                         if (events.size() > 0) {
                             Event firstEvent = getNextEvent(events);
-                            if(firstEvent != null) {
+                            if (firstEvent != null) {
                                 views.setTextViewText(R.id.title, firstEvent.getTitle());
                                 views.setTextViewText(R.id.location, firstEvent.getLocation());
                                 views.setTextViewText(R.id.startDate,
@@ -163,8 +163,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                                 i.putExtra(Const.EXTRA_EVENT_ID, firstEvent.getId());
                                 views.setOnClickPendingIntent(R.id.container,
                                     PendingIntent.getActivity(UpdateService.this, 0, i, 0));
-                            }
-                            else{
+                            } else {
                                 showErrorChild(views, R.string.no_scheduled_events, UpdateService.this);
                             }
 
