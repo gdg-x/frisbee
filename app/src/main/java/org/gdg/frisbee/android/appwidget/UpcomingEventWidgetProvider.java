@@ -123,6 +123,8 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                 });
 
         }
+
+        @Nullable
         private Event getNextEvent(List<Event> listEvents) {
             if (listEvents == null || listEvents.size() == 0) {
                 return null;
@@ -135,6 +137,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
             }
             return  ret;
         }
+
         private void fetchEvents(Chapter homeGdg,
                                  final RemoteViews views,
                                  final AppWidgetManager manager,
