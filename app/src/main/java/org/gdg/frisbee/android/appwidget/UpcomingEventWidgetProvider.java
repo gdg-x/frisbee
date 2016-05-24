@@ -92,7 +92,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
             final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_upcoming_event);
             Intent mainIntent = new Intent(context, MainActivity.class);
             final PendingIntent pi = PendingIntent.getActivity(context, REQUEST_CODE_LAUNCH_FRISBEE,
-                    mainIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                mainIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             views.setOnClickPendingIntent(R.id.container, pi);
 
             App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, false,
