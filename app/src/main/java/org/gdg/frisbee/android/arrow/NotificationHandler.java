@@ -16,13 +16,15 @@ import org.joda.time.DateTimeZone;
 public class NotificationHandler {
 
     private final Context context;
+    public static final DateTime SUMMIT_DATE_TIME = new DateTime(2016, 5, 17, 15, 0, DateTimeZone.UTC);
 
     public NotificationHandler(Context context) {
         this.context = context;
     }
 
     public boolean shouldSetAlarm() {
-        return !PrefUtils.isSummitNotificationSent(context);
+        return !PrefUtils.isSummitNotificationSent(context)
+            && SUMMIT_DATE_TIME.isAfterNow();
     }
 
     public void setAlarmForNotification() {
@@ -31,8 +33,7 @@ public class NotificationHandler {
         Intent intent = new Intent(SummitNotificationReceiver.ACTION_SUMMIT_NOTIFICATION);
 
         // Tuesday 8 AM PST in the morning
-        DateTime summitDateTime = new DateTime(2016, 5, 17, 15, 0, DateTimeZone.UTC);
-        am.set(AlarmManager.RTC_WAKEUP, summitDateTime.getMillis(),
+        am.set(AlarmManager.RTC_WAKEUP, SUMMIT_DATE_TIME.getMillis(),
             PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT));
     }
 
