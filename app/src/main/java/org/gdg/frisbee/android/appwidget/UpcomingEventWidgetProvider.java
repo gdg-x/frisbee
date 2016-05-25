@@ -131,9 +131,18 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
             }
             Event ret = listEvents.get(0);
             for (Event e : listEvents) {
-                if (e.getStart().isBefore(ret.getStart())) {
-                    ret = e;
+                if (e.getStart().isAfterNow()) {
+                    if (ret.getStart().isBeforeNow()) {
+                        ret = e;
+                    } else {
+                        if (e.getStart().isBefore(ret.getStart())) {
+                            ret = e;
+                        }
+                    }
                 }
+            }
+            if (ret.getStart().isBeforeNow()) {
+                return null;
             }
             return  ret;
         }
