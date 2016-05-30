@@ -129,10 +129,10 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
             if (listEvents == null || listEvents.size() == 0) {
                 return null;
             }
-            Event ret = listEvents.get(0);
+            Event ret = null;
             for (Event e : listEvents) {
                 if (e.getStart().isAfterNow()) {
-                    if (ret.getStart().isBeforeNow()) {
+                    if (ret == null) {
                         ret = e;
                     } else {
                         if (e.getStart().isBefore(ret.getStart())) {
@@ -140,9 +140,6 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                         }
                     }
                 }
-            }
-            if (ret.getStart().isBeforeNow()) {
-                return null;
             }
             return  ret;
         }
@@ -161,18 +158,18 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                         List<Event> events = eventsPagedList.getItems();
                         Timber.d("Got events");
                         if (events.size() > 0) {
-                            Event firstEvent = getNextEvent(events);
-                            if (firstEvent != null) {
-                                views.setTextViewText(R.id.title, firstEvent.getTitle());
-                                views.setTextViewText(R.id.location, firstEvent.getLocation());
+                            Event nextEvent = getNextEvent(events);
+                            if (nextEvent != null) {
+                                views.setTextViewText(R.id.title, nextEvent.getTitle());
+                                views.setTextViewText(R.id.location, nextEvent.getLocation());
                                 views.setTextViewText(R.id.startDate,
-                                    firstEvent.getStart().toLocalDateTime()
+                                    nextEvent.getStart().toLocalDateTime()
                                         .toString(DateTimeFormat.patternForStyle("MS",
                                             getResources().getConfiguration().locale)));
                                 showChild(views, 1);
 
                                 Intent i = new Intent(UpdateService.this, EventActivity.class);
-                                i.putExtra(Const.EXTRA_EVENT_ID, firstEvent.getId());
+                                i.putExtra(Const.EXTRA_EVENT_ID, nextEvent.getId());
                                 views.setOnClickPendingIntent(R.id.container,
                                     PendingIntent.getActivity(UpdateService.this, 0, i, 0));
                             } else {
