@@ -124,6 +124,26 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
 
         }
 
+        @Nullable
+        private Event getNextEvent(List<Event> listEvents) {
+            if (listEvents == null || listEvents.size() == 0) {
+                return null;
+            }
+            Event ret = null;
+            for (Event e : listEvents) {
+                if (e.getStart().isAfterNow()) {
+                    if (ret == null) {
+                        ret = e;
+                    } else {
+                        if (e.getStart().isBefore(ret.getStart())) {
+                            ret = e;
+                        }
+                    }
+                }
+            }
+            return  ret;
+        }
+
         private void fetchEvents(Chapter homeGdg,
                                  final RemoteViews views,
                                  final AppWidgetManager manager,
@@ -138,19 +158,23 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                         List<Event> events = eventsPagedList.getItems();
                         Timber.d("Got events");
                         if (events.size() > 0) {
-                            Event firstEvent = events.get(0);
-                            views.setTextViewText(R.id.title, firstEvent.getTitle());
-                            views.setTextViewText(R.id.location, firstEvent.getLocation());
-                            views.setTextViewText(R.id.startDate,
-                                firstEvent.getStart().toLocalDateTime()
-                                    .toString(DateTimeFormat.patternForStyle("MS",
-                                        getResources().getConfiguration().locale)));
-                            showChild(views, 1);
+                            Event nextEvent = getNextEvent(events);
+                            if (nextEvent != null) {
+                                views.setTextViewText(R.id.title, nextEvent.getTitle());
+                                views.setTextViewText(R.id.location, nextEvent.getLocation());
+                                views.setTextViewText(R.id.startDate,
+                                    nextEvent.getStart().toLocalDateTime()
+                                        .toString(DateTimeFormat.patternForStyle("MS",
+                                            getResources().getConfiguration().locale)));
+                                showChild(views, 1);
 
-                            Intent i = new Intent(UpdateService.this, EventActivity.class);
-                            i.putExtra(Const.EXTRA_EVENT_ID, firstEvent.getId());
-                            views.setOnClickPendingIntent(R.id.container,
-                                PendingIntent.getActivity(UpdateService.this, 0, i, 0));
+                                Intent i = new Intent(UpdateService.this, EventActivity.class);
+                                i.putExtra(Const.EXTRA_EVENT_ID, nextEvent.getId());
+                                views.setOnClickPendingIntent(R.id.container,
+                                    PendingIntent.getActivity(UpdateService.this, 0, i, 0));
+                            } else {
+                                showErrorChild(views, R.string.no_scheduled_events, UpdateService.this);
+                            }
 
                         } else {
                             showErrorChild(views, R.string.no_scheduled_events, UpdateService.this);
