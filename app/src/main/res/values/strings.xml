@@ -186,4 +186,5 @@
     </string>
   <string name="thanks_for_feedback">Thank you for your Feedback!</string>
   <string name="retry">Retry</string>
+  <string name ="no_pulse"> No information available.</string>
 </resources>
