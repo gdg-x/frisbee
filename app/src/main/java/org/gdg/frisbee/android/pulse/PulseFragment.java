@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.pulse;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -180,9 +181,15 @@ public class PulseFragment extends GdgListFragment {
         if (mTarget.equals(GLOBAL)) {
             mListener.openPulse(pulse.getKey());
         } else {
-            Intent chapterIntent = new Intent(getActivity(), MainActivity.class);
-            chapterIntent.putExtra(Const.EXTRA_CHAPTER_ID, pulse.getValue().getId());
-            startActivity(chapterIntent);
+            if (pulse.getValue().getMeetings() == 0) {
+                View rootView = this.getListView().getRootView();
+                Snackbar mySnackbar = Snackbar.make(rootView, R.string.no_pulse, Snackbar.LENGTH_SHORT);
+                mySnackbar.show();
+            } else {
+                Intent chapterIntent = new Intent(getActivity(), MainActivity.class);
+                chapterIntent.putExtra(Const.EXTRA_CHAPTER_ID, pulse.getValue().getId());
+                startActivity(chapterIntent);
+            }
         }
     }
 
