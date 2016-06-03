@@ -124,6 +124,20 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
 
         }
 
+        @Nullable
+        private Event getNextEvent(List<Event> listEvents) {
+            Event nextEvent = null;
+            for (Event e : listEvents) {
+                if (e.getStart().isBeforeNow()) {
+                    continue;
+                }
+                if (nextEvent == null || e.getStart().isBefore(nextEvent.getStart())) {
+                    nextEvent = e;
+                }
+            }
+            return nextEvent;
+        }
+
         private void fetchEvents(Chapter homeGdg,
                                  final RemoteViews views,
                                  final AppWidgetManager manager,
@@ -135,23 +149,21 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                 .enqueue(new Callback<PagedList<Event>>() {
                     @Override
                     public void success(PagedList<Event> eventsPagedList) {
-                        List<Event> events = eventsPagedList.getItems();
-                        Timber.d("Got events");
-                        if (events.size() > 0) {
-                            Event firstEvent = events.get(0);
-                            views.setTextViewText(R.id.title, firstEvent.getTitle());
-                            views.setTextViewText(R.id.location, firstEvent.getLocation());
+                        Event nextEvent = getNextEvent(eventsPagedList.getItems());
+
+                        if (nextEvent != null) {
+                            views.setTextViewText(R.id.title, nextEvent.getTitle());
+                            views.setTextViewText(R.id.location, nextEvent.getLocation());
                             views.setTextViewText(R.id.startDate,
-                                firstEvent.getStart().toLocalDateTime()
+                                nextEvent.getStart().toLocalDateTime()
                                     .toString(DateTimeFormat.patternForStyle("MS",
                                         getResources().getConfiguration().locale)));
                             showChild(views, 1);
 
                             Intent i = new Intent(UpdateService.this, EventActivity.class);
-                            i.putExtra(Const.EXTRA_EVENT_ID, firstEvent.getId());
+                            i.putExtra(Const.EXTRA_EVENT_ID, nextEvent.getId());
                             views.setOnClickPendingIntent(R.id.container,
                                 PendingIntent.getActivity(UpdateService.this, 0, i, 0));
-
                         } else {
                             showErrorChild(views, R.string.no_scheduled_events, UpdateService.this);
                         }

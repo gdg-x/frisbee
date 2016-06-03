@@ -16,7 +16,7 @@ public class PlusUtils {
     @Nullable
     public static String getCurrentPersonId(GoogleApiClient apiClient) {
         Person plusPerson = null;
-        if (apiClient.hasConnectedApi(Plus.API)) {
+        if (apiClient.isConnected() && apiClient.hasConnectedApi(Plus.API)) {
             plusPerson = Plus.PeopleApi.getCurrentPerson(apiClient);
         }
         return plusPerson != null ? plusPerson.getId() : null;

@@ -24,8 +24,6 @@ import android.os.Process;
 import android.support.annotation.Nullable;
 import android.support.v4.util.LruCache;
 
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.disklrucache.DiskLruCache;
@@ -57,7 +55,6 @@ import timber.log.Timber;
 public final class ModelCache {
 
     static final int DISK_CACHE_FLUSH_DELAY_SECS = 5;
-    final JsonFactory mJsonFactory = new GsonFactory();
     private Gson mGson;
     private LruCache<String, CacheItem> mMemoryCache;
     private DiskLruCache mDiskCache;
@@ -341,12 +338,8 @@ public final class ModelCache {
 
         out.write(className + "\n");
 
-        if (className.contains("google")) {
-            mJsonFactory.createJsonGenerator(out).serialize(o);
-        } else {
-            String json = mGson.toJson(o);
-            out.write(json);
-        }
+        String json = mGson.toJson(o);
+        out.write(json);
 
         out.close();
     }
@@ -374,13 +367,8 @@ public final class ModelCache {
 
         fss.close();
 
-        if (className.contains("google")) {
-            Class<?> clazz = Class.forName(className);
-            return mJsonFactory.createJsonParser(content).parseAndClose(clazz, null);
-        } else {
-            Class<?> clazz = Class.forName(className);
-            return mGson.fromJson(content, clazz);
-        }
+        Class<?> clazz = Class.forName(className);
+        return mGson.fromJson(content, clazz);
     }
 
     public interface CachePutListener {

@@ -48,20 +48,20 @@ ext {
     // Manifest version information!
     versionMajor = 2
     versionMinor = 4
-    versionPatch = 1
+    versionPatch = 2
     versionBuild = 1 // bump for dogfood builds, public betas, etc.
 
     versionCode = versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
     versionName = "${versionMajor}.${versionMinor}.${versionPatch}"
 
     // Sdk and tools
-    minSdkVersion = project.hasProperty("minSdk") ? minSdk : 16
+    minSdkVersion = project.hasProperty("minSdk") ? minSdk.trim() : 16
     targetSdkVersion = 21
     compileSdkVersion = 23
     buildToolsVersion = '23.0.2'
 
     // App dependencies
-    supportLibraryVersion = '23.2.1'
+    supportLibraryVersion = '23.4.0'
     playServicesVersion = '8.4.0'
     butterKnifeVersion = '8.0.1'
     jodaTimeVersion = '2.9.3'
