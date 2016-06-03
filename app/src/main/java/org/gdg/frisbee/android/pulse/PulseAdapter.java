@@ -39,17 +39,20 @@ import butterknife.ButterKnife;
 
 class PulseAdapter extends BaseAdapter {
 
-    private LayoutInflater mInflater;
-    private ArrayList<Map.Entry<String, PulseEntry>> mPulse;
+    private final LayoutInflater mInflater;
+    private final ArrayList<Map.Entry<String, PulseEntry>> mPulse;
+    @Nullable
+    private final Directory mDirectory;
+
     private int[] mPositions;
-
     private int mMode;
-    private Directory directory;
+    private boolean mCheckValuesAgainstDirectory;
 
-    public PulseAdapter(Context ctx, @Nullable int[] positions) {
+    public PulseAdapter(Context ctx, @Nullable int[] positions, Directory directory) {
         mInflater = LayoutInflater.from(ctx);
         mPulse = new ArrayList<>();
         mPositions = positions;
+        mDirectory = directory;
     }
 
     public int[] getPositions() {
@@ -118,13 +121,16 @@ class PulseAdapter extends BaseAdapter {
                 break;
         }
 
-        rowView.setEnabled(directory.getGroupById(entry.getValue().getId()) != null);
-        holder.key.setEnabled(directory.getGroupById(entry.getValue().getId()) != null);
+        if (mCheckValuesAgainstDirectory && mDirectory != null) {
+            rowView.setEnabled(mDirectory.getGroupById(entry.getValue().getId()) != null);
+            holder.key.setEnabled(mDirectory.getGroupById(entry.getValue().getId()) != null);
+        }
         return rowView;
     }
 
-    public void setPulse(final int mode, Pulse pulse) {
+    public void setPulse(final int mode, Pulse pulse, boolean checkValuesAgainstDirectory) {
         mMode = mode;
+        mCheckValuesAgainstDirectory = checkValuesAgainstDirectory;
         mPulse.clear();
         mPulse.addAll(pulse.entrySet());
         //Only initialize if the positions are not provided.
@@ -139,10 +145,6 @@ class PulseAdapter extends BaseAdapter {
                 return entry.getValue().compareTo(mode, entry2.getValue());
             }
         });
-    }
-
-    public void setDirectory(Directory directory) {
-        this.directory = directory;
     }
 
     static class ViewHolder {

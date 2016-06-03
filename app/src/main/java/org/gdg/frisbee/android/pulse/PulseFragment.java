@@ -19,7 +19,6 @@ package org.gdg.frisbee.android.pulse;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,13 +84,27 @@ public class PulseFragment extends GdgListFragment {
         mTarget = getArguments().getString(ARG_TARGET);
         mMode = getArguments().getInt(ARG_MODE);
 
-        int[] positions = savedInstanceState != null
+        final int[] positions = savedInstanceState != null
             ? savedInstanceState.getIntArray(INSTANCE_STATE_POSITIONS) : null;
-        mAdapter = new PulseAdapter(getActivity(), positions);
-        setListAdapter(mAdapter);
+
+        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
+            @Override
+            public void onGet(Object item) {
+                createAdapter(positions, (Directory) item);
+            }
+
+            @Override
+            public void onNotFound(String key) {
+                createAdapter(positions, null);
+            }
+        });
 
         setIsLoading(true);
+    }
 
+    public void createAdapter(int[] positions, Directory directory) {
+        mAdapter = new PulseAdapter(getActivity(), positions, directory);
+        setListAdapter(mAdapter);
         App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
             true,
             new ModelCache.CacheListener() {
@@ -108,8 +121,9 @@ public class PulseFragment extends GdgListFragment {
             });
     }
 
+
     private void fetchPulseTask() {
-        if (mTarget.equals(GLOBAL)) {
+        if (isGlobalSelected()) {
             App.getInstance().getGroupDirectory().getPulse().enqueue(new Callback<Pulse>() {
                 @Override
                 public void success(final Pulse pulse) {
@@ -164,23 +178,14 @@ public class PulseFragment extends GdgListFragment {
         }
     }
 
-    private void initAdapter(final Pulse pulse) {
-        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
-            @Override
-            public void onGet(Object item) {
-                mAdapter.setDirectory((Directory) item);
-                mAdapter.setPulse(mMode, pulse);
-                mAdapter.notifyDataSetChanged();
-                setIsLoading(false);
-            }
+    private boolean isGlobalSelected() {
+        return mTarget.equals(GLOBAL);
+    }
 
-            @Override
-            public void onNotFound(String key) {
-                mAdapter.setPulse(mMode, pulse);
-                mAdapter.notifyDataSetChanged();
-                setIsLoading(false);
-            }
-        });
+    private void initAdapter(Pulse pulse) {
+        mAdapter.setPulse(mMode, pulse, !isGlobalSelected());
+        mAdapter.notifyDataSetChanged();
+        setIsLoading(false);
     }
 
     @Override
@@ -192,17 +197,13 @@ public class PulseFragment extends GdgListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         Map.Entry<String, PulseEntry> pulse = mAdapter.getItem(position);
 
-        if (mTarget.equals(GLOBAL)) {
+        if (isGlobalSelected()) {
             mListener.openPulse(pulse.getKey());
         } else {
             if (v.isEnabled()) {
                 Intent chapterIntent = new Intent(getActivity(), MainActivity.class);
                 chapterIntent.putExtra(Const.EXTRA_CHAPTER_ID, pulse.getValue().getId());
                 startActivity(chapterIntent);
-            } else {
-                View rootView = getListView().getRootView();
-                Snackbar.make(rootView, R.string.no_pulse, Snackbar.LENGTH_SHORT)
-                    .show();
             }
         }
     }
