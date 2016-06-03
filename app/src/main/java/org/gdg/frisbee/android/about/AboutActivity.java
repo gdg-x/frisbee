@@ -96,9 +96,20 @@ public class AboutActivity extends GdgActivity {
                 // as the ID will be consistent on the sending and receiving devices.
                 String[] ids = AppInviteInvitation.getInvitationIds(resultCode, data);
                 Timber.d("Sent %d invitations", ids.length);
+                sendAnalyticsEvent(
+                    "AppInvite",
+                    "Successful",
+                    String.valueOf(ids.length),
+                    ids.length);
             } else {
                 // Sending failed or it was canceled, show failure message to the user
-//                showMessage(getString(R.string.send_failed));
+                showError(R.string.invitation_error_message);
+
+                sendAnalyticsEvent(
+                    "AppInvite",
+                    "Error",
+                    ""
+                );
             }
         }
     }
