@@ -48,7 +48,7 @@ class PulseAdapter extends BaseAdapter {
     private int mMode;
     private boolean mCheckValuesAgainstDirectory;
 
-    public PulseAdapter(Context ctx, @Nullable int[] positions, Directory directory) {
+    public PulseAdapter(Context ctx, @Nullable int[] positions, @Nullable Directory directory) {
         mInflater = LayoutInflater.from(ctx);
         mPulse = new ArrayList<>();
         mPositions = positions;
