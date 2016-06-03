@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.pulse;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import android.widget.ListView;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
+import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.Pulse;
 import org.gdg.frisbee.android.api.model.PulseEntry;
 import org.gdg.frisbee.android.app.App;
@@ -162,10 +164,23 @@ public class PulseFragment extends GdgListFragment {
         }
     }
 
-    private void initAdapter(Pulse pulse) {
-        mAdapter.setPulse(mMode, pulse);
-        mAdapter.notifyDataSetChanged();
-        setIsLoading(false);
+    private void initAdapter(final Pulse pulse) {
+        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
+            @Override
+            public void onGet(Object item) {
+                mAdapter.setDirectory((Directory) item);
+                mAdapter.setPulse(mMode, pulse);
+                mAdapter.notifyDataSetChanged();
+                setIsLoading(false);
+            }
+
+            @Override
+            public void onNotFound(String key) {
+                mAdapter.setPulse(mMode, pulse);
+                mAdapter.notifyDataSetChanged();
+                setIsLoading(false);
+            }
+        });
     }
 
     @Override
@@ -180,9 +195,15 @@ public class PulseFragment extends GdgListFragment {
         if (mTarget.equals(GLOBAL)) {
             mListener.openPulse(pulse.getKey());
         } else {
-            Intent chapterIntent = new Intent(getActivity(), MainActivity.class);
-            chapterIntent.putExtra(Const.EXTRA_CHAPTER_ID, pulse.getValue().getId());
-            startActivity(chapterIntent);
+            if (v.isEnabled()) {
+                Intent chapterIntent = new Intent(getActivity(), MainActivity.class);
+                chapterIntent.putExtra(Const.EXTRA_CHAPTER_ID, pulse.getValue().getId());
+                startActivity(chapterIntent);
+            } else {
+                View rootView = getListView().getRootView();
+                Snackbar.make(rootView, R.string.no_pulse, Snackbar.LENGTH_SHORT)
+                    .show();
+            }
         }
     }
 

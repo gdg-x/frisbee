@@ -25,6 +25,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.Pulse;
 import org.gdg.frisbee.android.api.model.PulseEntry;
 
@@ -43,6 +44,7 @@ class PulseAdapter extends BaseAdapter {
     private int[] mPositions;
 
     private int mMode;
+    private Directory directory;
 
     public PulseAdapter(Context ctx, @Nullable int[] positions) {
         mInflater = LayoutInflater.from(ctx);
@@ -116,6 +118,8 @@ class PulseAdapter extends BaseAdapter {
                 break;
         }
 
+        rowView.setEnabled(directory.getGroupById(entry.getValue().getId()) != null);
+        holder.key.setEnabled(directory.getGroupById(entry.getValue().getId()) != null);
         return rowView;
     }
 
@@ -135,6 +139,10 @@ class PulseAdapter extends BaseAdapter {
                 return entry.getValue().compareTo(mode, entry2.getValue());
             }
         });
+    }
+
+    public void setDirectory(Directory directory) {
+        this.directory = directory;
     }
 
     static class ViewHolder {
