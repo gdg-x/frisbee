@@ -51,7 +51,7 @@ public class AboutActivity extends GdgActivity {
         getActionBarToolbar().setTitle(R.string.about);
         getActionBarToolbar().setNavigationIcon(R.drawable.ic_up);
 
-        mViewPager.setAdapter(new AboutPagerAdapter(this, getSupportFragmentManager()));
+        mViewPager.setAdapter(new AboutPagerAdapter(getSupportFragmentManager(), getResources()));
         mTabLayout.setupWithViewPager(mViewPager);
     }
 
@@ -86,7 +86,7 @@ public class AboutActivity extends GdgActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Timber.d("onActivityResult: requestCode=" + requestCode + ", resultCode=" + resultCode);
+        Timber.d("onActivityResult: requestCode= %d, resultCode= %d", requestCode, resultCode);
 
         if (requestCode == REQUEST_INVITE) {
             if (resultCode == RESULT_OK) {
