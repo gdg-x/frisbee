@@ -1,16 +1,16 @@
-package org.gdg.frisbee.android.view;
+package org.gdg.frisbee.android.widget;
 
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.preference.DialogPreference;
-import android.preference.PreferenceManager;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatDialogFragment;
 import android.support.v7.widget.SearchView;
-import android.text.TextUtils;
-import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,31 +18,43 @@ import android.widget.Filter;
 import android.widget.ListView;
 
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.view.FilterListView;
+import org.gdg.frisbee.android.view.LocationListPreference;
 
-public class LocationListPreference extends DialogPreference implements AdapterView.OnItemClickListener {
+public class ChapterSelectDialog extends AppCompatDialogFragment
+    implements
+    AdapterView.OnItemClickListener {
 
+    private SearchView cityNameSearchView;
     private FilterListView listView;
     private int clickedItemIndex;
     private String mValue;
     private boolean mValueSet;
     private String[] mEntries;
     private String[] mEntryValues;
+    private Listener listener;
 
-    public LocationListPreference(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        setDialogLayoutResource(R.layout.view_location_list_preference);
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return super.onCreateDialog(savedInstanceState);
     }
 
+    @Nullable
     @Override
-    protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
-        super.onPrepareDialogBuilder(builder);
-        builder.setPositiveButton(null, null);
-    }
-
-    @Override
-    protected void onBindDialogView(View view) {
-        super.onBindDialogView(view);
+    public View onCreateView(LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.view_location_list_preference, container, false);
+        cityNameSearchView = (SearchView) view.findViewById(R.id.filter);
         listView = (FilterListView) view.findViewById(android.R.id.list);
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
         clickedItemIndex = findIndexOfValue(mValue);
         listView.setOnItemClickListener(this);
 
@@ -63,7 +75,6 @@ public class LocationListPreference extends DialogPreference implements AdapterV
             }
         };
 
-        SearchView cityNameSearchView = (SearchView) view.findViewById(R.id.filter);
         cityNameSearchView.setOnQueryTextListener(
             new SearchView.OnQueryTextListener() {
                 @Override
@@ -82,14 +93,30 @@ public class LocationListPreference extends DialogPreference implements AdapterV
     }
 
     @Override
-    protected void onDialogClosed(boolean positiveResult) {
-        if (positiveResult && clickedItemIndex >= 0 && mEntryValues != null) {
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+
+        if (clickedItemIndex >= 0 && mEntryValues != null) {
             String value = mEntryValues[clickedItemIndex];
             listView.setItemChecked(clickedItemIndex, true);
             if (callChangeListener(value)) {
                 setValue(value);
             }
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Listener) {
+            listener = (Listener) context;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        listener = Listener.EMPTY;
+        super.onDetach();
     }
 
     public String[] getEntries() {
@@ -124,7 +151,6 @@ public class LocationListPreference extends DialogPreference implements AdapterV
             }
         }
     }
-
     /**
      * Returns the index of the given value (in the entry values array).
      *
@@ -142,7 +168,7 @@ public class LocationListPreference extends DialogPreference implements AdapterV
         return -1;
     }
 
-    public int findIndexByLabelInFilteredListView(String value) {
+    private int findIndexByLabelInFilteredListView(String value) {
         if (value != null && listView != null) {
             Adapter adapter = listView.getAdapter();
             for (int i = adapter.getCount() - 1; i >= 0; i--) {
@@ -156,7 +182,7 @@ public class LocationListPreference extends DialogPreference implements AdapterV
         return -1;
     }
 
-    public int findIndexByLabel(String value) {
+    private int findIndexByLabel(String value) {
         if (value != null && mEntries != null) {
             for (int i = mEntries.length - 1; i >= 0; i--) {
                 if (mEntries[i].equals(value)) {
@@ -165,57 +191,6 @@ public class LocationListPreference extends DialogPreference implements AdapterV
             }
         }
         return -1;
-    }
-
-    @Override
-    public CharSequence getSummary() {
-        String persistedString = getPersistedString(null);
-        if (persistedString == null) {
-            return super.getSummary();
-        } else {
-            int index = findIndexOfValue(persistedString);
-            if (index >= 0) {
-                return mEntries[index];
-            } else {
-                return super.getSummary();
-            }
-        }
-    }
-
-    @Override
-    protected void onAttachedToHierarchy(PreferenceManager preferenceManager) {
-        super.onAttachedToHierarchy(preferenceManager);
-    }
-
-    @Override
-    protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
-        setValue(restoreValue ? getPersistedString(mValue) : (String) defaultValue);
-    }
-
-    @Override
-    protected Parcelable onSaveInstanceState() {
-        final Parcelable superState = super.onSaveInstanceState();
-
-        final SavedState myState = new SavedState(superState);
-        myState.value = getValue();
-        myState.entries = getEntries();
-        myState.entryValues = getEntryValues();
-        return myState;
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Parcelable state) {
-        if (state == null || !state.getClass().equals(SavedState.class)) {
-            // Didn't save state for us in onSaveInstanceState
-            super.onRestoreInstanceState(state);
-            return;
-        }
-
-        SavedState myState = (SavedState) state;
-        setEntries(myState.entries);
-        setEntryValues(myState.entryValues);
-        super.onRestoreInstanceState(myState.getSuperState());
-        setValue(myState.value);
     }
 
     @Override
@@ -239,38 +214,14 @@ public class LocationListPreference extends DialogPreference implements AdapterV
         }
     }
 
-    private static class SavedState extends BaseSavedState {
-        public static final Parcelable.Creator<SavedState> CREATOR =
-            new Parcelable.Creator<SavedState>() {
-                public SavedState createFromParcel(Parcel in) {
-                    return new SavedState(in);
-                }
+    interface Listener {
+        void onChapterSelected(String chapterId);
 
-                public SavedState[] newArray(int size) {
-                    return new SavedState[size];
-                }
-            };
-        String value;
-        String[] entries;
-        String[] entryValues;
-
-        public SavedState(Parcel source) {
-            super(source);
-            value = source.readString();
-            entries = source.createStringArray();
-            entryValues = source.createStringArray();
-        }
-
-        public SavedState(Parcelable superState) {
-            super(superState);
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            super.writeToParcel(dest, flags);
-            dest.writeString(value);
-            dest.writeStringArray(entries);
-            dest.writeStringArray(entryValues);
-        }
+        Listener EMPTY = new Listener() {
+            @Override
+            public void onChapterSelected(String chapterId) {
+                // no-op
+            }
+        };
     }
 }
