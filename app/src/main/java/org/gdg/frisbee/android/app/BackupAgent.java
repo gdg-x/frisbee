@@ -30,12 +30,6 @@ import java.io.IOException;
 
 import timber.log.Timber;
 
-/**
- * Created with IntelliJ IDEA.
- * User: maui
- * Date: 02.07.13
- * Time: 22:27
- */
 public class BackupAgent extends BackupAgentHelper {
 
     private static final String PREFS_BACKUP_KEY = "gdg_prefs";
