@@ -256,7 +256,7 @@
 
 
     <receiver
-      android:name=".arrow.SummitNotificationReceiver"
+      android:name=".eventseries.NotificationReceiver"
       android:enabled="true"
       android:exported="false">
       <intent-filter>

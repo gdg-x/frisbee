@@ -16,9 +16,6 @@ import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.GoogleApiClientFactory;
 import org.gdg.frisbee.android.app.OrganizerChecker;
-import org.gdg.frisbee.android.arrow.NotificationHandler;
-import org.gdg.frisbee.android.arrow.SummitNotificationReceiver;
-import org.gdg.frisbee.android.utils.PrefUtils;
 
 public class TaggedEventSeriesNotificationService extends Service
     implements
@@ -76,15 +73,13 @@ public class TaggedEventSeriesNotificationService extends Service
 
     @Override
     public void onOrganizerResponse(boolean isOrganizer) {
-        if (isOrganizer) {
+        if (isOrganizer || intent.getBooleanExtra(Const.EXTRA_ALARM_FOR_ALL, true)) {
             TaggedEventSeries eventSeries = intent.getParcelableExtra(Const.EXTRA_TAGGED_EVENT);
             NotificationHandler notificationHandler = new NotificationHandler(this, eventSeries);
             Notification notification = notificationHandler.createNotification();
 
             NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             nm.notify(NOTIFICATION_ID, notification);
-
-            PrefUtils.setTaggedEventSeriesNotificationSet(this, eventSeries);
         }
 
         stop();
@@ -97,6 +92,6 @@ public class TaggedEventSeriesNotificationService extends Service
 
     private void stop() {
         stopSelf();
-        SummitNotificationReceiver.completeWakefulIntent(intent);
+        NotificationReceiver.completeWakefulIntent(intent);
     }
 }

@@ -59,6 +59,11 @@ public class TaggedEventSeries implements Parcelable {
         mDescriptionResId = a.getResourceId(R.styleable.SpecialEvent_specialEventDescription,
             R.string.ioextended_description);
 
+        mGreetingsResId =  a.getResourceId(R.styleable.SpecialEvent_specialEventGreetings,
+            R.string.event_series_greetings);
+        mGreetingsTitleResId =  a.getResourceId(R.styleable.SpecialEvent_specialEventGreetingsTitle,
+            R.string.title_event_series_greetings);
+
         a.recycle();
 
         mTag = tag;
@@ -66,6 +71,7 @@ public class TaggedEventSeries implements Parcelable {
         mStartDateInMillis = startDateInMillis;
         mEndDateInMillis = endDateInMillis;
         mDrawerId = drawerId;
+
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -77,6 +83,8 @@ public class TaggedEventSeries implements Parcelable {
                              @DrawableRes int logoResId,
                              @StyleRes int specialEventTheme,
                              int drawerId,
+                             @StringRes int greetingsResId,
+                             @StringRes int greetingsTitleResId,
                              DateTime startDateInMillis,
                              DateTime endDateInMillis) {
         mTag = tag;
@@ -87,6 +95,8 @@ public class TaggedEventSeries implements Parcelable {
         mLogoResId = logoResId;
         mSpecialEventTheme = specialEventTheme;
         mDrawerId = drawerId;
+        mGreetingsResId = greetingsResId;
+        mGreetingsTitleResId = greetingsTitleResId;
         mStartDateInMillis = startDateInMillis;
         mEndDateInMillis = endDateInMillis;
     }
@@ -100,6 +110,8 @@ public class TaggedEventSeries implements Parcelable {
         mLogoResId = in.readInt();
         mSpecialEventTheme = in.readInt();
         mDrawerId = in.readInt();
+        mGreetingsResId = in.readInt();
+        mGreetingsTitleResId = in.readInt();
         mStartDateInMillis = new DateTime(in.readLong());
         mEndDateInMillis = new DateTime(in.readLong());
     }
@@ -144,11 +156,11 @@ public class TaggedEventSeries implements Parcelable {
         return mGreetingsTitleResId;
     }
 
-    public DateTime getStartDateInMillis() {
+    public DateTime getStartDate() {
         return mStartDateInMillis;
     }
 
-    public DateTime getEndDateInMillis() {
+    public DateTime getEndDate() {
         return mEndDateInMillis;
     }
 

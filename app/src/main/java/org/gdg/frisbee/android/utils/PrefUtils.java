@@ -183,13 +183,13 @@ public final class PrefUtils {
         prefs(context).edit().putBoolean(PREFS_FATAL_GOOGLE_PLAY_SERVICE, false).apply();
     }
 
-    public static boolean isTaggedEventSeriesNotificationSet(Context context, TaggedEventSeries taggedEventSeries) {
+    public static boolean isTaggedEventSeriesAlarmSet(Context context, TaggedEventSeries taggedEventSeries) {
         long lastTimeSent = prefs(context).getLong(getKeyForEventSeries(taggedEventSeries), 0);
-        return lastTimeSent >= taggedEventSeries.getStartDateInMillis().getMillis();
+        return lastTimeSent >= taggedEventSeries.getStartDate().getMillis();
     }
 
-    public static void setTaggedEventSeriesNotificationSet(Context context, TaggedEventSeries taggedEventSeries) {
-        long currentSeriesStartTime = taggedEventSeries.getStartDateInMillis().getMillis();
+    public static void setTaggedEventSeriesAlarmTime(Context context, TaggedEventSeries taggedEventSeries) {
+        long currentSeriesStartTime = taggedEventSeries.getStartDate().getMillis();
         prefs(context).edit().putLong(getKeyForEventSeries(taggedEventSeries), currentSeriesStartTime).apply();
     }
 

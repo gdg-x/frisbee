@@ -21,6 +21,7 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationManagerCompat;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -49,6 +50,7 @@ import org.gdg.frisbee.android.api.PlusApi;
 import org.gdg.frisbee.android.api.PlusApiFactory;
 import org.gdg.frisbee.android.api.PlusImageUrlConverter;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.eventseries.NotificationHandler;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.utils.CrashlyticsTree;
 import org.gdg.frisbee.android.utils.FileUtils;
@@ -58,6 +60,7 @@ import org.joda.time.DateTime;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import io.fabric.sdk.android.Fabric;
 import okhttp3.OkHttpClient;
@@ -194,12 +197,29 @@ public class App extends BaseApp implements LocationListener {
             Const.START_TIME_GCP_NEXT,
             Const.END_TIME_GCP_NEXT));
 
+        updateEventSeriesAlarms();
+
+    }
+
+    private void updateEventSeriesAlarms() {
+        if (isTranslationForAlarmsAvailable()) {
+            for (TaggedEventSeries eventSeries : currentTaggedEventSeries()) {
+                NotificationHandler notificationHandler = new NotificationHandler(this, eventSeries);
+                if (notificationHandler.shouldSetAlarm()) {
+                    notificationHandler.setAlarmForNotification();
+                }
+            }
+        }
+    }
+
+    private boolean isTranslationForAlarmsAvailable() {
+        return Locale.ENGLISH.getLanguage().equals(Locale.getDefault().getLanguage());
     }
 
     private void addTaggedEventSeriesIfDateFits(@NonNull TaggedEventSeries taggedEventSeries) {
         DateTime now = DateTime.now();
-        if (BuildConfig.DEBUG || (now.isAfter(taggedEventSeries.getStartDateInMillis())
-            && now.isBefore(taggedEventSeries.getEndDateInMillis()))) {
+        if (BuildConfig.DEBUG || (now.isAfter(taggedEventSeries.getStartDate())
+            && now.isBefore(taggedEventSeries.getEndDate()))) {
             mTaggedEventSeriesList.add(taggedEventSeries);
         }
     }
