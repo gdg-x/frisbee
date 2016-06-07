@@ -1,6 +1,6 @@
 package org.gdg.frisbee.android.about;
 
-import android.content.Context;
+import android.content.res.Resources;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -8,11 +8,12 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import org.gdg.frisbee.android.R;
 
 class AboutPagerAdapter extends FragmentStatePagerAdapter {
-    private Context mContext;
 
-    public AboutPagerAdapter(Context ctx, FragmentManager fm) {
+    private final String[] pageTitles;
+
+    AboutPagerAdapter(FragmentManager fm, Resources resources) {
         super(fm);
-        mContext = ctx;
+        pageTitles = resources.getStringArray(R.array.about_tabs);
     }
 
     @Override
@@ -22,7 +23,7 @@ class AboutPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return mContext.getResources().getStringArray(R.array.about_tabs).length;
+        return pageTitles.length;
     }
 
     @Override
@@ -40,12 +41,13 @@ class AboutPagerAdapter extends FragmentStatePagerAdapter {
                 return new GetInvolvedFragment();
             case 5:
                 return new ExtLibrariesFragment();
+            default:
+                throw new IllegalStateException("Unknown page in About Screen.");
         }
-        return null;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return mContext.getResources().getStringArray(R.array.about_tabs)[position];
+        return pageTitles[position];
     }
 }
