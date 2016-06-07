@@ -188,4 +188,7 @@
   <string name="retry">Retry</string>
   <string name="message_io_greeting">Welcome to GDG Summit 2016. We have a great game called Arrow. It\'s all about meeting new people. Check it out and enjoy!</string>
   <string name="title_io_greeting">Are you at GDG Summit?</string>
+  <string name="rsvp">RSVP</string>
+  <string name="invitation_custom_image">https://developers.google.com/_static/8346b846c6/images/gdg-program-icon.png</string>
+  <string name="view_event">View event</string>
 </resources>

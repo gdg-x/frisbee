@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.event;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
@@ -33,6 +34,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.tasomaniac.android.widget.DelayedProgressBar;
 
 import org.gdg.frisbee.android.Const;
@@ -53,6 +55,8 @@ import org.joda.time.format.DateTimeFormatter;
 import butterknife.BindView;
 
 public class EventOverviewFragment extends BaseFragment {
+
+    private static final int REQUEST_INVITE = 1;
 
     @BindView(R.id.title)
     TextView mTitle;
@@ -78,6 +82,8 @@ public class EventOverviewFragment extends BaseFragment {
     private boolean mLoading;
     private Directory mDirectory;
     private EventFullDetails mEvent;
+    @Nullable
+    private ImageInfo chapterImageOfEvent;
 
     public static Fragment createfor(String eventId) {
         EventOverviewFragment fragment = new EventOverviewFragment();
@@ -207,7 +213,6 @@ public class EventOverviewFragment extends BaseFragment {
         if (getActivity() == null) {
             return;
         }
-
         loadChapterImage(group.getGplusId());
 
         ((GdgActivity) getActivity()).setToolbarTitle(group.getShortName());
@@ -217,6 +222,7 @@ public class EventOverviewFragment extends BaseFragment {
         App.getInstance().getPlusApi().getImageInfo(gplusId).enqueue(new Callback<ImageInfo>() {
             @Override
             public void success(ImageInfo imageInfo) {
+                chapterImageOfEvent = imageInfo;
                 if (isContextValid()) {
                     String imageUrl = imageInfo.getImage().getUrl().replace("sz=50", "sz=196");
                     App.getInstance().getPicasso().load(imageUrl).into(mGroupLogo);
@@ -298,9 +304,27 @@ public class EventOverviewFragment extends BaseFragment {
             case R.id.view_event_url:
                 launchUrl(mEvent.getEventUrl());
                 return true;
+            case R.id.share_details:
+                shareUrl(mEvent.getEventUrl());
+                return true;
             default:
                 return false;
         }
+    }
+
+    private void shareUrl(String eventUrl) {
+        String imageUrl = getString(R.string.invitation_custom_image);
+        if (chapterImageOfEvent != null) {
+            imageUrl = chapterImageOfEvent.getUrl();
+        }
+        Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
+            .setMessage(getString(R.string.invitation_message))
+            .setDeepLink(Uri.parse(eventUrl))
+            //.setCustomImage(Uri.parse(imageUrl))
+            .setCallToActionText(getString(R.string.view_event))
+            .build();
+        startActivityForResult(intent, REQUEST_INVITE);
+
     }
 
     private void launchNavigation() {

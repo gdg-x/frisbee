@@ -141,9 +141,9 @@ dependencies {
     compile "com.google.android.gms:play-services-games:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-plus:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-analytics:$rootProject.playServicesVersion"
-    compile "com.google.android.gms:play-services-appinvite:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-appindexing:$rootProject.playServicesVersion"
     compile "com.google.firebase:firebase-messaging:$rootProject.playServicesVersion"
+    compile "com.google.firebase:firebase-invites:$rootProject.playServicesVersion"
 
     //Google
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'

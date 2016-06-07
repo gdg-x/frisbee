@@ -2,6 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto">
   <item
+    android:id="@+id/share_details"
+    android:title="@string/share" />
+  <item
     android:id="@+id/share"
     android:title="@string/share"
     app:actionProviderClass="android.support.v7.widget.ShareActionProvider"
