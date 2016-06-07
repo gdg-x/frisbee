@@ -250,7 +250,7 @@
     </receiver>
 
     <service
-      android:name=".arrow.SummitNotificationService"
+      android:name=".eventseries.TaggedEventSeriesNotificationService"
       android:enabled="true"
       android:exported="false"/>
 

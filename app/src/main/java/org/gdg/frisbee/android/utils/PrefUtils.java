@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.joda.time.DateTime;
 
 public final class PrefUtils {
@@ -26,7 +27,7 @@ public final class PrefUtils {
     private static final String PREFS_ACHIEVEMENTS_PREFIX = "achievement_unlocked_";
     private static final String PREFS_WIDGET_ADDED = "widget_added";
     private static final String PREFS_FATAL_GOOGLE_PLAY_SERVICE = "fatal_google_play_service";
-    private static final String PREFS_SUMMIT_NOTIFICATION_SENT = "summit_notification_sent";
+    private static final String PREFS_EVENT_SERIES_NOTIFICATION_SENT = "event_series_notification_sent";
 
     private static final boolean PREFS_FIRST_START_DEFAULT = true;
 
@@ -182,11 +183,18 @@ public final class PrefUtils {
         prefs(context).edit().putBoolean(PREFS_FATAL_GOOGLE_PLAY_SERVICE, false).apply();
     }
 
-    public static boolean isSummitNotificationSent(Context context) {
-        return prefs(context).getBoolean(PREFS_SUMMIT_NOTIFICATION_SENT, false);
+    public static boolean isTaggedEventSeriesNotificationSet(Context context, TaggedEventSeries taggedEventSeries) {
+        long lastTimeSent = prefs(context).getLong(getKeyForEventSeries(taggedEventSeries), 0);
+        return lastTimeSent >= taggedEventSeries.getStartDateInMillis().getMillis();
     }
 
-    public static void setSummitNotificationSent(Context context) {
-        prefs(context).edit().putBoolean(PREFS_SUMMIT_NOTIFICATION_SENT, true).apply();
+    public static void setTaggedEventSeriesNotificationSet(Context context, TaggedEventSeries taggedEventSeries) {
+        long currentSeriesStartTime = taggedEventSeries.getStartDateInMillis().getMillis();
+        prefs(context).edit().putLong(getKeyForEventSeries(taggedEventSeries), currentSeriesStartTime).apply();
+    }
+
+    @NonNull
+    private static String getKeyForEventSeries(TaggedEventSeries taggedEventSeries) {
+        return PREFS_EVENT_SERIES_NOTIFICATION_SENT + taggedEventSeries.getTag();
     }
 }

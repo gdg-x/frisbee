@@ -1,4 +1,4 @@
-package org.gdg.frisbee.android.arrow;
+package org.gdg.frisbee.android.eventseries;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -12,12 +12,15 @@ import android.support.annotation.Nullable;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.GoogleApiClientFactory;
 import org.gdg.frisbee.android.app.OrganizerChecker;
+import org.gdg.frisbee.android.arrow.NotificationHandler;
+import org.gdg.frisbee.android.arrow.SummitNotificationReceiver;
 import org.gdg.frisbee.android.utils.PrefUtils;
 
-public class SummitNotificationService extends Service
+public class TaggedEventSeriesNotificationService extends Service
     implements
     GoogleApiClient.ConnectionCallbacks,
     OrganizerChecker.Callbacks,
@@ -26,9 +29,8 @@ public class SummitNotificationService extends Service
     public static final int NOTIFICATION_ID = 1;
     private GoogleApiClient apiClient;
     private Intent intent;
-    private NotificationHandler notificationHandler;
 
-    public SummitNotificationService() {
+    public TaggedEventSeriesNotificationService() {
     }
 
     @Override
@@ -43,8 +45,6 @@ public class SummitNotificationService extends Service
         apiClient.registerConnectionCallbacks(this);
         apiClient.registerConnectionFailedListener(this);
         apiClient.connect();
-
-        notificationHandler = new NotificationHandler(this);
     }
 
     @Override
@@ -77,12 +77,14 @@ public class SummitNotificationService extends Service
     @Override
     public void onOrganizerResponse(boolean isOrganizer) {
         if (isOrganizer) {
+            TaggedEventSeries eventSeries = intent.getParcelableExtra(Const.EXTRA_TAGGED_EVENT);
+            NotificationHandler notificationHandler = new NotificationHandler(this, eventSeries);
             Notification notification = notificationHandler.createNotification();
 
             NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             nm.notify(NOTIFICATION_ID, notification);
 
-            PrefUtils.setSummitNotificationSent(this);
+            PrefUtils.setTaggedEventSeriesNotificationSet(this, eventSeries);
         }
 
         stop();

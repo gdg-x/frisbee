@@ -32,6 +32,8 @@ public class TaggedEventSeries implements Parcelable {
     private int mLogoResId;
     private int mSpecialEventTheme;
     private int mDrawerId;
+    private int mGreetingsResId;
+    private int mGreetingsTitleResId;
     private DateTime mStartDateInMillis;
     private DateTime mEndDateInMillis;
 
@@ -134,6 +136,14 @@ public class TaggedEventSeries implements Parcelable {
         return mDrawerId;
     }
 
+    public int getGreetingsResId() {
+        return mGreetingsResId;
+    }
+
+    public int getGreetingsTitleResId() {
+        return mGreetingsTitleResId;
+    }
+
     public DateTime getStartDateInMillis() {
         return mStartDateInMillis;
     }
@@ -157,6 +167,8 @@ public class TaggedEventSeries implements Parcelable {
         dest.writeInt(mLogoResId);
         dest.writeInt(mSpecialEventTheme);
         dest.writeInt(mDrawerId);
+        dest.writeInt(mGreetingsResId);
+        dest.writeInt(mGreetingsTitleResId);
         dest.writeLong(mStartDateInMillis.getMillis());
         dest.writeLong(mEndDateInMillis.getMillis());
     }

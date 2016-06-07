@@ -7,53 +7,51 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
-import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.chapter.MainActivity;
+import org.gdg.frisbee.android.Const;
+import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
+import org.gdg.frisbee.android.eventseries.TaggedEventSeriesActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 
 public class NotificationHandler {
 
     private final Context context;
-    public static final DateTime SUMMIT_DATE_TIME = new DateTime(2016, 5, 17, 15, 0, DateTimeZone.UTC);
+    private final TaggedEventSeries eventSeries;
 
-    public NotificationHandler(Context context) {
+    public NotificationHandler(Context context, TaggedEventSeries eventSeries) {
         this.context = context;
+        this.eventSeries = eventSeries;
     }
 
     public boolean shouldSetAlarm() {
-        return !PrefUtils.isSummitNotificationSent(context)
-            && SUMMIT_DATE_TIME.isAfterNow();
+        return !PrefUtils.isTaggedEventSeriesNotificationSet(context, eventSeries)
+            && eventSeries.getStartDateInMillis().isAfterNow();
     }
 
     public void setAlarmForNotification() {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         Intent intent = new Intent(SummitNotificationReceiver.ACTION_SUMMIT_NOTIFICATION);
+        intent.putExtra(Const.EXTRA_TAGGED_EVENT, eventSeries);
 
-        // Tuesday 8 AM PST in the morning
-        am.set(AlarmManager.RTC_WAKEUP, SUMMIT_DATE_TIME.getMillis(),
+        am.set(AlarmManager.RTC_WAKEUP, eventSeries.getStartDateInMillis().getMillis(),
             PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT));
     }
 
     public Notification createNotification() {
 
-        Intent mainIntent = new Intent(context, MainActivity.class);
-        Intent arrowIntent = new Intent(context, ArrowActivity.class);
+        Intent contentIntent = new Intent(context, TaggedEventSeriesActivity.class);
+        contentIntent.putExtra(Const.EXTRA_TAGGED_EVENT, eventSeries);
 
-        CharSequence message = context.getString(R.string.message_io_greeting);
+        String message = context.getString(eventSeries.getGreetingsResId());
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-            .setContentTitle(context.getString(R.string.title_io_greeting))
+            .setContentTitle(context.getString(eventSeries.getGreetingsTitleResId()))
             .setContentText(message)
-            .setSmallIcon(R.drawable.ic_drawer_devfest)
+            .setSmallIcon(eventSeries.getDrawerIconResId())
             .setAutoCancel(true)
             .setDefaults(Notification.DEFAULT_ALL)
             .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
-            .addAction(R.drawable.ic_drawer_arrow, "Play",
-                PendingIntent.getActivity(context, 0, arrowIntent, PendingIntent.FLAG_UPDATE_CURRENT))
-            .setContentIntent(PendingIntent.getActivity(context, 0, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+            .setContentIntent(PendingIntent.getActivity(context, 0, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 
         return builder.build();
     }

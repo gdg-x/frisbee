@@ -42,8 +42,10 @@ import com.google.android.gms.common.api.Status;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.achievements.AchievementActionHandler;
+import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.GoogleApiClientFactory;
 import org.gdg.frisbee.android.arrow.NotificationHandler;
+import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.RecentTasksStyler;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
@@ -270,9 +272,11 @@ public abstract class GdgActivity extends TrackableActivity implements
     }
 
     private void initSummitNotificationHandler() {
-        NotificationHandler notificationHandler = new NotificationHandler(this);
-        if (notificationHandler.shouldSetAlarm()) {
-            notificationHandler.setAlarmForNotification();
+        for (TaggedEventSeries eventSeries : App.getInstance().currentTaggedEventSeries()) {
+            NotificationHandler notificationHandler = new NotificationHandler(this, eventSeries);
+            if (notificationHandler.shouldSetAlarm()) {
+                notificationHandler.setAlarmForNotification();
+            }
         }
     }
 
