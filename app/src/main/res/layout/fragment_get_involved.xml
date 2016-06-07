@@ -54,6 +54,6 @@
     android:layout_height="wrap_content"
     android:layout_alignParentRight="true"
     android:layout_alignParentTop="true"
-    android:elevation="4dp"
+    android:elevation="8dp"
     android:src="@drawable/forkme_right" />
 </RelativeLayout>
