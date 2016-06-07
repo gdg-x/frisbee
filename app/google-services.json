@@ -1,18 +1,16 @@
 {
   "project_info": {
-    "project_id": "api-project-429371117063",
     "project_number": "429371117063",
-    "name": "GDGX"
+    "firebase_url": "https://api-project-429371117063.firebaseio.com",
+    "project_id": "api-project-429371117063",
+    "storage_bucket": "api-project-429371117063.appspot.com"
   },
   "client": [
     {
       "client_info": {
         "mobilesdk_app_id": "1:429371117063:android:d42e7ba907a05c43",
-        "client_id": "android:org.gdg.frisbee.android",
-        "client_type": 1,
         "android_client_info": {
-          "package_name": "org.gdg.frisbee.android",
-          "certificate_hash": []
+          "package_name": "org.gdg.frisbee.android"
         }
       },
       "oauth_client": [
@@ -64,14 +62,7 @@
       ],
       "services": {
         "analytics_service": {
-          "status": 2,
-          "analytics_property": {
-            "tracking_id": "UA-42015512-1"
-          }
-        },
-        "cloud_messaging_service": {
-          "status": 1,
-          "apns_config": []
+          "status": 1
         },
         "appinvite_service": {
           "status": 2,
@@ -82,9 +73,6 @@
             }
           ]
         },
-        "google_signin_service": {
-          "status": 2
-        },
         "ads_service": {
           "status": 1
         }
@@ -93,11 +81,8 @@
     {
       "client_info": {
         "mobilesdk_app_id": "1:429371117063:android:27fc93d6474f3957",
-        "client_id": "android:org.gdg.frisbee.android.debug",
-        "client_type": 1,
         "android_client_info": {
-          "package_name": "org.gdg.frisbee.android.debug",
-          "certificate_hash": []
+          "package_name": "org.gdg.frisbee.android.debug"
         }
       },
       "oauth_client": [
@@ -133,14 +118,7 @@
       ],
       "services": {
         "analytics_service": {
-          "status": 2,
-          "analytics_property": {
-            "tracking_id": "UA-42015512-1"
-          }
-        },
-        "cloud_messaging_service": {
-          "status": 1,
-          "apns_config": []
+          "status": 1
         },
         "appinvite_service": {
           "status": 2,
@@ -151,15 +129,11 @@
             }
           ]
         },
-        "google_signin_service": {
-          "status": 2
-        },
         "ads_service": {
           "status": 1
         }
       }
     }
   ],
-  "client_info": [],
-  "ARTIFACT_VERSION": "1"
+  "configuration_version": "1"
 }
