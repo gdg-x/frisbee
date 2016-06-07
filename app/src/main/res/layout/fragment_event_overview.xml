@@ -39,6 +39,7 @@
         android:layout_marginLeft="8dip"
         android:layout_toLeftOf="@+id/group_logo"
         android:textAppearance="?android:textAppearanceLarge"
+        android:textIsSelectable="true"
         tools:text="Event Title" />
 
       <TextView
@@ -64,19 +65,10 @@
         android:gravity="start"
         tools:text="Begin 20:15" />
 
-      <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/start_time"
-        android:layout_marginLeft="8dip"
-        android:layout_marginTop="10dip"
-        android:text="@string/event_description" />
-
       <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/textView"
+        android:layout_below="@+id/start_time"
         android:layout_marginLeft="5dip"
         android:layout_marginRight="5dip"
         android:layout_marginTop="10dip"
@@ -88,6 +80,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:autoLink="all"
+          android:textIsSelectable="true"
           android:padding="5dip" />
       </android.support.v7.widget.CardView>
 
