@@ -79,6 +79,7 @@
               android:layout_height="wrap_content"
               android:padding="@dimen/keyline_1"
               tools:ignore="InconsistentLayout"
+              android:textIsSelectable="true"
               tools:text="@string/ioextended_description" />
           </ScrollView>
         </android.support.v7.widget.CardView>
