@@ -27,7 +27,7 @@ public final class PrefUtils {
     private static final String PREFS_ACHIEVEMENTS_PREFIX = "achievement_unlocked_";
     private static final String PREFS_WIDGET_ADDED = "widget_added";
     private static final String PREFS_FATAL_GOOGLE_PLAY_SERVICE = "fatal_google_play_service";
-    private static final String PREFS_EVENT_SERIES_NOTIFICATION_SENT = "event_series_notification_sent";
+    private static final String PREFS_EVENT_SERIES_NOTIFICATION_ALARM_SET = "event_series_notification_alarm_set";
 
     private static final boolean PREFS_FIRST_START_DEFAULT = true;
 
@@ -190,11 +190,13 @@ public final class PrefUtils {
 
     public static void setTaggedEventSeriesAlarmTime(Context context, TaggedEventSeries taggedEventSeries) {
         long currentSeriesStartTime = taggedEventSeries.getStartDate().getMillis();
-        prefs(context).edit().putLong(getKeyForEventSeries(taggedEventSeries), currentSeriesStartTime).apply();
+        prefs(context).edit()
+            .putLong(getKeyForEventSeries(taggedEventSeries), currentSeriesStartTime)
+            .apply();
     }
 
     @NonNull
     private static String getKeyForEventSeries(TaggedEventSeries taggedEventSeries) {
-        return PREFS_EVENT_SERIES_NOTIFICATION_SENT + taggedEventSeries.getTag();
+        return PREFS_EVENT_SERIES_NOTIFICATION_ALARM_SET + taggedEventSeries.getTag();
     }
 }
