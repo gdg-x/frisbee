@@ -184,19 +184,19 @@ public final class PrefUtils {
     }
 
     public static boolean isTaggedEventSeriesAlarmSet(Context context, TaggedEventSeries taggedEventSeries) {
-        long lastTimeSent = prefs(context).getLong(getKeyForEventSeries(taggedEventSeries), 0);
+        long lastTimeSent = prefs(context).getLong(keyForEventSeriesAlarmSet(taggedEventSeries), 0);
         return lastTimeSent >= taggedEventSeries.getStartDate().getMillis();
     }
 
     public static void setTaggedEventSeriesAlarmTime(Context context, TaggedEventSeries taggedEventSeries) {
         long currentSeriesStartTime = taggedEventSeries.getStartDate().getMillis();
         prefs(context).edit()
-            .putLong(getKeyForEventSeries(taggedEventSeries), currentSeriesStartTime)
+            .putLong(keyForEventSeriesAlarmSet(taggedEventSeries), currentSeriesStartTime)
             .apply();
     }
 
     @NonNull
-    private static String getKeyForEventSeries(TaggedEventSeries taggedEventSeries) {
+    private static String keyForEventSeriesAlarmSet(TaggedEventSeries taggedEventSeries) {
         return PREFS_EVENT_SERIES_NOTIFICATION_ALARM_SET + taggedEventSeries.getTag();
     }
 }

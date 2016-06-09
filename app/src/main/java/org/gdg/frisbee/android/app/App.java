@@ -59,7 +59,6 @@ import org.joda.time.DateTime;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Locale;
 
 import io.fabric.sdk.android.Fabric;
 import okhttp3.OkHttpClient;
@@ -201,18 +200,12 @@ public class App extends BaseApp implements LocationListener {
     }
 
     private void updateEventSeriesAlarms() {
-        if (isTranslationForAlarmsAvailable()) {
-            for (TaggedEventSeries eventSeries : currentTaggedEventSeries()) {
-                NotificationHandler notificationHandler = new NotificationHandler(this, eventSeries);
-                if (notificationHandler.shouldSetAlarm()) {
-                    notificationHandler.setAlarmForNotification();
-                }
+        for (TaggedEventSeries eventSeries : currentTaggedEventSeries()) {
+            NotificationHandler notificationHandler = new NotificationHandler(this, eventSeries);
+            if (notificationHandler.shouldSetAlarm()) {
+                notificationHandler.setAlarmForNotification();
             }
         }
-    }
-
-    private boolean isTranslationForAlarmsAvailable() {
-        return Locale.ENGLISH.getLanguage().equals(Locale.getDefault().getLanguage());
     }
 
     private void addTaggedEventSeriesIfDateFits(@NonNull TaggedEventSeries taggedEventSeries) {
