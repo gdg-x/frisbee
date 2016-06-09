@@ -12,6 +12,7 @@ import android.view.ContextThemeWrapper;
 
 import org.gdg.frisbee.android.R;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 public class TaggedEventSeries implements Parcelable {
 
@@ -24,23 +25,34 @@ public class TaggedEventSeries implements Parcelable {
             return new TaggedEventSeries[size];
         }
     };
+
     private String mTag;
+    @DrawableRes
     private int mDrawerIconResId;
+    @StringRes
     private int mTitleResId;
+    @StringRes
     private int mDescriptionResId;
+    @DrawableRes
     private int mDefaultIconResId;
+    @DrawableRes
     private int mLogoResId;
+    @StyleRes
     private int mSpecialEventTheme;
     private int mDrawerId;
-    private DateTime mStartDateInMillis;
-    private DateTime mEndDateInMillis;
+    @StringRes
+    private int mGreetingsResId;
+    @StringRes
+    private int mGreetingsTitleResId;
+    private DateTime mStartDate;
+    private DateTime mEndDateIn;
 
     public TaggedEventSeries(Context context,
                              @StyleRes int specialEventTheme,
                              @NonNull String tag,
                              int drawerId,
-                             DateTime startDateInMillis,
-                             DateTime endDateInMillis) {
+                             DateTime startDate,
+                             DateTime endDate) {
 
         final ContextThemeWrapper themeWrapper = new ContextThemeWrapper(context, specialEventTheme);
         final TypedArray a = themeWrapper.obtainStyledAttributes(R.styleable.SpecialEvent);
@@ -57,36 +69,19 @@ public class TaggedEventSeries implements Parcelable {
         mDescriptionResId = a.getResourceId(R.styleable.SpecialEvent_specialEventDescription,
             R.string.ioextended_description);
 
+        mGreetingsResId =  a.getResourceId(R.styleable.SpecialEvent_specialEventGreetings,
+            R.string.event_series_greetings);
+        mGreetingsTitleResId =  a.getResourceId(R.styleable.SpecialEvent_specialEventGreetingsTitle,
+            R.string.title_event_series_greetings);
+
         a.recycle();
 
         mTag = tag;
         mSpecialEventTheme = specialEventTheme;
-        mStartDateInMillis = startDateInMillis;
-        mEndDateInMillis = endDateInMillis;
+        mStartDate = startDate;
+        mEndDateIn = endDate;
         mDrawerId = drawerId;
-    }
 
-    @SuppressWarnings("UnusedDeclaration")
-    public TaggedEventSeries(@NonNull String tag,
-                             @DrawableRes int drawerIconResId,
-                             @StringRes int titleResId,
-                             @StringRes int descriptionResId,
-                             @DrawableRes int defaultIconResId,
-                             @DrawableRes int logoResId,
-                             @StyleRes int specialEventTheme,
-                             int drawerId,
-                             DateTime startDateInMillis,
-                             DateTime endDateInMillis) {
-        mTag = tag;
-        mDrawerIconResId = drawerIconResId;
-        mTitleResId = titleResId;
-        mDescriptionResId = descriptionResId;
-        mDefaultIconResId = defaultIconResId;
-        mLogoResId = logoResId;
-        mSpecialEventTheme = specialEventTheme;
-        mDrawerId = drawerId;
-        mStartDateInMillis = startDateInMillis;
-        mEndDateInMillis = endDateInMillis;
     }
 
     private TaggedEventSeries(Parcel in) {
@@ -98,8 +93,10 @@ public class TaggedEventSeries implements Parcelable {
         mLogoResId = in.readInt();
         mSpecialEventTheme = in.readInt();
         mDrawerId = in.readInt();
-        mStartDateInMillis = new DateTime(in.readLong());
-        mEndDateInMillis = new DateTime(in.readLong());
+        mGreetingsResId = in.readInt();
+        mGreetingsTitleResId = in.readInt();
+        mStartDate = new DateTime(in.readLong(), DateTimeZone.UTC);
+        mEndDateIn = new DateTime(in.readLong(), DateTimeZone.UTC);
     }
 
     public String getTag() {
@@ -134,12 +131,20 @@ public class TaggedEventSeries implements Parcelable {
         return mDrawerId;
     }
 
-    public DateTime getStartDateInMillis() {
-        return mStartDateInMillis;
+    public int getGreetingsResId() {
+        return mGreetingsResId;
     }
 
-    public DateTime getEndDateInMillis() {
-        return mEndDateInMillis;
+    public int getGreetingsTitleResId() {
+        return mGreetingsTitleResId;
+    }
+
+    public DateTime getStartDate() {
+        return mStartDate;
+    }
+
+    public DateTime getEndDate() {
+        return mEndDateIn;
     }
 
     @Override
@@ -157,7 +162,9 @@ public class TaggedEventSeries implements Parcelable {
         dest.writeInt(mLogoResId);
         dest.writeInt(mSpecialEventTheme);
         dest.writeInt(mDrawerId);
-        dest.writeLong(mStartDateInMillis.getMillis());
-        dest.writeLong(mEndDateInMillis.getMillis());
+        dest.writeInt(mGreetingsResId);
+        dest.writeInt(mGreetingsTitleResId);
+        dest.writeLong(mStartDate.getMillis());
+        dest.writeLong(mEndDateIn.getMillis());
     }
 }
