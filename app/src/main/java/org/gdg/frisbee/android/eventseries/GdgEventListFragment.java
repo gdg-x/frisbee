@@ -1,6 +1,7 @@
 package org.gdg.frisbee.android.eventseries;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.util.Pair;
 
@@ -23,6 +24,9 @@ import java.util.List;
 
 public class GdgEventListFragment extends EventListFragment {
 
+    private String mCacheKey;
+    private String mPlusId;
+
     public static EventListFragment newInstance(String plusId) {
         EventListFragment fragment = new GdgEventListFragment();
         Bundle arguments = new Bundle();
@@ -37,58 +41,33 @@ public class GdgEventListFragment extends EventListFragment {
     }
 
     @Override
-    void fetchEvents() {
-        final DateTime now = DateTime.now();
-        DateTime start = now.minusMonths(2).dayOfMonth().withMinimumValue();
-        DateTime end = now.plusYears(1).dayOfMonth().withMaximumValue();
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
+        mPlusId = getArguments().getString(Const.EXTRA_PLUS_ID);
+        mCacheKey = "event_" + mPlusId;
+    }
+
+    @Override
+    void fetchEvents() {
         setIsLoading(true);
-        final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID);
-        final String cacheKey = "event_" + plusId;
 
         if (Utils.isOnline(getActivity())) {
-            App.getInstance().getGdgXHub().getChapterEventList(plusId, start, end).enqueue(
-                new Callback<PagedList<Event>>() {
-                    @Override
-                    public void success(PagedList<Event> eventsPagedList) {
-                        List<Event> events = eventsPagedList.getItems();
-                        splitEventsAndAddToAdapter(events);
-                        App.getInstance().getModelCache().putAsync(cacheKey,
-                            mEvents,
-                            DateTime.now().plusHours(2),
-                            new ModelCache.CachePutListener() {
-                                @Override
-                                public void onPutIntoCache() {
-                                    mAdapter.addAll(mEvents);
-                                    setIsLoading(false);
-                                }
-                            });
-                    }
-
-                    @Override
-                    public void failure(Throwable error) {
-                        onError(R.string.fetch_events_failed);
-                    }
-
-                    @Override
-                    public void networkFailure(Throwable error) {
-                        onError(R.string.offline_alert);
-                    }
-                });
+            onListLoadMore(1, 0);
         } else {
-            App.getInstance().getModelCache().getAsync(cacheKey, false, new ModelCache.CacheListener() {
+            App.getInstance().getModelCache().getAsync(mCacheKey, false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
 
                     if (checkValidCache(item)) {
                         ArrayList<Event> events = (ArrayList<Event>) item;
-                        splitEventsAndAddToAdapter(events);
+                        mAdapter.addAll(events);
                         setIsLoading(false);
                         Snackbar snackbar = Snackbar.make(getView(), R.string.cached_content,
                                 Snackbar.LENGTH_SHORT);
                         ColoredSnackBar.info(snackbar).show();
                     } else {
-                        App.getInstance().getModelCache().removeAsync(cacheKey);
+                        App.getInstance().getModelCache().removeAsync(mCacheKey);
                         onNotFound();
                     }
                 }
@@ -104,19 +83,6 @@ public class GdgEventListFragment extends EventListFragment {
                 }
             });
         }
-    }
-
-    /**
-     * Helper method that will split events into upcoming / past
-     * and add to the adapter of this list fragment
-     *
-     * @param events
-     *      The events list to be added
-     */
-    private void splitEventsAndAddToAdapter(Collection<? extends SimpleEvent> events) {
-        Pair<List<SimpleEvent>, List<SimpleEvent>> pair = splitEventsList(events);
-        mAdapter.addAll(pair.first);
-        mAdapter.addAll(pair.second);
     }
 
     /**
@@ -142,5 +108,41 @@ public class GdgEventListFragment extends EventListFragment {
         }
         Collections.reverse(past);
         return new Pair<>(upcoming, past);
+    }
+
+    @Override
+    protected boolean onListLoadMore(int page, int totalItemsCount) {
+        App.getInstance().getGdgXHub().getChapterAllEventList(
+            mPlusId, itemsPerPackage, page,
+            Const.DESCENDING_ORDER, Const.START_DATE).
+            enqueue(new Callback<PagedList<Event>>() {
+                @Override
+                public void success(PagedList<Event> eventsPagedList) {
+                    List<Event> events = eventsPagedList.getItems();
+                    mAdapter.addAll(events);
+                    App.getInstance().getModelCache().putAsync(mCacheKey,
+                        mEvents,
+                        DateTime.now().plusHours(2),
+                        new ModelCache.CachePutListener() {
+                            @Override
+                            public void onPutIntoCache() {
+                                mAdapter.addAll(mEvents);
+                                setIsLoading(false);
+                            }
+                        });
+                }
+
+                @Override
+                public void failure(Throwable error) {
+                    onError(R.string.fetch_events_failed);
+                }
+
+                @Override
+                public void networkFailure(Throwable error) {
+                    onError(R.string.offline_alert);
+                }
+            }
+        );
+        return true;
     }
 }

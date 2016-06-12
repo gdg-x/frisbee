@@ -25,6 +25,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.Pulse;
 import org.gdg.frisbee.android.api.model.PulseEntry;
 
@@ -38,16 +39,20 @@ import butterknife.ButterKnife;
 
 class PulseAdapter extends BaseAdapter {
 
-    private LayoutInflater mInflater;
-    private ArrayList<Map.Entry<String, PulseEntry>> mPulse;
+    private final LayoutInflater mInflater;
+    private final ArrayList<Map.Entry<String, PulseEntry>> mPulse;
+    @Nullable
+    private final Directory mDirectory;
+
     private int[] mPositions;
-
     private int mMode;
+    private boolean mCheckValuesAgainstDirectory;
 
-    public PulseAdapter(Context ctx, @Nullable int[] positions) {
+    public PulseAdapter(Context ctx, @Nullable int[] positions, @Nullable Directory directory) {
         mInflater = LayoutInflater.from(ctx);
         mPulse = new ArrayList<>();
         mPositions = positions;
+        mDirectory = directory;
     }
 
     public int[] getPositions() {
@@ -116,11 +121,16 @@ class PulseAdapter extends BaseAdapter {
                 break;
         }
 
+        if (mCheckValuesAgainstDirectory && mDirectory != null) {
+            rowView.setEnabled(mDirectory.getGroupById(entry.getValue().getId()) != null);
+            holder.key.setEnabled(mDirectory.getGroupById(entry.getValue().getId()) != null);
+        }
         return rowView;
     }
 
-    public void setPulse(final int mode, Pulse pulse) {
+    public void setPulse(final int mode, Pulse pulse, boolean checkValuesAgainstDirectory) {
         mMode = mode;
+        mCheckValuesAgainstDirectory = checkValuesAgainstDirectory;
         mPulse.clear();
         mPulse.addAll(pulse.entrySet());
         //Only initialize if the positions are not provided.

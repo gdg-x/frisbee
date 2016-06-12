@@ -98,7 +98,6 @@ class EventAdapter extends BaseAdapter {
         return i;
     }
 
-
     @Override
     public View getView(int i, View convertView, ViewGroup viewGroup) {
         ViewHolder holder;

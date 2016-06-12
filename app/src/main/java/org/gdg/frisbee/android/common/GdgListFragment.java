@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -32,6 +33,7 @@ import android.widget.ListView;
 import com.tasomaniac.android.widget.DelayedProgressBar;
 
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.utils.EndlessScrollListener;
 
 import butterknife.BindView;
 
@@ -44,8 +46,16 @@ public class GdgListFragment extends BaseFragment {
                 onListItemClick(null, v, position, id);
             }
         };
+    private final AbsListView.OnScrollListener mOnScrollListener =
+        new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                return onListLoadMore(page, totalItemsCount);
+            }
+        };
+    protected final int itemsPerPackage = 20;
     ListAdapter mAdapter;
-    AdapterView<ListAdapter> mList;
+    AbsListView mList;
     @BindView(R.id.empty)
     View mEmptyView;
     @BindView(R.id.loading)
@@ -114,6 +124,18 @@ public class GdgListFragment extends BaseFragment {
      * @param id       The row id of the item that was clicked
      */
     public void onListItemClick(ListView l, View v, int position, long id) {
+    }
+
+    /**
+     * This method will be called when new data needs to be
+     * appended to the List. Subclasses should override.
+     *
+     * @param page              The ListView where the click happened
+     * @param totalItemsCount   The view that was clicked within the ListView.
+     * @return true if more data is being loaded; false if there is no more
+     */
+    protected boolean onListLoadMore(int page, int totalItemsCount) {
+        return false;
     }
 
     private void updateEmpty() {
@@ -321,13 +343,14 @@ public class GdgListFragment extends BaseFragment {
 
         if (!(rawList instanceof AdapterView)) {
             throw new RuntimeException(
-                "Content has view with id attribute 'R.id.list' that is not a ListView class");
+                "Content has view with id attribute 'R.id.list' that is not a AbsListView class");
         }
 
-        mList = (AdapterView<ListAdapter>) rawList;
+        mList = (AbsListView) rawList;
 
         mListShown = true;
         mList.setOnItemClickListener(mOnClickListener);
+        mList.setOnScrollListener(mOnScrollListener);
 
         if (mAdapter != null) {
             ListAdapter adapter = mAdapter;
