@@ -240,8 +240,23 @@
         tools:ignore="ManifestResource" />
     </service>
 
+    <service
+      android:name=".messaging.MessagingService">
+      <intent-filter>
+        <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+      </intent-filter>
+    </service>
+
+    <service
+      android:name=".messaging.InstanceIdService">
+      <intent-filter>
+        <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+      </intent-filter>
+    </service>
+
+
     <receiver
-      android:name=".arrow.SummitNotificationReceiver"
+      android:name=".eventseries.NotificationReceiver"
       android:enabled="true"
       android:exported="false">
       <intent-filter>
@@ -250,7 +265,7 @@
     </receiver>
 
     <service
-      android:name=".arrow.SummitNotificationService"
+      android:name=".eventseries.TaggedEventSeriesNotificationService"
       android:enabled="true"
       android:exported="false"/>
 

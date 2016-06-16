@@ -51,7 +51,7 @@ public class AboutActivity extends GdgActivity {
         getActionBarToolbar().setTitle(R.string.about);
         getActionBarToolbar().setNavigationIcon(R.drawable.ic_up);
 
-        mViewPager.setAdapter(new AboutPagerAdapter(this, getSupportFragmentManager()));
+        mViewPager.setAdapter(new AboutPagerAdapter(getSupportFragmentManager(), getResources()));
         mTabLayout.setupWithViewPager(mViewPager);
     }
 
@@ -86,7 +86,7 @@ public class AboutActivity extends GdgActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Timber.d("onActivityResult: requestCode=" + requestCode + ", resultCode=" + resultCode);
+        Timber.d("onActivityResult: requestCode= %d, resultCode= %d", requestCode, resultCode);
 
         if (requestCode == REQUEST_INVITE) {
             if (resultCode == RESULT_OK) {
@@ -96,9 +96,20 @@ public class AboutActivity extends GdgActivity {
                 // as the ID will be consistent on the sending and receiving devices.
                 String[] ids = AppInviteInvitation.getInvitationIds(resultCode, data);
                 Timber.d("Sent %d invitations", ids.length);
+                sendAnalyticsEvent(
+                    "AppInvite",
+                    "Successful",
+                    String.valueOf(ids.length),
+                    ids.length);
             } else {
                 // Sending failed or it was canceled, show failure message to the user
-//                showMessage(getString(R.string.send_failed));
+                showError(R.string.invitation_error_message);
+
+                sendAnalyticsEvent(
+                    "AppInvite",
+                    "Error",
+                    ""
+                );
             }
         }
     }
