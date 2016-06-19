@@ -16,5 +16,6 @@
     android:drawablePadding="@dimen/content_padding"
     android:padding="@dimen/content_padding"
     tools:drawableTop="@drawable/ic_ioextended"
+    android:textIsSelectable="true"
     tools:text="@string/ioextended_description" />
 </android.support.v7.widget.CardView>

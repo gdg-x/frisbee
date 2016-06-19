@@ -184,8 +184,9 @@
     <string name="action_deep_link" translatable="false">
         org.gdg.frisbee.android.DEEP_LINK_ACTION
     </string>
+  <string name="invitation_error_message">App Invite was unsuccessful.</string>
   <string name="thanks_for_feedback">Thank you for your Feedback!</string>
   <string name="retry">Retry</string>
-  <string name="message_io_greeting">Welcome to GDG Summit 2016. We have a great game called Arrow. It\'s all about meeting new people. Check it out and enjoy!</string>
-  <string name="title_io_greeting">Are you at GDG Summit?</string>
+  <string name="title_event_series_greetings">New events coming up!</string>
+  <string name="event_series_greetings">Learn more about %1$s and see events around the world!</string>
 </resources>

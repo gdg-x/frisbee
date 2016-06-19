@@ -49,6 +49,7 @@ import org.gdg.frisbee.android.api.PlusApi;
 import org.gdg.frisbee.android.api.PlusApiFactory;
 import org.gdg.frisbee.android.api.PlusImageUrlConverter;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.eventseries.NotificationHandler;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.utils.CrashlyticsTree;
 import org.gdg.frisbee.android.utils.FileUtils;
@@ -194,12 +195,23 @@ public class App extends BaseApp implements LocationListener {
             Const.START_TIME_GCP_NEXT,
             Const.END_TIME_GCP_NEXT));
 
+        updateEventSeriesAlarms();
+
+    }
+
+    private void updateEventSeriesAlarms() {
+        for (TaggedEventSeries eventSeries : currentTaggedEventSeries()) {
+            NotificationHandler notificationHandler = new NotificationHandler(this, eventSeries);
+            if (notificationHandler.shouldSetAlarm()) {
+                notificationHandler.setAlarmForNotification();
+            }
+        }
     }
 
     private void addTaggedEventSeriesIfDateFits(@NonNull TaggedEventSeries taggedEventSeries) {
         DateTime now = DateTime.now();
-        if (BuildConfig.DEBUG || (now.isAfter(taggedEventSeries.getStartDateInMillis())
-            && now.isBefore(taggedEventSeries.getEndDateInMillis()))) {
+        if (BuildConfig.DEBUG || (now.isAfter(taggedEventSeries.getStartDate())
+            && now.isBefore(taggedEventSeries.getEndDate()))) {
             mTaggedEventSeriesList.add(taggedEventSeries);
         }
     }

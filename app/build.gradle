@@ -140,10 +140,10 @@ dependencies {
     //Play Services
     compile "com.google.android.gms:play-services-games:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-plus:$rootProject.playServicesVersion"
-    compile "com.google.android.gms:play-services-appstate:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-analytics:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-appinvite:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-appindexing:$rootProject.playServicesVersion"
+    compile "com.google.firebase:firebase-messaging:$rootProject.playServicesVersion"
 
     //Google
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
@@ -201,6 +201,7 @@ dependencies {
     // Espresso UI Testing dependencies.
     androidTestCompile "com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion"
     androidTestCompile "com.android.support.test.espresso:espresso-intents:$rootProject.espressoVersion"
+    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

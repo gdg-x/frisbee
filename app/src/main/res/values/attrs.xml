@@ -29,6 +29,8 @@
     <attr name="specialEventLogo" format="reference" />
     <attr name="specialEventTitle" format="reference|string" />
     <attr name="specialEventDescription" format="reference|string" />
+    <attr name="specialEventGreetings" format="reference|string" />
+    <attr name="specialEventGreetingsTitle" format="reference|string" />
   </declare-styleable>
 
 </resources>

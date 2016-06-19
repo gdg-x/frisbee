@@ -28,6 +28,7 @@ public class Const {
     public static final String GITHUB_REPO = "frisbee";
     //Special Events
     public static final String EXTRA_TAGGED_EVENT = "org.gdg.frisbee.TAGGED_EVENT";
+    public static final String EXTRA_ALARM_FOR_ALL = "org.gdg.frisbee.ALARM_FOR_ALL";
     public static final String EXTRA_TAGGED_EVENT_CACHEKEY = "org.gdg.frisbee.TAGGED_EVENT_CACHEKEY";
     //Special Events Dates
     public static final DateTime START_TIME_DEVFEST = new DateTime(2015, 9, 1, 0, 0, DateTimeZone.UTC);
