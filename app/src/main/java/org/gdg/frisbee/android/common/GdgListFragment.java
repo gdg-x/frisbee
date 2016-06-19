@@ -340,7 +340,7 @@ public class GdgListFragment extends BaseFragment {
                 "Your content must have a ListView whose id attribute is 'R.id.list'");
         }
 
-        if (!(rawList instanceof AdapterView)) {
+        if (!(rawList instanceof AbsListView)) {
             throw new RuntimeException(
                 "Content has view with id attribute 'R.id.list' that is not a AbsListView class");
         }
