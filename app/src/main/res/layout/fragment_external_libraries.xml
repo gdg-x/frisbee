@@ -21,8 +21,9 @@
         android:id="@+id/external"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:autoLink="web"
         android:padding="10dp"
+        android:autoLink="web"
+        android:textIsSelectable="true"
         tools:text="@string/about_third_party_libraries" />
     </ScrollView>
   </android.support.v7.widget.CardView>
