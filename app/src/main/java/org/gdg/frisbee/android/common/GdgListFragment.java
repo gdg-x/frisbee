@@ -53,7 +53,6 @@ public class GdgListFragment extends BaseFragment {
                 return onListLoadMore(page, totalItemsCount);
             }
         };
-    protected final int itemsPerPackage = 20;
     ListAdapter mAdapter;
     AbsListView mList;
     @BindView(R.id.empty)

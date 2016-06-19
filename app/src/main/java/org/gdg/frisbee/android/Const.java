@@ -91,11 +91,6 @@ public class Const {
     public static final String CACHE_KEY_PULSE = "pulse_";
 
     //Order
-    public static final Integer ASCENDING_ORDER = 1;
-    public static final Integer DESCENDING_ORDER = -1;
-
-    //Sort
-    public static final String START_DATE = "start";
 
     private Const() {
     }

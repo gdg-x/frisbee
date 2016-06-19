@@ -113,8 +113,7 @@ public class GdgEventListFragment extends EventListFragment {
     @Override
     protected boolean onListLoadMore(int page, int totalItemsCount) {
         App.getInstance().getGdgXHub().getChapterAllEventList(
-            mPlusId, itemsPerPackage, page,
-            Const.DESCENDING_ORDER, Const.START_DATE).
+            mPlusId, page).
             enqueue(new Callback<PagedList<Event>>() {
                 @Override
                 public void success(PagedList<Event> eventsPagedList) {
