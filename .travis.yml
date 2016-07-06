@@ -51,8 +51,8 @@ env:
     - ADB_INSTALL_TIMEOUT=8
     - GRADLE_OPTS="-Xms40m -Xmx3g -XX:MaxPermSize=3g"
   matrix:
-    - ANDROID_TARGET=21
-    - ANDROID_TARGET=22
+    - ANDROID_TARGET=android-21
+    - ANDROID_TARGET=android-22
 
 branches:
   except:
