@@ -5,8 +5,8 @@ import com.google.gson.FieldNamingPolicy;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.Utils;
 
-import retrofit2.GsonConverterFactory;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class GithubFactory {
 
@@ -17,10 +17,12 @@ public class GithubFactory {
 
     private static Retrofit provideRestAdapter() {
         return new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create(Utils.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)))
-                .client(OkClientFactory.okHttpClientWithIdlingResources(App.getInstance().getOkHttpClient()))
-                .build();
+            .baseUrl(API_URL)
+            .client(App.getInstance().getOkHttpClient())
+            .addConverterFactory(
+                GsonConverterFactory.create(Utils.getGson(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES))
+            )
+            .build();
     }
 
     public static GitHub provideGitHubApi() {

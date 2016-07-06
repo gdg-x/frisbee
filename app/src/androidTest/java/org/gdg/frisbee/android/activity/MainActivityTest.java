@@ -38,7 +38,7 @@ public class MainActivityTest extends IdlingTestCase {
         @Override
         protected void beforeActivityLaunched() {
             Context context = InstrumentationRegistry.getTargetContext();
-            PrefUtils.setInitialSettings(context, false, false, null, null);
+            PrefUtils.setInitialSettings(context, false);
             PrefUtils.setHomeChapter(context, CHAPTER_BRUSSELS);
             PrefUtils.setShouldNotOpenDrawerOnStart(context);
         }
@@ -49,9 +49,9 @@ public class MainActivityTest extends IdlingTestCase {
 
         onView(withId(R.id.actionbar_spinner)).perform(click());
         onData(allOf(is(instanceOf(Chapter.class)), is(CHAPTER_ISTANBUL)))
-                .perform(click());
+            .perform(click());
         onView(withId(R.id.actionbar_spinner))
-                .check(matches(withSpinnerText(CHAPTER_ISTANBUL.toString())));
+            .check(matches(withSpinnerText(CHAPTER_ISTANBUL.toString())));
 
         onView(withId(R.id.pager)).perform(swipeRight());
         onView(withId(R.id.tagline)).check(matches(withText(containsString(CHAPTER_ISTANBUL.toString()))));
@@ -67,14 +67,14 @@ public class MainActivityTest extends IdlingTestCase {
 
         onView(withId(R.id.actionbar_spinner)).perform(click());
         onData(allOf(is(instanceOf(Chapter.class)), is(CHAPTER_ISTANBUL)))
-                .perform(click());
+            .perform(click());
         onView(withId(R.id.actionbar_spinner))
-                .check(matches(withSpinnerText(CHAPTER_ISTANBUL.toString())));
+            .check(matches(withSpinnerText(CHAPTER_ISTANBUL.toString())));
 
 
         onView(isRoot()).perform(orientationLandscape());
 
         onView(withId(R.id.actionbar_spinner))
-                .check(matches(withSpinnerText(CHAPTER_ISTANBUL.toString())));
+            .check(matches(withSpinnerText(CHAPTER_ISTANBUL.toString())));
     }
 }

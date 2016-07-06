@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.onboarding;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,25 +27,32 @@ import android.widget.LinearLayout;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.common.BaseFragment;
+import org.gdg.frisbee.android.utils.PrefUtils;
 
-import butterknife.ButterKnife;
-import butterknife.Bind;
+import butterknife.BindView;
 
 public class FirstStartStep3Fragment extends BaseFragment {
 
-    @Bind(R.id.complete)
+    @BindView(R.id.complete)
     Button mCompleteButton;
 
-    @Bind(R.id.gcmContainer)
+    @BindView(R.id.gcmContainer)
     LinearLayout mGcmContainer;
 
-    @Bind(R.id.enable_gcm)
+    @BindView(R.id.enable_gcm)
     CheckBox mEnableGcm;
 
-    @Bind(R.id.enable_analytics)
+    @BindView(R.id.enable_analytics)
     CheckBox mEnableAnalytics;
 
-    private boolean mIsSignedIn = false;
+    private boolean isSignedIn = false;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        isSignedIn = PrefUtils.isSignedIn(getContext());
+    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -65,7 +73,7 @@ public class FirstStartStep3Fragment extends BaseFragment {
     public void onResume() {
         super.onResume();
 
-        if (!mIsSignedIn) {
+        if (!isSignedIn) {
             mGcmContainer.setVisibility(View.GONE);
         } else {
             mGcmContainer.setVisibility(View.VISIBLE);
@@ -74,13 +82,11 @@ public class FirstStartStep3Fragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_welcome_step3, container, false);
-        ButterKnife.bind(this, v);
-        return v;
+        return inflateView(inflater, R.layout.fragment_welcome_step3, container);
     }
 
     public void setSignedIn(boolean mIsSignedIn) {
-        this.mIsSignedIn = mIsSignedIn;
+        this.isSignedIn = mIsSignedIn;
 
         if (mGcmContainer != null) {
             if (!mIsSignedIn) {

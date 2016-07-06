@@ -42,7 +42,6 @@ import timber.log.Timber;
  * methods. Additionally it can be tracked when {@link #onPageSelected(int)} event is
  * fired, but one must first register for such event.
  *
- * @author Bartosz Przybylski <bart.p.pl@gmail.com>
  */
 public abstract class TrackableActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 

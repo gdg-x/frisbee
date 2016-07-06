@@ -1,7 +1,6 @@
 package org.gdg.frisbee.android.arrow;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v4.util.SparseArrayCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,10 +11,11 @@ import android.widget.TextView;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.utils.PlusUtils;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.BitmapBorderTransformation;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class OrganizerAdapter extends RecyclerView.Adapter<OrganizerAdapter.ViewHolder> {
@@ -31,8 +31,8 @@ public class OrganizerAdapter extends RecyclerView.Adapter<OrganizerAdapter.View
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view =  LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.list_tagged_organizer_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(
+            R.layout.list_tagged_organizer_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -41,11 +41,11 @@ public class OrganizerAdapter extends RecyclerView.Adapter<OrganizerAdapter.View
         final Organizer organizer = organizers.get(position);
 
         App.getInstance().getPicasso()
-                .load(organizer.getResolved().getImage().getUrl())
-                .transform(new BitmapBorderTransformation(0,
-                        context.getResources().getDimensionPixelSize(R.dimen.list_item_avatar) / 2,
-                        context.getResources().getColor(R.color.white)))
-                .into(holder.avatar);
+            .load(organizer.getResolved().getImage().getUrl())
+            .transform(new BitmapBorderTransformation(0,
+                context.getResources().getDimensionPixelSize(R.dimen.list_item_avatar) / 2,
+                context.getResources().getColor(R.color.white)))
+            .into(holder.avatar);
 
         holder.name.setText(organizer.getResolved().getDisplayName());
         holder.chapter.setText(organizer.getChapterName());
@@ -53,7 +53,7 @@ public class OrganizerAdapter extends RecyclerView.Adapter<OrganizerAdapter.View
             @Override
             public void onClick(View v) {
                 context.startActivity(Utils.createExternalIntent(context,
-                        Uri.parse("https://plus.google.com/" + organizer.getPlusId() + "/posts")));
+                    PlusUtils.createProfileUrl(organizer.getPlusId())));
             }
         });
     }
@@ -69,13 +69,13 @@ public class OrganizerAdapter extends RecyclerView.Adapter<OrganizerAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.avatar)
+        @BindView(R.id.avatar)
         ImageView avatar;
 
-        @Bind(R.id.organizerName)
+        @BindView(R.id.organizerName)
         TextView name;
 
-        @Bind(R.id.organizerChapter)
+        @BindView(R.id.organizerChapter)
         TextView chapter;
 
         public ViewHolder(View itemView) {

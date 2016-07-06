@@ -48,19 +48,18 @@ import org.joda.time.DateTime;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import butterknife.BindView;
 
 public class FirstStartStep1Fragment extends BaseFragment {
 
     private static final String ARG_SELECTED_CHAPTER = "selected_chapter";
-    @Bind(R.id.chapter_spinner)
+    @BindView(R.id.chapter_spinner)
     AutoCompleteSpinnerView mChapterSpinnerView;
-    @Bind(R.id.chapter_spinner_text_input_layout)
+    @BindView(R.id.chapter_spinner_text_input_layout)
     TextInputLayout mChapterSpinnerTextInputLayout;
-    @Bind(R.id.confirm)
+    @BindView(R.id.confirm)
     Button mConfirmButton;
-    @Bind(R.id.viewSwitcher)
+    @BindView(R.id.viewSwitcher)
     ViewSwitcher mLoadSwitcher;
     private ChapterAdapter mChapterAdapter;
     private Chapter mSelectedChapter;
@@ -81,7 +80,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
 
         mLocationComparator = new ChapterComparator(PrefUtils.getHomeChapterId(getActivity()),
-                App.getInstance().getLastLocation());
+            App.getInstance().getLastLocation());
 
         mChapterAdapter = new ChapterAdapter(getActivity(), R.layout.spinner_item_welcome);
         mChapterAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
@@ -91,21 +90,21 @@ public class FirstStartStep1Fragment extends BaseFragment {
         }
 
         App.getInstance().getModelCache().getAsync(
-                Const.CACHE_KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
-                    @Override
-                    public void onGet(Object item) {
-                        if (isContextValid()) {
-                            Directory directory = (Directory) item;
-                            addChapters(directory.getGroups());
-                            mLoadSwitcher.setDisplayedChild(1);
-                        }
-                    }
-
-                    @Override
-                    public void onNotFound(String key) {
-                        fetchChapters();
+            Const.CACHE_KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
+                @Override
+                public void onGet(Object item) {
+                    Directory directory = (Directory) item;
+                    if (isContextValid()) {
+                        addChapters(directory.getGroups());
+                        mLoadSwitcher.setDisplayedChild(1);
                     }
                 }
+
+                @Override
+                public void onNotFound(String key) {
+                    fetchChapters();
+                }
+            }
         );
 
         mChapterSpinnerView.setThreshold(1);
@@ -141,15 +140,15 @@ public class FirstStartStep1Fragment extends BaseFragment {
         mChapterSpinnerTextInputLayout.setErrorEnabled(true);
 
         mConfirmButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (getActivity() instanceof Step1Listener) {
-                            //TODO re-order cached chapter list
-                            ((Step1Listener) getActivity()).onConfirmedChapter(mSelectedChapter);
-                        }
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (getActivity() instanceof Step1Listener) {
+                        //TODO re-order cached chapter list
+                        ((Step1Listener) getActivity()).onConfirmedChapter(mSelectedChapter);
                     }
                 }
+            }
         );
     }
 
@@ -178,9 +177,9 @@ public class FirstStartStep1Fragment extends BaseFragment {
                     mLoadSwitcher.setDisplayedChild(1);
                 }
                 App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB,
-                        directory,
-                        DateTime.now().plusDays(4),
-                        null);
+                    directory,
+                    DateTime.now().plusDays(4),
+                    null);
             }
 
             @Override
@@ -200,8 +199,8 @@ public class FirstStartStep1Fragment extends BaseFragment {
         if (isContextValid()) {
             if (getView() != null) {
                 Snackbar snackbar = Snackbar.make(getView(), errorStringRes,
-                        Snackbar.LENGTH_INDEFINITE);
-                snackbar.setAction("Retry", new View.OnClickListener() {
+                    Snackbar.LENGTH_INDEFINITE);
+                snackbar.setAction(R.string.retry, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         fetchChapters();
@@ -237,9 +236,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_welcome_step1, container, false);
-        ButterKnife.bind(this, v);
-        return v;
+        return inflateView(inflater, R.layout.fragment_welcome_step1, container);
     }
 
     public interface Step1Listener {
@@ -254,7 +251,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
 
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 if (event.getRawX() >= (mChapterSpinnerView.getRight()
-                        - mChapterSpinnerView.getCompoundDrawables()[drawableRight].getBounds().width())) {
+                    - mChapterSpinnerView.getCompoundDrawables()[drawableRight].getBounds().width())) {
                     mChapterSpinnerView.setText("");
                     resetAutoCompleteHint();
                     mChapterSpinnerView.postDelayed(new Runnable() {

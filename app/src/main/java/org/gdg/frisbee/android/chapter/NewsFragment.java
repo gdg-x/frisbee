@@ -17,35 +17,28 @@
 package org.gdg.frisbee.android.chapter;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.api.services.plus.Plus;
-import com.google.api.services.plus.model.ActivityFeed;
-
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.Callback;
+import org.gdg.frisbee.android.api.model.plus.Activities;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.fragment.SwipeRefreshRecyclerViewFragment;
-import org.gdg.frisbee.android.task.Builder;
-import org.gdg.frisbee.android.task.CommonAsyncTask;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
-import java.io.IOException;
-
-import butterknife.ButterKnife;
-
 public class NewsFragment extends SwipeRefreshRecyclerViewFragment
-        implements SwipeRefreshLayout.OnRefreshListener {
+    implements SwipeRefreshLayout.OnRefreshListener {
 
     private NewsAdapter mAdapter;
 
@@ -61,8 +54,13 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
     public void onResume() {
         super.onResume();
 
-        for (int i = 0; i <= getListView().getChildCount(); i++) {
-            mAdapter.updatePlusOne(getListView().getChildAt(i));
+        RecyclerView recyclerView = getListView();
+        for (int i = 0, size = recyclerView.getChildCount(); i <= size; i++) {
+            View child = recyclerView.getChildAt(i);
+            if (child != null) {
+                mAdapter.updatePlusOne((NewsAdapter.ViewHolder)
+                    recyclerView.getChildViewHolder(child));
+            }
         }
     }
 
@@ -70,12 +68,12 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        StaggeredGridLayoutManager layoutManager = 
-                new StaggeredGridLayoutManager(
-                        getResources().getInteger(R.integer.news_fragment_column_count), 
-                        StaggeredGridLayoutManager.VERTICAL);
+        StaggeredGridLayoutManager layoutManager =
+            new StaggeredGridLayoutManager(
+                getResources().getInteger(R.integer.news_fragment_column_count),
+                StaggeredGridLayoutManager.VERTICAL);
         getListView().setLayoutManager(layoutManager);
-        
+
         mAdapter = new NewsAdapter(getActivity(), ((GdgActivity) getActivity()).getGoogleApiClient());
         setRecyclerAdapter(mAdapter);
 
@@ -83,55 +81,55 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
 
         final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID);
         if (Utils.isOnline(getActivity())) {
-            new Builder<>(String.class, ActivityFeed.class)
-                    .addParameter(plusId)
-                    .setOnPreExecuteListener(new CommonAsyncTask.OnPreExecuteListener() {
-                        @Override
-                        public void onPreExecute() {
-                            setIsLoading(true);
-                        }
-                    })
-                    .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, ActivityFeed>() {
-                        @Override
-                        public ActivityFeed doInBackground(String... params) {
-                            ActivityFeed feed = (ActivityFeed) App.getInstance().getModelCache().get(Const.CACHE_KEY_NEWS + params[0]);
-                            if (feed == null) {
-                                feed = getActivityFeedSync(params[0]);
-                            }
-                            return feed;
-                        }
-                    })
-                    .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, ActivityFeed>() {
-                        @Override
-                        public void onPostExecute(String[] params, ActivityFeed activityFeed) {
-                            if (activityFeed != null) {
-                                mAdapter.addAll(activityFeed.getItems());
-                                setIsLoading(false);
-                            }
-                        }
-                    })
-                    .buildAndExecute();
-        } else {
-            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_NEWS + plusId, false, new ModelCache.CacheListener() {
-                @Override
-                public void onGet(Object item) {
-                    ActivityFeed feed = (ActivityFeed) item;
-
-                    if (isAdded()) {
-                        Snackbar snackbar = Snackbar.make(getView(), R.string.cached_content,
-                                Snackbar.LENGTH_SHORT);
-                        ColoredSnackBar.info(snackbar).show();
+            setIsLoading(true);
+            App.getInstance().getModelCache()
+                .getAsync(Const.CACHE_KEY_NEWS + plusId, new ModelCache.CacheListener() {
+                    @Override
+                    public void onGet(Object item) {
+                        Activities activityFeed = (Activities) item;
+                        mAdapter.addAll(activityFeed.getItems());
+                        setIsLoading(false);
                     }
 
-                    mAdapter.addAll(feed.getItems());
-                    setIsLoading(false);
-                }
+                    @Override
+                    public void onNotFound(String key) {
+                        App.getInstance().getPlusApi().getActivities(plusId).enqueue(
+                            new Callback<Activities>() {
+                                @Override
+                                public void success(Activities activityFeed) {
+                                    if (activityFeed != null) {
+                                        mAdapter.addAll(activityFeed.getItems());
+                                    } else {
+                                        // TODO show empty view
+                                    }
+                                    setIsLoading(false);
+                                }
+                            });
+                    }
+                });
+        } else {
+            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_NEWS + plusId,
+                false,
+                new ModelCache.CacheListener() {
+                    @Override
+                    public void onGet(Object item) {
+                        Activities feed = (Activities) item;
 
-                @Override
-                public void onNotFound(String key) {
-                    showError(R.string.offline_alert);
-                }
-            });
+                        if (isAdded()) {
+                            Snackbar snackbar = Snackbar.make(getView(), R.string.cached_content,
+                                Snackbar.LENGTH_SHORT);
+                            ColoredSnackBar.info(snackbar).show();
+                        }
+
+                        mAdapter.addAll(feed.getItems());
+                        setIsLoading(false);
+                    }
+
+                    @Override
+                    public void onNotFound(String key) {
+                        showError(R.string.offline_alert);
+                    }
+                });
         }
     }
 
@@ -159,58 +157,34 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_news, container, false);
-        ButterKnife.bind(this, v);
+        View v = inflateView(inflater, R.layout.fragment_news, container);
         return createSwipeRefresh(v);
     }
 
     @Override
     public void onRefresh() {
         if (Utils.isOnline(getActivity())) {
-            new Builder<>(String.class, ActivityFeed.class)
-                    .addParameter(getArguments().getString(Const.EXTRA_PLUS_ID))
-                    .setOnBackgroundExecuteListener(new CommonAsyncTask.OnBackgroundExecuteListener<String, ActivityFeed>() {
-                        @Override
-                        public ActivityFeed doInBackground(String... params) {
-                            return getActivityFeedSync(params[0]);
-                        }
-                    })
-                    .setOnPostExecuteListener(new CommonAsyncTask.OnPostExecuteListener<String, ActivityFeed>() {
-                        @Override
-                        public void onPostExecute(String[] params, ActivityFeed activityFeed) {
-                            if (activityFeed != null) {
-                                mAdapter.replaceAll(activityFeed.getItems(), 0);
-                                mAdapter.notifyDataSetChanged();
+            final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID);
+            App.getInstance().getPlusApi().getActivities(plusId).enqueue(
+                new Callback<Activities>() {
+                    @Override
+                    public void success(Activities activityFeed) {
+                        if (activityFeed != null) {
+                            cacheActivityFeed(plusId, activityFeed);
+                            mAdapter.replaceAll(activityFeed.getItems(), 0);
+                            mAdapter.notifyDataSetChanged();
 
-                                if (getActivity() != null) {
-                                    setRefreshing(false);
-                                }
+                            if (getActivity() != null) {
+                                setRefreshing(false);
                             }
                         }
-                    })
-                    .buildAndExecute();
+                    }
+                });
         }
     }
 
-    @Nullable
-    private ActivityFeed getActivityFeedSync(String param) {
-        try {
-            Plus client = App.getInstance().getPlusClient();
-
-            Plus.Activities.List request = client.activities().list(param, "public");
-            request.setMaxResults(10L);
-            request.setFields(
-                    "nextPageToken,"
-                            + "items(id,published,url,object/content,verb,"
-                            + "object/attachments,annotation,object(plusoners,replies,resharers))");
-            ActivityFeed feed = request.execute();
-
-            App.getInstance().getModelCache().put(Const.CACHE_KEY_NEWS + param, feed, DateTime.now().plusHours(1));
-
-            return feed;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public void cacheActivityFeed(String plusId, Activities feed) {
+        App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_NEWS + plusId, feed,
+            DateTime.now().plusHours(1), null);
     }
 }

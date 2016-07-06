@@ -26,15 +26,9 @@ import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.api.client.googleapis.services.json.CommonGoogleJsonClientRequestInitializer;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.services.plus.Plus;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
-import com.squareup.picasso.LruCache;
 import com.squareup.picasso.Picasso;
 
 import net.danlew.android.joda.JodaTimeAndroid;
@@ -42,7 +36,6 @@ import net.danlew.android.joda.JodaTimeAndroid;
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.GapiOkTransport;
 import org.gdg.frisbee.android.api.GdeDirectory;
 import org.gdg.frisbee.android.api.GdeDirectoryFactory;
 import org.gdg.frisbee.android.api.GdgXHub;
@@ -52,13 +45,16 @@ import org.gdg.frisbee.android.api.GithubFactory;
 import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.GroupDirectoryFactory;
 import org.gdg.frisbee.android.api.OkClientFactory;
-import org.gdg.frisbee.android.api.PlusPersonDownloader;
+import org.gdg.frisbee.android.api.PlusApi;
+import org.gdg.frisbee.android.api.PlusApiFactory;
+import org.gdg.frisbee.android.api.PlusImageUrlConverter;
 import org.gdg.frisbee.android.cache.ModelCache;
+import org.gdg.frisbee.android.eventseries.NotificationHandler;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.utils.CrashlyticsTree;
+import org.gdg.frisbee.android.utils.FileUtils;
 import org.gdg.frisbee.android.utils.GingerbreadLastLocationFinder;
 import org.gdg.frisbee.android.utils.PrefUtils;
-import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
 
 import java.io.File;
@@ -71,11 +67,6 @@ import timber.log.Timber;
 public class App extends BaseApp implements LocationListener {
 
     private static App mInstance = null;
-
-    public static App getInstance() {
-        return mInstance;
-    }
-
     private OkHttpClient mOkHttpClient;
     private GroupDirectory groupDirectoryInstance;
     private GdgXHub hubInstance;
@@ -89,7 +80,11 @@ public class App extends BaseApp implements LocationListener {
     private OrganizerChecker mOrganizerChecker;
     private ArrayList<TaggedEventSeries> mTaggedEventSeriesList;
     private RefWatcher refWatcher;
-    private Plus plusClient;
+    private PlusApi plusApiInstance;
+
+    public static App getInstance() {
+        return mInstance;
+    }
 
     @Override
     public void onCreate() {
@@ -99,15 +94,17 @@ public class App extends BaseApp implements LocationListener {
             Timber.plant(new Timber.DebugTree());
 
             StrictMode.ThreadPolicy.Builder b = new StrictMode.ThreadPolicy.Builder()
-                    .detectDiskReads()
-                    .detectDiskWrites()
-                    .detectNetwork()
-                    .penaltyLog()
-                    .penaltyFlashScreen();
+                .detectDiskReads()
+                .detectDiskWrites()
+                .detectNetwork()
+                .penaltyLog()
+                .penaltyFlashScreen();
 
             StrictMode.setThreadPolicy(b.build());
         } else {
             Fabric.with(this, new Crashlytics());
+            Crashlytics.setString("commitSha", BuildConfig.COMMIT_SHA);
+            Crashlytics.setString("commitTime", BuildConfig.COMMIT_TIME);
             Timber.plant(new CrashlyticsTree());
         }
 
@@ -120,31 +117,17 @@ public class App extends BaseApp implements LocationListener {
         }
         mOkHttpClient = OkClientFactory.provideOkHttpClient(this);
 
-        //Initialize Plus Client which is used to get profile pictures and NewFeed of the chapters.
-        final HttpTransport httpTransport = new GapiOkTransport(mOkHttpClient);
-        final JsonFactory jsonFactory = new GsonFactory();
-        plusClient = new Plus.Builder(httpTransport, jsonFactory, null)
-                .setGoogleClientRequestInitializer(
-                        new CommonGoogleJsonClientRequestInitializer(BuildConfig.IP_SIMPLE_API_ACCESS_KEY))
-                .setApplicationName("GDG Frisbee")
-                .build();
-
-        // Initialize ModelCache and Volley
+        // Initialize ModelCache
         getModelCache();
 
         PrefUtils.increaseAppStartCount(this);
 
         // Initialize Picasso
-        // When we clone mOkHttpClient, it will use all the same cache and everything.
-        // Only the interceptors will be different.
-        // We shouldn't have the below interceptor in other instances.
         OkHttpClient.Builder picassoClient = mOkHttpClient.newBuilder();
-        picassoClient.addInterceptor(new PlusPersonDownloader(plusClient));
-
+        picassoClient.addInterceptor(new PlusImageUrlConverter());
         mPicasso = new Picasso.Builder(this)
-                .downloader(new OkHttp3Downloader(picassoClient.build()))
-                .memoryCache(new LruCache(this))
-                .build();
+            .downloader(new OkHttp3Downloader(picassoClient.build()))
+            .build();
 
         JodaTimeAndroid.init(this);
 
@@ -162,6 +145,13 @@ public class App extends BaseApp implements LocationListener {
         initTaggedEventSeries();
     }
 
+    @Override
+    protected void onAppUpdate(int oldVersion, int newVersion) {
+        super.onAppUpdate(oldVersion, newVersion);
+
+        File diskCacheLocation = getDiskCacheLocation();
+        FileUtils.deleteDirectory(diskCacheLocation);
+    }
 
     /**
      * Init TaggedEventSeries.
@@ -171,56 +161,67 @@ public class App extends BaseApp implements LocationListener {
         mTaggedEventSeriesList = new ArrayList<>();
         //Add DevFest
         addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
-                R.style.Theme_GDG_Special_DevFest,
-                "devfest",
-                Const.DRAWER_DEVFEST,
-                Const.START_TIME_DEVFEST,
-                Const.END_TIME_DEVFEST));
+            R.style.Theme_GDG_Special_DevFest,
+            "devfest",
+            Const.DRAWER_DEVFEST,
+            Const.START_TIME_DEVFEST,
+            Const.END_TIME_DEVFEST));
         //Add Women Techmakers
         addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
-                R.style.Theme_GDG_Special_Wtm,
-                "wtm",
-                Const.DRAWER_WTM,
-                Const.START_TIME_WTM,
-                Const.END_TIME_WTM));
+            R.style.Theme_GDG_Special_Wtm,
+            "wtm",
+            Const.DRAWER_WTM,
+            Const.START_TIME_WTM,
+            Const.END_TIME_WTM));
         //Add Android Fundamentals Study Jams
         addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
-                R.style.Theme_GDG_Special_StudyJams,
-                "studyjam",
-                Const.DRAWER_STUDY_JAM,
-                Const.START_TIME_STUDY_JAMS,
-                Const.END_TIME_STUDY_JAMS));
+            R.style.Theme_GDG_Special_StudyJams,
+            "studyjam",
+            Const.DRAWER_STUDY_JAM,
+            Const.START_TIME_STUDY_JAMS,
+            Const.END_TIME_STUDY_JAMS));
         //Add IO Extended
         addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
-                R.style.Theme_GDG_Special_IOExtended,
-                "i-oextended",
-                Const.DRAWER_IO_EXTENDED,
-                Const.START_TIME_IOEXTENDED,
-                Const.END_TIME_IOEXTENDED));
+            R.style.Theme_GDG_Special_IOExtended,
+            "i-oextended",
+            Const.DRAWER_IO_EXTENDED,
+            Const.START_TIME_IOEXTENDED,
+            Const.END_TIME_IOEXTENDED));
+        //Add GCP NEXT
+        addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
+            R.style.Theme_GDG_Special_GCPNEXT,
+            "gcpnext",
+            Const.DRAWER_GCP_NEXT,
+            Const.START_TIME_GCP_NEXT,
+            Const.END_TIME_GCP_NEXT));
+
+        updateEventSeriesAlarms();
+
+    }
+
+    private void updateEventSeriesAlarms() {
+        for (TaggedEventSeries eventSeries : currentTaggedEventSeries()) {
+            NotificationHandler notificationHandler = new NotificationHandler(this, eventSeries);
+            if (notificationHandler.shouldSetAlarm()) {
+                notificationHandler.setAlarmForNotification();
+            }
+        }
     }
 
     private void addTaggedEventSeriesIfDateFits(@NonNull TaggedEventSeries taggedEventSeries) {
         DateTime now = DateTime.now();
-        if (BuildConfig.DEBUG || (now.isAfter(taggedEventSeries.getStartDateInMillis())
-                && now.isBefore(taggedEventSeries.getEndDateInMillis()))) {
+        if (BuildConfig.DEBUG || (now.isAfter(taggedEventSeries.getStartDate())
+            && now.isBefore(taggedEventSeries.getEndDate()))) {
             mTaggedEventSeriesList.add(taggedEventSeries);
         }
     }
 
     public void updateLastLocation() {
-        if (Utils.isEmulator()) {
-            return;
-        }
-
         Location loc = mLocationFinder.getLastBestLocation(5000, 60 * 60 * 1000);
 
         if (loc != null) {
             mLastLocation = loc;
         }
-    }
-
-    public Plus getPlusClient() {
-        return plusClient;
     }
 
     public Location getLastLocation() {
@@ -244,25 +245,28 @@ public class App extends BaseApp implements LocationListener {
         return mTracker;
     }
 
-    @NonNull
     public ModelCache getModelCache() {
         if (mModelCache == null) {
 
-            File cacheDir = getExternalCacheDir();
-            if (cacheDir == null) {
-                cacheDir = getCacheDir();
-            }
-            final File rootDir = new File(cacheDir, "/model_cache/");
+            final File rootDir = getDiskCacheLocation();
 
-            ModelCache.Builder builder = new ModelCache.Builder()
-                    .setMemoryCacheEnabled(true);
-            if (rootDir.isDirectory() || rootDir.mkdirs()) {
+            ModelCache.Builder builder = new ModelCache.Builder(this)
+                .setMemoryCacheEnabled(true);
+            if (rootDir.mkdirs() || rootDir.isDirectory()) {
                 builder.setDiskCacheEnabled(true)
-                        .setDiskCacheLocation(rootDir);
+                    .setDiskCacheLocation(rootDir);
             }
             mModelCache = builder.build();
         }
         return mModelCache;
+    }
+
+    private File getDiskCacheLocation() {
+        File cacheDir = getExternalCacheDir();
+        if (cacheDir == null) {
+            cacheDir = getCacheDir();
+        }
+        return new File(cacheDir, "/model_cache/");
     }
 
     @Override
@@ -290,8 +294,8 @@ public class App extends BaseApp implements LocationListener {
         mOrganizerChecker.checkOrganizer(apiClient, responseHandler);
     }
 
-    public void resetOrganizer() {
-        mOrganizerChecker.resetOrganizer();
+    public void initOrganizer() {
+        mOrganizerChecker.initOrganizer();
     }
 
     /**
@@ -331,6 +335,13 @@ public class App extends BaseApp implements LocationListener {
             gitHubInstance = GithubFactory.provideGitHubApi();
         }
         return gitHubInstance;
+    }
+
+    public PlusApi getPlusApi() {
+        if (plusApiInstance == null) {
+            plusApiInstance = PlusApiFactory.providePlusApi();
+        }
+        return plusApiInstance;
     }
 
     public OkHttpClient getOkHttpClient() {

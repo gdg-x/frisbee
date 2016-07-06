@@ -15,14 +15,14 @@
 -->
 
 <android.support.v7.widget.Toolbar
-  android:id="@+id/toolbar_actionbar"
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/toolbar_actionbar"
   android:layout_width="match_parent"
   android:layout_height="?attr/actionBarSize"
   android:background="?attr/colorPrimary"
   android:theme="@style/ActionBarThemeOverlay"
-  app:popupTheme="@style/ActionBarPopupThemeOverlay"
   app:contentInsetStart="?actionBarInsetStart"
+  app:popupTheme="@style/ActionBarPopupThemeOverlay"
   app:titleTextAppearance="@style/ActionBar.TitleText" />
 

@@ -17,9 +17,6 @@
 package org.gdg.frisbee.android.event;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
@@ -36,13 +33,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.plus.People;
-import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.model.people.Person;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.tasomaniac.android.widget.DelayedProgressBar;
 
 import org.gdg.frisbee.android.Const;
@@ -51,6 +41,7 @@ import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.EventFullDetails;
+import org.gdg.frisbee.android.api.model.plus.ImageInfo;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.BaseFragment;
@@ -59,41 +50,46 @@ import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import butterknife.BindView;
 
 public class EventOverviewFragment extends BaseFragment {
 
-    @Bind(R.id.title)
+    @BindView(R.id.title)
     TextView mTitle;
 
-    @Bind(R.id.date)
+    @BindView(R.id.date)
     TextView mDate;
 
-    @Bind(R.id.start_time)
+    @BindView(R.id.start_time)
     TextView mStartTime;
 
-    @Bind(R.id.event_description)
+    @BindView(R.id.event_description)
     TextView mEventDescription;
 
-    @Bind(R.id.loading)
+    @BindView(R.id.loading)
     DelayedProgressBar mProgressContainer;
 
-    @Bind(R.id.group_logo)
+    @BindView(R.id.group_logo)
     ImageView mGroupLogo;
 
-    @Bind(R.id.container)
+    @BindView(R.id.container)
     View mContainer;
 
     private boolean mLoading;
     private Directory mDirectory;
     private EventFullDetails mEvent;
 
+    public static Fragment createfor(String eventId) {
+        EventOverviewFragment fragment = new EventOverviewFragment();
+        Bundle args = new Bundle();
+        args.putString(Const.EXTRA_EVENT_ID, eventId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_event_overview, parent, false);
-        ButterKnife.bind(this, v);
-
+        View v = inflateView(inflater, R.layout.fragment_event_overview, parent);
         setHasOptionsMenu(true);
         return v;
     }
@@ -208,40 +204,35 @@ public class EventOverviewFragment extends BaseFragment {
             return;
         }
 
-        Plus.PeopleApi.load(((GdgActivity) getActivity()).getGoogleApiClient(), group.getGplusId())
-                .setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
-                    @Override
-                    public void onResult(People.LoadPeopleResult loadPeopleResult) {
-                        if (loadPeopleResult.getStatus().getStatusCode() == CommonStatusCodes.SUCCESS) {
-                            Person gplusChapter = loadPeopleResult.getPersonBuffer().get(0);
-                            if (gplusChapter.getImage().hasUrl()) {
-                                Picasso.with(getActivity()).load(gplusChapter.getImage().getUrl()).into(new Target() {
-                                    @Override
-                                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
-                                        if (!isAdded()) {
-                                            return;
-                                        }
-                                        BitmapDrawable logo = new BitmapDrawable(getResources(), bitmap);
-                                        mGroupLogo.setVisibility(View.VISIBLE);
-                                        mGroupLogo.setImageDrawable(logo);
-                                    }
+        loadChapterImage(group.getGplusId());
 
-                                    @Override
-                                    public void onBitmapFailed(Drawable drawable) {
-                                        mGroupLogo.setVisibility(View.INVISIBLE);
-                                    }
-
-                                    @Override
-                                    public void onPrepareLoad(Drawable drawable) {
-
-                                    }
-                                });
-                            }
-                        }
-                    }
-                });
         ((GdgActivity) getActivity()).setToolbarTitle(group.getShortName());
-        //mGroupLogo.setVisibility(View.INVISIBLE);  //commented as it's making group logo invisible without any condition
+    }
+
+    private void loadChapterImage(String gplusId) {
+        App.getInstance().getPlusApi().getImageInfo(gplusId).enqueue(new Callback<ImageInfo>() {
+            @Override
+            public void success(ImageInfo imageInfo) {
+                if (isContextValid()) {
+                    String imageUrl = imageInfo.getImage().getUrl().replace("sz=50", "sz=196");
+                    App.getInstance().getPicasso().load(imageUrl).into(mGroupLogo);
+                }
+            }
+
+            @Override
+            public void failure(Throwable error) {
+                if (isContextValid()) {
+                    mGroupLogo.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void networkFailure(Throwable error) {
+                if (isContextValid()) {
+                    mGroupLogo.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
     }
 
     private void setIsLoading(boolean isLoading) {
@@ -276,8 +267,8 @@ public class EventOverviewFragment extends BaseFragment {
             MenuItem shareMenuItem = menu.findItem(R.id.share);
 
             if (mEvent.getEventUrl() != null) {
-                ShareActionProvider mShareActionProvider = 
-                        (ShareActionProvider) MenuItemCompat.getActionProvider(shareMenuItem);
+                ShareActionProvider mShareActionProvider =
+                    (ShareActionProvider) MenuItemCompat.getActionProvider(shareMenuItem);
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
                 shareIntent.putExtra(Intent.EXTRA_TEXT, mEvent.getEventUrl());
@@ -318,10 +309,10 @@ public class EventOverviewFragment extends BaseFragment {
 
     private void launchUrl(String eventUrl) {
         new CustomTabsIntent.Builder()
-                .setToolbarColor(getResources().getColor(R.color.theme_primary))
-                .setShowTitle(true)
-                .build()
-                .launchUrl(getActivity(), Uri.parse(eventUrl));
+            .setToolbarColor(getResources().getColor(R.color.theme_primary))
+            .setShowTitle(true)
+            .build()
+            .launchUrl(getActivity(), Uri.parse(eventUrl));
     }
 
     private void addEventToCalendar() {
@@ -338,14 +329,6 @@ public class EventOverviewFragment extends BaseFragment {
         }
 
         startActivity(intent);
-    }
-
-    public static Fragment createfor(String eventId) {
-        EventOverviewFragment fragment = new EventOverviewFragment();
-        Bundle args = new Bundle();
-        args.putString(Const.EXTRA_EVENT_ID, eventId);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     public interface Callbacks {

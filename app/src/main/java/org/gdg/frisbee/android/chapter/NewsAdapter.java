@@ -35,10 +35,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.PlusOneButton;
-import com.google.api.services.plus.model.Activity;
 
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.model.plus.Activity;
+import org.gdg.frisbee.android.api.model.plus.Attachment;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.widget.ResizableImageView;
@@ -50,8 +52,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Bind;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
@@ -60,6 +62,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     private static final int VIEWTYPE_PHOTO = 3;
     private static final int VIEWTYPE_ALBUM = 4;
     private static final int VIEWTYPE_EVENT = 5;
+    public static final int ACTIVITY_REQUEST_CODE_GPLUS_BUTTON = 1;
 
     private Context mContext;
     private LayoutInflater mInflater;
@@ -142,10 +145,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             Activity activity = item.getActivity();
 
             if (activity.getObject().getAttachments() == null
-                    || activity.getObject().getAttachments().isEmpty()) {
+                || activity.getObject().getAttachments().isEmpty()) {
                 return 0;
             } else {
-                Activity.PlusObject.Attachments attachment = activity.getObject().getAttachments().get(0);
+                Attachment attachment = activity.getObject().getAttachments().get(0);
                 String objectType = attachment.getObjectType();
 
                 switch (objectType) {
@@ -165,15 +168,19 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         return 0;
     }
 
-    public void updatePlusOne(View v) {
-        if (v != null && v.getTag() != null) {
-            ViewHolder viewHolder = (ViewHolder) v.getTag();
-
-            if (mPlusClient != null && mPlusClient.isConnected()) {
+    public void updatePlusOne(ViewHolder viewHolder) {
+        if (viewHolder != null) {
+            if (shouldShowGPlusButton()) {
                 viewHolder.plusButton.setVisibility(View.VISIBLE);
-                viewHolder.plusButton.initialize(viewHolder.url, 1);
+                viewHolder.plusButton.initialize(viewHolder.url, ACTIVITY_REQUEST_CODE_GPLUS_BUTTON);
+            } else {
+                viewHolder.plusButton.setVisibility(View.GONE);
             }
         }
+    }
+
+    private boolean shouldShowGPlusButton() {
+        return mPlusClient != null && mPlusClient.hasConnectedApi(Plus.API);
     }
 
     @Override
@@ -194,17 +201,16 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         final Activity activity = item.getActivity();
 
         holder.url = activity.getUrl();
-
-        if (mPlusClient != null && mPlusClient.isConnected()) {
-            holder.plusButton.setVisibility(View.VISIBLE);
-            holder.plusButton.initialize(activity.getUrl(), 1);
-        } else {
-            holder.plusButton.setVisibility(View.GONE);
-        }
-
+        updatePlusOne(holder);
         if (activity.getPublished() != null) {
             holder.timeStamp.setVisibility(View.VISIBLE);
-            holder.timeStamp.setText(Utils.toHumanTimePeriod(mContext, new DateTime(activity.getPublished().getValue()), DateTime.now()));
+            holder.timeStamp.setText(
+                Utils.toHumanTimePeriod(
+                    mContext,
+                    activity.getPublished(),
+                    DateTime.now()
+                )
+            );
         } else {
             holder.timeStamp.setVisibility(View.GONE);
         }
@@ -218,7 +224,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
         if (activity.getObject().getAttachments() != null && activity.getObject().getAttachments().size() > 0) {
 
-            final Activity.PlusObject.Attachments attachment = activity.getObject().getAttachments().get(0);
+            final Attachment attachment = activity.getObject().getAttachments().get(0);
 
             switch (getItemViewType(i)) {
                 case VIEWTYPE_ARTICLE:
@@ -295,7 +301,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         return attachmentView;
     }
 
-    private void populateArticle(ViewHolder mViewHolder, ViewGroup container, final Activity.PlusObject.Attachments attachment) {
+    private void populateArticle(ViewHolder mViewHolder,
+                                 ViewGroup container,
+                                 final Attachment attachment) {
         if (attachment == null) {
             return;
         }
@@ -318,8 +326,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             if (imageUrl != null) {
                 mViewHolder.articleImage.setVisibility(View.VISIBLE);
                 App.getInstance().getPicasso()
-                        .load(imageUrl)
-                        .into(mViewHolder.articleImage);
+                    .load(imageUrl)
+                    .into(mViewHolder.articleImage);
             } else {
                 mViewHolder.articleImage.setVisibility(View.GONE);
             }
@@ -334,7 +342,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     }
 
     @Nullable
-    private String getAttachmentImageUrl(final Activity.PlusObject.Attachments attachment) {
+    private String getAttachmentImageUrl(final Attachment attachment) {
         if (attachment.getFullImage() != null) {
             return attachment.getFullImage().getUrl();
         } else if (attachment.getImage() != null) {
@@ -343,7 +351,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         return null;
     }
 
-    private void populateVideo(ViewHolder mViewHolder, ViewGroup container, final Activity.PlusObject.Attachments attachment) {
+    private void populateVideo(ViewHolder mViewHolder,
+                               ViewGroup container,
+                               final Attachment attachment) {
         if (attachment == null) {
             return;
         }
@@ -355,8 +365,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         mViewHolder.poster.setImageDrawable(null);
 
         App.getInstance().getPicasso()
-                .load(attachment.getImage().getUrl())
-                .into(mViewHolder.poster);
+            .load(attachment.getImage().getUrl())
+            .into(mViewHolder.poster);
 
         attachmentView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -380,11 +390,15 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         });
     }
 
-    private String getVideoIdFrom(final Activity.PlusObject.Attachments attachment) throws UnsupportedEncodingException, MalformedURLException {
+    private String getVideoIdFrom(final Attachment attachment)
+        throws UnsupportedEncodingException, MalformedURLException {
+
         return Utils.splitQuery(new URL(attachment.getUrl())).get("v");
     }
 
-    private void populatePhoto(ViewHolder mViewHolder, ViewGroup container, Activity.PlusObject.Attachments attachment) {
+    private void populatePhoto(ViewHolder mViewHolder,
+                               ViewGroup container,
+                               Attachment attachment) {
         if (attachment == null) {
             return;
         }
@@ -392,19 +406,23 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         createAttachmentView(mViewHolder, container, R.layout.news_item_photo, 3);
 
         // Precalc Image Size
-        if (attachment.getImage() != null && attachment.getImage().getUrl() != null && attachment.getImage().getWidth() != null) {
+        if (attachment.getImage() != null
+            && attachment.getImage().getUrl() != null
+            && attachment.getImage().getWidth() != null) {
             mViewHolder.photo.setDimensions(attachment.getImage().getWidth(), attachment.getImage().getHeight());
         }
 
         mViewHolder.photo.setImageDrawable(null);
 
         App.getInstance().getPicasso()
-                .load(attachment.getImage().getUrl())
-                .into(mViewHolder.photo);
+            .load(attachment.getImage().getUrl())
+            .into(mViewHolder.photo);
 
     }
 
-    private void populateAlbum(ViewHolder mViewHolder, ViewGroup container, Activity.PlusObject.Attachments attachment) {
+    private void populateAlbum(ViewHolder mViewHolder,
+                               ViewGroup container,
+                               Attachment attachment) {
         if (attachment == null) {
             return;
         }
@@ -412,23 +430,25 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         createAttachmentView(mViewHolder, container, R.layout.news_item_album, 4);
 
         App.getInstance().getPicasso()
-                .load(attachment.getThumbnails().get(0).getImage().getUrl())
-                .into(mViewHolder.pic1);
+            .load(attachment.getThumbnails().get(0).getImage().getUrl())
+            .into(mViewHolder.pic1);
 
         if (attachment.getThumbnails().size() > 1) {
             App.getInstance().getPicasso()
-                    .load(attachment.getThumbnails().get(1).getImage().getUrl())
-                    .into(mViewHolder.pic2);
+                .load(attachment.getThumbnails().get(1).getImage().getUrl())
+                .into(mViewHolder.pic2);
         }
 
         if (attachment.getThumbnails().size() > 2) {
             App.getInstance().getPicasso()
-                    .load(attachment.getThumbnails().get(2).getImage().getUrl())
-                    .into(mViewHolder.pic3);
+                .load(attachment.getThumbnails().get(2).getImage().getUrl())
+                .into(mViewHolder.pic3);
         }
     }
 
-    private void populateEvent(ViewHolder mViewHolder, ViewGroup container, final Activity.PlusObject.Attachments attachment) {
+    private void populateEvent(ViewHolder mViewHolder,
+                               ViewGroup container,
+                               final Attachment attachment) {
         createAttachmentView(mViewHolder, container, R.layout.news_item_event, 5);
 
         TextView title = mViewHolder.attachmentTitle;
@@ -466,10 +486,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         String originallyShared = "";
 
         if (item.getObject().getActor() != null && mContext != null) {
-            originallyShared = "<b><a href=\"" 
-                    + item.getObject().getActor().getUrl() + "\">" 
-                    + item.getObject().getActor().getDisplayName() 
-                    + "</a></b> " + mContext.getString(R.string.originally_shared) + "<br/><br/>";
+            originallyShared = "<b><a href=\""
+                + item.getObject().getActor().getUrl() + "\">"
+                + item.getObject().getActor().getDisplayName()
+                + "</a></b> " + mContext.getString(R.string.originally_shared) + "<br/><br/>";
         }
 
         if (item.getAnnotation() != null) {
@@ -536,17 +556,17 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView attachmentTitle;
-        @Bind(R.id.plus_one_button)
+        @BindView(R.id.plus_one_button)
         PlusOneButton plusButton;
-        @Bind(R.id.attachmentContainer)
+        @BindView(R.id.attachmentContainer)
         ViewGroup container;
-        @Bind(R.id.shareContainer)
+        @BindView(R.id.shareContainer)
         ViewGroup shareContainer;
-        @Bind(R.id.timestamp)
+        @BindView(R.id.timestamp)
         TextView timeStamp;
-        @Bind(R.id.content)
+        @BindView(R.id.content)
         TextView content;
-        @Bind(R.id.shareContent)
+        @BindView(R.id.shareContent)
         TextView shareContent;
         ImageView articleImage;
         TextView title;

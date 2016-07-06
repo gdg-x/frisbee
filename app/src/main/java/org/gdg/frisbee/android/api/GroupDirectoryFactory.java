@@ -9,8 +9,8 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import retrofit2.GsonConverterFactory;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public final class GroupDirectoryFactory {
 
@@ -26,21 +26,21 @@ public final class GroupDirectoryFactory {
             public Response intercept(Chain chain) throws IOException {
 
                 Request compressedRequest = chain.request().newBuilder()
-                        .header("User-Agent", "GDG-Frisbee/0.1 (Android)")
-                        .header("Referrer", "https://developers.google.com/groups/directory/")
-                        .header("X-Requested-With", "XMLHttpRequest")
-                        .header("Cache-Control", "no-cache")
-                        .header("DNT", "1")
-                        .build();
+                    .header("User-Agent", "GDG-Frisbee/0.1 (Android)")
+                    .header("Referrer", "https://developers.google.com/groups/directory/")
+                    .header("X-Requested-With", "XMLHttpRequest")
+                    .header("Cache-Control", "no-cache")
+                    .header("DNT", "1")
+                    .build();
                 return chain.proceed(compressedRequest);
             }
         });
 
         return new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create(Utils.getGson()))
-                    .client(OkClientFactory.okHttpClientWithIdlingResources(client.build()))
-                    .build();
+            .baseUrl(BASE_URL)
+            .client(client.build())
+            .addConverterFactory(GsonConverterFactory.create(Utils.getGson()))
+            .build();
     }
 
     public static GroupDirectory provideGroupDirectoryApi() {

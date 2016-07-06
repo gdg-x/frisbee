@@ -40,12 +40,16 @@ public class Builder<Params, Result> {
         return this;
     }
 
-    public Builder<Params, Result> setOnPostExecuteListener(CommonAsyncTask.OnPostExecuteListener<Params, Result> listener) {
+    public Builder<Params, Result> setOnPostExecuteListener(
+        CommonAsyncTask.OnPostExecuteListener<Params, Result> listener) {
+
         mTask.setPostListener(listener);
         return this;
     }
 
-    public Builder<Params, Result> setOnBackgroundExecuteListener(CommonAsyncTask.OnBackgroundExecuteListener<Params, Result> listener) {
+    public Builder<Params, Result> setOnBackgroundExecuteListener(
+        CommonAsyncTask.OnBackgroundExecuteListener<Params, Result> listener) {
+
         mTask.setBackgroundListener(listener);
         return this;
     }

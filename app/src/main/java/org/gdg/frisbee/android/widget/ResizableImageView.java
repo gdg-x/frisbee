@@ -39,7 +39,6 @@ public class ResizableImageView extends ImageView {
             float ratio = (float) mHeight / (float) mWidth;
             int height = (int) (width * ratio);
 
-            //Timber.d("Measured Width: "+ width+", Computed Height: "+ height+", Pic W: "+ mWidth+", H: "+ mHeight+", Ratio: "+ ratio +", "+mUri);
             setMeasuredDimension(width, height);
         } else {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);

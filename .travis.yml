@@ -4,6 +4,12 @@ language: android
 sudo: required
 dist: precise
 
+env:
+  global:
+    - secure: "SBlXs4v/M3GD1tRaT6zmMXVpMCUaL/oNcSjGWdHgI56DO5NOmTBmDW5kJTT5y0u0U7aE1/Dq22iXPut8NLxWsEi/20xBq3bXQh9ngRkvOstNX7Y0LqnhKBtPixnMIx07xAjUPYCmunJakCT7Hr4fqZAGfUwA4a3ZzRa/KVeNx2A="
+    - secure: "OVfIL3ggaGcDgJJhdWxYTCo3u38SNPNUNPsv6adHp5wW0Y2n1CF1zcAnZXhTkGEjoGvi0RuV8ZLG9jbmQdqxd17qBeBf2XPWKxyG1SUfegDVSy9OPF8BY11Fsp9I5RP1W3T/c32KTc7zvhtAivq9mbcrBYJZhDCKpZkdTNliFQ0="
+    - GRADLE_OPTS="-Xms40m -Xmx3g -XX:MaxPermSize=3g"
+
 android:
   components:
   - platform-tools
@@ -24,6 +30,7 @@ before_install:
   - if [ -z "$GPG_PASS"]; then touch local.properties; fi
 
 before_script:
+  - GRADLE_OPTS="-Xms40m -Xmx3g -XX:MaxPermSize=3g"
   - echo no | android create avd --force -n test -t "Google Inc.:Google APIs:"$ANDROID_API_LEVEL --abi google_apis/armeabi-v7a --skin WXGA720
   - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator

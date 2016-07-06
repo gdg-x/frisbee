@@ -1,5 +1,8 @@
+import org.ajoberstar.grgit.Commit
+import org.ajoberstar.grgit.Grgit
+
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'io.fabric'
 apply plugin: 'com.github.triplet.play'
 apply plugin: 'checkstyle'
@@ -12,9 +15,6 @@ Properties local_properties = new Properties()
 local_properties.load(new FileInputStream(rootProject.file('local.properties')))
 
 apply from: '../settings/frisbee.gradle'
-
-def gitSha = org.ajoberstar.grgit.Grgit.open(dir: rootProject.file('.')).head().abbreviatedId
-def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone("UTC"))
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -34,8 +34,8 @@ android {
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
 
-        buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
-        buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
+        buildConfigField "String", "COMMIT_SHA", "\"${commitSha()}\""
+        buildConfigField "String", "COMMIT_TIME", "\"${commitTime()}\""
 
         resConfigs "en", "ar", "cs", "de", "es", "fr", "hi", "hy-rAM", "it", "ja", "ko", "lt", "nl", "pl", "pt-rBR", "pt-rPT", "ru", "sk", "th", "tr", "uk", "zh-rCN", "zh-rHK", "zh-rTW"
 
@@ -57,24 +57,21 @@ android {
             proguardFile '../settings/proguard/proguard-support-v7-appcompat.pro'
             proguardFile '../settings/proguard/proguard-support-v7-cardview.pro'
             proguardFile '../settings/proguard/proguard-google-play-services.pro'
-            proguardFile '../settings/proguard/proguard-google-analytics.pro'
             proguardFile '../settings/proguard/proguard-gson.pro'
             proguardFile '../settings/proguard/proguard-square-okio.pro'
             proguardFile '../settings/proguard/proguard-square-okhttp3.pro'
             proguardFile '../settings/proguard/proguard-square-picasso.pro'
             proguardFile '../settings/proguard/proguard-square-retrofit2.pro'
-            proguardFile '../settings/proguard/proguard-butterknife.pro'
             proguardFile '../settings/proguard/proguard-crashlytics.pro'
-            proguardFile '../settings/proguard/proguard-joda-time.pro'
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             minifyEnabled true
             zipAlignEnabled true
             shrinkResources true
-            debuggable false
 
             buildConfigField "String", "IP_SIMPLE_API_ACCESS_KEY", "\"$local_properties.ip_simple_api_access_key\""
             buildConfigField "String", "ANDROID_SIMPLE_API_ACCESS_KEY", "\"$local_properties.android_simple_api_access_key\""
             resValue "string", "android_simple_api_access_key", local_properties.android_simple_api_access_key ?: ""
+            resValue "string", "authority", "org.gdg.frisbee.android.provider"
         }
         alpha.initWith(release)
         debug {
@@ -86,19 +83,13 @@ android {
             buildConfigField "String", "IP_SIMPLE_API_ACCESS_KEY", "\"$local_properties.ip_simple_api_access_key_debug\""
             buildConfigField "String", "ANDROID_SIMPLE_API_ACCESS_KEY", "\"$local_properties.android_simple_api_access_key_debug\""
             resValue "string", "android_simple_api_access_key", local_properties.android_simple_api_access_key_debug ?: ""
-
-            multiDexEnabled true
+            resValue "string", "authority", "org.gdg.frisbee.android.debug.provider"
         }
     }
 
     productFlavors {
         prod
-        dev {
-            minSdkVersion 21
-        }
-        mock {
-            minSdkVersion 21
-        }
+        mock
     }
 
     //For dev and mock flavors, we only have debug builds.
@@ -106,7 +97,7 @@ android {
         def flavorName = variant.flavors[0].name
         def buildType = variant.buildType.name
 
-        if ((flavorName.equals('dev') || flavorName.equals('mock'))
+        if (flavorName.equals('mock')
                 && (buildType.equals('release') || buildType.equals('alpha'))) {
             variant.setIgnore(true);
         }
@@ -159,31 +150,23 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
     compile "com.android.support:design:$rootProject.supportLibraryVersion"
     compile "com.android.support:customtabs:$rootProject.supportLibraryVersion"
-    debugCompile 'com.android.support:multidex:1.0.1'
 
     //Play Services
-    compile "com.google.android.gms:play-services-location:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-games:$rootProject.playServicesVersion"
-    compile "com.google.android.gms:play-services-identity:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-plus:$rootProject.playServicesVersion"
-    compile "com.google.android.gms:play-services-appstate:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-analytics:$rootProject.playServicesVersion"
-    compile "com.google.android.gms:play-services-gcm:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-appinvite:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-appindexing:$rootProject.playServicesVersion"
+    compile "com.google.firebase:firebase-messaging:$rootProject.playServicesVersion"
 
     //Google
-    compile 'com.google.http-client:google-http-client-gson:1.20.0'
-    compile 'com.google.apis:google-api-services-plus:v1-rev126-1.18.0-rc'
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
     compile 'com.google.zxing:android-integration:3.2.1'
     compile 'com.google.zxing:core:3.2.1'
 
     //Square
     compile "com.squareup.okhttp3:okhttp:$rootProject.okHttpVersion"
-    compile "com.squareup.okhttp3:okhttp-urlconnection:$rootProject.okHttpVersion"
     compile "com.squareup.okhttp3:logging-interceptor:$rootProject.okHttpVersion"
-    compile 'com.squareup.okio:okio:1.6.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
     compile "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
@@ -194,18 +177,19 @@ dependencies {
     androidTestCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakCanaryVersion"
 
     //Jake Wharton
-    compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.jakewharton.timber:timber:4.1.0'
+    compile "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
+    apt "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
+    compile "com.jakewharton.timber:timber:$rootProject.timberVersion"
     compile 'com.jakewharton:disklrucache:2.0.2'
-    compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.1'
+    compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.2'
 
     //Others
-    compile 'io.doorbell:android-sdk:0.2.2@aar'
+    compile 'io.doorbell:android-sdk:0.2.6@aar'
     compile 'org.jsoup:jsoup:1.8.2'
     compile "net.danlew:android.joda:$rootProject.jodaTimeVersion"
     compile 'com.tasomaniac:delayed-progress:0.3'
     compile 'com.google.code.findbugs:jsr305:2.0.1'
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.4@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
 
@@ -213,14 +197,13 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     // Android Wear
-    prodWearApp project(':wear')
+    wearApp project(':wear')
 
     // Dependencies for local unit tests
     testCompile "junit:junit:$rootProject.junitVersion"
     testCompile "org.mockito:mockito-all:$rootProject.mockitoVersion"
     testCompile "org.hamcrest:hamcrest-all:$rootProject.hamcrestVersion"
     testCompile "org.robolectric:robolectric:$rootProject.robolectricVersion"
-    testCompile "org.robolectric:shadows-multidex:$rootProject.robolectricVersion"
     testCompile "joda-time:joda-time:$rootProject.jodaTimeVersion"
 
     androidTestCompile 'org.assertj:assertj-core:1.7.1'
@@ -235,4 +218,39 @@ dependencies {
     // Espresso UI Testing dependencies.
     androidTestCompile "com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion"
     androidTestCompile "com.android.support.test.espresso:espresso-intents:$rootProject.espressoVersion"
+    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1'
+}
+
+apply plugin: 'com.google.gms.google-services'
+
+def commitSha() {
+    def file = new File(project.buildDir, "commit-sha.txt")
+    if (file.exists()) {
+        return file.text
+    }
+
+    def value = getHeadGitCommit().abbreviatedId
+
+    file.parentFile.mkdirs()
+    file.text = value
+    return value
+}
+
+def commitTime() {
+    def file = new File(project.buildDir, "commit-timestamp.txt")
+    if (file.exists()) {
+        return file.text
+    }
+
+    def date = getHeadGitCommit().date
+    def value = date.format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone("UTC"))
+
+    file.parentFile.mkdirs()
+    file.text = value
+    return value
+}
+
+@SuppressWarnings("GroovyAssignabilityCheck")
+private Commit getHeadGitCommit() {
+    Grgit.open(dir: rootProject.file('.')).head()
 }

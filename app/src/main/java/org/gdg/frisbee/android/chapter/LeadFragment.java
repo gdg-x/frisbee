@@ -20,16 +20,11 @@ import org.gdg.frisbee.android.api.model.LeadMessage;
 import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.Utils;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class LeadFragment extends ListFragment {
     private LeadAnnouncementsAdapter mAdapter;
-
-    @Override
-    public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_for_leads, container, false);
-    }
 
     public static Fragment newInstance(final String gplusId) {
         Fragment fragment = new LeadFragment();
@@ -40,20 +35,28 @@ public class LeadFragment extends ListFragment {
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_for_leads, container, false);
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mAdapter = new LeadAnnouncementsAdapter(getActivity());
         setListAdapter(mAdapter);
         mAdapter.add(LeadMessage.newMessage(getString(R.string.leads_welcome_title),
-                getString(R.string.leads_welcome)));
+            getString(R.string.leads_welcome)));
         mAdapter.add(LeadMessage.newResource(getString(R.string.leads_resources_title),
-                getString(R.string.leads_resources),
-                Const.URL_GDG_RESOURCE_FOLDER));
+            getString(R.string.leads_resources),
+            Const.URL_GDG_RESOURCE_FOLDER));
         mAdapter.add(LeadMessage.newResource(getString(R.string.leads_wisdom_title),
-                getString(R.string.leads_wisdom),
-                Const.URL_GDG_WISDOM_BOOK));
-        mAdapter.add(LeadMessage.newResource(getString(R.string.leads_gplus_community_title), getString(R.string.leads_gplus_community),
-                Const.URL_GDG_LEADS_GPLUS_COMMUNITY));
+            getString(R.string.leads_wisdom),
+            Const.URL_GDG_WISDOM_BOOK));
+        mAdapter.add(LeadMessage.newResource(getString(R.string.leads_gplus_community_title),
+            getString(R.string.leads_gplus_community),
+            Const.URL_GDG_LEADS_GPLUS_COMMUNITY));
     }
 
     @Override
@@ -64,20 +67,24 @@ public class LeadFragment extends ListFragment {
             startActivity(Utils.createExternalIntent(activity, Uri.parse(item.getLinkUrl())));
             if (activity != null && activity instanceof GdgActivity) {
                 ((GdgActivity) activity).getAchievementActionHandler()
-                        .handleCuriousOrganizer();
+                    .handleCuriousOrganizer();
             }
         }
     }
 
     private static class LeadAnnouncementsAdapter extends ArrayAdapter<LeadMessage> {
+
+        private LayoutInflater layoutInflater;
+
         public LeadAnnouncementsAdapter(final Context context) {
             super(context, R.layout.list_announcement_item);
+            layoutInflater = LayoutInflater.from(context);
         }
 
         @Override
         public View getView(final int position, View convertView, final ViewGroup parent) {
             if (convertView == null) {
-                convertView = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.list_announcement_item, parent, false);
+                convertView = layoutInflater.inflate(R.layout.list_announcement_item, parent, false);
                 final ViewHolder viewHolder = new ViewHolder(convertView);
                 convertView.setTag(viewHolder);
             }
@@ -91,11 +98,11 @@ public class LeadFragment extends ListFragment {
     }
 
     public static class ViewHolder {
-        @Bind(R.id.msg_title)
+        @BindView(R.id.msg_title)
         TextView title;
-        @Bind(R.id.msg_details)
+        @BindView(R.id.msg_details)
         TextView details;
-        @Bind(R.id.msg_type)
+        @BindView(R.id.msg_type)
         TextView type;
 
         public ViewHolder(View view) {

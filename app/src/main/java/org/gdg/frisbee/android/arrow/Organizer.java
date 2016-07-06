@@ -1,6 +1,7 @@
 package org.gdg.frisbee.android.arrow;
 
-import com.google.android.gms.plus.model.people.Person;
+
+import org.gdg.frisbee.android.api.model.plus.Person;
 
 public class Organizer {
     private String plusId;

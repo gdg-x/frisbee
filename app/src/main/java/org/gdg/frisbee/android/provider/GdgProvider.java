@@ -25,6 +25,7 @@ import android.database.MatrixCursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.activity.SearchActivity;
 import org.gdg.frisbee.android.api.model.Chapter;
@@ -35,9 +36,7 @@ import timber.log.Timber;
 
 public class GdgProvider extends ContentProvider {
 
-    private static final String AUTHORITY = "org.gdg.frisbee.android.provider.GdgProvider";
-
-    private static final String[] CHAPTER_COLUMNS = new String[] {
+    private static final String[] CHAPTER_COLUMNS = new String[]{
         BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1,
         SearchManager.SUGGEST_COLUMN_TEXT_2, SearchManager.SUGGEST_COLUMN_INTENT_ACTION,
         SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID
@@ -49,7 +48,8 @@ public class GdgProvider extends ContentProvider {
 
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        uriMatcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY, SEARCH_SUGGEST);
+        uriMatcher.addURI(BuildConfig.APPLICATION_ID + ".provider",
+            SearchManager.SUGGEST_URI_PATH_QUERY, SEARCH_SUGGEST);
     }
 
     private Directory mDirectory;
@@ -85,10 +85,10 @@ public class GdgProvider extends ContentProvider {
 
         for (Chapter chapter : mDirectory.getGroups()) {
             if (chapter.getName().toLowerCase().contains(query.toLowerCase())) {
-                cursor.addRow(new Object[] {
-                    chapter.getGplusId(),
+                cursor.addRow(new Object[]{
+                    chapter.getGplusId().hashCode(),
                     chapter.getName(),
-                    chapter.getCity() + ", " + chapter.getCountry(),
+                    chapter.getCity() + ", " + chapter.getCountry().getName(),
                     SearchActivity.ACTION_FOUND,
                     chapter.getGplusId()
                 });

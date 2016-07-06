@@ -16,8 +16,7 @@
   ~ limitations under the License.
 -->
 
-<RelativeLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
@@ -38,14 +37,14 @@
       android:paddingRight="10dip"
       android:paddingTop="5dip">
 
-      <include layout="@layout/card_about_box"/>
+      <include layout="@layout/card_about_box" />
 
-      <include layout="@layout/card_organizes_box"/>
+      <include layout="@layout/card_organizes_box" />
 
-      <include layout="@layout/card_resources_box"/>
+      <include layout="@layout/card_resources_box" />
 
     </LinearLayout>
   </ScrollView>
 
-  <include layout="@layout/loading_animated_view"/>
+  <include layout="@layout/loading_animated_view" />
 </RelativeLayout>

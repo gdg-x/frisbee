@@ -30,19 +30,16 @@ import org.gdg.frisbee.android.utils.Utils;
 import java.io.IOException;
 import java.io.InputStream;
 
-import butterknife.ButterKnife;
-import butterknife.Bind;
+import butterknife.BindView;
 
 public class ExtLibrariesFragment extends BaseFragment {
 
-    @Bind(R.id.external)
+    @BindView(R.id.external)
     TextView mExternal;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_external_libraries, container, false);
-        ButterKnife.bind(this, v);
-        return v;
+        return inflateView(inflater, R.layout.fragment_external_libraries, container);
     }
 
     @Override

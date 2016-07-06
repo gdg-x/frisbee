@@ -34,9 +34,9 @@ public class WearableConfigAdapter extends WearableListView.Adapter {
         nameTextView.setText(configuration.getTitle());
 
         TextView settingTextView = (TextView) layout.findViewById(R.id.subsetting_text_view);
-        settingTextView.setVisibility("Date".equals(nameTextView.getText().toString()) ? View.VISIBLE : View.GONE);
+        settingTextView.setVisibility(WearableConfigurationUtil.CONFIG_DATE.equals(nameTextView.getText().toString()) ? View.VISIBLE : View.GONE);
         settingTextView.setText(configuration.isSelected() ?
-                mContext.getString(R.string.label_setting_on) : mContext.getString(R.string.label_setting_off));
+            mContext.getString(R.string.label_setting_on) : mContext.getString(R.string.label_setting_off));
 
         CircledImageView circleImage = (CircledImageView) layout.findViewById(R.id.setting_circle);
         circleImage.setImageResource(configuration.getIcon());

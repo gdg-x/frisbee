@@ -8,8 +8,6 @@ import org.gdg.frisbee.android.api.deserializer.ZuluDateTimeDeserializer;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.api.model.EventFullDetails;
-import org.gdg.frisbee.android.api.model.GcmRegistrationRequest;
-import org.gdg.frisbee.android.api.model.GcmRegistrationResponse;
 import org.gdg.frisbee.android.api.model.HomeGdgRequest;
 import org.gdg.frisbee.android.api.model.OrganizerCheckResponse;
 import org.gdg.frisbee.android.api.model.PagedList;
@@ -81,18 +79,6 @@ public class MockGdgXHub implements GdgXHub {
     public Call<PagedList<Event>> getTaggedEventUpcomingList(@Path("tag") String tag, @Query("_") DateTime now) {
         EspressoIdlingResource.increment();
         return Calls.response(new PagedList<Event>());
-    }
-
-    @Override
-    public Call<GcmRegistrationResponse> registerGcm(@Header("Authorization") String authorization, @Body GcmRegistrationRequest request) {
-        EspressoIdlingResource.increment();
-        return Calls.response(new GcmRegistrationResponse());
-    }
-
-    @Override
-    public Call<GcmRegistrationResponse> unregisterGcm(@Header("Authorization") String authorization, @Body GcmRegistrationRequest request) {
-        EspressoIdlingResource.increment();
-        return Calls.response(new GcmRegistrationResponse());
     }
 
     @Override

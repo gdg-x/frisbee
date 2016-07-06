@@ -27,6 +27,7 @@ import android.widget.ListView;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
+import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.Pulse;
 import org.gdg.frisbee.android.api.model.PulseEntry;
 import org.gdg.frisbee.android.app.App;
@@ -36,8 +37,6 @@ import org.gdg.frisbee.android.common.GdgListFragment;
 import org.joda.time.DateTime;
 
 import java.util.Map;
-
-import butterknife.ButterKnife;
 
 public class PulseFragment extends GdgListFragment {
 
@@ -68,7 +67,7 @@ public class PulseFragment extends GdgListFragment {
             mListener = (Callbacks) activity;
         } else {
             throw new ClassCastException("Activity " + activity.getClass().getSimpleName()
-                    + " must implement " + Pulse.class.getSimpleName() + " interface.");
+                + " must implement " + Pulse.class.getSimpleName() + " interface.");
         }
     }
 
@@ -85,44 +84,59 @@ public class PulseFragment extends GdgListFragment {
         mTarget = getArguments().getString(ARG_TARGET);
         mMode = getArguments().getInt(ARG_MODE);
 
-        int[] positions = savedInstanceState != null
-                ? savedInstanceState.getIntArray(INSTANCE_STATE_POSITIONS) : null;
-        mAdapter = new PulseAdapter(getActivity(), positions);
-        setListAdapter(mAdapter);
+        final int[] positions = savedInstanceState != null
+            ? savedInstanceState.getIntArray(INSTANCE_STATE_POSITIONS) : null;
+
+        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
+            @Override
+            public void onGet(Object item) {
+                createAdapter(positions, (Directory) item);
+            }
+
+            @Override
+            public void onNotFound(String key) {
+                createAdapter(positions, null);
+            }
+        });
 
         setIsLoading(true);
-
-        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
-                true,
-                new ModelCache.CacheListener() {
-                    @Override
-                    public void onGet(Object item) {
-                        Pulse pulse = (Pulse) item;
-                        initAdapter(pulse);
-                    }
-
-                    @Override
-                    public void onNotFound(String key) {
-                        fetchPulseTask();
-                    }
-                });
     }
 
+    public void createAdapter(int[] positions, Directory directory) {
+        mAdapter = new PulseAdapter(getActivity(), positions, directory);
+        setListAdapter(mAdapter);
+        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
+            true,
+            new ModelCache.CacheListener() {
+                @Override
+                public void onGet(Object item) {
+                    Pulse pulse = (Pulse) item;
+                    initAdapter(pulse);
+                }
+
+                @Override
+                public void onNotFound(String key) {
+                    fetchPulseTask();
+                }
+            });
+    }
+
+
     private void fetchPulseTask() {
-        if (mTarget.equals(GLOBAL)) {
+        if (isGlobalSelected()) {
             App.getInstance().getGroupDirectory().getPulse().enqueue(new Callback<Pulse>() {
                 @Override
                 public void success(final Pulse pulse) {
                     App.getInstance().getModelCache().putAsync(
-                            Const.CACHE_KEY_PULSE + mTarget.toLowerCase(),
-                            pulse,
-                            DateTime.now().plusDays(1),
-                            new ModelCache.CachePutListener() {
-                                @Override
-                                public void onPutIntoCache() {
-                                    initAdapter(pulse);
-                                }
-                            });
+                        Const.CACHE_KEY_PULSE + mTarget.toLowerCase(),
+                        pulse,
+                        DateTime.now().plusDays(1),
+                        new ModelCache.CachePutListener() {
+                            @Override
+                            public void onPutIntoCache() {
+                                initAdapter(pulse);
+                            }
+                        });
                 }
 
                 @Override
@@ -140,15 +154,15 @@ public class PulseFragment extends GdgListFragment {
                 @Override
                 public void success(final Pulse pulse) {
                     App.getInstance().getModelCache().putAsync(
-                            Const.CACHE_KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
-                            pulse,
-                            DateTime.now().plusDays(1),
-                            new ModelCache.CachePutListener() {
-                                @Override
-                                public void onPutIntoCache() {
-                                    initAdapter(pulse);
-                                }
-                            });
+                        Const.CACHE_KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
+                        pulse,
+                        DateTime.now().plusDays(1),
+                        new ModelCache.CachePutListener() {
+                            @Override
+                            public void onPutIntoCache() {
+                                initAdapter(pulse);
+                            }
+                        });
                 }
 
                 @Override
@@ -164,29 +178,33 @@ public class PulseFragment extends GdgListFragment {
         }
     }
 
+    private boolean isGlobalSelected() {
+        return mTarget.equals(GLOBAL);
+    }
+
     private void initAdapter(Pulse pulse) {
-        mAdapter.setPulse(mMode, pulse);
+        mAdapter.setPulse(mMode, pulse, !isGlobalSelected());
         mAdapter.notifyDataSetChanged();
         setIsLoading(false);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_pulse, container, false);
-        ButterKnife.bind(this, v);
-        return v;
+        return inflateView(inflater, R.layout.fragment_pulse, container);
     }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         Map.Entry<String, PulseEntry> pulse = mAdapter.getItem(position);
 
-        if (mTarget.equals(GLOBAL)) {
+        if (isGlobalSelected()) {
             mListener.openPulse(pulse.getKey());
         } else {
-            Intent chapterIntent = new Intent(getActivity(), MainActivity.class);
-            chapterIntent.putExtra(Const.EXTRA_CHAPTER_ID, pulse.getValue().getId());
-            startActivity(chapterIntent);
+            if (v.isEnabled()) {
+                Intent chapterIntent = new Intent(getActivity(), MainActivity.class);
+                chapterIntent.putExtra(Const.EXTRA_CHAPTER_ID, pulse.getValue().getId());
+                startActivity(chapterIntent);
+            }
         }
     }
 

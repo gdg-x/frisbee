@@ -98,6 +98,7 @@
   <string name="order_by_distance">Nach Entfernung sortieren</string>
   <string name="gcm_event_ticker">Deine GDG hat ein neues Event angekündigt.</string>
   <string name="ioextended_description">Google I/O Extended is about joining the Google conference at your local group.</string>
+  <string name="gcpnext_description">GCP NEXT Extended events bring the local developer community together to experience talks, in-depth product demos, and behind-the-scenes interviews. All keynote and technical sessions will be available on-line for time-shifted viewing. The event can also offer other unique activities for developers, such cloud codelabs or hackathons.</string>
   <string name="devfest_description">GDG DevFests sind große, von der Community organisierte Events bestehend aus Sessions über mehrere Produktbereiche, Hackathons, Code Labs und mehr.\n\nJedes GDG DevFest ist einzigartig und auf die Bedürfnisse der lokalen Community welche das DevFest veranstaltet zugeschnitten. Auch wenn jedes DevFest anders ist, sind sie im Kern angetrieben durch die Idee das tolle Dinge enstehen wenn sich Entwickler treffen und Ideen austauschen.</string>
   <string name="studyjams_description">Google Developers Study Jams is a free series of global, community–run, in–person study groups. The first Study Jams series is presented in partnership with Udacity and will follow their Android Fundamentals curriculum. Google Developer Group facilitators certified in the course will lead the Study Jams that meet once weekly for 8 – 9 weeks.</string>
   <string name="wtm_description">Women Techmakers is Google\'s global program and brand for women in technology. Kicked off in 2012 by then VP of Google[x] Megan Smith, Women Techmakers is now led by Women in Technology Advocate Natalie Villalobos and a global team of Googlers who are passionate about empowering women in technology through increased visibility, community, and resources.\n\nEach of our summits and meetups will be catered to local communities of women in technology. Summits and meetups around the world may feature hands-on coding workshops, inspiring speakers, and networking opportunities.\n\nAll events will occur within the month of March.</string>
@@ -171,4 +172,5 @@
   <string name="invitation_title">Invite your friends to GDG app</string>
   <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go.</string>
   <string name="thanks_for_feedback">Thank you for your Feedback!</string>
+  <string name="retry">Retry</string>
 </resources>

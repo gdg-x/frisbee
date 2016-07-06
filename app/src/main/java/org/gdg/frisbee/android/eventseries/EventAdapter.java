@@ -43,23 +43,23 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Locale;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 class EventAdapter extends BaseAdapter {
 
+    private static final DateTime DATETIME_NOW = DateTime.now();
+    private final int mDefaultIcon;
     private Context mContext;
     private LayoutInflater mInflater;
     private ArrayList<Item> mEvents;
-    private final int mDefaultIcon;
-    private boolean mFirstPastEvent = true;
-    private static final DateTime DATETIME_NOW = DateTime.now();
 
     public EventAdapter(Context ctx) {
         this(ctx, R.drawable.icon);
     }
-    
+
     public EventAdapter(Context ctx, @DrawableRes int defaultIcon) {
         mContext = ctx;
         mInflater = LayoutInflater.from(mContext);
@@ -123,9 +123,10 @@ class EventAdapter extends BaseAdapter {
         holder.eventTitle.setText(event.getTitle());
 
         final LocalDateTime dateTime = event.getStart().toLocalDateTime();
-        holder.eventDate.setText(dateTime.toString(DateTimeFormat.patternForStyle("S-", mContext.getResources().getConfiguration().locale)));
-        holder.eventTime.setText(dateTime.toString(DateTimeFormat.patternForStyle("-S", mContext.getResources().getConfiguration().locale)));
-        
+        Locale locale = mContext.getResources().getConfiguration().locale;
+        holder.eventDate.setText(dateTime.toString(DateTimeFormat.patternForStyle("S-", locale)));
+        holder.eventTime.setText(dateTime.toString(DateTimeFormat.patternForStyle("-S", locale)));
+
         holder.eventLocation.setText(event.getLocation());
 
         if (event.getStart().isBefore(DATETIME_NOW)) {
@@ -199,13 +200,19 @@ class EventAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        @Bind(R.id.event_title) TextView eventTitle;
-        @Bind(R.id.event_date) TextView eventDate;
-        @Bind(R.id.event_time) TextView eventTime;
-        @Bind(R.id.event_location) TextView eventLocation;
-        @Bind(R.id.past) TextView past;
-        @Bind(R.id.icon) ImageView icon;
-//        @Bind(R.id.event_image_header) ImageView eventHeader;
+        @BindView(R.id.event_title)
+        TextView eventTitle;
+        @BindView(R.id.event_date)
+        TextView eventDate;
+        @BindView(R.id.event_time)
+        TextView eventTime;
+        @BindView(R.id.event_location)
+        TextView eventLocation;
+        @BindView(R.id.past)
+        TextView past;
+        @BindView(R.id.icon)
+        ImageView icon;
+//        @BindView(R.id.event_image_header) ImageView eventHeader;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

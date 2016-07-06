@@ -1,16 +1,7 @@
 package org.gdg.frisbee.android.achievements;
 
-/**
- *
- * Constant values for achievements unlocking.
- *
- * @author Bartek Przybylski <bart.p.pl@gmail.com>
- */
 class Achievements {
 
-    private Achievements() {
-    }
-    
     // Achievements
     public static final String ACHIEVEMENT_SIGNIN_PALOOZA = "CgkIh5yNxL8MEAIQAA";
     public static final String ACHIEVEMENT_GDG_MANIAC = "CgkIh5yNxL8MEAIQAg";
@@ -25,4 +16,6 @@ class Achievements {
     public static final String ACHIEVEMENT_CURIOUS_ORGANIZER = "CgkIh5yNxL8MEAIQFQ";
     public static final String ACHIEVEMENT_CINEPHILE = "CgkIh5yNxL8MEAIQAQ";
     public static final String ACHIEVEMENT_MAJOR_CINEPHILE = "CgkIh5yNxL8MEAIQBQ";
+    private Achievements() {
+    }
 }

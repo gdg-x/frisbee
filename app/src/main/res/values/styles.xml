@@ -9,7 +9,7 @@
 
   <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-  <style name="Widget.GDG.Spinner.Base" parent="Widget.AppCompat.Light.Spinner.DropDown.ActionBar"/>
+  <style name="Widget.GDG.Spinner.Base" parent="Widget.AppCompat.Light.Spinner.DropDown.ActionBar" />
 
   <style name="Widget.GDG.Spinner" parent="Widget.GDG.Spinner.Base">
     <item name="android:theme">@style/ActionBarThemeOverlay</item>

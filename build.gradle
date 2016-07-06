@@ -6,12 +6,13 @@ buildscript {
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.0-alpha4'
-        classpath 'com.google.gms:google-services:1.3.1'
+        classpath 'com.android.tools.build:gradle:2.1.0'
+        classpath 'com.google.gms:google-services:3.0.0'
 
-        classpath 'io.fabric.tools:gradle:1.20.1'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        classpath 'io.fabric.tools:gradle:1.21.6'
         classpath 'com.github.triplet.gradle:play-publisher:1.1.4'
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.11.3'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.12.0'
         classpath 'org.ajoberstar:grgit:1.4.1'
     }
 }
@@ -46,26 +47,28 @@ ext {
 
     // Manifest version information!
     versionMajor = 2
-    versionMinor = 3
-    versionPatch = 0
-    versionBuild = 5 // bump for dogfood builds, public betas, etc.
+    versionMinor = 4
+    versionPatch = 2
+    versionBuild = 1 // bump for dogfood builds, public betas, etc.
 
     versionCode = versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
     versionName = "${versionMajor}.${versionMinor}.${versionPatch}"
 
     // Sdk and tools
-    minSdkVersion = 16
+    minSdkVersion = project.hasProperty("minSdk") ? minSdk.trim() : 16
     targetSdkVersion = 21
     compileSdkVersion = 23
     buildToolsVersion = '23.0.2'
 
     // App dependencies
-    supportLibraryVersion = '23.1.1'
-    playServicesVersion = '7.8.0'
-    jodaTimeVersion = '2.9.1'
+    supportLibraryVersion = '23.4.0'
+    playServicesVersion = '9.0.1'
+    butterKnifeVersion = '8.0.1'
+    jodaTimeVersion = '2.9.3'
     leakCanaryVersion = '1.3.1'
     okHttpVersion = '3.4.0-RC1'
     retrofitVersion = '2.1.0'
+    timberVersion = '4.1.2'
 
     //test dependencies
     junitVersion = '4.12'

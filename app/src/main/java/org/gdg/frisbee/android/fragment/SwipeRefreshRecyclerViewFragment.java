@@ -17,10 +17,12 @@
 package org.gdg.frisbee.android.fragment;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -54,13 +56,14 @@ public class SwipeRefreshRecyclerViewFragment extends GdgRecyclerFragment {
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT));
 
-        mSwipeRefreshLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                mSwipeRefreshLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                mSwipeRefreshLayout.setRecyclerView(getListView());
-            }
-        });
+        mSwipeRefreshLayout.getViewTreeObserver().addOnGlobalLayoutListener(
+            new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    mSwipeRefreshLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    mSwipeRefreshLayout.setRecyclerView(getListView());
+                }
+            });
 
         // Now return the SwipeRefreshLayout as this fragment's content view
         return mSwipeRefreshLayout;
@@ -70,7 +73,7 @@ public class SwipeRefreshRecyclerViewFragment extends GdgRecyclerFragment {
      * Set the {@link android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener} to listen for
      * initiated refreshes.
      *
-     * @see android.support.v4.widget.SwipeRefreshLayout#setOnRefreshListener(android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener)
+     * @see android.support.v4.widget.SwipeRefreshLayout#setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener)
      */
     public void setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener listener) {
         mSwipeRefreshLayout.setOnRefreshListener(listener);
@@ -117,7 +120,7 @@ public class SwipeRefreshRecyclerViewFragment extends GdgRecyclerFragment {
      * {@link android.support.v4.widget.SwipeRefreshLayout} only supports a single child, which it
      * expects to be the one which triggers refreshes. In our case the layout's child is the content
      * view returned from
-     * {@link android.support.v4.app.ListFragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)}
+     * {@link android.support.v4.app.ListFragment#onCreateView(LayoutInflater, ViewGroup, Bundle)}
      * which is a {@link android.view.ViewGroup}.
      *
      * <p>To enable 'swipe-to-refresh' support via the {@link android.widget.ListView} we need to
@@ -164,7 +167,8 @@ public class SwipeRefreshRecyclerViewFragment extends GdgRecyclerFragment {
                     int position = ((LinearLayoutManager) layoutManager).findFirstCompletelyVisibleItemPosition();
                     return position != 0;
                 } else if (layoutManager instanceof StaggeredGridLayoutManager) {
-                    int[] positions = ((StaggeredGridLayoutManager) layoutManager).findFirstCompletelyVisibleItemPositions(null);
+                    int[] positions = ((StaggeredGridLayoutManager) layoutManager)
+                        .findFirstCompletelyVisibleItemPositions(null);
                     for (int position : positions) {
                         if (position == 0) {
                             return false;

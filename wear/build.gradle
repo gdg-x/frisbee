@@ -25,10 +25,18 @@ android {
         // Skip pre-dexing when running on CI or when disabled via -Dpre-dex=false.
         preDexLibraries = rootProject.ext.preDexEnabled && !rootProject.ext.ci
     }
+
+    lintOptions {
+        ignoreWarnings ci
+        textReport true
+        textOutput 'stdout'
+    }
 }
 
 dependencies {
     compile 'com.google.android.support:wearable:1.3.0'
     compile "com.android.support:support-v4:$rootProject.supportLibraryVersion"
     compile "com.google.android.gms:play-services-wearable:$rootProject.playServicesVersion"
+
+    compile "com.jakewharton.timber:timber:$rootProject.timberVersion"
 }

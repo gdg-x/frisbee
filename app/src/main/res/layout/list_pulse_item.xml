@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:minHeight="?attr/listPreferredItemHeight"
   android:orientation="horizontal"
-  tools:layout_height="?attr/listPreferredItemHeight"
-  tools:context=".pulse.PulseActivity">
+  tools:context=".pulse.PulseActivity"
+  tools:layout_height="?attr/listPreferredItemHeight">
 
   <TextView
     android:id="@+id/position"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
     android:paddingLeft="@dimen/keyline_1"
     android:textAppearance="?attr/textAppearanceListItem"
-    android:layout_centerVertical="true"
     android:textStyle="bold"
-    tools:text="1."/>
+    tools:text="1." />
 
   <TextView
     android:id="@+id/key"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_centerVertical="true"
-    android:layout_toRightOf="@+id/position"
     android:layout_marginLeft="4dp"
+    android:layout_toRightOf="@+id/position"
     android:textAppearance="?attr/textAppearanceListItem"
-    tools:text="GDG Sampletown"/>
+    tools:text="GDG Sampletown" />
 
   <TextView
     android:id="@+id/value"
@@ -37,10 +36,10 @@
     android:layout_centerVertical="true"
     android:paddingRight="@dimen/keyline_1"
     android:textAppearance="?attr/textAppearanceListItem"
-    tools:text="(00)"/>
+    tools:text="(00)" />
 
   <View
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/dividerHorizontal"/>
+    android:background="?attr/dividerHorizontal" />
 </RelativeLayout>

@@ -115,6 +115,7 @@
   <string name="order_by_distance">الترتيب حسب المسافة</string>
   <string name="gcm_event_ticker">وكان من المقرر حدثا جديدا في منزلك GDG.</string>
   <string name="ioextended_description">جوجل I / O الموسع هو حول الانضمام إلى مؤتمر جوجل في المجموعة المحلية الخاصة بك.</string>
+  <string name="gcpnext_description">GCP NEXT Extended events bring the local developer community together to experience talks, in-depth product demos, and behind-the-scenes interviews. All keynote and technical sessions will be available on-line for time-shifted viewing. The event can also offer other unique activities for developers, such cloud codelabs or hackathons.</string>
   <string name="devfest_description">GDG DevFest هي، والأحداث الكبيرة التي تديرها المجتمعات المحلية التي يمكن أن تقدم دورات اللغة في جميع أنحاء متعددة من مجالات المنتجات، hackathons طوال اليوم، ومختبرات الرمز، وأكثر من ذلك. \ n سوف تكون مصدر إلهام \ شاطئ GDG DevFest من قبل ومصممة بشكل فريد لاحتياجات المجتمع المطور الذي يستضيف فيه. في حين لا حدثين سوف يكون بالضبط على حد سواء، كل GDG DevFest و، في جوهرها، يتم تشغيله من خلال الإيمان المشترك أنه عندما تأتي المطورين معا لتبادل الأفكار والأشياء المدهشة يمكن أن يحدث.</string>
   <string name="studyjams_description">دراسة مطوري جوجل المربيات هو عبارة عن سلسلة خالية من العالمي، المجتمع التي تديرها، ومجموعات الدراسة في شخص. وقدم أول مسلسل المربيات دراسة في شراكة مع Udacity وسوف تتبع من الروبوت أساسيات المنهج الدراسي. والميسرين المطور Google مجموعة شهادة في مسار يؤدي المربيات الدراسة أن تجتمع مرة واحدة أسبوعيا لمدة 8–9 أسابيع.</string>
   <string name="wtm_description">صناع النساء للتكنولوجيا هو برنامج عالمي غوغل والعلامة التجارية للنساء في مجال التكنولوجيا. انطلقت في 2012 من قبل ثم نائب رئيس جوجل [س] ميغان سميث، ويقود المرأة Techmakers الآن من قبل المرأة والتكنولوجيا المحامي ناتالي فيلالوبوس وفريق عالمي من مستخدمي Google الذين هم متحمسون تمكين المرأة في مجال التكنولوجيا من خلال زيادة وضوح والمجتمع والموارد. \ في \ سيتم تلبي كل من لدينا مؤتمرات القمة وmeetups للمجتمعات المحلية للنساء في مجال التكنولوجيا. القمة وmeetups في جميع أنحاء العالم قد ميزة التدريب العملي على الترميز ورش العمل، والمتكلمين الملهم، وفرص التواصل. \ n والأحداث \ n كل يحدث في غضون شهر مارس.</string>
@@ -188,4 +189,5 @@
   <string name="invitation_title">أدع أصدقائك إلى تطبيق المجموعة</string>
   <string name="invitation_message">حمّل تطبيق GDG و اكتشف محتوى مجموعة مطوري Google بينما يكون جاهزا للإطلاق.</string>
   <string name="thanks_for_feedback">Thank you for your Feedback!</string>
+  <string name="retry">Retry</string>
 </resources>

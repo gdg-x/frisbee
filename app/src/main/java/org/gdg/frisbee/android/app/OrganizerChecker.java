@@ -3,12 +3,11 @@ package org.gdg.frisbee.android.app;
 import android.content.SharedPreferences;
 
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.model.people.Person;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.OrganizerCheckResponse;
+import org.gdg.frisbee.android.utils.PlusUtils;
 import org.gdg.frisbee.android.utils.PrefUtils;
 
 public class OrganizerChecker {
@@ -19,10 +18,10 @@ public class OrganizerChecker {
 
     public OrganizerChecker(SharedPreferences preferences) {
         mPreferences = preferences;
-        resetOrganizer();
+        initOrganizer();
     }
 
-    public void resetOrganizer() {
+    public void initOrganizer() {
         mLastOrganizerCheck = mPreferences.getLong(Const.PREF_ORGANIZER_CHECK_TIME, 0);
         mCheckedId = mPreferences.getString(Const.PREF_ORGANIZER_CHECK_ID, null);
         mIsOrganizer = mPreferences.getBoolean(Const.PREF_ORGANIZER_STATE, false);
@@ -41,15 +40,18 @@ public class OrganizerChecker {
     }
 
     public void checkOrganizer(GoogleApiClient apiClient, final Callbacks responseHandler) {
-        Person plusPerson = null;
-        if (apiClient.isConnected() && PrefUtils.isSignedIn(apiClient.getContext())) {
-            plusPerson = Plus.PeopleApi.getCurrentPerson(apiClient);
+        if (!PrefUtils.isSignedIn(apiClient.getContext())) {
+            mIsOrganizer = false;
+            mCheckedId = null;
+            responseHandler.onOrganizerResponse(mIsOrganizer);
+            return;
         }
-        final String currentId = plusPerson != null ? plusPerson.getId() : null;
+
+        final String currentId = PlusUtils.getCurrentPersonId(apiClient);
 
         if (currentId != null
-                && (!currentId.equals(mCheckedId)
-                || System.currentTimeMillis() > mLastOrganizerCheck + Const.ORGANIZER_CHECK_MAX_TIME)) {
+            && (!currentId.equals(mCheckedId)
+            || System.currentTimeMillis() > mLastOrganizerCheck + Const.ORGANIZER_CHECK_MAX_TIME)) {
             mIsOrganizer = false;
             App.getInstance().getGdgXHub().checkOrganizer(currentId).enqueue(new Callback<OrganizerCheckResponse>() {
                 @Override
@@ -75,10 +77,10 @@ public class OrganizerChecker {
 
     private void savePreferences() {
         mPreferences.edit()
-                .putLong(Const.PREF_ORGANIZER_CHECK_TIME, getLastOrganizerCheckTime())
-                .putString(Const.PREF_ORGANIZER_CHECK_ID, getLastOrganizerCheckId())
-                .putBoolean(Const.PREF_ORGANIZER_STATE, isOrganizer())
-                .apply();
+            .putLong(Const.PREF_ORGANIZER_CHECK_TIME, getLastOrganizerCheckTime())
+            .putString(Const.PREF_ORGANIZER_CHECK_ID, getLastOrganizerCheckId())
+            .putBoolean(Const.PREF_ORGANIZER_STATE, isOrganizer())
+            .apply();
     }
 
     public interface Callbacks {

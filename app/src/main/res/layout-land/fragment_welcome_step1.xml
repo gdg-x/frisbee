@@ -44,7 +44,7 @@
             android:text="@string/welcome"
             android:textAppearance="@android:style/TextAppearance.Large"
             android:textColor="@color/asbestos"
-            android:textIsSelectable="false"/>
+            android:textIsSelectable="false" />
 
           <TextView
             android:id="@+id/textView1"
@@ -55,7 +55,7 @@
             android:text="@string/choose_home_gdg"
             android:textAppearance="@android:style/TextAppearance.Large"
             android:textColor="@color/asbestos"
-            android:textIsSelectable="false"/>
+            android:textIsSelectable="false" />
         </LinearLayout>
 
         <ViewSwitcher
@@ -76,7 +76,7 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:indeterminate="true"
-              android:indeterminateOnly="true"/>
+              android:indeterminateOnly="true" />
           </LinearLayout>
 
           <LinearLayout
@@ -92,24 +92,24 @@
 
               <org.gdg.frisbee.android.view.AutoCompleteSpinnerView
                 android:id="@+id/chapter_spinner"
-                android:drawableRight="@drawable/spinner_arrow_dropdown"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/keyline_1"
                 android:layout_marginRight="@dimen/keyline_1"
+                android:drawableRight="@drawable/spinner_arrow_dropdown"
                 android:hint="@string/home_gdg"
                 android:minHeight="50dip"
                 android:minWidth="200dip"
                 android:paddingLeft="@dimen/spinner_left_padding"
                 android:paddingRight="4dp"
-                android:singleLine="true"/>
+                android:singleLine="true" />
             </android.support.design.widget.TextInputLayout>
 
             <Button
               android:id="@+id/confirm"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:text="@string/confirm"/>
+              android:text="@string/confirm" />
           </LinearLayout>
         </ViewSwitcher>
       </LinearLayout>
@@ -120,7 +120,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:adjustViewBounds="true"
-        android:background="@drawable/gdg_world"/>
+        android:background="@drawable/gdg_world" />
     </LinearLayout>
   </LinearLayout>
 
@@ -129,5 +129,5 @@
     android:layout_width="match_parent"
     android:layout_height="15dip"
     android:background="@drawable/googly_bar"
-    android:contentDescription="@null"/>
+    android:contentDescription="@null" />
 </LinearLayout>

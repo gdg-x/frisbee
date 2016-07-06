@@ -33,10 +33,13 @@ import java.lang.reflect.Type;
 public class ZuluDateTimeDeserializer implements JsonDeserializer<DateTime>, JsonSerializer<DateTime> {
 
     //2013-05-15T16:30:00.000Z
-    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ss.SSS'Z'");
+    public static final DateTimeFormatter DATE_TIME_FORMATTER =
+        DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ss.SSS'Z'");
 
     @Override
-    public DateTime deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+    public DateTime deserialize(JsonElement jsonElement,
+                                Type type,
+                                JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
         return DATE_TIME_FORMATTER.parseDateTime(jsonElement.getAsJsonPrimitive().getAsString());
     }
 

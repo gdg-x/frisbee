@@ -28,8 +28,6 @@ import java.util.ArrayList;
 
 /**
  * Simple Achievements action handler used not to clutter activity code with achievements unlocking.
- *
- * @author Bartek Przybylski <bart.p.pl@gmail.com>
  */
 public class AchievementActionHandler {
     private final Context mContext;
@@ -104,7 +102,7 @@ public class AchievementActionHandler {
             return;
         }
 
-        if (!mGoogleApi.isConnected()) {
+        if (!mGoogleApi.hasConnectedApi(Games.API)) {
             mPending.add(achievementName);
         } else {
             Games.Achievements.unlock(mGoogleApi, achievementName);
@@ -116,7 +114,7 @@ public class AchievementActionHandler {
         if (PrefUtils.hasHigherAchievementSteps(mContext, achievementName, steps)) {
             return;
         }
-        if (!mGoogleApi.isConnected()) {
+        if (!mGoogleApi.hasConnectedApi(Games.API)) {
             final Pair<String, Integer> achievement = new Pair<>(achievementName, steps);
             mPendingIncremental.add(achievement);
         } else {
@@ -126,6 +124,9 @@ public class AchievementActionHandler {
     }
 
     public void onConnected() {
+        if (!mGoogleApi.hasConnectedApi(Games.API)) {
+            return;
+        }
         for (String achievement : mPending) {
             postAchievementUnlockedEvent(achievement);
         }

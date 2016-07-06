@@ -60,6 +60,7 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.OrganizerChecker;
 import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.utils.CryptoUtils;
+import org.gdg.frisbee.android.utils.PlusUtils;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -67,34 +68,71 @@ import org.joda.time.DateTimeZone;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import timber.log.Timber;
 
 public class ArrowActivity extends GdgNavDrawerActivity {
 
-    private static final Charset CHARSET = Charset.forName("US-ASCII");
     public static final String ID_SEPARATOR_FOR_SPLIT = "\\|";
+    private static final Charset CHARSET = Charset.forName("US-ASCII");
     private static final String ID_SPLIT_CHAR = "|";
     private static final int REQUEST_LEADERBOARD = 1;
     private static final int WHITE = 0xFFFFFFFF;
     private static final int BLACK = 0xFF000000;
-    @Bind(R.id.viewFlipper)
+    @BindView(R.id.viewFlipper)
     ViewFlipper viewFlipper;
-    @Bind(R.id.switchToSend)
+    @BindView(R.id.switchToSend)
     Button switchToSend;
-    @Bind(R.id.switchToTag)
+    @BindView(R.id.switchToTag)
     Button switchToReceive;
-    @Bind(R.id.organizerOnly)
+    @BindView(R.id.organizerOnly)
     LinearLayout organizerOnly;
-    @Bind(R.id.imageView)
+    @BindView(R.id.imageView)
     ImageView scanImageView;
-    @Bind(R.id.organizerPic)
+    @BindView(R.id.organizerPic)
     ImageView organizerPic;
     private String taggedPeopleIds;
     private BaseArrowHandler mArrowHandler;
     private NfcAdapter mNfcAdapter;
     private String mPendingScore;
     private Handler mHandler = new Handler();
+    private Runnable updateQrCode = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                String encryptedMessage = getEncryptedMessage();
+                if (TextUtils.isEmpty(encryptedMessage)) {
+                    return;
+                }
+                String message = Const.QR_MSG_PREFIX + encryptedMessage;
+                MultiFormatWriter mQrCodeWriter = new MultiFormatWriter();
+                int qrCodeSize = getResources().getInteger(R.integer.qr_code_size);
+                BitMatrix bitMatrix = mQrCodeWriter.encode(message, BarcodeFormat.QR_CODE, qrCodeSize, qrCodeSize);
+                int width = bitMatrix.getWidth();
+                int height = bitMatrix.getHeight();
+                int[] pixels = new int[width * height];
+                for (int y = 0; y < height; y++) {
+                    int offset = y * width;
+                    for (int x = 0; x < width; x++) {
+                        pixels[offset + x] = bitMatrix.get(x, y) ? BLACK : WHITE;
+                    }
+                }
+
+                Bitmap bitmap = Bitmap.createBitmap(width, height,
+                    Bitmap.Config.ARGB_8888);
+                bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+                organizerPic.setImageBitmap(bitmap);
+
+                mHandler.postDelayed(updateQrCode, 60000);
+            } catch (Exception e) {
+                Timber.e(e, "Error while trying to update QR code");
+            }
+        }
+    };
+
+    private static long getNow() {
+        return DateTime.now(DateTimeZone.UTC).getMillis();
+    }
 
     @Override
     protected String getTrackedViewName() {
@@ -128,12 +166,12 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         });
 
         switchToReceive.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        viewFlipper.setDisplayedChild(0);
-                    }
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    viewFlipper.setDisplayedChild(0);
                 }
+            }
         );
     }
 
@@ -150,8 +188,8 @@ public class ArrowActivity extends GdgNavDrawerActivity {
             case R.id.arrow_lb:
                 if (getGoogleApiClient().isConnected()) {
                     startActivityForResult(
-                            Games.Leaderboards.getLeaderboardIntent(getGoogleApiClient(), Const.ARROW_LB),
-                            REQUEST_LEADERBOARD
+                        Games.Leaderboards.getLeaderboardIntent(getGoogleApiClient(), Const.ARROW_LB),
+                        REQUEST_LEADERBOARD
                     );
                 }
                 return true;
@@ -246,12 +284,73 @@ public class ArrowActivity extends GdgNavDrawerActivity {
 
     private void score(final String id) {
 
-        if (id.equals(Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getId())) {
+        if (id.equals(PlusUtils.getCurrentPersonId(getGoogleApiClient()))) {
             Toast.makeText(this, R.string.arrow_selfie, Toast.LENGTH_LONG).show();
             return;
         }
 
         new StoreSnapshotTask(getGoogleApiClient()).execute(id);
+    }
+
+    private void showNoNfc() {
+        Toast.makeText(this, R.string.no_nfc_use_qr_scanner, Toast.LENGTH_LONG).show();
+    }
+
+    @Nullable
+    private String getEncryptedMessage() throws Exception {
+        if (getGoogleApiClient().isConnected()) {
+            return CryptoUtils.encrypt(Const.ARROW_K,
+                PlusUtils.getCurrentPersonId(getGoogleApiClient()) + ID_SPLIT_CHAR + getNow());
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        super.onConnected(bundle);
+
+        switchToSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (App.getInstance().isOrganizer()) {
+                    viewFlipper.setDisplayedChild(1);
+                    mArrowHandler.enablePush();
+                }
+            }
+        });
+        mArrowHandler.disablePush();
+
+        App.getInstance().checkOrganizer(getGoogleApiClient(),
+            new OrganizerChecker.Callbacks() {
+                @Override
+                public void onOrganizerResponse(boolean isOrganizer) {
+                    if (isOrganizer) {
+                        organizerOnly.setVisibility(View.VISIBLE);
+                        setQrCode();
+                    } else {
+                        organizerOnly.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onErrorResponse() {
+                    organizerOnly.setVisibility(View.GONE);
+                }
+            });
+
+        if (mPendingScore != null) {
+            score(mPendingScore);
+            mPendingScore = null;
+        }
+    }
+
+    private void setQrCode() {
+        mHandler.post(updateQrCode);
+
+    }
+
+    public static class AlreadyTaggedException extends Exception {
     }
 
     public class StoreSnapshotTask extends AsyncTask<String, Void, String> {
@@ -293,10 +392,10 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         @WorkerThread
         private Snapshot openSnapshot() {
             Snapshots.OpenSnapshotResult result = Games.Snapshots.open(
-                    googleApiClient,
-                    Const.GAMES_SNAPSHOT_ID,
-                    true,
-                    Snapshots.RESOLUTION_POLICY_MOST_RECENTLY_MODIFIED
+                googleApiClient,
+                Const.GAMES_SNAPSHOT_ID,
+                true,
+                Snapshots.RESOLUTION_POLICY_MOST_RECENTLY_MODIFIED
             ).await();
 
             final int statusCode = result.getStatus().getStatusCode();
@@ -305,8 +404,8 @@ public class ArrowActivity extends GdgNavDrawerActivity {
             }
 
             Timber.e("Error in Snapshot opening.\n"
-                    + "Status: %s\n"
-                    + "Status Code: %d", result.getStatus().getStatusMessage(), statusCode);
+                + "Status: %s\n"
+                + "Status Code: %d", result.getStatus().getStatusMessage(), statusCode);
             return null;
         }
 
@@ -329,8 +428,8 @@ public class ArrowActivity extends GdgNavDrawerActivity {
             if (snapshot != null) {
                 snapshot.getSnapshotContents().writeBytes(merged.getBytes());
                 SnapshotMetadataChange metadataChange = new SnapshotMetadataChange.Builder()
-                        .setDescription(getString(R.string.arrow_tagged) + ": " + numberOfTaggedOrganizers)
-                        .build();
+                    .setDescription(getString(R.string.arrow_tagged) + ": " + numberOfTaggedOrganizers)
+                    .build();
                 Games.Snapshots.commitAndClose(getGoogleApiClient(), snapshot, metadataChange).await();
             }
 
@@ -350,122 +449,28 @@ public class ArrowActivity extends GdgNavDrawerActivity {
         }
     }
 
-    public static class AlreadyTaggedException extends Exception {
-    }
-
-    private void showNoNfc() {
-        Toast.makeText(this, R.string.no_nfc_use_qr_scanner, Toast.LENGTH_LONG).show();
-    }
-
-    @Nullable
-    private String getEncryptedMessage() throws Exception {
-        if (getGoogleApiClient().isConnected()) {
-            return CryptoUtils.encrypt(Const.ARROW_K,
-                    Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getId()
-                            + ID_SPLIT_CHAR
-                            + getNow());
-        } else {
-            return null;
-        }
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        super.onConnected(bundle);
-
-        switchToSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (App.getInstance().isOrganizer()) {
-                    viewFlipper.setDisplayedChild(1);
-                    mArrowHandler.enablePush();
-                }
-            }
-        });
-        mArrowHandler.disablePush();
-
-        App.getInstance().checkOrganizer(getGoogleApiClient(),
-                new OrganizerChecker.Callbacks() {
-                    @Override
-                    public void onOrganizerResponse(boolean isOrganizer) {
-                        if (isOrganizer) {
-                            organizerOnly.setVisibility(View.VISIBLE);
-                            setQrCode();
-                        } else {
-                            organizerOnly.setVisibility(View.GONE);
-                        }
-                    }
-
-                    @Override
-                    public void onErrorResponse() {
-                        organizerOnly.setVisibility(View.GONE);
-                    }
-                });
-
-        if (mPendingScore != null) {
-            score(mPendingScore);
-            mPendingScore = null;
-        }
-    }
-
-    private void setQrCode() {
-        mHandler.post(updateQrCode);
-
-    }
-
-    private Runnable updateQrCode = new Runnable() {
-        @Override
-        public void run() {
-            try {
-                String encryptedMessage = getEncryptedMessage();
-                if (TextUtils.isEmpty(encryptedMessage)) {
-                    return;
-                }
-                String message = Const.QR_MSG_PREFIX + encryptedMessage;
-                MultiFormatWriter mQrCodeWriter = new MultiFormatWriter();
-                int qrCodeSize = getResources().getInteger(R.integer.qr_code_size);
-                BitMatrix bitMatrix = mQrCodeWriter.encode(message, BarcodeFormat.QR_CODE, qrCodeSize, qrCodeSize);
-                int width = bitMatrix.getWidth();
-                int height = bitMatrix.getHeight();
-                int[] pixels = new int[width * height];
-                for (int y = 0; y < height; y++) {
-                    int offset = y * width;
-                    for (int x = 0; x < width; x++) {
-                        pixels[offset + x] = bitMatrix.get(x, y) ? BLACK : WHITE;
-                    }
-                }
-
-                Bitmap bitmap = Bitmap.createBitmap(width, height,
-                        Bitmap.Config.ARGB_8888);
-                bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
-                organizerPic.setImageBitmap(bitmap);
-
-                mHandler.postDelayed(updateQrCode, 60000);
-            } catch (Exception e) {
-                Timber.e(e, "Error while trying to update QR code");
-            }
-        }
-    };
-
-    private static long getNow() {
-        return DateTime.now(DateTimeZone.UTC).getMillis();
-    }
-
     private class BaseArrowHandler {
-        public void enablePush() { }
-        public void disablePush() { }
-    }
-
-    private class NfcArrowHandler extends BaseArrowHandler
-            implements NfcAdapter.OnNdefPushCompleteCallback, NfcAdapter.CreateNdefMessageCallback {
-
         public void enablePush() {
-            mNfcAdapter.setNdefPushMessageCallback(this, ArrowActivity.this);
-            mNfcAdapter.setOnNdefPushCompleteCallback(this, ArrowActivity.this);
         }
 
         public void disablePush() {
-            mNfcAdapter.setNdefPushMessage(null, ArrowActivity.this);
+        }
+    }
+
+    private class NfcArrowHandler extends BaseArrowHandler
+        implements NfcAdapter.OnNdefPushCompleteCallback, NfcAdapter.CreateNdefMessageCallback {
+
+        public void enablePush() {
+            if (isContextValid()) {
+                mNfcAdapter.setNdefPushMessageCallback(this, ArrowActivity.this);
+                mNfcAdapter.setOnNdefPushCompleteCallback(this, ArrowActivity.this);
+            }
+        }
+
+        public void disablePush() {
+            if (isContextValid()) {
+                mNfcAdapter.setNdefPushMessage(null, ArrowActivity.this);
+            }
         }
 
         @Nullable
@@ -479,19 +484,20 @@ public class ArrowActivity extends GdgNavDrawerActivity {
                 }
 
                 NdefRecord mimeRecord = new NdefRecord(
-                        NdefRecord.TNF_MIME_MEDIA,
-                        Const.ARROW_MIME.getBytes(CHARSET),
-                        new byte[0],
-                        msg.getBytes(CHARSET));
+                    NdefRecord.TNF_MIME_MEDIA,
+                    Const.ARROW_MIME.getBytes(CHARSET),
+                    new byte[0],
+                    msg.getBytes(CHARSET));
                 return new NdefMessage(new NdefRecord[]{mimeRecord});
             } catch (Exception e) {
                 Timber.e(e, "Error while trying to create NFC message");
-                Toast.makeText(ArrowActivity.this, ArrowActivity.this.getString(R.string.arrow_oops), Toast.LENGTH_LONG).show();
+                Toast.makeText(ArrowActivity.this, R.string.arrow_oops, Toast.LENGTH_LONG).show();
             }
             return null;
         }
 
         @Override
-        public void onNdefPushComplete(NfcEvent nfcEvent) { }
+        public void onNdefPushComplete(NfcEvent nfcEvent) {
+        }
     }
 }

@@ -1,8 +1,11 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.gdg.frisbee.android">
-    <uses-feature android:name="android.hardware.type.watch" />
+<manifest package="org.gdg.frisbee.android"
+          xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <uses-feature android:name="android.hardware.type.watch"/>
+
   <uses-permission android:name="com.google.android.permission.PROVIDE_BACKGROUND"/>
   <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
 
   <application
     android:allowBackup="true"
@@ -50,6 +53,9 @@
     </activity>
     <activity
       android:name=".ColorConfigActivity"
+      android:label="@string/label_configure"/>
+    <activity
+      android:name=".TimeConfigActivity"
       android:label="@string/label_configure"/>
   </application>
 

@@ -18,12 +18,10 @@ package org.gdg.frisbee.android.utils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.Uri;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
 import android.util.DisplayMetrics;
@@ -51,26 +49,10 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
-import timber.log.Timber;
-
 public class Utils {
-    
+
     private Utils() {
         // Prevent instances of this class being created.
-    }
-
-    /**
-     * @return Application's version code from the {@code PackageManager}.
-     */
-    public static int getAppVersion(Context context) {
-        try {
-            PackageInfo packageInfo = context.getPackageManager()
-                    .getPackageInfo(context.getPackageName(), 0);
-            return packageInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            // should never happen
-            throw new RuntimeException("Could not get package name: " + e);
-        }
     }
 
     /**
@@ -84,7 +66,7 @@ public class Utils {
         return (int) TypedValue
                 .applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, res.getDisplayMetrics());
     }
-    
+
     public static float convertPixelsToDp(float px, Context context) {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
@@ -113,7 +95,8 @@ public class Utils {
         String[] pairs = query.split("&");
         for (String pair : pairs) {
             int idx = pair.indexOf("=");
-            queryPairs.put(URLDecoder.decode(pair.substring(0, idx), "UTF-8"), URLDecoder.decode(pair.substring(idx + 1), "UTF-8"));
+            queryPairs.put(URLDecoder.decode(pair.substring(0, idx), "UTF-8"),
+                URLDecoder.decode(pair.substring(idx + 1), "UTF-8"));
         }
         return queryPairs;
     }
@@ -123,16 +106,20 @@ public class Utils {
         Resources res = ctx.getResources();
         Period p = new Period(start, end);
 
-        if (p.getYears() == 0 && p.getMonths() == 0 && p.getWeeks() == 0 && p.getDays() == 0 && p.getHours() == 0 && p.getMinutes() == 0) {
+        if (p.getYears() == 0 && p.getMonths() == 0 && p.getWeeks() == 0
+            && p.getDays() == 0 && p.getHours() == 0 && p.getMinutes() == 0) {
             result = res.getQuantityString(R.plurals.seconds_ago, p.getSeconds(), p.getSeconds());
-        } else if (p.getYears() == 0 && p.getMonths() == 0 && p.getWeeks() == 0 && p.getDays() == 0 && p.getHours() == 0) {
+        } else if (p.getYears() == 0 && p.getMonths() == 0 && p.getWeeks() == 0
+            && p.getDays() == 0 && p.getHours() == 0) {
             result = res.getQuantityString(R.plurals.minutes_ago, p.getMinutes(), p.getMinutes());
         } else if (p.getYears() == 0 && p.getMonths() == 0 && p.getWeeks() == 0 && p.getDays() == 0) {
             result = res.getQuantityString(R.plurals.hours_ago, p.getHours(), p.getHours());
         } else if (p.getYears() == 0 && p.getMonths() == 0 && p.getWeeks() == 0) {
             result = res.getQuantityString(R.plurals.days_ago, p.getDays(), p.getDays());
         } else {
-            result = start.toLocalDateTime().toString(DateTimeFormat.patternForStyle("M-", res.getConfiguration().locale));
+            result = start.toLocalDateTime().toString(
+                DateTimeFormat.patternForStyle("M-", res.getConfiguration().locale)
+            );
         }
         return result;
     }
@@ -143,11 +130,6 @@ public class Utils {
         return mConMgr.getActiveNetworkInfo() != null
                 && mConMgr.getActiveNetworkInfo().isAvailable()
                 && mConMgr.getActiveNetworkInfo().isConnected();
-    }
-
-    public static boolean isEmulator() {
-        Timber.d(Build.PRODUCT);
-        return Build.PRODUCT.equals("google_sdk");
     }
 
     public static long stringToLong(String str) {
@@ -217,4 +199,5 @@ public class Utils {
         intent.setData(uri);
         return intent;
     }
+
 }

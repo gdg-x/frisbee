@@ -24,14 +24,10 @@ import android.view.ViewGroup;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.common.BaseFragment;
 
-import butterknife.ButterKnife;
-
 public class GetInvolvedFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_get_involved, container, false);
-        ButterKnife.bind(this, v);
-        return v;
+        return inflateView(inflater, R.layout.fragment_get_involved, container);
     }
 }

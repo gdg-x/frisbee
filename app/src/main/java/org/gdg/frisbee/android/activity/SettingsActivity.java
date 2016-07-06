@@ -36,8 +36,8 @@ public class SettingsActivity extends GdgActivity {
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.settings_fragment, new SettingsFragment())
-                    .commit();
+                .add(R.id.settings_fragment, new SettingsFragment())
+                .commit();
         }
     }
 

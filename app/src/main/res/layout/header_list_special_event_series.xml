@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
   xmlns:card_view="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
+  android:layout_marginBottom="@dimen/keyline_1"
   card_view:cardCornerRadius="2dp"
-  card_view:cardUseCompatPadding="true"
   card_view:cardElevation="4dp"
-  android:layout_marginBottom="@dimen/keyline_1">
+  card_view:cardUseCompatPadding="true">
 
   <TextView
     android:id="@+id/special_description"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/content_padding"
     android:drawablePadding="@dimen/content_padding"
-    tools:text="@string/ioextended_description"
-    tools:drawableTop="@drawable/ic_ioextended"/>
+    android:padding="@dimen/content_padding"
+    tools:drawableTop="@drawable/ic_ioextended"
+    android:textIsSelectable="true"
+    tools:text="@string/ioextended_description" />
 </android.support.v7.widget.CardView>

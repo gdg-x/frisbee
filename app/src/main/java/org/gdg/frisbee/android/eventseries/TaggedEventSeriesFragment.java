@@ -49,7 +49,8 @@ public class TaggedEventSeriesFragment extends EventListFragment {
 
     private String mCacheKey = "";
     private TaggedEventSeries mTaggedEventSeries;
-    private Comparator<EventAdapter.Item> mLocationComparator = new TaggedEventDistanceComparator();
+    private Comparator<EventAdapter.Item> mLocationComparator =
+        new TaggedEventDistanceComparator(App.getInstance().getLastLocation());
     private Comparator<EventAdapter.Item> mCurrentComparator = mLocationComparator;
     private Comparator<EventAdapter.Item> mDateComparator = new EventDateComparator();
 
@@ -84,12 +85,12 @@ public class TaggedEventSeriesFragment extends EventListFragment {
 
         if (getArguments() != null && getArguments().getBoolean(ARGS_ADD_DESCRIPTION_AS_HEADER, false)) {
             View header = getLayoutInflater(null)
-                    .inflate(R.layout.header_list_special_event_series, (ViewGroup) getView(), false);
+                .inflate(R.layout.header_list_special_event_series, (ViewGroup) getView(), false);
 
             TextView mDescription = ButterKnife.findById(header, R.id.special_description);
             mDescription.setText(mTaggedEventSeries.getDescriptionResId());
             mDescription.setCompoundDrawablesWithIntrinsicBounds(0,
-                    mTaggedEventSeries.getLogoResId(), 0, 0);
+                mTaggedEventSeries.getLogoResId(), 0, 0);
 
             list.addHeaderView(header, null, false);
         }
@@ -116,16 +117,16 @@ public class TaggedEventSeriesFragment extends EventListFragment {
             public void success(final PagedList<Event> taggedEventPagedList) {
                 mEvents.addAll(taggedEventPagedList.getItems());
                 App.getInstance().getModelCache().putAsync(mCacheKey,
-                        mEvents,
-                        DateTime.now().plusHours(2),
-                        new ModelCache.CachePutListener() {
-                            @Override
-                            public void onPutIntoCache() {
-                                mAdapter.addAll(mEvents);
-                                sortEvents();
-                                setIsLoading(false);
-                            }
-                        });
+                    mEvents,
+                    DateTime.now().plusHours(2),
+                    new ModelCache.CachePutListener() {
+                        @Override
+                        public void onPutIntoCache() {
+                            mAdapter.addAll(mEvents);
+                            sortEvents();
+                            setIsLoading(false);
+                        }
+                    });
             }
 
             @Override
@@ -141,7 +142,7 @@ public class TaggedEventSeriesFragment extends EventListFragment {
 
         if (Utils.isOnline(getActivity())) {
             App.getInstance().getGdgXHub()
-                    .getTaggedEventUpcomingList(mTaggedEventSeries.getTag(), DateTime.now()).enqueue(listener);
+                .getTaggedEventUpcomingList(mTaggedEventSeries.getTag(), DateTime.now()).enqueue(listener);
         } else {
             App.getInstance().getModelCache().getAsync(mCacheKey, false, new ModelCache.CacheListener() {
                 @Override
@@ -153,7 +154,7 @@ public class TaggedEventSeriesFragment extends EventListFragment {
                         setIsLoading(false);
                         if (isAdded()) {
                             Snackbar snackbar = Snackbar.make(getView(), R.string.cached_content,
-                                    Snackbar.LENGTH_SHORT);
+                                Snackbar.LENGTH_SHORT);
                             ColoredSnackBar.info(snackbar).show();
                         }
                     } else {

@@ -14,6 +14,7 @@ import org.gdg.frisbee.android.R;
 public class PlainLayoutFragment extends BaseFragment {
 
     private static final String ARG_LAYOUT_RES = "layout_res";
+    private int mLayoutRes;
 
     public static PlainLayoutFragment newInstance(@LayoutRes int res) {
         PlainLayoutFragment frag = new PlainLayoutFragment();
@@ -22,8 +23,6 @@ public class PlainLayoutFragment extends BaseFragment {
         frag.setArguments(bndl);
         return frag;
     }
-
-    private int mLayoutRes;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -24,6 +24,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -41,8 +42,6 @@ import android.widget.Spinner;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AndroidAppUri;
 import com.google.android.gms.appinvite.AppInviteReferral;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
@@ -53,7 +52,6 @@ import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.OrganizerChecker;
-import org.gdg.frisbee.android.arrow.AppStateMigrationHelper;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
 import org.gdg.frisbee.android.eventseries.GdgEventListFragment;
@@ -66,35 +64,32 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import timber.log.Timber;
 
 public class MainActivity extends GdgNavDrawerActivity {
 
+    public static final String TITLE_GOOGLE_DEVELOPER_GROUPS = "Google Developer Groups";
     private static final String SECTION_EVENTS = "events";
     private static final String ARG_SELECTED_CHAPTER = "selected_chapter";
     private static final String ARG_CHAPTERS = "chapters";
-
     private static final int[] PAGES = {
         R.string.news, R.string.info, R.string.events
     };
     private static final int[] ORGANIZER_PAGES = {
         R.string.news, R.string.info, R.string.events, R.string.for_leads
     };
-
     private static final int REQUEST_FIRST_START_WIZARD = 100;
-    private static final int PLAY_SERVICE_DIALOG_REQUEST_CODE = 200;
-    private static final Uri APP_URI = AndroidAppUri.newAndroidAppUri(BuildConfig.APPLICATION_ID, Uri.parse(Const.URL_GDGROUPS_ORG)).toUri();
-    public static final String TITLE_GOOGLE_DEVELOPER_GROUPS = "Google Developer Groups";
-
-    @Bind(R.id.pager)
+    private static final Uri APP_URI =
+        AndroidAppUri.newAndroidAppUri(BuildConfig.APPLICATION_ID, Uri.parse(Const.URL_GDGROUPS_ORG)).toUri();
+    @BindView(R.id.pager)
     ViewPager mViewPager;
-    @Bind(R.id.tabs)
+    @BindView(R.id.tabs)
     TabLayout mTabLayout;
 
     private Handler mHandler = new Handler();
-    private ChapterAdapter mChapterAdapter;
-    private ChapterFragmentPagerAdapter mViewPagerAdapter;
+    ChapterAdapter mChapterAdapter;
+    ChapterFragmentPagerAdapter mViewPagerAdapter;
 
     private boolean mFirstStart = false;
 
@@ -103,7 +98,8 @@ public class MainActivity extends GdgNavDrawerActivity {
     private String selectedChapterId;
 
     // Local Broadcast receiver for receiving invites
-    private BroadcastReceiver mDeepLinkReceiver = null;
+    @Nullable private BroadcastReceiver mDeepLinkReceiver;
+    @Nullable private OrganizerCheckCallback organizerCheckCallback;
 
     /**
      * Called when the activity is first created.
@@ -118,7 +114,7 @@ public class MainActivity extends GdgNavDrawerActivity {
         setContentView(R.layout.activity_main);
 
         mLocationComparator = new ChapterComparator(PrefUtils.getHomeChapterIdNotNull(this),
-                App.getInstance().getLastLocation());
+            App.getInstance().getLastLocation());
 
         mChapterAdapter = new ChapterAdapter(MainActivity.this, R.layout.spinner_item_actionbar);
         mChapterAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
@@ -158,23 +154,23 @@ public class MainActivity extends GdgNavDrawerActivity {
             initChapters(chapters);
         } else {
             App.getInstance().getModelCache().getAsync(
-                    Const.CACHE_KEY_CHAPTER_LIST_HUB,
-                    new ModelCache.CacheListener() {
-                        @Override
-                        public void onGet(Object item) {
-                            Directory directory = (Directory) item;
-                            initChapters(directory.getGroups());
-                        }
+                Const.CACHE_KEY_CHAPTER_LIST_HUB,
+                new ModelCache.CacheListener() {
+                    @Override
+                    public void onGet(Object item) {
+                        Directory directory = (Directory) item;
+                        initChapters(directory.getGroups());
+                    }
 
-                        @Override
-                        public void onNotFound(String key) {
-                            if (Utils.isOnline(MainActivity.this)) {
-                                fetchChapters();
-                            } else {
-                                showError(R.string.offline_alert);
-                            }
+                    @Override
+                    public void onNotFound(String key) {
+                        if (Utils.isOnline(MainActivity.this)) {
+                            fetchChapters();
+                        } else {
+                            showError(R.string.offline_alert);
                         }
                     }
+                }
             );
         }
 
@@ -191,50 +187,48 @@ public class MainActivity extends GdgNavDrawerActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        int playServiceStatus = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        if (ConnectionResult.SUCCESS != playServiceStatus) {
-            GooglePlayServicesUtil.getErrorDialog(playServiceStatus, this, PLAY_SERVICE_DIALOG_REQUEST_CODE).show();
-        }
         checkHomeChapterValid();
         updateChapterPages();
+    }
+
+    @Override
+    protected void onPause() {
+        if (organizerCheckCallback != null) {
+            organizerCheckCallback.cancel();
+            organizerCheckCallback = null;
+        }
+        super.onPause();
     }
 
     @Override
     public void onConnected(Bundle bundle) {
         super.onConnected(bundle);
         updateChapterPages();
-
-        AppStateMigrationHelper.checkSnapshotUpgrade(this, getGoogleApiClient(), getString(R.string.arrow_tagged));
     }
 
     private void updateChapterPages() {
-        final boolean wasOrganizer = mViewPagerAdapter != null
-                && mViewPagerAdapter.getCount() == ORGANIZER_PAGES.length;
+        if (organizerCheckCallback != null) {
+            organizerCheckCallback.cancel();
+        }
+        organizerCheckCallback = new OrganizerCheckCallback(mViewPagerAdapter, isOrganizerFragmentShown());
         App.getInstance().checkOrganizer(
-                getGoogleApiClient(),
-                new OrganizerChecker.Callbacks() {
-                    @Override
-                    public void onOrganizerResponse(boolean isOrganizer) {
-                        if (mViewPagerAdapter != null && wasOrganizer != isOrganizer) {
-                            mViewPagerAdapter.notifyDataSetChanged(false /* forceUpdate */);
-                            mTabLayout.setTabsFromPagerAdapter(mViewPagerAdapter);
-                        }
-                    }
-
-                    @Override
-                    public void onErrorResponse() {
-                    }
-                }
+            getGoogleApiClient(),
+            organizerCheckCallback
         );
+    }
+
+    private boolean isOrganizerFragmentShown() {
+        return mViewPagerAdapter != null
+            && mViewPagerAdapter.getCount() == ORGANIZER_PAGES.length;
     }
 
     private void checkHomeChapterValid() {
         String homeChapterId = getCurrentHomeChapterId();
         if (isHomeChapterOutdated(homeChapterId)
-                && isShowingStoredHomeChapter()) {
+            && isShowingStoredHomeChapter()) {
             int position = mChapterAdapter.getPosition(homeChapterId);
             if (position != -1) {
-                updateSelectionfor(homeChapterId);
+                updateSelectionFor(homeChapterId);
             }
         }
     }
@@ -247,29 +241,29 @@ public class MainActivity extends GdgNavDrawerActivity {
         if (intent.hasExtra(Const.EXTRA_CHAPTER_ID)) {
             return intent.getStringExtra(Const.EXTRA_CHAPTER_ID);
         } else if (intent.getData() != null
-                && intent.getData().getScheme() != null
-                && intent.getData().getScheme().equals("https")) {
+            && intent.getData().getScheme() != null
+            && intent.getData().getScheme().equals("https")) {
             return intent.getData().getLastPathSegment();
         }
         return null;
     }
 
-    private void fetchChapters() {
+    void fetchChapters() {
         App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
             @Override
             public void success(final Directory directory) {
 
                 App.getInstance().getModelCache().putAsync(
-                        Const.CACHE_KEY_CHAPTER_LIST_HUB,
-                        directory,
-                        DateTime.now().plusDays(1),
-                        new ModelCache.CachePutListener() {
-                            @Override
-                            public void onPutIntoCache() {
-                                ArrayList<Chapter> chapters = directory.getGroups();
-                                initChapters(chapters);
-                            }
-                        });
+                    Const.CACHE_KEY_CHAPTER_LIST_HUB,
+                    directory,
+                    DateTime.now().plusDays(1),
+                    new ModelCache.CachePutListener() {
+                        @Override
+                        public void onPutIntoCache() {
+                            ArrayList<Chapter> chapters = directory.getGroups();
+                            initChapters(chapters);
+                        }
+                    });
             }
 
             @Override
@@ -289,28 +283,28 @@ public class MainActivity extends GdgNavDrawerActivity {
      *
      * @param chapters Chapter array to be initialized, never null.
      */
-    private void initChapters(@NonNull ArrayList<Chapter> chapters) {
+    void initChapters(@NonNull ArrayList<Chapter> chapters) {
         addChapters(chapters);
 
         mViewPagerAdapter = new ChapterFragmentPagerAdapter(
-                this,
-                getSupportFragmentManager(), selectedChapterId
+            this,
+            getSupportFragmentManager(), selectedChapterId
         );
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.setOffscreenPageLimit(3);
-        updateSelectionfor(selectedChapterId);
+        updateSelectionFor(selectedChapterId);
 
         recordStartPageView();
 
         mTabLayout.setupWithViewPager(mViewPager);
         if (SECTION_EVENTS.equals(getIntent().getStringExtra(Const.EXTRA_SECTION))) {
             mHandler.postDelayed(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            mViewPager.setCurrentItem(2, true);
-                        }
-                    }, 500
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        mViewPager.setCurrentItem(2, true);
+                    }
+                }, 500
             );
         }
     }
@@ -327,7 +321,7 @@ public class MainActivity extends GdgNavDrawerActivity {
 
     protected String getTrackedViewName() {
         if (mViewPager == null
-                || mViewPagerAdapter == null) {
+            || mViewPagerAdapter == null) {
             return "Main";
         }
         final String[] pagesNames = {"News", "Info", "Events"};
@@ -339,7 +333,7 @@ public class MainActivity extends GdgNavDrawerActivity {
         }
         Chapter chapter = mChapterAdapter.findById(selectedChapterId);
         return "Main/" + (chapter != null ? chapter.getName().replaceAll(" ", "-") : "")
-                + "/" + pageName;
+            + "/" + pageName;
     }
 
     @Override
@@ -396,7 +390,7 @@ public class MainActivity extends GdgNavDrawerActivity {
         Toolbar toolbar = getActionBarToolbar();
         View spinnerContainer = LayoutInflater.from(this).inflate(R.layout.actionbar_spinner, toolbar, false);
         ActionBar.LayoutParams lp = new ActionBar.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
         );
         toolbar.addView(spinnerContainer, lp);
 
@@ -404,23 +398,24 @@ public class MainActivity extends GdgNavDrawerActivity {
 
         mSpinner.setAdapter(mChapterAdapter);
         mSpinner.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
+            new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(final AdapterView<?> parent, final View view,
+                                           final int position, final long id) {
 
-                        Chapter selectedChapter = mChapterAdapter.getItem(position);
-                        updateSelectionfor(selectedChapter.getGplusId());
-                    }
-
-                    @Override
-                    public void onNothingSelected(final AdapterView<?> parent) {
-                        // Nothing to do.
-                    }
+                    Chapter selectedChapter = mChapterAdapter.getItem(position);
+                    updateSelectionFor(selectedChapter.getGplusId());
                 }
+
+                @Override
+                public void onNothingSelected(final AdapterView<?> parent) {
+                    // Nothing to do.
+                }
+            }
         );
     }
 
-    private void updateSelectionfor(final String newChapterId) {
+    void updateSelectionFor(final String newChapterId) {
         mViewPagerAdapter.setSelectedChapter(newChapterId);
         mSpinner.setSelection(mChapterAdapter.getPosition(newChapterId));
         if (!selectedChapterId.equals(newChapterId)) {
@@ -428,6 +423,39 @@ public class MainActivity extends GdgNavDrawerActivity {
             selectedChapterId = newChapterId;
             mViewPagerAdapter.notifyDataSetChanged(true /* forceUpdate */);
         }
+    }
+
+    private void registerDeepLinkReceiver() {
+        // Create local Broadcast receiver that starts AppInviteDeepLinkActivity when a deep link
+        // is found
+        mDeepLinkReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (AppInviteReferral.hasReferral(intent)) {
+                    launchAppInviteActivity(intent);
+                }
+            }
+        };
+
+        IntentFilter intentFilter = new IntentFilter(getString(R.string.action_deep_link));
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+            mDeepLinkReceiver, intentFilter
+        );
+    }
+
+    private void unregisterDeepLinkReceiver() {
+        if (mDeepLinkReceiver != null) {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(mDeepLinkReceiver);
+        }
+    }
+
+    /**
+     * Launch AppInviteActivity with an intent containing App Invite information
+     */
+    void launchAppInviteActivity(Intent intent) {
+        Timber.d("launchAppInviteActivity: %s", intent);
+        Intent newIntent = new Intent(intent).setClass(this, AppInviteDeepLinkActivity.class);
+        startActivity(newIntent);
     }
 
     public class ChapterFragmentPagerAdapter extends FragmentStatePagerAdapter {
@@ -506,36 +534,33 @@ public class MainActivity extends GdgNavDrawerActivity {
         }
     }
 
-    private void registerDeepLinkReceiver() {
-        // Create local Broadcast receiver that starts AppInviteDeepLinkActivity when a deep link
-        // is found
-        mDeepLinkReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (AppInviteReferral.hasReferral(intent)) {
-                    launchAppInviteActivity(intent);
-                }
-            }
-        };
+    private static class OrganizerCheckCallback implements OrganizerChecker.Callbacks {
+        private final boolean wasOrganizer;
+        private final ChapterFragmentPagerAdapter mViewPagerAdapter;
 
-        IntentFilter intentFilter = new IntentFilter(getString(R.string.action_deep_link));
-        LocalBroadcastManager.getInstance(this).registerReceiver(
-                mDeepLinkReceiver, intentFilter
-        );
-    }
+        private boolean cancelled = false;
 
-    private void unregisterDeepLinkReceiver() {
-        if (mDeepLinkReceiver != null) {
-            LocalBroadcastManager.getInstance(this).unregisterReceiver(mDeepLinkReceiver);
+        public OrganizerCheckCallback(ChapterFragmentPagerAdapter mViewPagerAdapter, boolean wasOrganizer) {
+            this.wasOrganizer = wasOrganizer;
+            this.mViewPagerAdapter = mViewPagerAdapter;
         }
-    }
 
-    /**
-     * Launch AppInviteActivity with an intent containing App Invite information
-     */
-    private void launchAppInviteActivity(Intent intent) {
-        Timber.d("launchAppInviteActivity:" + intent);
-        Intent newIntent = new Intent(intent).setClass(this, AppInviteDeepLinkActivity.class);
-        startActivity(newIntent);
+        @Override
+        public void onOrganizerResponse(boolean isOrganizer) {
+            if (cancelled) {
+                return;
+            }
+            if (mViewPagerAdapter != null && wasOrganizer != isOrganizer) {
+                mViewPagerAdapter.notifyDataSetChanged(false /* forceUpdate */);
+            }
+        }
+
+        @Override
+        public void onErrorResponse() {
+        }
+
+        public void cancel() {
+            cancelled = true;
+        }
     }
 }

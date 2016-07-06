@@ -10,7 +10,7 @@
     android:layout_height="@dimen/navdrawer_image_height"
     android:contentDescription="@string/cd_navdrawer_image"
     android:scaleType="centerCrop"
-    android:src="@drawable/ic_logo_wide"/>
+    android:src="@drawable/ic_logo_wide" />
 
   <ImageView
     android:id="@+id/navdrawer_user_picture"
@@ -23,6 +23,6 @@
     android:layout_marginLeft="@dimen/keyline_1"
     android:layout_marginStart="@dimen/keyline_1"
     android:contentDescription="@string/cd_navdrawer_user_picture"
-    android:scaleType="centerCrop"/>
+    android:scaleType="centerCrop" />
 
 </RelativeLayout>

@@ -27,14 +27,13 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.snapshot.Snapshot;
 import com.google.android.gms.games.snapshot.Snapshots;
-import com.google.android.gms.plus.People;
-import com.google.android.gms.plus.Plus;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
+import org.gdg.frisbee.android.api.model.plus.Person;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
@@ -42,14 +41,14 @@ import org.gdg.frisbee.android.view.DividerItemDecoration;
 
 import java.io.IOException;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import timber.log.Timber;
 
 public class ArrowTaggedActivity extends GdgActivity {
 
     private static final String ID_SEPARATOR_FOR_SPLIT = "\\|";
 
-    @Bind(R.id.taggedList)
+    @BindView(R.id.taggedList)
     RecyclerView taggedList;
 
     private String serializedOrganizers;
@@ -96,33 +95,33 @@ public class ArrowTaggedActivity extends GdgActivity {
 
     private void loadFromSnapshot() {
         Games.Snapshots.open(getGoogleApiClient(), Const.GAMES_SNAPSHOT_ID, false).setResultCallback(
-                new ResultCallback<Snapshots.OpenSnapshotResult>() {
+            new ResultCallback<Snapshots.OpenSnapshotResult>() {
 
-                    @Override
-                    public void onResult(Snapshots.OpenSnapshotResult stateResult) {
-                        if (!stateResult.getStatus().isSuccess()) {
-                            return;
-                        }
-
-                        Snapshot loadedResult = stateResult.getSnapshot();
-                        serializedOrganizers = "";
-                        if (loadedResult != null) {
-                            try {
-                                serializedOrganizers = new String(loadedResult.getSnapshotContents().readFully());
-                            } catch (IOException e) {
-                                Timber.w(e, "Could not store tagged organizer");
-                                Toast.makeText(ArrowTaggedActivity.this, R.string.arrow_oops, Toast.LENGTH_LONG).show();
-                            }
-                        }
-
-                        App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
-                            @Override
-                            public void success(Directory directory) {
-                                loadChapterOrganizers(directory);
-                            }
-                        });
+                @Override
+                public void onResult(Snapshots.OpenSnapshotResult stateResult) {
+                    if (!stateResult.getStatus().isSuccess()) {
+                        return;
                     }
-                });
+
+                    Snapshot loadedResult = stateResult.getSnapshot();
+                    serializedOrganizers = "";
+                    if (loadedResult != null) {
+                        try {
+                            serializedOrganizers = new String(loadedResult.getSnapshotContents().readFully());
+                        } catch (IOException e) {
+                            Timber.w(e, "Could not store tagged organizer");
+                            Toast.makeText(ArrowTaggedActivity.this, R.string.arrow_oops, Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
+                        @Override
+                        public void success(Directory directory) {
+                            loadChapterOrganizers(directory);
+                        }
+                    });
+                }
+            });
     }
 
     private void loadChapterOrganizers(Directory directory) {
@@ -147,15 +146,14 @@ public class ArrowTaggedActivity extends GdgActivity {
                 organizer.setChapterName(organizerChapter.getName());
                 organizer.setChapterId(organizerChapter.getGplusId());
 
-                Plus.PeopleApi.load(getGoogleApiClient(), organizer.getPlusId())
-                        .setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
-                            @Override
-                            public void onResult(People.LoadPeopleResult loadPeopleResult) {
-                                organizer.setResolved(loadPeopleResult.getPersonBuffer().get(0));
-                                adapter.add(organizer);
-                                adapter.notifyItemInserted(adapter.getItemCount() - 1);
-                            }
-                        });
+                App.getInstance().getPlusApi().getPerson(organizer.getPlusId()).enqueue(new Callback<Person>() {
+                    @Override
+                    public void success(Person person) {
+                        organizer.setResolved(person);
+                        adapter.add(organizer);
+                        adapter.notifyItemInserted(adapter.getItemCount() - 1);
+                    }
+                });
             }
         }
     }

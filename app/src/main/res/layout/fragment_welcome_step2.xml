@@ -61,6 +61,6 @@
     android:id="@+id/imageView"
     android:layout_width="match_parent"
     android:layout_height="15dip"
-    android:contentDescription="@null"
-    android:background="@drawable/googly_bar" />
+    android:background="@drawable/googly_bar"
+    android:contentDescription="@null" />
 </LinearLayout>

@@ -6,8 +6,8 @@ import org.gdg.frisbee.android.api.deserializer.ZuluDateTimeDeserializer;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.Utils;
 
-import retrofit2.GsonConverterFactory;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public final class GdgXHubFactory {
 
@@ -18,10 +18,12 @@ public final class GdgXHubFactory {
 
     private static Retrofit provideRestAdapter() {
         return new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .client(OkClientFactory.okHttpClientWithIdlingResources(App.getInstance().getOkHttpClient()))
-                .addConverterFactory(GsonConverterFactory.create(Utils.getGson(FieldNamingPolicy.IDENTITY, new ZuluDateTimeDeserializer())))
-                .build();
+            .baseUrl(BASE_URL)
+            .client(App.getInstance().getOkHttpClient())
+            .addConverterFactory(
+                GsonConverterFactory.create(Utils.getGson(FieldNamingPolicy.IDENTITY, new ZuluDateTimeDeserializer()))
+            )
+            .build();
     }
 
     public static GdgXHub provideHubApi() {
