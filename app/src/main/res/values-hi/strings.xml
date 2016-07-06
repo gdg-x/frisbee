@@ -171,6 +171,9 @@
   <string name="cd_qrCode">QR कोड</string>
   <string name="invitation_title">Invite your friends to GDG app</string>
   <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go.</string>
+  <string name="invitation_error_message">App Invite was unsuccessful.</string>
   <string name="thanks_for_feedback">आपकी प्रतिपुष्टि के लिए धन्यवाद।</string>
   <string name="retry">Retry</string>
+  <string name="title_event_series_greetings">New events coming up!</string>
+  <string name="event_series_greetings">Learn more about %1$s and see events around the world!</string>
 </resources>
