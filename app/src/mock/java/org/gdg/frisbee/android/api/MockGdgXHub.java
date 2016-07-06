@@ -35,7 +35,6 @@ public class MockGdgXHub implements GdgXHub {
 
     @Override
     public Call<Directory> getDirectory() {
-        EspressoIdlingResource.increment();
         Directory directory = new Directory();
         try {
             directory = gson.fromJson(
@@ -49,7 +48,6 @@ public class MockGdgXHub implements GdgXHub {
 
     @Override
     public Call<PagedList<Event>> getChapterEventList(@Path("chapterId") String chapterId, @Path("start") DateTime start, @Path("end") DateTime end) {
-        EspressoIdlingResource.increment();
         PagedList<Event> events = new PagedList<>();
         try {
             events = gson.fromJson(
@@ -63,7 +61,6 @@ public class MockGdgXHub implements GdgXHub {
 
     @Override
     public Call<EventFullDetails> getEventDetail(@Path("id") String eventId) {
-        EspressoIdlingResource.increment();
         EventFullDetails eventFullDetails = new EventFullDetails();
         try {
             eventFullDetails = gson.fromJson(
@@ -77,19 +74,16 @@ public class MockGdgXHub implements GdgXHub {
 
     @Override
     public Call<PagedList<Event>> getTaggedEventUpcomingList(@Path("tag") String tag, @Query("_") DateTime now) {
-        EspressoIdlingResource.increment();
         return Calls.response(new PagedList<Event>());
     }
 
     @Override
     public Call<Void> setHomeGdg(@Header("Authorization") String authorization, @Body HomeGdgRequest request) {
-        EspressoIdlingResource.increment();
         return Calls.failure(new IOException("Set Home Gdg is not working"));
     }
 
     @Override
     public Call<OrganizerCheckResponse> checkOrganizer(@Path("gplusId") String gplusId) {
-        EspressoIdlingResource.increment();
         return Calls.response(new OrganizerCheckResponse());
     }
 }

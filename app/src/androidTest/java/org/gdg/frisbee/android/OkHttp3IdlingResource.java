@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gdg.frisbee.android.app;
+package org.gdg.frisbee.android;
 
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;

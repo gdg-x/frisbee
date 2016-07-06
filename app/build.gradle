@@ -208,9 +208,6 @@ dependencies {
 
     androidTestCompile 'org.assertj:assertj-core:1.7.1'
 
-    // Idling resources only for debug builds
-    debugCompile "com.android.support.test.espresso:espresso-idling-resource:$rootProject.espressoVersion"
-
     // Android Testing Support Library's runner and rules
     androidTestCompile "com.android.support.test:runner:$rootProject.runnerVersion"
     androidTestCompile "com.android.support.test:rules:$rootProject.runnerVersion"

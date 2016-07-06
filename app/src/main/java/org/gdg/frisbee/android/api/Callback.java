@@ -22,16 +22,12 @@ public abstract class Callback<T> implements retrofit2.Callback<T> {
                 failure(e);
             }
         }
-
-        EspressoIdlingResource.decrement();
     }
 
     @Override
     public final void onFailure(Call<T> call, Throwable t) {
         Timber.d(t, "Network failure!");
         networkFailure(t);
-
-        EspressoIdlingResource.decrement();
     }
 
     public void failure(Throwable error) {

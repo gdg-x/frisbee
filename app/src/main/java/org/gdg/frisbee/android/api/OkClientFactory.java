@@ -6,13 +6,9 @@ import android.support.annotation.NonNull;
 import org.gdg.frisbee.android.BuildConfig;
 
 import java.io.File;
-import java.io.IOException;
 
 import okhttp3.Cache;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import okhttp3.logging.HttpLoggingInterceptor.Logger;
@@ -35,8 +31,6 @@ public final class OkClientFactory {
         OkHttpClient.Builder okHttpClient = new OkHttpClient.Builder()
             .cache(cache);
 
-        okHttpClient.addInterceptor(provideIdlingResourcesInterceptor());
-
         if (BuildConfig.DEBUG) {
             okHttpClient.addInterceptor(provideHttpLoggingInterceptor());
         }
@@ -54,15 +48,4 @@ public final class OkClientFactory {
         return loggingInterceptor;
     }
 
-    private static Interceptor provideIdlingResourcesInterceptor() {
-        return new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                EspressoIdlingResource.increment();
-
-                Request request = chain.request();
-                return chain.proceed(request);
-            }
-        };
-    }
 }
