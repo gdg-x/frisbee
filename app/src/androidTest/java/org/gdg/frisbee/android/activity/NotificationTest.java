@@ -48,7 +48,7 @@ public class NotificationTest {
             nm.notify(i, notification);
 
             mDevice.openNotification();
-            Thread.sleep(1000);
+            Thread.sleep(2000);
             mDevice.findObject(By.textContains(rule.getActivity().getString(series.getTitleResId())))
                 .click();
             Thread.sleep(1000);

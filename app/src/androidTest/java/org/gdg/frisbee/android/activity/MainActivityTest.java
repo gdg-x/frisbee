@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 
-import org.gdg.frisbee.android.IdlingTestCase;
+import org.gdg.frisbee.android.IdlingResourceTestRule;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.chapter.MainActivity;
@@ -29,7 +29,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
-public class MainActivityTest extends IdlingTestCase {
+public class MainActivityTest {
     public static final Chapter CHAPTER_ISTANBUL = new Chapter("Istanbul", "100514812580249787371");
     public static final Chapter CHAPTER_BRUSSELS = new Chapter("Brussels", "105068877693379070381");
 
@@ -43,6 +43,9 @@ public class MainActivityTest extends IdlingTestCase {
             PrefUtils.setShouldNotOpenDrawerOnStart(context);
         }
     };
+
+    @Rule
+    public final IdlingResourceTestRule idlingResourceTestRule = new IdlingResourceTestRule();
 
     @Test
     public void supportsChapterSwapping() {

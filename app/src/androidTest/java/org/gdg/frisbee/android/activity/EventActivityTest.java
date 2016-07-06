@@ -7,7 +7,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 
 import org.gdg.frisbee.android.Const;
-import org.gdg.frisbee.android.IdlingTestCase;
+import org.gdg.frisbee.android.IdlingResourceTestRule;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.event.EventActivity;
 import org.junit.Before;
@@ -29,7 +29,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.not;
 
-public class EventActivityTest extends IdlingTestCase {
+public class EventActivityTest {
+
     @Rule
     public final IntentsTestRule<EventActivity> rule = new IntentsTestRule<EventActivity>(EventActivity.class) {
         @Override
@@ -39,6 +40,9 @@ public class EventActivityTest extends IdlingTestCase {
             return intent;
         }
     };
+
+    @Rule
+    public final IdlingResourceTestRule idlingResourceTestRule = new IdlingResourceTestRule();
 
     @Before
     public void stubAllExternalIntents() {
