@@ -20,7 +20,6 @@ android:
   - extra-google-m2repository
   - extra-android-m2repository
   - addon-google_apis-google-$ANDROID_API_LEVEL
-  - sys-img-armeabi-v7a-addon-google_apis-google-$ANDROID_API_LEVEL
 
 before_install:
   # $GPG_PASS is not defined for forks, so just skip it.
@@ -31,7 +30,7 @@ before_install:
 
 before_script:
   - GRADLE_OPTS="-Xms40m -Xmx3g -XX:MaxPermSize=3g"
-  - echo no | android create avd --force -n test -t "Google Inc.:Google APIs:"$ANDROID_API_LEVEL --abi google_apis/armeabi-v7a --skin WXGA720
+  - echo no | android create avd --force -n test -t "android-"$ANDROID_API_LEVEL  --abi armeabi-v7a --skin WXGA720
   - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
   - sleep 10
