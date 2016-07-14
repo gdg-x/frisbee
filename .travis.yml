@@ -1,9 +1,5 @@
 language: android
 
-# Force Travis to run on new GCE Precise
-sudo: required
-dist: precise
-
 env:
   global:
     - secure: "SBlXs4v/M3GD1tRaT6zmMXVpMCUaL/oNcSjGWdHgI56DO5NOmTBmDW5kJTT5y0u0U7aE1/Dq22iXPut8NLxWsEi/20xBq3bXQh9ngRkvOstNX7Y0LqnhKBtPixnMIx07xAjUPYCmunJakCT7Hr4fqZAGfUwA4a3ZzRa/KVeNx2A="
