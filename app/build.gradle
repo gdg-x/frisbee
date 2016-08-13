@@ -37,7 +37,7 @@ android {
         buildConfigField "String", "COMMIT_SHA", "\"${commitSha()}\""
         buildConfigField "String", "COMMIT_TIME", "\"${commitTime()}\""
 
-        resConfigs "en", "ar", "cs", "de", "es", "fr", "hi", "hy-rAM", "it", "ja", "ko", "lt", "nl", "pl", "pt-rBR", "pt-rPT", "ru", "sk", "th", "tr", "uk", "zh-rCN", "zh-rHK", "zh-rTW"
+        resConfigs "en", "ar", "cs", "de", "es", "fr", "hi", "hu", "hy-rAM", "it", "ja", "ko", "lt", "nl", "pl", "pt-rBR", "pt-rPT", "ru", "sk", "th", "tr", "uk", "zh-rCN", "zh-rHK", "zh-rTW"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
