@@ -30,7 +30,7 @@ public class TranslatorsFragment extends ContributorsFragment {
         new Translator("Said Tahsin Dane",
             "tasomaniac",
             "https://www.gravatar.com/avatar/67be1b058c66ed002ff45a1f9a22c0ff?s=170",
-            65),
+            147),
         new Translator("Sebastian Mauer",
             "mauimauer",
             "https://www.gravatar.com/avatar/b9236795d95774ca2137bb15d54da0a9?s=170",
@@ -62,8 +62,31 @@ public class TranslatorsFragment extends ContributorsFragment {
         new Translator("Erick Mendonça",
             "erickmendonca",
             "https://www.gravatar.com/avatar/87402530330e8d1fb2ff707a6f4510ad?s=170",
-            8)
-
+            8),
+        new Translator("Csaba Toth",
+            "MrCsabaToth",
+            "http://www.gravatar.com/avatar/cc87a10a1c3fb5129a4cf5c2a701b1b2?s=170",
+            186),
+        new Translator("Riccardo Ciovati",
+            "rciovati",
+            "http://www.gravatar.com/avatar/80b5a7a78e7e143264b05fc33a6f381e?s=170",
+            27),
+        new Translator("Somrani Mariem",
+            "somranimariem8",
+            "http://www.gravatar.com/avatar/8ab786fcd1aaa96c5268ba4870790384?s=170",
+            154),
+        new Translator("Frank R.",
+            "renfeng",
+            "http://www.gravatar.com/avatar/4bffd542821e8a3e5e36a0eec7bea0af?s=170",
+            59),
+        new Translator("Oleh Zasadnyy",
+            "bilenkuyboy",
+            "http://www.gravatar.com/avatar/2ab351a2bffc95411b0d0d1ff0ef4a6c?s=170",
+            67),
+        new Translator("Martin Liersch",
+            "goddchen",
+            "http://www.gravatar.com/avatar/fdc7eb99d52639e67ca31ffe478abd7b?s=170",
+            33)
     };
 
     protected void loadContributors() {
