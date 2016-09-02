@@ -1,8 +1,6 @@
+<strong>Release 2.5</strong>
+- DevFest season is added to drawer.
+
 <strong>Release 2.4.1</strong>
 - Bug fixes
 - Localization updates
-
-<strong>Release 2.4</strong>
-- Google Sign-in improvements. Devices without Google Play Services will work now.
-- GCP NEXT Extended events are added to the drawer.
-- GDE page fixed.
