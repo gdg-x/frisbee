@@ -49,7 +49,7 @@ ext {
     versionMajor = 2
     versionMinor = 5
     versionPatch = 0
-    versionBuild = 0 // bump for dogfood builds, public betas, etc.
+    versionBuild = 1 // bump for dogfood builds, public betas, etc.
 
     versionCode = versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
     versionName = "${versionMajor}.${versionMinor}.${versionPatch}"
