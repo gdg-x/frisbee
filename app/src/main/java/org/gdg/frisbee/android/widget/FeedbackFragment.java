@@ -49,8 +49,6 @@ import android.widget.EditText;
 
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.achievements.AchievementActionHandler;
-import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
@@ -93,7 +91,6 @@ public class FeedbackFragment extends DialogFragment {
 
     private JSONObject mProperties;
     private DoorbellApi mApi;
-    private AchievementActionHandler achievementHandler;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -114,7 +111,6 @@ public class FeedbackFragment extends DialogFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        achievementHandler = ((GdgActivity) activity).getAchievementActionHandler();
     }
 
     @NonNull
@@ -188,12 +184,8 @@ public class FeedbackFragment extends DialogFragment {
                 mMessageField.setText("");
                 mProperties = new JSONObject();
 
-                if (achievementHandler != null) {
-                    achievementHandler.handleKissesFromGdgXTeam();
-                } else {
-                    Snackbar snackbar = Snackbar.make(getView(), R.string.thanks_for_feedback, Snackbar.LENGTH_LONG);
-                    ColoredSnackBar.info(snackbar).show();
-                }
+                Snackbar snackbar = Snackbar.make(getView(), R.string.thanks_for_feedback, Snackbar.LENGTH_LONG);
+                ColoredSnackBar.info(snackbar).show();
             }
         });
         mApi.setErrorCallback(new RestErrorCallback() {

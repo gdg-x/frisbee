@@ -36,7 +36,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.Plus;
 
 import org.gdg.frisbee.android.Const;
@@ -164,7 +163,6 @@ public class SettingsFragment extends PreferenceFragment {
                             createConnectedGoogleApiClient();
                         } else {
                             if (mGoogleApiClient.isConnected()) {
-                                Games.signOut(mGoogleApiClient);
                                 Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
                                 disconnectGoogleApiClient();
                             }

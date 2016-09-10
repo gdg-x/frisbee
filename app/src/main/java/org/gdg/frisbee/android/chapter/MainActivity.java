@@ -178,10 +178,6 @@ public class MainActivity extends GdgNavDrawerActivity {
             SeasonsGreetingsFragment seasonsGreetings = new SeasonsGreetingsFragment();
             seasonsGreetings.show(getSupportFragmentManager(), "dialog");
         }
-
-        if (PrefUtils.isSignedIn(this)) {
-            checkAchievements();
-        }
     }
 
     @Override
@@ -339,16 +335,6 @@ public class MainActivity extends GdgNavDrawerActivity {
     @Override
     protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
         super.onActivityResult(requestCode, responseCode, intent);
-    }
-
-    private void checkAchievements() {
-        if (mFirstStart) {
-            getAchievementActionHandler().handleSignIn();
-        }
-        getAchievementActionHandler().handleAppStarted();
-        if (PrefUtils.isWidgetAdded(this)) {
-            getAchievementActionHandler().handlePowerUser();
-        }
     }
 
     private void addChapters(List<Chapter> chapterList) {

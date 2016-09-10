@@ -97,8 +97,6 @@ public class GdeActivity extends GdgNavDrawerActivity implements ViewPager.OnPag
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.addOnPageChangeListener(this);
         mTabLayout.setupWithViewPager(mViewPager);
-
-        getAchievementActionHandler().handleLookingForExperts();
     }
 
     private HashMap<String, GdeList> extractCategoriesFromGdeList(GdeList directory) {

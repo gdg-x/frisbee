@@ -41,7 +41,6 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.achievements.AchievementActionHandler;
 import org.gdg.frisbee.android.app.GoogleApiClientFactory;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.RecentTasksStyler;
@@ -62,7 +61,6 @@ public abstract class GdgActivity extends TrackableActivity implements
     @Nullable
     @BindView(R.id.content_frame)
     FrameLayout mContentLayout;
-    private AchievementActionHandler mAchievementActionHandler;
 
     // GoogleApiClient wraps our service connection to Google Play services and
     // provides access to the users sign in state and Google's APIs.
@@ -108,10 +106,6 @@ public abstract class GdgActivity extends TrackableActivity implements
         return mGoogleApiClient;
     }
 
-    public AchievementActionHandler getAchievementActionHandler() {
-        return mAchievementActionHandler;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,9 +116,6 @@ public abstract class GdgActivity extends TrackableActivity implements
         }
 
         mGoogleApiClient = createGoogleApiClient();
-
-        mAchievementActionHandler =
-            new AchievementActionHandler(mGoogleApiClient, this);
     }
 
     @Override
@@ -263,7 +254,7 @@ public abstract class GdgActivity extends TrackableActivity implements
 
     @Override
     public void onConnected(Bundle bundle) {
-        mAchievementActionHandler.onConnected();
+
     }
 
     @Override

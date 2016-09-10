@@ -30,13 +30,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
 import android.widget.ImageView;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.games.Games;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -45,7 +40,6 @@ import org.gdg.frisbee.android.activity.SettingsActivity;
 import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.plus.Person;
 import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.arrow.ArrowActivity;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
@@ -70,8 +64,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
     private static final int INVALID_ITEM_ID = -1;
     private static final int GROUP_ID = 1;
-    private static final int GAMES_GROUP_ID = 2;
-    private static final int SETTINGS_GROUP_ID = 3;
+    private static final int SETTINGS_GROUP_ID = 2;
 
     protected String mStoredHomeChapterId;
     @BindView(R.id.drawer)
@@ -159,17 +152,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 .setIcon(taggedEventSeries.getDrawerIconResId());
         }
 
-        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)
-            == ConnectionResult.SUCCESS) {
-            SubMenu subMenu =
-                menu.addSubMenu(GAMES_GROUP_ID, Const.DRAWER_SUBMENU_GAMES, Menu.NONE, R.string.drawer_subheader_games);
-            subMenu.add(GAMES_GROUP_ID, Const.DRAWER_ACHIEVEMENTS, Menu.NONE, R.string.achievements)
-                .setIcon(R.drawable.ic_drawer_achievements);
-            subMenu.add(GAMES_GROUP_ID, Const.DRAWER_ARROW, Menu.NONE, R.string.arrow)
-                .setIcon(R.drawable.ic_drawer_arrow)
-                .setCheckable(true);
-        }
-
         menu.add(SETTINGS_GROUP_ID, Const.DRAWER_SETTINGS, Menu.NONE, R.string.settings)
             .setIcon(R.drawable.ic_drawer_settings);
         menu.add(SETTINGS_GROUP_ID, Const.DRAWER_HELP, Menu.NONE, R.string.help)
@@ -211,14 +193,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         data.putInt(EXTRA_SELECTED_DRAWER_ITEM_ID, itemId);
 
         switch (itemId) {
-            case Const.DRAWER_ACHIEVEMENTS:
-                if (PrefUtils.isSignedIn(this) && getGoogleApiClient().isConnected()) {
-                    startActivityForResult(Games.Achievements.getAchievementsIntent(getGoogleApiClient()), 0);
-                } else {
-                    drawerItemIdToNavigateAfterSignIn = itemId;
-                    showLoginErrorDialog(R.string.achievements_need_signin);
-                }
-                break;
             case Const.DRAWER_HOME:
                 navigateTo(MainActivity.class, data);
                 break;
@@ -234,14 +208,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 break;
             case Const.DRAWER_PULSE:
                 navigateTo(PulseActivity.class, data);
-                break;
-            case Const.DRAWER_ARROW:
-                if (PrefUtils.isSignedIn(this) && getGoogleApiClient().isConnected()) {
-                    navigateTo(ArrowActivity.class, data);
-                } else {
-                    drawerItemIdToNavigateAfterSignIn = itemId;
-                    showLoginErrorDialog(R.string.arrow_need_games);
-                }
                 break;
             case Const.DRAWER_SETTINGS:
                 navigateTo(SettingsActivity.class, data);

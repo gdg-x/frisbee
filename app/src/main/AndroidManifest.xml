@@ -47,9 +47,6 @@
       android:name="com.google.android.maps.v2.API_KEY"
       android:value="@string/android_simple_api_access_key" />
     <meta-data
-      android:name="com.google.android.gms.games.APP_ID"
-      android:value="@string/play_app_id" />
-    <meta-data
       android:name="com.google.android.gms.appstate.APP_ID"
       android:value="@string/play_app_id" />
     <meta-data
