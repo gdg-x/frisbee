@@ -39,7 +39,6 @@
   <string name="or">ou</string>
   <string name="skip">Passer l\'identification</string>
   <string name="youtube_init_failed">Impossible d\'initaliser le lecteur YouTube.</string>
-  <string name="achievements">Succès</string>
   <string name="settings">Paramètres</string>
   <string name="about">À propos</string>
   <plurals name="seconds_ago">
@@ -87,7 +86,6 @@
   <string name="google_signed_in">Identifié par Google+</string>
   <string name="google_signed_in_on">Vous êtes actuellement identifié par Google+</string>
   <string name="google_signed_in_off">Vous n\'êtes pas connecté</string>
-  <string name="achievements_need_signin">Vous devez être connecté pour débloquer les succès</string>
   <string name="done">OK</string>
   <string name="allow_analytics">Nous autoriser à collecter des données d\'utilisation anonymes afin d\'améliorer l\'application</string>
   <string name="enable_gcm">Activer les notifications du Cloud GDG (pour être informé des nouveaux événements)</string>
@@ -115,18 +113,6 @@
   <string name="gde_who_desc">Les Google Developer Experts (GDEs) sont des experts dans une ou plusieurs technologies de développement de Google. Le programme GDE reconnaît le travail exemplaire accompli par ces rock stars pour les développeurs Google dans le monde entier en les invitant à faire partie de la communauté grandissante des GDEs. Les GDEs sont des gourous, des mentors et des amis ; ils sont les développeurs tout comme vous.\n\nLes Google Developer Experts parlent dans des événements locaux et mondiaux, ils ont une forte présence en ligne et une excellente base technique dans leur domaine. Ces développeurs indépendants apportent leur expérience pratique et savoir faire dans les technologies de Google pour les communautés de développeurs dans le monde entier.</string>
   <string name="gde_what_title">Quel genres d\'actions font GDEs ?</string>
   <string name="gde_what_desc">Les GDEs écrivent du code et lancent des applications ; ils publient autant que possible le code sources qu\'ils écrivent pour les autres développeurs. Ils ont écrit et continuent à écrire un blog, des articles, des documents, des livres, etc sur le développement pour la plateforme Google.\n\nIls traduisent aussi la documentation existante dans d\'autres langues pour les développeurs locaux. Les GDEs ont une bonne réputation sur les forums comme Stack Overflow et sont Top Contributeurs sur les forums d\'aide des produits.\n\nIls prennent la parole lors des conférences de développeurs, organisent et dirigent les GDGs et mènent les Hackathons. Les GDEs sont nommés pour une ou plusieurs actions pour un produit. Une fois qu\'ils ont le statut de GDE, ils sont supposés continuer à contribuer par l\'un des moyens énumérés ci-dessus.</string>
-  <string name="arrow_oops">Oh oh, quelque chose c\'est mal passé. Essayez à nouveau, s\'il vous plaît.</string>
-  <string name="arrow_stale">Ohoh, ce code est périmé. Réessayez.</string>
-  <string name="arrow_scan">Prêt à scanner ! \nTrouvez un organisateur\net demandez-lui gentiment si vous pouvez le/la « taguer »</string>
-  <string name="arrow_organizer">Hè, vous êtes un organisateur GDG, on dirait. Passer au Mode Envoyer maintenant si vous souhaitez permettre à quelqu\'un de vous « taguer ».</string>
-  <string name="arrow_send_mode">Mode Emission</string>
-  <string name="arrow_tag_here">Toucher des téléphones NFC et tapoter pour lancer la flèche !</string>
-  <string name="arrow_back_receive">Retour au Tag Mode</string>
-  <string name="arrow_already_tagged">Mince ! Vous avez déjà « tagué » cet organisateur !</string>
-  <string name="arrow">Arrow</string>
-  <string name="arrow_need_games">Vous devez être identifié pour jouer à GDG Arrow</string>
-  <string name="arrow_selfie">Vous ne pouvez pas vous « taguer » vous-même. Désolé ;)</string>
-  <string name="arrow_leaderboard">Meilleurs à GDG Arrow</string>
   <string name="no_nfc_use_qr_scanner">Pas de NFC détecté, utilisez le scanner QR !</string>
   <string name="event_description">Description</string>
   <string name="event">Événement</string>

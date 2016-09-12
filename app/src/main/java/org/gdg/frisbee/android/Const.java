@@ -44,14 +44,11 @@ public class Const {
     //Navigation Drawer
     public static final int DRAWER_HOME = 0;
     public static final int DRAWER_PULSE = 2;
-    public static final int DRAWER_ACHIEVEMENTS = 4;
     public static final int DRAWER_GDE = 5;
-    public static final int DRAWER_ARROW = 99;
     public static final int DRAWER_SETTINGS = 100;
     public static final int DRAWER_HELP = 101;
     public static final int DRAWER_FEEDBACK = 102;
     public static final int DRAWER_ABOUT = 103;
-    public static final int DRAWER_SUBMENU_GAMES = 1000;
     // Drawer Special Event Items
     public static final int DRAWER_DEVFEST = 30;
     public static final int DRAWER_WTM = 31;
@@ -64,10 +61,6 @@ public class Const {
     public static final String PREF_ORGANIZER_CHECK_ID = "pref_organizer_check_id";
     public static final String PREF_ORGANIZER_STATE = "pref_organizer_state";
     public static final long ORGANIZER_CHECK_MAX_TIME = DateUtils.WEEK_IN_MILLIS;
-    public static final String ARROW_MIME = "application/vnd.org.gdgx.frisbee.arrow";
-    public static final String ARROW_LB = "CgkIh5yNxL8MEAIQBw";
-    public static final String ARROW_K = "XXXX111122223333";
-    public static final String GAMES_SNAPSHOT_ID = "tagged_organizers.json";
 
     public static final String EXTRA_EVENT_ID = "EXTRA_EVENT_ID";
     public static final String EXTRA_SECTION = "EXTRA_SECTION";

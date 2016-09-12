@@ -39,7 +39,6 @@
   <string name="or">أو</string>
   <string name="skip">تخطي تسجيل الدخول</string>
   <string name="youtube_init_failed">تعذر تهيئة مشغل يوتيوب.</string>
-  <string name="achievements">الإنجازات</string>
   <string name="settings">الإعدادات</string>
   <string name="about">حول البرنامج</string>
   <plurals name="seconds_ago">
@@ -99,7 +98,6 @@
   <string name="google_signed_in">وقعت في جوجل +</string>
   <string name="google_signed_in_on">قمت بتسجيل الدخول حاليا في جوجل +</string>
   <string name="google_signed_in_off">أنت لم تسجل الدخول</string>
-  <string name="achievements_need_signin">عليك أن تكون مسجلا لفتح الإنجازات</string>
   <string name="done">منجز</string>
   <string name="allow_analytics">تسمح لنا جمع بيانات الاستخدام المجهول الذي يساعدنا على تحسين التطبيق</string>
   <string name="enable_gcm">تمكين GDG سحابة إعلامات (تلقي إشعار عن أحداث جديدة)</string>
@@ -127,18 +125,6 @@
   <string name="gde_who_desc">خبراء جوجل المطور (GDEs) هم خبراء في واحدة أو أكثر تقنيات المطور جوجل. يتعرف البرنامج GDE العمل المتميز لهذه نجوم موسيقى الروك لمطوري جوجل في جميع أنحاء العالم من خلال دعوتهم ليكونوا جزءا من المجتمع GDE المتنامية. الأدلة معلمو ومدربين والأصدقاء. هم المطورين مثلك. \ في \ خبراء المطورين جوجل التحدث في المناسبات المحلية والعالمية، لها وجود قوي على شبكة الإنترنت وخلفية فنية ممتازة في هذا المجال. هذه المطورين المستقلين تجلب لهم الخبرة والمعرفة في العالم الحقيقي في العمل مع تقنيات جوجل للمجتمعات المطور في جميع أنحاء العالم.</string>
   <string name="gde_what_title">أي نوع من الأنشطة يقوم بها GDEs؟</string>
   <string name="gde_what_desc">GDEs كتابة رمز وإطلاق التطبيقات. يفتحون مصدر أكبر قدر ممكن من قانون يكتبون للاستفادة مطورين آخرين. وقد مكتوبة والاستمرار في كتابة بلوق وظائف، مقالات، وثائق، كتب، الخ حول تطوير على منصة جوجل. \ لا ترجموا أيضا الوثائق الموجودة إلى لغات أخرى لصالح المطورين المحليين. GDEs دينا ممثلين عالية على المنتديات مثل تجاوز المكدس وهي أكبر المساهمين في القوائم البريدية المنتج. \ لا يتحدثون في المؤتمرات المطور، تنظيم وقيادة GDGs، وإجراء hackathons. GDEs يمكن أن يتم ترشيحه للبرنامج لفعل واحد أو أكثر من أنواع الأنشطة للمنتج. مرة واحدة يتم قبولها باعتبارها GDE، من المتوقع أن تواصل المساهمة في أي من الطرق المذكورة أعلاه.</string>
-  <string name="arrow_oops">اه يا، حدث خطأ ما. حاول مرة اخرى.</string>
-  <string name="arrow_stale">اه أوه، انتهت صلاحية هذا الرمز. حاول مرة أخرى.</string>
-  <string name="arrow_scan">على استعداد لمسح! \ المنظمات غير الحكومية العثور على GDG منظم \ n وتسأل لطيف إذا كنت قد \"سمة\" له / لها</string>
-  <string name="arrow_organizer">مهلا، يبدو أنك منظم GDG. التبديل إلى الوضع إرسال هنا إذا كنت تريد أن تسمح لشخص ما \"علامة\" لك.</string>
-  <string name="arrow_send_mode">إرسال الوضع</string>
-  <string name="arrow_tag_here">لمس الهواتف NFC والاستفادة لاطلاق السهم!</string>
-  <string name="arrow_back_receive">العودة إلى العلامة الوضع</string>
-  <string name="arrow_already_tagged">أطلق النار! كنت الموسومة بالفعل هذا المنظم!</string>
-  <string name="arrow">Arrow</string>
-  <string name="arrow_need_games">عليك أن تكون مسجلا للعب السهم GDG</string>
-  <string name="arrow_selfie">كنت حقا لا يمكن تسمية لك. عذرا؛)</string>
-  <string name="arrow_leaderboard">أفضل من السهم</string>
   <string name="no_nfc_use_qr_scanner">لا NFC الكشف عن استخدام الماسح الضوئي QR!</string>
   <string name="event_description">وصف</string>
   <string name="event">حدث</string>

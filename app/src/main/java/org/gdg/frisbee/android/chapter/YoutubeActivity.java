@@ -76,7 +76,6 @@ public class YoutubeActivity extends GdgActivity implements YouTubePlayer.OnInit
 
             @Override
             public void onVideoEnded() {
-                getAchievementActionHandler().handleVideoViewed();
             }
 
             @Override
