@@ -105,27 +105,6 @@
       android:name=".activity.SettingsActivity"
       android:label="@string/settings"
       android:theme="@style/Theme.GDG" />
-    <activity
-      android:name=".arrow.ArrowActivity"
-      android:screenOrientation="portrait"
-      android:theme="@style/Theme.GDG.WithNavDrawer">
-      <intent-filter>
-        <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <data android:mimeType="application/vnd.org.gdgx.frisbee.arrow" />
-      </intent-filter>
-      <intent-filter>
-        <action android:name="android.intent.action.VIEW" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <data
-          android:host="arrow"
-          android:scheme="gdgx" />
-      </intent-filter>
-    </activity>
-    <activity
-      android:name=".arrow.ArrowTaggedActivity"
-      android:screenOrientation="portrait"
-      android:theme="@style/Theme.GDG.WithNavDrawer" />
     <activity android:name=".onboarding.FirstStartActivity" />
     <activity
       android:name=".chapter.YoutubeActivity"
