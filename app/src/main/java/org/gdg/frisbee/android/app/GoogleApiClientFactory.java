@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.drive.Drive;
 import com.google.android.gms.plus.Plus;
 
 import org.gdg.frisbee.android.utils.PrefUtils;
@@ -26,8 +25,7 @@ public final class GoogleApiClientFactory {
             .addApi(AppIndex.API);
 
         if (withSignIn) {
-            builder.addApi(Plus.API).addScope(Plus.SCOPE_PLUS_PROFILE)
-                .addApi(Drive.API).addScope(Drive.SCOPE_APPFOLDER);
+            builder.addApi(Plus.API).addScope(Plus.SCOPE_PLUS_PROFILE);
         }
 
         return builder.build();

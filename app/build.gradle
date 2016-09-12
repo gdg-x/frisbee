@@ -138,7 +138,6 @@ dependencies {
     compile "com.android.support.test.espresso:espresso-idling-resource:$rootProject.espressoVersion"
 
     //Play Services
-    compile "com.google.android.gms:play-services-drive:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-plus:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-analytics:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-appinvite:$rootProject.playServicesVersion"
