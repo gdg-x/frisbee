@@ -39,7 +39,6 @@
   <string name="or">vagy</string>
   <string name="skip">Bejelentkezés átugrása</string>
   <string name="youtube_init_failed">Nem sikerült inicializálni a YouTube-lejátszót.</string>
-  <string name="achievements">Trófeák</string>
   <string name="settings">Beállítások</string>
   <string name="about">Az alkalmazásról</string>
   <plurals name="seconds_ago">
@@ -82,7 +81,6 @@
   <string name="google_signed_in">Bejelentkeztél a Google+-al</string>
   <string name="google_signed_in_on">Jelenleg be vagy jelentkezve Google+-al</string>
   <string name="google_signed_in_off">Nem vagy bejelentkezve</string>
-  <string name="achievements_need_signin">Be kell jelentkezned, hogy megszerezhesd a trófeákat</string>
   <string name="done">Kész</string>
   <string name="allow_analytics">Kérjük tedd lehetővé, hogy névtelen használati adatokat gyűjthessünk, amelyek segíthetnek, hogy fejlesszük az alkalmazást</string>
   <string name="enable_gcm">Engedélyezi a GDG felhő értesítéseket (értesítések az új eseményekről)</string>
@@ -110,18 +108,6 @@
   <string name="gde_who_desc">A Google Fejlesztői Szakértők (GDE-k) olyan szakemberek, akik egy vagy több Google fejlesztői technológiában profik. A GDE program felismeri ezen rocksztárok példaértékű munkáját, világszerte felkérve őket, hogy legyenek a növekvő GDE közösség tagjai. A GDE-k guruk, mesterek, mentorok és barátok, csakúgy mint te.\n\nA Google Fejlesztő Szakértők helyi és globális eseményeken beszélnek, erős online jelenlétük van és a kiváló a technikai hátterük a maguk területén. Ezek a független fejlesztők az élet tapasztalataikat és a tudásukat adják át a Google technológiákkal kapcsolatban világszerte a fejlesztői közösségnek.</string>
   <string name="gde_what_title">Milyen tevékenységeket végeznek a GDE-k?</string>
   <string name="gde_what_desc">A GDE-ek forrás kódokat írnak, alkalmazásokat készítenek és publikálnak; Ezek amennyire csak lehetséges nyílt forrásúak, hogy más fejlesztők tanulhassanak belőle. Rendszeresen blog hozzászólásokat, cikkeket, dokumentációt, könyveket, stb. írnak a Google platform-hoz tartozó témákkal kapcsolatban.\n\nMeglévő dokumentációt lefordítanak más nyelvekre, hogy a helyi fejlesztők megérthessék. A GDE-knek magas rangja van a fórumokon (mint pl. a Stack Overfow) és vezető hozzászólók a termék levelezési listákon.\n\nFejlesztői konferenciákon adnak elő, GDG-ket szerveznek és vezetnek, és hackathon-okat tartanak. A GDE-ket egy termékhez kapcsolódó, egy vagy több típusú említett tevékenység esetében lehet jelölni. Miután elfogadták a GDE jelölést, elvárhatóan továbbra is hozzájárulnak a közösséghez a fent felsorolt módokon.</string>
-  <string name="arrow_oops">Hoppá, valami hiba történt, kérlek próbáld újra.</string>
-  <string name="arrow_stale">Hoppá, ez a kód lejárt. Próbáld újra.</string>
-  <string name="arrow_scan">Készen áll a leolvasáshoz!\nKeress egy GDG szervezőt\nés kérdezd meg, hogy megjelölheted-e</string>
-  <string name="arrow_organizer">Úgy tűnik, hogy GDG szervező vagy. Válts itt küldő módba ha lehetővé akarod tenni, hogy \"megjelölhessenek\".</string>
-  <string name="arrow_send_mode">Küldő mód</string>
-  <string name="arrow_tag_here">Érintsd össze az NFC-s telefonokat, és koppints, hogy kilődd a nyílat!</string>
-  <string name="arrow_back_receive">Vissza a jelölő módba</string>
-  <string name="arrow_already_tagged">Hoppá! Ezt a szervezőt már megjelölted!</string>
-  <string name="arrow">Arrow</string>
-  <string name="arrow_need_games">Be kell bejelentkezzél, hogy a GDG Nyíllal játsszhass</string>
-  <string name="arrow_selfie">Saját magadat nem jelölheted meg. Bocsi ;)</string>
-  <string name="arrow_leaderboard">A Nyíl legjobbjai</string>
   <string name="no_nfc_use_qr_scanner">Az NFC nem található, használj QR kód leolvasót!</string>
   <string name="event_description">Leírás</string>
   <string name="event">Esemény</string>
