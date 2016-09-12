@@ -19,6 +19,8 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import butterknife.BindView;
 
@@ -85,8 +87,8 @@ public class GdeActivity extends GdgNavDrawerActivity implements ViewPager.OnPag
     }
 
     private void setupGdeViewPager(GdeList directory) {
-        // TODO use sorted HashMap to sort the categories.
-        HashMap<String, GdeList> gdeMap = extractCategoriesFromGdeList(directory);
+        SortedMap<String, GdeList> gdeMap = new TreeMap<>();
+        gdeMap.putAll(extractCategoriesFromGdeList(directory));
         List<GdeCategory> gdeCategoryList = convertCategoryMapToList(gdeMap);
 
         mViewPagerAdapter = new GdeCategoryPagerAdapter(
@@ -120,7 +122,7 @@ public class GdeActivity extends GdgNavDrawerActivity implements ViewPager.OnPag
         return gdeMap;
     }
 
-    private List<GdeCategory> convertCategoryMapToList(HashMap<String, GdeList> gdeMap) {
+    private List<GdeCategory> convertCategoryMapToList(SortedMap<String, GdeList> gdeMap) {
         List<GdeCategory> gdeCategoryList = new ArrayList<>();
         for (String category : gdeMap.keySet()) {
             GdeList gdeList = gdeMap.get(category);
