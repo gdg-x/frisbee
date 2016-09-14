@@ -90,7 +90,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
     private boolean mFirstStart = false;
 
     private ChapterComparator locationComparator;
-    private TextView mSpinner;
+    private TextView chapterSwitcher;
     private String selectedChapterId;
     private ArrayList<Chapter> chapters;
 
@@ -115,7 +115,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
         locationComparator = new ChapterComparator(PrefUtils.getHomeChapterIdNotNull(this),
             App.getInstance().getLastLocation());
 
-        initSpinner();
+        setupChapterSwitcher();
 
         if (savedInstanceState != null) {
             chapters = savedInstanceState.getParcelableArrayList(ARG_CHAPTERS);
@@ -368,12 +368,12 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
         }
     }
 
-    private void initSpinner() {
+    private void setupChapterSwitcher() {
         Toolbar toolbar = getActionBarToolbar();
-        View spinnerContainer = LayoutInflater.from(this).inflate(R.layout.actionbar_chapter_selector, toolbar);
-        mSpinner = (TextView) spinnerContainer.findViewById(android.R.id.text1);
+        View container = LayoutInflater.from(this).inflate(R.layout.actionbar_chapter_selector, toolbar);
+        chapterSwitcher = (TextView) container.findViewById(android.R.id.text1);
 
-        mSpinner.setOnClickListener(new View.OnClickListener() {
+        chapterSwitcher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ChapterSelectDialog.newInstance(chapters, findChapterById(selectedChapterId))
@@ -386,7 +386,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
         mViewPagerAdapter.setSelectedChapter(newChapterId);
         Chapter chapter = findChapterById(newChapterId);
         if (chapter != null) {
-            mSpinner.setText(chapter.toString());
+            chapterSwitcher.setText(chapter.toString());
         }
         if (!selectedChapterId.equals(newChapterId)) {
             Timber.d("Switching newChapterId!");
