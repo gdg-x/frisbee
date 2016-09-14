@@ -30,6 +30,7 @@ public class ChapterSelectDialog extends AppCompatDialogFragment
     implements AdapterView.OnItemClickListener {
 
     private static final String EXTRA_CHAPTERS = "EXTRA_CHAPTERS";
+    private static final String EXTRA_SELECTED_CHAPTER = "EXTRA_SELECTED_CHAPTER";
 
     @BindView(R.id.filter) SearchView cityNameSearchView;
     @BindView(android.R.id.list) FilterListView listView;
@@ -39,10 +40,12 @@ public class ChapterSelectDialog extends AppCompatDialogFragment
     private Listener listener = Listener.EMPTY;
     private Chapter selectedChapter;
 
-    public static ChapterSelectDialog newInstance(ArrayList<Chapter> chapters) {
+    public static ChapterSelectDialog newInstance(ArrayList<Chapter> chapters,
+                                                  @Nullable Chapter selectedChapter) {
         ChapterSelectDialog fragment = new ChapterSelectDialog();
-        Bundle args = new Bundle(1);
+        Bundle args = new Bundle(2);
         args.putParcelableArrayList(EXTRA_CHAPTERS, chapters);
+        args.putParcelable(EXTRA_SELECTED_CHAPTER, selectedChapter);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,7 +55,7 @@ public class ChapterSelectDialog extends AppCompatDialogFragment
         super.onCreate(savedInstanceState);
 
         chapters = getArguments().getParcelableArrayList(EXTRA_CHAPTERS);
-        selectedChapter = chapters.get(0);
+        selectedChapter = getArguments().getParcelable(EXTRA_SELECTED_CHAPTER);
     }
 
     @NonNull
@@ -85,7 +88,10 @@ public class ChapterSelectDialog extends AppCompatDialogFragment
             chapters
         );
         listView.setAdapter(adapter);
-        listView.setItemChecked(0, true); // First item is always the home chapter.
+
+        int selectedItemPos = chapters.indexOf(selectedChapter);
+        listView.setSelection(selectedItemPos);
+        listView.setItemChecked(selectedItemPos, true);
         final Filter.FilterListener filterListener = new Filter.FilterListener() {
             @Override
             public void onFilterComplete(int count) {

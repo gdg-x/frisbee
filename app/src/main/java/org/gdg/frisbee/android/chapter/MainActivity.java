@@ -383,7 +383,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
         mSpinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChapterSelectDialog.newInstance(chapters)
+                ChapterSelectDialog.newInstance(chapters, findChapterById(selectedChapterId))
                     .show(getSupportFragmentManager(), ChapterSelectDialog.class.getSimpleName());
             }
         });
