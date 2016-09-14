@@ -170,10 +170,10 @@ dependencies {
     //Others
     compile 'io.doorbell:android-sdk:0.2.6@aar'
     compile 'org.jsoup:jsoup:1.8.2'
-    compile "net.danlew:android.joda:$rootProject.jodaTimeVersion"
+    compile "net.danlew:android.joda:$rootProject.jodaTimeAndroidVersion"
     compile 'com.tasomaniac:delayed-progress:0.3'
     compile 'com.google.code.findbugs:jsr305:2.0.1'
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {
         transitive = true;
     }
 
@@ -191,7 +191,7 @@ dependencies {
     testCompile "org.robolectric:shadows-multidex:$rootProject.robolectricVersion"
     testCompile "joda-time:joda-time:$rootProject.jodaTimeVersion"
 
-    androidTestCompile 'org.assertj:assertj-core:1.7.1'
+    androidTestCompile 'org.assertj:assertj-core:3.5.2'
 
     // Android Testing Support Library's runner and rules
     androidTestCompile "com.android.support.test:runner:$rootProject.runnerVersion"
@@ -200,7 +200,7 @@ dependencies {
     // Espresso UI Testing dependencies.
     androidTestCompile "com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion"
     androidTestCompile "com.android.support.test.espresso:espresso-intents:$rootProject.espressoVersion"
-    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1'
+    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
 }
 
 apply plugin: 'com.google.gms.google-services'
