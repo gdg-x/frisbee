@@ -66,7 +66,7 @@ public class ChapterSelectDialog extends AppCompatDialogFragment
         ButterKnife.bind(this, view);
 
         return new AlertDialog.Builder(getActivity())
-            .setNegativeButton(R.string.feedback_cancel, null)
+            .setNegativeButton(android.R.string.cancel, null)
             .setView(view)
             .create();
     }
