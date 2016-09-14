@@ -112,6 +112,7 @@ public class ChapterSelectDialog extends AppCompatDialogFragment
             }
         );
         cityNameSearchView.requestFocus();
+        adapter.getFilter().filter(cityNameSearchView.getQuery(), filterListener);
     }
 
     private int findIndexByValueInFilteredListView(Chapter value) {
