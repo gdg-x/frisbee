@@ -160,7 +160,7 @@ public class ChapterSelectDialog extends AppCompatDialogFragment
         }
     }
 
-    interface Listener {
+    public interface Listener {
         void onChapterSelected(Chapter selectedChapter);
 
         Listener EMPTY = new Listener() {
