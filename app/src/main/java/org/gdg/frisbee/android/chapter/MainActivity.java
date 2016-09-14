@@ -31,11 +31,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.android.gms.appindexing.Action;
@@ -372,13 +370,8 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
 
     private void initSpinner() {
         Toolbar toolbar = getActionBarToolbar();
-        View spinnerContainer = LayoutInflater.from(this).inflate(R.layout.actionbar_spinner, toolbar, false);
-        ActionBar.LayoutParams lp = new ActionBar.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
-        );
-        toolbar.addView(spinnerContainer, lp);
-
-        mSpinner = (TextView) spinnerContainer.findViewById(R.id.actionbar_spinner);
+        View spinnerContainer = LayoutInflater.from(this).inflate(R.layout.actionbar_chapter_selector, toolbar);
+        mSpinner = (TextView) spinnerContainer.findViewById(android.R.id.text1);
 
         mSpinner.setOnClickListener(new View.OnClickListener() {
             @Override

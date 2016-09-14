@@ -19,7 +19,7 @@
   android:layout_height="match_parent"
   android:orientation="vertical">
 
-  <TextView
+  <Spinner
     android:id="@+id/actionbar_spinner"
     style="@style/Widget.GDG.Spinner"
     android:layout_width="wrap_content"
