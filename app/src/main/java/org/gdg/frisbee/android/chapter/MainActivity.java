@@ -218,7 +218,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
             && isShowingStoredHomeChapter()) {
             Chapter homeChapter = findChapterById(homeChapterId);
             if (homeChapter != null) {
-                updateSelectionFor(homeChapter.getGplusId());
+                updateSelectionFor(homeChapter);
             }
         }
     }
@@ -284,7 +284,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
         );
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.setOffscreenPageLimit(3);
-        updateSelectionFor(selectedChapterId);
+        updateSelectionFor(findChapterById(selectedChapterId));
 
         recordStartPageView();
 
@@ -382,12 +382,10 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
         });
     }
 
-    void updateSelectionFor(String newChapterId) {
+    void updateSelectionFor(Chapter newChapter) {
+        String newChapterId = newChapter.getGplusId();
         mViewPagerAdapter.setSelectedChapter(newChapterId);
-        Chapter chapter = findChapterById(newChapterId);
-        if (chapter != null) {
-            chapterSwitcher.setText(chapter.toString());
-        }
+        chapterSwitcher.setText(newChapter.toString());
         if (!selectedChapterId.equals(newChapterId)) {
             Timber.d("Switching newChapterId!");
             selectedChapterId = newChapterId;
@@ -430,7 +428,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
 
     @Override
     public void onChapterSelected(Chapter selectedChapter) {
-        updateSelectionFor(selectedChapter.getGplusId());
+        updateSelectionFor(selectedChapter);
     }
 
     public class ChapterFragmentPagerAdapter extends FragmentStatePagerAdapter {
