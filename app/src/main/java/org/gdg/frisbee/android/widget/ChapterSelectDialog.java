@@ -15,12 +15,16 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Chapter;
+import org.gdg.frisbee.android.api.model.Directory;
+import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.view.FilterListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -29,7 +33,6 @@ import butterknife.ButterKnife;
 public class ChapterSelectDialog extends AppCompatDialogFragment
     implements AdapterView.OnItemClickListener {
 
-    private static final String EXTRA_CHAPTERS = "EXTRA_CHAPTERS";
     private static final String EXTRA_SELECTED_CHAPTER = "EXTRA_SELECTED_CHAPTER";
 
     @BindView(R.id.filter) SearchView cityNameSearchView;
@@ -40,11 +43,9 @@ public class ChapterSelectDialog extends AppCompatDialogFragment
     private Listener listener = Listener.EMPTY;
     private Chapter selectedChapter;
 
-    public static ChapterSelectDialog newInstance(ArrayList<Chapter> chapters,
-                                                  @Nullable Chapter selectedChapter) {
+    public static ChapterSelectDialog newInstance(@Nullable Chapter selectedChapter) {
         ChapterSelectDialog fragment = new ChapterSelectDialog();
         Bundle args = new Bundle(2);
-        args.putParcelableArrayList(EXTRA_CHAPTERS, chapters);
         args.putParcelable(EXTRA_SELECTED_CHAPTER, selectedChapter);
         fragment.setArguments(args);
         return fragment;
@@ -53,8 +54,6 @@ public class ChapterSelectDialog extends AppCompatDialogFragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        chapters = getArguments().getParcelableArrayList(EXTRA_CHAPTERS);
         selectedChapter = getArguments().getParcelable(EXTRA_SELECTED_CHAPTER);
     }
 
@@ -75,6 +74,24 @@ public class ChapterSelectDialog extends AppCompatDialogFragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, false,
+            new ModelCache.CacheListener() {
+                @Override
+                public void onGet(Object item) {
+                    chapters = ((Directory) item).getGroups();
+                    setupUI();
+                }
+
+                @Override
+                public void onNotFound(String key) {
+                    // TODO load from the network.
+                    Toast.makeText(getContext(), R.string.fetch_chapters_failed, Toast.LENGTH_SHORT).show();
+                    dismiss();
+                }
+            });
+    }
+
+    private void setupUI() {
         listView.setOnItemClickListener(this);
 
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
@@ -89,6 +106,7 @@ public class ChapterSelectDialog extends AppCompatDialogFragment
         int selectedItemPos = chapters.indexOf(selectedChapter);
         listView.setSelection(selectedItemPos);
         listView.setItemChecked(selectedItemPos, true);
+
         final Filter.FilterListener filterListener = new Filter.FilterListener() {
             @Override
             public void onFilterComplete(int count) {

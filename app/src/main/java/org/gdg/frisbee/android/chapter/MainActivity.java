@@ -376,7 +376,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
         chapterSwitcher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChapterSelectDialog.newInstance(chapters, findChapterById(selectedChapterId))
+                ChapterSelectDialog.newInstance(findChapterById(selectedChapterId))
                     .show(getSupportFragmentManager(), ChapterSelectDialog.class.getSimpleName());
             }
         });
