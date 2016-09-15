@@ -1,4 +1,4 @@
-package org.gdg.frisbee.android.widget;
+package org.gdg.frisbee.android.chapter;
 
 import android.app.Dialog;
 import android.content.Context;
