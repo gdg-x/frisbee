@@ -25,20 +25,6 @@ public class Const {
     public static final String EXTRA_TAGGED_EVENT = "org.gdg.frisbee.TAGGED_EVENT";
     public static final String EXTRA_ALARM_FOR_ALL = "org.gdg.frisbee.ALARM_FOR_ALL";
     public static final String EXTRA_TAGGED_EVENT_CACHEKEY = "org.gdg.frisbee.TAGGED_EVENT_CACHEKEY";
-    //Navigation Drawer
-    public static final int DRAWER_HOME = 0;
-    public static final int DRAWER_PULSE = 2;
-    public static final int DRAWER_GDE = 5;
-    public static final int DRAWER_SETTINGS = 100;
-    public static final int DRAWER_HELP = 101;
-    public static final int DRAWER_FEEDBACK = 102;
-    public static final int DRAWER_ABOUT = 103;
-    // Drawer Special Event Items
-    public static final int DRAWER_DEVFEST = 30;
-    public static final int DRAWER_WTM = 31;
-    public static final int DRAWER_STUDY_JAM = 32;
-    public static final int DRAWER_IO_EXTENDED = 33;
-    public static final int DRAWER_GCP_NEXT = 34;
 
     public static final String EXTRA_EVENT_ID = "EXTRA_EVENT_ID";
     public static final String EXTRA_SECTION = "EXTRA_SECTION";
