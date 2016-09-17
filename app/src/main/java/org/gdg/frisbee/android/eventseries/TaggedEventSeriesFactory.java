@@ -26,52 +26,52 @@ public final class TaggedEventSeriesFactory {
 
     public static List<TaggedEventSeries> createAvailableEventSeries(Context context) {
 
-        List<TaggedEventSeries> series = new ArrayList<>();
+        List<TaggedEventSeries> seriesList = new ArrayList<>();
         //Add DevFest
-        addTaggedEventSeriesIfDateFits(series, new TaggedEventSeries(context,
+        addTaggedEventSeriesIfDateFits(seriesList, new TaggedEventSeries(context,
             R.style.Theme_GDG_Special_DevFest,
             "devfest",
             GdgNavDrawerActivity.DRAWER_DEVFEST,
             START_TIME_DEVFEST,
             END_TIME_DEVFEST));
         //Add Women Techmakers
-        addTaggedEventSeriesIfDateFits(series, new TaggedEventSeries(context,
+        addTaggedEventSeriesIfDateFits(seriesList, new TaggedEventSeries(context,
             R.style.Theme_GDG_Special_Wtm,
             "wtm",
             GdgNavDrawerActivity.DRAWER_WTM,
             START_TIME_WTM,
             END_TIME_WTM));
         //Add Android Fundamentals Study Jams
-        addTaggedEventSeriesIfDateFits(series, new TaggedEventSeries(context,
+        addTaggedEventSeriesIfDateFits(seriesList, new TaggedEventSeries(context,
             R.style.Theme_GDG_Special_StudyJams,
             "studyjam",
             GdgNavDrawerActivity.DRAWER_STUDY_JAM,
             START_TIME_STUDY_JAMS,
             END_TIME_STUDY_JAMS));
         //Add IO Extended
-        addTaggedEventSeriesIfDateFits(series, new TaggedEventSeries(context,
+        addTaggedEventSeriesIfDateFits(seriesList, new TaggedEventSeries(context,
             R.style.Theme_GDG_Special_IOExtended,
             "i-oextended",
             GdgNavDrawerActivity.DRAWER_IO_EXTENDED,
             START_TIME_IOEXTENDED,
             END_TIME_IOEXTENDED));
         //Add GCP NEXT
-        addTaggedEventSeriesIfDateFits(series, new TaggedEventSeries(context,
+        addTaggedEventSeriesIfDateFits(seriesList, new TaggedEventSeries(context,
             R.style.Theme_GDG_Special_GCPNEXT,
             "gcpnext",
             GdgNavDrawerActivity.DRAWER_GCP_NEXT,
             START_TIME_GCP_NEXT,
             END_TIME_GCP_NEXT));
 
-        return series;
+        return seriesList;
     }
 
     private static void addTaggedEventSeriesIfDateFits(List<TaggedEventSeries> list,
-                                                       TaggedEventSeries taggedEventSeries) {
+                                                       TaggedEventSeries newSeries) {
         DateTime now = DateTime.now();
-        if (BuildConfig.DEBUG || (now.isAfter(taggedEventSeries.getStartDate())
-            && now.isBefore(taggedEventSeries.getEndDate()))) {
-            list.add(taggedEventSeries);
+        if (BuildConfig.DEBUG || (now.isAfter(newSeries.getStartDate())
+            && now.isBefore(newSeries.getEndDate()))) {
+            list.add(newSeries);
         }
     }
 
