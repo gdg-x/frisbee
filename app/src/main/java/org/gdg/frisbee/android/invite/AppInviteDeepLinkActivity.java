@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.gdg.frisbee.android.activity;
+package org.gdg.frisbee.android.invite;
 
 import android.app.Dialog;
 import android.content.Intent;

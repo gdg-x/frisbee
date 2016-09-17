@@ -43,7 +43,7 @@ import com.google.android.gms.appinvite.AppInviteReferral;
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.activity.AppInviteDeepLinkActivity;
+import org.gdg.frisbee.android.invite.AppInviteDeepLinkActivity;
 import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
