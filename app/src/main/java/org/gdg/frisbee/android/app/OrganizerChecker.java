@@ -27,17 +27,17 @@ public class OrganizerChecker {
         initOrganizer();
     }
 
+    private void initOrganizer() {
+        mLastOrganizerCheck = mPreferences.getLong(PREF_ORGANIZER_CHECK_TIME, 0);
+        mCheckedId = mPreferences.getString(PREF_ORGANIZER_CHECK_ID, null);
+        mIsOrganizer = mPreferences.getBoolean(PREF_ORGANIZER_STATE, false);
+    }
+
     void resetOrganizer() {
         mPreferences.edit()
             .putBoolean(OrganizerChecker.PREF_ORGANIZER_STATE, false)
             .putLong(OrganizerChecker.PREF_ORGANIZER_CHECK_TIME, 0)
             .apply();
-    }
-
-    private void initOrganizer() {
-        mLastOrganizerCheck = mPreferences.getLong(PREF_ORGANIZER_CHECK_TIME, 0);
-        mCheckedId = mPreferences.getString(PREF_ORGANIZER_CHECK_ID, null);
-        mIsOrganizer = mPreferences.getBoolean(PREF_ORGANIZER_STATE, false);
     }
 
     public boolean isOrganizer() {
