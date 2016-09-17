@@ -144,8 +144,6 @@ dependencies {
 
     //Google
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
-    compile 'com.google.zxing:android-integration:3.2.1'
-    compile 'com.google.zxing:core:3.2.1'
 
     //Square
     compile "com.squareup.okhttp3:okhttp:$rootProject.okHttpVersion"
