@@ -16,11 +16,6 @@
 
 package org.gdg.frisbee.android;
 
-import android.text.format.DateUtils;
-
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-
 public class Const {
 
     //GitHub
@@ -30,17 +25,6 @@ public class Const {
     public static final String EXTRA_TAGGED_EVENT = "org.gdg.frisbee.TAGGED_EVENT";
     public static final String EXTRA_ALARM_FOR_ALL = "org.gdg.frisbee.ALARM_FOR_ALL";
     public static final String EXTRA_TAGGED_EVENT_CACHEKEY = "org.gdg.frisbee.TAGGED_EVENT_CACHEKEY";
-    //Special Events Dates
-    public static final DateTime START_TIME_DEVFEST = new DateTime(2016, 9, 1, 0, 0, DateTimeZone.UTC);
-    public static final DateTime START_TIME_WTM = new DateTime(2017, 2, 1, 0, 0, DateTimeZone.UTC);
-    public static final DateTime START_TIME_STUDY_JAMS = new DateTime(2017, 1, 15, 0, 0, DateTimeZone.UTC);
-    public static final DateTime START_TIME_IOEXTENDED = new DateTime(2017, 5, 1, 0, 0, DateTimeZone.UTC);
-    public static final DateTime START_TIME_GCP_NEXT = new DateTime(2017, 3, 15, 0, 0, DateTimeZone.UTC);
-    public static final DateTime END_TIME_DEVFEST = new DateTime(2017, 1, 1, 0, 0, DateTimeZone.UTC);
-    public static final DateTime END_TIME_WTM = new DateTime(2017, 4, 1, 0, 0, DateTimeZone.UTC);
-    public static final DateTime END_TIME_STUDY_JAMS = new DateTime(2017, 5, 1, 0, 0, DateTimeZone.UTC);
-    public static final DateTime END_TIME_IOEXTENDED = new DateTime(2017, 6, 1, 0, 0, DateTimeZone.UTC);
-    public static final DateTime END_TIME_GCP_NEXT = new DateTime(2017, 4, 15, 0, 0, DateTimeZone.UTC);
     //Navigation Drawer
     public static final int DRAWER_HOME = 0;
     public static final int DRAWER_PULSE = 2;

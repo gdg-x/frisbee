@@ -20,7 +20,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.annotation.NonNull;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -34,7 +33,6 @@ import com.squareup.picasso.Picasso;
 import net.danlew.android.joda.JodaTimeAndroid;
 
 import org.gdg.frisbee.android.BuildConfig;
-import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.GdeDirectory;
 import org.gdg.frisbee.android.api.GdeDirectoryFactory;
@@ -51,14 +49,14 @@ import org.gdg.frisbee.android.api.PlusImageUrlConverter;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.eventseries.NotificationHandler;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
+import org.gdg.frisbee.android.eventseries.TaggedEventSeriesFactory;
 import org.gdg.frisbee.android.utils.CrashlyticsTree;
 import org.gdg.frisbee.android.utils.FileUtils;
 import org.gdg.frisbee.android.utils.GingerbreadLastLocationFinder;
 import org.gdg.frisbee.android.utils.PrefUtils;
-import org.joda.time.DateTime;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
 import okhttp3.OkHttpClient;
@@ -78,7 +76,7 @@ public class App extends BaseApp implements LocationListener {
     private GingerbreadLastLocationFinder mLocationFinder;
     private Location mLastLocation;
     private OrganizerChecker mOrganizerChecker;
-    private ArrayList<TaggedEventSeries> mTaggedEventSeriesList;
+    private List<TaggedEventSeries> mTaggedEventSeriesList;
     private RefWatcher refWatcher;
     private PlusApi plusApiInstance;
 
@@ -157,43 +155,7 @@ public class App extends BaseApp implements LocationListener {
      * Init TaggedEventSeries.
      */
     private void initTaggedEventSeries() {
-
-        mTaggedEventSeriesList = new ArrayList<>();
-        //Add DevFest
-        addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
-            R.style.Theme_GDG_Special_DevFest,
-            "devfest",
-            Const.DRAWER_DEVFEST,
-            Const.START_TIME_DEVFEST,
-            Const.END_TIME_DEVFEST));
-        //Add Women Techmakers
-        addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
-            R.style.Theme_GDG_Special_Wtm,
-            "wtm",
-            Const.DRAWER_WTM,
-            Const.START_TIME_WTM,
-            Const.END_TIME_WTM));
-        //Add Android Fundamentals Study Jams
-        addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
-            R.style.Theme_GDG_Special_StudyJams,
-            "studyjam",
-            Const.DRAWER_STUDY_JAM,
-            Const.START_TIME_STUDY_JAMS,
-            Const.END_TIME_STUDY_JAMS));
-        //Add IO Extended
-        addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
-            R.style.Theme_GDG_Special_IOExtended,
-            "i-oextended",
-            Const.DRAWER_IO_EXTENDED,
-            Const.START_TIME_IOEXTENDED,
-            Const.END_TIME_IOEXTENDED));
-        //Add GCP NEXT
-        addTaggedEventSeriesIfDateFits(new TaggedEventSeries(this,
-            R.style.Theme_GDG_Special_GCPNEXT,
-            "gcpnext",
-            Const.DRAWER_GCP_NEXT,
-            Const.START_TIME_GCP_NEXT,
-            Const.END_TIME_GCP_NEXT));
+        mTaggedEventSeriesList = TaggedEventSeriesFactory.createAvailableEventSeries(this);
 
         updateEventSeriesAlarms();
 
@@ -205,14 +167,6 @@ public class App extends BaseApp implements LocationListener {
             if (notificationHandler.shouldSetAlarm()) {
                 notificationHandler.setAlarmForNotification();
             }
-        }
-    }
-
-    private void addTaggedEventSeriesIfDateFits(@NonNull TaggedEventSeries taggedEventSeries) {
-        DateTime now = DateTime.now();
-        if (BuildConfig.DEBUG || (now.isAfter(taggedEventSeries.getStartDate())
-            && now.isBefore(taggedEventSeries.getEndDate()))) {
-            mTaggedEventSeriesList.add(taggedEventSeries);
         }
     }
 
@@ -302,10 +256,9 @@ public class App extends BaseApp implements LocationListener {
      * Return the current list of GDG event series occurring in the world.
      * This may be empty but cannot be null.
      *
-     * @return ArrayList of current event series.
+     * @return List of current event series.
      */
-    @NonNull
-    public ArrayList<TaggedEventSeries> currentTaggedEventSeries() {
+    public List<TaggedEventSeries> currentTaggedEventSeries() {
         return mTaggedEventSeriesList;
     }
 
