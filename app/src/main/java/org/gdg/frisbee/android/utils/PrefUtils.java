@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
@@ -57,10 +56,8 @@ public final class PrefUtils {
     public static void setLoggedOut(Context context) {
         prefs(context).edit()
             .putBoolean(SETTINGS_SIGNED_IN, false)
-            .putBoolean(Const.PREF_ORGANIZER_STATE, false)
-            .putLong(Const.PREF_ORGANIZER_CHECK_TIME, 0)
             .apply();
-        App.getInstance().initOrganizer();
+        App.getInstance().resetOrganizer();
     }
 
     @Nullable

@@ -55,12 +55,6 @@ public class Const {
     public static final int DRAWER_STUDY_JAM = 32;
     public static final int DRAWER_IO_EXTENDED = 33;
     public static final int DRAWER_GCP_NEXT = 34;
-    //Arrow
-    public static final String QR_MSG_PREFIX = "gdgx://arrow?m=";
-    public static final String PREF_ORGANIZER_CHECK_TIME = "pref_organizer_check_time";
-    public static final String PREF_ORGANIZER_CHECK_ID = "pref_organizer_check_id";
-    public static final String PREF_ORGANIZER_STATE = "pref_organizer_state";
-    public static final long ORGANIZER_CHECK_MAX_TIME = DateUtils.WEEK_IN_MILLIS;
 
     public static final String EXTRA_EVENT_ID = "EXTRA_EVENT_ID";
     public static final String EXTRA_SECTION = "EXTRA_SECTION";
