@@ -33,7 +33,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Pulse;
@@ -49,7 +48,10 @@ import butterknife.BindView;
 
 public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment.Callbacks {
 
+    private static final String GLOBAL = "Global";
+    private static final String CACHE_KEY_PULSE_GLOBAL = "pulse_global";
     private static final String INSTANCE_STATE_SELECTED_PULSE = "INSTANCE_STATE_SELECTED_PULSE";
+
     @BindView(R.id.pager)
     ViewPager mViewPager;
 
@@ -71,10 +73,10 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
         if (savedInstanceState != null) {
             selectedPulse = savedInstanceState.getString(INSTANCE_STATE_SELECTED_PULSE);
         } else {
-            selectedPulse = PulseFragment.GLOBAL;
+            selectedPulse = GLOBAL;
         }
 
-        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PULSE_GLOBAL, true, new ModelCache.CacheListener() {
+        App.getInstance().getModelCache().getAsync(CACHE_KEY_PULSE_GLOBAL, true, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 Pulse pulse = (Pulse) item;
@@ -93,7 +95,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
             @Override
             public void success(final Pulse pulse) {
                 App.getInstance().getModelCache().putAsync(
-                    Const.CACHE_KEY_PULSE_GLOBAL,
+                    CACHE_KEY_PULSE_GLOBAL,
                     pulse,
                     DateTime.now().plusDays(1),
                     new ModelCache.CachePutListener() {
@@ -119,7 +121,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
     void setupPulseScreen(Pulse pulse, String selectedPulse) {
         mPulseTargets.addAll(pulse.keySet());
         Collections.sort(mPulseTargets);
-        mPulseTargets.add(0, PulseFragment.GLOBAL);
+        mPulseTargets.add(0, GLOBAL);
 
         initSpinner();
         openPulse(selectedPulse);
@@ -189,8 +191,8 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
 
     @Override
     public void onBackPressed() {
-        if (mSpinner != null && !PulseFragment.GLOBAL.equals(mSpinner.getSelectedItem())) {
-            openPulse(PulseFragment.GLOBAL);
+        if (mSpinner != null && !GLOBAL.equals(mSpinner.getSelectedItem())) {
+            openPulse(GLOBAL);
             return;
         }
         super.onBackPressed();
