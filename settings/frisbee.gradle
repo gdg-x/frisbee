@@ -1,19 +1,18 @@
-Properties local_properties = new Properties()
-local_properties.load(new FileInputStream(rootProject.file('local.properties')))
-
 android {
+    def signingProperties = rootProject.file("settings/signing.properties")
     signingConfigs {
         debug {
-            storeFile file("../settings/debug.keystore")
-            keyAlias "androiddebugkey"
-            storePassword "android"
-            keyPassword "android"
+            storeFile rootProject.file("settings/debug.keystore")
         }
-        release {
-            storeFile file("../settings/" + (local_properties.release_keystore_name ?: "debug.keystore"))
-            keyAlias(local_properties.release_keystore_alias ?: "androiddebugkey")
-            storePassword(local_properties.release_keystore_pwd ?: "android")
-            keyPassword(local_properties.release_keystore_pwd2 ?: "android")
+        if (signingProperties.exists()) {
+            Properties props = new Properties()
+            props.load(new FileInputStream(signingProperties))
+            release {
+                storeFile rootProject.file("settings/${props.storeFile}")
+                storePassword props.storePassword
+                keyAlias props.keyAlias
+                keyPassword props.keyPassword
+            }
         }
     }
 
@@ -23,7 +22,7 @@ android {
         }
 
         release {
-            signingConfig signingConfigs.release
+            signingConfig signingProperties.exists() ? signingConfigs.release : signingConfigs.debug
         }
     }
 }
