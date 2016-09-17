@@ -62,7 +62,7 @@ ext {
 
     // App dependencies
     supportLibraryVersion = '24.2.1'
-    playServicesVersion = '9.0.1'
+    playServicesVersion = '9.4.0'
     butterKnifeVersion = '8.4.0'
     jodaTimeAndroidVersion = '2.9.4.1'
     jodaTimeVersion = '2.9.4'
