@@ -18,9 +18,6 @@ package org.gdg.frisbee.android;
 
 public class Const {
 
-    //GitHub
-    public static final String GITHUB_ORGA = "gdg-x";
-    public static final String GITHUB_REPO = "frisbee";
     //Special Events
     public static final String EXTRA_TAGGED_EVENT = "org.gdg.frisbee.TAGGED_EVENT";
     public static final String EXTRA_ALARM_FOR_ALL = "org.gdg.frisbee.ALARM_FOR_ALL";

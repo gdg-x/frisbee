@@ -32,6 +32,9 @@ import org.joda.time.DateTime;
 
 public class ContributorsFragment extends PeopleListFragment {
 
+    private static final String GITHUB_ORGA = "gdg-x";
+    private static final String GITHUB_REPO = "frisbee";
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -62,7 +65,7 @@ public class ContributorsFragment extends PeopleListFragment {
     }
 
     private void fetchGitHubContributors() {
-        App.getInstance().getGithub().getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO)
+        App.getInstance().getGithub().getContributors(GITHUB_ORGA, GITHUB_REPO)
             .enqueue(new Callback<ContributorList>() {
                 @Override
                 public void success(final ContributorList contributors) {
