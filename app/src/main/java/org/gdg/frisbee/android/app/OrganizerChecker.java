@@ -17,10 +17,11 @@ public class OrganizerChecker {
     private static final String PREF_ORGANIZER_STATE = "pref_organizer_state";
     private static final long ORGANIZER_CHECK_MAX_TIME = DateUtils.WEEK_IN_MILLIS;
 
+    private final SharedPreferences preferences;
+
     private boolean isOrganizer = false;
     private long lastOrganizerCheckTimeStamp = 0;
     private String checkedId = null;
-    private SharedPreferences preferences;
 
     OrganizerChecker(SharedPreferences preferences) {
         this.preferences = preferences;
