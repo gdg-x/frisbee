@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Gde;
@@ -25,8 +26,6 @@ import butterknife.BindView;
 
 public class GdeActivity extends GdgNavDrawerActivity implements ViewPager.OnPageChangeListener {
 
-    private static final String CACHE_KEY_GDE_LIST = "gde_list";
-
     @BindView(R.id.pager)
     ViewPager mViewPager;
 
@@ -45,7 +44,7 @@ public class GdeActivity extends GdgNavDrawerActivity implements ViewPager.OnPag
         Toolbar toolbar = getActionBarToolbar();
         toolbar.setTitle(R.string.gde);
 
-        App.getInstance().getModelCache().getAsync(CACHE_KEY_GDE_LIST, new ModelCache.CacheListener() {
+        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_GDE_LIST, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 GdeList directory = (GdeList) item;
@@ -64,7 +63,7 @@ public class GdeActivity extends GdgNavDrawerActivity implements ViewPager.OnPag
         App.getInstance().getGdeDirectory().getDirectory().enqueue(new Callback<GdeList>() {
             @Override
             public void success(final GdeList directory) {
-                App.getInstance().getModelCache().putAsync(CACHE_KEY_GDE_LIST,
+                App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_GDE_LIST,
                     directory,
                     DateTime.now().plusDays(4),
                     new ModelCache.CachePutListener() {

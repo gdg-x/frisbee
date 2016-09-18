@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.about;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 
+import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.ContributorList;
@@ -30,8 +31,6 @@ import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
 public class ContributorsFragment extends PeopleListFragment {
-
-    private static final String CACHE_KEY_FRISBEE_CONTRIBUTORS = "frisbee_contributor_list";
 
     private static final String GITHUB_ORGA = "gdg-x";
     private static final String GITHUB_REPO = "frisbee";
@@ -47,7 +46,7 @@ public class ContributorsFragment extends PeopleListFragment {
             fetchGitHubContributors();
         } else {
             App.getInstance().getModelCache().getAsync(
-                CACHE_KEY_FRISBEE_CONTRIBUTORS, false, new ModelCache.CacheListener() {
+                Const.CACHE_KEY_FRISBEE_CONTRIBUTORS, false, new ModelCache.CacheListener() {
                     @Override
                     public void onGet(Object item) {
                         ContributorList contributors = (ContributorList) item;
@@ -72,7 +71,7 @@ public class ContributorsFragment extends PeopleListFragment {
                 public void success(final ContributorList contributors) {
 
                     mAdapter.addAll(contributors);
-                    App.getInstance().getModelCache().putAsync(CACHE_KEY_FRISBEE_CONTRIBUTORS,
+                    App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_FRISBEE_CONTRIBUTORS,
                         contributors,
                         DateTime.now().plusDays(1),
                         null);

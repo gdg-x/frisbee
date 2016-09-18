@@ -40,8 +40,7 @@ import java.util.Map;
 
 public class PulseFragment extends GdgListFragment {
 
-    private static final String GLOBAL = "Global";
-    private static final String CACHE_KEY_PULSE = "pulse_";
+    public static final String GLOBAL = "Global";
 
     private static final String ARG_MODE = "mode";
     private static final String ARG_TARGET = "target";
@@ -106,7 +105,7 @@ public class PulseFragment extends GdgListFragment {
     public void createAdapter(int[] positions, Directory directory) {
         mAdapter = new PulseAdapter(getActivity(), positions, directory);
         setListAdapter(mAdapter);
-        App.getInstance().getModelCache().getAsync(CACHE_KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
+        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
             true,
             new ModelCache.CacheListener() {
                 @Override
@@ -129,7 +128,7 @@ public class PulseFragment extends GdgListFragment {
                 @Override
                 public void success(final Pulse pulse) {
                     App.getInstance().getModelCache().putAsync(
-                        CACHE_KEY_PULSE + mTarget.toLowerCase(),
+                        Const.CACHE_KEY_PULSE + mTarget.toLowerCase(),
                         pulse,
                         DateTime.now().plusDays(1),
                         new ModelCache.CachePutListener() {
@@ -155,7 +154,7 @@ public class PulseFragment extends GdgListFragment {
                 @Override
                 public void success(final Pulse pulse) {
                     App.getInstance().getModelCache().putAsync(
-                        CACHE_KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
+                        Const.CACHE_KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
                         pulse,
                         DateTime.now().plusDays(1),
                         new ModelCache.CachePutListener() {
