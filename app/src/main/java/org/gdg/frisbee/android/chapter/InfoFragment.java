@@ -97,7 +97,7 @@ public class InfoFragment extends BaseFragment {
         chapterPlusId = getArguments().getString(Const.EXTRA_PLUS_ID);
 
         final boolean online = Utils.isOnline(getActivity());
-        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PERSON + chapterPlusId,
+        App.getInstance().getModelCache().getAsync(ModelCache.KEY_PERSON + chapterPlusId,
             online, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
@@ -194,7 +194,7 @@ public class InfoFragment extends BaseFragment {
 
     private void addOrganizerAsync(final String gplusId, final boolean online) {
         App.getInstance().getModelCache().getAsync(
-            Const.CACHE_KEY_PERSON + gplusId,
+            ModelCache.KEY_PERSON + gplusId,
             online,
             new ModelCache.CacheListener() {
                 @Override
@@ -299,7 +299,7 @@ public class InfoFragment extends BaseFragment {
 
     private void putPersonInCache(String plusId, Person person) {
         App.getInstance().getModelCache().putAsync(
-            Const.CACHE_KEY_PERSON + plusId,
+            ModelCache.KEY_PERSON + plusId,
             person,
             DateTime.now().plusDays(1),
             null

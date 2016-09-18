@@ -83,7 +83,7 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
         if (Utils.isOnline(getActivity())) {
             setIsLoading(true);
             App.getInstance().getModelCache()
-                .getAsync(Const.CACHE_KEY_NEWS + plusId, new ModelCache.CacheListener() {
+                .getAsync(ModelCache.KEY_NEWS + plusId, new ModelCache.CacheListener() {
                     @Override
                     public void onGet(Object item) {
                         Activities activityFeed = (Activities) item;
@@ -108,7 +108,7 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
                     }
                 });
         } else {
-            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_NEWS + plusId,
+            App.getInstance().getModelCache().getAsync(ModelCache.KEY_NEWS + plusId,
                 false,
                 new ModelCache.CacheListener() {
                     @Override
@@ -184,7 +184,7 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
     }
 
     public void cacheActivityFeed(String plusId, Activities feed) {
-        App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_NEWS + plusId, feed,
+        App.getInstance().getModelCache().putAsync(ModelCache.KEY_NEWS + plusId, feed,
             DateTime.now().plusHours(1), null);
     }
 }

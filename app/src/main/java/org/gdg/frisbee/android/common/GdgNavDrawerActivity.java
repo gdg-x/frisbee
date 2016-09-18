@@ -381,7 +381,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     private void maybeUpdateChapterImage() {
         final String homeChapterId = getCurrentHomeChapterId();
         if (isHomeChapterOutdated(homeChapterId)) {
-            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PERSON + homeChapterId,
+            App.getInstance().getModelCache().getAsync(ModelCache.KEY_PERSON + homeChapterId,
                 true, new ModelCache.CacheListener() {
                     @Override
                     public void onGet(Object person) {

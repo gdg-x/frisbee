@@ -37,13 +37,6 @@ public class Const {
     //Keys
     public static final String EXTRA_PLUS_ID = "plus_id";
     public static final String EXTRA_CHAPTER_ID = "org.gdg.frisbee.CHAPTER";
-    public static final String CACHE_KEY_CHAPTER_LIST_HUB = "chapter_list_hub";
-    public static final String CACHE_KEY_PULSE_GLOBAL = "pulse_global";
-    public static final String CACHE_KEY_GDE_LIST = "gde_list";
-    public static final String CACHE_KEY_FRISBEE_CONTRIBUTORS = "frisbee_contributor_list";
-    public static final String CACHE_KEY_PERSON = "person2_";
-    public static final String CACHE_KEY_NEWS = "news2_";
-    public static final String CACHE_KEY_PULSE = "pulse_";
 
     private Const() {
     }

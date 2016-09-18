@@ -26,11 +26,11 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 import org.gdg.frisbee.android.BuildConfig;
-import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.activity.SearchActivity;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.cache.ModelCache;
 
 import timber.log.Timber;
 
@@ -76,7 +76,7 @@ public class GdgProvider extends ContentProvider {
     }
 
     private void prepareProvider() {
-        mDirectory = (Directory) App.getInstance().getModelCache().get(Const.CACHE_KEY_CHAPTER_LIST_HUB);
+        mDirectory = (Directory) App.getInstance().getModelCache().get(ModelCache.KEY_CHAPTER_LIST_HUB);
         Timber.d("Initialized ContentProvider");
     }
 
