@@ -89,7 +89,7 @@
   <string name="allow_analytics">Leisti rinkti anonimizuotą naudojamumo informaciją programėlės tobulinimui</string>
   <string name="enable_gcm">Leisti GDG Debesies pranešimus (gauti pranešimus apie naujus renginius)</string>
   <string name="step3_text">Dar prieš pradedant&#8230;</string>
-  <string name="share_on_gplus">Pakviesti draugus</string>
+  <string name="invite_friends">Pakviesti draugus</string>
   <string name="join_me">Prisijunkite prie šio renginio!</string>
   <string name="name_not_known">Nežinomas vardas</string>
   <string name="originally_shared">pirmas pasidalijo:</string>
@@ -160,7 +160,7 @@
   <string name="cd_arrowTagImage">Arrow Tagging Game</string>
   <string name="cd_qrCode">QR Code</string>
   <string name="invitation_title">Invite your friends to GDG app</string>
-  <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go.</string>
+  <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go. %s</string>
   <string name="invitation_error_message">App Invite was unsuccessful.</string>
   <string name="thanks_for_feedback">Thank you for your Feedback!</string>
   <string name="retry">Retry</string>

@@ -82,7 +82,7 @@
   <string name="allow_analytics">アプリケーションを改善するために、匿名の使用状況データを収集することを許可します。</string>
   <string name="enable_gcm">Enable GDG Cloud Notifications (get notified about new Events)</string>
   <string name="step3_text">One more thing before we start&#8230;</string>
-  <string name="share_on_gplus">友達を招待</string>
+  <string name="invite_friends">友達を招待</string>
   <string name="join_me">このイベントに参加</string>
   <string name="name_not_known">不明な名前</string>
   <string name="originally_shared">originally shared:</string>
@@ -153,7 +153,7 @@
   <string name="cd_arrowTagImage">Arrow Tagging Game</string>
   <string name="cd_qrCode">QR Code</string>
   <string name="invitation_title">Invite your friends to GDG app</string>
-  <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go.</string>
+  <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go. %s</string>
   <string name="invitation_error_message">App Invite was unsuccessful.</string>
   <string name="thanks_for_feedback">Thank you for your Feedback!</string>
   <string name="retry">Retry</string>

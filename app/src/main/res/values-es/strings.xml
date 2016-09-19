@@ -85,7 +85,7 @@
   <string name="allow_analytics">Permitirnos recolectar datos anónimos de uso, lo que nos ayuda a mejorar la app</string>
   <string name="enable_gcm">Habilitar las Notificaciones GDG (ser notificado acerca de nuevos Eventos)</string>
   <string name="step3_text">Una cosa más antes de empezar…</string>
-  <string name="share_on_gplus">Invitar Amigos</string>
+  <string name="invite_friends">Invitar Amigos</string>
   <string name="join_me">¡Acompáñame en este evento!</string>
   <string name="name_not_known">Nombre desconocido</string>
   <string name="originally_shared">compartida originalmente por:</string>
@@ -156,7 +156,7 @@
   <string name="cd_arrowTagImage">Juego: Etiquetado con la flecha</string>
   <string name="cd_qrCode">Código QR</string>
   <string name="invitation_title">Invita a tus amigos a la aplicación GDG</string>
-  <string name="invitation_message">Descarga la aplicación de GDG para Android y descubre contenido de Google Developers Group al momento.</string>
+  <string name="invitation_message">Descarga la aplicación de GDG para Android y descubre contenido de Google Developers Group al momento. %s</string>
   <string name="invitation_error_message">App Invite was unsuccessful.</string>
   <string name="thanks_for_feedback">¡Gracias por su revisión!</string>
   <string name="retry">Intentar nuevamente</string>

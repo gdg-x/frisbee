@@ -85,7 +85,7 @@
   <string name="allow_analytics">Permita-nos coletar dados anônimos de utilização, o que nos ajudará a melhorar o aplicativo</string>
   <string name="enable_gcm">Ativar Notificação GDG de Nuvem (ser notificado sobre novos eventos)</string>
   <string name="step3_text">Só mais uma coisa antes de começarmos&#8230;</string>
-  <string name="share_on_gplus">Convidar Amigos</string>
+  <string name="invite_friends">Convidar Amigos</string>
   <string name="join_me">Junte-se a mim neste evento!</string>
   <string name="name_not_known">Nome não conhecido</string>
   <string name="originally_shared">originalmente compartilhado:</string>
@@ -156,7 +156,7 @@
   <string name="cd_arrowTagImage">Arrow Tagging Game</string>
   <string name="cd_qrCode">QR Code</string>
   <string name="invitation_title">Invite your friends to GDG app</string>
-  <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go.</string>
+  <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go. %s</string>
   <string name="invitation_error_message">App Invite was unsuccessful.</string>
   <string name="thanks_for_feedback">Thank you for your Feedback!</string>
   <string name="retry">Retry</string>

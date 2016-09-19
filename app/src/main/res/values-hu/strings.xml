@@ -85,7 +85,7 @@
   <string name="allow_analytics">Kérjük tedd lehetővé, hogy névtelen használati adatokat gyűjthessünk, amelyek segíthetnek, hogy fejlesszük az alkalmazást</string>
   <string name="enable_gcm">Engedélyezi a GDG felhő értesítéseket (értesítések az új eseményekről)</string>
   <string name="step3_text">Még egy dolog mielőtt elkezdjük&#8230;</string>
-  <string name="share_on_gplus">Barátok meghívása</string>
+  <string name="invite_friends">Barátok meghívása</string>
   <string name="join_me">Csatlakozz hozzám ezen az eseményen!</string>
   <string name="name_not_known">Neve ismeretlen</string>
   <string name="originally_shared">eredetileg megosztotta:</string>
@@ -156,7 +156,7 @@
   <string name="cd_arrowTagImage">Nyílas Jelölési Játék</string>
   <string name="cd_qrCode">QR kód</string>
   <string name="invitation_title">Hívd meg a barátaid a GDG alkalmazásba</string>
-  <string name="invitation_message">Töltsd le a GDG Android Alkalmazást, és fedezd fel a Google Fejlesztői Csoport tartalmakat amíg úton vagy.</string>
+  <string name="invitation_message">Töltsd le a GDG Android Alkalmazást, és fedezd fel a Google Fejlesztői Csoport tartalmakat amíg úton vagy. %s</string>
   <string name="invitation_error_message">Az Alkalmazás Meghívó sikertelen volt.</string>
   <string name="thanks_for_feedback">Köszönjük a visszajelzést!</string>
   <string name="retry">Újra próbál</string>

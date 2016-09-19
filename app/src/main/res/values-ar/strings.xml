@@ -102,7 +102,7 @@
   <string name="allow_analytics">تسمح لنا جمع بيانات الاستخدام المجهول الذي يساعدنا على تحسين التطبيق</string>
   <string name="enable_gcm">تمكين GDG سحابة إعلامات (تلقي إشعار عن أحداث جديدة)</string>
   <string name="step3_text">شيء واحد قبل أن نبدأ&#8230;</string>
-  <string name="share_on_gplus">أدع الأصدقاء</string>
+  <string name="invite_friends">أدع الأصدقاء</string>
   <string name="join_me">انضم الي في هذا الحدث!</string>
   <string name="name_not_known">اسم غير معروف</string>
   <string name="originally_shared">الأصل المشترك:</string>
@@ -173,7 +173,7 @@
   <string name="cd_arrowTagImage">لعبة أسهم الإشارة</string>
   <string name="cd_qrCode">رمز QR</string>
   <string name="invitation_title">أدع أصدقائك إلى تطبيق المجموعة</string>
-  <string name="invitation_message">حمّل تطبيق GDG و اكتشف محتوى مجموعة مطوري Google بينما يكون جاهزا للإطلاق.</string>
+  <string name="invitation_message">حمّل تطبيق GDG و اكتشف محتوى مجموعة مطوري Google بينما يكون جاهزا للإطلاق. %s</string>
   <string name="invitation_error_message">App Invite was unsuccessful.</string>
   <string name="thanks_for_feedback">Thank you for your Feedback!</string>
   <string name="retry">Retry</string>

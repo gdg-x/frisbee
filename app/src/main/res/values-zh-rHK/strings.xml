@@ -81,7 +81,7 @@
   <string name="allow_analytics">允許我們收集匿名使用資料以改進應用程式</string>
   <string name="enable_gcm">啟用 GDG 雲端通知 (當有新活動時會通知)</string>
   <string name="step3_text">開始之前還有一件事&#8230;</string>
-  <string name="share_on_gplus">邀請朋友</string>
+  <string name="invite_friends">邀請朋友</string>
   <string name="join_me">跟我一同參加本次活動！</string>
   <string name="name_not_known">未知的名稱</string>
   <string name="originally_shared">最先分享這則訊息:</string>
@@ -152,7 +152,7 @@
   <string name="cd_arrowTagImage">Arrow Tagging Game</string>
   <string name="cd_qrCode">QR Code</string>
   <string name="invitation_title">Invite your friends to GDG app</string>
-  <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go.</string>
+  <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go. %s</string>
   <string name="invitation_error_message">App Invite was unsuccessful.</string>
   <string name="thanks_for_feedback">Thank you for your Feedback!</string>
   <string name="retry">Retry</string>

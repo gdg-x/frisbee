@@ -89,7 +89,7 @@
   <string name="allow_analytics">Povoľe aplikácii zasielať anonýmmne dáta používania pre zlepšienie aplikácie</string>
   <string name="enable_gcm">Zapnite GDG cloudové notifikácie (dostávajte notifikácie o nových udalostiach)</string>
   <string name="step3_text">Jedna vec pred tým než začneme&#8230;</string>
-  <string name="share_on_gplus">Pozvite priateľov</string>
+  <string name="invite_friends">Pozvite priateľov</string>
   <string name="join_me">Pridajte sa na tento event</string>
   <string name="name_not_known">Meno neznáme</string>
   <string name="originally_shared">originálne zdieľané:</string>
@@ -160,7 +160,7 @@
   <string name="cd_arrowTagImage">Arrow Tagging Game</string>
   <string name="cd_qrCode">QR Code</string>
   <string name="invitation_title">Invite your friends to GDG app</string>
-  <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go.</string>
+  <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go. %s</string>
   <string name="invitation_error_message">App Invite was unsuccessful.</string>
   <string name="thanks_for_feedback">Thank you for your Feedback!</string>
   <string name="retry">Retry</string>
