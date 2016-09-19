@@ -23,11 +23,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,6 +47,7 @@ import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeriesActivity;
 import org.gdg.frisbee.android.gde.GdeActivity;
+import org.gdg.frisbee.android.invite.AppInviteLinkGenerator;
 import org.gdg.frisbee.android.pulse.PulseActivity;
 import org.gdg.frisbee.android.utils.PlusUtils;
 import org.gdg.frisbee.android.utils.PrefUtils;
@@ -63,9 +66,10 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     private static final int DRAWER_PULSE = 2;
     private static final int DRAWER_GDE = 5;
     private static final int DRAWER_SETTINGS = 100;
-    private static final int DRAWER_HELP = 101;
-    private static final int DRAWER_FEEDBACK = 102;
-    private static final int DRAWER_ABOUT = 103;
+    private static final int DRAWER_INVITE = 101;
+    private static final int DRAWER_HELP = 102;
+    private static final int DRAWER_FEEDBACK = 103;
+    private static final int DRAWER_ABOUT = 104;
 
     // Drawer Special Event Items
     public static final int DRAWER_DEVFEST = 30;
@@ -169,6 +173,8 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
         menu.add(SETTINGS_GROUP_ID, DRAWER_SETTINGS, Menu.NONE, R.string.settings)
             .setIcon(R.drawable.ic_drawer_settings);
+        menu.add(SETTINGS_GROUP_ID, DRAWER_INVITE, Menu.NONE, R.string.invite_friends)
+            .setIcon(R.drawable.ic_drawer_invite);
         menu.add(SETTINGS_GROUP_ID, DRAWER_HELP, Menu.NONE, R.string.help)
             .setIcon(R.drawable.ic_drawer_help);
         menu.add(SETTINGS_GROUP_ID, DRAWER_FEEDBACK, Menu.NONE, R.string.feedback)
