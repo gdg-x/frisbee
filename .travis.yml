@@ -1,5 +1,8 @@
 language: android
 
+jdk:
+  - oraclejdk8
+
 env:
   global:
     - secure: "OaxeZXHPbdkHymxnep/o3CQnTLhoftgdRpD6kGHSOuRrsSrldKg0Vyp1fJykmP3Z+UMSI5N9K9tpb98OgWgdiQWeiSp+Q1tT+/Mo1GhmZD7UQssoUF4cvnZByQL5qgjDxqMzDTB1TVIe6B+BJ9iNyzZZ2i433afMAplra7nTP0M="
@@ -8,12 +11,12 @@ env:
 
 android:
   components:
-  - platform-tools
-  - tools
-  - android-23
-  - build-tools-23.0.2
-  - extra-google-m2repository
-  - extra-android-m2repository
+    - tools
+    - platform-tools
+    - build-tools-24.0.2
+    - android-24
+    - extra-google-m2repository
+    - extra-android-m2repository
 
 before_install:
   # $GPG_PASS is not defined for forks, so just skip it.
