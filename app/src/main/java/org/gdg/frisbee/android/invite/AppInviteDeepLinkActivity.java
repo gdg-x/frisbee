@@ -22,8 +22,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
+import android.widget.Toast;
 
-import com.google.android.gms.appinvite.AppInvite;
 import com.google.android.gms.appinvite.AppInviteReferral;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -38,10 +38,6 @@ import timber.log.Timber;
  * displays as a Dialog over the MainActivity and does not cover the full screen.
  */
 public class AppInviteDeepLinkActivity extends GdgActivity {
-
-    // Invitation intent received while GoogleApiClient was not connected, to be reported
-    // on connection
-    private Intent mCachedInvitationIntent;
 
     @Override
     protected GoogleApiClient createGoogleApiClient() {
@@ -58,19 +54,14 @@ public class AppInviteDeepLinkActivity extends GdgActivity {
         );
     }
 
-    // [START deep_link_on_start]
     @Override
     protected void onStart() {
         super.onStart();
 
-        // If app is already installed app and launched with deep link that matches
-        // AppInviteDeepLinkActivity filter, then the referral info will be in the intent
         Intent intent = getIntent();
         processReferralIntent(intent);
     }
-    // [END deep_link_on_start]
 
-    // [START process_referral_intent]
     private void processReferralIntent(Intent intent) {
         if (!AppInviteReferral.hasReferral(intent)) {
             Timber.e("Error: AppInviteDeepLinkActivity Intent does not contain App Invite");
@@ -81,50 +72,8 @@ public class AppInviteDeepLinkActivity extends GdgActivity {
         String invitationId = AppInviteReferral.getInvitationId(intent);
         String deepLink = AppInviteReferral.getDeepLink(intent);
 
-        Timber.d("Found Referral: %s:%s", invitationId, deepLink);
-
-        if (getGoogleApiClient().isConnected()) {
-            // Notify the API of the install success and invitation conversion
-            updateInvitationStatus(intent);
-        } else {
-            // Cache the invitation ID so that we can call the AppInvite API after
-            // the GoogleAPIClient connects
-            Timber.w("Warning: GoogleAPIClient not connected, can't update invitation.");
-            mCachedInvitationIntent = intent;
-        }
-    }
-    // [END process_referral_intent]
-
-    /**
-     * Update the install and conversion status of an invite intent
-     **/
-    // [START update_invitation_status]
-    private void updateInvitationStatus(Intent intent) {
-        String invitationId = AppInviteReferral.getInvitationId(intent);
-
-        // Note: these  calls return PendingResult(s), so one could also wait to see
-        // if this succeeds instead of using fire-and-forget, as is shown here
-        if (AppInviteReferral.isOpenedFromPlayStore(intent)) {
-            AppInvite.AppInviteApi.updateInvitationOnInstall(getGoogleApiClient(), invitationId);
-        }
-
-        // If your invitation contains deep link information such as a coupon code, you may
-        // want to wait to call `convertInvitation` until the time when the user actually
-        // uses the deep link data, rather than immediately upon receipt
-        AppInvite.AppInviteApi.convertInvitation(getGoogleApiClient(), invitationId);
-    }
-    // [END update_invitation_status]
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        super.onConnected(bundle);
-
-        // We got a referral invitation ID before the GoogleApiClient was connected,
-        // so send it now
-        if (mCachedInvitationIntent != null) {
-            updateInvitationStatus(mCachedInvitationIntent);
-            mCachedInvitationIntent = null;
-        }
+        Toast.makeText(this, deepLink, Toast.LENGTH_SHORT).show();
+        // TODO: 9/19/16 handle deeplink
     }
 
     @Override

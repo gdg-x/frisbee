@@ -29,7 +29,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -232,6 +231,17 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 break;
             case DRAWER_SETTINGS:
                 navigateTo(SettingsActivity.class, data);
+                break;
+            case DRAWER_INVITE:
+                AppInviteLinkGenerator linkGenerator = new AppInviteLinkGenerator(
+                    "https://fmec6.app.goo.gl/", "https://gdg.events/");
+                String gplusId = PlusUtils.getCurrentPersonId(getGoogleApiClient());
+                String plusUrl = gplusId != null ? PlusUtils.createProfileUrl(gplusId) : null;
+                ShareCompat.IntentBuilder.from(this)
+                    .setChooserTitle(R.string.invite_friends)
+                    .setText(getString(R.string.invitation_message, linkGenerator.createAppInviteLink(plusUrl)))
+                    .setType("text/plain")
+                    .startChooser();
                 break;
             case DRAWER_HELP:
                 startActivity(Utils.createExternalIntent(this, Uri.parse(Const.URL_HELP)));

@@ -19,7 +19,6 @@ package org.gdg.frisbee.android.chapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,7 +28,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -38,12 +36,10 @@ import android.widget.TextView;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AndroidAppUri;
-import com.google.android.gms.appinvite.AppInviteReferral;
 
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.invite.AppInviteDeepLinkActivity;
 import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
@@ -131,13 +127,6 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
             }
 
             selectedChapterId = getChapterIdFromIntent(intent);
-
-            if (AppInviteReferral.hasReferral(intent)) {
-                // In this case the referral data is in the intent launching the MainActivity,
-                // which means this user already had the app installed. We do not have to
-                // register the Broadcast Receiver to listen for Play Store Install information
-                launchAppInviteActivity(intent);
-            }
         }
 
         if (selectedChapterId == null) {
@@ -345,13 +334,11 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
         if (PrefUtils.isFirstStart(this)) {
             startActivityForResult(new Intent(this, FirstStartActivity.class), REQUEST_FIRST_START_WIZARD);
         }
-        registerDeepLinkReceiver();
     }
 
     @Override
     protected void onStop() {
         recordEndPageView();
-        unregisterDeepLinkReceiver();
         super.onStop();
     }
 
@@ -390,39 +377,6 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
             selectedChapterId = newChapterId;
             mViewPagerAdapter.notifyDataSetChanged(true /* forceUpdate */);
         }
-    }
-
-    private void registerDeepLinkReceiver() {
-        // Create local Broadcast receiver that starts AppInviteDeepLinkActivity when a deep link
-        // is found
-        mDeepLinkReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (AppInviteReferral.hasReferral(intent)) {
-                    launchAppInviteActivity(intent);
-                }
-            }
-        };
-
-        IntentFilter intentFilter = new IntentFilter(getString(R.string.action_deep_link));
-        LocalBroadcastManager.getInstance(this).registerReceiver(
-            mDeepLinkReceiver, intentFilter
-        );
-    }
-
-    private void unregisterDeepLinkReceiver() {
-        if (mDeepLinkReceiver != null) {
-            LocalBroadcastManager.getInstance(this).unregisterReceiver(mDeepLinkReceiver);
-        }
-    }
-
-    /**
-     * Launch AppInviteActivity with an intent containing App Invite information
-     */
-    void launchAppInviteActivity(Intent intent) {
-        Timber.d("launchAppInviteActivity: %s", intent);
-        Intent newIntent = new Intent(intent).setClass(this, AppInviteDeepLinkActivity.class);
-        startActivity(newIntent);
     }
 
     @Override

@@ -3,6 +3,7 @@ package org.gdg.frisbee.android.app;
 import android.content.Context;
 
 import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appinvite.AppInvite;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 
@@ -22,7 +23,8 @@ public final class GoogleApiClientFactory {
 
     private static GoogleApiClient createClient(Context context, boolean withSignIn) {
         GoogleApiClient.Builder builder = new GoogleApiClient.Builder(context)
-            .addApi(AppIndex.API);
+            .addApi(AppIndex.API)
+            .addApi(AppInvite.API);
 
         if (withSignIn) {
             builder.addApi(Plus.API).addScope(Plus.SCOPE_PLUS_PROFILE);
