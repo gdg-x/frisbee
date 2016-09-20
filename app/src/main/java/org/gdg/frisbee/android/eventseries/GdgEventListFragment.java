@@ -3,14 +3,12 @@ package org.gdg.frisbee.android.eventseries;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.util.Pair;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.api.model.PagedList;
-import org.gdg.frisbee.android.api.model.SimpleEvent;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.Utils;
@@ -18,8 +16,6 @@ import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public class GdgEventListFragment extends EventListFragment {
