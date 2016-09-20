@@ -49,8 +49,8 @@ public class GdgListFragment extends BaseFragment {
     private final AbsListView.OnScrollListener mOnScrollListener =
         new EndlessScrollListener() {
             @Override
-            public boolean onLoadMore(int page, int totalItemsCount) {
-                return onListLoadMore(page, totalItemsCount);
+            public boolean onLoadMore(int page) {
+                return onListLoadMore(page);
             }
         };
     ListAdapter mAdapter;
@@ -129,11 +129,10 @@ public class GdgListFragment extends BaseFragment {
      * This method will be called when new data needs to be
      * appended to the List. Subclasses should override.
      *
-     * @param page              The ListView where the click happened
-     * @param totalItemsCount   The view that was clicked within the ListView.
+     * @param page              The page that should be loaded
      * @return true if more data is being loaded; false if there is no more
      */
-    protected boolean onListLoadMore(int page, int totalItemsCount) {
+    protected boolean onListLoadMore(int page) {
         return false;
     }
 

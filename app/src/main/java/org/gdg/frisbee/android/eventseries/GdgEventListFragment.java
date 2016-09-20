@@ -53,7 +53,7 @@ public class GdgEventListFragment extends EventListFragment {
         setIsLoading(true);
 
         if (Utils.isOnline(getActivity())) {
-            onListLoadMore(1, 0);
+            onListLoadMore(1);
         } else {
             App.getInstance().getModelCache().getAsync(mCacheKey, false, new ModelCache.CacheListener() {
                 @Override
@@ -111,7 +111,7 @@ public class GdgEventListFragment extends EventListFragment {
     }
 
     @Override
-    protected boolean onListLoadMore(int page, int totalItemsCount) {
+    protected boolean onListLoadMore(int page) {
         App.getInstance().getGdgXHub().getChapterAllEventList(
             mPlusId, page).
             enqueue(new Callback<PagedList<Event>>() {
