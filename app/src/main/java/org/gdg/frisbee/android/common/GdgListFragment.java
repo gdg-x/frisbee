@@ -50,7 +50,7 @@ public class GdgListFragment extends BaseFragment {
         new EndlessScrollListener() {
             @Override
             public boolean onLoadMore(int page) {
-                return onListLoadMore(page);
+                return loadMoreEvents(page);
             }
         };
     ListAdapter mAdapter;
@@ -132,7 +132,7 @@ public class GdgListFragment extends BaseFragment {
      * @param page              The page that should be loaded
      * @return true if more data is being loaded; false if there is no more
      */
-    protected boolean onListLoadMore(int page) {
+    protected boolean loadMoreEvents(int page) {
         return false;
     }
 
