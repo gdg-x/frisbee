@@ -89,31 +89,6 @@ public class GdgEventListFragment extends EventListFragment {
         loadMoreEvents(1);
     }
 
-    /**
-     * Split a events list into Upcoming / Past events
-     *
-     * @param events
-     *      The events list that needs to be sorted
-     * @return
-     *      A pair containting the split list into Upcoming / Past events
-     */
-    private Pair<List<SimpleEvent>, List<SimpleEvent>> splitEventsList(Collection<? extends SimpleEvent> events) {
-        List<SimpleEvent> upcoming = new ArrayList<>();
-        List<SimpleEvent> past = new ArrayList<>();
-
-        DateTime now = DateTime.now();
-
-        for (SimpleEvent event : events) {
-            if (event.getStart().isBefore(now)) {
-                past.add(event);
-            } else {
-                upcoming.add(event);
-            }
-        }
-        Collections.reverse(past);
-        return new Pair<>(upcoming, past);
-    }
-
     @Override
     protected boolean loadMoreEvents(int page) {
         App.getInstance().getGdgXHub().getChapterAllEventList(
