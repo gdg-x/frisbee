@@ -38,8 +38,6 @@ public class Const {
     public static final String EXTRA_PLUS_ID = "plus_id";
     public static final String EXTRA_CHAPTER_ID = "org.gdg.frisbee.CHAPTER";
 
-    //Order
-
     private Const() {
     }
 }
