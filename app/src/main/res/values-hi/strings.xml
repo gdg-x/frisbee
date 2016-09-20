@@ -39,7 +39,6 @@
   <string name="or">या</string>
   <string name="skip">साईन इन छोड़ें</string>
   <string name="youtube_init_failed">यूटूब शुरू नहीं किया जा सका। </string>
-  <string name="achievements">उपलब्धियां</string>
   <string name="settings">व्यवस्था</string>
   <string name="about">एप्प के बारे में</string>
   <plurals name="seconds_ago">
@@ -82,7 +81,6 @@
   <string name="google_signed_in">गूगल+ जुड़ा हुआ है</string>
   <string name="google_signed_in_on">आप इस समय गूगल+ से जुड़े हुए हैं </string>
   <string name="google_signed_in_off">आप जुड़े हुए नहीं हैं </string>
-  <string name="achievements_need_signin">उपलब्धियां खोलने के लिए आपको किसी अकाउंट से जुड़ना होगा</string>
   <string name="done">कर लिया गया</string>
   <string name="allow_analytics">हमें गुमनाम रूप से प्रयोग की जानकारी एकत्र करने की अनुमति दें</string>
   <string name="enable_gcm">जी डी जी Cloud सूचनाएँ शुरू करें  (नए कार्यक्रमों के बारे में जानें)</string>
@@ -110,18 +108,6 @@
   <string name="gde_who_desc">Google Developer Experts (GDEs) are experts in one or more Google developer technologies. The GDE program recognizes the exemplary work done by these rock stars for the Google Developers worldwide by inviting them to be part of the growing GDE community. GDEs are gurus, mentors and friends; they are developers just like you.\n\nGoogle Developers Experts speak in local and global events, have a strong online presence and an excellent technical background in their field. These independent developers bring their real-world experience and knowledge working with Google technologies to developer communities worldwide.</string>
   <string name="gde_what_title">What kind of activities do GDEs do?</string>
   <string name="gde_what_desc">GDEs write code and launch apps; they open source as much as possible of the code they write to benefit other developers. They have written and continue to write blog posts, articles, documentation, books, etc. about development on the Google platform.\n\nThey also translate existing documentation into other languages to benefit local developers. GDEs have high reps on forums like Stack Overflow and are top contributors on product mailing lists.\n\nThey speak at developer conferences, organize and lead GDGs, and conduct hackathons. GDEs can be nominated for the program for doing one or more types of activities for a product. Once they are accepted as a GDE, they are expected to continue contributing in any of the ways listed above.</string>
-  <string name="arrow_oops">उह ओह, कुछ गलत हुआ है। कृपया पुन: प्रयास करें।</string>
-  <string name="arrow_stale">उह ओह, यह कोड समाप्त हो गया है । पुनः प्रयास करें।</string>
-  <string name="arrow_scan">Ready to Scan!\nGo find a GDG Organizer\nand ask nicely if you may \"tag\" him/her</string>
-  <string name="arrow_organizer">Hey, it seems you are a GDG Organizer. Switch to Send Mode here if you want to allow someone to \"tag\" you.</string>
-  <string name="arrow_send_mode">Send Mode</string>
-  <string name="arrow_tag_here">Touch NFC phones and tap to fire off the arrow!</string>
-  <string name="arrow_back_receive">Back to Tag Mode</string>
-  <string name="arrow_already_tagged">Shoot! You already tagged this Organizer!</string>
-  <string name="arrow">Arrow</string>
-  <string name="arrow_need_games">You need to be logged in to play GDG Arrow</string>
-  <string name="arrow_selfie">तुम सच में अपने आप को टैग कर  नहीं सकते। खेद है ;)</string>
-  <string name="arrow_leaderboard">सर्वश्रेष्ठ</string>
   <string name="no_nfc_use_qr_scanner">QR स्कैनर का उपयोग करें!</string>
   <string name="event_description">विवरण</string>
   <string name="event">कार्यक्रम</string>
@@ -171,6 +157,9 @@
   <string name="cd_qrCode">QR कोड</string>
   <string name="invitation_title">Invite your friends to GDG app</string>
   <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go.</string>
+  <string name="invitation_error_message">App Invite was unsuccessful.</string>
   <string name="thanks_for_feedback">आपकी प्रतिपुष्टि के लिए धन्यवाद।</string>
   <string name="retry">Retry</string>
+  <string name="title_event_series_greetings">New events coming up!</string>
+  <string name="event_series_greetings">Learn more about %1$s and see events around the world!</string>
 </resources>

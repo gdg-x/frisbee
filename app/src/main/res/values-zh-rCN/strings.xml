@@ -39,7 +39,6 @@
   <string name="or">或者</string>
   <string name="skip">跳过登录</string>
   <string name="youtube_init_failed">YouTube 播放器无法初始化</string>
-  <string name="achievements">成就</string>
   <string name="settings">设置</string>
   <string name="about">关于</string>
   <plurals name="seconds_ago">
@@ -78,7 +77,6 @@
   <string name="google_signed_in">登录 Google+</string>
   <string name="google_signed_in_on">您已经登录 Google+</string>
   <string name="google_signed_in_off">您尚未登录</string>
-  <string name="achievements_need_signin">您需要登录才能解除成就</string>
   <string name="done">完成</string>
   <string name="allow_analytics">允许我们匿名收集信息用来改进程序</string>
   <string name="enable_gcm">启用GDG 云端通知(当有新活动时会通知)</string>
@@ -106,18 +104,6 @@
   <string name="gde_who_desc">Google Developer Experts (GDEs) are experts in one or more Google developer technologies. The GDE program recognizes the exemplary work done by these rock stars for the Google Developers worldwide by inviting them to be part of the growing GDE community. GDEs are gurus, mentors and friends; they are developers just like you.\n\nGoogle Developers Experts speak in local and global events, have a strong online presence and an excellent technical background in their field. These independent developers bring their real-world experience and knowledge working with Google technologies to developer communities worldwide.</string>
   <string name="gde_what_title">GDE 们做哪些事情？</string>
   <string name="gde_what_desc">GDEs write code and launch apps; they open source as much as possible of the code they write to benefit other developers. They have written and continue to write blog posts, articles, documentation, books, etc. about development on the Google platform.\n\nThey also translate existing documentation into other languages to benefit local developers. GDEs have high reps on forums like Stack Overflow and are top contributors on product mailing lists.\n\nThey speak at developer conferences, organize and lead GDGs, and conduct hackathons. GDEs can be nominated for the program for doing one or more types of activities for a product. Once they are accepted as a GDE, they are expected to continue contributing in any of the ways listed above.</string>
-  <string name="arrow_oops">啊哦，哪里出错了。请重试。</string>
-  <string name="arrow_stale">啊哦，代码过期。再试一次。</string>
-  <string name="arrow_scan">准备扫描 ！ \n去找一位 GDG 组织者\n并客气地问是否可以\"标记\"他/她</string>
-  <string name="arrow_organizer">嘿，看来你是一个 GDG 组织者。如果你想让别人来\"标记\"你，在这里切换到发送模式。</string>
-  <string name="arrow_send_mode">发送模式</string>
-  <string name="arrow_tag_here">把 NFC 手机贴在一起，然后触摸屏幕，射箭！</string>
-  <string name="arrow_back_receive">返回标记模式</string>
-  <string name="arrow_already_tagged">靠！你已经标记过该组织者了！</string>
-  <string name="arrow">Arrow</string>
-  <string name="arrow_need_games">您需要登录才能玩 GDG 射箭</string>
-  <string name="arrow_selfie">你真的不能标记自己。抱歉 ;)</string>
-  <string name="arrow_leaderboard">射箭排行</string>
   <string name="no_nfc_use_qr_scanner">没有检测到的 NFC, 请扫二维码！</string>
   <string name="event_description">说明</string>
   <string name="event">活动</string>
@@ -167,6 +153,9 @@
   <string name="cd_qrCode">QR Code</string>
   <string name="invitation_title">Invite your friends to GDG app</string>
   <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go.</string>
+  <string name="invitation_error_message">App Invite was unsuccessful.</string>
   <string name="thanks_for_feedback">Thank you for your Feedback!</string>
   <string name="retry">Retry</string>
+  <string name="title_event_series_greetings">New events coming up!</string>
+  <string name="event_series_greetings">Learn more about %1$s and see events around the world!</string>
 </resources>

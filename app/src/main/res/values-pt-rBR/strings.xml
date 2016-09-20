@@ -39,7 +39,6 @@
   <string name="or">ou</string>
   <string name="skip">Pular Sign-in</string>
   <string name="youtube_init_failed">O player do YouTube não pôde ser inicializado.</string>
-  <string name="achievements">Conquistas</string>
   <string name="settings">Configurações</string>
   <string name="about">Sobre</string>
   <plurals name="seconds_ago">
@@ -82,7 +81,6 @@
   <string name="google_signed_in">Conectado ao Google+</string>
   <string name="google_signed_in_on">Você está conectado ao Google+</string>
   <string name="google_signed_in_off">Você não está conectado</string>
-  <string name="achievements_need_signin">Você precisa estar conectado para desbloquear as conquistas</string>
   <string name="done">Feito</string>
   <string name="allow_analytics">Permita-nos coletar dados anônimos de utilização, o que nos ajudará a melhorar o aplicativo</string>
   <string name="enable_gcm">Ativar Notificação GDG de Nuvem (ser notificado sobre novos eventos)</string>
@@ -110,18 +108,6 @@
   <string name="gde_who_desc">Google Developer Experts (GDEs) são especialistas em uma ou mais tecnologias de desenvolvedor do Google. O programa GDE reconhece o trabalho exemplar feito por estas estrelas do rock para os desenvolvedores do Google em todo o mundo convidando-os a fazer parte da crescente comunidade GDE. GDEs são gurus, mestres e amigos; eles são os desenvolvedores como você.\n\Google Developer Expertss falam em eventos locais e globais, têm uma forte presença online e um excelente background técnico em seus campo de atuação. Esses desenvolvedores independentes trazem sua experiência do mundo real e conhecimento trabalhando com tecnologias Google para comunidades de desenvolvedores em todo o mundo.</string>
   <string name="gde_what_title">Que tipo de actividades fazem os GDEs?</string>
   <string name="gde_what_desc">GDEs escrevem código e lançar apps; eles abrem o máximo possível do código que eles escrevem para beneficiar outros desenvolvedores de fonte. Eles escreveram e continuam a escrever blog posts, documentação, artigos, livros, etc sobre desenvolvimento na platform.\n\Eles também traduzem documentação existente em outras línguas para beneficiar desenvolvedores locais. GDEs têm altos representantes em fóruns como Stack Overflow e alta contribuidção em listas de discussão de novos produtos.\n\Eles falam em conferências de desenvolvedores, organizam e conduzem GDGs e conduta hackathons. GDEs podem ser nomeados para o programa para fazer um ou mais tipos de atividades para um produto. Uma vez que eles são aceitos como um GDE, eles são esperados para continuar contribuindo em qualquer das formas listadas acima.</string>
-  <string name="arrow_oops">Uh, algo deu errado. Por favor, tente novamente.</string>
-  <string name="arrow_stale">Uh, aquele código expirou. Tente novamente.</string>
-  <string name="arrow_scan">Pronto para escanear!\nVá encontrar um organizador GDG\nae pedir educadamente se você pode \"marcar\" ele/ela</string>
-  <string name="arrow_organizer">Ei, parece que você é um organizador GDG. Alterne para o \"Modo de Envio\" aqui se você quiser permitir que alguém marque você.</string>
-  <string name="arrow_send_mode">Modo de envio</string>
-  <string name="arrow_tag_here">Encoste os telefones NFC e toque para disparar a flecha!</string>
-  <string name="arrow_back_receive">Voltar para o modo de marcação</string>
-  <string name="arrow_already_tagged">Ah não! Você já marcou este organizador!</string>
-  <string name="arrow">Arrow</string>
-  <string name="arrow_need_games">Você precisa estar logado para jogar o GDG Arrow</string>
-  <string name="arrow_selfie">Você realmente não pode marcar você mesmo. Desculpe ;)</string>
-  <string name="arrow_leaderboard">O melhor do jogo GDG Arrow</string>
   <string name="no_nfc_use_qr_scanner">NFC não detectado, use o QR scanner!</string>
   <string name="event_description">Descrição</string>
   <string name="event">Evento</string>
@@ -171,6 +157,9 @@
   <string name="cd_qrCode">QR Code</string>
   <string name="invitation_title">Invite your friends to GDG app</string>
   <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go.</string>
+  <string name="invitation_error_message">App Invite was unsuccessful.</string>
   <string name="thanks_for_feedback">Thank you for your Feedback!</string>
   <string name="retry">Retry</string>
+  <string name="title_event_series_greetings">New events coming up!</string>
+  <string name="event_series_greetings">Learn more about %1$s and see events around the world!</string>
 </resources>

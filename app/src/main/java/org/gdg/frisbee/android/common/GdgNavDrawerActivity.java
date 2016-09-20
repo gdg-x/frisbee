@@ -30,13 +30,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
 import android.widget.ImageView;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.games.Games;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -45,7 +40,6 @@ import org.gdg.frisbee.android.activity.SettingsActivity;
 import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.plus.Person;
 import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.arrow.ArrowActivity;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
@@ -58,20 +52,34 @@ import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.BitmapBorderTransformation;
 import org.joda.time.DateTime;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public abstract class GdgNavDrawerActivity extends GdgActivity {
 
+    private static final int DRAWER_HOME = 0;
+    private static final int DRAWER_PULSE = 2;
+    private static final int DRAWER_GDE = 5;
+    private static final int DRAWER_SETTINGS = 100;
+    private static final int DRAWER_HELP = 101;
+    private static final int DRAWER_FEEDBACK = 102;
+    private static final int DRAWER_ABOUT = 103;
+
+    // Drawer Special Event Items
+    public static final int DRAWER_DEVFEST = 30;
+    public static final int DRAWER_WTM = 31;
+    public static final int DRAWER_STUDY_JAM = 32;
+    public static final int DRAWER_IO_EXTENDED = 33;
+    public static final int DRAWER_GCP_NEXT = 34;
+
     private static final String EXTRA_SELECTED_DRAWER_ITEM_ID = "SELECTED_DRAWER_ITEM_ID";
     private static final String DRAWER_ITEM_ID_TO_NAVIGATE_AFTER_SIGN_IN = "DRAWER_ITEM_ID_TO_NAVIGATE_AFTER_SIGN_IN";
 
     private static final int INVALID_ITEM_ID = -1;
     private static final int GROUP_ID = 1;
-    private static final int GAMES_GROUP_ID = 2;
-    private static final int SETTINGS_GROUP_ID = 3;
+    private static final int SETTINGS_GROUP_ID = 2;
 
     protected String mStoredHomeChapterId;
     @BindView(R.id.drawer)
@@ -144,12 +152,12 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     private void setupDrawerContent(NavigationView navigationView) {
 
         Menu menu = navigationView.getMenu();
-        menu.add(GROUP_ID, Const.DRAWER_HOME, Menu.NONE, R.string.home_gdg).setIcon(R.drawable.ic_drawer_home_gdg);
-        menu.add(GROUP_ID, Const.DRAWER_GDE, Menu.NONE, R.string.gde).setIcon(R.drawable.ic_drawer_gde);
-        menu.add(GROUP_ID, Const.DRAWER_PULSE, Menu.NONE, R.string.pulse).setIcon(R.drawable.ic_drawer_pulse);
+        menu.add(GROUP_ID, DRAWER_HOME, Menu.NONE, R.string.home_gdg).setIcon(R.drawable.ic_drawer_home_gdg);
+        menu.add(GROUP_ID, DRAWER_GDE, Menu.NONE, R.string.gde).setIcon(R.drawable.ic_drawer_gde);
+        menu.add(GROUP_ID, DRAWER_PULSE, Menu.NONE, R.string.pulse).setIcon(R.drawable.ic_drawer_pulse);
 
         //adding special events in navigation drawer
-        final ArrayList<TaggedEventSeries> currentEventSeries =
+        final List<TaggedEventSeries> currentEventSeries =
             App.getInstance().currentTaggedEventSeries();
         for (TaggedEventSeries taggedEventSeries : currentEventSeries) {
             menu.add(GROUP_ID,
@@ -159,29 +167,18 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 .setIcon(taggedEventSeries.getDrawerIconResId());
         }
 
-        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)
-            == ConnectionResult.SUCCESS) {
-            SubMenu subMenu =
-                menu.addSubMenu(GAMES_GROUP_ID, Const.DRAWER_SUBMENU_GAMES, Menu.NONE, R.string.drawer_subheader_games);
-            subMenu.add(GAMES_GROUP_ID, Const.DRAWER_ACHIEVEMENTS, Menu.NONE, R.string.achievements)
-                .setIcon(R.drawable.ic_drawer_achievements);
-            subMenu.add(GAMES_GROUP_ID, Const.DRAWER_ARROW, Menu.NONE, R.string.arrow)
-                .setIcon(R.drawable.ic_drawer_arrow)
-                .setCheckable(true);
-        }
-
-        menu.add(SETTINGS_GROUP_ID, Const.DRAWER_SETTINGS, Menu.NONE, R.string.settings)
+        menu.add(SETTINGS_GROUP_ID, DRAWER_SETTINGS, Menu.NONE, R.string.settings)
             .setIcon(R.drawable.ic_drawer_settings);
-        menu.add(SETTINGS_GROUP_ID, Const.DRAWER_HELP, Menu.NONE, R.string.help)
+        menu.add(SETTINGS_GROUP_ID, DRAWER_HELP, Menu.NONE, R.string.help)
             .setIcon(R.drawable.ic_drawer_help);
-        menu.add(SETTINGS_GROUP_ID, Const.DRAWER_FEEDBACK, Menu.NONE, R.string.feedback)
+        menu.add(SETTINGS_GROUP_ID, DRAWER_FEEDBACK, Menu.NONE, R.string.feedback)
             .setIcon(R.drawable.ic_drawer_feedback);
-        menu.add(SETTINGS_GROUP_ID, Const.DRAWER_ABOUT, Menu.NONE, R.string.about)
+        menu.add(SETTINGS_GROUP_ID, DRAWER_ABOUT, Menu.NONE, R.string.about)
             .setIcon(R.drawable.ic_drawer_about);
 
         menu.setGroupCheckable(GROUP_ID, true, true);
 
-        final int selectedDrawerItemId = getIntent().getIntExtra(EXTRA_SELECTED_DRAWER_ITEM_ID, Const.DRAWER_HOME);
+        final int selectedDrawerItemId = getIntent().getIntExtra(EXTRA_SELECTED_DRAWER_ITEM_ID, DRAWER_HOME);
         final MenuItem selectedItem = menu.findItem(selectedDrawerItemId);
         if (selectedItem != null) {
             selectedItem.setChecked(true);
@@ -211,48 +208,32 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         data.putInt(EXTRA_SELECTED_DRAWER_ITEM_ID, itemId);
 
         switch (itemId) {
-            case Const.DRAWER_ACHIEVEMENTS:
-                if (PrefUtils.isSignedIn(this) && getGoogleApiClient().isConnected()) {
-                    startActivityForResult(Games.Achievements.getAchievementsIntent(getGoogleApiClient()), 0);
-                } else {
-                    drawerItemIdToNavigateAfterSignIn = itemId;
-                    showLoginErrorDialog(R.string.achievements_need_signin);
-                }
-                break;
-            case Const.DRAWER_HOME:
+            case DRAWER_HOME:
                 navigateTo(MainActivity.class, data);
                 break;
-            case Const.DRAWER_GDE:
+            case DRAWER_GDE:
                 navigateTo(GdeActivity.class, data);
                 break;
-            case Const.DRAWER_DEVFEST:
-            case Const.DRAWER_WTM:
-            case Const.DRAWER_STUDY_JAM:
-            case Const.DRAWER_IO_EXTENDED:
-            case Const.DRAWER_GCP_NEXT:
+            case DRAWER_DEVFEST:
+            case DRAWER_WTM:
+            case DRAWER_STUDY_JAM:
+            case DRAWER_IO_EXTENDED:
+            case DRAWER_GCP_NEXT:
                 onDrawerSpecialItemClick(itemId, data);
                 break;
-            case Const.DRAWER_PULSE:
+            case DRAWER_PULSE:
                 navigateTo(PulseActivity.class, data);
                 break;
-            case Const.DRAWER_ARROW:
-                if (PrefUtils.isSignedIn(this) && getGoogleApiClient().isConnected()) {
-                    navigateTo(ArrowActivity.class, data);
-                } else {
-                    drawerItemIdToNavigateAfterSignIn = itemId;
-                    showLoginErrorDialog(R.string.arrow_need_games);
-                }
-                break;
-            case Const.DRAWER_SETTINGS:
+            case DRAWER_SETTINGS:
                 navigateTo(SettingsActivity.class, data);
                 break;
-            case Const.DRAWER_HELP:
+            case DRAWER_HELP:
                 startActivity(Utils.createExternalIntent(this, Uri.parse(Const.URL_HELP)));
                 break;
-            case Const.DRAWER_FEEDBACK:
+            case DRAWER_FEEDBACK:
                 showFeedbackDialog();
                 break;
-            case Const.DRAWER_ABOUT:
+            case DRAWER_ABOUT:
                 navigateTo(AboutActivity.class, data);
                 break;
         }
@@ -291,7 +272,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             }
         }
 
-        final ArrayList<TaggedEventSeries> currentEventSeries =
+        final List<TaggedEventSeries> currentEventSeries =
             App.getInstance().currentTaggedEventSeries();
         for (TaggedEventSeries taggedEventSeries : currentEventSeries) {
             if (taggedEventSeries.getDrawerId() == itemId) {
@@ -400,7 +381,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     private void maybeUpdateChapterImage() {
         final String homeChapterId = getCurrentHomeChapterId();
         if (isHomeChapterOutdated(homeChapterId)) {
-            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PERSON + homeChapterId,
+            App.getInstance().getModelCache().getAsync(ModelCache.KEY_PERSON + homeChapterId,
                 true, new ModelCache.CacheListener() {
                     @Override
                     public void onGet(Object person) {

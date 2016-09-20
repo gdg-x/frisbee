@@ -6,7 +6,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 
-import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Gde;
@@ -19,6 +18,8 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import butterknife.BindView;
 
@@ -42,7 +43,7 @@ public class GdeActivity extends GdgNavDrawerActivity implements ViewPager.OnPag
         Toolbar toolbar = getActionBarToolbar();
         toolbar.setTitle(R.string.gde);
 
-        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_GDE_LIST, new ModelCache.CacheListener() {
+        App.getInstance().getModelCache().getAsync(ModelCache.KEY_GDE_LIST, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 GdeList directory = (GdeList) item;
@@ -61,7 +62,7 @@ public class GdeActivity extends GdgNavDrawerActivity implements ViewPager.OnPag
         App.getInstance().getGdeDirectory().getDirectory().enqueue(new Callback<GdeList>() {
             @Override
             public void success(final GdeList directory) {
-                App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_GDE_LIST,
+                App.getInstance().getModelCache().putAsync(ModelCache.KEY_GDE_LIST,
                     directory,
                     DateTime.now().plusDays(4),
                     new ModelCache.CachePutListener() {
@@ -85,8 +86,8 @@ public class GdeActivity extends GdgNavDrawerActivity implements ViewPager.OnPag
     }
 
     private void setupGdeViewPager(GdeList directory) {
-        // TODO use sorted HashMap to sort the categories.
-        HashMap<String, GdeList> gdeMap = extractCategoriesFromGdeList(directory);
+        SortedMap<String, GdeList> gdeMap = new TreeMap<>();
+        gdeMap.putAll(extractCategoriesFromGdeList(directory));
         List<GdeCategory> gdeCategoryList = convertCategoryMapToList(gdeMap);
 
         mViewPagerAdapter = new GdeCategoryPagerAdapter(
@@ -97,8 +98,6 @@ public class GdeActivity extends GdgNavDrawerActivity implements ViewPager.OnPag
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.addOnPageChangeListener(this);
         mTabLayout.setupWithViewPager(mViewPager);
-
-        getAchievementActionHandler().handleLookingForExperts();
     }
 
     private HashMap<String, GdeList> extractCategoriesFromGdeList(GdeList directory) {
@@ -120,7 +119,7 @@ public class GdeActivity extends GdgNavDrawerActivity implements ViewPager.OnPag
         return gdeMap;
     }
 
-    private List<GdeCategory> convertCategoryMapToList(HashMap<String, GdeList> gdeMap) {
+    private List<GdeCategory> convertCategoryMapToList(SortedMap<String, GdeList> gdeMap) {
         List<GdeCategory> gdeCategoryList = new ArrayList<>();
         for (String category : gdeMap.keySet()) {
             GdeList gdeList = gdeMap.get(category);

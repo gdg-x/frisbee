@@ -36,10 +36,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.Plus;
 
-import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.SettingsActivity;
 import org.gdg.frisbee.android.api.model.Chapter;
@@ -119,7 +117,7 @@ public class SettingsFragment extends PreferenceFragment {
         if (prefHomeGdgList != null) {
             prefHomeGdgList.setEnabled(false);
 
-            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, false,
+            App.getInstance().getModelCache().getAsync(ModelCache.KEY_CHAPTER_LIST_HUB, false,
                 new ModelCache.CacheListener() {
                     @Override
                     public void onGet(Object item) {
@@ -164,7 +162,6 @@ public class SettingsFragment extends PreferenceFragment {
                             createConnectedGoogleApiClient();
                         } else {
                             if (mGoogleApiClient.isConnected()) {
-                                Games.signOut(mGoogleApiClient);
                                 Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
                                 disconnectGoogleApiClient();
                             }
