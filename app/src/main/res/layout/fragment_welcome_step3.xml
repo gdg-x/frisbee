@@ -86,11 +86,4 @@
       android:layout_marginTop="25dip"
       android:text="@string/done" />
   </LinearLayout>
-
-  <ImageView
-    android:id="@+id/imageView"
-    android:layout_width="match_parent"
-    android:layout_height="15dip"
-    android:background="@drawable/googly_bar"
-    android:contentDescription="@null" />
 </LinearLayout>

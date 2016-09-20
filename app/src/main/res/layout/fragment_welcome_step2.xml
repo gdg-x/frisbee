@@ -56,11 +56,4 @@
       android:layout_height="wrap_content"
       android:text="@string/skip" />
   </LinearLayout>
-
-  <ImageView
-    android:id="@+id/imageView"
-    android:layout_width="match_parent"
-    android:layout_height="15dip"
-    android:background="@drawable/googly_bar"
-    android:contentDescription="@null" />
 </LinearLayout>
