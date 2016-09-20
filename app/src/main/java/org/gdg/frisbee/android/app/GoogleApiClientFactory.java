@@ -3,7 +3,8 @@ package org.gdg.frisbee.android.app;
 import android.content.Context;
 
 import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appinvite.AppInvite;
+import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.api.Api.ApiOptions.NotRequiredOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 
@@ -14,23 +15,28 @@ public final class GoogleApiClientFactory {
     }
 
     public static GoogleApiClient createWith(Context context) {
-        return createClient(context, PrefUtils.isSignedIn(context));
+        return createBuilder(context, PrefUtils.isSignedIn(context)).build();
+    }
+
+    public static GoogleApiClient createWithApi(Context context, Api<? extends NotRequiredOptions> api) {
+        return createBuilder(context, PrefUtils.isSignedIn(context))
+            .addApi(api)
+            .build();
     }
 
     public static GoogleApiClient createWithoutSignIn(Context context) {
-        return createClient(context, false);
+        return createBuilder(context, false).build();
     }
 
-    private static GoogleApiClient createClient(Context context, boolean withSignIn) {
+    private static GoogleApiClient.Builder createBuilder(Context context, boolean withSignIn) {
         GoogleApiClient.Builder builder = new GoogleApiClient.Builder(context)
-            .addApi(AppIndex.API)
-            .addApi(AppInvite.API);
+            .addApi(AppIndex.API);
 
         if (withSignIn) {
             builder.addApi(Plus.API).addScope(Plus.SCOPE_PLUS_PROFILE);
         }
 
-        return builder.build();
+        return builder;
     }
 
 }

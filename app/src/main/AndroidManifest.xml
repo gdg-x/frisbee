@@ -119,6 +119,16 @@
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
+
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data
+          android:scheme="https"
+          android:host="gdg.events"
+          android:pathPrefix="/invite" />
+      </intent-filter>
     </activity>
     <activity
       android:name=".pulse.PulseActivity"
@@ -152,19 +162,7 @@
     </activity>
     <activity
       android:name=".invite.AppInviteDeepLinkActivity"
-      android:theme="@style/Theme.GDG.Panel">
-
-      <intent-filter>
-        <action android:name="android.intent.action.VIEW" />
-
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.BROWSABLE" />
-
-        <data android:scheme="https"
-          android:host="gdg.events"
-          android:pathPrefix="/invite"/>
-      </intent-filter>
-    </activity>
+      android:theme="@style/Theme.GDG.Panel"/>
     <activity
       android:name=".activity.SearchActivity"
       android:launchMode="singleTop">

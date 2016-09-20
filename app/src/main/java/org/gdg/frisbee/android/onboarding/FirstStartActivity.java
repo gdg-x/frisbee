@@ -27,12 +27,15 @@ import android.widget.FrameLayout;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.appinvite.AppInvite;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.app.GoogleApiClientFactory;
 import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
@@ -57,6 +60,11 @@ public class FirstStartActivity extends GdgActivity implements
 
     private FirstStartPageAdapter mViewPagerAdapter;
     private boolean signInRequested;
+
+    @Override
+    protected GoogleApiClient createGoogleApiClient() {
+        return GoogleApiClientFactory.createWithApi(this, AppInvite.API);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
