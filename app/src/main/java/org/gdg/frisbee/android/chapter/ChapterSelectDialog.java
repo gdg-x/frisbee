@@ -17,7 +17,6 @@ import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
@@ -74,7 +73,7 @@ public class ChapterSelectDialog extends AppCompatDialogFragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, false,
+        App.getInstance().getModelCache().getAsync(ModelCache.KEY_CHAPTER_LIST_HUB, false,
             new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {

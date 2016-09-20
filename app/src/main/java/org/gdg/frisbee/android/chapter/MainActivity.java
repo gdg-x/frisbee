@@ -148,7 +148,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
             initUI();
         } else {
             App.getInstance().getModelCache().getAsync(
-                Const.CACHE_KEY_CHAPTER_LIST_HUB,
+                ModelCache.KEY_CHAPTER_LIST_HUB,
                 new ModelCache.CacheListener() {
                     @Override
                     public void onGet(Object item) {
@@ -253,7 +253,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
             public void success(final Directory directory) {
 
                 App.getInstance().getModelCache().putAsync(
-                    Const.CACHE_KEY_CHAPTER_LIST_HUB,
+                    ModelCache.KEY_CHAPTER_LIST_HUB,
                     directory,
                     DateTime.now().plusDays(1),
                     new ModelCache.CachePutListener() {

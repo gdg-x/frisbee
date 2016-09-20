@@ -87,7 +87,7 @@ public class PulseFragment extends GdgListFragment {
         final int[] positions = savedInstanceState != null
             ? savedInstanceState.getIntArray(INSTANCE_STATE_POSITIONS) : null;
 
-        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
+        App.getInstance().getModelCache().getAsync(ModelCache.KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 createAdapter(positions, (Directory) item);
@@ -105,7 +105,7 @@ public class PulseFragment extends GdgListFragment {
     public void createAdapter(int[] positions, Directory directory) {
         mAdapter = new PulseAdapter(getActivity(), positions, directory);
         setListAdapter(mAdapter);
-        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
+        App.getInstance().getModelCache().getAsync(ModelCache.KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
             true,
             new ModelCache.CacheListener() {
                 @Override
@@ -128,7 +128,7 @@ public class PulseFragment extends GdgListFragment {
                 @Override
                 public void success(final Pulse pulse) {
                     App.getInstance().getModelCache().putAsync(
-                        Const.CACHE_KEY_PULSE + mTarget.toLowerCase(),
+                        ModelCache.KEY_PULSE + mTarget.toLowerCase(),
                         pulse,
                         DateTime.now().plusDays(1),
                         new ModelCache.CachePutListener() {
@@ -154,7 +154,7 @@ public class PulseFragment extends GdgListFragment {
                 @Override
                 public void success(final Pulse pulse) {
                     App.getInstance().getModelCache().putAsync(
-                        Const.CACHE_KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
+                        ModelCache.KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
                         pulse,
                         DateTime.now().plusDays(1),
                         new ModelCache.CachePutListener() {
