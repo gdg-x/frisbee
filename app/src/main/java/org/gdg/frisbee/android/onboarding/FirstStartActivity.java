@@ -45,6 +45,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class FirstStartActivity extends GdgActivity implements
+    FirstStartInviteFragment.Listener,
     FirstStartStep1Fragment.Step1Listener,
     FirstStartStep2Fragment.Step2Listener,
     FirstStartStep3Fragment.Step3Listener {
@@ -141,6 +142,11 @@ public class FirstStartActivity extends GdgActivity implements
     }
 
     @Override
+    public void onInviteSkipped() {
+        mViewPager.setCurrentItem(1);
+    }
+
+    @Override
     public void onConfirmedChapter(Chapter chapter) {
         PrefUtils.setHomeChapter(this, chapter);
 
@@ -150,7 +156,7 @@ public class FirstStartActivity extends GdgActivity implements
             == ConnectionResult.SERVICE_MISSING) {
             moveToStep3(false);
         } else {
-            mViewPager.setCurrentItem(1);
+            mViewPager.setCurrentItem(2);
         }
     }
 
@@ -188,7 +194,7 @@ public class FirstStartActivity extends GdgActivity implements
         FirstStartStep3Fragment step3 = (FirstStartStep3Fragment) mViewPagerAdapter.getItem(2);
         step3.setSignedIn(isSignedIn);
 
-        mViewPager.setCurrentItem(2);
+        mViewPager.setCurrentItem(3);
     }
 
     @Override
@@ -215,12 +221,13 @@ public class FirstStartActivity extends GdgActivity implements
         startActivity(resultData);
     }
 
-    public class FirstStartPageAdapter extends FragmentStatePagerAdapter {
+    static class FirstStartPageAdapter extends FragmentStatePagerAdapter {
         private Fragment[] mFragments;
 
-        public FirstStartPageAdapter(FragmentManager fm) {
+        FirstStartPageAdapter(FragmentManager fm) {
             super(fm);
             mFragments = new Fragment[]{
+                new FirstStartInviteFragment(),
                 new FirstStartStep1Fragment(),
                 new FirstStartStep2Fragment(),
                 new FirstStartStep3Fragment()
@@ -234,7 +241,7 @@ public class FirstStartActivity extends GdgActivity implements
 
         @Override
         public int getCount() {
-            return 3;
+            return mFragments.length;
         }
 
         @Override

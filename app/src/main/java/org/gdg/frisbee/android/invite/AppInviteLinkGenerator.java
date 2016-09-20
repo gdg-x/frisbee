@@ -6,7 +6,7 @@ import okhttp3.HttpUrl;
 
 public class AppInviteLinkGenerator {
 
-    private static final String SENDER = "sender";
+    public static final String SENDER = "sender";
     private static final String SUPPORTED_VERSION_CODE = "26000";
     private final String dynamicLinkDomain;
     private final String deepLinkBaseUrl;
