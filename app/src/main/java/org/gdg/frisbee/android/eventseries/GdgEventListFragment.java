@@ -53,7 +53,7 @@ public class GdgEventListFragment extends EventListFragment {
         setIsLoading(true);
 
         if (Utils.isOnline(getActivity())) {
-            onListLoadMore(1);
+            loadFirstPage();
         } else {
             App.getInstance().getModelCache().getAsync(mCacheKey, false, new ModelCache.CacheListener() {
                 @Override
@@ -83,6 +83,10 @@ public class GdgEventListFragment extends EventListFragment {
                 }
             });
         }
+    }
+
+    private void loadFirstPage() {
+        onListLoadMore(1);
     }
 
     /**
