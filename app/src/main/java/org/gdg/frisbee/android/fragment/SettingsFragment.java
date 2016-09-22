@@ -22,7 +22,6 @@ import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceScreen;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -148,8 +147,7 @@ public class SettingsFragment extends PreferenceFragment {
 
         CheckBoxPreference prefGoogleSignIn = (CheckBoxPreference) findPreference(PrefUtils.SETTINGS_SIGNED_IN);
         if (prefGoogleSignIn != null) {
-            if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(getActivity())
-                == ConnectionResult.SUCCESS) {
+            if (isGooglePlayServicesAvailable()) {
                 prefGoogleSignIn.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                     @Override
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -172,8 +170,7 @@ public class SettingsFragment extends PreferenceFragment {
                     }
                 });
             } else {
-                PreferenceScreen root = (PreferenceScreen) findPreference(PrefUtils.SETTINGS_ROOT);
-                root.removePreference(prefGoogleSignIn);
+                prefGoogleSignIn.setEnabled(false);
             }
         }
 
@@ -181,6 +178,11 @@ public class SettingsFragment extends PreferenceFragment {
         if (prefAnalytics != null) {
             prefAnalytics.setOnPreferenceChangeListener(mOnAnalyticsPreferenceChange);
         }
+    }
+
+    private boolean isGooglePlayServicesAvailable() {
+        return GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(getActivity())
+            == ConnectionResult.SUCCESS;
     }
 
     private void createConnectedGoogleApiClient() {
