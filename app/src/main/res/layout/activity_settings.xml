@@ -21,7 +21,12 @@
   android:layout_height="match_parent"
   android:orientation="vertical">
 
-  <include layout="@layout/toolbar_actionbar" />
+  <android.support.design.widget.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <include layout="@layout/toolbar_actionbar" />
+  </android.support.design.widget.AppBarLayout>
 
   <FrameLayout
     android:id="@+id/settings_fragment"
