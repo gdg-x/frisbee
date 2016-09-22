@@ -105,7 +105,9 @@
       android:name=".activity.SettingsActivity"
       android:label="@string/settings"
       android:theme="@style/Theme.GDG" />
-    <activity android:name=".onboarding.FirstStartActivity" />
+    <activity android:name=".onboarding.FirstStartActivity"
+      android:theme="@style/Theme.GDG.Onboarding"
+      />
     <activity
       android:name=".chapter.YoutubeActivity"
       android:configChanges="keyboardHidden|orientation|screenSize"

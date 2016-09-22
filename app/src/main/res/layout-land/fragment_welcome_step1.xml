@@ -1,126 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:background="@color/cloud"
-  android:orientation="vertical">
+  android:layout_height="match_parent">
 
   <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
     android:gravity="center_vertical"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:gravity="center_vertical"
-      android:orientation="horizontal">
+      android:layout_weight="1"
+      android:orientation="vertical">
 
       <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="25dip"
+        android:layout_marginLeft="10dip"
+        android:layout_marginTop="10dip"
+        android:orientation="vertical"
+        android:padding="5dip">
 
-        <LinearLayout
+        <TextView
+          android:id="@+id/textView"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_gravity="center_horizontal"
-          android:layout_marginBottom="25dip"
-          android:layout_marginLeft="10dip"
-          android:layout_marginTop="10dip"
-          android:orientation="vertical"
-          android:padding="5dip">
+          android:linksClickable="false"
+          android:singleLine="true"
+          android:text="@string/welcome"
+          android:textAppearance="@android:style/TextAppearance.Large"
+          android:textColor="@color/asbestos"
+          android:textIsSelectable="false" />
 
-          <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:linksClickable="false"
-            android:singleLine="true"
-            android:text="@string/welcome"
-            android:textAppearance="@android:style/TextAppearance.Large"
-            android:textColor="@color/asbestos"
-            android:textIsSelectable="false" />
-
-          <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:linksClickable="false"
-            android:singleLine="true"
-            android:text="@string/choose_home_gdg"
-            android:textAppearance="@android:style/TextAppearance.Large"
-            android:textColor="@color/asbestos"
-            android:textIsSelectable="false" />
-        </LinearLayout>
-
-        <ViewSwitcher
-          android:id="@+id/viewSwitcher"
-          android:layout_width="match_parent"
+        <TextView
+          android:id="@+id/textView1"
+          android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:inAnimation="@anim/fade_in"
-          android:outAnimation="@anim/fade_out">
-
-          <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <ProgressBar
-              android:id="@+id/progressBar"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:indeterminate="true"
-              android:indeterminateOnly="true" />
-          </LinearLayout>
-
-          <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <android.support.design.widget.TextInputLayout
-              android:id="@+id/chapter_spinner_text_input_layout"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
-
-              <org.gdg.frisbee.android.view.AutoCompleteSpinnerView
-                android:id="@+id/chapter_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/keyline_1"
-                android:layout_marginRight="@dimen/keyline_1"
-                android:drawableRight="@drawable/spinner_arrow_dropdown"
-                android:hint="@string/home_gdg"
-                android:minHeight="50dip"
-                android:minWidth="200dip"
-                android:paddingLeft="@dimen/spinner_left_padding"
-                android:paddingRight="4dp"
-                android:singleLine="true" />
-            </android.support.design.widget.TextInputLayout>
-
-            <Button
-              android:id="@+id/confirm"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="@string/confirm" />
-          </LinearLayout>
-        </ViewSwitcher>
+          android:linksClickable="false"
+          android:singleLine="true"
+          android:text="@string/choose_home_gdg"
+          android:textAppearance="@android:style/TextAppearance.Large"
+          android:textColor="@color/asbestos"
+          android:textIsSelectable="false" />
       </LinearLayout>
 
-      <org.gdg.frisbee.android.widget.ResizableImageView
-        android:id="@+id/imageView"
+      <ViewSwitcher
+        android:id="@+id/viewSwitcher"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:adjustViewBounds="true"
-        android:background="@drawable/gdg_world" />
+        android:inAnimation="@anim/fade_in"
+        android:outAnimation="@anim/fade_out">
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:gravity="center_horizontal"
+          android:orientation="vertical">
+
+          <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:indeterminateOnly="true" />
+        </LinearLayout>
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:gravity="center_horizontal"
+          android:orientation="vertical">
+
+          <android.support.design.widget.TextInputLayout
+            android:id="@+id/chapter_spinner_text_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <org.gdg.frisbee.android.view.AutoCompleteSpinnerView
+              android:id="@+id/chapter_spinner"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/keyline_1"
+              android:layout_marginRight="@dimen/keyline_1"
+              android:drawableRight="@drawable/spinner_arrow_dropdown"
+              android:hint="@string/home_gdg"
+              android:minHeight="50dip"
+              android:minWidth="200dip"
+              android:paddingLeft="@dimen/spinner_left_padding"
+              android:paddingRight="4dp"
+              android:singleLine="true" />
+          </android.support.design.widget.TextInputLayout>
+
+          <Button
+            android:id="@+id/confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/confirm" />
+        </LinearLayout>
+      </ViewSwitcher>
     </LinearLayout>
+
+    <org.gdg.frisbee.android.widget.ResizableImageView
+      android:id="@+id/imageView"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:adjustViewBounds="true"
+      android:background="@drawable/gdg_world" />
   </LinearLayout>
-</LinearLayout>
+</FrameLayout>

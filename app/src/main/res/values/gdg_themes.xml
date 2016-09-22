@@ -64,6 +64,10 @@
     <item name="android:windowNoTitle">true</item>
   </style>
 
+  <style name="Theme.GDG.Onboarding">
+    <item name="android:windowBackground">@color/cloud</item>
+  </style>
+
   <!-- Special Event Series-->
   <style name="Theme.GDG.Special" parent="Theme.GDG.WithNavDrawer" />
 
