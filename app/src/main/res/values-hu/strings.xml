@@ -162,4 +162,6 @@
   <string name="retry">Újra próbál</string>
   <string name="title_event_series_greetings">Új esemény közeleg!</string>
   <string name="event_series_greetings">Tudj meg többet a %1$s-ról, és nézz meg az eseményeket a világ minden tájáról!</string>
+  <string name="cd_invitation_sender_profile_image">Invitation sender profile image</string>
+  <string name="invite_congrats">Yey! You\'re invited by\n%s</string>
 </resources>

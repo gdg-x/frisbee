@@ -162,4 +162,6 @@
   <string name="retry">Tekrar Dene</string>
   <string name="title_event_series_greetings">Yeni etkinlikler yaklaşıyor!</string>
   <string name="event_series_greetings">%1$s hakkında daha bilgiye ulaş ve tğm dünyadaki etkinlikleri gör!</string>
+  <string name="cd_invitation_sender_profile_image">Davetiye gönderen profil resmi</string>
+  <string name="invite_congrats">Yaşasın! Sizi davet eden\n%s</string>
 </resources>
