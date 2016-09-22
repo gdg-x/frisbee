@@ -42,7 +42,6 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.GoogleApiClientFactory;
 import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.common.GdgActivity;
-import org.gdg.frisbee.android.invite.AppInviteLinkGenerator;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.widget.NonSwipeableViewPager;
 

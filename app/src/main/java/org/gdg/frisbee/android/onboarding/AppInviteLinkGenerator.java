@@ -1,4 +1,4 @@
-package org.gdg.frisbee.android.invite;
+package org.gdg.frisbee.android.onboarding;
 
 import org.gdg.frisbee.android.BuildConfig;
 
@@ -11,7 +11,7 @@ public class AppInviteLinkGenerator {
     private final String dynamicLinkDomain;
     private final String deepLinkBaseUrl;
 
-    public static String extractSender(HttpUrl httpUrl) {
+    static String extractSender(HttpUrl httpUrl) {
         return httpUrl.queryParameter(SENDER);
     }
 

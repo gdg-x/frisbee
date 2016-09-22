@@ -46,7 +46,7 @@ import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeriesActivity;
 import org.gdg.frisbee.android.gde.GdeActivity;
-import org.gdg.frisbee.android.invite.AppInviteLinkGenerator;
+import org.gdg.frisbee.android.onboarding.AppInviteLinkGenerator;
 import org.gdg.frisbee.android.pulse.PulseActivity;
 import org.gdg.frisbee.android.utils.PlusUtils;
 import org.gdg.frisbee.android.utils.PrefUtils;
@@ -233,13 +233,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 navigateTo(SettingsActivity.class, data);
                 break;
             case DRAWER_INVITE:
-                AppInviteLinkGenerator linkGenerator = AppInviteLinkGenerator.create();
-                String gplusId = PlusUtils.getCurrentPersonId(getGoogleApiClient());
-                ShareCompat.IntentBuilder.from(this)
-                    .setChooserTitle(R.string.invite_friends)
-                    .setText(getString(R.string.invitation_message, linkGenerator.createAppInviteLink(gplusId)))
-                    .setType("text/plain")
-                    .startChooser();
+                shareAppInviteLink();
                 break;
             case DRAWER_HELP:
                 startActivity(Utils.createExternalIntent(this, Uri.parse(Const.URL_HELP)));
@@ -315,6 +309,16 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
         startActivity(i);
         mDrawerLayout.closeDrawers();
+    }
+
+    private void shareAppInviteLink() {
+        AppInviteLinkGenerator linkGenerator = AppInviteLinkGenerator.create();
+        String gplusId = PlusUtils.getCurrentPersonId(getGoogleApiClient());
+        ShareCompat.IntentBuilder.from(this)
+            .setChooserTitle(R.string.invite_friends)
+            .setText(getString(R.string.invitation_message, linkGenerator.createAppInviteLink(gplusId)))
+            .setType("text/plain")
+            .startChooser();
     }
 
     @Override
