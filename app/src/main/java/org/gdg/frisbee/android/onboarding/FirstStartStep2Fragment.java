@@ -18,22 +18,62 @@ package org.gdg.frisbee.android.onboarding;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.Callback;
+import org.gdg.frisbee.android.api.model.plus.Person;
+import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.common.BaseFragment;
+import org.gdg.frisbee.android.view.BitmapBorderTransformation;
 
+import butterknife.BindDimen;
+import butterknife.BindView;
 import butterknife.OnClick;
 
 public class FirstStartStep2Fragment extends BaseFragment {
 
+    private static final String INVITE_SENDER = "INVITE_SENDER";
+
+    @BindView(R.id.invite_sender_container)
+    View inviteContainer;
+    @BindView(R.id.invite_sender_profile_image)
+    ImageView inviteSenderImage;
+    @BindView(R.id.invite_sender_message)
+    TextView inviteSenderMessage;
+    @BindDimen(R.dimen.navdrawer_user_picture_size)
+    int profileImageSize;
+
     Step2Listener listener = Step2Listener.EMPTY;
+    private String inviteSender;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflateView(inflater, R.layout.fragment_welcome_step2, container);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            inviteSender = savedInstanceState.getString(INVITE_SENDER);
+            if (inviteSender != null) {
+                loadSender(inviteSender);
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(INVITE_SENDER,  inviteSender);
     }
 
     @Override
@@ -62,8 +102,37 @@ public class FirstStartStep2Fragment extends BaseFragment {
         listener.onSkippedSignIn();
     }
 
-    void updateSender(String sender) {
+    public void loadSender(String inviteSender) {
+        this.inviteSender = inviteSender;
+        if (!isContextValid()) {
+            return;
+        }
 
+        App.getInstance().getPlusApi()
+            .getPerson(inviteSender)
+            .enqueue(new Callback<Person>() {
+                @Override
+                public void success(Person sender) {
+                    if (isContextValid()) {
+                        updateSender(sender);
+                    }
+                }
+            });
+    }
+
+    private void updateSender(Person sender) {
+        inviteContainer.setVisibility(View.VISIBLE);
+        inviteSenderMessage.setText(getString(R.string.invite_congrats, sender.getDisplayName()));
+
+        if (sender.getImage() != null && sender.getImage().getUrl() != null) {
+            App.getInstance().getPicasso()
+                .load(sender.getImage().getUrl())
+                .transform(new BitmapBorderTransformation(2,
+                    profileImageSize / 2,
+                    ContextCompat.getColor(getContext(), R.color.white))
+                )
+                .into(inviteSenderImage);
+        }
     }
 
     public interface Step2Listener {

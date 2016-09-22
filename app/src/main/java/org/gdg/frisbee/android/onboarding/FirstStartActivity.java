@@ -194,10 +194,11 @@ public class FirstStartActivity extends GdgActivity implements
     private void onInvitationLoaded(@NonNull AppInviteInvitationResult result) {
         if (result.getStatus().isSuccess()) {
             Intent intent = result.getInvitationIntent();
-            String sender = extractSender(intent);
+            String inviteSender = extractSender(intent);
 
-            if (sender != null) {
-                updateSender(sender);
+            if (inviteSender != null) {
+                FirstStartStep2Fragment loginFragment = (FirstStartStep2Fragment) mViewPagerAdapter.getItem(1);
+                loginFragment.loadSender(inviteSender);
             }
         }
     }
@@ -214,11 +215,6 @@ public class FirstStartActivity extends GdgActivity implements
         }
         return httpUrl.queryParameter(AppInviteLinkGenerator.SENDER);
 
-    }
-
-    private void updateSender(String sender) {
-        FirstStartStep2Fragment loginFragment = (FirstStartStep2Fragment) mViewPagerAdapter.getItem(1);
-        loginFragment.updateSender(sender);
     }
 
     @Override
@@ -259,7 +255,7 @@ public class FirstStartActivity extends GdgActivity implements
         startActivity(resultData);
     }
 
-    public class FirstStartPageAdapter extends FragmentStatePagerAdapter {
+    public static class FirstStartPageAdapter extends FragmentStatePagerAdapter {
         private Fragment[] mFragments;
 
         FirstStartPageAdapter(FragmentManager fm) {
