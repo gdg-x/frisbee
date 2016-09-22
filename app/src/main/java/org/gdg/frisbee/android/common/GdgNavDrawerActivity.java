@@ -58,6 +58,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.HttpUrl;
 
 public abstract class GdgNavDrawerActivity extends GdgActivity {
 
@@ -314,9 +315,12 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     private void shareAppInviteLink() {
         AppInviteLinkGenerator linkGenerator = AppInviteLinkGenerator.create();
         String gplusId = PlusUtils.getCurrentPersonId(getGoogleApiClient());
+        HttpUrl appInviteLink = gplusId != null
+            ? linkGenerator.createAppInviteLink(gplusId)
+            : AppInviteLinkGenerator.NON_SIGNED_IN_INVITE_URL;
         ShareCompat.IntentBuilder.from(this)
             .setChooserTitle(R.string.invite_friends)
-            .setText(getString(R.string.invitation_message, linkGenerator.createAppInviteLink(gplusId)))
+            .setText(getString(R.string.invitation_message, appInviteLink))
             .setType("text/plain")
             .startChooser();
     }
