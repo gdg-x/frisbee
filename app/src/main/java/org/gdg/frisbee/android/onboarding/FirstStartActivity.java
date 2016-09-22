@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.onboarding;
 import android.app.backup.BackupManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -28,9 +29,12 @@ import android.widget.FrameLayout;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.appinvite.AppInvite;
+import com.google.android.gms.appinvite.AppInviteInvitationResult;
+import com.google.android.gms.appinvite.AppInviteReferral;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Chapter;
@@ -38,14 +42,15 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.GoogleApiClientFactory;
 import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.common.GdgActivity;
+import org.gdg.frisbee.android.invite.AppInviteLinkGenerator;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.widget.NonSwipeableViewPager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.HttpUrl;
 
 public class FirstStartActivity extends GdgActivity implements
-    FirstStartInviteFragment.Listener,
     FirstStartStep1Fragment.Step1Listener,
     FirstStartStep2Fragment.Step2Listener,
     FirstStartStep3Fragment.Step3Listener {
@@ -142,11 +147,6 @@ public class FirstStartActivity extends GdgActivity implements
     }
 
     @Override
-    public void onInviteSkipped() {
-        mViewPager.setCurrentItem(1);
-    }
-
-    @Override
     public void onConfirmedChapter(Chapter chapter) {
         PrefUtils.setHomeChapter(this, chapter);
 
@@ -156,7 +156,7 @@ public class FirstStartActivity extends GdgActivity implements
             == ConnectionResult.SERVICE_MISSING) {
             moveToStep3(false);
         } else {
-            mViewPager.setCurrentItem(2);
+            mViewPager.setCurrentItem(1);
         }
     }
 
@@ -181,6 +181,44 @@ public class FirstStartActivity extends GdgActivity implements
             signInRequested = false;
             moveToStep3(true);
         }
+
+        AppInvite.AppInviteApi.getInvitation(getGoogleApiClient(), this, false)
+            .setResultCallback(new ResultCallback<AppInviteInvitationResult>() {
+                @Override
+                public void onResult(@NonNull AppInviteInvitationResult result) {
+                    onInvitationLoaded(result);
+                }
+            });
+    }
+
+    private void onInvitationLoaded(@NonNull AppInviteInvitationResult result) {
+        if (result.getStatus().isSuccess()) {
+            Intent intent = result.getInvitationIntent();
+            String sender = extractSender(intent);
+
+            if (sender != null) {
+                updateSender(sender);
+            }
+        }
+    }
+
+    private static String extractSender(Intent intent) {
+        String deepLink = AppInviteReferral.getDeepLink(intent);
+        if (deepLink == null) {
+            return null;
+        }
+
+        HttpUrl httpUrl = HttpUrl.parse(deepLink);
+        if (httpUrl == null) {
+            return null;
+        }
+        return httpUrl.queryParameter(AppInviteLinkGenerator.SENDER);
+
+    }
+
+    private void updateSender(String sender) {
+        FirstStartStep2Fragment loginFragment = (FirstStartStep2Fragment) mViewPagerAdapter.getItem(1);
+        loginFragment.updateSender(sender);
     }
 
     @Override
@@ -194,7 +232,7 @@ public class FirstStartActivity extends GdgActivity implements
         FirstStartStep3Fragment step3 = (FirstStartStep3Fragment) mViewPagerAdapter.getItem(2);
         step3.setSignedIn(isSignedIn);
 
-        mViewPager.setCurrentItem(3);
+        mViewPager.setCurrentItem(2);
     }
 
     @Override
@@ -221,13 +259,12 @@ public class FirstStartActivity extends GdgActivity implements
         startActivity(resultData);
     }
 
-    static class FirstStartPageAdapter extends FragmentStatePagerAdapter {
+    public class FirstStartPageAdapter extends FragmentStatePagerAdapter {
         private Fragment[] mFragments;
 
         FirstStartPageAdapter(FragmentManager fm) {
             super(fm);
             mFragments = new Fragment[]{
-                new FirstStartInviteFragment(),
                 new FirstStartStep1Fragment(),
                 new FirstStartStep2Fragment(),
                 new FirstStartStep3Fragment()

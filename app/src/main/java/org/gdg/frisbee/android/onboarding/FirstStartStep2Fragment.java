@@ -62,6 +62,10 @@ public class FirstStartStep2Fragment extends BaseFragment {
         listener.onSkippedSignIn();
     }
 
+    void updateSender(String sender) {
+
+    }
+
     public interface Step2Listener {
         void onSignedIn();
 
