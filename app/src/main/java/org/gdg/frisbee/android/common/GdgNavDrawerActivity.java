@@ -233,13 +233,11 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 navigateTo(SettingsActivity.class, data);
                 break;
             case DRAWER_INVITE:
-                AppInviteLinkGenerator linkGenerator = new AppInviteLinkGenerator(
-                    "https://fmec6.app.goo.gl/", "https://gdg.events/");
+                AppInviteLinkGenerator linkGenerator = AppInviteLinkGenerator.create();
                 String gplusId = PlusUtils.getCurrentPersonId(getGoogleApiClient());
-                String plusUrl = gplusId != null ? PlusUtils.createProfileUrl(gplusId) : null;
                 ShareCompat.IntentBuilder.from(this)
                     .setChooserTitle(R.string.invite_friends)
-                    .setText(getString(R.string.invitation_message, linkGenerator.createAppInviteLink(plusUrl)))
+                    .setText(getString(R.string.invitation_message, linkGenerator.createAppInviteLink(gplusId)))
                     .setType("text/plain")
                     .startChooser();
                 break;

@@ -6,12 +6,20 @@ import okhttp3.HttpUrl;
 
 public class AppInviteLinkGenerator {
 
-    public static final String SENDER = "sender";
+    private static final String SENDER = "sender";
     private static final String SUPPORTED_VERSION_CODE = "26000";
     private final String dynamicLinkDomain;
     private final String deepLinkBaseUrl;
 
-    public AppInviteLinkGenerator(String dynamicLinkDomain, String deepLinkBaseUrl) {
+    public static String extractSender(HttpUrl httpUrl) {
+        return httpUrl.queryParameter(SENDER);
+    }
+
+    public static AppInviteLinkGenerator create() {
+        return new AppInviteLinkGenerator("https://fmec6.app.goo.gl/", "https://gdg.events/");
+    }
+
+    private AppInviteLinkGenerator(String dynamicLinkDomain, String deepLinkBaseUrl) {
         this.dynamicLinkDomain = dynamicLinkDomain;
         this.deepLinkBaseUrl = deepLinkBaseUrl;
     }

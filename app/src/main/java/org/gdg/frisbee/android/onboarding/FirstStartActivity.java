@@ -213,7 +213,7 @@ public class FirstStartActivity extends GdgActivity implements
         if (httpUrl == null) {
             return null;
         }
-        return httpUrl.queryParameter(AppInviteLinkGenerator.SENDER);
+        return AppInviteLinkGenerator.extractSender(httpUrl);
 
     }
 

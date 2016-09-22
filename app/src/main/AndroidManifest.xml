@@ -163,9 +163,6 @@
       </intent-filter>
     </activity>
     <activity
-      android:name=".invite.AppInviteDeepLinkActivity"
-      android:theme="@style/Theme.GDG.Panel"/>
-    <activity
       android:name=".activity.SearchActivity"
       android:launchMode="singleTop">
       <intent-filter>
