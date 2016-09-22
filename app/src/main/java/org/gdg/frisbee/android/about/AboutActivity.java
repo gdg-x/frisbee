@@ -17,9 +17,9 @@
 package org.gdg.frisbee.android.about;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +28,8 @@ import com.google.android.gms.appinvite.AppInviteInvitation;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.common.GdgActivity;
+import org.gdg.frisbee.android.onboarding.AppInviteLinkGenerator;
+import org.gdg.frisbee.android.utils.PlusUtils;
 
 import butterknife.BindView;
 import timber.log.Timber;
@@ -72,15 +74,21 @@ public class AboutActivity extends GdgActivity {
             finish();
             return true;
         } else if (R.id.action_app_invite == item.getItemId()) {
-            Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
-                .setMessage(getString(R.string.invitation_message))
-                .setDeepLink(Uri.parse(getString(R.string.invitation_deep_link)))
-                .build();
-            startActivityForResult(intent, REQUEST_INVITE);
+            shareAppInviteLink();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void shareAppInviteLink() {
+        AppInviteLinkGenerator linkGenerator = AppInviteLinkGenerator.create();
+        String gplusId = PlusUtils.getCurrentPersonId(getGoogleApiClient());
+        ShareCompat.IntentBuilder.from(this)
+            .setChooserTitle(R.string.invite_friends)
+            .setText(getString(R.string.invitation_message, linkGenerator.createAppInviteLink(gplusId)))
+            .setType("text/plain")
+            .startChooser();
     }
 
     @Override

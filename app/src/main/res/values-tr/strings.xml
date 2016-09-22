@@ -155,7 +155,6 @@
   <string name="fork_me">Beni Fork\'la</string>
   <string name="cd_arrowTagImage">Organizatör etiketleme oyunu</string>
   <string name="cd_qrCode">Kare Kod</string>
-  <string name="invitation_title">GDG uygulamasına arkadaşlarınızı davet edin</string>
   <string name="invitation_message">GDG Android uygulamasını indirin ve mobil olarak Google Developers Group\'larla ilgili her şeyi takip edin. %s</string>
   <string name="invitation_error_message">Uygulama Daveti başarısız oldu.</string>
   <string name="thanks_for_feedback">Geri bildirim için teşekkürler!</string>

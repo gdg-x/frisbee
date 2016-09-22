@@ -172,7 +172,6 @@
   <string name="fork_me">مفترق لي</string>
   <string name="cd_arrowTagImage">لعبة أسهم الإشارة</string>
   <string name="cd_qrCode">رمز QR</string>
-  <string name="invitation_title">أدع أصدقائك إلى تطبيق المجموعة</string>
   <string name="invitation_message">حمّل تطبيق GDG و اكتشف محتوى مجموعة مطوري Google بينما يكون جاهزا للإطلاق. %s</string>
   <string name="invitation_error_message">App Invite was unsuccessful.</string>
   <string name="thanks_for_feedback">Thank you for your Feedback!</string>

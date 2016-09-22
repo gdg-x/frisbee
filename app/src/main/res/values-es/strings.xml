@@ -155,7 +155,6 @@
   <string name="fork_me">Fork me</string>
   <string name="cd_arrowTagImage">Juego: Etiquetado con la flecha</string>
   <string name="cd_qrCode">Código QR</string>
-  <string name="invitation_title">Invita a tus amigos a la aplicación GDG</string>
   <string name="invitation_message">Descarga la aplicación de GDG para Android y descubre contenido de Google Developers Group al momento. %s</string>
   <string name="invitation_error_message">App Invite was unsuccessful.</string>
   <string name="thanks_for_feedback">¡Gracias por su revisión!</string>

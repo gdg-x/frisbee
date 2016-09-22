@@ -155,7 +155,6 @@
   <string name="fork_me">Fork-olj engem</string>
   <string name="cd_arrowTagImage">Nyílas Jelölési Játék</string>
   <string name="cd_qrCode">QR kód</string>
-  <string name="invitation_title">Hívd meg a barátaid a GDG alkalmazásba</string>
   <string name="invitation_message">Töltsd le a GDG Android Alkalmazást, és fedezd fel a Google Fejlesztői Csoport tartalmakat amíg úton vagy. %s</string>
   <string name="invitation_error_message">Az Alkalmazás Meghívó sikertelen volt.</string>
   <string name="thanks_for_feedback">Köszönjük a visszajelzést!</string>

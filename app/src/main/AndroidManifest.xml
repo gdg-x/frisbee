@@ -194,14 +194,6 @@
         android:name="android.appwidget.provider"
         android:resource="@xml/upcoming_event_appwidget_info" />
     </receiver>
-    <receiver
-      android:name=".receiver.ReferrerReceiver"
-      android:exported="true"
-      tools:ignore="ExportedReceiver">
-      <intent-filter>
-        <action android:name="com.android.vending.INSTALL_REFERRER" />
-      </intent-filter>
-    </receiver>
 
     <service android:name=".appwidget.UpcomingEventWidgetProvider$UpdateService" />
     <service
