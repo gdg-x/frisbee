@@ -8,7 +8,7 @@ public class AppInviteLinkGenerator {
 
     private static final String SENDER = "sender";
     private static final String SUPPORTED_VERSION_CODE = "26000";
-    public static final HttpUrl NON_SIGNED_IN_INVITE_URL = HttpUrl.parse("https://fmec6.app.goo.gl/bVbA");
+    public static final HttpUrl NON_SIGNED_IN_INVITE_URL = HttpUrl.parse("https://fmec6.app.goo.gl/Lr7u");
 
     private final String dynamicLinkDomain;
     private final String deepLinkBaseUrl;
@@ -38,7 +38,6 @@ public class AppInviteLinkGenerator {
     private String createDeepLink(String gplusId) {
         return HttpUrl.parse(deepLinkBaseUrl)
             .newBuilder()
-            .addPathSegment("invite")
             .addQueryParameter(SENDER, gplusId)
             .build()
             .toString();
