@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.fragment;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
@@ -26,10 +27,14 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 
@@ -37,6 +42,7 @@ import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.SettingsActivity;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
+import org.gdg.frisbee.android.api.model.HomeGdgRequest;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.GoogleApiClientFactory;
 import org.gdg.frisbee.android.appwidget.UpcomingEventWidgetProvider;
@@ -45,19 +51,21 @@ import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.view.LocationListPreference;
 
+import java.io.IOException;
+
 public class SettingsFragment extends PreferenceFragment {
 
     private GoogleApiClient mGoogleApiClient;
+    private LinearLayout mLoading;
 
     private Preference.OnPreferenceChangeListener mOnHomeGdgPreferenceChange =
         new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
+                final String homeGdg = (String) o;
 
                 if (mGoogleApiClient.isConnected()) {
-//                    final String homeGdg = (String) o;
-//                    setHomeGdg(homeGdg);
-                    // TODO: 9/17/16 Update home gdg on the server
+                    setHomeGdg(homeGdg);
                 }
                 // Update widgets to show newest chosen GdgHome events
                 App.getInstance().startService(new Intent(App.getInstance(),
@@ -95,6 +103,12 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_simple_prefs, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mLoading = new LinearLayout(getActivity());
     }
 
     private void initPreferences() {
@@ -180,5 +194,29 @@ public class SettingsFragment extends PreferenceFragment {
         mGoogleApiClient.unregisterConnectionCallbacks((SettingsActivity) getActivity());
         mGoogleApiClient.unregisterConnectionFailedListener((SettingsActivity) getActivity());
         mGoogleApiClient.disconnect();
+    }
+
+    private void setHomeGdg(final String homeGdg) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+
+                try {
+                    GdgActivity activity = (GdgActivity) getActivity();
+                    String token = GoogleAuthUtil.getToken(
+                        activity,
+                        Plus.AccountApi.getAccountName(activity.getGoogleApiClient()),
+                        "oauth2: " + Scopes.PLUS_LOGIN);
+
+                    App.getInstance().getGdgXHub().setHomeGdg("Bearer " + token,
+                        new HomeGdgRequest(homeGdg))
+                        .execute();
+                } catch (IOException | GoogleAuthException e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+        }.execute();
     }
 }
