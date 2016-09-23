@@ -193,16 +193,16 @@ public class FirstStartActivity extends GdgActivity implements
     private void onInvitationLoaded(@NonNull AppInviteInvitationResult result) {
         if (result.getStatus().isSuccess()) {
             Intent intent = result.getInvitationIntent();
-            String inviteSender = extractSender(intent);
+            Invite invite = extractInvite(intent);
 
-            if (inviteSender != null) {
+            if (invite != null) {
                 FirstStartStep2Fragment loginFragment = (FirstStartStep2Fragment) mViewPagerAdapter.getItem(1);
-                loginFragment.loadSender(inviteSender);
+                loginFragment.loadInvite(invite);
             }
         }
     }
 
-    private static String extractSender(Intent intent) {
+    private static Invite extractInvite(Intent intent) {
         String deepLink = AppInviteReferral.getDeepLink(intent);
         if (deepLink == null) {
             return null;
@@ -212,7 +212,8 @@ public class FirstStartActivity extends GdgActivity implements
         if (httpUrl == null) {
             return null;
         }
-        return AppInviteLinkGenerator.extractSender(httpUrl);
+        String sender = AppInviteLinkGenerator.extractSender(httpUrl);
+        return new Invite(sender);
 
     }
 

@@ -20,6 +20,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,7 @@ import butterknife.OnClick;
 
 public class FirstStartStep2Fragment extends BaseFragment {
 
-    private static final String INVITE_SENDER = "INVITE_SENDER";
+    private static final String KEY_INVITE = "invite";
 
     @BindView(R.id.invite_sender_container)
     View inviteContainer;
@@ -51,7 +52,7 @@ public class FirstStartStep2Fragment extends BaseFragment {
     int profileImageSize;
 
     Step2Listener listener = Step2Listener.EMPTY;
-    private String inviteSender;
+    private Invite invite;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,9 +64,9 @@ public class FirstStartStep2Fragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
 
         if (savedInstanceState != null) {
-            inviteSender = savedInstanceState.getString(INVITE_SENDER);
-            if (inviteSender != null) {
-                loadSender(inviteSender);
+            invite = savedInstanceState.getParcelable(KEY_INVITE);
+            if (invite != null) {
+                loadInvite(invite);
             }
         }
     }
@@ -73,7 +74,7 @@ public class FirstStartStep2Fragment extends BaseFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(INVITE_SENDER,  inviteSender);
+        outState.putParcelable(KEY_INVITE, invite);
     }
 
     @Override
@@ -102,27 +103,39 @@ public class FirstStartStep2Fragment extends BaseFragment {
         listener.onSkippedSignIn();
     }
 
-    public void loadSender(String inviteSender) {
-        this.inviteSender = inviteSender;
+    public void loadInvite(Invite inviteSender) {
+        this.invite = inviteSender;
         if (!isContextValid()) {
             return;
         }
 
+
+        if (TextUtils.isEmpty(invite.sender)) {
+            displayUnknownSender();
+            return;
+        }
+
         App.getInstance().getPlusApi()
-            .getPerson(inviteSender)
+            .getPerson(inviteSender.sender)
             .enqueue(new Callback<Person>() {
                 @Override
                 public void success(Person sender) {
                     if (isContextValid()) {
-                        updateSender(sender);
+                        displaySender(sender);
                     }
                 }
             });
     }
 
-    private void updateSender(Person sender) {
+    private void displayUnknownSender() {
         inviteContainer.setVisibility(View.VISIBLE);
-        inviteSenderMessage.setText(getString(R.string.invite_congrats, sender.getDisplayName()));
+        updateSenderName(getString(R.string.friend));
+        inviteSenderImage.setImageResource(R.drawable.ic_no_avatar);
+    }
+
+    private void displaySender(Person sender) {
+        inviteContainer.setVisibility(View.VISIBLE);
+        updateSenderName(sender.getDisplayName());
 
         if (sender.getImage() != null && sender.getImage().getUrl() != null) {
             App.getInstance().getPicasso()
@@ -133,6 +146,10 @@ public class FirstStartStep2Fragment extends BaseFragment {
                 )
                 .into(inviteSenderImage);
         }
+    }
+
+    private void updateSenderName(String senderName) {
+        inviteSenderMessage.setText(getString(R.string.invite_congrats, senderName));
     }
 
     public interface Step2Listener {
