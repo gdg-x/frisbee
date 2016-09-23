@@ -23,7 +23,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ShareCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -58,7 +57,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.HttpUrl;
 
 public abstract class GdgNavDrawerActivity extends GdgActivity {
 
@@ -234,7 +232,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 navigateTo(SettingsActivity.class, data);
                 break;
             case DRAWER_INVITE:
-                shareAppInviteLink();
+                AppInviteLinkGenerator.shareAppInviteLink(this);
                 break;
             case DRAWER_HELP:
                 startActivity(Utils.createExternalIntent(this, Uri.parse(Const.URL_HELP)));
@@ -310,19 +308,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
         startActivity(i);
         mDrawerLayout.closeDrawers();
-    }
-
-    private void shareAppInviteLink() {
-        AppInviteLinkGenerator linkGenerator = AppInviteLinkGenerator.create();
-        String gplusId = PlusUtils.getCurrentPersonId(getGoogleApiClient());
-        HttpUrl appInviteLink = gplusId != null
-            ? linkGenerator.createAppInviteLink(gplusId)
-            : AppInviteLinkGenerator.NON_SIGNED_IN_INVITE_URL;
-        ShareCompat.IntentBuilder.from(this)
-            .setChooserTitle(R.string.invite_friends)
-            .setText(getString(R.string.invitation_message, appInviteLink))
-            .setType("text/plain")
-            .startChooser();
     }
 
     @Override
