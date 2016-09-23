@@ -160,4 +160,5 @@
   <string name="event_series_greetings">Learn more about %1$s and see events around the world!</string>
   <string name="cd_invitation_sender_profile_image">Invitation sender profile image</string>
   <string name="invite_congrats">Yey! You\'re invited by\n%s</string>
+  <string name="friend">a friend</string>
 </resources>

@@ -163,4 +163,5 @@
   <string name="event_series_greetings">Erfahren Sie mehr über %1$s und verfolge Veranstaltungen auf der ganzen Welt!</string>
   <string name="cd_invitation_sender_profile_image">Invitation sender profile image</string>
   <string name="invite_congrats">Yey! You\'re invited by\n%s</string>
+  <string name="friend">a friend</string>
 </resources>
