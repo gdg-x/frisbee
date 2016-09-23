@@ -109,7 +109,6 @@ public class FirstStartStep2Fragment extends BaseFragment {
             return;
         }
 
-
         if (TextUtils.isEmpty(invite.sender)) {
             displayUnknownSender();
             return;
@@ -122,6 +121,20 @@ public class FirstStartStep2Fragment extends BaseFragment {
                 public void success(Person sender) {
                     if (isContextValid()) {
                         displaySender(sender);
+                    }
+                }
+
+                @Override
+                public void failure(Throwable error) {
+                    if (isContextValid()) {
+                        displayUnknownSender();
+                    }
+                }
+
+                @Override
+                public void networkFailure(Throwable error) {
+                    if (isContextValid()) {
+                        displayUnknownSender();
                     }
                 }
             });
