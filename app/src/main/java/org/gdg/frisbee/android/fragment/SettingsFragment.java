@@ -26,7 +26,6 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.auth.GoogleAuthException;
@@ -55,7 +54,6 @@ import java.io.IOException;
 public class SettingsFragment extends PreferenceFragment {
 
     private GoogleApiClient mGoogleApiClient;
-    private LinearLayout mLoading;
 
     private Preference.OnPreferenceChangeListener mOnHomeGdgPreferenceChange =
         new Preference.OnPreferenceChangeListener() {
@@ -102,12 +100,6 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_simple_prefs, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mLoading = new LinearLayout(getActivity());
     }
 
     private void initPreferences() {

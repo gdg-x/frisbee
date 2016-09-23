@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.onboarding;
 import android.app.backup.BackupManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -27,12 +28,18 @@ import android.widget.FrameLayout;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.appinvite.AppInvite;
+import com.google.android.gms.appinvite.AppInviteInvitationResult;
+import com.google.android.gms.appinvite.AppInviteReferral;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.app.GoogleApiClientFactory;
 import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
@@ -40,6 +47,7 @@ import org.gdg.frisbee.android.widget.NonSwipeableViewPager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.HttpUrl;
 
 public class FirstStartActivity extends GdgActivity implements
     FirstStartStep1Fragment.Step1Listener,
@@ -57,6 +65,11 @@ public class FirstStartActivity extends GdgActivity implements
 
     private FirstStartPageAdapter mViewPagerAdapter;
     private boolean signInRequested;
+
+    @Override
+    protected GoogleApiClient createGoogleApiClient() {
+        return GoogleApiClientFactory.createWithApi(this, AppInvite.API);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -167,6 +180,41 @@ public class FirstStartActivity extends GdgActivity implements
             signInRequested = false;
             moveToStep3(true);
         }
+
+        AppInvite.AppInviteApi.getInvitation(getGoogleApiClient(), this, false)
+            .setResultCallback(new ResultCallback<AppInviteInvitationResult>() {
+                @Override
+                public void onResult(@NonNull AppInviteInvitationResult result) {
+                    onInvitationLoaded(result);
+                }
+            });
+    }
+
+    private void onInvitationLoaded(@NonNull AppInviteInvitationResult result) {
+        if (result.getStatus().isSuccess()) {
+            Intent intent = result.getInvitationIntent();
+            Invite invite = extractInvite(intent);
+
+            if (invite != null) {
+                FirstStartStep2Fragment loginFragment = (FirstStartStep2Fragment) mViewPagerAdapter.getItem(1);
+                loginFragment.loadInvite(invite);
+            }
+        }
+    }
+
+    private static Invite extractInvite(Intent intent) {
+        String deepLink = AppInviteReferral.getDeepLink(intent);
+        if (deepLink == null) {
+            return null;
+        }
+
+        HttpUrl httpUrl = HttpUrl.parse(deepLink);
+        if (httpUrl == null) {
+            return null;
+        }
+        String sender = AppInviteLinkGenerator.extractSender(httpUrl);
+        return new Invite(sender);
+
     }
 
     @Override
@@ -207,10 +255,10 @@ public class FirstStartActivity extends GdgActivity implements
         startActivity(resultData);
     }
 
-    public class FirstStartPageAdapter extends FragmentStatePagerAdapter {
+    public static class FirstStartPageAdapter extends FragmentStatePagerAdapter {
         private Fragment[] mFragments;
 
-        public FirstStartPageAdapter(FragmentManager fm) {
+        FirstStartPageAdapter(FragmentManager fm) {
             super(fm);
             mFragments = new Fragment[]{
                 new FirstStartStep1Fragment(),
@@ -226,7 +274,7 @@ public class FirstStartActivity extends GdgActivity implements
 
         @Override
         public int getCount() {
-            return 3;
+            return mFragments.length;
         }
 
         @Override

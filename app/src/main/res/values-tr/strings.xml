@@ -85,7 +85,7 @@
   <string name="allow_analytics">Uygulamayı geliştirmemize yardımcı olmak için anonim kullanım bilgisi toplamamıza izin verin.</string>
   <string name="enable_gcm">GDG Bildirimlerini Aktifleştir (yeni etkinliklerden haberin olsun.)</string>
   <string name="step3_text">Başlamadan önce son bir şey&#8230;</string>
-  <string name="share_on_gplus">Arkadaşlarını Davet Et</string>
+  <string name="invite_friends">Arkadaşlarını Davet Et</string>
   <string name="join_me">Bu etkinlikle bana katıl!</string>
   <string name="name_not_known">İsim bilinmiyor.</string>
   <string name="originally_shared">paylaştı:</string>
@@ -155,11 +155,13 @@
   <string name="fork_me">Beni Fork\'la</string>
   <string name="cd_arrowTagImage">Organizatör etiketleme oyunu</string>
   <string name="cd_qrCode">Kare Kod</string>
-  <string name="invitation_title">GDG uygulamasına arkadaşlarınızı davet edin</string>
-  <string name="invitation_message">GDG Android uygulamasını indirin ve mobil olarak Google Developers Group\'larla ilgili her şeyi takip edin.</string>
+  <string name="invitation_message">GDG Android uygulamasını indirin ve mobil olarak Google Developers Group\'larla ilgili her şeyi takip edin. %s</string>
   <string name="invitation_error_message">Uygulama Daveti başarısız oldu.</string>
   <string name="thanks_for_feedback">Geri bildirim için teşekkürler!</string>
   <string name="retry">Tekrar Dene</string>
   <string name="title_event_series_greetings">Yeni etkinlikler yaklaşıyor!</string>
   <string name="event_series_greetings">%1$s hakkında daha bilgiye ulaş ve tğm dünyadaki etkinlikleri gör!</string>
+  <string name="cd_invitation_sender_profile_image">Davetiye gönderen profil resmi</string>
+  <string name="invite_congrats">Yaşasın! Sizi davet eden\n%s</string>
+  <string name="friend">bir arkadaş</string>
 </resources>

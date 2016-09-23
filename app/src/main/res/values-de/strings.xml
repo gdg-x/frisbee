@@ -85,7 +85,7 @@
   <string name="allow_analytics">Erlaube uns anonyme Nutzungsdaten zur Verbesserung der App zu sammeln</string>
   <string name="enable_gcm">Aktiviere GDG Cloud Benachrichtigungen (werde über neue Events benachrichtigt)</string>
   <string name="step3_text">Eine Sache noch&#8230;</string>
-  <string name="share_on_gplus">Freunde einladen</string>
+  <string name="invite_friends">Freunde einladen</string>
   <string name="join_me">Begleitet mich zu diesem Event!</string>
   <string name="name_not_known">Unbekannt</string>
   <string name="originally_shared">hat Folgendes ursprünglich geteilt:</string>
@@ -155,11 +155,13 @@
   <string name="fork_me">Fork mich</string>
   <string name="cd_arrowTagImage">Arrow Tagging Game</string>
   <string name="cd_qrCode">QR Code</string>
-  <string name="invitation_title">Lade deine Freunde zur GDG ein</string>
-  <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go.</string>
+  <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go. %s</string>
   <string name="invitation_error_message">App Invite was unsuccessful.</string>
   <string name="thanks_for_feedback">Vielen Dank für Dein Feedback!</string>
   <string name="retry">Nochmal versuchen</string>
   <string name="title_event_series_greetings">Neue Events kommen bald!</string>
   <string name="event_series_greetings">Erfahren Sie mehr über %1$s und verfolge Veranstaltungen auf der ganzen Welt!</string>
+  <string name="cd_invitation_sender_profile_image">Invitation sender profile image</string>
+  <string name="invite_congrats">Yey! You\'re invited by\n%s</string>
+  <string name="friend">a friend</string>
 </resources>
