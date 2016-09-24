@@ -86,9 +86,6 @@ android {
     }
 
     lintOptions {
-        abortOnError true
-        checkReleaseBuilds false
-
         ignoreWarnings ci
         textReport true
         textOutput 'stdout'
@@ -96,19 +93,11 @@ android {
         warning 'InvalidPackage'
         warning 'ImpliedQuantity'
         warning 'MissingQuantity'
-        warning 'MissingTranslation'
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
     }
 
     packagingOptions {
         exclude 'LICENSE.txt'
     }
-
-    useLibrary 'org.apache.http.legacy'
 }
 
 play {
