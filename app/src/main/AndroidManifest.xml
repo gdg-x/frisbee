@@ -66,7 +66,7 @@
       android:name=".gde.GdeActivity"
       android:theme="@style/Theme.GDG.WithNavDrawer" />
     <activity
-      android:name=".about.Resources"
+      android:name=".about.AboutActivity"
       android:theme="@style/Theme.GDG" />
     <activity
       android:name=".eventseries.TaggedEventSeriesActivity"
