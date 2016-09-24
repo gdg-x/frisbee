@@ -5,7 +5,7 @@ jdk:
 
 env:
   global:
-    - secure: "OaxeZXHPbdkHymxnep/o3CQnTLhoftgdRpD6kGHSOuRrsSrldKg0Vyp1fJykmP3Z+UMSI5N9K9tpb98OgWgdiQWeiSp+Q1tT+/Mo1GhmZD7UQssoUF4cvnZByQL5qgjDxqMzDTB1TVIe6B+BJ9iNyzZZ2i433afMAplra7nTP0M="
+    - secure: "Ge+jCpENJt7ppa6zs3BJgK2hEPAlNZQTg0RwhOFZZXA5lxeNNe5vJF+aaZax95B1lHV7pW2hoeQosB7dWRvIo4pjxKR4e+etgVoGCWOt0a1sLatI9g+gm5oVGu3GZ7E5BHqkpaVQ7if5H0Lcg3tlCzTlhGKkZjZPQCUQsovFf00="
     - secure: "OVfIL3ggaGcDgJJhdWxYTCo3u38SNPNUNPsv6adHp5wW0Y2n1CF1zcAnZXhTkGEjoGvi0RuV8ZLG9jbmQdqxd17qBeBf2XPWKxyG1SUfegDVSy9OPF8BY11Fsp9I5RP1W3T/c32KTc7zvhtAivq9mbcrBYJZhDCKpZkdTNliFQ0="
     - GRADLE_OPTS="-Xms40m -Xmx3g -XX:MaxPermSize=3g"
 
@@ -21,9 +21,9 @@ android:
 before_install:
   # $GPG_PASS is not defined for forks, so just skip it.
   - if [ -n "$GPG_PASS" ]; then echo $GPG_PASS | gpg --passphrase-fd 0 local.properties.gpg; fi
-  - if [ -n "$GPG_PASS" ]; then echo $GPG_PASS | gpg --passphrase-fd 0 settings/service_account.json.gpg; fi
-  - if [ -n "$GPG_PASS" ]; then echo $GPG_PASS | gpg --passphrase-fd 0 settings/release.keystore.gpg; fi
   - if [ -n "$GPG_PASS" ]; then echo $GPG_PASS | gpg --passphrase-fd 0 settings/signing.properties.gpg; fi
+  - if [ -n "$GPG_PASS" ]; then echo $GPG_PASS | gpg --passphrase-fd 0 settings/release.keystore.gpg; fi
+  - if [ -n "$GPG_PASS" ]; then echo $GPG_PASS | gpg --passphrase-fd 0 settings/service_account.json.gpg; fi
   - if [ -z "$GPG_PASS"]; then touch local.properties; fi
 
 after_success:
