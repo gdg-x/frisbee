@@ -198,6 +198,8 @@ public class FirstStartActivity extends GdgActivity implements
             if (invite != null) {
                 FirstStartStep2Fragment loginFragment = (FirstStartStep2Fragment) mViewPagerAdapter.getItem(1);
                 loginFragment.loadInvite(invite);
+
+                sendAnalyticsEvent("AppInvite", "Installed", "");
             }
         }
     }
