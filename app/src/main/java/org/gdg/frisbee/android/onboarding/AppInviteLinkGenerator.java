@@ -42,6 +42,9 @@ public class AppInviteLinkGenerator {
             .setText(activity.getString(R.string.invitation_message, appInviteLink))
             .setType("text/plain")
             .startChooser();
+
+        activity.sendAnalyticsEvent("AppInvite", "Shared",
+            gplusId != null ? "Signed In" : "Non Signed In");
     }
 
     private HttpUrl createAppInviteLink(String gplusId) {

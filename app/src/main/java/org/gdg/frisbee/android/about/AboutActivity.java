@@ -16,25 +16,19 @@
 
 package org.gdg.frisbee.android.about;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.android.gms.appinvite.AppInviteInvitation;
-
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.onboarding.AppInviteLinkGenerator;
 
 import butterknife.BindView;
-import timber.log.Timber;
 
 public class AboutActivity extends GdgActivity {
-
-    private static final int REQUEST_INVITE = 101;
 
     @BindView(R.id.pager)
     ViewPager mViewPager;
@@ -77,37 +71,6 @@ public class AboutActivity extends GdgActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Timber.d("onActivityResult: requestCode= %d, resultCode= %d", requestCode, resultCode);
-
-        if (requestCode == REQUEST_INVITE) {
-            if (resultCode == RESULT_OK) {
-                // Check how many invitations were sent and log a message
-                // The ids array contains the unique invitation ids for each invitation sent
-                // (one for each contact select by the user). You can use these for analytics
-                // as the ID will be consistent on the sending and receiving devices.
-                String[] ids = AppInviteInvitation.getInvitationIds(resultCode, data);
-                Timber.d("Sent %d invitations", ids.length);
-                sendAnalyticsEvent(
-                    "AppInvite",
-                    "Successful",
-                    String.valueOf(ids.length),
-                    ids.length);
-            } else {
-                // Sending failed or it was canceled, show failure message to the user
-                showError(R.string.invitation_error_message);
-
-                sendAnalyticsEvent(
-                    "AppInvite",
-                    "Error",
-                    ""
-                );
-            }
-        }
     }
 
 }
