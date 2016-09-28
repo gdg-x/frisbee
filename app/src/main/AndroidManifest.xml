@@ -121,6 +121,7 @@
         <data android:host="gdgroups.org" />
         <data android:host="gdg.events" />
         <data android:path="/" />
+        <data android:path="/invite" />
       </intent-filter>
     </activity>
     <activity

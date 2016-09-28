@@ -12,8 +12,7 @@ import okhttp3.HttpUrl;
 public class AppInviteLinkGenerator {
 
     private static final String SENDER = "sender";
-    private static final String SUPPORTED_VERSION_CODE = "26000";
-    private static final HttpUrl NON_SIGNED_IN_INVITE_URL = HttpUrl.parse("https://fmec6.app.goo.gl/Lr7u");
+    private static final HttpUrl NON_SIGNED_IN_INVITE_URL = HttpUrl.parse("https://fmec6.app.goo.gl/bVbA");
 
     private final String dynamicLinkDomain;
     private final String deepLinkBaseUrl;
@@ -52,13 +51,13 @@ public class AppInviteLinkGenerator {
             .newBuilder()
             .addQueryParameter("link", createDeepLink(gplusId))
             .addQueryParameter("apn", BuildConfig.APPLICATION_ID)
-            .addQueryParameter("amv", SUPPORTED_VERSION_CODE)
             .build();
     }
 
     private String createDeepLink(String gplusId) {
         return HttpUrl.parse(deepLinkBaseUrl)
             .newBuilder()
+            .addPathSegment("invite")
             .addQueryParameter(SENDER, gplusId)
             .build()
             .toString();
