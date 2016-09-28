@@ -1,6 +1,14 @@
-<strong>Release 2.5</strong>
-- DevFest season is added to drawer.
+<strong>Release 2.6</strong>
 
-<strong>Release 2.4.1</strong>
-- Bug fixes
-- Localization updates
+New:
+- Endless scrolling for events. You'll now see years of events of chapters.
+- New chapter spinner in main page.
+- Invite your friends to GDG app using the button in Nav Drawer.
+
+Gone:
+- :( Arrow Game and Achievements are removed. More info: https://github.com/gdg-x/frisbee/issues/648
+
+Fixed:
+- GDG Widget is fixed.
+- GDE categories are sorted.
+- Inactive chapters are now also inactive in Pulse

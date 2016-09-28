@@ -19,7 +19,6 @@ package org.gdg.frisbee.android.chapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,24 +28,18 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AndroidAppUri;
-import com.google.android.gms.appinvite.AppInviteReferral;
 
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.activity.AppInviteDeepLinkActivity;
 import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
@@ -62,12 +55,11 @@ import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import butterknife.BindView;
 import timber.log.Timber;
 
-public class MainActivity extends GdgNavDrawerActivity {
+public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectDialog.Listener {
 
     public static final String TITLE_GOOGLE_DEVELOPER_GROUPS = "Google Developer Groups";
     private static final String SECTION_EVENTS = "events";
@@ -88,18 +80,20 @@ public class MainActivity extends GdgNavDrawerActivity {
     TabLayout mTabLayout;
 
     private Handler mHandler = new Handler();
-    ChapterAdapter mChapterAdapter;
     ChapterFragmentPagerAdapter mViewPagerAdapter;
 
     private boolean mFirstStart = false;
 
-    private ChapterComparator mLocationComparator;
-    private Spinner mSpinner;
+    private ChapterComparator locationComparator;
+    private TextView chapterSwitcher;
     private String selectedChapterId;
+    private ArrayList<Chapter> chapters;
 
     // Local Broadcast receiver for receiving invites
-    @Nullable private BroadcastReceiver mDeepLinkReceiver;
-    @Nullable private OrganizerCheckCallback organizerCheckCallback;
+    @Nullable
+    private BroadcastReceiver mDeepLinkReceiver;
+    @Nullable
+    private OrganizerCheckCallback organizerCheckCallback;
 
     /**
      * Called when the activity is first created.
@@ -113,14 +107,10 @@ public class MainActivity extends GdgNavDrawerActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mLocationComparator = new ChapterComparator(PrefUtils.getHomeChapterIdNotNull(this),
+        locationComparator = new ChapterComparator(PrefUtils.getHomeChapterIdNotNull(this),
             App.getInstance().getLastLocation());
 
-        mChapterAdapter = new ChapterAdapter(MainActivity.this, R.layout.spinner_item_actionbar);
-        mChapterAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        initSpinner();
-
-        ArrayList<Chapter> chapters = null;
+        setupChapterSwitcher();
 
         if (savedInstanceState != null) {
             chapters = savedInstanceState.getParcelableArrayList(ARG_CHAPTERS);
@@ -137,13 +127,6 @@ public class MainActivity extends GdgNavDrawerActivity {
             }
 
             selectedChapterId = getChapterIdFromIntent(intent);
-
-            if (AppInviteReferral.hasReferral(intent)) {
-                // In this case the referral data is in the intent launching the MainActivity,
-                // which means this user already had the app installed. We do not have to
-                // register the Broadcast Receiver to listen for Play Store Install information
-                launchAppInviteActivity(intent);
-            }
         }
 
         if (selectedChapterId == null) {
@@ -151,15 +134,14 @@ public class MainActivity extends GdgNavDrawerActivity {
         }
 
         if (chapters != null) {
-            initChapters(chapters);
+            initUI();
         } else {
             App.getInstance().getModelCache().getAsync(
-                Const.CACHE_KEY_CHAPTER_LIST_HUB,
+                ModelCache.KEY_CHAPTER_LIST_HUB,
                 new ModelCache.CacheListener() {
                     @Override
                     public void onGet(Object item) {
-                        Directory directory = (Directory) item;
-                        initChapters(directory.getGroups());
+                        onDirectoryLoaded((Directory) item);
                     }
 
                     @Override
@@ -177,10 +159,6 @@ public class MainActivity extends GdgNavDrawerActivity {
         if (PrefUtils.shouldShowSeasonsGreetings(this)) {
             SeasonsGreetingsFragment seasonsGreetings = new SeasonsGreetingsFragment();
             seasonsGreetings.show(getSupportFragmentManager(), "dialog");
-        }
-
-        if (PrefUtils.isSignedIn(this)) {
-            checkAchievements();
         }
     }
 
@@ -226,11 +204,21 @@ public class MainActivity extends GdgNavDrawerActivity {
         String homeChapterId = getCurrentHomeChapterId();
         if (isHomeChapterOutdated(homeChapterId)
             && isShowingStoredHomeChapter()) {
-            int position = mChapterAdapter.getPosition(homeChapterId);
-            if (position != -1) {
-                updateSelectionFor(homeChapterId);
+            Chapter homeChapter = findChapterById(homeChapterId);
+            if (homeChapter != null) {
+                updateSelectionFor(homeChapter);
             }
         }
+    }
+
+    @Nullable
+    private Chapter findChapterById(String homeChapterId) {
+        Chapter temp = new Chapter("", homeChapterId);
+        int position = chapters.indexOf(temp);
+        if (position != -1) {
+            return chapters.get(position);
+        }
+        return null;
     }
 
     private boolean isShowingStoredHomeChapter() {
@@ -254,14 +242,13 @@ public class MainActivity extends GdgNavDrawerActivity {
             public void success(final Directory directory) {
 
                 App.getInstance().getModelCache().putAsync(
-                    Const.CACHE_KEY_CHAPTER_LIST_HUB,
+                    ModelCache.KEY_CHAPTER_LIST_HUB,
                     directory,
                     DateTime.now().plusDays(1),
                     new ModelCache.CachePutListener() {
                         @Override
                         public void onPutIntoCache() {
-                            ArrayList<Chapter> chapters = directory.getGroups();
-                            initChapters(chapters);
+                            onDirectoryLoaded(directory);
                         }
                     });
             }
@@ -278,21 +265,14 @@ public class MainActivity extends GdgNavDrawerActivity {
         });
     }
 
-    /**
-     * Initializes ViewPager, TabLayout, and Spinner Navigation.
-     *
-     * @param chapters Chapter array to be initialized, never null.
-     */
-    void initChapters(@NonNull ArrayList<Chapter> chapters) {
-        addChapters(chapters);
-
+    void initUI() {
         mViewPagerAdapter = new ChapterFragmentPagerAdapter(
             this,
             getSupportFragmentManager(), selectedChapterId
         );
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.setOffscreenPageLimit(3);
-        updateSelectionFor(selectedChapterId);
+        updateSelectionFor(findChapterById(selectedChapterId));
 
         recordStartPageView();
 
@@ -331,7 +311,7 @@ public class MainActivity extends GdgNavDrawerActivity {
         } catch (IndexOutOfBoundsException e) {
             pageName = "";
         }
-        Chapter chapter = mChapterAdapter.findById(selectedChapterId);
+        Chapter chapter = findChapterById(selectedChapterId);
         return "Main/" + (chapter != null ? chapter.getName().replaceAll(" ", "-") : "")
             + "/" + pageName;
     }
@@ -341,20 +321,10 @@ public class MainActivity extends GdgNavDrawerActivity {
         super.onActivityResult(requestCode, responseCode, intent);
     }
 
-    private void checkAchievements() {
-        if (mFirstStart) {
-            getAchievementActionHandler().handleSignIn();
-        }
-        getAchievementActionHandler().handleAppStarted();
-        if (PrefUtils.isWidgetAdded(this)) {
-            getAchievementActionHandler().handlePowerUser();
-        }
-    }
-
-    private void addChapters(List<Chapter> chapterList) {
-        Collections.sort(chapterList, mLocationComparator);
-        mChapterAdapter.clear();
-        mChapterAdapter.addAll(chapterList);
+    private void onDirectoryLoaded(Directory directory) {
+        chapters = directory.getGroups();
+        Collections.sort(chapters, locationComparator);
+        initUI();
     }
 
     @Override
@@ -364,13 +334,11 @@ public class MainActivity extends GdgNavDrawerActivity {
         if (PrefUtils.isFirstStart(this)) {
             startActivityForResult(new Intent(this, FirstStartActivity.class), REQUEST_FIRST_START_WIZARD);
         }
-        registerDeepLinkReceiver();
     }
 
     @Override
     protected void onStop() {
         recordEndPageView();
-        unregisterDeepLinkReceiver();
         super.onStop();
     }
 
@@ -378,46 +346,32 @@ public class MainActivity extends GdgNavDrawerActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        if (mChapterAdapter.getCount() > 0) {
-            outState.putParcelableArrayList(ARG_CHAPTERS, mChapterAdapter.getAll());
+        if (chapters.size() > 0) {
+            outState.putParcelableArrayList(ARG_CHAPTERS, chapters);
         }
         if (mViewPagerAdapter != null) {
             outState.putString(ARG_SELECTED_CHAPTER, mViewPagerAdapter.getSelectedChapter());
         }
     }
 
-    private void initSpinner() {
+    private void setupChapterSwitcher() {
         Toolbar toolbar = getActionBarToolbar();
-        View spinnerContainer = LayoutInflater.from(this).inflate(R.layout.actionbar_spinner, toolbar, false);
-        ActionBar.LayoutParams lp = new ActionBar.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
-        );
-        toolbar.addView(spinnerContainer, lp);
+        View container = LayoutInflater.from(this).inflate(R.layout.actionbar_chapter_selector, toolbar);
+        chapterSwitcher = (TextView) container.findViewById(android.R.id.text1);
 
-        mSpinner = (Spinner) spinnerContainer.findViewById(R.id.actionbar_spinner);
-
-        mSpinner.setAdapter(mChapterAdapter);
-        mSpinner.setOnItemSelectedListener(
-            new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(final AdapterView<?> parent, final View view,
-                                           final int position, final long id) {
-
-                    Chapter selectedChapter = mChapterAdapter.getItem(position);
-                    updateSelectionFor(selectedChapter.getGplusId());
-                }
-
-                @Override
-                public void onNothingSelected(final AdapterView<?> parent) {
-                    // Nothing to do.
-                }
+        chapterSwitcher.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChapterSelectDialog.newInstance(findChapterById(selectedChapterId))
+                    .show(getSupportFragmentManager(), ChapterSelectDialog.class.getSimpleName());
             }
-        );
+        });
     }
 
-    void updateSelectionFor(final String newChapterId) {
+    void updateSelectionFor(Chapter newChapter) {
+        String newChapterId = newChapter.getGplusId();
         mViewPagerAdapter.setSelectedChapter(newChapterId);
-        mSpinner.setSelection(mChapterAdapter.getPosition(newChapterId));
+        chapterSwitcher.setText(newChapter.toString());
         if (!selectedChapterId.equals(newChapterId)) {
             Timber.d("Switching newChapterId!");
             selectedChapterId = newChapterId;
@@ -425,37 +379,9 @@ public class MainActivity extends GdgNavDrawerActivity {
         }
     }
 
-    private void registerDeepLinkReceiver() {
-        // Create local Broadcast receiver that starts AppInviteDeepLinkActivity when a deep link
-        // is found
-        mDeepLinkReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (AppInviteReferral.hasReferral(intent)) {
-                    launchAppInviteActivity(intent);
-                }
-            }
-        };
-
-        IntentFilter intentFilter = new IntentFilter(getString(R.string.action_deep_link));
-        LocalBroadcastManager.getInstance(this).registerReceiver(
-            mDeepLinkReceiver, intentFilter
-        );
-    }
-
-    private void unregisterDeepLinkReceiver() {
-        if (mDeepLinkReceiver != null) {
-            LocalBroadcastManager.getInstance(this).unregisterReceiver(mDeepLinkReceiver);
-        }
-    }
-
-    /**
-     * Launch AppInviteActivity with an intent containing App Invite information
-     */
-    void launchAppInviteActivity(Intent intent) {
-        Timber.d("launchAppInviteActivity: %s", intent);
-        Intent newIntent = new Intent(intent).setClass(this, AppInviteDeepLinkActivity.class);
-        startActivity(newIntent);
+    @Override
+    public void onChapterSelected(Chapter selectedChapter) {
+        updateSelectionFor(selectedChapter);
     }
 
     public class ChapterFragmentPagerAdapter extends FragmentStatePagerAdapter {
@@ -466,16 +392,16 @@ public class MainActivity extends GdgNavDrawerActivity {
         private String mSelectedChapterId;
         private boolean forceUpdate = false;
 
-        public ChapterFragmentPagerAdapter(Context ctx,
-                                           FragmentManager fm,
-                                           @NonNull String selectedChapterId) {
+        ChapterFragmentPagerAdapter(Context ctx,
+                                    FragmentManager fm,
+                                    @NonNull String selectedChapterId) {
             super(fm);
             mContext = ctx;
             mSelectedChapterId = selectedChapterId;
             mPages = App.getInstance().isOrganizer() ? ORGANIZER_PAGES : PAGES;
         }
 
-        public void notifyDataSetChanged(boolean forceUpdate) {
+        void notifyDataSetChanged(boolean forceUpdate) {
             this.forceUpdate = forceUpdate;
             notifyDataSetChanged();
         }
@@ -524,11 +450,11 @@ public class MainActivity extends GdgNavDrawerActivity {
         }
 
         @NonNull
-        public String getSelectedChapter() {
+        String getSelectedChapter() {
             return mSelectedChapterId;
         }
 
-        public void setSelectedChapter(@NonNull String chapterId) {
+        void setSelectedChapter(@NonNull String chapterId) {
             trackView();
             mSelectedChapterId = chapterId;
         }
@@ -540,7 +466,7 @@ public class MainActivity extends GdgNavDrawerActivity {
 
         private boolean cancelled = false;
 
-        public OrganizerCheckCallback(ChapterFragmentPagerAdapter mViewPagerAdapter, boolean wasOrganizer) {
+        OrganizerCheckCallback(ChapterFragmentPagerAdapter mViewPagerAdapter, boolean wasOrganizer) {
             this.wasOrganizer = wasOrganizer;
             this.mViewPagerAdapter = mViewPagerAdapter;
         }

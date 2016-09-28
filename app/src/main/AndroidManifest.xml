@@ -47,9 +47,6 @@
       android:name="com.google.android.maps.v2.API_KEY"
       android:value="@string/android_simple_api_access_key" />
     <meta-data
-      android:name="com.google.android.gms.games.APP_ID"
-      android:value="@string/play_app_id" />
-    <meta-data
       android:name="com.google.android.gms.appstate.APP_ID"
       android:value="@string/play_app_id" />
     <meta-data
@@ -64,7 +61,37 @@
 
     <activity
       android:name=".chapter.MainActivity"
-      android:theme="@style/Theme.GDG.Main">
+      android:theme="@style/Theme.GDG.Main" />
+    <activity
+      android:name=".gde.GdeActivity"
+      android:theme="@style/Theme.GDG.WithNavDrawer" />
+    <activity
+      android:name=".about.AboutActivity"
+      android:theme="@style/Theme.GDG" />
+    <activity
+      android:name=".eventseries.TaggedEventSeriesActivity"
+      android:theme="@style/Theme.GDG.Special" />
+    <activity
+      android:name=".activity.SettingsActivity"
+      android:label="@string/settings"
+      android:theme="@style/Theme.GDG" />
+    <activity android:name=".onboarding.FirstStartActivity"
+      android:theme="@style/Theme.GDG.Onboarding"
+      />
+    <activity
+      android:name=".chapter.YoutubeActivity"
+      android:configChanges="keyboardHidden|orientation|screenSize"
+      android:screenOrientation="sensor"
+      android:theme="@style/Theme.GDG.SeeTrough" />
+    <activity
+      android:name=".onboarding.StartActivity"
+      android:configChanges="orientation|keyboardHidden|screenSize"
+      android:theme="@android:style/Theme.NoDisplay">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
 
@@ -92,56 +119,9 @@
         <data android:scheme="http" />
         <data android:scheme="https" />
         <data android:host="gdgroups.org" />
+        <data android:host="gdg.events" />
         <data android:path="/" />
-      </intent-filter>
-    </activity>
-    <activity
-      android:name=".gde.GdeActivity"
-      android:theme="@style/Theme.GDG.WithNavDrawer" />
-    <activity
-      android:name=".about.AboutActivity"
-      android:theme="@style/Theme.GDG" />
-    <activity
-      android:name=".eventseries.TaggedEventSeriesActivity"
-      android:theme="@style/Theme.GDG.Special" />
-    <activity
-      android:name=".activity.SettingsActivity"
-      android:label="@string/settings"
-      android:theme="@style/Theme.GDG" />
-    <activity
-      android:name=".arrow.ArrowActivity"
-      android:screenOrientation="portrait"
-      android:theme="@style/Theme.GDG.WithNavDrawer">
-      <intent-filter>
-        <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <data android:mimeType="application/vnd.org.gdgx.frisbee.arrow" />
-      </intent-filter>
-      <intent-filter>
-        <action android:name="android.intent.action.VIEW" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <data
-          android:host="arrow"
-          android:scheme="gdgx" />
-      </intent-filter>
-    </activity>
-    <activity
-      android:name=".arrow.ArrowTaggedActivity"
-      android:screenOrientation="portrait"
-      android:theme="@style/Theme.GDG.WithNavDrawer" />
-    <activity android:name=".onboarding.FirstStartActivity" />
-    <activity
-      android:name=".chapter.YoutubeActivity"
-      android:configChanges="keyboardHidden|orientation|screenSize"
-      android:screenOrientation="sensor"
-      android:theme="@style/Theme.GDG.SeeTrough" />
-    <activity
-      android:name=".onboarding.StartActivity"
-      android:configChanges="orientation|keyboardHidden|screenSize"
-      android:theme="@android:style/Theme.NoDisplay">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
-        <category android:name="android.intent.category.LAUNCHER" />
+        <data android:path="/invite" />
       </intent-filter>
     </activity>
     <activity
@@ -175,9 +155,6 @@
       </intent-filter>
     </activity>
     <activity
-      android:name=".activity.AppInviteDeepLinkActivity"
-      android:theme="@style/Theme.GDG.Panel"></activity>
-    <activity
       android:name=".activity.SearchActivity"
       android:launchMode="singleTop">
       <intent-filter>
@@ -208,14 +185,6 @@
       <meta-data
         android:name="android.appwidget.provider"
         android:resource="@xml/upcoming_event_appwidget_info" />
-    </receiver>
-    <receiver
-      android:name=".receiver.ReferrerReceiver"
-      android:exported="true"
-      tools:ignore="ExportedReceiver">
-      <intent-filter>
-        <action android:name="com.android.vending.INSTALL_REFERRER" />
-      </intent-filter>
     </receiver>
 
     <service android:name=".appwidget.UpcomingEventWidgetProvider$UpdateService" />

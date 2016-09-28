@@ -237,11 +237,6 @@ public class LocationListPreference extends DialogPreference implements AdapterV
         public boolean hasStableIds() {
             return true;
         }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
     }
 
     private static class SavedState extends BaseSavedState {

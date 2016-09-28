@@ -59,6 +59,34 @@ There are GDG communities all over the world, so we want Frisbee to be available
 You can help us out. Head over to Crowdin and start translating Frisbee to your language.
 https://crowdin.com/project/gdgx-frisbee
 
+Release
+-------
+
+The project has continuous distribution trigged by Travis CI. 
+
+Pushing to `master` branch -> alpha release
+Pushing to `release` branch -> beta release
+
+Alpha release is a special build that **should not** be promoted to beta & production.
+
+`release` branch is meant to be for production release. It is by default deployed to Beta group. After a brief test there, it can be safely promoted to production.
+
+Push triggers a release. 
+
+When we push something to `master` or `release`, it always creates another commit increasing the version number and git tag. It's not necessary to tag manually.
+
+####Best Practices
+
+- Alpha release
+  - Just merge `develop` into `master` and push to trigger an internal alpha release.
+- Beta/Production release
+  - Create a branch named `release`
+  - Increase version number in main `build.gradle` file.
+  - Make `versionBuild = 0`
+  - Update `app/src/main/play/en-US/whatsnew` file for change log in Google Play Store.
+  - Commit and push the changes.
+  - After a successful release, merge `release` branch into `develop`
+
 ######The GDG App, GDG[x] are not endorsed and/or supported by Google, the corporation.
 
 License

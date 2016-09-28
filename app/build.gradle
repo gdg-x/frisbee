@@ -42,8 +42,6 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         //KEYS
-        buildConfigField "String", "HUB_CLIENT_ID", "\"" + (local_properties.hub_client_id ?: "") + "\""
-        buildConfigField "String", "GCM_SENDER_ID", "\"" + (local_properties.gcm_sender_id ?: "") + "\""
         buildConfigField "long", "DOORBELL_ID", local_properties.doorbell_id ?: "0"
         buildConfigField "String", "DOORBELL_APP_KEY", "\"" + (local_properties.doorbell_app_key ?: "") + "\""
         resValue "string", "play_app_id", "429371117063"
@@ -88,9 +86,6 @@ android {
     }
 
     lintOptions {
-        abortOnError true
-        checkReleaseBuilds false
-
         ignoreWarnings ci
         textReport true
         textOutput 'stdout'
@@ -98,19 +93,11 @@ android {
         warning 'InvalidPackage'
         warning 'ImpliedQuantity'
         warning 'MissingQuantity'
-        warning 'MissingTranslation'
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
     }
 
     packagingOptions {
         exclude 'LICENSE.txt'
     }
-
-    useLibrary 'org.apache.http.legacy'
 }
 
 play {
@@ -138,17 +125,15 @@ dependencies {
     compile "com.android.support.test.espresso:espresso-idling-resource:$rootProject.espressoVersion"
 
     //Play Services
-    compile "com.google.android.gms:play-services-games:$rootProject.playServicesVersion"
+    compile "com.google.android.gms:play-services-auth:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-plus:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-analytics:$rootProject.playServicesVersion"
-    compile "com.google.android.gms:play-services-appinvite:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-appindexing:$rootProject.playServicesVersion"
+    compile "com.google.firebase:firebase-invites:$rootProject.playServicesVersion"
     compile "com.google.firebase:firebase-messaging:$rootProject.playServicesVersion"
 
     //Google
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
-    compile 'com.google.zxing:android-integration:3.2.1'
-    compile 'com.google.zxing:core:3.2.1'
 
     //Square
     compile "com.squareup.okhttp3:okhttp:$rootProject.okHttpVersion"
@@ -171,10 +156,10 @@ dependencies {
     //Others
     compile 'io.doorbell:android-sdk:0.2.6@aar'
     compile 'org.jsoup:jsoup:1.8.2'
-    compile "net.danlew:android.joda:$rootProject.jodaTimeVersion"
+    compile "net.danlew:android.joda:$rootProject.jodaTimeAndroidVersion"
     compile 'com.tasomaniac:delayed-progress:0.3'
     compile 'com.google.code.findbugs:jsr305:2.0.1'
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {
         transitive = true;
     }
 
@@ -192,7 +177,7 @@ dependencies {
     testCompile "org.robolectric:shadows-multidex:$rootProject.robolectricVersion"
     testCompile "joda-time:joda-time:$rootProject.jodaTimeVersion"
 
-    androidTestCompile 'org.assertj:assertj-core:1.7.1'
+    androidTestCompile 'org.assertj:assertj-core:3.5.2'
 
     // Android Testing Support Library's runner and rules
     androidTestCompile "com.android.support.test:runner:$rootProject.runnerVersion"
@@ -201,7 +186,7 @@ dependencies {
     // Espresso UI Testing dependencies.
     androidTestCompile "com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion"
     androidTestCompile "com.android.support.test.espresso:espresso-intents:$rootProject.espressoVersion"
-    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1'
+    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
 }
 
 apply plugin: 'com.google.gms.google-services'

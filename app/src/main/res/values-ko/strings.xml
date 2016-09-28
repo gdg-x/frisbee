@@ -39,7 +39,6 @@
   <string name="or">또는</string>
   <string name="skip">로그인 건너 뛰기</string>
   <string name="youtube_init_failed">유튜브 플레이어를 초기화할 수 없습니다.</string>
-  <string name="achievements">업적</string>
   <string name="settings">설정</string>
   <string name="about">정보</string>
   <plurals name="seconds_ago">
@@ -78,12 +77,11 @@
   <string name="google_signed_in">Google+에 로그인</string>
   <string name="google_signed_in_on">Google+에 로그인됨</string>
   <string name="google_signed_in_off">현재 로그인되어 있지 않습니다.</string>
-  <string name="achievements_need_signin">업적 잠금을 해제하려면 로그인 해야합니다</string>
   <string name="done">완료</string>
   <string name="allow_analytics">앱을 개선하는 데 필요한 익명의 사용자 데이터 수집을 허용합니다.</string>
   <string name="enable_gcm">GDG 알림 사용(새 이벤트 알림을 위해 사용됨)</string>
   <string name="step3_text">시작하기 전 한가지 더..</string>
-  <string name="share_on_gplus">친구 초대하기</string>
+  <string name="invite_friends">친구 초대하기</string>
   <string name="join_me">이 이벤트에서 저와 만나요!</string>
   <string name="name_not_known">알 수 없는 이름</string>
   <string name="originally_shared">님이 처음에 다음 항목을 공유:</string>
@@ -106,18 +104,6 @@
   <string name="gde_who_desc">Google Developer Experts (GDEs) are experts in one or more Google developer technologies. The GDE program recognizes the exemplary work done by these rock stars for the Google Developers worldwide by inviting them to be part of the growing GDE community. GDEs are gurus, mentors and friends; they are developers just like you.\n\nGoogle Developers Experts speak in local and global events, have a strong online presence and an excellent technical background in their field. These independent developers bring their real-world experience and knowledge working with Google technologies to developer communities worldwide.</string>
   <string name="gde_what_title">What kind of activities do GDEs do?</string>
   <string name="gde_what_desc">GDEs write code and launch apps; they open source as much as possible of the code they write to benefit other developers. They have written and continue to write blog posts, articles, documentation, books, etc. about development on the Google platform.\n\nThey also translate existing documentation into other languages to benefit local developers. GDEs have high reps on forums like Stack Overflow and are top contributors on product mailing lists.\n\nThey speak at developer conferences, organize and lead GDGs, and conduct hackathons. GDEs can be nominated for the program for doing one or more types of activities for a product. Once they are accepted as a GDE, they are expected to continue contributing in any of the ways listed above.</string>
-  <string name="arrow_oops">Uh oh, something went wrong. Please try again.</string>
-  <string name="arrow_stale">Uh oh, that code has expired. Try again.</string>
-  <string name="arrow_scan">Ready to Scan!\nGo find a GDG Organizer\nand ask nicely if you may \"tag\" him/her</string>
-  <string name="arrow_organizer">Hey, it seems you are a GDG Organizer. Switch to Send Mode here if you want to allow someone to \"tag\" you.</string>
-  <string name="arrow_send_mode">Send Mode</string>
-  <string name="arrow_tag_here">Touch NFC phones and tap to fire off the arrow!</string>
-  <string name="arrow_back_receive">Back to Tag Mode</string>
-  <string name="arrow_already_tagged">Shoot! You already tagged this Organizer!</string>
-  <string name="arrow">Arrow</string>
-  <string name="arrow_need_games">You need to be logged in to play GDG Arrow</string>
-  <string name="arrow_selfie">You really can not tag yourself. Sorry ;)</string>
-  <string name="arrow_leaderboard">Best of Arrow</string>
   <string name="no_nfc_use_qr_scanner">No NFC detected, use QR scanner!</string>
   <string name="event_description">Description</string>
   <string name="event">Event</string>
@@ -165,11 +151,13 @@
   <string name="fork_me">Fork me</string>
   <string name="cd_arrowTagImage">Arrow Tagging Game</string>
   <string name="cd_qrCode">QR Code</string>
-  <string name="invitation_title">Invite your friends to GDG app</string>
-  <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go.</string>
+  <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go. %s</string>
   <string name="invitation_error_message">App Invite was unsuccessful.</string>
   <string name="thanks_for_feedback">Thank you for your Feedback!</string>
   <string name="retry">Retry</string>
   <string name="title_event_series_greetings">New events coming up!</string>
   <string name="event_series_greetings">Learn more about %1$s and see events around the world!</string>
+  <string name="cd_invitation_sender_profile_image">Invitation sender profile image</string>
+  <string name="invite_congrats">Yey! You\'re invited by\n%s</string>
+  <string name="friend">a friend</string>
 </resources>

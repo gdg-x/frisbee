@@ -26,6 +26,10 @@ public interface GdgXHub {
                                                @Path("start") final DateTime start,
                                                @Path("end") final DateTime end);
 
+    @GET("chapters/{chapterId}/events?perpage=20&sort=start&asc=-1")
+    Call<PagedList<Event>> getChapterAllEventList(@Path("chapterId") final String chapterId,
+                                                  @Query("page") Integer page);
+
     @GET("events/{id}")
     Call<EventFullDetails> getEventDetail(@Path("id") String eventId);
 

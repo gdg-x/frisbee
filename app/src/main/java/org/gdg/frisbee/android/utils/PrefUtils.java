@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
@@ -24,7 +23,6 @@ public final class PrefUtils {
     private static final String PREFS_VERSION_CODE = "gdg_version_code";
     private static final String PREFS_APP_STARTS = "gdg_app_starts";
     private static final String PREFS_SEASONS_GREETINGS = "seasons_greetings";
-    private static final String PREFS_ACHIEVEMENTS_PREFIX = "achievement_unlocked_";
     private static final String PREFS_WIDGET_ADDED = "widget_added";
     private static final String PREFS_FATAL_GOOGLE_PLAY_SERVICE = "fatal_google_play_service";
     private static final String PREFS_EVENT_SERIES_NOTIFICATION_ALARM_SET = "event_series_notification_alarm_set";
@@ -58,10 +56,8 @@ public final class PrefUtils {
     public static void setLoggedOut(Context context) {
         prefs(context).edit()
             .putBoolean(SETTINGS_SIGNED_IN, false)
-            .putBoolean(Const.PREF_ORGANIZER_STATE, false)
-            .putLong(Const.PREF_ORGANIZER_CHECK_TIME, 0)
             .apply();
-        App.getInstance().initOrganizer();
+        App.getInstance().resetOrganizer();
     }
 
     @Nullable
@@ -138,30 +134,6 @@ public final class PrefUtils {
     public static void resetInitialSettings(final Context context) {
         prefs(context).edit()
             .clear()
-            .apply();
-    }
-
-    public static boolean isAchievementUnlocked(final Context context, final String achievement) {
-        return prefs(context).getBoolean(PREFS_ACHIEVEMENTS_PREFIX + achievement, false);
-    }
-
-    public static void setAchievementUnlocked(@NonNull final Context context,
-                                              @NonNull final String achievement) {
-        prefs(context).edit()
-            .putBoolean(PREFS_ACHIEVEMENTS_PREFIX + achievement, true)
-            .apply();
-    }
-
-    public static boolean hasHigherAchievementSteps(Context context, String achievementName, int steps) {
-        SharedPreferences preferences = prefs(context);
-        String achievementKey = PREFS_ACHIEVEMENTS_PREFIX + achievementName;
-        return preferences.getInt(achievementKey, 0) > steps;
-    }
-
-    public static void setAchievementSteps(@NonNull final Context context,
-                                           @NonNull final String achievement, @NonNull final Integer steps) {
-        prefs(context).edit()
-            .putInt(PREFS_ACHIEVEMENTS_PREFIX + achievement, steps)
             .apply();
     }
 

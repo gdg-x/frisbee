@@ -17,7 +17,6 @@ import android.widget.TextView;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.LeadMessage;
-import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.Utils;
 
 import butterknife.BindView;
@@ -65,10 +64,6 @@ public class LeadFragment extends ListFragment {
         if (item.getType() == LeadMessage.Type.resource) {
             Activity activity = getActivity();
             startActivity(Utils.createExternalIntent(activity, Uri.parse(item.getLinkUrl())));
-            if (activity != null && activity instanceof GdgActivity) {
-                ((GdgActivity) activity).getAchievementActionHandler()
-                    .handleCuriousOrganizer();
-            }
         }
     }
 

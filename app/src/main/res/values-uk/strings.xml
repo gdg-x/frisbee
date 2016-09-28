@@ -42,7 +42,6 @@
   <string name="or">або</string>
   <string name="skip">Пропустити вхід</string>
   <string name="youtube_init_failed">Не вдалося ініціалізувати програвач YouTube.</string>
-  <string name="achievements">Досягнення</string>
   <string name="settings">Налаштування</string>
   <string name="about">Про</string>
   <plurals name="seconds_ago">
@@ -100,9 +99,6 @@
   <string name="google_signed_in">Авторизація в Google+</string>
   <string name="google_signed_in_on">На даний час, ви авторизовані в Google+</string>
   <string name="google_signed_in_off">Ви не ввійшли</string>
-  <string name="achievements_need_signin">Ви повинні бути авторизовані, щоб розблокувати
-        досягнення
-    </string>
   <string name="done">Готово</string>
   <string name="allow_analytics">Дозвольте збирати анонімні дані про використання додатку, щоб
         допомогти покращити його
@@ -110,7 +106,7 @@
   <string name="enable_gcm">Включити сповіщення GDG (отримувати сповіщення про нові події)
     </string>
   <string name="step3_text">Ще одна річ, перш ніж ми почнемо&#8230;</string>
-  <string name="share_on_gplus">Запросити друзів</string>
+  <string name="invite_friends">Запросити друзів</string>
   <string name="join_me">Приєднуйтесь до мене на цій події!</string>
   <string name="name_not_known">Невідоме ім\'я</string>
   <string name="originally_shared">спочатку поділився:</string>
@@ -139,18 +135,6 @@
   <string name="gde_who_desc">Google Developer Experts (GDE-ти) - це експерти в одній або більше технологіях Google. Програма GDE визнає зразкову роботу, виконану цими рок-зірками для розробків Google  по всьому світу, запрошуючи їх бути частиною зростаючої спільноти GDE. GDE-ти є гуру, наставниками і друзями; вони є розробники такими як і ви.\n\nGDE роблять доповіді на як і на локальних, так і на глобальних подіях, маючи сильну онлайн присутність і глибокі знання в своїй області. Ці незалежні розробники приносять їх реальний досвід і знання роботи з технологіями Google для спільнот розробників по всьому світу.</string>
   <string name="gde_what_title">Що роблять GDE-ти?</string>
   <string name="gde_what_desc">GDE-ти пишуть код і випускають додатки; вони дають у відкритий доступ якомога більше коду, який вони написали, в інтересах інших розробників. Вони пишуть блоги, статті, документації, книги і т.д. про розробку на платформі Google.\n\nВони також перекладають існуючу документацію на інші мови в інтересах місцевих розробників. GDE-ти мають високу репутацію на форумах, таких як Stack Overflow і часто пишуть розсилках продукту.\n\nВони виступають на конференціях розробників, організовують та очолюють GDG-и і проводять хакатони. Після того, як вони будуть прийняті в якості GDE, вони будуть продовжувати робити те що і колись.</string>
-  <string name="arrow_oops">Халепа, щось пішло не так. Будь ласка, спробуйте ще раз.</string>
-  <string name="arrow_stale">От-такої, цей код вже не працює. Спробуйте ще раз.</string>
-  <string name="arrow_scan">Готовий сканувати!\nЗнайдіть GDG організатора\n і гарно запитайте чи можна \"затегувати\" його/її</string>
-  <string name="arrow_organizer">Агов, виглядає так, що Ви GDG організатор. Перейдіть у режим відправки тут, якщо Ви хочете, щоб вас хтось \"затегав\".</string>
-  <string name="arrow_send_mode">Режим відправки</string>
-  <string name="arrow_tag_here">Дотуліть NFC телефони і натисніть, щоб запустити стрілу!</string>
-  <string name="arrow_back_receive">Назад до режиму \"тегування\"</string>
-  <string name="arrow_already_tagged">Ой! Ви вже \"затегували\" цього організатора!</string>
-  <string name="arrow">Arrow</string>
-  <string name="arrow_need_games">Ви маєте бути авторизованими, щоб грати GDG Стрілу</string>
-  <string name="arrow_selfie">Гарна спроба! Проте, Ви не можете \"тегувати\" себе.</string>
-  <string name="arrow_leaderboard">Найкращі із Стріли</string>
   <string name="no_nfc_use_qr_scanner">NFC не знайдено, використовуйте QR сканер!</string>
   <string name="event_description">Опис</string>
   <string name="event">Подія</string>
@@ -198,11 +182,13 @@
   <string name="fork_me">Клонуй мене</string>
   <string name="cd_arrowTagImage">Arrow Tagging Game</string>
   <string name="cd_qrCode">QR Code</string>
-  <string name="invitation_title">Invite your friends to GDG app</string>
-  <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go.</string>
+  <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go. %s</string>
   <string name="invitation_error_message">App Invite was unsuccessful.</string>
   <string name="thanks_for_feedback">Thank you for your Feedback!</string>
   <string name="retry">Retry</string>
   <string name="title_event_series_greetings">New events coming up!</string>
   <string name="event_series_greetings">Learn more about %1$s and see events around the world!</string>
+  <string name="cd_invitation_sender_profile_image">Invitation sender profile image</string>
+  <string name="invite_congrats">Yey! You\'re invited by\n%s</string>
+  <string name="friend">a friend</string>
 </resources>

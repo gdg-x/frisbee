@@ -95,7 +95,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                 mainIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             views.setOnClickPendingIntent(R.id.container, pi);
 
-            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, false,
+            App.getInstance().getModelCache().getAsync(ModelCache.KEY_CHAPTER_LIST_HUB, false,
                 new ModelCache.CacheListener() {
                     @Override
                     public void onGet(Object item) {

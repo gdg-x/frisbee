@@ -22,12 +22,10 @@ import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceScreen;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.auth.GoogleAuthException;
@@ -36,10 +34,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.games.Games;
 import com.google.android.gms.plus.Plus;
 
-import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.activity.SettingsActivity;
 import org.gdg.frisbee.android.api.model.Chapter;
@@ -58,7 +54,6 @@ import java.io.IOException;
 public class SettingsFragment extends PreferenceFragment {
 
     private GoogleApiClient mGoogleApiClient;
-    private LinearLayout mLoading;
 
     private Preference.OnPreferenceChangeListener mOnHomeGdgPreferenceChange =
         new Preference.OnPreferenceChangeListener() {
@@ -107,19 +102,13 @@ public class SettingsFragment extends PreferenceFragment {
         return inflater.inflate(R.layout.fragment_simple_prefs, container, false);
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mLoading = new LinearLayout(getActivity());
-    }
-
     private void initPreferences() {
         final LocationListPreference prefHomeGdgList =
             (LocationListPreference) findPreference(PrefUtils.SETTINGS_HOME_GDG);
         if (prefHomeGdgList != null) {
             prefHomeGdgList.setEnabled(false);
 
-            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, false,
+            App.getInstance().getModelCache().getAsync(ModelCache.KEY_CHAPTER_LIST_HUB, false,
                 new ModelCache.CacheListener() {
                     @Override
                     public void onGet(Object item) {
@@ -150,8 +139,7 @@ public class SettingsFragment extends PreferenceFragment {
 
         CheckBoxPreference prefGoogleSignIn = (CheckBoxPreference) findPreference(PrefUtils.SETTINGS_SIGNED_IN);
         if (prefGoogleSignIn != null) {
-            if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(getActivity())
-                == ConnectionResult.SUCCESS) {
+            if (isGooglePlayServicesAvailable()) {
                 prefGoogleSignIn.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                     @Override
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -164,7 +152,6 @@ public class SettingsFragment extends PreferenceFragment {
                             createConnectedGoogleApiClient();
                         } else {
                             if (mGoogleApiClient.isConnected()) {
-                                Games.signOut(mGoogleApiClient);
                                 Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
                                 disconnectGoogleApiClient();
                             }
@@ -175,8 +162,7 @@ public class SettingsFragment extends PreferenceFragment {
                     }
                 });
             } else {
-                PreferenceScreen root = (PreferenceScreen) findPreference(PrefUtils.SETTINGS_ROOT);
-                root.removePreference(prefGoogleSignIn);
+                prefGoogleSignIn.setEnabled(false);
             }
         }
 
@@ -184,6 +170,11 @@ public class SettingsFragment extends PreferenceFragment {
         if (prefAnalytics != null) {
             prefAnalytics.setOnPreferenceChangeListener(mOnAnalyticsPreferenceChange);
         }
+    }
+
+    private boolean isGooglePlayServicesAvailable() {
+        return GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(getActivity())
+            == ConnectionResult.SUCCESS;
     }
 
     private void createConnectedGoogleApiClient() {

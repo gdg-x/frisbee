@@ -33,7 +33,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Pulse;
@@ -74,7 +73,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
             selectedPulse = PulseFragment.GLOBAL;
         }
 
-        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PULSE_GLOBAL, true, new ModelCache.CacheListener() {
+        App.getInstance().getModelCache().getAsync(ModelCache.KEY_PULSE_GLOBAL, true, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 Pulse pulse = (Pulse) item;
@@ -93,7 +92,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
             @Override
             public void success(final Pulse pulse) {
                 App.getInstance().getModelCache().putAsync(
-                    Const.CACHE_KEY_PULSE_GLOBAL,
+                    ModelCache.KEY_PULSE_GLOBAL,
                     pulse,
                     DateTime.now().plusDays(1),
                     new ModelCache.CachePutListener() {
