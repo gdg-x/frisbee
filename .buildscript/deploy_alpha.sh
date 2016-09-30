@@ -29,6 +29,10 @@ commitAndPushToGit () {
   local version=$1
   git config user.name "GDG-X"
   git config user.email "support@gdgx.io"
+  git stash
+  git checkout develop
+  git merge $BRANCH
+  git stash pop
   git add build.gradle
   git commit -m "Prepare for release $version"
   git tag -a $version -m "Version $version"
