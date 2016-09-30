@@ -5,9 +5,8 @@
   package="org.gdg.frisbee.android"
   android:installLocation="auto">
 
-  <uses-feature
-    android:name="android.hardware.nfc"
-    android:required="false" />
+  <uses-feature android:name="android.hardware.nfc" android:required="false" />
+  <uses-feature android:name="android.hardware.location.gps" android:required="false" />
 
   <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
   <uses-permission android:name="android.permission.INTERNET" />
