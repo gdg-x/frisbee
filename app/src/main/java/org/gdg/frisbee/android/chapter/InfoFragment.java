@@ -24,6 +24,7 @@ import android.text.Html;
 import android.text.Spanned;
 import android.text.SpannedString;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -146,6 +147,7 @@ public class InfoFragment extends BaseFragment {
         }
         if (mAbout != null) {
             mAbout.setText(getAboutText(chapter));
+            mAbout.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }
 
@@ -189,6 +191,7 @@ public class InfoFragment extends BaseFragment {
         TextView tv = (TextView) mInflater
             .inflate(R.layout.list_resource_item, (ViewGroup) getView(), false);
         tv.setText(Html.fromHtml("<a href='" + url.getValue() + "'>" + url.getLabel() + "</a>"));
+        tv.setMovementMethod(LinkMovementMethod.getInstance());
         mResourcesBox.addView(tv);
     }
 
