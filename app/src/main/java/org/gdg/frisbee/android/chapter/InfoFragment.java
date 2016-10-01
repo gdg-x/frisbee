@@ -147,6 +147,7 @@ public class InfoFragment extends BaseFragment {
         }
         if (mAbout != null) {
             mAbout.setText(getAboutText(chapter));
+            mAbout.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }
 
