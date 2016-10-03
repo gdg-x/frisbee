@@ -3,6 +3,9 @@ package org.gdg.frisbee.android.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.plus.PlusShare;
@@ -19,10 +22,10 @@ public class ParseDeepLinkActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent target;
+        Intent target = null;
 
         String deepLinkId = PlusShare.getDeepLinkId(getIntent());
-        if (deepLinkId != null) {
+        if (!TextUtils.isEmpty(deepLinkId)) {
             target = parseDeepLinkId(deepLinkId);
         } else {
             if (Intent.ACTION_VIEW.equals(getIntent().getAction())) {
@@ -30,13 +33,13 @@ public class ParseDeepLinkActivity extends Activity {
                 target.setClass(getApplicationContext(), EventActivity.class);
                 target.putExtra(Const.EXTRA_EVENT_ID, getIntent().getData().getLastPathSegment());
                 target.putExtra(Const.EXTRA_SECTION, EventActivity.EventPagerAdapter.SECTION_OVERVIEW);
-            } else {
-                target = null;
             }
         }
 
         if (target != null) {
-            startActivity(target);
+            if (target.resolveActivity(getPackageManager()) != null) {
+                startActivity(target);
+            }
         }
 
         finish();
@@ -48,12 +51,10 @@ public class ParseDeepLinkActivity extends Activity {
      * @param deepLinkId The deep-link ID to parse.
      * @return The intent corresponding to the deep-link ID.
      */
-    private Intent parseDeepLinkId(String deepLinkId) {
-        if (deepLinkId == null) {
-            return null;
-        }
+    @Nullable
+    private Intent parseDeepLinkId(@NonNull String deepLinkId) {
         Intent route = new Intent();
-        Timber.d("Deep Link id: " + deepLinkId);
+        Timber.d("Deep Link id: %s", deepLinkId);
         String[] parts = deepLinkId.split("/");
 
         App.getInstance().getTracker().send(new HitBuilders.EventBuilder()
