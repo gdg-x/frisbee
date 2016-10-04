@@ -346,7 +346,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        if (chapters.size() > 0) {
+        if (chapters != null && !chapters.isEmpty()) {
             outState.putParcelableArrayList(ARG_CHAPTERS, chapters);
         }
         if (mViewPagerAdapter != null) {
