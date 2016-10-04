@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -36,10 +35,8 @@ public class ParseDeepLinkActivity extends Activity {
             }
         }
 
-        if (target != null) {
-            if (target.resolveActivity(getPackageManager()) != null) {
-                startActivity(target);
-            }
+        if (target != null && target.resolveActivity(getPackageManager()) != null) {
+            startActivity(target);
         }
 
         finish();
@@ -51,7 +48,6 @@ public class ParseDeepLinkActivity extends Activity {
      * @param deepLinkId The deep-link ID to parse.
      * @return The intent corresponding to the deep-link ID.
      */
-    @Nullable
     private Intent parseDeepLinkId(@NonNull String deepLinkId) {
         Intent route = new Intent();
         Timber.d("Deep Link id: %s", deepLinkId);
