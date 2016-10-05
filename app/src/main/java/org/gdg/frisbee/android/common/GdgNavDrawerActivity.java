@@ -319,18 +319,16 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     private void updateUserPicture() {
-        if (!PrefUtils.isSignedIn(this)) {
+        final String gplusId = PlusUtils.getCurrentPersonId(getGoogleApiClient());
+        if (gplusId == null) {
             mDrawerUserPicture.setImageDrawable(null);
             return;
         }
-        final String gplusId = PlusUtils.getCurrentPersonId(getGoogleApiClient());
-        if (gplusId != null) {
-            App.getInstance().getPicasso().load(PlusUtils.createProfileUrl(gplusId))
-                .transform(new BitmapBorderTransformation(2,
-                    getResources().getDimensionPixelSize(R.dimen.navdrawer_user_picture_size) / 2,
-                    ContextCompat.getColor(this, R.color.white)))
-                .into(mDrawerUserPicture);
-        }
+        App.getInstance().getPicasso().load(PlusUtils.createProfileUrl(gplusId))
+            .transform(new BitmapBorderTransformation(2,
+                getResources().getDimensionPixelSize(R.dimen.navdrawer_user_picture_size) / 2,
+                ContextCompat.getColor(this, R.color.white)))
+            .into(mDrawerUserPicture);
     }
 
     private void maybeUpdateChapterImage() {
