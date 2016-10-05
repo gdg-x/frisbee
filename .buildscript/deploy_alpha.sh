@@ -78,7 +78,7 @@ else
   version=$(getVersionName);
   updateWhatsNewFile
   echo "Deploying $TRACK APK version $version"
-  ./gradlew $GRADLE_TASK -Ptrack=$TRACK
+  ./gradlew $GRADLE_TASK -Dtrack=$TRACK
   if [ $? -eq 0 ]; then
     echo "$TRACK APK successfully deployed!"
     commitAndPushToGit $version
