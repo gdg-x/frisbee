@@ -46,29 +46,26 @@
       android:layout_height="wrap_content"
       android:layout_marginRight="20dip"
       android:gravity="center_horizontal"
-      android:layout_toLeftOf="@id/googleSignin"
+      android:layout_toLeftOf="@id/sign_in_button"
       android:text="@string/signin_description"
       android:textAppearance="@android:style/TextAppearance.Large"
       android:textColor="@color/asbestos" />
 
-    <Button
-      android:id="@+id/googleSignin"
-      style="@style/GoogleSignIn"
+    <com.google.android.gms.common.SignInButton
+      android:id="@+id/sign_in_button"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentRight="true"
       android:layout_alignParentEnd="true"
-      android:layout_marginTop="@dimen/content_padding"
-      android:background="@drawable/btn_g_signin"
-      android:text="@string/signin_with_google" />
+      android:layout_marginTop="@dimen/content_padding"/>
 
     <TextView
       android:id="@+id/textView1"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_alignLeft="@id/googleSignin"
-      android:layout_alignRight="@id/googleSignin"
-      android:layout_below="@id/googleSignin"
+      android:layout_alignLeft="@id/sign_in_button"
+      android:layout_alignRight="@id/sign_in_button"
+      android:layout_below="@id/sign_in_button"
       android:padding="@dimen/content_padding_small"
       android:gravity="center"
       android:text="@string/or"
@@ -79,8 +76,8 @@
       android:id="@+id/skipSignin"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_alignLeft="@id/googleSignin"
-      android:layout_alignRight="@id/googleSignin"
+      android:layout_alignLeft="@id/sign_in_button"
+      android:layout_alignRight="@id/sign_in_button"
       android:layout_below="@id/textView1"
       android:text="@string/skip" />
 

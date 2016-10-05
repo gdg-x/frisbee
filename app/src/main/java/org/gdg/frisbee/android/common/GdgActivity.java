@@ -88,7 +88,6 @@ public abstract class GdgActivity extends TrackableActivity implements
     private PendingIntent mSignInIntent;
 
     private Toolbar mActionBarToolbar;
-    private boolean isSignedIn;
 
     @Override
     public void setContentView(int layoutResId) {
@@ -122,25 +121,7 @@ public abstract class GdgActivity extends TrackableActivity implements
     protected void onStart() {
         super.onStart();
 
-        recreateGoogleApiClientIfNeeded();
         mGoogleApiClient.connect();
-    }
-
-    protected final void recreateGoogleApiClientIfNeeded() {
-        if (isSignedIn != PrefUtils.isSignedIn(this)) {
-            mGoogleApiClient.unregisterConnectionCallbacks(this);
-            mGoogleApiClient.unregisterConnectionFailedListener(this);
-            mGoogleApiClient.disconnect();
-
-            mGoogleApiClient = createGoogleApiClient();
-        }
-
-        if (!mGoogleApiClient.isConnectionCallbacksRegistered(this)) {
-            mGoogleApiClient.registerConnectionCallbacks(this);
-        }
-        if (!mGoogleApiClient.isConnectionFailedListenerRegistered(this)) {
-            mGoogleApiClient.registerConnectionFailedListener(this);
-        }
     }
 
     /**
@@ -149,7 +130,6 @@ public abstract class GdgActivity extends TrackableActivity implements
      * @return {@link GoogleApiClient} without connecting. {@code connect()} must be called afterwards.
      */
     protected GoogleApiClient createGoogleApiClient() {
-        isSignedIn = PrefUtils.isSignedIn(this);
         return GoogleApiClientFactory.createWith(this);
     }
 

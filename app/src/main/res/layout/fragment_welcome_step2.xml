@@ -45,15 +45,12 @@
     android:textAppearance="@android:style/TextAppearance.Large"
     android:textColor="@color/asbestos" />
 
-  <Button
-    android:id="@+id/googleSignin"
-    style="@style/GoogleSignIn"
+  <com.google.android.gms.common.SignInButton
+    android:id="@+id/sign_in_button"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_marginBottom="15dip"
-    android:background="@drawable/btn_g_signin"
-    android:text="@string/signin_with_google" />
+    android:layout_marginBottom="@dimen/content_padding"/>
 
   <LinearLayout
     android:layout_width="wrap_content"

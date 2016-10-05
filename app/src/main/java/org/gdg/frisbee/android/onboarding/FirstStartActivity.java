@@ -31,15 +31,19 @@ import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.appinvite.AppInvite;
 import com.google.android.gms.appinvite.AppInviteInvitationResult;
 import com.google.android.gms.appinvite.AppInviteReferral;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Scope;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.app.GoogleApiClientFactory;
 import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
@@ -54,7 +58,7 @@ public class FirstStartActivity extends GdgActivity implements
     FirstStartStep2Fragment.Step2Listener,
     FirstStartStep3Fragment.Step3Listener {
 
-    private static final String SIGN_IN_REQUESTED = "SIGN_IN_REQUESTED";
+    private static final int RC_SIGN_IN = 101;
     public static final String ACTION_FIRST_START = "finish_first_start";
 
     @BindView(R.id.pager)
@@ -64,11 +68,13 @@ public class FirstStartActivity extends GdgActivity implements
     FrameLayout mContentLayout;
 
     private FirstStartPageAdapter mViewPagerAdapter;
-    private boolean signInRequested;
+    private GoogleApiClient signInClient;
 
     @Override
     protected GoogleApiClient createGoogleApiClient() {
-        return GoogleApiClientFactory.createWithApi(this, AppInvite.API);
+        return new GoogleApiClient.Builder(this)
+            .addApi(AppInvite.API)
+            .build();
     }
 
     @Override
@@ -79,13 +85,10 @@ public class FirstStartActivity extends GdgActivity implements
 
         App.getInstance().updateLastLocation();
 
-        if (savedInstanceState != null) {
-            signInRequested = savedInstanceState.getBoolean(SIGN_IN_REQUESTED);
-        }
+        setupSignInClient();
 
         mViewPagerAdapter = new FirstStartPageAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);
-
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i2) {
@@ -110,17 +113,46 @@ public class FirstStartActivity extends GdgActivity implements
         });
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    private void setupSignInClient() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestScopes(new Scope(Scopes.PLUS_LOGIN))
+            .build();
+        signInClient = new GoogleApiClient.Builder(this)
+            .enableAutoManage(this, this)
+            .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+            .build();
 
-        outState.putBoolean(SIGN_IN_REQUESTED, signInRequested);
+        Auth.GoogleSignInApi.silentSignIn(signInClient).setResultCallback(new ResultCallback<GoogleSignInResult>() {
+            @Override
+            public void onResult(@NonNull GoogleSignInResult googleSignInResult) {
+                if (googleSignInResult.isSuccess()) {
+                    PrefUtils.setSignedIn(getApplicationContext());
+                }
+            }
+        });
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignInResult(result);
+            return;
+        }
+
         mViewPagerAdapter.getItem(mViewPager.getCurrentItem()).onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void handleSignInResult(GoogleSignInResult result) {
+        if (result.isSuccess()) {
+            PrefUtils.setSignedIn(this);
+            moveToStep3(true);
+        }
     }
 
     @Override
@@ -161,25 +193,13 @@ public class FirstStartActivity extends GdgActivity implements
 
     @Override
     public void onSignedIn() {
-        PrefUtils.setSignedIn(this);
-        recreateGoogleApiClientIfNeeded();
-
-        if (getGoogleApiClient().isConnected()) {
-            moveToStep3(true);
-        } else {
-            getGoogleApiClient().connect();
-            signInRequested = true;
-        }
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(signInClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     @Override
     public void onConnected(Bundle bundle) {
         super.onConnected(bundle);
-
-        if (signInRequested && PrefUtils.isSignedIn(this)) {
-            signInRequested = false;
-            moveToStep3(true);
-        }
 
         AppInvite.AppInviteApi.getInvitation(getGoogleApiClient(), this, false)
             .setResultCallback(new ResultCallback<AppInviteInvitationResult>() {
@@ -226,7 +246,7 @@ public class FirstStartActivity extends GdgActivity implements
         moveToStep3(false);
     }
 
-    private void moveToStep3(final boolean isSignedIn) {
+    private void moveToStep3(boolean isSignedIn) {
         FirstStartStep3Fragment step3 = (FirstStartStep3Fragment) mViewPagerAdapter.getItem(2);
         step3.setSignedIn(isSignedIn);
 
