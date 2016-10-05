@@ -81,8 +81,6 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
     private Handler mHandler = new Handler();
     ChapterFragmentPagerAdapter mViewPagerAdapter;
 
-    private boolean mFirstStart = false;
-
     private ChapterComparator locationComparator;
     private TextView chapterSwitcher;
     private String selectedChapterId;
@@ -113,15 +111,6 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
             selectedChapterId = savedInstanceState.getString(ARG_SELECTED_CHAPTER);
         } else {
             Intent intent = getIntent();
-
-            if (FirstStartActivity.ACTION_FIRST_START.equals(intent.getAction())) {
-                Timber.d("Completed FirstStartWizard");
-
-                if (PrefUtils.isSignedIn(this)) {
-                    mFirstStart = true;
-                }
-            }
-
             selectedChapterId = getChapterIdFromIntent(intent);
         }
 
