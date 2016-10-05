@@ -18,7 +18,8 @@ android:
     - extra-android-m2repository
 
 before_install:
-  - openssl aes-256-cbc -K $encrypted_49e3b92debd1_key -iv $encrypted_49e3b92debd1_iv -in secrets.enc -out secrets -d
+  - if [ -n "$encrypted_49e3b92debd1_key" ]; then openssl aes-256-cbc -K $encrypted_49e3b92debd1_key -iv $encrypted_49e3b92debd1_iv -in secrets.enc -out secrets -d; fi
+  - if [ -z "$encrypted_49e3b92debd1_key" ]; then touch local.properties; fi
   - tar xvf secrets
 
 after_success:
