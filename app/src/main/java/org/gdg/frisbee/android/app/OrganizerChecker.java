@@ -8,7 +8,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.OrganizerCheckResponse;
 import org.gdg.frisbee.android.utils.PlusUtils;
-import org.gdg.frisbee.android.utils.PrefUtils;
 
 public class OrganizerChecker {
 
@@ -46,39 +45,43 @@ public class OrganizerChecker {
     }
 
     void checkOrganizer(GoogleApiClient apiClient, final Callbacks responseHandler) {
-        if (!PrefUtils.isSignedIn(apiClient.getContext())) {
+        final String currentId = PlusUtils.getCurrentPersonId(apiClient);
+
+        if (currentId == null) {
             isOrganizer = false;
             checkedId = null;
             responseHandler.onOrganizerResponse(false);
             return;
         }
 
-        final String currentId = PlusUtils.getCurrentPersonId(apiClient);
-
-        if (currentId != null
-            && (!currentId.equals(checkedId)
-            || System.currentTimeMillis() > lastOrganizerCheckTimeStamp + ORGANIZER_CHECK_MAX_TIME)) {
-            isOrganizer = false;
-            App.getInstance().getGdgXHub().checkOrganizer(currentId).enqueue(new Callback<OrganizerCheckResponse>() {
-                @Override
-                public void success(OrganizerCheckResponse organizerCheckResponse) {
-                    lastOrganizerCheckTimeStamp = System.currentTimeMillis();
-                    checkedId = currentId;
-                    isOrganizer = organizerCheckResponse.getChapters().size() > 0;
-                    responseHandler.onOrganizerResponse(isOrganizer);
-
-                    savePreferences();
-                }
-
-                @Override
-                public void failure(Throwable error) {
-                    isOrganizer = false;
-                    responseHandler.onErrorResponse();
-                }
-            });
-        } else {
+        if (isLastOrganizerCheckValid(currentId)) {
             responseHandler.onOrganizerResponse(isOrganizer);
+            return;
         }
+
+        isOrganizer = false;
+        App.getInstance().getGdgXHub().checkOrganizer(currentId).enqueue(new Callback<OrganizerCheckResponse>() {
+            @Override
+            public void success(OrganizerCheckResponse organizerCheckResponse) {
+                lastOrganizerCheckTimeStamp = System.currentTimeMillis();
+                checkedId = currentId;
+                isOrganizer = organizerCheckResponse.getChapters().size() > 0;
+                responseHandler.onOrganizerResponse(isOrganizer);
+
+                savePreferences();
+            }
+
+            @Override
+            public void failure(Throwable error) {
+                isOrganizer = false;
+                responseHandler.onErrorResponse();
+            }
+        });
+    }
+
+    private boolean isLastOrganizerCheckValid(String currentId) {
+        return currentId.equals(checkedId)
+            && System.currentTimeMillis() <= lastOrganizerCheckTimeStamp + ORGANIZER_CHECK_MAX_TIME;
     }
 
     private void savePreferences() {
