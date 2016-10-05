@@ -30,7 +30,9 @@ commitAndPushToGit () {
   git config user.name "GDG-X"
   git config user.email "support@gdgx.io"
   git stash
+  git fetch --unshallow
   git checkout develop
+  git pull
   git merge $BRANCH
   git stash pop
   git add build.gradle
