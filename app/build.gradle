@@ -102,8 +102,7 @@ android {
 
 play {
     jsonFile = file(local_properties.service_account_json_file ?: 'no-file.json')
-    track = project.hasProperty('track') ? project.property('track') : 'alpha'
-    untrackOld = true
+    track = project.hasProperty('track') ? track.trim() : 'alpha'
 }
 
 configurations {
