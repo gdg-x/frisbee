@@ -291,11 +291,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             mDrawerLayout.openDrawer(GravityCompat.START);
         }
         maybeUpdateChapterImage();
-    }
-
-    @Override
-    public void onConnected(final Bundle bundle) {
-        super.onConnected(bundle);
         updateUserPicture();
     }
 
@@ -319,7 +314,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     private void updateUserPicture() {
-        final String gplusId = PlusUtils.getCurrentPersonId(getGoogleApiClient());
+        final String gplusId = PlusUtils.getCurrentPersonId(this);
         if (gplusId == null) {
             mDrawerUserPicture.setImageDrawable(null);
             return;

@@ -1,12 +1,18 @@
 package org.gdg.frisbee.android.utils;
 
+import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.model.people.Person;
+import com.google.android.gms.common.api.OptionalPendingResult;
+import com.google.android.gms.common.api.Scope;
 
 public class PlusUtils {
 
@@ -14,12 +20,22 @@ public class PlusUtils {
     }
 
     @Nullable
-    public static String getCurrentPersonId(GoogleApiClient apiClient) {
-        Person plusPerson = null;
-        if (apiClient.isConnected() && apiClient.hasConnectedApi(Plus.API)) {
-            plusPerson = Plus.PeopleApi.getCurrentPerson(apiClient);
+    public static String getCurrentPersonId(Context context) {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .requestScopes(new Scope(Scopes.PLUS_LOGIN))
+            .build();
+
+        OptionalPendingResult<GoogleSignInResult> result = Auth.GoogleSignInApi
+            .silentSignIn(new GoogleApiClient.Builder(context)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build()
+            );
+        if (!result.isDone()) {
+            return null;
         }
-        return plusPerson != null ? plusPerson.getId() : null;
+        GoogleSignInAccount account = result.get().getSignInAccount();
+        return account != null ? account.getId() : null;
     }
 
     public static Uri createProfileUrl(@NonNull final String gplusId) {

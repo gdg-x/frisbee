@@ -175,7 +175,6 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
         }
         organizerCheckCallback = new OrganizerCheckCallback(mViewPagerAdapter, isOrganizerFragmentShown());
         App.getInstance().checkOrganizer(
-            getGoogleApiClient(),
             organizerCheckCallback
         );
     }

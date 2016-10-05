@@ -1,9 +1,8 @@
 package org.gdg.frisbee.android.app;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.format.DateUtils;
-
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.OrganizerCheckResponse;
@@ -44,8 +43,8 @@ public class OrganizerChecker {
         return isOrganizer;
     }
 
-    void checkOrganizer(GoogleApiClient apiClient, final Callbacks responseHandler) {
-        final String currentId = PlusUtils.getCurrentPersonId(apiClient);
+    void checkOrganizer(Context context, final Callbacks responseHandler) {
+        final String currentId = PlusUtils.getCurrentPersonId(context);
 
         if (currentId == null) {
             isOrganizer = false;

@@ -24,7 +24,6 @@ import android.os.StrictMode;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
@@ -244,8 +243,8 @@ public class App extends BaseApp implements LocationListener {
         return mOrganizerChecker.isOrganizer();
     }
 
-    public void checkOrganizer(GoogleApiClient apiClient, OrganizerChecker.Callbacks responseHandler) {
-        mOrganizerChecker.checkOrganizer(apiClient, responseHandler);
+    public void checkOrganizer(OrganizerChecker.Callbacks responseHandler) {
+        mOrganizerChecker.checkOrganizer(this, responseHandler);
     }
 
     public void resetOrganizer() {

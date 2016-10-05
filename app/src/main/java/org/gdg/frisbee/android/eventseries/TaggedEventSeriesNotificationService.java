@@ -58,7 +58,7 @@ public class TaggedEventSeriesNotificationService extends Service
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        App.getInstance().checkOrganizer(apiClient, this);
+        App.getInstance().checkOrganizer(this);
     }
 
     @Override
