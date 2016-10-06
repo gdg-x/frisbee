@@ -30,6 +30,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.about.AboutActivity;
@@ -314,12 +316,12 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     private void updateUserPicture() {
-        final String gplusId = PlusUtils.getCurrentPersonId(this);
-        if (gplusId == null) {
+        final GoogleSignInAccount account = PlusUtils.getCurrentAccount(this);
+        if (account == null || account.getPhotoUrl() == null) {
             mDrawerUserPicture.setImageDrawable(null);
             return;
         }
-        App.getInstance().getPicasso().load(PlusUtils.createProfileUrl(gplusId))
+        App.getInstance().getPicasso().load(account.getPhotoUrl())
             .transform(new BitmapBorderTransformation(2,
                 getResources().getDimensionPixelSize(R.dimen.navdrawer_user_picture_size) / 2,
                 ContextCompat.getColor(this, R.color.white)))
