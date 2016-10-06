@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="@dimen/navdrawer_image_height"
   android:orientation="vertical">
@@ -10,19 +11,51 @@
     android:layout_height="@dimen/navdrawer_image_height"
     android:contentDescription="@string/cd_navdrawer_image"
     android:scaleType="centerCrop"
-    android:src="@drawable/ic_logo_wide" />
+    tools:src="@drawable/ic_logo_wide" />
+
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:alpha="0.6"
+    android:background="?attr/colorPrimary" />
 
   <ImageView
     android:id="@+id/navdrawer_user_picture"
     android:layout_width="@dimen/navdrawer_user_picture_size"
     android:layout_height="@dimen/navdrawer_user_picture_size"
-    android:layout_alignParentBottom="true"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
     android:layout_marginBottom="@dimen/keyline_1"
     android:layout_marginLeft="@dimen/keyline_1"
     android:layout_marginStart="@dimen/keyline_1"
+    android:layout_marginTop="@dimen/navdrawer_user_image_top_margin"
     android:contentDescription="@string/cd_navdrawer_user_picture"
-    android:scaleType="centerCrop" />
+    android:scaleType="centerCrop"/>
+
+  <TextView
+    android:id="@+id/navdrawer_user_name"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_marginBottom="@dimen/keyline_1"
+    android:layout_marginEnd="@dimen/keyline_1"
+    android:layout_marginLeft="@dimen/keyline_1"
+    android:layout_marginRight="@dimen/keyline_1"
+    android:layout_marginStart="@dimen/keyline_1"
+    android:textColor="@color/white"
+    android:text="@string/login_register"/>
+
+  <TextView
+    android:id="@+id/welcome"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_above="@id/navdrawer_user_name"
+    android:layout_marginEnd="@dimen/keyline_1"
+    android:layout_marginLeft="@dimen/keyline_1"
+    android:layout_marginRight="@dimen/keyline_1"
+    android:layout_marginStart="@dimen/keyline_1"
+    android:fontFamily="sans-serif-medium"
+    android:text="@string/drawer_welcome"
+    android:textColor="@color/white"/>
 
 </RelativeLayout>
