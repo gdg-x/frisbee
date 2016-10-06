@@ -22,6 +22,16 @@ public class PlusUtils {
         return plusPerson != null ? plusPerson.getId() : null;
     }
 
+    @Nullable
+    public static String getCurrentPersonName(GoogleApiClient apiClient) {
+        Person plusPerson = null;
+        if (apiClient.isConnected() && apiClient.hasConnectedApi(Plus.API)) {
+            plusPerson = Plus.PeopleApi.getCurrentPerson(apiClient);
+            return plusPerson.getDisplayName();
+        }
+        return null;
+    }
+
     public static Uri createProfileUrl(@NonNull final String gplusId) {
         return Uri.parse("https://plus.google.com/" + gplusId);
     }
