@@ -9,7 +9,11 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.Scope;
+
+import org.gdg.frisbee.android.R;
+
 
 public final class GoogleApiClientFactory {
     private GoogleApiClientFactory() {
@@ -27,7 +31,7 @@ public final class GoogleApiClientFactory {
     }
 
     public static GoogleApiClient createForSignIn(FragmentActivity fragmentActivity,
-                                                  @Nullable GoogleApiClient.OnConnectionFailedListener onConnectionFailedListener) {
+                                                  @Nullable OnConnectionFailedListener onConnectionFailedListener) {
         return createBuilderForSignIn(fragmentActivity)
             .enableAutoManage(fragmentActivity, onConnectionFailedListener)
             .build();
@@ -37,6 +41,7 @@ public final class GoogleApiClientFactory {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
             .requestScopes(new Scope(Scopes.PLUS_LOGIN))
+            .requestIdToken(context.getString(R.string.default_web_client_id))
             .build();
         return new GoogleApiClient.Builder(context)
             .addApi(Auth.GOOGLE_SIGN_IN_API, gso);
