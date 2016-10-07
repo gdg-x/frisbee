@@ -55,7 +55,7 @@
     android:layout_marginRight="@dimen/keyline_1"
     android:layout_marginStart="@dimen/keyline_1"
     android:fontFamily="sans-serif-medium"
-    android:text="@string/drawer_welcome"
+    android:text="@string/welcome"
     android:textColor="@color/white"/>
 
 </RelativeLayout>
