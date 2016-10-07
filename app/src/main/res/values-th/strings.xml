@@ -131,7 +131,7 @@
   <string name="feedback_send">Send</string>
   <string name="feedback_sending">Sending&#8230;</string>
   <string name="for_leads">For Leads</string>
-  <string name="leads_welcome_title">Welcome</string>
+  <string name="leads_welcome_title">ยินดีต้อนรับ</string>
   <string name="leads_welcome">As a GDG lead, you have access to these organizer-only resources!</string>
   <string name="leads_resources_title">GDG Resources</string>
   <string name="leads_resources">You can find important GDG Resources in this Google Drive folder. Tap to browse slide decks, guides, graphics, code labs, and more.</string>
@@ -160,4 +160,5 @@
   <string name="cd_invitation_sender_profile_image">Invitation sender profile image</string>
   <string name="invite_congrats">Yey! You\'re invited by\n%s</string>
   <string name="friend">a friend</string>
+  <string name="login_register">Login/Register</string>
 </resources>

@@ -31,7 +31,7 @@
   <string name="bogus_organizer">Não foi possível analisar o Id do organizador: %1$s</string>
   <string name="cached_content">Você está atualmente offline. Segue o conteúdo do cache.</string>
   <string name="offline_alert">Você está offline.</string>
-  <string name="welcome">Bem-vindo</string>
+  <string name="welcome">Seja bem-vindo(a)</string>
   <string name="choose_home_gdg">Escolha o seu GDG de origem</string>
   <string name="signin_with_google">Faça sign-in com o Google</string>
   <string name="confirm">Confirme</string>
@@ -164,4 +164,5 @@
   <string name="cd_invitation_sender_profile_image">Invitation sender profile image</string>
   <string name="invite_congrats">Yey! You\'re invited by\n%s</string>
   <string name="friend">a friend</string>
+  <string name="login_register">Login/Register</string>
 </resources>

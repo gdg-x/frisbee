@@ -31,7 +31,7 @@
   <string name="bogus_organizer">Nepavyko paimti Organizatoriaus Id iš: %1$s</string>
   <string name="cached_content">Nėra ryšio. Rodomas ankstesnė informacija.</string>
   <string name="offline_alert">Nėra ryšio.</string>
-  <string name="welcome">labàdienà</string>
+  <string name="welcome">Labàdienà</string>
   <string name="choose_home_gdg">Pasirink artimiausią GDG</string>
   <string name="signin_with_google">Prisijungti su Google</string>
   <string name="confirm">Gerai</string>
@@ -139,7 +139,7 @@
   <string name="feedback_send">Send</string>
   <string name="feedback_sending">Sending&#8230;</string>
   <string name="for_leads">For Leads</string>
-  <string name="leads_welcome_title">Welcome</string>
+  <string name="leads_welcome_title">Labàdienà</string>
   <string name="leads_welcome">As a GDG lead, you have access to these organizer-only resources!</string>
   <string name="leads_resources_title">GDG Resources</string>
   <string name="leads_resources">You can find important GDG Resources in this Google Drive folder. Tap to browse slide decks, guides, graphics, code labs, and more.</string>
@@ -168,4 +168,5 @@
   <string name="cd_invitation_sender_profile_image">Invitation sender profile image</string>
   <string name="invite_congrats">Yey! You\'re invited by\n%s</string>
   <string name="friend">a friend</string>
+  <string name="login_register">Login/Register</string>
 </resources>
