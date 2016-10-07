@@ -1,7 +1,6 @@
 package org.gdg.frisbee.android.gde;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -30,8 +29,6 @@ public class GdeActivity extends GdgNavDrawerActivity implements ViewPager.OnPag
 
     @BindView(R.id.tabs)
     TabLayout mTabLayout;
-
-    private Handler mHandler = new Handler();
 
     private GdeCategoryPagerAdapter mViewPagerAdapter;
 

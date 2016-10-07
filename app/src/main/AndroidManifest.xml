@@ -167,7 +167,7 @@
     <activity
       android:name=".event.EventActivity"
       android:parentActivityName=".chapter.MainActivity"
-      android:theme="@style/Theme.GDG"></activity>
+      android:theme="@style/Theme.GDG" />
 
     <provider
       android:name=".provider.GdgProvider"

@@ -16,7 +16,7 @@
 
 package org.gdg.frisbee.android.pulse;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -61,12 +61,12 @@ public class PulseFragment extends GdgListFragment {
     }
 
     @Override
-    public void onAttach(final Activity activity) {
-        super.onAttach(activity);
-        if (activity instanceof Callbacks) {
-            mListener = (Callbacks) activity;
+    public void onAttach(final Context context) {
+        super.onAttach(context);
+        if (context instanceof Callbacks) {
+            mListener = (Callbacks) context;
         } else {
-            throw new ClassCastException("Activity " + activity.getClass().getSimpleName()
+            throw new ClassCastException("Activity " + context.getClass().getSimpleName()
                 + " must implement " + Pulse.class.getSimpleName() + " interface.");
         }
     }
@@ -102,7 +102,7 @@ public class PulseFragment extends GdgListFragment {
         setIsLoading(true);
     }
 
-    public void createAdapter(int[] positions, Directory directory) {
+    void createAdapter(int[] positions, Directory directory) {
         mAdapter = new PulseAdapter(getActivity(), positions, directory);
         setListAdapter(mAdapter);
         App.getInstance().getModelCache().getAsync(ModelCache.KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),

@@ -152,7 +152,6 @@
   <string name="feedback_message_required">Mensaje requerido</string>
   <string name="feedback_invalid_email">Ingresa un e-mail válido</string>
   <string name="drawer_subheader_games">Juegos</string>
-  <string name="fork_me">Fork me</string>
   <string name="cd_arrowTagImage">Juego: Etiquetado con la flecha</string>
   <string name="cd_qrCode">Código QR</string>
   <string name="invitation_message">Descarga la aplicación de GDG para Android y descubre contenido de Google Developers Group al momento. %s</string>

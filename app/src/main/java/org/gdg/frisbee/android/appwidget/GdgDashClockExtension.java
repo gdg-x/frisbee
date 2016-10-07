@@ -23,8 +23,6 @@ public class GdgDashClockExtension extends DashClockExtension {
 
     @Override
     protected void onUpdateData(int i) {
-        PrefUtils.setWidgetAdded(this);
-
         final String homeGdg = PrefUtils.getHomeChapterId(GdgDashClockExtension.this);
 
         if (homeGdg == null) {

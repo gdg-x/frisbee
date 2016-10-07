@@ -17,21 +17,12 @@
 -->
 
 <resources>
-  <color name="story_red">#e46f61</color>
-  <color name="people_blue">#76a7fa</color>
-  <color name="contact_yellow">#f9b256</color>
   <color name="line_2">#757575</color>
-  <color name="grey_border">#d0d0d0</color>
-  <color name="shadow">#dcdcdc</color>
   <color name="white">#FFFFFF</color>
-  <color name="peter_river">#3498db</color>
   <color name="cloud">#ECF0F1</color>
-  <color name="silver">#BDC3C7</color>
-  <color name="concrete">#95A5A6</color>
   <color name="asbestos">#7F8C8D</color>
   <color name="semi_transparent">#96000000</color>
   <color name="default_bg">#e5e5e5</color>
-  <color name="light_semi_transparent">#b6e0e0e0</color>
   <color name="material_blue_500">#2196F3</color>
   <color name="material_blue_700">#1976D2</color>
   <color name="theme_primary">@color/material_blue_500</color>

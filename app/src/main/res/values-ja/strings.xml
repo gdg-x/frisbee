@@ -149,7 +149,6 @@
   <string name="feedback_message_required">Message required</string>
   <string name="feedback_invalid_email">Input valid email address</string>
   <string name="drawer_subheader_games">Games</string>
-  <string name="fork_me">Fork me</string>
   <string name="cd_arrowTagImage">Arrow Tagging Game</string>
   <string name="cd_qrCode">QR Code</string>
   <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go. %s</string>

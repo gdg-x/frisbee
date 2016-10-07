@@ -240,6 +240,7 @@ public class FirstStartActivity extends GdgActivity implements
 
         startMainActivity();
 
+        //TODO enable FCM only when the `enableGcm` param is true
         finish();
     }
 

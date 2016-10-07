@@ -169,7 +169,6 @@
   <string name="feedback_message_required">الرسالة المطلوبة</string>
   <string name="feedback_invalid_email">إدخال عنوان بريد إلكتروني صحيح</string>
   <string name="drawer_subheader_games">ألعاب</string>
-  <string name="fork_me">مفترق لي</string>
   <string name="cd_arrowTagImage">لعبة أسهم الإشارة</string>
   <string name="cd_qrCode">رمز QR</string>
   <string name="invitation_message">حمّل تطبيق GDG و اكتشف محتوى مجموعة مطوري Google بينما يكون جاهزا للإطلاق. %s</string>
