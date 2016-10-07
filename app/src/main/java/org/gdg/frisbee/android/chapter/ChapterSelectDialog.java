@@ -40,11 +40,11 @@ public class ChapterSelectDialog extends AppCompatDialogFragment
     private List<Chapter> chapters;
 
     private Listener listener = Listener.EMPTY;
-    private Chapter selectedChapter;
+    @Nullable private Chapter selectedChapter;
 
     public static ChapterSelectDialog newInstance(@Nullable Chapter selectedChapter) {
         ChapterSelectDialog fragment = new ChapterSelectDialog();
-        Bundle args = new Bundle(2);
+        Bundle args = new Bundle();
         args.putParcelable(EXTRA_SELECTED_CHAPTER, selectedChapter);
         fragment.setArguments(args);
         return fragment;
@@ -102,9 +102,11 @@ public class ChapterSelectDialog extends AppCompatDialogFragment
         );
         listView.setAdapter(adapter);
 
-        int selectedItemPos = chapters.indexOf(selectedChapter);
-        listView.setSelection(selectedItemPos);
-        listView.setItemChecked(selectedItemPos, true);
+        if (selectedChapter != null) {
+            int selectedItemPos = chapters.indexOf(selectedChapter);
+            listView.setSelection(selectedItemPos);
+            listView.setItemChecked(selectedItemPos, true);
+        }
 
         final Filter.FilterListener filterListener = new Filter.FilterListener() {
             @Override
@@ -132,7 +134,7 @@ public class ChapterSelectDialog extends AppCompatDialogFragment
         adapter.getFilter().filter(cityNameSearchView.getQuery(), filterListener);
     }
 
-    private int findIndexByValueInFilteredListView(Chapter value) {
+    private int findIndexByValueInFilteredListView(@Nullable Chapter value) {
         if (value == null || listView == null) {
             return -1;
         }

@@ -16,7 +16,6 @@
 
 package org.gdg.frisbee.android.chapter;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -87,11 +86,8 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
     private ChapterComparator locationComparator;
     private TextView chapterSwitcher;
     private String selectedChapterId;
-    private ArrayList<Chapter> chapters;
+    private ArrayList<Chapter> chapters = new ArrayList<>();
 
-    // Local Broadcast receiver for receiving invites
-    @Nullable
-    private BroadcastReceiver mDeepLinkReceiver;
     @Nullable
     private OrganizerCheckCallback organizerCheckCallback;
 
@@ -133,7 +129,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
             selectedChapterId = PrefUtils.getHomeChapterIdNotNull(this);
         }
 
-        if (chapters != null) {
+        if (!chapters.isEmpty()) {
             initUI();
         } else {
             App.getInstance().getModelCache().getAsync(
@@ -268,24 +264,26 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
     void initUI() {
         mViewPagerAdapter = new ChapterFragmentPagerAdapter(
             this,
-            getSupportFragmentManager(), selectedChapterId
+            getSupportFragmentManager(),
+            selectedChapterId
         );
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.setOffscreenPageLimit(3);
-        updateSelectionFor(findChapterById(selectedChapterId));
+        Chapter selectedChapter = findChapterById(selectedChapterId);
+        if (selectedChapter != null) {
+            updateSelectionFor(selectedChapter);
+        }
 
         recordStartPageView();
 
         mTabLayout.setupWithViewPager(mViewPager);
         if (SECTION_EVENTS.equals(getIntent().getStringExtra(Const.EXTRA_SECTION))) {
-            mHandler.postDelayed(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        mViewPager.setCurrentItem(2, true);
-                    }
-                }, 500
-            );
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mViewPager.setCurrentItem(2, true);
+                }
+            }, 500);
         }
     }
 
@@ -346,7 +344,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        if (chapters != null && !chapters.isEmpty()) {
+        if (!chapters.isEmpty()) {
             outState.putParcelableArrayList(ARG_CHAPTERS, chapters);
         }
         if (mViewPagerAdapter != null) {
