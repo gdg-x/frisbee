@@ -16,17 +16,14 @@
 
 package org.gdg.frisbee.android.common;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.StringRes;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.Menu;
@@ -82,9 +79,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     public static final int DRAWER_GCP_NEXT = 34;
 
     private static final String EXTRA_SELECTED_DRAWER_ITEM_ID = "SELECTED_DRAWER_ITEM_ID";
-    private static final String DRAWER_ITEM_ID_TO_NAVIGATE_AFTER_SIGN_IN = "DRAWER_ITEM_ID_TO_NAVIGATE_AFTER_SIGN_IN";
 
-    private static final int INVALID_ITEM_ID = -1;
     private static final int GROUP_ID = 1;
     private static final int SETTINGS_GROUP_ID = 2;
 
@@ -97,24 +92,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     ImageView mDrawerUserPicture;
     TextView mDrawerUserName;
     private ActionBarDrawerToggle mDrawerToggle;
-    int drawerItemIdToNavigateAfterSignIn = INVALID_ITEM_ID;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (savedInstanceState != null) {
-            drawerItemIdToNavigateAfterSignIn
-                = savedInstanceState.getInt(DRAWER_ITEM_ID_TO_NAVIGATE_AFTER_SIGN_IN, INVALID_ITEM_ID);
-        }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putInt(DRAWER_ITEM_ID_TO_NAVIGATE_AFTER_SIGN_IN, drawerItemIdToNavigateAfterSignIn);
-    }
 
     @Override
     public void setContentView(int layoutResId) {
@@ -283,29 +260,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         }
     }
 
-    private void showLoginErrorDialog(@StringRes int errorMessage) {
-
-        new AlertDialog.Builder(this)
-            .setTitle(R.string.title_signing_needed)
-            .setMessage(errorMessage)
-            .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    drawerItemIdToNavigateAfterSignIn = INVALID_ITEM_ID;
-                }
-            })
-            .setPositiveButton(R.string.signin, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    PrefUtils.setSignedIn(GdgNavDrawerActivity.this);
-
-                    recreateGoogleApiClientIfNeeded();
-                    getGoogleApiClient().connect();
-                }
-            })
-            .show();
-    }
-
     private void onDrawerSpecialItemClick(int itemId, Bundle data) {
         if (this instanceof TaggedEventSeriesActivity) {
             TaggedEventSeriesActivity activity = (TaggedEventSeriesActivity) this;
@@ -394,10 +348,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     public void onConnected(final Bundle bundle) {
         super.onConnected(bundle);
         updateUserDetails();
-        if (drawerItemIdToNavigateAfterSignIn != INVALID_ITEM_ID) {
-            onDrawerItemClick(drawerItemIdToNavigateAfterSignIn);
-            drawerItemIdToNavigateAfterSignIn = INVALID_ITEM_ID;
-        }
     }
 
     @Override
