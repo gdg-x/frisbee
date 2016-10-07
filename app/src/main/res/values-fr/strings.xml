@@ -31,7 +31,7 @@
   <string name="bogus_organizer">Impossible d\'analyser l\'identifiant d\'organisateur : %1$s</string>
   <string name="cached_content">Vous êtes actuellement déconnecté. Voici le contenu mis en cache.</string>
   <string name="offline_alert">Vous êtes actuellement déconnecté.</string>
-  <string name="welcome">Bienvenue.</string>
+  <string name="welcome">Bienvenue</string>
   <string name="choose_home_gdg">Choisissez votre GDG</string>
   <string name="signin_with_google">Identifiez-vous avec Google</string>
   <string name="confirm">Confirmez</string>

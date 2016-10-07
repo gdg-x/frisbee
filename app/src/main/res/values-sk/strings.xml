@@ -31,7 +31,7 @@
   <string name="bogus_organizer">Nebolo možné načítať organizátora Id: %1$s</string>
   <string name="cached_content">Ste offline, zobrazuje sa nacachovaný obsah.</string>
   <string name="offline_alert">Ste offline.</string>
-  <string name="welcome">Vitajte.</string>
+  <string name="welcome">Vitajte</string>
   <string name="choose_home_gdg">Vyberte svoje domáce GDG</string>
   <string name="signin_with_google">Prihláste sa na Google účet</string>
   <string name="confirm">Potvrdiť</string>

@@ -31,7 +31,7 @@
   <string name="bogus_organizer">Не удаётся проанализировать Organizer Id: %1$s</string>
   <string name="cached_content">В настоящее время ты офлайн. Используется сохранённое в кэше содержание.</string>
   <string name="offline_alert">В настоящее время ты офлайн.</string>
-  <string name="welcome">Добро пожаловать.</string>
+  <string name="welcome">Добро пожаловать</string>
   <string name="choose_home_gdg">Выбери свой локальный GDG</string>
   <string name="signin_with_google">Войди с Google</string>
   <string name="confirm">Подтвердить</string>

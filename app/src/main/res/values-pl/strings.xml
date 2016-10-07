@@ -31,7 +31,7 @@
   <string name="bogus_organizer">Nieprawidłowy identyfikator organizatora: %1$s</string>
   <string name="cached_content">Brak połączenia. Dostępne są pobrane wcześniej informacje.</string>
   <string name="offline_alert">Brak połączenia.</string>
-  <string name="welcome">Witaj.</string>
+  <string name="welcome">Witaj</string>
   <string name="choose_home_gdg">Wybierz swój podstawowy GDG</string>
   <string name="signin_with_google">Zaloguj się poprzez Google</string>
   <string name="confirm">Potwierdź</string>

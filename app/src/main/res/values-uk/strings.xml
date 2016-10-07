@@ -32,7 +32,7 @@
   <string name="cached_content">На даний момент ви не в мережі. Використовуються дані з кешу.
     </string>
   <string name="offline_alert">На даний момент ви не в мережі.</string>
-  <string name="welcome">Ласкаво просимо.</string>
+  <string name="welcome">Ласкаво просимо</string>
   <string name="choose_home_gdg">Виберіть GDG поряд з вами</string>
   <string name="signin_with_google">Вхід з Google</string>
   <string name="confirm">Підтвердити</string>

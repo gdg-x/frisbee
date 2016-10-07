@@ -31,7 +31,7 @@
   <string name="bogus_organizer">Konnte Organizer Id: %1$s nicht parsen</string>
   <string name="cached_content">Du bist gerade offline. Hier ist eine ältere Version.</string>
   <string name="offline_alert">Du bist gerade offline.</string>
-  <string name="welcome">Willkommen.</string>
+  <string name="welcome">Willkommen</string>
   <string name="choose_home_gdg">Wähle deine Heimat-GDG</string>
   <string name="signin_with_google">Mit Google anmelden</string>
   <string name="confirm">Bestätigen</string>

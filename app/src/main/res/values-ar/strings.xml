@@ -31,7 +31,7 @@
   <string name="bogus_organizer">لا يمكن تحليل \"معرف المنظم\": %1$s</string>
   <string name="cached_content">أنت غير متصل حاليا. وإليك بعض المحتوى المخزن مؤقتاً.</string>
   <string name="offline_alert">أنت غير متصل حاليا.</string>
-  <string name="welcome">مرحبا.</string>
+  <string name="welcome">مرحبا</string>
   <string name="choose_home_gdg">اختر المجموعة المنتمي إليها</string>
   <string name="signin_with_google">تسجيل الدخول باستخدام جوجل</string>
   <string name="confirm">تأكيد</string>

@@ -31,7 +31,7 @@
   <string name="bogus_organizer">Nepodařilo se rozparsovat ID orga: %1$s</string>
   <string name="cached_content">Nyní jsi off-line. Tady máš nějaký nacachovaný obsah.</string>
   <string name="offline_alert">Jsi off-line.</string>
-  <string name="welcome">Vítej.</string>
+  <string name="welcome">Vítej</string>
   <string name="choose_home_gdg">Nastav si svoje domovské GDG</string>
   <string name="signin_with_google">Přihlásit se přes Google</string>
   <string name="confirm">Potvrdit</string>
