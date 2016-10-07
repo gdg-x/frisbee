@@ -70,9 +70,7 @@ public class FirstStartActivity extends GdgActivity implements
 
     @Override
     protected GoogleApiClient createGoogleApiClient() {
-        return new GoogleApiClient.Builder(this)
-            .addApi(AppInvite.API)
-            .build();
+        return GoogleApiClientFactory.createWithApi(this, AppInvite.API);
     }
 
     @Override

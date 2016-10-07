@@ -8,6 +8,8 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.api.Api.ApiOptions.NotRequiredOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.Scope;
@@ -20,9 +22,19 @@ public final class GoogleApiClientFactory {
     }
 
     public static GoogleApiClient createWith(Context context) {
-        return new GoogleApiClient.Builder(context)
-            .addApi(AppIndex.API)
+        return createBuilder(context)
             .build();
+    }
+
+    public static GoogleApiClient createWithApi(Context context, Api<? extends NotRequiredOptions> api) {
+        return createBuilder(context)
+            .addApi(api)
+            .build();
+    }
+
+    private static GoogleApiClient.Builder createBuilder(Context context) {
+        return new GoogleApiClient.Builder(context)
+            .addApi(AppIndex.API);
     }
 
     public static GoogleApiClient createForSignIn(Context context) {
