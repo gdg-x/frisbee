@@ -18,7 +18,6 @@ package org.gdg.frisbee.android.widget;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -106,11 +105,6 @@ public class FeedbackFragment extends DialogFragment {
         buildProperties();
 
         setRetainInstance(true);
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
     }
 
     @NonNull

@@ -52,7 +52,6 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, final AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        PrefUtils.setWidgetAdded(context);
         context.startService(new Intent(context, UpdateService.class));
     }
 

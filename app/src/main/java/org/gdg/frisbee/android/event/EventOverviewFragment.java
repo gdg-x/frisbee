@@ -21,6 +21,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
 import android.text.Html;
@@ -313,7 +314,7 @@ public class EventOverviewFragment extends BaseFragment {
 
     private void launchUrl(String eventUrl) {
         new CustomTabsIntent.Builder()
-            .setToolbarColor(getResources().getColor(R.color.theme_primary))
+            .setToolbarColor(ContextCompat.getColor(getContext(), R.color.theme_primary))
             .setShowTitle(true)
             .build()
             .launchUrl(getActivity(), Uri.parse(eventUrl));

@@ -51,7 +51,7 @@ public class FirstStartStep2Fragment extends BaseFragment {
     @BindDimen(R.dimen.navdrawer_user_picture_size)
     int profileImageSize;
 
-    Step2Listener listener = Step2Listener.EMPTY;
+    private Step2Listener listener = Step2Listener.EMPTY;
     private Invite invite;
 
     @Override

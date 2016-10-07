@@ -23,7 +23,7 @@ public class TaggedEventSeriesNotificationService extends Service
     OrganizerChecker.Callbacks,
     GoogleApiClient.OnConnectionFailedListener {
 
-    public static final int NOTIFICATION_ID = 1;
+    private static final int NOTIFICATION_ID = 1;
     private GoogleApiClient apiClient;
     private Intent intent;
 

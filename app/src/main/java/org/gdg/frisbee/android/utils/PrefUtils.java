@@ -17,13 +17,11 @@ public final class PrefUtils {
     public static final String SETTINGS_SIGNED_IN = "gdg_signed_in";
     public static final String SETTINGS_ANALYTICS = "analytics";
     private static final String SETTINGS_HOME_GDG_NAME = "gdg_home_name";
-    private static final String PREFS_VIDEOS_PLAYED = "gdg_app_videos_played";
     private static final String PREFS_OPEN_DRAWER_ON_START = "open_drawer_on_start";
     private static final String PREFS_FIRST_START = "gdg_first_start";
     private static final String PREFS_VERSION_CODE = "gdg_version_code";
     private static final String PREFS_APP_STARTS = "gdg_app_starts";
     private static final String PREFS_SEASONS_GREETINGS = "seasons_greetings";
-    private static final String PREFS_WIDGET_ADDED = "widget_added";
     private static final String PREFS_FATAL_GOOGLE_PLAY_SERVICE = "fatal_google_play_service";
     private static final String PREFS_EVENT_SERIES_NOTIFICATION_ALARM_SET = "event_series_notification_alarm_set";
 
@@ -95,10 +93,6 @@ public final class PrefUtils {
         increaseIntPreference(context, PREFS_APP_STARTS);
     }
 
-    public static int increaseVideoViewed(final Context mContext) {
-        return increaseIntPreference(mContext, PREFS_VIDEOS_PLAYED);
-    }
-
     private static int increaseIntPreference(final Context context, String key) {
         int newValue = prefs(context).getInt(key, 0) + 1;
         prefs(context).edit().putInt(key, newValue).apply();
@@ -134,16 +128,6 @@ public final class PrefUtils {
     public static void resetInitialSettings(final Context context) {
         prefs(context).edit()
             .clear()
-            .apply();
-    }
-
-    public static boolean isWidgetAdded(final Context context) {
-        return prefs(context).getBoolean(PREFS_WIDGET_ADDED, false);
-    }
-
-    public static void setWidgetAdded(@NonNull final Context context) {
-        prefs(context).edit()
-            .putBoolean(PREFS_WIDGET_ADDED, true)
             .apply();
     }
 

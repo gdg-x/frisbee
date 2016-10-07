@@ -1,6 +1,7 @@
 package org.gdg.frisbee.android.view;
 
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.TextView;
 
@@ -8,9 +9,6 @@ import org.gdg.frisbee.android.R;
 
 import butterknife.ButterKnife;
 
-/**
- * Created by paresh.mayani on 21-07-2015.
- */
 public class ColoredSnackBar {
 
     private static final int red = 0xffff4444;
@@ -33,7 +31,7 @@ public class ColoredSnackBar {
         if (snackBarView != null) {
             snackBarView.setBackgroundColor(colorId);
             TextView action = ButterKnife.findById(snackBarView, R.id.snackbar_action);
-            action.setTextColor(snackBarView.getResources().getColor(R.color.white));
+            action.setTextColor(ContextCompat.getColor(snackBarView.getContext(), android.R.color.white));
         }
 
         return snackbar;

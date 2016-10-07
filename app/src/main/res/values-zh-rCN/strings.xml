@@ -56,7 +56,7 @@
   <string name="contributors">本 GDG  应用程序为社区贡献并开源。以下为贡献者：</string>
   <string name="get_involved">参与贡献！</string>
   <string name="get_involved_text">本 GDG 应用程序为社区开发，任何人都欢迎参与到开发中。\n\n请直接前往 Github 获取代码。\n\nhttps://github.com/imstand/GDG-China</string>
-  <string name="about_license">(c) 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof the Apache 2.0 License</string>
+  <string name="about_license">© 2013 The GDG Frisbee Project\nAll Rights reserved.\n\nLicensed under the terms\nof the Apache 2.0 License</string>
   <string name="past_event">历史活动</string>
   <string name="upcoming_widget">GDG - 即将到来的活动</string>
   <string name="global">全球</string>
@@ -148,7 +148,6 @@
   <string name="feedback_message_required">Message required</string>
   <string name="feedback_invalid_email">输入有效的电子邮件地址</string>
   <string name="drawer_subheader_games">游戏</string>
-  <string name="fork_me">Fork me</string>
   <string name="cd_arrowTagImage">Arrow Tagging Game</string>
   <string name="cd_qrCode">QR Code</string>
   <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go. %s</string>

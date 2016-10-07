@@ -44,7 +44,7 @@ public class BackupAgent extends BackupAgentHelper {
     @Override
     public void onRestore(BackupDataInput data, int appVersionCode, ParcelFileDescriptor newState) throws IOException {
         super.onRestore(data, appVersionCode, newState);
-        Timber.d(String.format("Restoring from backup (was saved using version %d)", appVersionCode));
+        Timber.d("Restoring from backup (was saved using version %d)", appVersionCode);
 
         App.getInstance().getTracker().send(new HitBuilders.EventBuilder()
             .setCategory("backup")

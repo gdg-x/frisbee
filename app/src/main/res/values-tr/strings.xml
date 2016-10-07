@@ -152,7 +152,6 @@
   <string name="feedback_message_required">Mesaj gerekli</string>
   <string name="feedback_invalid_email">Geçerli bir eposta adresi girin</string>
   <string name="drawer_subheader_games">Oyunlar</string>
-  <string name="fork_me">Beni Fork\'la</string>
   <string name="cd_arrowTagImage">Organizatör etiketleme oyunu</string>
   <string name="cd_qrCode">Kare Kod</string>
   <string name="invitation_message">GDG Android uygulamasını indirin ve mobil olarak Google Developers Group\'larla ilgili her şeyi takip edin. %s</string>

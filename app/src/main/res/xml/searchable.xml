@@ -6,4 +6,4 @@
   android:searchSettingsDescription="@string/search_hint"
   android:searchSuggestAuthority="@string/authority"
   android:searchSuggestIntentData="item"
-  android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"></searchable>
+  android:voiceSearchMode="showVoiceSearchButton|launchRecognizer" />
