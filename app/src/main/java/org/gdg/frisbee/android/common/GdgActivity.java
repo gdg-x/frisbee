@@ -56,7 +56,7 @@ public abstract class GdgActivity extends TrackableActivity implements
     private static final int STATE_DEFAULT = 0;
     private static final int STATE_SIGN_IN = 1;
     private static final int STATE_IN_PROGRESS = 2;
-    public static final int RC_SIGN_IN = 101;
+    private static final int RC_SIGN_IN = 101;
     private static final String SAVED_PROGRESS = "SAVED_PROGRESS";
     @Nullable
     @BindView(R.id.content_frame)
