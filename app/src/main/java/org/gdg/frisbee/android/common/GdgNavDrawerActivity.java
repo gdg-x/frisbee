@@ -32,8 +32,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.about.AboutActivity;
@@ -41,7 +39,6 @@ import org.gdg.frisbee.android.activity.SettingsActivity;
 import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.plus.Person;
 import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.app.GoogleApiClientFactory;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
@@ -196,25 +193,10 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     private void onLoginClick() {
         if (!PrefUtils.isSignedIn(this)) {
             mDrawerLayout.closeDrawer(Gravity.LEFT);
-            if (getGoogleApiClient().isConnected()) {
-                disconnectGoogleApiClient();
-            }
-            PrefUtils.setSignedIn(this);
-            createConnectedGoogleApiClient();
+            PrefUtils.setSignedIn(GdgNavDrawerActivity.this);
+            recreateGoogleApiClientIfNeeded();
+            getGoogleApiClient().connect();
         }
-    }
-
-    private void createConnectedGoogleApiClient() {
-        GoogleApiClient googleApiClient = GoogleApiClientFactory.createWith(this);
-        googleApiClient.registerConnectionFailedListener(this);
-        googleApiClient.registerConnectionCallbacks(this);
-        googleApiClient.connect();
-    }
-
-    private void disconnectGoogleApiClient() {
-        getGoogleApiClient().unregisterConnectionCallbacks(this);
-        getGoogleApiClient().unregisterConnectionFailedListener(this);
-        getGoogleApiClient().disconnect();
     }
 
     void onDrawerItemClick(int itemId) {
@@ -319,19 +301,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         // Pass the event to ActionBarDrawerToggle, if it returns
         // true, then it has handled the app icon touch event
         return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
-        if (PrefUtils.isSignedIn(this)) {
-            switch (requestCode) {
-                case GdgActivity.RC_SIGN_IN:
-                    if (responseCode == RESULT_OK) {
-                        updateUserDetails();
-                        recreate();
-                    }
-            }
-        }
     }
 
     @Override
