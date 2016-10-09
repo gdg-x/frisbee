@@ -31,7 +31,7 @@
   <string name="bogus_organizer">आयोजक संख्या %1$s समझी नहीं जा सकी </string>
   <string name="cached_content">इस समय आप ऑफलाइन हैं ।  पहले से राखी हुई कुछ सूचना इस प्रकार है :</string>
   <string name="offline_alert">इस समय आप ऑफलाइन हैं ।</string>
-  <string name="welcome">स्वागत है !</string>
+  <string name="welcome">स्वागत है</string>
   <string name="choose_home_gdg">अपना जी डी जी चयन करें</string>
   <string name="signin_with_google">अपने गूगल अकाउंट के साथ जुड़ें</string>
   <string name="confirm">पुष्टि करें</string>
@@ -163,4 +163,5 @@
   <string name="cd_invitation_sender_profile_image">Invitation sender profile image</string>
   <string name="invite_congrats">Yey! You\'re invited by\n%s</string>
   <string name="friend">a friend</string>
+  <string name="login_register">Login/Register</string>
 </resources>

@@ -21,14 +21,16 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -47,7 +49,7 @@ import org.gdg.frisbee.android.pulse.PulseActivity;
 import org.gdg.frisbee.android.utils.PlusUtils;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.Utils;
-import org.gdg.frisbee.android.view.BitmapBorderTransformation;
+import org.gdg.frisbee.android.view.CircleTransform;
 import org.joda.time.DateTime;
 
 import java.util.List;
@@ -85,6 +87,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     NavigationView mNavigationView;
     ImageView mDrawerImage;
     ImageView mDrawerUserPicture;
+    TextView mDrawerUserName;
     private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
@@ -177,6 +180,23 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         View headerView = navigationView.getHeaderView(0);
         mDrawerImage = ButterKnife.findById(headerView, R.id.navdrawer_image);
         mDrawerUserPicture = ButterKnife.findById(headerView, R.id.navdrawer_user_picture);
+        mDrawerUserName = ButterKnife.findById(headerView, R.id.navdrawer_user_name);
+
+        headerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onLoginClick();
+            }
+        });
+    }
+
+    private void onLoginClick() {
+        if (!PrefUtils.isSignedIn(this)) {
+            mDrawerLayout.closeDrawer(Gravity.LEFT);
+            PrefUtils.setSignedIn(GdgNavDrawerActivity.this);
+            recreateGoogleApiClientIfNeeded();
+            getGoogleApiClient().connect();
+        }
     }
 
     void onDrawerItemClick(int itemId) {
@@ -296,7 +316,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     @Override
     public void onConnected(final Bundle bundle) {
         super.onConnected(bundle);
-        updateUserPicture();
+        updateUserDetails();
     }
 
     @Override
@@ -318,18 +338,22 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         }
     }
 
-    private void updateUserPicture() {
+    private void updateUserDetails() {
         if (!PrefUtils.isSignedIn(this)) {
             mDrawerUserPicture.setImageDrawable(null);
+            mDrawerUserName.setText(R.string.login_register);
             return;
         }
         final String gplusId = PlusUtils.getCurrentPersonId(getGoogleApiClient());
         if (gplusId != null) {
             App.getInstance().getPicasso().load(PlusUtils.createProfileUrl(gplusId))
-                .transform(new BitmapBorderTransformation(2,
-                    getResources().getDimensionPixelSize(R.dimen.navdrawer_user_picture_size) / 2,
-                    ContextCompat.getColor(this, R.color.white)))
+                .transform(new CircleTransform())
                 .into(mDrawerUserPicture);
+        }
+
+        String name = PlusUtils.getCurrentPersonName(getGoogleApiClient());
+        if (!TextUtils.isEmpty(name)) {
+            mDrawerUserName.setText(name);
         }
     }
 
