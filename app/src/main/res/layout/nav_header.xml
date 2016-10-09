@@ -25,7 +25,7 @@
     android:layout_height="@dimen/navdrawer_user_picture_size"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
-    android:layout_marginBottom="@dimen/keyline_1"
+    android:layout_marginBottom="@dimen/content_padding"
     android:layout_marginLeft="@dimen/keyline_1"
     android:layout_marginStart="@dimen/keyline_1"
     android:layout_marginTop="@dimen/navdrawer_user_image_top_margin"
@@ -40,7 +40,7 @@
     android:layout_marginBottom="@dimen/content_padding"
     android:layout_marginLeft="@dimen/keyline_1"
     android:layout_marginRight="@dimen/keyline_1"
-    android:textColor="@color/white"
+    android:textColor="?android:textColorPrimaryInverse"
     android:text="@string/login_register"/>
 
   <TextView
@@ -48,10 +48,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_above="@id/navdrawer_user_name"
-    android:layout_marginEnd="@dimen/keyline_1"
     android:layout_marginLeft="@dimen/keyline_1"
     android:layout_marginRight="@dimen/keyline_1"
-    android:layout_marginStart="@dimen/keyline_1"
     android:fontFamily="sans-serif-medium"
     android:text="@string/welcome"
     android:textColor="?android:textColorPrimaryInverse"/>
