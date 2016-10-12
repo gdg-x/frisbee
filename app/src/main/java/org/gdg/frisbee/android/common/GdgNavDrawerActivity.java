@@ -25,14 +25,15 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -41,6 +42,7 @@ import org.gdg.frisbee.android.activity.SettingsActivity;
 import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.plus.Person;
 import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.app.GoogleApiClientFactory;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
@@ -60,6 +62,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public abstract class GdgNavDrawerActivity extends GdgActivity {
+    private static final int RC_SIGN_IN = 101;
 
     private static final int DRAWER_HOME = 0;
     private static final int DRAWER_PULSE = 2;
@@ -193,12 +196,13 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     private void onLoginClick() {
-        if (!PrefUtils.isSignedIn(this)) {
-            mDrawerLayout.closeDrawer(Gravity.LEFT);
-            PrefUtils.setSignedIn(GdgNavDrawerActivity.this);
-            recreateGoogleApiClientIfNeeded();
-            getGoogleApiClient().connect();
+        if (PrefUtils.isSignedIn(this)) {
+            return;
         }
+        closeNavDrawer();
+        GoogleApiClient signInClient = GoogleApiClientFactory.createForSignIn(this, this);
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(signInClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     void onDrawerItemClick(int itemId) {
