@@ -78,8 +78,12 @@ public class OrganizerChecker {
         });
     }
 
-    private boolean isLastOrganizerCheckValid(String currentId) {
-        return currentId.equals(checkedId)
+    /**
+     * The latest organizer check value is still valid
+     * when we have the same organizer and we already checked within a valid timeframe.
+     */
+    private boolean isLastOrganizerCheckValid(String organizerIdToCheck) {
+        return organizerIdToCheck.equals(checkedId)
             && System.currentTimeMillis() <= lastOrganizerCheckTimeStamp + ORGANIZER_CHECK_MAX_TIME;
     }
 
