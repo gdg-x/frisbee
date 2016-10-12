@@ -11,10 +11,10 @@ import com.google.android.gms.common.api.OptionalPendingResult;
 
 import org.gdg.frisbee.android.app.GoogleApiClientFactory;
 
-public class PlusUtils {
+public final class PlusUtils {
 
     @Nullable
-    public static String getCurrentPersonId(Context context) {
+    public static String getCurrentPlusId(Context context) {
         GoogleSignInAccount account = getCurrentAccount(context);
         return account != null ? account.getId() : null;
     }

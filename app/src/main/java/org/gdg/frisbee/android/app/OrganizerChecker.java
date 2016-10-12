@@ -44,7 +44,7 @@ public class OrganizerChecker {
     }
 
     void checkOrganizer(Context context, final Callbacks responseHandler) {
-        final String currentId = PlusUtils.getCurrentPersonId(context);
+        final String currentId = PlusUtils.getCurrentPlusId(context);
 
         if (currentId == null) {
             isOrganizer = false;

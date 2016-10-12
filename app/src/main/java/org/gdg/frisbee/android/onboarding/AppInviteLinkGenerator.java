@@ -32,7 +32,7 @@ public class AppInviteLinkGenerator {
 
     public static void shareAppInviteLink(GdgActivity activity) {
         AppInviteLinkGenerator linkGenerator = create();
-        String gplusId = PlusUtils.getCurrentPersonId(activity);
+        String gplusId = PlusUtils.getCurrentPlusId(activity);
         HttpUrl appInviteLink = gplusId != null
             ? linkGenerator.createAppInviteLink(gplusId)
             : NON_SIGNED_IN_INVITE_URL;

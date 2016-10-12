@@ -302,11 +302,6 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
             + "/" + pageName;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
-        super.onActivityResult(requestCode, responseCode, intent);
-    }
-
     private void onDirectoryLoaded(Directory directory) {
         chapters = directory.getGroups();
         Collections.sort(chapters, locationComparator);
