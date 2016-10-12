@@ -4,30 +4,24 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.app.GoogleApiClientFactory;
 import org.gdg.frisbee.android.app.OrganizerChecker;
 
-public class TaggedEventSeriesNotificationService extends Service
-    implements
-    GoogleApiClient.ConnectionCallbacks,
-    OrganizerChecker.Callbacks,
-    GoogleApiClient.OnConnectionFailedListener {
+public class TaggedEventSeriesNotificationService extends Service implements OrganizerChecker.Callbacks {
 
     private static final int NOTIFICATION_ID = 1;
-    private GoogleApiClient apiClient;
     private Intent intent;
 
     public TaggedEventSeriesNotificationService() {
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        App.getInstance().checkOrganizer(this);
     }
 
     @Override
@@ -36,39 +30,9 @@ public class TaggedEventSeriesNotificationService extends Service
     }
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        apiClient = GoogleApiClientFactory.createWith(this);
-        apiClient.registerConnectionCallbacks(this);
-        apiClient.registerConnectionFailedListener(this);
-        apiClient.connect();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        apiClient.unregisterConnectionCallbacks(this);
-    }
-
-    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         this.intent = intent;
         return START_STICKY;
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        App.getInstance().checkOrganizer(apiClient, this);
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        stop();
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        stop();
     }
 
     @Override

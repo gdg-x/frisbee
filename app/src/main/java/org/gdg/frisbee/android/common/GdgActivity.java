@@ -19,8 +19,6 @@ package org.gdg.frisbee.android.common;
 
 import android.annotation.TargetApi;
 import android.app.PendingIntent;
-import android.content.Intent;
-import android.content.IntentSender;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -53,11 +51,6 @@ import timber.log.Timber;
 public abstract class GdgActivity extends TrackableActivity implements
     GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    private static final int STATE_DEFAULT = 0;
-    private static final int STATE_SIGN_IN = 1;
-    private static final int STATE_IN_PROGRESS = 2;
-    private static final int RC_SIGN_IN = 101;
-    private static final String SAVED_PROGRESS = "SAVED_PROGRESS";
     @Nullable
     @BindView(R.id.content_frame)
     FrameLayout mContentLayout;
@@ -66,29 +59,7 @@ public abstract class GdgActivity extends TrackableActivity implements
     // provides access to the users sign in state and Google's APIs.
     private GoogleApiClient mGoogleApiClient;
 
-    // We use mSignInProgress to track whether user has clicked sign in.
-    // mSignInProgress can be one of three values:
-    //
-    //       STATE_DEFAULT: The default state of the application before the user
-    //                      has clicked 'sign in', or after they have clicked
-    //                      'sign out'.  In this state we will not attempt to
-    //                      resolve sign in errors and so will display our
-    //                      Activity in a signed out state.
-    //       STATE_SIGN_IN: This state indicates that the user has clicked 'sign
-    //                      in', so resolve successive errors preventing sign in
-    //                      until the user has successfully authorized an account
-    //                      for our app.
-    //   STATE_IN_PROGRESS: This state indicates that we have started an intent to
-    //                      resolve an error, and so we should not start further
-    //                      intents until the current intent completes.
-    private int mSignInProgress;
-
-    // Used to store the PendingIntent most recently returned by Google Play
-    // services until the user clicks 'sign in'.
-    private PendingIntent mSignInIntent;
-
     private Toolbar mActionBarToolbar;
-    private boolean isSignedIn;
 
     @Override
     public void setContentView(int layoutResId) {
@@ -111,10 +82,6 @@ public abstract class GdgActivity extends TrackableActivity implements
         super.onCreate(savedInstanceState);
         RecentTasksStyler.styleRecentTasksEntry(this);
 
-        if (savedInstanceState != null) {
-            mSignInProgress = savedInstanceState.getInt(SAVED_PROGRESS, STATE_DEFAULT);
-        }
-
         mGoogleApiClient = createGoogleApiClient();
     }
 
@@ -122,25 +89,7 @@ public abstract class GdgActivity extends TrackableActivity implements
     protected void onStart() {
         super.onStart();
 
-        recreateGoogleApiClientIfNeeded();
         mGoogleApiClient.connect();
-    }
-
-    protected final void recreateGoogleApiClientIfNeeded() {
-        if (isSignedIn != PrefUtils.isSignedIn(this)) {
-            mGoogleApiClient.unregisterConnectionCallbacks(this);
-            mGoogleApiClient.unregisterConnectionFailedListener(this);
-            mGoogleApiClient.disconnect();
-
-            mGoogleApiClient = createGoogleApiClient();
-        }
-
-        if (!mGoogleApiClient.isConnectionCallbacksRegistered(this)) {
-            mGoogleApiClient.registerConnectionCallbacks(this);
-        }
-        if (!mGoogleApiClient.isConnectionFailedListenerRegistered(this)) {
-            mGoogleApiClient.registerConnectionFailedListener(this);
-        }
     }
 
     /**
@@ -149,7 +98,6 @@ public abstract class GdgActivity extends TrackableActivity implements
      * @return {@link GoogleApiClient} without connecting. {@code connect()} must be called afterwards.
      */
     protected GoogleApiClient createGoogleApiClient() {
-        isSignedIn = PrefUtils.isSignedIn(this);
         return GoogleApiClientFactory.createWith(this);
     }
 
@@ -162,38 +110,6 @@ public abstract class GdgActivity extends TrackableActivity implements
         mGoogleApiClient.disconnect();
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(SAVED_PROGRESS, mSignInProgress);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
-        super.onActivityResult(requestCode, responseCode, intent);
-
-        if (PrefUtils.isSignedIn(this)) {
-            switch (requestCode) {
-                case RC_SIGN_IN:
-                    if (responseCode == RESULT_OK) {
-                        // If the error resolution was successful we should continue
-                        // processing errors.
-                        mSignInProgress = STATE_SIGN_IN;
-                        if (!mGoogleApiClient.isConnecting()) {
-                            // If Google Play services resolved the issue with a dialog then
-                            // onStart is not called so we need to re-attempt connection here.
-                            mGoogleApiClient.connect();
-                        }
-                    } else {
-                        // If the error resolution was not successful or the user canceled,
-                        // we should stop processing errors.
-                        mSignInProgress = STATE_DEFAULT;
-                    }
-                    break;
-            }
-        }
-    }
-
     protected Toolbar getActionBarToolbar() {
         if (mActionBarToolbar == null) {
             mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
@@ -204,30 +120,6 @@ public abstract class GdgActivity extends TrackableActivity implements
             }
         }
         return mActionBarToolbar;
-    }
-
-    private void resolveSignInError() {
-        // We have an intent which will allow our user to sign in or
-        // resolve an error.  For example if the user needs to
-        // select an account to sign in with, or if they need to consent
-        // to the permissions your app is requesting.
-
-        try {
-            // Send the pending intent that we stored on the most recent
-            // OnConnectionFailed callback.  This will allow the user to
-            // resolve the error currently preventing our connection to
-            // Google Play services.
-            mSignInProgress = STATE_IN_PROGRESS;
-            startIntentSenderForResult(
-                mSignInIntent.getIntentSender(),
-                RC_SIGN_IN, null, 0, 0, 0
-            );
-        } catch (IntentSender.SendIntentException e) {
-            // The intent was canceled before it was sent.  Attempt to connect to
-            // get an updated ConnectionResult.
-            mSignInProgress = STATE_SIGN_IN;
-            mGoogleApiClient.connect();
-        }
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -264,22 +156,9 @@ public abstract class GdgActivity extends TrackableActivity implements
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult result) {
-        if (mSignInProgress != STATE_IN_PROGRESS) {
-
-            // We do not have an intent in progress so we should store the latest
-            // error resolution intent for use when the sign in button is clicked.
-            mSignInIntent = result.getResolution();
-            if (mSignInIntent != null) {
-                resolveSignInError();
-            } else {
-                // Google Play services wasn't able to provide an intent for some
-                // error types, so we show the default Google Play services error
-                // dialog which may still start an intent on our behalf if the
-                // user can resolve the issue.
-                if (PrefUtils.shouldShowFatalPlayServiceMessage(this)) {
-                    showFatalPlayServiceMessage(result);
-                }
-            }
+        PendingIntent mSignInIntent = result.getResolution();
+        if (mSignInIntent == null && PrefUtils.shouldShowFatalPlayServiceMessage(this)) {
+            showFatalPlayServiceMessage(result);
         }
     }
 

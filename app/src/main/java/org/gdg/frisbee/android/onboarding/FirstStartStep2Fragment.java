@@ -93,7 +93,7 @@ public class FirstStartStep2Fragment extends BaseFragment {
         listener = Step2Listener.EMPTY;
     }
 
-    @OnClick(R.id.googleSignin)
+    @OnClick(R.id.sign_in_button)
     public void onSignedIn() {
         listener.onSignedIn();
     }

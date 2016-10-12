@@ -25,12 +25,16 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -39,6 +43,7 @@ import org.gdg.frisbee.android.activity.SettingsActivity;
 import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.plus.Person;
 import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.app.GoogleApiClientFactory;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
@@ -58,6 +63,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public abstract class GdgNavDrawerActivity extends GdgActivity {
+    private static final int RC_SIGN_IN = 101;
 
     private static final int DRAWER_HOME = 0;
     private static final int DRAWER_PULSE = 2;
@@ -89,6 +95,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     ImageView mDrawerUserPicture;
     TextView mDrawerUserName;
     private ActionBarDrawerToggle mDrawerToggle;
+    private GoogleApiClient signInClient;
 
     @Override
     public void setContentView(int layoutResId) {
@@ -191,11 +198,26 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     private void onLoginClick() {
-        if (!PrefUtils.isSignedIn(this)) {
-            mDrawerLayout.closeDrawer(Gravity.LEFT);
-            PrefUtils.setSignedIn(GdgNavDrawerActivity.this);
-            recreateGoogleApiClientIfNeeded();
-            getGoogleApiClient().connect();
+        if (PrefUtils.isSignedIn(this)) {
+            return;
+        }
+        closeNavDrawer();
+        if (signInClient == null) {
+            signInClient = GoogleApiClientFactory.createForSignIn(this, this);
+        }
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(signInClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result.isSuccess()) {
+                PrefUtils.setSignedIn(this);
+            }
         }
     }
 
@@ -311,11 +333,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             mDrawerLayout.openDrawer(GravityCompat.START);
         }
         maybeUpdateChapterImage();
-    }
-
-    @Override
-    public void onConnected(final Bundle bundle) {
-        super.onConnected(bundle);
         updateUserDetails();
     }
 
@@ -339,21 +356,20 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     private void updateUserDetails() {
-        if (!PrefUtils.isSignedIn(this)) {
+        final GoogleSignInAccount account = PlusUtils.getCurrentAccount(this);
+        if (account == null) {
             mDrawerUserPicture.setImageDrawable(null);
             mDrawerUserName.setText(R.string.login_register);
             return;
         }
-        final String gplusId = PlusUtils.getCurrentPersonId(getGoogleApiClient());
-        if (gplusId != null) {
-            App.getInstance().getPicasso().load(PlusUtils.createProfileUrl(gplusId))
+        if (account.getPhotoUrl() != null) {
+            App.getInstance().getPicasso().load(account.getPhotoUrl())
                 .transform(new CircleTransform())
                 .into(mDrawerUserPicture);
         }
-
-        String name = PlusUtils.getCurrentPersonName(getGoogleApiClient());
-        if (!TextUtils.isEmpty(name)) {
-            mDrawerUserName.setText(name);
+        String displayName = account.getDisplayName();
+        if (!TextUtils.isEmpty(displayName)) {
+            mDrawerUserName.setText(displayName);
         }
     }
 
