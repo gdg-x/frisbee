@@ -31,7 +31,7 @@
   <string name="bogus_organizer">운영자 Id를 분석할 수 없습니다: %1$s</string>
   <string name="cached_content">현재 오프라인 상태입니다. 이전에 가져왔던 정보가 보여집니다.</string>
   <string name="offline_alert">현재 오프라인 상태입니다.</string>
-  <string name="welcome">반갑습니다.</string>
+  <string name="welcome">반갑습니다</string>
   <string name="choose_home_gdg">기본 GDG 선택하세요.</string>
   <string name="signin_with_google">Google로 로그인</string>
   <string name="confirm">확인</string>
@@ -131,7 +131,7 @@
   <string name="feedback_send">Send</string>
   <string name="feedback_sending">Sending&#8230;</string>
   <string name="for_leads">For Leads</string>
-  <string name="leads_welcome_title">Welcome</string>
+  <string name="leads_welcome_title">반갑습니다</string>
   <string name="leads_welcome">As a GDG lead, you have access to these organizer-only resources!</string>
   <string name="leads_resources_title">GDG Resources</string>
   <string name="leads_resources">You can find important GDG Resources in this Google Drive folder. Tap to browse slide decks, guides, graphics, code labs, and more.</string>
@@ -159,4 +159,5 @@
   <string name="cd_invitation_sender_profile_image">Invitation sender profile image</string>
   <string name="invite_congrats">Yey! You\'re invited by\n%s</string>
   <string name="friend">a friend</string>
+  <string name="login_register">Login/Register</string>
 </resources>

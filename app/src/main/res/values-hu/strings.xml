@@ -31,7 +31,7 @@
   <string name="bogus_organizer">Nem sikerült értelmezni szervező azonosítót: %1$s</string>
   <string name="cached_content">Jelenleg nincs net kapcsolat. Íme néhány elmentett tartalom.</string>
   <string name="offline_alert">Jelenleg nincs net kapcsolat.</string>
-  <string name="welcome">Üdvözlet.</string>
+  <string name="welcome">Üdvözlet</string>
   <string name="choose_home_gdg">Válaszd ki az otthoni GDG-det</string>
   <string name="signin_with_google">Bejelentkezés Google-lel</string>
   <string name="confirm">Jóváhagy</string>
@@ -163,4 +163,5 @@
   <string name="cd_invitation_sender_profile_image">Invitation sender profile image</string>
   <string name="invite_congrats">Yey! You\'re invited by\n%s</string>
   <string name="friend">a friend</string>
+  <string name="login_register">Login/Register</string>
 </resources>

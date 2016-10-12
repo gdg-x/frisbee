@@ -163,4 +163,5 @@
   <string name="cd_invitation_sender_profile_image">Davetiye gönderen profil resmi</string>
   <string name="invite_congrats">Yaşasın! Sizi davet eden\n%s</string>
   <string name="friend">bir arkadaş</string>
+  <string name="login_register">Giriş yap/Kayıt ol</string>
 </resources>

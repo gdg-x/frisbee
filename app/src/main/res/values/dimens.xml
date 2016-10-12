@@ -23,5 +23,6 @@
   <dimen name="responsive_width">@dimen/match_parent</dimen>
 
   <dimen name="organizer_icon_size">32dp</dimen>
+  <dimen name="navdrawer_user_image_top_margin">32dp</dimen>
 
 </resources>
