@@ -137,7 +137,7 @@ public final class ModelCache {
     }
 
     @Nullable
-    public Object get(String url, boolean checkExpiration) {
+    public <T> T get(String url, boolean checkExpiration) {
         Timber.d("get(%s)", url);
         CacheItem result;
 
@@ -150,7 +150,8 @@ public final class ModelCache {
         }
 
         if (result != null) {
-            return result.getValue();
+            //noinspection unchecked
+            return (T) result.getValue();
         } else {
             return null;
         }
@@ -198,6 +199,7 @@ public final class ModelCache {
         return result;
     }
 
+    @Nullable
     private CacheItem getFromMemoryCache(final String url, boolean checkExpiration) {
         CacheItem result = null;
 
