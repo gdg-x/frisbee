@@ -169,12 +169,12 @@ public class InfoFragment extends BaseFragment implements OrganizerLoader.Listen
         }
     }
 
-    private Spanned createAboutText(Person person) {
+    private static CharSequence createAboutText(Person person) {
         String aboutText = person.getAboutMe();
         if (aboutText == null) {
             return SpannedString.valueOf("");
         }
-        return Html.fromHtml(aboutText);
+        return createHtmlFormatted(aboutText);
     }
 
     private void addOrganizers(Person cachedChapter) {
@@ -204,16 +204,21 @@ public class InfoFragment extends BaseFragment implements OrganizerLoader.Listen
         organizerLoader.execute(organizerIds.toArray(new String[organizerIds.size()]));
     }
 
-    private boolean isNonCommunityPlusUrl(Urls url) {
+    private static boolean isNonCommunityPlusUrl(Urls url) {
         return url.getValue().contains("plus.google.com/") && !url.getValue().contains("communities");
     }
 
     private void addUrlToUI(Urls url) {
         TextView tv = (TextView) mInflater
             .inflate(R.layout.list_resource_item, (ViewGroup) getView(), false);
-        tv.setText(Html.fromHtml("<a href='" + url.getValue() + "'>" + url.getLabel() + "</a>"));
+        tv.setText(createHtmlFormatted("<a href='" + url.getValue() + "'>" + url.getLabel() + "</a>"));
         tv.setMovementMethod(LinkMovementMethod.getInstance());
         mResourcesBox.addView(tv);
+    }
+
+    @SuppressWarnings("deprecation")
+    private static Spanned createHtmlFormatted(String source) {
+        return Html.fromHtml(source);
     }
 
     @Override

@@ -63,7 +63,7 @@ class OrganizerLoader extends AsyncTask<String, Person, Void> {
         return null;
     }
 
-    private void putPersonInCache(String plusId, Person person) {
+    private static void putPersonInCache(String plusId, Person person) {
         App.getInstance().getModelCache().putAsync(
             ModelCache.KEY_PERSON + plusId,
             person,
