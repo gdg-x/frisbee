@@ -16,14 +16,9 @@
 
 package org.gdg.frisbee.android.chapter;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.Loader;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.SpannedString;
@@ -51,18 +46,16 @@ import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.BitmapBorderTransformation;
 import org.joda.time.DateTime;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import retrofit2.Response;
 import timber.log.Timber;
 
-public class InfoFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<List<Person>> {
-    public static final String ORGANIZER_IDS = "organizerIds";
+public class InfoFragment extends BaseFragment implements OrganizerLoader.Listener {
+
     @BindView(R.id.about)
     TextView mAbout;
     @BindView(R.id.tagline)
@@ -80,6 +73,7 @@ public class InfoFragment extends BaseFragment implements LoaderManager.LoaderCa
 
     private LayoutInflater mInflater;
     private String chapterPlusId;
+    private OrganizerLoader organizerLoader;
 
     public static InfoFragment newInstance(String plusId) {
         InfoFragment fragment = new InfoFragment();
@@ -97,10 +91,23 @@ public class InfoFragment extends BaseFragment implements LoaderManager.LoaderCa
         setIsLoading(true);
 
         chapterPlusId = getArguments().getString(Const.EXTRA_PLUS_ID);
+        loadChapter(chapterPlusId);
+    }
 
-        final boolean online = Utils.isOnline(getActivity());
-        App.getInstance().getModelCache().getAsync(ModelCache.KEY_PERSON + chapterPlusId,
-            online, new ModelCache.CacheListener() {
+    @Override
+    public void onDestroy() {
+        if (organizerLoader != null) {
+            organizerLoader.setListener(null);
+            organizerLoader.cancel(true);
+        }
+        super.onDestroy();
+    }
+
+    private void loadChapter(final String chapterPlusId) {
+        App.getInstance().getModelCache().getAsync(
+            ModelCache.KEY_PERSON + chapterPlusId,
+            Utils.isOnline(getActivity()),
+            new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
                     updateUIFrom((Person) item);
@@ -108,12 +115,12 @@ public class InfoFragment extends BaseFragment implements LoaderManager.LoaderCa
 
                 @Override
                 public void onNotFound(String key) {
-                    loadChapterFromNetwork();
+                    loadChapterFromNetwork(chapterPlusId);
                 }
             });
     }
 
-    void loadChapterFromNetwork() {
+    void loadChapterFromNetwork(final String chapterPlusId) {
         App.getInstance().getPlusApi().getPerson(chapterPlusId).enqueue(
             new Callback<Person>() {
                 @Override
@@ -191,9 +198,9 @@ public class InfoFragment extends BaseFragment implements LoaderManager.LoaderCa
                 addUrlToUI(url);
             }
         }
-        Bundle args = new Bundle();
-        args.putStringArrayList(ORGANIZER_IDS, organizerIds);
-        getLoaderManager().initLoader(0, args, this).forceLoad();
+        organizerLoader = new OrganizerLoader(getContext());
+        organizerLoader.setListener(this);
+        organizerLoader.execute(organizerIds.toArray(new String[organizerIds.size()]));
     }
 
     private boolean isNonCommunityPlusUrl(Urls url) {
@@ -209,27 +216,7 @@ public class InfoFragment extends BaseFragment implements LoaderManager.LoaderCa
     }
 
     @Override
-    public Loader<List<Person>> onCreateLoader(int id, final Bundle args) {
-        return new OrganizerLoader(getContext(), args.getStringArrayList(ORGANIZER_IDS));
-    }
-
-    @Override
-    public void onLoadFinished(Loader<List<Person>> loader, List<Person> organizers) {
-        for (Person organizer : organizers) {
-            if (organizer != null) {
-                addOrganizerToUI(organizer);
-            } else {
-                addUnknownOrganizerToUI();
-            }
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<Person>> loader) {
-        // no-op
-    }
-
-    private void addOrganizerToUI(final Person organizer) {
+    public void onOrganizerLoaded(final Person organizer) {
         View v = createOrganizerView(organizer);
         v.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -266,8 +253,8 @@ public class InfoFragment extends BaseFragment implements LoaderManager.LoaderCa
         return convertView;
     }
 
-    private void addUnknownOrganizerToUI() {
-        Timber.d("null person");
+    @Override
+    public void onUnknownOrganizerLoaded() {
         View v = getUnknownOrganizerView();
         if (mOrganizerBox != null) {
             mOrganizerBox.addView(v);
@@ -344,52 +331,4 @@ public class InfoFragment extends BaseFragment implements LoaderManager.LoaderCa
         return inflateView(inflater, R.layout.fragment_chapter_info, container);
     }
 
-    private static class OrganizerLoader extends AsyncTaskLoader<List<Person>> {
-        private final boolean online;
-        private final ArrayList<String> organizerIds;
-
-        OrganizerLoader(Context context, ArrayList<String> organizerIds) {
-            super(context);
-            this.organizerIds = organizerIds;
-            online = Utils.isOnline(getContext());
-        }
-
-        @Override
-        public List<Person> loadInBackground() {
-            List<Person> organizers = new ArrayList<>(organizerIds.size());
-            for (String gplusId : organizerIds) {
-                organizers.add(loadOrganizer(gplusId));
-            }
-            return organizers;
-        }
-
-        @Nullable
-        private Person loadOrganizer(String gplusId) {
-            Person person = App.getInstance().getModelCache()
-                .get(ModelCache.KEY_PERSON + gplusId, online);
-            if (person != null) {
-                return person;
-            }
-            try {
-                Response<Person> response = App.getInstance().getPlusApi().
-                    getPerson(gplusId).execute();
-                if (response.isSuccessful()) {
-                    person = response.body();
-                    putPersonInCache(gplusId, person);
-                    return person;
-                }
-            } catch (IOException ignored) {
-            }
-            return null;
-        }
-
-        private void putPersonInCache(String plusId, Person person) {
-            App.getInstance().getModelCache().putAsync(
-                ModelCache.KEY_PERSON + plusId,
-                person,
-                DateTime.now().plusDays(1),
-                null
-            );
-        }
-    }
 }
