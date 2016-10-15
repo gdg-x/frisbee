@@ -131,6 +131,7 @@ public class InfoFragment extends BaseFragment implements OrganizerLoader.Listen
 
                 @Override
                 public void failure(Throwable error) {
+                    showError(R.string.server_error);
                     setIsLoading(false);
                 }
 
