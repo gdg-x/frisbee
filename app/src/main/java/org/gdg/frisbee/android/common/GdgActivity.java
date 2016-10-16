@@ -147,6 +147,8 @@ public abstract class GdgActivity extends TrackableActivity implements
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
                 onSuccessfulSignIn(result.getSignInAccount());
+            } else {
+                PrefUtils.setSignedOut(this);
             }
         }
     }
