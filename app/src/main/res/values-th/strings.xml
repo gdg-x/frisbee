@@ -32,6 +32,7 @@
   <string name="cached_content">โหมดการใช้งานแบบออฟไลน์และใช้ข้อมูลจากแคช</string>
   <string name="offline_alert">คุณกำลังใช้งานแบบออฟไลน์</string>
   <string name="welcome">ยินดีต้อนรับ</string>
+  <string name="welcome_sign_in">ยินดีต้อนรับ! %s</string>
   <string name="choose_home_gdg">เลือก GDG ที่ใกล้คุณ</string>
   <string name="signin_with_google">ลงชื่อเข้าใช้งานด้วยบัญชี Google</string>
   <string name="confirm">ยืนยัน</string>

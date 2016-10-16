@@ -30,6 +30,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
@@ -197,6 +198,13 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         }
         closeNavDrawer();
         requestSignIn();
+    }
+
+    @Override
+    protected void onSuccessfulSignIn(GoogleSignInAccount signInAccount) {
+        super.onSuccessfulSignIn(signInAccount);
+        String welcome = getString(R.string.welcome_sign_in, signInAccount.getDisplayName());
+        Toast.makeText(this, welcome, Toast.LENGTH_SHORT).show();
     }
 
     void onDrawerItemClick(int itemId) {
