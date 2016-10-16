@@ -120,10 +120,12 @@ public class App extends BaseApp implements LocationListener {
         PrefUtils.increaseAppStartCount(this);
 
         // Initialize Picasso
-        OkHttpClient.Builder picassoClient = mOkHttpClient.newBuilder();
-        picassoClient.addInterceptor(new PlusImageUrlConverter());
+        OkHttpClient picassoClient = mOkHttpClient.newBuilder()
+            .cache(OkHttp3Downloader.createDefaultCache(this))
+            .addInterceptor(new PlusImageUrlConverter())
+            .build();
         mPicasso = new Picasso.Builder(this)
-            .downloader(new OkHttp3Downloader(picassoClient.build()))
+            .downloader(new OkHttp3Downloader(picassoClient))
             .build();
 
         JodaTimeAndroid.init(this);
