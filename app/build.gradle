@@ -7,8 +7,6 @@ apply plugin: 'io.fabric'
 apply plugin: 'com.github.triplet.play'
 apply plugin: 'checkstyle'
 
-preBuild.dependsOn('checkstyle')
-assemble.dependsOn('lint')
 check.dependsOn('checkstyle')
 
 Properties local_properties = new Properties()
