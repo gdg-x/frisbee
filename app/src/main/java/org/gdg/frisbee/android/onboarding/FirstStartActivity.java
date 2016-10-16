@@ -227,7 +227,7 @@ public class FirstStartActivity extends GdgActivity implements
 
     @Override
     public void onSkippedSignIn() {
-        PrefUtils.setLoggedOut(this);
+        PrefUtils.setSignedOut(this);
 
         moveToStep3(false);
     }

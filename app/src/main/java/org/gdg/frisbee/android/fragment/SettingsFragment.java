@@ -147,7 +147,7 @@ public class SettingsFragment extends PreferenceFragment {
                         startActivityForResult(signInIntent, RC_SIGN_IN);
                     } else {
                         Auth.GoogleSignInApi.signOut(signInClient);
-                        PrefUtils.setLoggedOut(getActivity());
+                        PrefUtils.setSignedOut(getActivity());
                     }
                     return true;
                 }
