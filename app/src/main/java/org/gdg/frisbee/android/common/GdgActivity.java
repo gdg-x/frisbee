@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -108,6 +109,7 @@ public abstract class GdgActivity extends TrackableActivity implements
      *
      * @return {@link GoogleApiClient} without connecting. {@code connect()} must be called afterwards.
      */
+    @CheckResult
     protected GoogleApiClient createGoogleApiClient() {
         return GoogleApiClientFactory.createWith(this);
     }
@@ -121,7 +123,7 @@ public abstract class GdgActivity extends TrackableActivity implements
         mGoogleApiClient.disconnect();
     }
 
-    protected void requestSignIn() {
+    protected final void requestSignIn() {
         if (signInClient == null) {
             signInClient = GoogleApiClientFactory.createForSignIn(this, this);
         }
