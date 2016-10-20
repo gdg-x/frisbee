@@ -33,6 +33,7 @@
   <string name="cached_content">現在オフラインです。キャッシュされたコンテンツを表示しています。</string>
   <string name="offline_alert">オフラインです</string>
   <string name="welcome">ようこそ</string>
+  <string name="welcome_sign_in">ようこそ! %s</string>
   <string name="choose_home_gdg">あなたのGDGを選択してください</string>
   <string name="signin_with_google">Googleアカウントでログイン</string>
   <string name="confirm">確認</string>

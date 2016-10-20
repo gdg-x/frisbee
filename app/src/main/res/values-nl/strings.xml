@@ -32,6 +32,7 @@
   <string name="cached_content">Jij bent momenteel offline. Hier is een beetje opgeslagen inhoud.</string>
   <string name="offline_alert">Jij bent momenteel offline.</string>
   <string name="welcome">Welkom</string>
+  <string name="welcome_sign_in">Welkom! %s</string>
   <string name="choose_home_gdg">Kies je lokale GDG</string>
   <string name="signin_with_google">Inloggen met Google</string>
   <string name="confirm">Bevestigen</string>

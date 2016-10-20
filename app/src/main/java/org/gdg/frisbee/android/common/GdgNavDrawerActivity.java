@@ -30,11 +30,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -43,7 +41,6 @@ import org.gdg.frisbee.android.activity.SettingsActivity;
 import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.plus.Person;
 import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.app.GoogleApiClientFactory;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
@@ -63,7 +60,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public abstract class GdgNavDrawerActivity extends GdgActivity {
-    private static final int RC_SIGN_IN = 101;
 
     private static final int DRAWER_HOME = 0;
     private static final int DRAWER_PULSE = 2;
@@ -95,7 +91,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     ImageView mDrawerUserPicture;
     TextView mDrawerUserName;
     private ActionBarDrawerToggle mDrawerToggle;
-    private GoogleApiClient signInClient;
 
     @Override
     public void setContentView(int layoutResId) {
@@ -192,33 +187,24 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         headerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onLoginClick();
+                onSignInClick();
             }
         });
     }
 
-    private void onLoginClick() {
+    private void onSignInClick() {
         if (PrefUtils.isSignedIn(this)) {
             return;
         }
         closeNavDrawer();
-        if (signInClient == null) {
-            signInClient = GoogleApiClientFactory.createForSignIn(this, this);
-        }
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(signInClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+        requestSignIn();
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            if (result.isSuccess()) {
-                PrefUtils.setSignedIn(this);
-            }
-        }
+    protected void onSuccessfulSignIn(GoogleSignInAccount signInAccount) {
+        super.onSuccessfulSignIn(signInAccount);
+        String welcome = getString(R.string.welcome_sign_in, signInAccount.getDisplayName());
+        Toast.makeText(this, welcome, Toast.LENGTH_SHORT).show();
     }
 
     void onDrawerItemClick(int itemId) {

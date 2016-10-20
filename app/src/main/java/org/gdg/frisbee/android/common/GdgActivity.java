@@ -19,8 +19,11 @@ package org.gdg.frisbee.android.common;
 
 import android.annotation.TargetApi;
 import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
+import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -31,15 +34,20 @@ import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.ResultCallbacks;
 import com.google.android.gms.common.api.Status;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.app.GoogleApiClientFactory;
+import org.gdg.frisbee.android.utils.PlusUtils;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.RecentTasksStyler;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
@@ -51,13 +59,14 @@ import timber.log.Timber;
 public abstract class GdgActivity extends TrackableActivity implements
     GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
+    private static final int RC_SIGN_IN = 101;
+
     @Nullable
     @BindView(R.id.content_frame)
     FrameLayout mContentLayout;
 
-    // GoogleApiClient wraps our service connection to Google Play services and
-    // provides access to the users sign in state and Google's APIs.
     private GoogleApiClient mGoogleApiClient;
+    private GoogleApiClient signInClient;
 
     private Toolbar mActionBarToolbar;
 
@@ -90,6 +99,9 @@ public abstract class GdgActivity extends TrackableActivity implements
         super.onStart();
 
         mGoogleApiClient.connect();
+        if (PrefUtils.isSignedIn(this) && PlusUtils.getCurrentAccount(this) == null) {
+            requestSignIn();
+        }
     }
 
     /**
@@ -97,6 +109,7 @@ public abstract class GdgActivity extends TrackableActivity implements
      *
      * @return {@link GoogleApiClient} without connecting. {@code connect()} must be called afterwards.
      */
+    @CheckResult
     protected GoogleApiClient createGoogleApiClient() {
         return GoogleApiClientFactory.createWith(this);
     }
@@ -108,6 +121,48 @@ public abstract class GdgActivity extends TrackableActivity implements
         mGoogleApiClient.unregisterConnectionCallbacks(this);
         mGoogleApiClient.unregisterConnectionFailedListener(this);
         mGoogleApiClient.disconnect();
+    }
+
+    protected final void requestSignIn() {
+        if (signInClient == null) {
+            signInClient = GoogleApiClientFactory.createForSignIn(this, this);
+        }
+        Auth.GoogleSignInApi.silentSignIn(signInClient).setResultCallback(new ResultCallbacks<GoogleSignInResult>() {
+            @Override
+            public void onSuccess(@NonNull GoogleSignInResult result) {
+                onSuccessfulSignIn(result.getSignInAccount());
+            }
+
+            @Override
+            public void onFailure(@NonNull Status status) {
+                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(signInClient);
+                startActivityForResult(signInIntent, RC_SIGN_IN);
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result.isSuccess()) {
+                onSuccessfulSignIn(result.getSignInAccount());
+            } else {
+                PrefUtils.setSignedOut(this);
+            }
+        }
+    }
+
+    /**
+     * Called when a successful SignIn operation is made
+     *
+     * @param signInAccount {@link GoogleSignInAccount} of the user
+     */
+    @CallSuper
+    protected void onSuccessfulSignIn(GoogleSignInAccount signInAccount) {
+        PrefUtils.setSignedIn(this);
     }
 
     protected Toolbar getActionBarToolbar() {

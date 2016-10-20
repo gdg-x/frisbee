@@ -51,7 +51,7 @@ public final class PrefUtils {
         prefs(context).edit().putBoolean(SETTINGS_SIGNED_IN, true).apply();
     }
 
-    public static void setLoggedOut(Context context) {
+    public static void setSignedOut(Context context) {
         prefs(context).edit()
             .putBoolean(SETTINGS_SIGNED_IN, false)
             .apply();

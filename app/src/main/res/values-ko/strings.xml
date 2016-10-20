@@ -32,6 +32,7 @@
   <string name="cached_content">현재 오프라인 상태입니다. 이전에 가져왔던 정보가 보여집니다.</string>
   <string name="offline_alert">현재 오프라인 상태입니다.</string>
   <string name="welcome">반갑습니다</string>
+  <string name="welcome_sign_in">반갑습니다! %s</string>
   <string name="choose_home_gdg">기본 GDG 선택하세요.</string>
   <string name="signin_with_google">Google로 로그인</string>
   <string name="confirm">확인</string>
