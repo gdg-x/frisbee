@@ -5,7 +5,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,14 +23,6 @@ import butterknife.ButterKnife;
 
 public class LeadFragment extends ListFragment {
     private LeadAnnouncementsAdapter mAdapter;
-
-    public static Fragment newInstance(final String gplusId) {
-        Fragment fragment = new LeadFragment();
-        Bundle arguments = new Bundle();
-        arguments.putString(Const.EXTRA_PLUS_ID, gplusId);
-        fragment.setArguments(arguments);
-        return fragment;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater,

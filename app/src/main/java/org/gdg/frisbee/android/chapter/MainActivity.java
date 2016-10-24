@@ -413,7 +413,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
                 case 2:
                     return GdgEventListFragment.newInstance(mSelectedChapterId);
                 case 3:
-                    return LeadFragment.newInstance(mSelectedChapterId);
+                    return new LeadFragment();
             }
             return null;
         }
