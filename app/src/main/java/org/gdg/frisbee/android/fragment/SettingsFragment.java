@@ -17,12 +17,13 @@
 package org.gdg.frisbee.android.fragment;
 
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,45 +31,22 @@ import android.view.ViewGroup;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.activity.SettingsActivity;
 import org.gdg.frisbee.android.api.model.Chapter;
-import org.gdg.frisbee.android.api.model.Directory;
-import org.gdg.frisbee.android.api.model.HomeGdgRequest;
-import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.GoogleApiClientFactory;
-import org.gdg.frisbee.android.appwidget.UpcomingEventWidgetProvider;
-import org.gdg.frisbee.android.cache.ModelCache;
-import org.gdg.frisbee.android.utils.PlusUtils;
+import org.gdg.frisbee.android.chapter.ChapterSelectDialog;
 import org.gdg.frisbee.android.utils.PrefUtils;
-import org.gdg.frisbee.android.view.LocationListPreference;
 
-import java.io.IOException;
-
-public class SettingsFragment extends PreferenceFragment {
+public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final int RC_SIGN_IN = 101;
 
     private GoogleApiClient signInClient;
-
-    private Preference.OnPreferenceChangeListener mOnHomeGdgPreferenceChange =
-        new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object o) {
-                final String homeGdg = (String) o;
-
-                setHomeGdg(homeGdg);
-                // Update widgets to show newest chosen GdgHome events
-                App.getInstance().startService(new Intent(App.getInstance(),
-                    UpcomingEventWidgetProvider.UpdateService.class));
-
-                return true;
-            }
-        };
 
     private Preference.OnPreferenceChangeListener mOnAnalyticsPreferenceChange =
         new Preference.OnPreferenceChangeListener() {
@@ -79,7 +57,9 @@ public class SettingsFragment extends PreferenceFragment {
                 return true;
             }
         };
+    private SharedPreferences sharedPreferences;
     private CheckBoxPreference prefGoogleSignIn;
+    @Nullable private Chapter homeChapter;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -91,9 +71,20 @@ public class SettingsFragment extends PreferenceFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        homeChapter = PrefUtils.getHomeChapter(getActivity());
+
+        sharedPreferences = PrefUtils.prefs(getActivity());
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+
         getPreferenceManager().setSharedPreferencesName(PrefUtils.PREF_NAME);
         addPreferencesFromResource(R.xml.settings);
         initPreferences();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -102,40 +93,31 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void initPreferences() {
-        final LocationListPreference prefHomeGdgList =
-            (LocationListPreference) findPreference(PrefUtils.SETTINGS_HOME_GDG);
-        if (prefHomeGdgList != null) {
-            prefHomeGdgList.setEnabled(false);
+        initGdgHomePreference();
 
-            App.getInstance().getModelCache().getAsync(ModelCache.KEY_CHAPTER_LIST_HUB, false,
-                new ModelCache.CacheListener() {
-                    @Override
-                    public void onGet(Object item) {
-                        Directory directory = (Directory) item;
+        initGoogleSignInPreference();
 
-                        String[] entries = new String[directory.getGroups().size()];
-                        String[] entryValues = new String[directory.getGroups().size()];
+        initAnalyticsPreference();
+    }
 
-                        int i = 0;
-                        for (Chapter chapter : directory.getGroups()) {
-                            entries[i] = chapter.getName();
-                            entryValues[i] = chapter.getGplusId();
-                            i++;
-                        }
-                        prefHomeGdgList.setEntries(entries);
-                        prefHomeGdgList.setEntryValues(entryValues);
-                        prefHomeGdgList.setEnabled(true);
-                    }
-
-                    @Override
-                    public void onNotFound(String key) {
-
-                    }
-                });
-
-            prefHomeGdgList.setOnPreferenceChangeListener(mOnHomeGdgPreferenceChange);
+    private void initGdgHomePreference() {
+        Preference preference = findPreference(PrefUtils.SETTINGS_HOME_GDG);
+        if (homeChapter != null) {
+            preference.setSummary(homeChapter.getName());
         }
+        preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                SettingsActivity activity = (SettingsActivity) getActivity();
+                Chapter homeChapter = PrefUtils.getHomeChapter(getActivity());
+                ChapterSelectDialog.newInstance(homeChapter)
+                    .show(activity.getSupportFragmentManager(), null);
+                return true;
+            }
+        });
+    }
 
+    private void initGoogleSignInPreference() {
         prefGoogleSignIn = (CheckBoxPreference) findPreference(PrefUtils.SETTINGS_SIGNED_IN);
         if (isGooglePlayServicesAvailable()) {
             prefGoogleSignIn.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -155,7 +137,9 @@ public class SettingsFragment extends PreferenceFragment {
         } else {
             prefGoogleSignIn.setEnabled(false);
         }
+    }
 
+    private void initAnalyticsPreference() {
         CheckBoxPreference prefAnalytics = (CheckBoxPreference) findPreference(PrefUtils.SETTINGS_ANALYTICS);
         if (prefAnalytics != null) {
             prefAnalytics.setOnPreferenceChangeListener(mOnAnalyticsPreferenceChange);
@@ -181,24 +165,14 @@ public class SettingsFragment extends PreferenceFragment {
             == ConnectionResult.SUCCESS;
     }
 
-    private void setHomeGdg(final String homeGdg) {
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                GoogleSignInAccount account = PlusUtils.getCurrentAccount(getActivity());
-                if (account == null) {
-                    return null;
-                }
-                try {
-                    App.getInstance().getGdgXHub().setHomeGdg("Bearer " + account.getIdToken(),
-                        new HomeGdgRequest(homeGdg))
-                        .execute();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                return null;
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (PrefUtils.SETTINGS_HOME_GDG.equals(key)) {
+            homeChapter = PrefUtils.getHomeChapter(getActivity());
+            Preference preference = findPreference(key);
+            if (homeChapter != null) {
+                preference.setSummary(homeChapter.getName());
             }
-        }.execute();
+        }
     }
 }

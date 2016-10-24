@@ -12,7 +12,6 @@ import org.joda.time.DateTime;
 
 public final class PrefUtils {
     public static final String PREF_NAME = "gdg";
-    public static final String SETTINGS_ROOT = "root";
     public static final String SETTINGS_HOME_GDG = "gdg_home";
     public static final String SETTINGS_SIGNED_IN = "gdg_signed_in";
     public static final String SETTINGS_ANALYTICS = "analytics";
@@ -68,6 +67,17 @@ public final class PrefUtils {
     public static String getHomeChapterIdNotNull(final Context context) {
         return prefs(context)
             .getString(SETTINGS_HOME_GDG, "");
+    }
+
+    @Nullable
+    public static Chapter getHomeChapter(Context context) {
+        SharedPreferences prefs = prefs(context);
+        String chapterId = prefs.getString(SETTINGS_HOME_GDG, null);
+        if (chapterId == null) {
+            return null;
+        }
+        String chapterName = prefs.getString(SETTINGS_HOME_GDG_NAME, "");
+        return new Chapter(chapterName, chapterId);
     }
 
     public static void setHomeChapter(final Context context, final Chapter chapter) {

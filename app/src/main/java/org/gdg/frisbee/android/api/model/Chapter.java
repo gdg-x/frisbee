@@ -44,10 +44,8 @@ public class Chapter implements Comparable<Chapter>, Parcelable {
     private Geo geo;
     private String shortName;
 
-    public Chapter() {
-        name = "";
-        gplusId = "";
-        organizers = new ArrayList<>();
+    public Chapter(String gplusId) {
+        this("", gplusId);
     }
 
     public Chapter(String name, String gplusId) {
