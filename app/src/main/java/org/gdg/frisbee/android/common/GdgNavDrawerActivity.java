@@ -82,7 +82,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     private static final int GROUP_ID = 1;
     private static final int SETTINGS_GROUP_ID = 2;
 
-    protected String mStoredHomeChapterId;
     @BindView(R.id.drawer)
     DrawerLayout mDrawerLayout;
     @BindView(R.id.nav_view)
@@ -91,6 +90,8 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     ImageView mDrawerUserPicture;
     TextView mDrawerUserName;
     private ActionBarDrawerToggle mDrawerToggle;
+
+    private String mStoredHomeChapterId;
 
     @Override
     public void setContentView(int layoutResId) {
@@ -360,7 +361,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     private void maybeUpdateChapterImage() {
-        final String homeChapterId = getCurrentHomeChapterId();
+        final String homeChapterId = PrefUtils.getHomeChapterId(this);
         if (isHomeChapterOutdated(homeChapterId)) {
             App.getInstance().getModelCache().getAsync(ModelCache.KEY_PERSON + homeChapterId,
                 true, new ModelCache.CacheListener() {
@@ -393,10 +394,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 .load(person.getCover().getCoverPhoto().getUrl())
                 .into(mDrawerImage);
         }
-    }
-
-    protected String getCurrentHomeChapterId() {
-        return PrefUtils.getHomeChapterId(this);
     }
 
     protected boolean isHomeChapterOutdated(final String currentHomeChapterId) {

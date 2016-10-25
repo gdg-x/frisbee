@@ -16,15 +16,11 @@
 
 package org.gdg.frisbee.android.chapter;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -44,10 +40,8 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.app.OrganizerChecker;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.GdgNavDrawerActivity;
-import org.gdg.frisbee.android.eventseries.GdgEventListFragment;
 import org.gdg.frisbee.android.onboarding.FirstStartActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
-import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
@@ -113,30 +107,30 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
         if (!chapters.isEmpty()) {
             initUI();
         } else {
-            App.getInstance().getModelCache().getAsync(
-                ModelCache.KEY_CHAPTER_LIST_HUB,
-                new ModelCache.CacheListener() {
-                    @Override
-                    public void onGet(Object item) {
-                        onDirectoryLoaded((Directory) item);
-                    }
-
-                    @Override
-                    public void onNotFound(String key) {
-                        if (Utils.isOnline(MainActivity.this)) {
-                            fetchChapters();
-                        } else {
-                            showError(R.string.offline_alert);
-                        }
-                    }
-                }
-            );
+            loadChaptersFromCache();
         }
 
         if (PrefUtils.shouldShowSeasonsGreetings(this)) {
             SeasonsGreetingsFragment seasonsGreetings = new SeasonsGreetingsFragment();
             seasonsGreetings.show(getSupportFragmentManager(), "dialog");
         }
+    }
+
+    private void loadChaptersFromCache() {
+        App.getInstance().getModelCache().getAsync(
+            ModelCache.KEY_CHAPTER_LIST_HUB,
+            new ModelCache.CacheListener() {
+                @Override
+                public void onGet(Object item) {
+                    onDirectoryLoaded((Directory) item);
+                }
+
+                @Override
+                public void onNotFound(String key) {
+                    fetchChapters();
+                }
+            }
+        );
     }
 
     @Override
@@ -152,6 +146,25 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
             organizerCheckCallback = null;
         }
         super.onPause();
+    }
+
+    private void checkHomeChapterValid() {
+        Chapter newHomeChapter = PrefUtils.getHomeChapter(this);
+        if (hasTheSameHomeChapter(newHomeChapter)) {
+            return;
+        }
+        if (isShowingStoredHomeChapter()) {
+            updateSelectionFor(newHomeChapter);
+        }
+        homeChapter = newHomeChapter;
+    }
+
+    private boolean hasTheSameHomeChapter(Chapter newHomeChapter) {
+        return newHomeChapter == null || newHomeChapter.equals(homeChapter);
+    }
+
+    private boolean isShowingStoredHomeChapter() {
+        return homeChapter.equals(selectedChapter);
     }
 
     private void updateChapterPages() {
@@ -173,18 +186,6 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
 
     private boolean isOrganizerFragmentShown() {
         return mViewPagerAdapter != null && mViewPagerAdapter.isOrganizerFragmentShown();
-    }
-
-    private void checkHomeChapterValid() {
-        Chapter homeChapter = PrefUtils.getHomeChapter(this);
-        if (isHomeChapterOutdated(homeChapter.getGplusId())
-            && isShowingStoredHomeChapter()) {
-            updateSelectionFor(homeChapter);
-        }
-    }
-
-    private boolean isShowingStoredHomeChapter() {
-        return selectedChapter.getGplusId().equals(mStoredHomeChapterId);
     }
 
     private static String getChapterIdFromIntent(final Intent intent) {
@@ -234,7 +235,6 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
     }
 
     void initUI() {
-        chapterSwitcher.setText(selectedChapter.toString());
         setupPagerWith(selectedChapter, App.getInstance().isOrganizer());
         viewPager.setOffscreenPageLimit(3);
 
@@ -309,6 +309,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
         View container = LayoutInflater.from(this).inflate(R.layout.actionbar_chapter_selector, toolbar);
         chapterSwitcher = (TextView) container.findViewById(android.R.id.text1);
 
+        chapterSwitcher.setText(selectedChapter.toString());
         chapterSwitcher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
