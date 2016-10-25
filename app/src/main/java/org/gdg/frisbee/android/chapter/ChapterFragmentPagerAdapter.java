@@ -11,16 +11,12 @@ import org.gdg.frisbee.android.eventseries.GdgEventListFragment;
 
 class ChapterFragmentPagerAdapter extends FragmentPagerAdapter {
     private static final int[] PAGES = {
-        R.string.news, R.string.info, R.string.events
-    };
-    private static final int[] ORGANIZER_PAGES = {
         R.string.news, R.string.info, R.string.events, R.string.for_leads
     };
 
     private final Context context;
     private final Chapter selectedChapter;
-    private final boolean isOrganizer;
-    private final int[] pageTitles;
+    private boolean isOrganizer;
 
     ChapterFragmentPagerAdapter(FragmentActivity activity,
                                 Chapter selectedChapter,
@@ -29,12 +25,16 @@ class ChapterFragmentPagerAdapter extends FragmentPagerAdapter {
         this.context = activity;
         this.selectedChapter = selectedChapter;
         this.isOrganizer = isOrganizer;
-        pageTitles = isOrganizer ? ORGANIZER_PAGES : PAGES;
+    }
+
+    public void setOrganizer(boolean organizer) {
+        isOrganizer = organizer;
+        notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return pageTitles.length;
+        return isOrganizer ? 4 : 3;
     }
 
     @Override
@@ -55,8 +55,8 @@ class ChapterFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if (0 <= position && position < pageTitles.length) {
-            return context.getString(pageTitles[position]);
+        if (0 <= position && position < PAGES.length) {
+            return context.getString(PAGES[position]);
         } else {
             return "";
         }

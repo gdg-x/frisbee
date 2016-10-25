@@ -65,8 +65,8 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
     TabLayout tabLayout;
     private TextView chapterSwitcher;
 
-    ChapterFragmentPagerAdapter mViewPagerAdapter;
     private ChapterComparator locationComparator;
+    @Nullable ChapterFragmentPagerAdapter viewPagerAdapter;
     @Nullable private Chapter selectedChapter;
     private Chapter homeChapter;
     private ArrayList<Chapter> chapters = new ArrayList<>();
@@ -223,8 +223,8 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
     }
 
     private void updatePagerWith(Chapter selectedChapter, boolean isOrganizer) {
-        mViewPagerAdapter = new ChapterFragmentPagerAdapter(this, selectedChapter, isOrganizer);
-        viewPager.setAdapter(mViewPagerAdapter);
+        viewPagerAdapter = new ChapterFragmentPagerAdapter(this, selectedChapter, isOrganizer);
+        viewPager.setAdapter(viewPagerAdapter);
     }
 
     @Override
@@ -268,13 +268,13 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
         organizerCheckCallback = new OrganizerChecker.Callbacks() {
             @Override
             public void onOrganizerResponse(boolean isOrganizer) {
-                if (selectedChapter == null) {
+                if (viewPagerAdapter == null) {
                     return;
                 }
-                if (isOrganizer == isOrganizerFragmentShown()) {
+                if (isOrganizer == viewPagerAdapter.isOrganizerFragmentShown()) {
                     return;
                 }
-                updatePagerWith(selectedChapter, isOrganizer);
+                viewPagerAdapter.setOrganizer(isOrganizer);
             }
 
             @Override
@@ -283,10 +283,6 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
             }
         };
         App.getInstance().checkOrganizer(organizerCheckCallback);
-    }
-
-    private boolean isOrganizerFragmentShown() {
-        return mViewPagerAdapter != null && mViewPagerAdapter.isOrganizerFragmentShown();
     }
 
     private void recordStartPageView() {
@@ -300,8 +296,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
     }
 
     protected String getTrackedViewName() {
-        if (viewPager == null
-            || mViewPagerAdapter == null) {
+        if (viewPager == null || viewPagerAdapter == null) {
             return "Main";
         }
         final String[] pagesNames = {"News", "Info", "Events"};
