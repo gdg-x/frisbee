@@ -63,12 +63,6 @@ public final class PrefUtils {
             .getString(SETTINGS_HOME_GDG, null);
     }
 
-    @NonNull
-    public static String getHomeChapterIdNotNull(final Context context) {
-        return prefs(context)
-            .getString(SETTINGS_HOME_GDG, "");
-    }
-
     @Nullable
     public static Chapter getHomeChapter(Context context) {
         SharedPreferences prefs = prefs(context);
