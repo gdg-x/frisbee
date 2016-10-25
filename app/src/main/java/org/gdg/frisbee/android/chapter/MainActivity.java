@@ -79,6 +79,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
 
     @Nullable
     private OrganizerChecker.Callbacks organizerCheckCallback;
+    private Chapter homeChapter;
 
     /**
      * Called when the activity is first created.
@@ -92,10 +93,8 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        locationComparator = new ChapterComparator(PrefUtils.getHomeChapterIdNotNull(this),
-            App.getInstance().getLastLocation());
-
-        setupChapterSwitcher();
+        homeChapter = PrefUtils.getHomeChapter(this);
+        locationComparator = new ChapterComparator(homeChapter, App.getInstance().getLastLocation());
 
         if (savedInstanceState != null) {
             chapters = savedInstanceState.getParcelableArrayList(ARG_CHAPTERS);
@@ -106,10 +105,10 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
                 selectedChapter = new Chapter(chapterId);
             }
         }
-
         if (selectedChapter == null) {
-            selectedChapter = PrefUtils.getHomeChapter(this);
+            selectedChapter = homeChapter;
         }
+        setupChapterSwitcher();
 
         if (!chapters.isEmpty()) {
             initUI();

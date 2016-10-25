@@ -10,11 +10,11 @@ import java.util.Comparator;
 public class ChapterComparator implements Comparator<Chapter> {
 
     private static final float MAX_DISTANCE = 500000;
-    private final String homeChapterId;
+    private final Chapter homeChapter;
     private final Location lastLocation;
 
-    public ChapterComparator(@Nullable String homeChapterId, @Nullable Location lastLocation) {
-        this.homeChapterId = homeChapterId;
+    public ChapterComparator(@Nullable Chapter homeChapter, @Nullable Location lastLocation) {
+        this.homeChapter = homeChapter;
         this.lastLocation = lastLocation;
     }
 
@@ -25,11 +25,11 @@ public class ChapterComparator implements Comparator<Chapter> {
     @Override
     public int compare(Chapter chapter, Chapter chapter2) {
 
-        if (chapter.getGplusId().equals(homeChapterId)) {
+        if (chapter.equals(homeChapter)) {
             return -1;
         }
 
-        if (chapter2.getGplusId().equals(homeChapterId)) {
+        if (chapter2.equals(homeChapter)) {
             return 1;
         }
 
