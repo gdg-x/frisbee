@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -174,7 +175,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
             new NavigationView.OnNavigationItemSelectedListener() {
                 @Override
-                public boolean onNavigationItemSelected(MenuItem menuItem) {
+                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                     onDrawerItemClick(menuItem.getItemId());
                     mDrawerLayout.closeDrawers();
                     return true;
@@ -396,7 +397,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         }
     }
 
-    protected boolean isHomeChapterOutdated(final String currentHomeChapterId) {
+    private boolean isHomeChapterOutdated(final String currentHomeChapterId) {
         return currentHomeChapterId != null
             && (mStoredHomeChapterId == null || !mStoredHomeChapterId.equals(currentHomeChapterId));
     }
