@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -82,7 +83,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     private static final int GROUP_ID = 1;
     private static final int SETTINGS_GROUP_ID = 2;
 
-    protected String mStoredHomeChapterId;
     @BindView(R.id.drawer)
     DrawerLayout mDrawerLayout;
     @BindView(R.id.nav_view)
@@ -91,6 +91,8 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     ImageView mDrawerUserPicture;
     TextView mDrawerUserName;
     private ActionBarDrawerToggle mDrawerToggle;
+
+    private String mStoredHomeChapterId;
 
     @Override
     public void setContentView(int layoutResId) {
@@ -173,7 +175,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
 
             new NavigationView.OnNavigationItemSelectedListener() {
                 @Override
-                public boolean onNavigationItemSelected(MenuItem menuItem) {
+                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                     onDrawerItemClick(menuItem.getItemId());
                     mDrawerLayout.closeDrawers();
                     return true;
@@ -360,7 +362,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     private void maybeUpdateChapterImage() {
-        final String homeChapterId = getCurrentHomeChapterId();
+        final String homeChapterId = PrefUtils.getHomeChapterId(this);
         if (isHomeChapterOutdated(homeChapterId)) {
             App.getInstance().getModelCache().getAsync(ModelCache.KEY_PERSON + homeChapterId,
                 true, new ModelCache.CacheListener() {
@@ -395,11 +397,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         }
     }
 
-    protected String getCurrentHomeChapterId() {
-        return PrefUtils.getHomeChapterId(this);
-    }
-
-    protected boolean isHomeChapterOutdated(final String currentHomeChapterId) {
+    private boolean isHomeChapterOutdated(final String currentHomeChapterId) {
         return currentHomeChapterId != null
             && (mStoredHomeChapterId == null || !mStoredHomeChapterId.equals(currentHomeChapterId));
     }

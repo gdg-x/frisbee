@@ -309,7 +309,7 @@ public class InfoFragment extends BaseFragment implements OrganizerLoader.Listen
     }
 
     void setIsLoading(boolean isLoading) {
-        if (isLoading == mLoading || getActivity() == null) {
+        if (isLoading == mLoading || !isContextValid()) {
             return;
         }
 
