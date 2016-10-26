@@ -55,19 +55,14 @@ public class GdeActivity extends GdgNavDrawerActivity implements ViewPager.OnPag
     }
 
     private void fetchGdeDirectory() {
-
         App.getInstance().getGdeDirectory().getDirectory().enqueue(new Callback<GdeList>() {
             @Override
-            public void success(final GdeList directory) {
+            public void success(GdeList directory) {
                 App.getInstance().getModelCache().putAsync(ModelCache.KEY_GDE_LIST,
                     directory,
                     DateTime.now().plusDays(4),
-                    new ModelCache.CachePutListener() {
-                        @Override
-                        public void onPutIntoCache() {
-                            setupGdeViewPager(directory);
-                        }
-                    });
+                    null);
+                setupGdeViewPager(directory);
             }
 
             @Override
@@ -83,6 +78,9 @@ public class GdeActivity extends GdgNavDrawerActivity implements ViewPager.OnPag
     }
 
     private void setupGdeViewPager(GdeList directory) {
+        if (!isContextValid()) {
+            return;
+        }
         SortedMap<String, GdeList> gdeMap = new TreeMap<>();
         gdeMap.putAll(extractCategoriesFromGdeList(directory));
         List<GdeCategory> gdeCategoryList = convertCategoryMapToList(gdeMap);
