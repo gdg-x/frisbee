@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.pulse;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,7 @@ public class PulseFragment extends GdgListFragment {
 
     private int mMode;
     private String mTarget;
-    private PulseAdapter mAdapter;
+    private PulseAdapter adapter;
     private Callbacks mListener;
 
     public static PulseFragment newInstance(int mode, String target) {
@@ -74,7 +75,9 @@ public class PulseFragment extends GdgListFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putIntArray(INSTANCE_STATE_POSITIONS, mAdapter.getPositions());
+        if (adapter != null) {
+            outState.putIntArray(INSTANCE_STATE_POSITIONS, adapter.getPositions());
+        }
     }
 
     @Override
@@ -102,9 +105,9 @@ public class PulseFragment extends GdgListFragment {
         setIsLoading(true);
     }
 
-    void createAdapter(int[] positions, Directory directory) {
-        mAdapter = new PulseAdapter(getActivity(), positions, directory);
-        setListAdapter(mAdapter);
+    void createAdapter(int[] positions, @Nullable Directory directory) {
+        adapter = new PulseAdapter(getActivity(), positions, directory);
+        setListAdapter(adapter);
         App.getInstance().getModelCache().getAsync(ModelCache.KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
             true,
             new ModelCache.CacheListener() {
@@ -183,8 +186,8 @@ public class PulseFragment extends GdgListFragment {
     }
 
     private void initAdapter(Pulse pulse) {
-        mAdapter.setPulse(mMode, pulse, !isGlobalSelected());
-        mAdapter.notifyDataSetChanged();
+        adapter.setPulse(mMode, pulse, !isGlobalSelected());
+        adapter.notifyDataSetChanged();
         setIsLoading(false);
     }
 
@@ -195,7 +198,7 @@ public class PulseFragment extends GdgListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Map.Entry<String, PulseEntry> pulse = mAdapter.getItem(position);
+        Map.Entry<String, PulseEntry> pulse = adapter.getItem(position);
 
         if (isGlobalSelected()) {
             mListener.openPulse(pulse.getKey());
