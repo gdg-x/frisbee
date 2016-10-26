@@ -21,16 +21,14 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -39,10 +37,7 @@ import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.about.AboutActivity;
 import org.gdg.frisbee.android.activity.SettingsActivity;
-import org.gdg.frisbee.android.api.Callback;
-import org.gdg.frisbee.android.api.model.plus.Person;
 import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeriesActivity;
@@ -52,13 +47,11 @@ import org.gdg.frisbee.android.pulse.PulseActivity;
 import org.gdg.frisbee.android.utils.PlusUtils;
 import org.gdg.frisbee.android.utils.PrefUtils;
 import org.gdg.frisbee.android.utils.Utils;
-import org.gdg.frisbee.android.view.CircleTransform;
-import org.joda.time.DateTime;
+import org.gdg.frisbee.android.widget.FeedbackFragment;
 
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public abstract class GdgNavDrawerActivity extends GdgActivity {
 
@@ -87,12 +80,9 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     DrawerLayout mDrawerLayout;
     @BindView(R.id.nav_view)
     NavigationView mNavigationView;
-    ImageView mDrawerImage;
-    ImageView mDrawerUserPicture;
-    TextView mDrawerUserName;
     private ActionBarDrawerToggle mDrawerToggle;
 
-    private String mStoredHomeChapterId;
+    private DrawerHeaderDisplayer headerDisplayer;
 
     @Override
     public void setContentView(int layoutResId) {
@@ -128,15 +118,26 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        if (mNavigationView != null) {
-            setupDrawerContent(mNavigationView);
-        }
-
+        setupDrawerContent(mNavigationView);
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
-
         Menu menu = navigationView.getMenu();
+        populateMainGroup(menu);
+        populateSettingsGroup(menu);
+
+        int selectedDrawerItemId = getIntent().getIntExtra(EXTRA_SELECTED_DRAWER_ITEM_ID, DRAWER_HOME);
+        navigationView.setCheckedItem(selectedDrawerItemId);
+        navigationView.setNavigationItemSelectedListener(createDrawerItemClickListener());
+        headerDisplayer = new DrawerHeaderDisplayer(navigationView.getHeaderView(0), new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onSignInClick();
+            }
+        });
+    }
+
+    private static void populateMainGroup(Menu menu) {
         menu.add(GROUP_ID, DRAWER_HOME, Menu.NONE, R.string.home_gdg).setIcon(R.drawable.ic_drawer_home_gdg);
         menu.add(GROUP_ID, DRAWER_GDE, Menu.NONE, R.string.gde).setIcon(R.drawable.ic_drawer_gde);
         menu.add(GROUP_ID, DRAWER_PULSE, Menu.NONE, R.string.pulse).setIcon(R.drawable.ic_drawer_pulse);
@@ -148,10 +149,13 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             menu.add(GROUP_ID,
                 taggedEventSeries.getDrawerId(),
                 Menu.NONE,
-                taggedEventSeries.getTitleResId())
-                .setIcon(taggedEventSeries.getDrawerIconResId());
+                taggedEventSeries.getTitleResId()
+            ).setIcon(taggedEventSeries.getDrawerIconResId());
         }
+        menu.setGroupCheckable(GROUP_ID, true, true);
+    }
 
+    private static void populateSettingsGroup(Menu menu) {
         menu.add(SETTINGS_GROUP_ID, DRAWER_SETTINGS, Menu.NONE, R.string.settings)
             .setIcon(R.drawable.ic_drawer_settings);
         menu.add(SETTINGS_GROUP_ID, DRAWER_INVITE, Menu.NONE, R.string.invite_friends)
@@ -162,36 +166,17 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             .setIcon(R.drawable.ic_drawer_feedback);
         menu.add(SETTINGS_GROUP_ID, DRAWER_ABOUT, Menu.NONE, R.string.about)
             .setIcon(R.drawable.ic_drawer_about);
+    }
 
-        menu.setGroupCheckable(GROUP_ID, true, true);
-
-        final int selectedDrawerItemId = getIntent().getIntExtra(EXTRA_SELECTED_DRAWER_ITEM_ID, DRAWER_HOME);
-        final MenuItem selectedItem = menu.findItem(selectedDrawerItemId);
-        if (selectedItem != null) {
-            selectedItem.setChecked(true);
-        }
-
-        navigationView.setNavigationItemSelectedListener(
-
-            new NavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                    onDrawerItemClick(menuItem.getItemId());
-                    mDrawerLayout.closeDrawers();
-                    return true;
-                }
-            });
-        View headerView = navigationView.getHeaderView(0);
-        mDrawerImage = ButterKnife.findById(headerView, R.id.navdrawer_image);
-        mDrawerUserPicture = ButterKnife.findById(headerView, R.id.navdrawer_user_picture);
-        mDrawerUserName = ButterKnife.findById(headerView, R.id.navdrawer_user_name);
-
-        headerView.setOnClickListener(new View.OnClickListener() {
+    private NavigationView.OnNavigationItemSelectedListener createDrawerItemClickListener() {
+        return new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View view) {
-                onSignInClick();
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                onDrawerItemClick(menuItem.getItemId());
+                mDrawerLayout.closeDrawers();
+                return false;
             }
-        });
+        };
     }
 
     private void onSignInClick() {
@@ -205,6 +190,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     @Override
     protected void onSuccessfulSignIn(GoogleSignInAccount signInAccount) {
         super.onSuccessfulSignIn(signInAccount);
+        headerDisplayer.updateUserDetails(PlusUtils.getCurrentAccount(this));
         String welcome = getString(R.string.welcome_sign_in, signInAccount.getDisplayName());
         Toast.makeText(this, welcome, Toast.LENGTH_SHORT).show();
     }
@@ -244,7 +230,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 startActivity(Utils.createExternalIntent(this, Uri.parse(Const.URL_HELP)));
                 break;
             case DRAWER_FEEDBACK:
-                showFeedbackDialog();
+                displayFeedbackDialog();
                 break;
             case DRAWER_ABOUT:
                 navigateTo(AboutActivity.class, data);
@@ -261,9 +247,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 return;
             }
         }
-
-        final List<TaggedEventSeries> currentEventSeries =
-            App.getInstance().currentTaggedEventSeries();
+        final List<TaggedEventSeries> currentEventSeries = App.getInstance().currentTaggedEventSeries();
         for (TaggedEventSeries taggedEventSeries : currentEventSeries) {
             if (taggedEventSeries.getDrawerId() == itemId) {
 
@@ -276,20 +260,23 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         }
     }
 
-    private void navigateTo(Class<? extends GdgActivity> activityClass, Bundle additional) {
+    private void displayFeedbackDialog() {
+        trackView("Feedback/" + getTrackedViewName());
+        new FeedbackFragment().show(getSupportFragmentManager(), "FeedbackFragment");
+    }
+
+    private void navigateTo(Class<? extends GdgActivity> activityClass, @Nullable Bundle additional) {
         if (this.getClass().equals(activityClass)
             && !(this instanceof TaggedEventSeriesActivity)) {
             return;
         }
 
-        Intent i = new Intent(GdgNavDrawerActivity.this, activityClass);
-        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-
+        Intent intent = new Intent(GdgNavDrawerActivity.this, activityClass);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         if (additional != null) {
-            i.putExtras(additional);
+            intent.putExtras(additional);
         }
-
-        startActivity(i);
+        startActivity(intent);
         mDrawerLayout.closeDrawers();
     }
 
@@ -320,8 +307,8 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         if (PrefUtils.shouldOpenDrawerOnStart(this)) {
             mDrawerLayout.openDrawer(GravityCompat.START);
         }
-        maybeUpdateChapterImage();
-        updateUserDetails();
+        headerDisplayer.maybeUpdateChapterImage(PrefUtils.getHomeChapterId(this));
+        headerDisplayer.updateUserDetails(PlusUtils.getCurrentAccount(this));
     }
 
     @Override
@@ -343,62 +330,4 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         }
     }
 
-    private void updateUserDetails() {
-        final GoogleSignInAccount account = PlusUtils.getCurrentAccount(this);
-        if (account == null) {
-            mDrawerUserPicture.setImageDrawable(null);
-            mDrawerUserName.setText(R.string.login_register);
-            return;
-        }
-        if (account.getPhotoUrl() != null) {
-            App.getInstance().getPicasso().load(account.getPhotoUrl())
-                .transform(new CircleTransform())
-                .into(mDrawerUserPicture);
-        }
-        String displayName = account.getDisplayName();
-        if (!TextUtils.isEmpty(displayName)) {
-            mDrawerUserName.setText(displayName);
-        }
-    }
-
-    private void maybeUpdateChapterImage() {
-        final String homeChapterId = PrefUtils.getHomeChapterId(this);
-        if (isHomeChapterOutdated(homeChapterId)) {
-            App.getInstance().getModelCache().getAsync(ModelCache.KEY_PERSON + homeChapterId,
-                true, new ModelCache.CacheListener() {
-                    @Override
-                    public void onGet(Object person) {
-                        updateChapterImage((Person) person, homeChapterId);
-                    }
-
-                    @Override
-                    public void onNotFound(final String key) {
-                        App.getInstance().getPlusApi().getPerson(homeChapterId).enqueue(new Callback<Person>() {
-                            @Override
-                            public void success(Person person) {
-                                if (person != null) {
-                                    App.getInstance().getModelCache().putAsync(key, person,
-                                        DateTime.now().plusDays(1), null);
-                                    updateChapterImage(person, homeChapterId);
-                                }
-                            }
-                        });
-                    }
-                });
-        }
-    }
-
-    private void updateChapterImage(Person person, String homeChapterId) {
-        mStoredHomeChapterId = homeChapterId;
-        if (person.getCover() != null) {
-            App.getInstance().getPicasso()
-                .load(person.getCover().getCoverPhoto().getUrl())
-                .into(mDrawerImage);
-        }
-    }
-
-    private boolean isHomeChapterOutdated(final String currentHomeChapterId) {
-        return currentHomeChapterId != null
-            && (mStoredHomeChapterId == null || !mStoredHomeChapterId.equals(currentHomeChapterId));
-    }
 }
