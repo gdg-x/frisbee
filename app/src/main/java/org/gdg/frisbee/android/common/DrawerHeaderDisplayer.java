@@ -73,7 +73,7 @@ class DrawerHeaderDisplayer {
                 public void onNotFound(final String key) {
                     App.getInstance().getPlusApi().getPerson(homeChapterId).enqueue(new Callback<Person>() {
                         @Override
-                        public void success(Person person) {
+                        public void onSuccess(Person person) {
                             if (person != null) {
                                 App.getInstance().getModelCache().putAsync(key, person,
                                     DateTime.now().plusDays(1), null);

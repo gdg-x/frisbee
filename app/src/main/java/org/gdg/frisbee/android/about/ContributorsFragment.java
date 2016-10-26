@@ -67,7 +67,7 @@ public class ContributorsFragment extends PeopleListFragment {
         App.getInstance().getGithub().getContributors(GITHUB_ORGANIZATION, GITHUB_REPO)
             .enqueue(new Callback<ContributorList>() {
                 @Override
-                public void success(final ContributorList contributors) {
+                public void onSuccess(final ContributorList contributors) {
 
                     mAdapter.addAll(contributors);
                     App.getInstance().getModelCache().putAsync(ModelCache.KEY_FRISBEE_CONTRIBUTORS,

@@ -35,7 +35,7 @@ public class GdgDashClockExtension extends DashClockExtension {
             new DateTime().plusMonths(1))
             .enqueue(new Callback<PagedList<Event>>() {
                 @Override
-                public void success(PagedList<Event> eventsPagedList) {
+                public void onSuccess(PagedList<Event> eventsPagedList) {
                     List<Event> events = eventsPagedList.getItems();
                     if (events.size() > 0) {
                         if (events.get(0).getGPlusEventLink() != null) {

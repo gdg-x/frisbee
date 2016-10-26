@@ -57,7 +57,7 @@ public class GdeActivity extends GdgNavDrawerActivity implements ViewPager.OnPag
     private void fetchGdeDirectory() {
         App.getInstance().getGdeDirectory().getDirectory().enqueue(new Callback<GdeList>() {
             @Override
-            public void success(GdeList directory) {
+            public void onSuccess(GdeList directory) {
                 App.getInstance().getModelCache().putAsync(ModelCache.KEY_GDE_LIST,
                     directory,
                     DateTime.now().plusDays(4),
@@ -66,12 +66,12 @@ public class GdeActivity extends GdgNavDrawerActivity implements ViewPager.OnPag
             }
 
             @Override
-            public void failure(Throwable error) {
+            public void onError() {
                 showError(R.string.fetch_gde_failed);
             }
 
             @Override
-            public void networkFailure(Throwable error) {
+            public void onNetworkFailure(Throwable error) {
                 showError(R.string.offline_alert);
             }
         });

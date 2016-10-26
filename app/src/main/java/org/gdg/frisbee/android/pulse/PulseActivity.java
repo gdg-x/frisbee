@@ -90,7 +90,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
     void fetchPulse(final String selectedPulse) {
         App.getInstance().getGroupDirectory().getPulse().enqueue(new Callback<Pulse>() {
             @Override
-            public void success(final Pulse pulse) {
+            public void onSuccess(final Pulse pulse) {
                 App.getInstance().getModelCache().putAsync(
                     ModelCache.KEY_PULSE_GLOBAL,
                     pulse,
@@ -104,12 +104,12 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
             }
 
             @Override
-            public void failure(Throwable error) {
+            public void onError() {
                 showError(R.string.fetch_chapters_failed);
             }
 
             @Override
-            public void networkFailure(Throwable error) {
+            public void onNetworkFailure(Throwable error) {
                 showError(R.string.offline_alert);
             }
         });

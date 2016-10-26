@@ -147,7 +147,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                     new DateTime().plusMonths(1))
                 .enqueue(new Callback<PagedList<Event>>() {
                     @Override
-                    public void success(PagedList<Event> eventsPagedList) {
+                    public void onSuccess(PagedList<Event> eventsPagedList) {
                         Event nextEvent = getNextEvent(eventsPagedList.getItems());
 
                         if (nextEvent != null) {
@@ -170,13 +170,13 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                     }
 
                     @Override
-                    public void failure(Throwable error) {
+                    public void onError() {
                         showErrorChild(views, R.string.loading_data_failed, UpdateService.this);
                         manager.updateAppWidget(thisWidget, views);
                     }
 
                     @Override
-                    public void networkFailure(Throwable error) {
+                    public void onNetworkFailure(Throwable error) {
                         showErrorChild(views, R.string.offline_alert, UpdateService.this);
                         manager.updateAppWidget(thisWidget, views);
                     }

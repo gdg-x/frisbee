@@ -107,17 +107,17 @@ public class EventOverviewFragment extends BaseFragment {
         final String eventId = getArguments().getString(Const.EXTRA_EVENT_ID);
         App.getInstance().getGdgXHub().getEventDetail(eventId).enqueue(new Callback<EventFullDetails>() {
             @Override
-            public void success(EventFullDetails eventFullDetails) {
+            public void onSuccess(EventFullDetails eventFullDetails) {
                 onSuccess(eventFullDetails);
             }
 
             @Override
-            public void failure(Throwable error) {
+            public void onError() {
                 showError(R.string.server_error);
             }
 
             @Override
-            public void networkFailure(Throwable error) {
+            public void onNetworkFailure(Throwable error) {
                 showError(R.string.offline_alert);
             }
         });
@@ -182,18 +182,18 @@ public class EventOverviewFragment extends BaseFragment {
                 if (Utils.isOnline(getActivity())) {
                     App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
                         @Override
-                        public void success(Directory directory) {
+                        public void onSuccess(Directory directory) {
                             mDirectory = directory;
                             updateGroupDetails(mDirectory.getGroupById(eventFullDetails.getChapter()));
                         }
 
                         @Override
-                        public void failure(Throwable error) {
+                        public void onError() {
                             showError(R.string.fetch_chapters_failed);
                         }
 
                         @Override
-                        public void networkFailure(Throwable error) {
+                        public void onNetworkFailure(Throwable error) {
                             showError(R.string.offline_alert);
                         }
                     });
@@ -217,7 +217,7 @@ public class EventOverviewFragment extends BaseFragment {
     private void loadChapterImage(String gplusId) {
         App.getInstance().getPlusApi().getImageInfo(gplusId).enqueue(new Callback<ImageInfo>() {
             @Override
-            public void success(ImageInfo imageInfo) {
+            public void onSuccess(ImageInfo imageInfo) {
                 if (isContextValid()) {
                     String imageUrl = imageInfo.getImage().getUrl().replace("sz=50", "sz=196");
                     App.getInstance().getPicasso().load(imageUrl).into(mGroupLogo);
@@ -225,14 +225,14 @@ public class EventOverviewFragment extends BaseFragment {
             }
 
             @Override
-            public void failure(Throwable error) {
+            public void onError() {
                 if (isContextValid()) {
                     mGroupLogo.setVisibility(View.INVISIBLE);
                 }
             }
 
             @Override
-            public void networkFailure(Throwable error) {
+            public void onNetworkFailure(Throwable error) {
                 if (isContextValid()) {
                     mGroupLogo.setVisibility(View.INVISIBLE);
                 }

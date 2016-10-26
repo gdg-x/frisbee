@@ -118,21 +118,21 @@ public class FirstStartStep2Fragment extends BaseFragment {
             .getPerson(inviteSender.sender)
             .enqueue(new Callback<Person>() {
                 @Override
-                public void success(Person sender) {
+                public void onSuccess(Person sender) {
                     if (isContextValid()) {
                         displaySender(sender);
                     }
                 }
 
                 @Override
-                public void failure(Throwable error) {
+                public void onError() {
                     if (isContextValid()) {
                         displayUnknownSender();
                     }
                 }
 
                 @Override
-                public void networkFailure(Throwable error) {
+                public void onNetworkFailure(Throwable error) {
                     if (isContextValid()) {
                         displayUnknownSender();
                     }

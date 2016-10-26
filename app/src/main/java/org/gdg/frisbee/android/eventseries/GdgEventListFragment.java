@@ -91,7 +91,7 @@ public class GdgEventListFragment extends EventListFragment {
             mPlusId, page).
             enqueue(new Callback<PagedList<Event>>() {
                 @Override
-                public void success(PagedList<Event> eventsPagedList) {
+                public void onSuccess(PagedList<Event> eventsPagedList) {
                     List<Event> events = eventsPagedList.getItems();
                     mAdapter.addAll(events);
                     App.getInstance().getModelCache().putAsync(mCacheKey,
@@ -107,13 +107,15 @@ public class GdgEventListFragment extends EventListFragment {
                 }
 
                 @Override
-                public void failure(Throwable error) {
-                    onError(R.string.fetch_events_failed);
+                public void onError() {
+                    setIsLoading(false);
+                    showError(R.string.fetch_events_failed);
                 }
 
                 @Override
-                public void networkFailure(Throwable error) {
-                    onError(R.string.offline_alert);
+                public void onNetworkFailure(Throwable error) {
+                    setIsLoading(false);
+                    showError(R.string.offline_alert);
                 }
             }
         );

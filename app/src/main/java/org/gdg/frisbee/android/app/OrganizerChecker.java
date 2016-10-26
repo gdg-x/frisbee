@@ -61,7 +61,7 @@ public class OrganizerChecker {
         isOrganizer = false;
         App.getInstance().getGdgXHub().checkOrganizer(currentId).enqueue(new Callback<OrganizerCheckResponse>() {
             @Override
-            public void success(OrganizerCheckResponse organizerCheckResponse) {
+            public void onSuccess(OrganizerCheckResponse organizerCheckResponse) {
                 lastOrganizerCheckTimeStamp = System.currentTimeMillis();
                 checkedId = currentId;
                 isOrganizer = organizerCheckResponse.getChapters().size() > 0;
@@ -71,7 +71,7 @@ public class OrganizerChecker {
             }
 
             @Override
-            public void failure(Throwable error) {
+            public void onError() {
                 isOrganizer = false;
                 responseHandler.onErrorResponse();
             }

@@ -129,7 +129,7 @@ public class PulseFragment extends GdgListFragment {
         if (isGlobalSelected()) {
             App.getInstance().getGroupDirectory().getPulse().enqueue(new Callback<Pulse>() {
                 @Override
-                public void success(final Pulse pulse) {
+                public void onSuccess(final Pulse pulse) {
                     App.getInstance().getModelCache().putAsync(
                         ModelCache.KEY_PULSE + mTarget.toLowerCase(),
                         pulse,
@@ -143,19 +143,19 @@ public class PulseFragment extends GdgListFragment {
                 }
 
                 @Override
-                public void failure(Throwable error) {
+                public void onError() {
                     showError(R.string.server_error);
                 }
 
                 @Override
-                public void networkFailure(Throwable error) {
+                public void onNetworkFailure(Throwable error) {
                     showError(R.string.offline_alert);
                 }
             });
         } else {
             App.getInstance().getGroupDirectory().getCountryPulse(mTarget).enqueue(new Callback<Pulse>() {
                 @Override
-                public void success(final Pulse pulse) {
+                public void onSuccess(final Pulse pulse) {
                     App.getInstance().getModelCache().putAsync(
                         ModelCache.KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
                         pulse,
@@ -169,12 +169,12 @@ public class PulseFragment extends GdgListFragment {
                 }
 
                 @Override
-                public void failure(Throwable error) {
+                public void onError() {
                     showError(R.string.server_error);
                 }
 
                 @Override
-                public void networkFailure(Throwable error) {
+                public void onNetworkFailure(Throwable error) {
                     showError(R.string.offline_alert);
                 }
             });

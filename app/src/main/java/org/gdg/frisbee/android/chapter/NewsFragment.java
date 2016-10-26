@@ -96,7 +96,7 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
                         App.getInstance().getPlusApi().getActivities(plusId).enqueue(
                             new Callback<Activities>() {
                                 @Override
-                                public void success(Activities activityFeed) {
+                                public void onSuccess(Activities activityFeed) {
                                     if (activityFeed != null) {
                                         mAdapter.addAll(activityFeed.getItems());
                                     } else {
@@ -168,7 +168,7 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
             App.getInstance().getPlusApi().getActivities(plusId).enqueue(
                 new Callback<Activities>() {
                     @Override
-                    public void success(Activities activityFeed) {
+                    public void onSuccess(Activities activityFeed) {
                         if (activityFeed != null) {
                             cacheActivityFeed(plusId, activityFeed);
                             mAdapter.replaceAll(activityFeed.getItems(), 0);

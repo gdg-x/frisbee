@@ -149,7 +149,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
     void fetchChapters(final String selectedChapterId) {
         App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
             @Override
-            public void success(final Directory directory) {
+            public void onSuccess(final Directory directory) {
 
                 App.getInstance().getModelCache().putAsync(
                     ModelCache.KEY_CHAPTER_LIST_HUB,
@@ -164,12 +164,12 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
             }
 
             @Override
-            public void failure(Throwable error) {
+            public void onError() {
                 showError(R.string.fetch_chapters_failed);
             }
 
             @Override
-            public void networkFailure(Throwable error) {
+            public void onNetworkFailure(Throwable error) {
                 showError(R.string.offline_alert);
             }
         });

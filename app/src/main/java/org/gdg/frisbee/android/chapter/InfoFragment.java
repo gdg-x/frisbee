@@ -124,19 +124,19 @@ public class InfoFragment extends BaseFragment implements OrganizerLoader.Listen
         App.getInstance().getPlusApi().getPerson(chapterPlusId).enqueue(
             new Callback<Person>() {
                 @Override
-                public void success(Person chapter) {
+                public void onSuccess(Person chapter) {
                     putChapterInCache(chapterPlusId, chapter);
                     updateUIFrom(chapter);
                 }
 
                 @Override
-                public void failure(Throwable error) {
+                public void onError() {
                     showError(R.string.server_error);
                     setIsLoading(false);
                 }
 
                 @Override
-                public void networkFailure(Throwable error) {
+                public void onNetworkFailure(Throwable error) {
                     showError(R.string.offline_alert);
                     setIsLoading(false);
                 }

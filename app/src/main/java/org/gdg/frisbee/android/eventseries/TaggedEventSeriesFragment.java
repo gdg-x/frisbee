@@ -30,8 +30,8 @@ import android.widget.TextView;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
-import org.gdg.frisbee.android.api.model.PagedList;
 import org.gdg.frisbee.android.api.model.Event;
+import org.gdg.frisbee.android.api.model.PagedList;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.Utils;
@@ -114,7 +114,7 @@ public class TaggedEventSeriesFragment extends EventListFragment {
 
         Callback<PagedList<Event>> listener = new Callback<PagedList<Event>>() {
             @Override
-            public void success(final PagedList<Event> taggedEventPagedList) {
+            public void onSuccess(final PagedList<Event> taggedEventPagedList) {
                 mEvents.addAll(taggedEventPagedList.getItems());
                 App.getInstance().getModelCache().putAsync(mCacheKey,
                     mEvents,
@@ -130,13 +130,15 @@ public class TaggedEventSeriesFragment extends EventListFragment {
             }
 
             @Override
-            public void failure(Throwable error) {
-                onError(R.string.fetch_events_failed);
+            public void onError() {
+                setIsLoading(false);
+                showError(R.string.fetch_events_failed);
             }
 
             @Override
-            public void networkFailure(Throwable error) {
-                onError(R.string.offline_alert);
+            public void onNetworkFailure(Throwable error) {
+                setIsLoading(false);
+                showError(R.string.offline_alert);
             }
         };
 
