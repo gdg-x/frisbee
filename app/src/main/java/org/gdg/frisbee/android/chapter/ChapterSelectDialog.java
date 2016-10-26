@@ -22,7 +22,6 @@ import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
-import org.gdg.frisbee.android.view.FilterListView;
 
 import java.util.List;
 
@@ -35,7 +34,7 @@ public class ChapterSelectDialog extends AppCompatDialogFragment
     private static final String EXTRA_SELECTED_CHAPTER = "EXTRA_SELECTED_CHAPTER";
 
     @BindView(R.id.filter) SearchView cityNameSearchView;
-    @BindView(android.R.id.list) FilterListView listView;
+    @BindView(android.R.id.list) ListView listView;
 
     private List<Chapter> chapters;
 

@@ -14,7 +14,7 @@
     app:queryHint="@string/search_hint"
     app:searchIcon="@null" />
 
-  <org.gdg.frisbee.android.view.FilterListView
+  <ListView
     android:id="@android:id/list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
