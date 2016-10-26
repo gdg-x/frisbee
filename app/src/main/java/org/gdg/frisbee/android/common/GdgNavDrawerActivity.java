@@ -172,7 +172,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         }
 
         navigationView.setNavigationItemSelectedListener(
-
             new NavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -205,6 +204,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     @Override
     protected void onSuccessfulSignIn(GoogleSignInAccount signInAccount) {
         super.onSuccessfulSignIn(signInAccount);
+        updateUserDetails();
         String welcome = getString(R.string.welcome_sign_in, signInAccount.getDisplayName());
         Toast.makeText(this, welcome, Toast.LENGTH_SHORT).show();
     }
@@ -282,14 +282,12 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
             return;
         }
 
-        Intent i = new Intent(GdgNavDrawerActivity.this, activityClass);
-        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-
+        Intent intent = new Intent(GdgNavDrawerActivity.this, activityClass);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         if (additional != null) {
-            i.putExtras(additional);
+            intent.putExtras(additional);
         }
-
-        startActivity(i);
+        startActivity(intent);
         mDrawerLayout.closeDrawers();
     }
 
