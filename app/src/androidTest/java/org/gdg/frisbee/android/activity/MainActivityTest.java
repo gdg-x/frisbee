@@ -1,8 +1,10 @@
 package org.gdg.frisbee.android.activity;
 
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v7.widget.Toolbar;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Chapter;
@@ -18,9 +20,10 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
 import static android.support.test.espresso.action.ViewActions.swipeRight;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
+import static android.support.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.gdg.frisbee.android.activity.util.OrientationChangeAction.orientationLandscape;
 import static org.gdg.frisbee.android.activity.util.OrientationChangeAction.orientationPortrait;
@@ -46,11 +49,11 @@ public class MainActivityTest {
     @Test
     public void supportsChapterSwapping() {
 
-        onView(withId(R.id.actionbar_spinner)).perform(click());
+        onViewChapterSwitcher().perform(click());
         onData(allOf(is(instanceOf(Chapter.class)), is(CHAPTER_ISTANBUL)))
             .perform(click());
-        onView(withId(R.id.actionbar_spinner))
-            .check(matches(withSpinnerText(CHAPTER_ISTANBUL.toString())));
+        onViewChapterSwitcher()
+            .check(matches(withText(CHAPTER_ISTANBUL.toString())));
 
         onView(withId(R.id.pager)).perform(swipeRight());
         onView(withId(R.id.tagline)).check(matches(withText(containsString(CHAPTER_ISTANBUL.toString()))));
@@ -61,19 +64,19 @@ public class MainActivityTest {
 
     @Test
     public void keepsChapterOnOrientationChange() {
-
         onView(isRoot()).perform(orientationPortrait());
 
-        onView(withId(R.id.actionbar_spinner)).perform(click());
+        onViewChapterSwitcher().perform(click());
         onData(allOf(is(instanceOf(Chapter.class)), is(CHAPTER_ISTANBUL)))
             .perform(click());
-        onView(withId(R.id.actionbar_spinner))
-            .check(matches(withSpinnerText(CHAPTER_ISTANBUL.toString())));
-
+        onViewChapterSwitcher().check(matches(withText(CHAPTER_ISTANBUL.toString())));
 
         onView(isRoot()).perform(orientationLandscape());
 
-        onView(withId(R.id.actionbar_spinner))
-            .check(matches(withSpinnerText(CHAPTER_ISTANBUL.toString())));
+        onViewChapterSwitcher().check(matches(withText(CHAPTER_ISTANBUL.toString())));
+    }
+
+    private static ViewInteraction onViewChapterSwitcher() {
+        return onView(allOf(withId(android.R.id.text1), isDescendantOfA(isAssignableFrom(Toolbar.class))));
     }
 }
