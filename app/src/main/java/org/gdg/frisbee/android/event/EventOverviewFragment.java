@@ -108,7 +108,7 @@ public class EventOverviewFragment extends BaseFragment {
         App.getInstance().getGdgXHub().getEventDetail(eventId).enqueue(new Callback<EventFullDetails>() {
             @Override
             public void onSuccess(EventFullDetails eventFullDetails) {
-                onSuccess(eventFullDetails);
+                onEventDetailsLoaded(eventFullDetails);
             }
 
             @Override
@@ -158,7 +158,7 @@ public class EventOverviewFragment extends BaseFragment {
         return fmt.print(eventFullDetails.getStart());
     }
 
-    private void onSuccess(final EventFullDetails eventFullDetails) {
+    private void onEventDetailsLoaded(final EventFullDetails eventFullDetails) {
         if (getActivity() == null) {
             return;
         }
