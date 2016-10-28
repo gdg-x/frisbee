@@ -175,7 +175,8 @@ dependencies {
     testCompile "org.robolectric:shadows-multidex:$rootProject.robolectricVersion"
     testCompile "joda-time:joda-time:$rootProject.jodaTimeVersion"
 
-    androidTestCompile 'org.assertj:assertj-core:3.5.2'
+    // Needs an older version since newer versions are compiled against java 8
+    androidTestCompile 'org.assertj:assertj-core:1.7.1'
 
     // Android Testing Support Library's runner and rules
     androidTestCompile "com.android.support.test:runner:$rootProject.runnerVersion"

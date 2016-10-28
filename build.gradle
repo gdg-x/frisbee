@@ -64,7 +64,7 @@ ext {
     supportLibraryVersion = '24.2.1'
     playServicesVersion = '9.6.1'
     butterKnifeVersion = '8.4.0'
-    jodaTimeAndroidVersion = '2.9.4.2'
+    jodaTimeAndroidVersion = '2.9.4.3'
     jodaTimeVersion = '2.9.4'
     leakCanaryVersion = '1.3.1'
     okHttpVersion = '3.4.1'
