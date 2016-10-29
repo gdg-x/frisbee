@@ -299,4 +299,8 @@ public class App extends BaseApp implements LocationListener {
     public RefWatcher getRefWatcher() {
         return refWatcher;
     }
+
+    public OkHttpClient getOkHttpClient() {
+        return okHttpClient;
+    }
 }

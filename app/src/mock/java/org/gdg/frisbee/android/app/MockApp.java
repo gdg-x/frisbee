@@ -7,7 +7,7 @@ public class MockApp extends App {
 
     @Override
     public GdgXHub getGdgXHub() {
-        return new MockGdgXHub();
+        return new MockGdgXHub(this);
     }
 
 }

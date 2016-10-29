@@ -1,5 +1,7 @@
 package org.gdg.frisbee.android.api;
 
+import android.content.Context;
+
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -11,7 +13,6 @@ import org.gdg.frisbee.android.api.model.EventFullDetails;
 import org.gdg.frisbee.android.api.model.HomeGdgRequest;
 import org.gdg.frisbee.android.api.model.OrganizerCheckResponse;
 import org.gdg.frisbee.android.api.model.PagedList;
-import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.MockUtils;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
@@ -27,9 +28,11 @@ import retrofit2.mock.Calls;
 
 public class MockGdgXHub implements GdgXHub {
 
-    private Gson gson;
+    private final Gson gson;
+    private final Context context;
 
-    public MockGdgXHub() {
+    public MockGdgXHub(Context context) {
+        this.context = context;
         gson = Utils.getGson(FieldNamingPolicy.IDENTITY, new ZuluDateTimeDeserializer());
     }
 
@@ -38,7 +41,7 @@ public class MockGdgXHub implements GdgXHub {
         Directory directory = new Directory();
         try {
             directory = gson.fromJson(
-                MockUtils.getStringFromFile(App.getInstance(), "chapters.json"),
+                MockUtils.getStringFromFile(context, "chapters.json"),
                 Directory.class
             );
         } catch (IOException ignored) {
@@ -51,7 +54,7 @@ public class MockGdgXHub implements GdgXHub {
         PagedList<Event> events = new PagedList<>();
         try {
             events = gson.fromJson(
-                MockUtils.getStringFromFile(App.getInstance(), "chapters/105068877693379070381/events.json"),
+                MockUtils.getStringFromFile(context, "chapters/105068877693379070381/events.json"),
                 new TypeToken<PagedList<Event>>() {}.getType()
             );
         } catch (IOException ignored) {
@@ -64,7 +67,7 @@ public class MockGdgXHub implements GdgXHub {
         PagedList<Event> events = new PagedList<>();
         try {
             events = gson.fromJson(
-                MockUtils.getStringFromFile(App.getInstance(), "chapters/105068877693379070381/events.json"),
+                MockUtils.getStringFromFile(context, "chapters/105068877693379070381/events.json"),
                 new TypeToken<PagedList<Event>>() {
                 }.getType()
             );
@@ -78,7 +81,7 @@ public class MockGdgXHub implements GdgXHub {
         EventFullDetails eventFullDetails = new EventFullDetails();
         try {
             eventFullDetails = gson.fromJson(
-                MockUtils.getStringFromFile(App.getInstance(), "events/6256487006994432.json"),
+                MockUtils.getStringFromFile(context, "events/6256487006994432.json"),
                 EventFullDetails.class
             );
         } catch (IOException ignored) {
