@@ -65,7 +65,7 @@ public class GdgEventListFragment extends EventListFragment {
                         mAdapter.addAll(events);
                         setIsLoading(false);
                         Snackbar snackbar = Snackbar.make(getView(), R.string.cached_content,
-                                Snackbar.LENGTH_SHORT);
+                            Snackbar.LENGTH_SHORT);
                         ColoredSnackBar.info(snackbar).show();
                     } else {
                         modelCache.removeAsync(mCacheKey);
@@ -92,8 +92,7 @@ public class GdgEventListFragment extends EventListFragment {
 
     @Override
     protected boolean loadMoreEvents(int page) {
-        gdgXHub.getChapterAllEventList(
-            mPlusId, page).
+        gdgXHub.getChapterAllEventList(mPlusId, page).
             enqueue(new Callback<PagedList<Event>>() {
                 @Override
                 public void onSuccess(PagedList<Event> eventsPagedList) {
@@ -122,8 +121,7 @@ public class GdgEventListFragment extends EventListFragment {
                     setIsLoading(false);
                     showError(R.string.offline_alert);
                 }
-            }
-        );
+            });
         return true;
     }
 }

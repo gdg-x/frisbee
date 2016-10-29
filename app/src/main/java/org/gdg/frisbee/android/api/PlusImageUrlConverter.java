@@ -17,7 +17,7 @@ public class PlusImageUrlConverter implements Interceptor {
     private final PlusApi plusApi;
 
     public PlusImageUrlConverter(PlusApi plusApi) {
-        this.plusApi = plusApi;;
+        this.plusApi = plusApi;
     }
 
     @Override
