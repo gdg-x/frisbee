@@ -73,7 +73,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
             selectedPulse = PulseFragment.GLOBAL;
         }
 
-        App.getInstance().getModelCache().getAsync(ModelCache.KEY_PULSE_GLOBAL, true, new ModelCache.CacheListener() {
+        App.from(this).getModelCache().getAsync(ModelCache.KEY_PULSE_GLOBAL, true, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 Pulse pulse = (Pulse) item;
@@ -88,10 +88,10 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
     }
 
     void fetchPulse(final String selectedPulse) {
-        App.getInstance().getGroupDirectory().getPulse().enqueue(new Callback<Pulse>() {
+        App.from(this).getGroupDirectory().getPulse().enqueue(new Callback<Pulse>() {
             @Override
             public void onSuccess(final Pulse pulse) {
-                App.getInstance().getModelCache().putAsync(
+                App.from(PulseActivity.this).getModelCache().putAsync(
                     ModelCache.KEY_PULSE_GLOBAL,
                     pulse,
                     DateTime.now().plusDays(1),

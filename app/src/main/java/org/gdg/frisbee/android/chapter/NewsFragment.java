@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.chapter;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +29,7 @@ import android.view.ViewGroup;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
+import org.gdg.frisbee.android.api.PlusApi;
 import org.gdg.frisbee.android.api.model.plus.Activities;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
@@ -40,6 +42,8 @@ import org.joda.time.DateTime;
 public class NewsFragment extends SwipeRefreshRecyclerViewFragment
     implements SwipeRefreshLayout.OnRefreshListener {
 
+    private PlusApi plusApi;
+    private ModelCache modelCache;
     private NewsAdapter mAdapter;
 
     public static NewsFragment newInstance(String plusId) {
@@ -48,6 +52,13 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
         arguments.putString(Const.EXTRA_PLUS_ID, plusId);
         fragment.setArguments(arguments);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        plusApi = App.from(getContext()).getPlusApi();
+        modelCache = App.from(getContext()).getModelCache();
     }
 
     @Override
@@ -82,33 +93,32 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
         final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID);
         if (Utils.isOnline(getActivity())) {
             setIsLoading(true);
-            App.getInstance().getModelCache()
-                .getAsync(ModelCache.KEY_NEWS + plusId, new ModelCache.CacheListener() {
-                    @Override
-                    public void onGet(Object item) {
-                        Activities activityFeed = (Activities) item;
-                        mAdapter.addAll(activityFeed.getItems());
-                        setIsLoading(false);
-                    }
+            modelCache.getAsync(ModelCache.KEY_NEWS + plusId, new ModelCache.CacheListener() {
+                @Override
+                public void onGet(Object item) {
+                    Activities activityFeed = (Activities) item;
+                    mAdapter.addAll(activityFeed.getItems());
+                    setIsLoading(false);
+                }
 
-                    @Override
-                    public void onNotFound(String key) {
-                        App.getInstance().getPlusApi().getActivities(plusId).enqueue(
-                            new Callback<Activities>() {
-                                @Override
-                                public void onSuccess(Activities activityFeed) {
-                                    if (activityFeed != null) {
-                                        mAdapter.addAll(activityFeed.getItems());
-                                    } else {
-                                        // TODO show empty view
-                                    }
-                                    setIsLoading(false);
+                @Override
+                public void onNotFound(String key) {
+                    plusApi.getActivities(plusId).enqueue(
+                        new Callback<Activities>() {
+                            @Override
+                            public void onSuccess(Activities activityFeed) {
+                                if (activityFeed != null) {
+                                    mAdapter.addAll(activityFeed.getItems());
+                                } else {
+                                    // TODO show empty view
                                 }
-                            });
-                    }
-                });
+                                setIsLoading(false);
+                            }
+                        });
+                }
+            });
         } else {
-            App.getInstance().getModelCache().getAsync(ModelCache.KEY_NEWS + plusId,
+            modelCache.getAsync(ModelCache.KEY_NEWS + plusId,
                 false,
                 new ModelCache.CacheListener() {
                     @Override
@@ -165,7 +175,7 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
     public void onRefresh() {
         if (Utils.isOnline(getActivity())) {
             final String plusId = getArguments().getString(Const.EXTRA_PLUS_ID);
-            App.getInstance().getPlusApi().getActivities(plusId).enqueue(
+            plusApi.getActivities(plusId).enqueue(
                 new Callback<Activities>() {
                     @Override
                     public void onSuccess(Activities activityFeed) {
@@ -184,7 +194,7 @@ public class NewsFragment extends SwipeRefreshRecyclerViewFragment
     }
 
     public void cacheActivityFeed(String plusId, Activities feed) {
-        App.getInstance().getModelCache().putAsync(ModelCache.KEY_NEWS + plusId, feed,
+        modelCache.putAsync(ModelCache.KEY_NEWS + plusId, feed,
             DateTime.now().plusHours(1), null);
     }
 }

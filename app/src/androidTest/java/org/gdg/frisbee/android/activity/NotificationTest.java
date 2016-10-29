@@ -50,7 +50,7 @@ public class NotificationTest {
         NotificationManagerCompat nm = NotificationManagerCompat.from(rule.getActivity());
 
         int i = 0;
-        for (TaggedEventSeries series : App.getInstance().currentTaggedEventSeries()) {
+        for (TaggedEventSeries series : App.from(InstrumentationRegistry.getTargetContext()).currentTaggedEventSeries()) {
             Notification notification = new NotificationHandler(rule.getActivity(), series).createNotification();
             nm.notify(i, notification);
 

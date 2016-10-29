@@ -44,6 +44,7 @@ import org.joda.time.format.DateTimeFormat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -94,7 +95,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                 mainIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             views.setOnClickPendingIntent(R.id.container, pi);
 
-            App.getInstance().getModelCache().getAsync(ModelCache.KEY_CHAPTER_LIST_HUB, false,
+            App.from(this).getModelCache().getAsync(ModelCache.KEY_CHAPTER_LIST_HUB, false,
                 new ModelCache.CacheListener() {
                     @Override
                     public void onGet(Object item) {
@@ -124,7 +125,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
         }
 
         @Nullable
-        private Event getNextEvent(List<Event> listEvents) {
+        private static Event getNextEvent(List<Event> listEvents) {
             Event nextEvent = null;
             for (Event e : listEvents) {
                 if (e.getStart().isBeforeNow()) {
@@ -141,7 +142,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                                  final RemoteViews views,
                                  final AppWidgetManager manager,
                                  final ComponentName thisWidget) {
-            App.getInstance().getGdgXHub()
+            App.from(this).getGdgXHub()
                 .getChapterEventList(homeGdg.getGplusId(),
                     new DateTime(),
                     new DateTime().plusMonths(1))
@@ -156,7 +157,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                             views.setTextViewText(R.id.startDate,
                                 nextEvent.getStart().toLocalDateTime()
                                     .toString(DateTimeFormat.patternForStyle("MS",
-                                        getResources().getConfiguration().locale)));
+                                        Locale.getDefault())));
                             showChild(views, 1);
 
                             Intent i = new Intent(UpdateService.this, EventActivity.class);
@@ -190,7 +191,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
             views.setOnClickPendingIntent(R.id.container, PendingIntent.getActivity(context, 0, i, 0));
         }
 
-        private void showChild(RemoteViews views, int i) {
+        private static void showChild(RemoteViews views, int i) {
             views.setDisplayedChild(R.id.viewFlipper, i);
         }
     }

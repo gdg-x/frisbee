@@ -112,7 +112,7 @@ class EventAdapter extends BaseAdapter {
         final SimpleEvent event = item.getEvent();
 
         if (event.getIconUrl() != null) {
-            App.getInstance().getPicasso()
+            App.from(mContext).getPicasso()
                 .load(Const.URL_DEVELOPERS_GOOGLE_COM + event.getIconUrl())
                 .into(holder.icon);
         } else {

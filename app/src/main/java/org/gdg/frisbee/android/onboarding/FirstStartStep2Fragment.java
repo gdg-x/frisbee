@@ -114,7 +114,7 @@ public class FirstStartStep2Fragment extends BaseFragment {
             return;
         }
 
-        App.getInstance().getPlusApi()
+        App.from(getContext()).getPlusApi()
             .getPerson(inviteSender.sender)
             .enqueue(new Callback<Person>() {
                 @Override
@@ -151,7 +151,7 @@ public class FirstStartStep2Fragment extends BaseFragment {
         updateSenderName(sender.getDisplayName());
 
         if (sender.getImage() != null && sender.getImage().getUrl() != null) {
-            App.getInstance().getPicasso()
+            App.from(getContext()).getPicasso()
                 .load(sender.getImage().getUrl())
                 .transform(new BitmapBorderTransformation(2,
                     profileImageSize / 2,

@@ -72,7 +72,7 @@ public class ChapterSelectDialog extends AppCompatDialogFragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        App.getInstance().getModelCache().getAsync(ModelCache.KEY_CHAPTER_LIST_HUB, false,
+        App.from(getContext()).getModelCache().getAsync(ModelCache.KEY_CHAPTER_LIST_HUB, false,
             new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {

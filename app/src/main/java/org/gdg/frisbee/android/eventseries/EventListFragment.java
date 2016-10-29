@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.eventseries;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -130,11 +131,12 @@ public abstract class EventListFragment extends GdgListFragment {
     }
 
     @Override
+    @NonNull
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflateView(inflater, R.layout.fragment_events, container);
     }
 
-    protected boolean checkValidCache(Object item) {
+    protected static boolean checkValidCache(Object item) {
         if (item instanceof ArrayList) {
             ArrayList<?> result = (ArrayList) item;
             if (result.size() > 0) {

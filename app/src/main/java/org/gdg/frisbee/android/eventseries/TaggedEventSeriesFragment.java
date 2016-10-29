@@ -17,6 +17,7 @@
 package org.gdg.frisbee.android.eventseries;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -49,10 +50,7 @@ public class TaggedEventSeriesFragment extends EventListFragment {
 
     private String mCacheKey = "";
     private TaggedEventSeries mTaggedEventSeries;
-    private Comparator<EventAdapter.Item> mLocationComparator =
-        new TaggedEventDistanceComparator(App.getInstance().getLastLocation());
-    private Comparator<EventAdapter.Item> mCurrentComparator = mLocationComparator;
-    private Comparator<EventAdapter.Item> mDateComparator = new EventDateComparator();
+    private Comparator<EventAdapter.Item> comparator;
 
     public static TaggedEventSeriesFragment newInstance(String cacheKey,
                                                         TaggedEventSeries taggedEventSeries,
@@ -70,6 +68,8 @@ public class TaggedEventSeriesFragment extends EventListFragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
+        comparator = new TaggedEventDistanceComparator(App.from(getContext()).getLastLocation());
+
         if (getArguments() != null) {
             Bundle args = getArguments();
             mCacheKey = args.getString(Const.EXTRA_TAGGED_EVENT_CACHEKEY);
@@ -77,6 +77,7 @@ public class TaggedEventSeriesFragment extends EventListFragment {
         }
     }
 
+    @NonNull
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState);
@@ -116,7 +117,7 @@ public class TaggedEventSeriesFragment extends EventListFragment {
             @Override
             public void onSuccess(final PagedList<Event> taggedEventPagedList) {
                 mEvents.addAll(taggedEventPagedList.getItems());
-                App.getInstance().getModelCache().putAsync(mCacheKey,
+                App.from(getContext()).getModelCache().putAsync(mCacheKey,
                     mEvents,
                     DateTime.now().plusHours(2),
                     new ModelCache.CachePutListener() {
@@ -143,10 +144,10 @@ public class TaggedEventSeriesFragment extends EventListFragment {
         };
 
         if (Utils.isOnline(getActivity())) {
-            App.getInstance().getGdgXHub()
+            App.from(getContext()).getGdgXHub()
                 .getTaggedEventUpcomingList(mTaggedEventSeries.getTag(), DateTime.now()).enqueue(listener);
         } else {
-            App.getInstance().getModelCache().getAsync(mCacheKey, false, new ModelCache.CacheListener() {
+            App.from(getContext()).getModelCache().getAsync(mCacheKey, false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
                     if (checkValidCache(item)) {
@@ -160,7 +161,7 @@ public class TaggedEventSeriesFragment extends EventListFragment {
                             ColoredSnackBar.info(snackbar).show();
                         }
                     } else {
-                        App.getInstance().getModelCache().removeAsync(mCacheKey);
+                        App.from(getContext()).getModelCache().removeAsync(mCacheKey);
                         onNotFound();
                     }
                 }
@@ -179,7 +180,7 @@ public class TaggedEventSeriesFragment extends EventListFragment {
     }
 
     private void sortEvents() {
-        mAdapter.sort(mCurrentComparator);
+        mAdapter.sort(comparator);
     }
 
     @Override
@@ -189,7 +190,7 @@ public class TaggedEventSeriesFragment extends EventListFragment {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        if (mCurrentComparator == mLocationComparator) {
+        if (comparator instanceof TaggedEventDistanceComparator) {
             menu.findItem(R.id.order_by_date).setVisible(true);
             menu.findItem(R.id.order_by_distance).setVisible(false);
         } else {
@@ -202,7 +203,7 @@ public class TaggedEventSeriesFragment extends EventListFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.order_by_date) {
-            mCurrentComparator = mDateComparator;
+            comparator = new EventDateComparator();
             setIsLoading(true);
             sortEvents();
             setIsLoading(false);
@@ -210,7 +211,7 @@ public class TaggedEventSeriesFragment extends EventListFragment {
             scrollToSoonestEvent();
             return true;
         } else if (item.getItemId() == R.id.order_by_distance) {
-            mCurrentComparator = mLocationComparator;
+            comparator = new TaggedEventDistanceComparator(App.from(getContext()).getLastLocation());
             setIsLoading(true);
             sortEvents();
             setIsLoading(false);

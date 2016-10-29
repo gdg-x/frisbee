@@ -53,7 +53,7 @@ public class ParseDeepLinkActivity extends Activity {
         Timber.d("Deep Link id: %s", deepLinkId);
         String[] parts = deepLinkId.split("/");
 
-        App.getInstance().getTracker().send(new HitBuilders.EventBuilder()
+        App.from(this).getTracker().send(new HitBuilders.EventBuilder()
             .setCategory("gplus")
             .setAction("deepLink")
             .setLabel(deepLinkId)

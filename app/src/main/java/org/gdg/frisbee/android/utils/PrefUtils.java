@@ -55,7 +55,7 @@ public final class PrefUtils {
         prefs(context).edit()
             .putBoolean(SETTINGS_SIGNED_IN, false)
             .apply();
-        App.getInstance().resetOrganizer();
+        App.from(context).resetOrganizer();
     }
 
     @Nullable

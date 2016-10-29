@@ -1,7 +1,6 @@
 package org.gdg.frisbee.android.api;
 
 import org.gdg.frisbee.android.api.model.plus.ImageInfo;
-import org.gdg.frisbee.android.app.App;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -15,6 +14,11 @@ public class PlusImageUrlConverter implements Interceptor {
 
     private static final Pattern mPlusPattern
         = Pattern.compile("http[s]?://plus\\..*google\\.com.*(\\+[a-zA-Z] +|[0-9]{21}).*");
+    private final PlusApi plusApi;
+
+    public PlusImageUrlConverter(PlusApi plusApi) {
+        this.plusApi = plusApi;;
+    }
 
     @Override
     public Response intercept(Chain chain) throws IOException {
@@ -26,8 +30,7 @@ public class PlusImageUrlConverter implements Interceptor {
         }
 
         String gplusId = matcher.group(1);
-        retrofit2.Response<ImageInfo> imageInfoResponse
-            = App.getInstance().getPlusApi().getImageInfo(gplusId).execute();
+        retrofit2.Response<ImageInfo> imageInfoResponse = plusApi.getImageInfo(gplusId).execute();
         if (imageInfoResponse.isSuccessful()) {
             ImageInfo imageInfo = imageInfoResponse.body();
             if (imageInfo.getImage() != null && imageInfo.getImage().getUrl() != null) {

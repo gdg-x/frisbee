@@ -24,6 +24,7 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.support.annotation.NonNull;
 
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.activity.SearchActivity;
@@ -44,7 +45,7 @@ public class GdgProvider extends ContentProvider {
 
     private static final int SEARCH_SUGGEST = 0;
 
-    private static UriMatcher uriMatcher;
+    private static final UriMatcher uriMatcher;
 
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -60,7 +61,7 @@ public class GdgProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
 
         if (!isSetupDone()) {
@@ -76,7 +77,7 @@ public class GdgProvider extends ContentProvider {
     }
 
     private void prepareProvider() {
-        mDirectory = (Directory) App.getInstance().getModelCache().get(ModelCache.KEY_CHAPTER_LIST_HUB);
+        mDirectory = (Directory) App.from(getContext()).getModelCache().get(ModelCache.KEY_CHAPTER_LIST_HUB);
         Timber.d("Initialized ContentProvider");
     }
 
@@ -98,7 +99,7 @@ public class GdgProvider extends ContentProvider {
     }
 
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
         switch (uriMatcher.match(uri)) {
             case SEARCH_SUGGEST:
                 return SearchManager.SUGGEST_MIME_TYPE;
@@ -109,17 +110,17 @@ public class GdgProvider extends ContentProvider {
     }
 
     @Override
-    public Uri insert(Uri uri, ContentValues contentValues) {
+    public Uri insert(@NonNull Uri uri, ContentValues contentValues) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public int delete(Uri uri, String s, String[] strings) {
+    public int delete(@NonNull Uri uri, String s, String[] strings) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
+    public int update(@NonNull Uri uri, ContentValues contentValues, String s, String[] strings) {
         throw new UnsupportedOperationException();
     }
 }

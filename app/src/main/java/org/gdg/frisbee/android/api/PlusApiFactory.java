@@ -1,19 +1,17 @@
 package org.gdg.frisbee.android.api;
 
-import org.gdg.frisbee.android.app.App;
-
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class PlusApiFactory {
+public final class PlusApiFactory {
     private static final String API_URL = "https://www.googleapis.com/plus/v1/";
 
     private PlusApiFactory() {
     }
 
-    private static Retrofit provideRestAdapter() {
-        OkHttpClient.Builder client = App.getInstance().getOkHttpClient().newBuilder();
+    private static Retrofit provideRestAdapter(OkHttpClient okHttpClient) {
+        OkHttpClient.Builder client = okHttpClient.newBuilder();
         client.addInterceptor(new ApiKeyAdder());
 
         return new Retrofit.Builder()
@@ -23,7 +21,7 @@ public class PlusApiFactory {
             .build();
     }
 
-    public static PlusApi providePlusApi() {
-        return provideRestAdapter().create(PlusApi.class);
+    public static PlusApi providePlusApi(OkHttpClient okHttpClient) {
+        return provideRestAdapter(okHttpClient).create(PlusApi.class);
     }
 }

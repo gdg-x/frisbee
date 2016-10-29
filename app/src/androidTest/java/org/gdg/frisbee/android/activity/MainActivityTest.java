@@ -68,14 +68,14 @@ public class MainActivityTest {
 
     @Test
     public void keepsChapterOnOrientationChange() {
-        onView(isRoot()).perform(orientationPortrait());
+        onView(isRoot()).perform(orientationPortrait(activityRule.getActivity()));
 
         onViewChapterSwitcher().perform(click());
         onData(allOf(is(instanceOf(Chapter.class)), is(CHAPTER_ISTANBUL)))
             .perform(click());
         onViewChapterSwitcher().check(matches(withText(CHAPTER_ISTANBUL.toString())));
 
-        onView(isRoot()).perform(orientationLandscape());
+        onView(isRoot()).perform(orientationLandscape(activityRule.getActivity()));
 
         onViewChapterSwitcher().check(matches(withText(CHAPTER_ISTANBUL.toString())));
     }

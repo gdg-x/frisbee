@@ -79,7 +79,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
 
         mLocationComparator = new ChapterComparator(PrefUtils.getHomeChapter(getActivity()),
-            App.getInstance().getLastLocation());
+            App.from(getContext()).getLastLocation());
 
         mChapterAdapter = new ChapterAdapter(getActivity(), R.layout.spinner_item_welcome);
         mChapterAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
@@ -88,7 +88,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
             mSelectedChapter = savedInstanceState.getParcelable(ARG_SELECTED_CHAPTER);
         }
 
-        App.getInstance().getModelCache().getAsync(
+        App.from(getContext()).getModelCache().getAsync(
             ModelCache.KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
@@ -167,7 +167,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
 
     private void fetchChapters() {
 
-        App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
+        App.from(getContext()).getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
             @Override
             public void onSuccess(Directory directory) {
 
@@ -175,7 +175,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
                     addChapters(directory.getGroups());
                     mLoadSwitcher.setDisplayedChild(1);
                 }
-                App.getInstance().getModelCache().putAsync(ModelCache.KEY_CHAPTER_LIST_HUB,
+                App.from(getContext()).getModelCache().putAsync(ModelCache.KEY_CHAPTER_LIST_HUB,
                     directory,
                     DateTime.now().plusDays(4),
                     null);
@@ -221,7 +221,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
 
         if (mSelectedChapter == null) {
             //if the location is available, select the first chapter by default.
-            if (App.getInstance().getLastLocation() != null && chapterList.size() > 0) {
+            if (App.from(getContext()).getLastLocation() != null && chapterList.size() > 0) {
                 mSelectedChapter = chapterList.get(0);
             }
         }

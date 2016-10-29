@@ -37,10 +37,12 @@ import android.widget.TextView;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.PlusOneButton;
+import com.squareup.picasso.Picasso;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.plus.Activity;
 import org.gdg.frisbee.android.api.model.plus.Attachment;
+import org.gdg.frisbee.android.api.model.plus.Thumbnail;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.widget.ResizableImageView;
@@ -51,36 +53,39 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
+class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
-    private static final int VIEWTYPE_ARTICLE = 1;
-    private static final int VIEWTYPE_VIDEO = 2;
-    private static final int VIEWTYPE_PHOTO = 3;
-    private static final int VIEWTYPE_ALBUM = 4;
-    private static final int VIEWTYPE_EVENT = 5;
-    public static final int ACTIVITY_REQUEST_CODE_GPLUS_BUTTON = 1;
+    private static final int VIEW_TYPE_ARTICLE = 1;
+    private static final int VIEW_TYPE_VIDEO = 2;
+    private static final int VIEW_TYPE_PHOTO = 3;
+    private static final int VIEW_TYPE_ALBUM = 4;
+    private static final int VIEW_TYPE_EVENT = 5;
+    private static final int ACTIVITY_REQUEST_CODE_GPLUS_BUTTON = 1;
 
-    private Context mContext;
-    private LayoutInflater mInflater;
-    private ArrayList<Item> mActivities;
-    private GoogleApiClient mPlusClient;
+    private final Context context;
+    private final LayoutInflater inflater;
+    private ArrayList<Item> activities;
+    private final GoogleApiClient plusClient;
+    private final Picasso picasso;
 
-    public NewsAdapter(Context ctx, GoogleApiClient client) {
-        mContext = ctx;
-        mPlusClient = client;
-        mInflater = LayoutInflater.from(mContext);
-        mActivities = new ArrayList<>();
+    NewsAdapter(Context context, GoogleApiClient client) {
+        this.context = context;
+        plusClient = client;
+        inflater = LayoutInflater.from(this.context);
+        activities = new ArrayList<>();
+        picasso = App.from(this.context).getPicasso();
 
         setHasStableIds(true);
     }
 
     public void addAll(Collection<Activity> items) {
         for (Activity a : items) {
-            mActivities.add(new Item(a));
+            activities.add(new Item(a));
         }
         notifyDataSetChanged();
     }
@@ -88,15 +93,15 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     public void replaceAll(Collection<Activity> items, int start) {
         for (Activity a : items) {
 
-            if (start < mActivities.size()) {
-                if (a.getId().equals(mActivities.get(start).getActivity().getId())) {
-                    mActivities.set(start, new Item(a));
+            if (start < activities.size()) {
+                if (a.getId().equals(activities.get(start).getActivity().getId())) {
+                    activities.set(start, new Item(a));
                 } else {
-                    mActivities.add(start, new Item(a));
+                    activities.add(start, new Item(a));
                     start++;
                 }
             } else {
-                mActivities.add(new Item(a));
+                activities.add(new Item(a));
             }
 
             start++;
@@ -105,34 +110,28 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     }
 
     public void add(Activity item) {
-        mActivities.add(new Item(item));
+        activities.add(new Item(item));
         notifyDataSetChanged();
     }
 
     public void clear() {
-        mActivities.clear();
+        activities.clear();
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return mActivities.size();
+        return activities.size();
     }
 
     private Item getItemInternal(int i) {
-        return mActivities.get(i);
+        return activities.get(i);
     }
 
     @Override
     public long getItemId(int i) {
         return Utils.stringToLong(getItemInternal(i).getActivity().getId());
     }
-
-//    @Override
-//    public int getViewTypeCount() {
-//        // nothing, article, video, photo, album, event
-//        return 6;
-//    }
 
     @Override
     public int getItemViewType(int position) {
@@ -153,15 +152,15 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
                 switch (objectType) {
                     case "article":
-                        return VIEWTYPE_ARTICLE;
+                        return VIEW_TYPE_ARTICLE;
                     case "video":
-                        return VIEWTYPE_VIDEO;
+                        return VIEW_TYPE_VIDEO;
                     case "photo":
-                        return VIEWTYPE_PHOTO;
+                        return VIEW_TYPE_PHOTO;
                     case "album":
-                        return VIEWTYPE_ALBUM;
+                        return VIEW_TYPE_ALBUM;
                     case "event":
-                        return VIEWTYPE_EVENT;
+                        return VIEW_TYPE_EVENT;
                 }
             }
         }
@@ -180,12 +179,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     }
 
     private boolean shouldShowGPlusButton() {
-        return mPlusClient != null && mPlusClient.hasConnectedApi(Plus.API);
+        return plusClient != null && plusClient.hasConnectedApi(Plus.API);
     }
 
     @Override
     public NewsAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = mInflater.inflate(R.layout.news_item_base, viewGroup, false);
+        View v = inflater.inflate(R.layout.news_item_base, viewGroup, false);
 
         final ViewHolder viewHolder = new ViewHolder(v);
         viewHolder.content.setMovementMethod(LinkMovementMethod.getInstance());
@@ -206,7 +205,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             holder.timeStamp.setVisibility(View.VISIBLE);
             holder.timeStamp.setText(
                 Utils.toHumanTimePeriod(
-                    mContext,
+                    context,
                     activity.getPublished(),
                     DateTime.now()
                 )
@@ -227,23 +226,23 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             final Attachment attachment = activity.getObject().getAttachments().get(0);
 
             switch (getItemViewType(i)) {
-                case VIEWTYPE_ARTICLE:
+                case VIEW_TYPE_ARTICLE:
                     // Article
                     populateArticle(holder, holder.container, attachment);
                     break;
-                case VIEWTYPE_VIDEO:
+                case VIEW_TYPE_VIDEO:
                     // Video
                     populateVideo(holder, holder.container, attachment);
                     break;
-                case VIEWTYPE_PHOTO:
+                case VIEW_TYPE_PHOTO:
                     // Photo
                     populatePhoto(holder, holder.container, attachment);
                     break;
-                case VIEWTYPE_ALBUM:
+                case VIEW_TYPE_ALBUM:
                     // Album
                     populateAlbum(holder, holder.container, attachment);
                     break;
-                case VIEWTYPE_EVENT:
+                case VIEW_TYPE_EVENT:
                     // Event
                     populateEvent(holder, holder.container, attachment);
                     break;
@@ -254,7 +253,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 //        if (!item.isConsumed()) {
 //            item.setConsumed(true);
 //            // In which case we magically instantiate our effect and launch it directly on the view
-//            Animation animation = AnimationUtils.makeInChildBottomAnimation(mContext);
+//            Animation animation = AnimationUtils.makeInChildBottomAnimation(context);
 //            view.startAnimation(animation);
 //        }
     }
@@ -263,7 +262,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         View attachmentView;
 
         if (container.getChildCount() == 0) {
-            attachmentView = mInflater.inflate(layout, container, false);
+            attachmentView = inflater.inflate(layout, container, false);
             container.addView(attachmentView);
 
             switch (type) {
@@ -325,8 +324,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             String imageUrl = getAttachmentImageUrl(attachment);
             if (imageUrl != null) {
                 mViewHolder.articleImage.setVisibility(View.VISIBLE);
-                App.getInstance().getPicasso()
-                    .load(imageUrl)
+                picasso.load(imageUrl)
                     .into(mViewHolder.articleImage);
             } else {
                 mViewHolder.articleImage.setVisibility(View.GONE);
@@ -336,13 +334,13 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         attachmentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mContext.startActivity(Utils.createExternalIntent(mContext, Uri.parse(attachment.getUrl())));
+                context.startActivity(Utils.createExternalIntent(context, Uri.parse(attachment.getUrl())));
             }
         });
     }
 
     @Nullable
-    private String getAttachmentImageUrl(final Attachment attachment) {
+    private static String getAttachmentImageUrl(final Attachment attachment) {
         if (attachment.getFullImage() != null) {
             return attachment.getFullImage().getUrl();
         } else if (attachment.getImage() != null) {
@@ -364,8 +362,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         mViewHolder.poster.setDimensions(attachment.getImage().getWidth(), attachment.getImage().getHeight());
         mViewHolder.poster.setImageDrawable(null);
 
-        App.getInstance().getPicasso()
-            .load(attachment.getImage().getUrl())
+        picasso.load(attachment.getImage().getUrl())
             .into(mViewHolder.poster);
 
         attachmentView.setOnClickListener(new View.OnClickListener() {
@@ -374,13 +371,13 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                 try {
                     String videoId = getVideoIdFrom(attachment);
                     if (videoId != null) {
-                        Intent playVideoIntent = new Intent(mContext, YoutubeActivity.class);
+                        Intent playVideoIntent = new Intent(context, YoutubeActivity.class);
                         playVideoIntent.putExtra(YoutubeActivity.EXTRA_VIDEO_ID, videoId);
-                        mContext.startActivity(playVideoIntent);
+                        context.startActivity(playVideoIntent);
                     } else {
-                        Intent viewUrlIntent = Utils.createExternalIntent(mContext, Uri.parse(attachment.getUrl()));
-                        if (Utils.canLaunch(mContext, viewUrlIntent)) {
-                            mContext.startActivity(viewUrlIntent);
+                        Intent viewUrlIntent = Utils.createExternalIntent(context, Uri.parse(attachment.getUrl()));
+                        if (Utils.canLaunch(context, viewUrlIntent)) {
+                            context.startActivity(viewUrlIntent);
                         }
                     }
                 } catch (UnsupportedEncodingException | MalformedURLException e) {
@@ -390,7 +387,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         });
     }
 
-    private String getVideoIdFrom(final Attachment attachment)
+    private static String getVideoIdFrom(final Attachment attachment)
         throws UnsupportedEncodingException, MalformedURLException {
 
         return Utils.splitQuery(new URL(attachment.getUrl())).get("v");
@@ -414,8 +411,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
         mViewHolder.photo.setImageDrawable(null);
 
-        App.getInstance().getPicasso()
-            .load(attachment.getImage().getUrl())
+        picasso.load(attachment.getImage().getUrl())
             .into(mViewHolder.photo);
 
     }
@@ -429,19 +425,16 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
         createAttachmentView(mViewHolder, container, R.layout.news_item_album, 4);
 
-        App.getInstance().getPicasso()
-            .load(attachment.getThumbnails().get(0).getImage().getUrl())
+        List<Thumbnail> thumbnails = attachment.getThumbnails();
+        picasso.load(thumbnails.get(0).getImage().getUrl())
             .into(mViewHolder.pic1);
 
-        if (attachment.getThumbnails().size() > 1) {
-            App.getInstance().getPicasso()
-                .load(attachment.getThumbnails().get(1).getImage().getUrl())
+        if (thumbnails.size() > 1) {
+            picasso.load(thumbnails.get(1).getImage().getUrl())
                 .into(mViewHolder.pic2);
         }
-
-        if (attachment.getThumbnails().size() > 2) {
-            App.getInstance().getPicasso()
-                .load(attachment.getThumbnails().get(2).getImage().getUrl())
+        if (thumbnails.size() > 2) {
+            picasso.load(thumbnails.get(2).getImage().getUrl())
                 .into(mViewHolder.pic3);
         }
     }
@@ -474,7 +467,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     }
 
     private void openEventInGPlus(String uri) {
-        mContext.startActivity(Utils.createExternalIntent(mContext, Uri.parse(uri)));
+        context.startActivity(Utils.createExternalIntent(context, Uri.parse(uri)));
 
     }
 
@@ -485,11 +478,11 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     private void populateShare(Activity item, ViewHolder holder) {
         String originallyShared = "";
 
-        if (item.getObject().getActor() != null && mContext != null) {
+        if (item.getObject().getActor() != null && context != null) {
             originallyShared = "<b><a href=\""
                 + item.getObject().getActor().getUrl() + "\">"
                 + item.getObject().getActor().getDisplayName()
-                + "</a></b> " + mContext.getString(R.string.originally_shared) + "<br/><br/>";
+                + "</a></b> " + context.getString(R.string.originally_shared) + "<br/><br/>";
         }
 
         if (item.getAnnotation() != null) {
@@ -519,7 +512,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                 ssb.setSpan(new ClickableSpan() {
                     @Override
                     public void onClick(View view) {
-                        mContext.startActivity(Utils.createExternalIntent(mContext, Uri.parse(url)));
+                        context.startActivity(Utils.createExternalIntent(context, Uri.parse(url)));
                     }
                 }, start, end, 33);
             }
@@ -528,11 +521,11 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     }
 
 
-    public class Item {
+    private static class Item {
         private Activity mActivity;
         private boolean mConsumed = false;
 
-        public Item(Activity a) {
+        Item(Activity a) {
             mActivity = a;
             mConsumed = false;
         }
@@ -554,7 +547,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         }
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView attachmentTitle;
         @BindView(R.id.plus_one_button)
         PlusOneButton plusButton;

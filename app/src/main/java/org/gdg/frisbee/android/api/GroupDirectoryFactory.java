@@ -1,6 +1,5 @@
 package org.gdg.frisbee.android.api;
 
-import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.Utils;
 
 import java.io.IOException;
@@ -19,8 +18,8 @@ public final class GroupDirectoryFactory {
     private GroupDirectoryFactory() {
     }
 
-    private static Retrofit provideRestAdapter() {
-        OkHttpClient.Builder client = App.getInstance().getOkHttpClient().newBuilder();
+    private static Retrofit provideRestAdapter(OkHttpClient okHttpClient) {
+        OkHttpClient.Builder client = okHttpClient.newBuilder();
         client.addInterceptor(new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
@@ -43,7 +42,7 @@ public final class GroupDirectoryFactory {
             .build();
     }
 
-    public static GroupDirectory provideGroupDirectoryApi() {
-        return provideRestAdapter().create(GroupDirectory.class);
+    public static GroupDirectory provideGroupDirectoryApi(OkHttpClient okHttpClient) {
+        return provideRestAdapter(okHttpClient).create(GroupDirectory.class);
     }
 }

@@ -79,7 +79,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
         setContentView(R.layout.activity_main);
 
         homeChapter = PrefUtils.getHomeChapter(this);
-        locationComparator = new ChapterComparator(homeChapter, App.getInstance().getLastLocation());
+        locationComparator = new ChapterComparator(homeChapter, App.from(this).getLastLocation());
 
         setupChapterSwitcher();
 
@@ -130,7 +130,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
     }
 
     private void loadChaptersFromCache(final String selectedChapterId) {
-        App.getInstance().getModelCache().getAsync(
+        App.from(this).getModelCache().getAsync(
             ModelCache.KEY_CHAPTER_LIST_HUB,
             new ModelCache.CacheListener() {
                 @Override
@@ -147,11 +147,11 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
     }
 
     void fetchChapters(final String selectedChapterId) {
-        App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
+        App.from(this).getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
             @Override
             public void onSuccess(final Directory directory) {
 
-                App.getInstance().getModelCache().putAsync(
+                App.from(MainActivity.this).getModelCache().putAsync(
                     ModelCache.KEY_CHAPTER_LIST_HUB,
                     directory,
                     DateTime.now().plusDays(1),
@@ -218,7 +218,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
         if (!newChapter.equals(selectedChapter)) {
             Timber.d("Switching newChapterId!");
             selectedChapter = newChapter;
-            updatePagerWith(newChapter, App.getInstance().isOrganizer());
+            updatePagerWith(newChapter, App.from(this).isOrganizer());
         }
     }
 
@@ -282,7 +282,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
 
             }
         };
-        App.getInstance().checkOrganizer(organizerCheckCallback);
+        App.from(this).checkOrganizer(organizerCheckCallback);
     }
 
     private void recordStartPageView() {

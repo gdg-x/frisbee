@@ -28,6 +28,7 @@ import android.widget.ListView;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
+import org.gdg.frisbee.android.api.GroupDirectory;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.Pulse;
 import org.gdg.frisbee.android.api.model.PulseEntry;
@@ -51,6 +52,8 @@ public class PulseFragment extends GdgListFragment {
     private String mTarget;
     private PulseAdapter adapter;
     private Callbacks mListener;
+    private GroupDirectory groupDirectory;
+    private ModelCache modelCache;
 
     public static PulseFragment newInstance(int mode, String target) {
         PulseFragment fragment = new PulseFragment();
@@ -70,6 +73,8 @@ public class PulseFragment extends GdgListFragment {
             throw new ClassCastException("Activity " + context.getClass().getSimpleName()
                 + " must implement " + Pulse.class.getSimpleName() + " interface.");
         }
+        groupDirectory = App.from(context).getGroupDirectory();
+        modelCache = App.from(context).getModelCache();
     }
 
     @Override
@@ -90,7 +95,7 @@ public class PulseFragment extends GdgListFragment {
         final int[] positions = savedInstanceState != null
             ? savedInstanceState.getIntArray(INSTANCE_STATE_POSITIONS) : null;
 
-        App.getInstance().getModelCache().getAsync(ModelCache.KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
+        modelCache.getAsync(ModelCache.KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 createAdapter(positions, (Directory) item);
@@ -108,7 +113,7 @@ public class PulseFragment extends GdgListFragment {
     void createAdapter(int[] positions, @Nullable Directory directory) {
         adapter = new PulseAdapter(getActivity(), positions, directory);
         setListAdapter(adapter);
-        App.getInstance().getModelCache().getAsync(ModelCache.KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
+        modelCache.getAsync(ModelCache.KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
             true,
             new ModelCache.CacheListener() {
                 @Override
@@ -127,10 +132,10 @@ public class PulseFragment extends GdgListFragment {
 
     private void fetchPulseTask() {
         if (isGlobalSelected()) {
-            App.getInstance().getGroupDirectory().getPulse().enqueue(new Callback<Pulse>() {
+            groupDirectory.getPulse().enqueue(new Callback<Pulse>() {
                 @Override
                 public void onSuccess(final Pulse pulse) {
-                    App.getInstance().getModelCache().putAsync(
+                    modelCache.putAsync(
                         ModelCache.KEY_PULSE + mTarget.toLowerCase(),
                         pulse,
                         DateTime.now().plusDays(1),
@@ -153,10 +158,10 @@ public class PulseFragment extends GdgListFragment {
                 }
             });
         } else {
-            App.getInstance().getGroupDirectory().getCountryPulse(mTarget).enqueue(new Callback<Pulse>() {
+            groupDirectory.getCountryPulse(mTarget).enqueue(new Callback<Pulse>() {
                 @Override
                 public void onSuccess(final Pulse pulse) {
-                    App.getInstance().getModelCache().putAsync(
+                    modelCache.putAsync(
                         ModelCache.KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
                         pulse,
                         DateTime.now().plusDays(1),
