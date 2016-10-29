@@ -79,7 +79,7 @@ public class FirstStartActivity extends GdgActivity implements
         setContentView(R.layout.activity_first_start);
         ButterKnife.bind(this);
 
-        App.getInstance().updateLastLocation();
+        App.from(this).updateLastLocation();
 
         setupSignInClient();
 
@@ -93,7 +93,7 @@ public class FirstStartActivity extends GdgActivity implements
 
             @Override
             public void onPageSelected(int i) {
-                Tracker t = App.getInstance().getTracker();
+                Tracker t = App.from(FirstStartActivity.this).getTracker();
                 // Set screen name.
                 // Where path is a String representing the screen name.
                 t.setScreenName("/FirstStart/Step" + (1 + i));
@@ -145,7 +145,7 @@ public class FirstStartActivity extends GdgActivity implements
     protected void onStart() {
         super.onStart();
 
-        Tracker t = App.getInstance().getTracker();
+        Tracker t = App.from(this).getTracker();
         // Set screen name.
         // Where path is a String representing the screen name.
         t.setScreenName("/FirstStart/Step" + (1 + mViewPager.getCurrentItem()));

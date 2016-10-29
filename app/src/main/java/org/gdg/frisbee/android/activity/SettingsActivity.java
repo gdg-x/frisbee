@@ -22,7 +22,6 @@ import android.view.MenuItem;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Chapter;
-import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.appwidget.UpcomingEventWidgetProvider;
 import org.gdg.frisbee.android.chapter.ChapterSelectDialog;
 import org.gdg.frisbee.android.common.GdgActivity;
@@ -67,7 +66,6 @@ public class SettingsActivity extends GdgActivity implements ChapterSelectDialog
     public void onChapterSelected(Chapter selectedChapter) {
         PrefUtils.setHomeChapter(this, selectedChapter);
         // Update widgets to show newest chosen GdgHome events
-        App.getInstance().startService(new Intent(App.getInstance(),
-            UpcomingEventWidgetProvider.UpdateService.class));
+        startService(new Intent(this, UpcomingEventWidgetProvider.UpdateService.class));
     }
 }

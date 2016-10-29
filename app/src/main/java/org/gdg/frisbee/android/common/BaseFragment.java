@@ -29,7 +29,7 @@ public abstract class BaseFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         if (BuildConfig.DEBUG) {
-            RefWatcher refWatcher = App.getInstance().getRefWatcher();
+            RefWatcher refWatcher = App.from(getContext()).getRefWatcher();
             refWatcher.watch(this);
         }
     }

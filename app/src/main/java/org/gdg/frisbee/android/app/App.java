@@ -16,6 +16,7 @@
 
 package org.gdg.frisbee.android.app;
 
+import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -63,12 +64,12 @@ import timber.log.Timber;
 
 public class App extends BaseApp implements LocationListener {
 
-    private static App mInstance = null;
-    private OkHttpClient mOkHttpClient;
-    private GroupDirectory groupDirectoryInstance;
-    private GdgXHub hubInstance;
-    private GdeDirectory gdeDirectoryInstance;
-    private GitHub gitHubInstance;
+    private OkHttpClient okHttpClient;
+    private GroupDirectory groupDirectory;
+    private GdgXHub gdgXHub;
+    private GdeDirectory gdeDirectory;
+    private GitHub gitHub;
+    private PlusApi plusApi;
     private ModelCache mModelCache;
     private Picasso mPicasso;
     private Tracker mTracker;
@@ -77,10 +78,9 @@ public class App extends BaseApp implements LocationListener {
     private OrganizerChecker mOrganizerChecker;
     private List<TaggedEventSeries> mTaggedEventSeriesList;
     private RefWatcher refWatcher;
-    private PlusApi plusApiInstance;
 
-    public static App getInstance() {
-        return mInstance;
+    public static App from(Context context) {
+        return (App) context.getApplicationContext();
     }
 
     @Override
@@ -105,14 +105,12 @@ public class App extends BaseApp implements LocationListener {
             Timber.plant(new CrashlyticsTree());
         }
 
-        mInstance = this;
-
         int storedVersionCode = PrefUtils.getVersionCode(this);
         if (storedVersionCode != 0 && storedVersionCode < BuildConfig.VERSION_CODE) {
             onAppUpdate(storedVersionCode, BuildConfig.VERSION_CODE);
             PrefUtils.setVersionCode(this, BuildConfig.VERSION_CODE);
         }
-        mOkHttpClient = OkClientFactory.provideOkHttpClient(this);
+        okHttpClient = OkClientFactory.provideOkHttpClient(this);
 
         // Initialize ModelCache
         getModelCache();
@@ -120,9 +118,9 @@ public class App extends BaseApp implements LocationListener {
         PrefUtils.increaseAppStartCount(this);
 
         // Initialize Picasso
-        OkHttpClient picassoClient = mOkHttpClient.newBuilder()
+        OkHttpClient picassoClient = okHttpClient.newBuilder()
             .cache(OkHttp3Downloader.createDefaultCache(this))
-            .addInterceptor(new PlusImageUrlConverter())
+            .addInterceptor(new PlusImageUrlConverter(getPlusApi()))
             .build();
         mPicasso = new Picasso.Builder(this)
             .downloader(new OkHttp3Downloader(picassoClient))
@@ -264,42 +262,38 @@ public class App extends BaseApp implements LocationListener {
     }
 
     public GdgXHub getGdgXHub() {
-        if (hubInstance == null) {
-            hubInstance = GdgXHubFactory.provideHubApi();
+        if (gdgXHub == null) {
+            gdgXHub = GdgXHubFactory.provideHubApi(okHttpClient);
         }
-        return hubInstance;
+        return gdgXHub;
     }
 
     public GroupDirectory getGroupDirectory() {
-        if (groupDirectoryInstance == null) {
-            groupDirectoryInstance = GroupDirectoryFactory.provideGroupDirectoryApi();
+        if (groupDirectory == null) {
+            groupDirectory = GroupDirectoryFactory.provideGroupDirectoryApi(okHttpClient);
         }
-        return groupDirectoryInstance;
+        return groupDirectory;
     }
 
     public GdeDirectory getGdeDirectory() {
-        if (gdeDirectoryInstance == null) {
-            gdeDirectoryInstance = GdeDirectoryFactory.provideGdeApi();
+        if (gdeDirectory == null) {
+            gdeDirectory = GdeDirectoryFactory.provideGdeApi(okHttpClient);
         }
-        return gdeDirectoryInstance;
+        return gdeDirectory;
     }
 
     public GitHub getGithub() {
-        if (gitHubInstance == null) {
-            gitHubInstance = GithubFactory.provideGitHubApi();
+        if (gitHub == null) {
+            gitHub = GithubFactory.provideGitHubApi(okHttpClient);
         }
-        return gitHubInstance;
+        return gitHub;
     }
 
     public PlusApi getPlusApi() {
-        if (plusApiInstance == null) {
-            plusApiInstance = PlusApiFactory.providePlusApi();
+        if (plusApi == null) {
+            plusApi = PlusApiFactory.providePlusApi(okHttpClient);
         }
-        return plusApiInstance;
-    }
-
-    public OkHttpClient getOkHttpClient() {
-        return mOkHttpClient;
+        return plusApi;
     }
 
     public RefWatcher getRefWatcher() {

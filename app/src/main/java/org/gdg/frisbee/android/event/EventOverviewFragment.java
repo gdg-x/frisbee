@@ -105,7 +105,7 @@ public class EventOverviewFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         final String eventId = getArguments().getString(Const.EXTRA_EVENT_ID);
-        App.getInstance().getGdgXHub().getEventDetail(eventId).enqueue(new Callback<EventFullDetails>() {
+        App.from(getContext()).getGdgXHub().getEventDetail(eventId).enqueue(new Callback<EventFullDetails>() {
             @Override
             public void onSuccess(EventFullDetails eventFullDetails) {
                 onEventDetailsLoaded(eventFullDetails);
@@ -170,7 +170,7 @@ public class EventOverviewFragment extends BaseFragment {
         getActivity().supportInvalidateOptionsMenu();
         updateWithDetails(eventFullDetails);
 
-        App.getInstance().getModelCache().getAsync(ModelCache.KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
+        App.from(getContext()).getModelCache().getAsync(ModelCache.KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 mDirectory = (Directory) item;
@@ -180,7 +180,7 @@ public class EventOverviewFragment extends BaseFragment {
             @Override
             public void onNotFound(String key) {
                 if (Utils.isOnline(getActivity())) {
-                    App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
+                    App.from(getContext()).getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
                         @Override
                         public void onSuccess(Directory directory) {
                             mDirectory = directory;
@@ -215,12 +215,12 @@ public class EventOverviewFragment extends BaseFragment {
     }
 
     private void loadChapterImage(String gplusId) {
-        App.getInstance().getPlusApi().getImageInfo(gplusId).enqueue(new Callback<ImageInfo>() {
+        App.from(getContext()).getPlusApi().getImageInfo(gplusId).enqueue(new Callback<ImageInfo>() {
             @Override
             public void onSuccess(ImageInfo imageInfo) {
                 if (isContextValid()) {
                     String imageUrl = imageInfo.getImage().getUrl().replace("sz=50", "sz=196");
-                    App.getInstance().getPicasso().load(imageUrl).into(mGroupLogo);
+                    App.from(getContext()).getPicasso().load(imageUrl).into(mGroupLogo);
                 }
             }
 

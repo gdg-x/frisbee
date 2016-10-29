@@ -40,7 +40,7 @@ public class GdeActivity extends GdgNavDrawerActivity implements ViewPager.OnPag
         Toolbar toolbar = getActionBarToolbar();
         toolbar.setTitle(R.string.gde);
 
-        App.getInstance().getModelCache().getAsync(ModelCache.KEY_GDE_LIST, new ModelCache.CacheListener() {
+        App.from(this).getModelCache().getAsync(ModelCache.KEY_GDE_LIST, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 GdeList directory = (GdeList) item;
@@ -55,10 +55,10 @@ public class GdeActivity extends GdgNavDrawerActivity implements ViewPager.OnPag
     }
 
     private void fetchGdeDirectory() {
-        App.getInstance().getGdeDirectory().getDirectory().enqueue(new Callback<GdeList>() {
+        App.from(this).getGdeDirectory().getDirectory().enqueue(new Callback<GdeList>() {
             @Override
             public void onSuccess(GdeList directory) {
-                App.getInstance().getModelCache().putAsync(ModelCache.KEY_GDE_LIST,
+                App.from(GdeActivity.this).getModelCache().putAsync(ModelCache.KEY_GDE_LIST,
                     directory,
                     DateTime.now().plusDays(4),
                     null);

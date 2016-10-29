@@ -90,7 +90,7 @@ public abstract class TrackableActivity extends AppCompatActivity implements Vie
         if (BuildConfig.DEBUG) {
             Timber.tag("Analytics").d("Screen: " + viewName);
         } else {
-            Tracker t = App.getInstance().getTracker();
+            Tracker t = App.from(this).getTracker();
             // Set screen name.
             // Where path is a String representing the screen name.
             t.setScreenName("/" + viewName);
@@ -113,7 +113,7 @@ public abstract class TrackableActivity extends AppCompatActivity implements Vie
                     + "\n\tLabel: " + label
                     + "\n\tValue: " + value);
         } else {
-            App.getInstance().getTracker()
+            App.from(this).getTracker()
                     .send(new HitBuilders.EventBuilder()
                             .setCategory(category)
                             .setAction(action)

@@ -21,7 +21,7 @@ public class TaggedEventSeriesNotificationService extends Service implements Org
     @Override
     public void onCreate() {
         super.onCreate();
-        App.getInstance().checkOrganizer(this);
+        App.from(this).checkOrganizer(this);
     }
 
     @Override

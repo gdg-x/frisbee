@@ -7,9 +7,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.squareup.picasso.Picasso;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
+import org.gdg.frisbee.android.api.PlusApi;
 import org.gdg.frisbee.android.api.model.plus.Cover;
 import org.gdg.frisbee.android.api.model.plus.Person;
 import org.gdg.frisbee.android.app.App;
@@ -21,6 +23,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 class DrawerHeaderDisplayer {
+
+    private final PlusApi plusApi;
+    private final ModelCache modelCache;
+    private final Picasso picasso;
+
     @BindView(R.id.navdrawer_image) ImageView mDrawerImage;
     @BindView(R.id.navdrawer_user_picture) ImageView mDrawerUserPicture;
     @BindView(R.id.navdrawer_user_name) TextView mDrawerUserName;
@@ -30,6 +37,10 @@ class DrawerHeaderDisplayer {
     DrawerHeaderDisplayer(View headerView, View.OnClickListener onClickListener) {
         ButterKnife.bind(this, headerView);
         headerView.setOnClickListener(onClickListener);
+        App app = App.from(headerView.getContext());
+        plusApi = app.getPlusApi();
+        modelCache = app.getModelCache();
+        picasso = app.getPicasso();
     }
 
     void updateUserDetails(@Nullable GoogleSignInAccount account) {
@@ -39,7 +50,7 @@ class DrawerHeaderDisplayer {
             return;
         }
         if (account.getPhotoUrl() != null) {
-            App.getInstance().getPicasso().load(account.getPhotoUrl())
+            picasso.load(account.getPhotoUrl())
                 .transform(new CircleTransform())
                 .into(mDrawerUserPicture);
         }
@@ -61,7 +72,7 @@ class DrawerHeaderDisplayer {
     }
 
     private void updateChapterImage(final String homeChapterId) {
-        App.getInstance().getModelCache().getAsync(ModelCache.KEY_PERSON + homeChapterId,
+        modelCache.getAsync(ModelCache.KEY_PERSON + homeChapterId,
             true, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object person) {
@@ -71,11 +82,11 @@ class DrawerHeaderDisplayer {
 
                 @Override
                 public void onNotFound(final String key) {
-                    App.getInstance().getPlusApi().getPerson(homeChapterId).enqueue(new Callback<Person>() {
+                    plusApi.getPerson(homeChapterId).enqueue(new Callback<Person>() {
                         @Override
                         public void onSuccess(Person person) {
                             if (person != null) {
-                                App.getInstance().getModelCache().putAsync(key, person,
+                                modelCache.putAsync(key, person,
                                     DateTime.now().plusDays(1), null);
                                 mStoredHomeChapterId = homeChapterId;
                                 updateChapterCover(person.getCover());
@@ -88,8 +99,7 @@ class DrawerHeaderDisplayer {
 
     private void updateChapterCover(@Nullable Cover cover) {
         if (cover != null) {
-            App.getInstance().getPicasso()
-                .load(cover.getCoverPhoto().getUrl())
+            picasso.load(cover.getCoverPhoto().getUrl())
                 .into(mDrawerImage);
         }
     }

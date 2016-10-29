@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
+import org.gdg.frisbee.android.api.GdgXHub;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.api.model.PagedList;
 import org.gdg.frisbee.android.app.App;
@@ -20,6 +21,8 @@ import java.util.List;
 
 public class GdgEventListFragment extends EventListFragment {
 
+    private GdgXHub gdgXHub;
+    private ModelCache modelCache;
     private String mCacheKey;
     private String mPlusId;
 
@@ -40,6 +43,8 @@ public class GdgEventListFragment extends EventListFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        gdgXHub = App.from(getContext()).getGdgXHub();
+        modelCache = App.from(getContext()).getModelCache();
         mPlusId = getArguments().getString(Const.EXTRA_PLUS_ID);
         mCacheKey = "event_" + mPlusId;
     }
@@ -51,7 +56,7 @@ public class GdgEventListFragment extends EventListFragment {
         if (Utils.isOnline(getActivity())) {
             loadFirstPage();
         } else {
-            App.getInstance().getModelCache().getAsync(mCacheKey, false, new ModelCache.CacheListener() {
+            modelCache.getAsync(mCacheKey, false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
 
@@ -63,7 +68,7 @@ public class GdgEventListFragment extends EventListFragment {
                                 Snackbar.LENGTH_SHORT);
                         ColoredSnackBar.info(snackbar).show();
                     } else {
-                        App.getInstance().getModelCache().removeAsync(mCacheKey);
+                        modelCache.removeAsync(mCacheKey);
                         onNotFound();
                     }
                 }
@@ -87,14 +92,14 @@ public class GdgEventListFragment extends EventListFragment {
 
     @Override
     protected boolean loadMoreEvents(int page) {
-        App.getInstance().getGdgXHub().getChapterAllEventList(
+        gdgXHub.getChapterAllEventList(
             mPlusId, page).
             enqueue(new Callback<PagedList<Event>>() {
                 @Override
                 public void onSuccess(PagedList<Event> eventsPagedList) {
                     List<Event> events = eventsPagedList.getItems();
                     mAdapter.addAll(events);
-                    App.getInstance().getModelCache().putAsync(mCacheKey,
+                    modelCache.putAsync(mCacheKey,
                         mEvents,
                         DateTime.now().plusHours(2),
                         new ModelCache.CachePutListener() {

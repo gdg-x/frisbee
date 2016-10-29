@@ -16,6 +16,7 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
 import java.util.List;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -30,7 +31,7 @@ public class GdgDashClockExtension extends DashClockExtension {
             return;
         }
         Timber.d("Fetching events");
-        App.getInstance().getGdgXHub().getChapterEventList(homeGdg,
+        App.from(this).getGdgXHub().getChapterEventList(homeGdg,
             new DateTime(),
             new DateTime().plusMonths(1))
             .enqueue(new Callback<PagedList<Event>>() {
@@ -46,7 +47,7 @@ public class GdgDashClockExtension extends DashClockExtension {
                                 event.getStart()
                                     .toLocalDateTime()
                                     .toString(DateTimeFormat.patternForStyle("MS",
-                                        getResources().getConfiguration().locale));
+                                        Locale.getDefault()));
                             publishUpdate(new ExtensionData()
                                 .visible(true)
                                 .icon(R.drawable.ic_dashclock)

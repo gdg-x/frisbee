@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 
+import org.gdg.frisbee.android.api.PlusApi;
 import org.gdg.frisbee.android.api.model.plus.Person;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
@@ -15,11 +16,16 @@ import java.io.IOException;
 import retrofit2.Response;
 
 class OrganizerLoader extends AsyncTask<String, Person, Void> {
+
     private final boolean online;
+    private final PlusApi plusApi;
+    private final ModelCache modelCache;
     private Listener listener;
 
     OrganizerLoader(Context context) {
         online = Utils.isOnline(context);
+        plusApi = App.from(context).getPlusApi();
+        modelCache = App.from(context).getModelCache();
     }
 
     @Override
@@ -45,14 +51,12 @@ class OrganizerLoader extends AsyncTask<String, Person, Void> {
 
     @Nullable
     private Person loadOrganizer(String gplusId) {
-        Person person = App.getInstance().getModelCache()
-            .get(ModelCache.KEY_PERSON + gplusId, online);
+        Person person = modelCache.get(ModelCache.KEY_PERSON + gplusId, online);
         if (person != null) {
             return person;
         }
         try {
-            Response<Person> response = App.getInstance().getPlusApi().
-                getPerson(gplusId).execute();
+            Response<Person> response = plusApi.getPerson(gplusId).execute();
             if (response.isSuccessful()) {
                 person = response.body();
                 putPersonInCache(gplusId, person);
@@ -63,8 +67,8 @@ class OrganizerLoader extends AsyncTask<String, Person, Void> {
         return null;
     }
 
-    private static void putPersonInCache(String plusId, Person person) {
-        App.getInstance().getModelCache().putAsync(
+    private void putPersonInCache(String plusId, Person person) {
+        modelCache.putAsync(
             ModelCache.KEY_PERSON + plusId,
             person,
             DateTime.now().plusDays(1),

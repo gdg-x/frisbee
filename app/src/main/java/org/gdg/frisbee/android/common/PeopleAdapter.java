@@ -2,6 +2,7 @@ package org.gdg.frisbee.android.common;
 
 import android.content.Context;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -57,6 +58,7 @@ public class PeopleAdapter extends ArrayAdapter<GdgPerson> {
         }
     }
 
+    @NonNull
     @Override
     public View getView(int i, View convertView, ViewGroup parent) {
         final GdgPerson gdgPerson = getItem(i);
@@ -73,7 +75,7 @@ public class PeopleAdapter extends ArrayAdapter<GdgPerson> {
         holder.secondaryTextView.setText(gdgPerson.getSecondaryText());
 
         if (!TextUtils.isEmpty(gdgPerson.getImageUrl())) {
-            RequestCreator creator = App.getInstance().getPicasso()
+            RequestCreator creator = App.from(getContext()).getPicasso()
                 .load(gdgPerson.getImageUrl());
             if (placeholder != 0) {
                 creator.placeholder(placeholder);

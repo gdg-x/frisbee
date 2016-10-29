@@ -137,14 +137,14 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         });
     }
 
-    private static void populateMainGroup(Menu menu) {
+    private void populateMainGroup(Menu menu) {
         menu.add(GROUP_ID, DRAWER_HOME, Menu.NONE, R.string.home_gdg).setIcon(R.drawable.ic_drawer_home_gdg);
         menu.add(GROUP_ID, DRAWER_GDE, Menu.NONE, R.string.gde).setIcon(R.drawable.ic_drawer_gde);
         menu.add(GROUP_ID, DRAWER_PULSE, Menu.NONE, R.string.pulse).setIcon(R.drawable.ic_drawer_pulse);
 
         //adding special events in navigation drawer
         final List<TaggedEventSeries> currentEventSeries =
-            App.getInstance().currentTaggedEventSeries();
+            App.from(this).currentTaggedEventSeries();
         for (TaggedEventSeries taggedEventSeries : currentEventSeries) {
             menu.add(GROUP_ID,
                 taggedEventSeries.getDrawerId(),
@@ -247,7 +247,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
                 return;
             }
         }
-        final List<TaggedEventSeries> currentEventSeries = App.getInstance().currentTaggedEventSeries();
+        final List<TaggedEventSeries> currentEventSeries = App.from(this).currentTaggedEventSeries();
         for (TaggedEventSeries taggedEventSeries : currentEventSeries) {
             if (taggedEventSeries.getDrawerId() == itemId) {
 

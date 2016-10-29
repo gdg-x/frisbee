@@ -104,7 +104,7 @@ public class InfoFragment extends BaseFragment implements OrganizerLoader.Listen
     }
 
     private void loadChapter(final String chapterPlusId) {
-        App.getInstance().getModelCache().getAsync(
+        App.from(getContext()).getModelCache().getAsync(
             ModelCache.KEY_PERSON + chapterPlusId,
             Utils.isOnline(getActivity()),
             new ModelCache.CacheListener() {
@@ -121,7 +121,7 @@ public class InfoFragment extends BaseFragment implements OrganizerLoader.Listen
     }
 
     void loadChapterFromNetwork(final String chapterPlusId) {
-        App.getInstance().getPlusApi().getPerson(chapterPlusId).enqueue(
+        App.from(getContext()).getPlusApi().getPerson(chapterPlusId).enqueue(
             new Callback<Person>() {
                 @Override
                 public void onSuccess(Person chapter) {
@@ -142,7 +142,7 @@ public class InfoFragment extends BaseFragment implements OrganizerLoader.Listen
                 }
 
                 private void putChapterInCache(String plusId, Person person) {
-                    App.getInstance().getModelCache().putAsync(
+                    App.from(getContext()).getModelCache().putAsync(
                         ModelCache.KEY_PERSON + plusId,
                         person,
                         DateTime.now().plusDays(1),
@@ -244,7 +244,7 @@ public class InfoFragment extends BaseFragment implements OrganizerLoader.Listen
         ImageView picture = (ImageView) convertView.findViewById(R.id.icon);
 
         if (organizer.getImage() != null) {
-            App.getInstance().getPicasso()
+            App.from(getContext()).getPicasso()
                 .load(organizer.getImage().getUrl())
                 .transform(new BitmapBorderTransformation(0,
                     getResources().getDimensionPixelSize(R.dimen.organizer_icon_size) / 2,

@@ -59,7 +59,7 @@ public class OrganizerChecker {
         }
 
         isOrganizer = false;
-        App.getInstance().getGdgXHub().checkOrganizer(currentId).enqueue(new Callback<OrganizerCheckResponse>() {
+        App.from(context).getGdgXHub().checkOrganizer(currentId).enqueue(new Callback<OrganizerCheckResponse>() {
             @Override
             public void onSuccess(OrganizerCheckResponse organizerCheckResponse) {
                 lastOrganizerCheckTimeStamp = System.currentTimeMillis();

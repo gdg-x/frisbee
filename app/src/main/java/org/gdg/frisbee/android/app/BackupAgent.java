@@ -46,7 +46,7 @@ public class BackupAgent extends BackupAgentHelper {
         super.onRestore(data, appVersionCode, newState);
         Timber.d("Restoring from backup (was saved using version %d)", appVersionCode);
 
-        App.getInstance().getTracker().send(new HitBuilders.EventBuilder()
+        App.from(this).getTracker().send(new HitBuilders.EventBuilder()
             .setCategory("backup")
             .setAction("restore")
             .setLabel("" + appVersionCode)
@@ -59,7 +59,7 @@ public class BackupAgent extends BackupAgentHelper {
                          ParcelFileDescriptor newState) throws IOException {
         super.onBackup(oldState, data, newState);
 
-        App.getInstance().getTracker().send(new HitBuilders.EventBuilder()
+        App.from(this).getTracker().send(new HitBuilders.EventBuilder()
             .setCategory("backup")
             .setAction("backup")
             .setLabel("")

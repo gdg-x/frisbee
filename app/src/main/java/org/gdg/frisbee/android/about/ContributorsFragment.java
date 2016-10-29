@@ -44,7 +44,7 @@ public class ContributorsFragment extends PeopleListFragment {
         if (Utils.isOnline(getActivity())) {
             fetchGitHubContributors();
         } else {
-            App.getInstance().getModelCache().getAsync(
+            App.from(getContext()).getModelCache().getAsync(
                 ModelCache.KEY_FRISBEE_CONTRIBUTORS, false, new ModelCache.CacheListener() {
                     @Override
                     public void onGet(Object item) {
@@ -64,13 +64,13 @@ public class ContributorsFragment extends PeopleListFragment {
     }
 
     private void fetchGitHubContributors() {
-        App.getInstance().getGithub().getContributors(GITHUB_ORGANIZATION, GITHUB_REPO)
+        App.from(getContext()).getGithub().getContributors(GITHUB_ORGANIZATION, GITHUB_REPO)
             .enqueue(new Callback<ContributorList>() {
                 @Override
                 public void onSuccess(final ContributorList contributors) {
 
                     mAdapter.addAll(contributors);
-                    App.getInstance().getModelCache().putAsync(ModelCache.KEY_FRISBEE_CONTRIBUTORS,
+                    App.from(getContext()).getModelCache().putAsync(ModelCache.KEY_FRISBEE_CONTRIBUTORS,
                         contributors,
                         DateTime.now().plusDays(1),
                         null);
