@@ -63,7 +63,7 @@ public abstract class BaseFragment extends Fragment {
         return isContextValid;
     }
 
-    protected void showError(@StringRes final int errorStringRes) {
+    protected void showError(@StringRes int errorStringRes) {
         if (isContextValid()) {
             if (getView() != null) {
                 Snackbar snackbar = Snackbar.make(getView(), errorStringRes,

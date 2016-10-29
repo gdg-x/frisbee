@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
@@ -13,19 +12,15 @@ import org.joda.time.DateTime;
 
 public final class PrefUtils {
     public static final String PREF_NAME = "gdg";
-    public static final String SETTINGS_ROOT = "root";
     public static final String SETTINGS_HOME_GDG = "gdg_home";
     public static final String SETTINGS_SIGNED_IN = "gdg_signed_in";
     public static final String SETTINGS_ANALYTICS = "analytics";
     private static final String SETTINGS_HOME_GDG_NAME = "gdg_home_name";
-    private static final String PREFS_VIDEOS_PLAYED = "gdg_app_videos_played";
     private static final String PREFS_OPEN_DRAWER_ON_START = "open_drawer_on_start";
     private static final String PREFS_FIRST_START = "gdg_first_start";
     private static final String PREFS_VERSION_CODE = "gdg_version_code";
     private static final String PREFS_APP_STARTS = "gdg_app_starts";
     private static final String PREFS_SEASONS_GREETINGS = "seasons_greetings";
-    private static final String PREFS_ACHIEVEMENTS_PREFIX = "achievement_unlocked_";
-    private static final String PREFS_WIDGET_ADDED = "widget_added";
     private static final String PREFS_FATAL_GOOGLE_PLAY_SERVICE = "fatal_google_play_service";
     private static final String PREFS_EVENT_SERIES_NOTIFICATION_ALARM_SET = "event_series_notification_alarm_set";
 
@@ -56,13 +51,11 @@ public final class PrefUtils {
         prefs(context).edit().putBoolean(SETTINGS_SIGNED_IN, true).apply();
     }
 
-    public static void setLoggedOut(Context context) {
+    public static void setSignedOut(Context context) {
         prefs(context).edit()
             .putBoolean(SETTINGS_SIGNED_IN, false)
-            .putBoolean(Const.PREF_ORGANIZER_STATE, false)
-            .putLong(Const.PREF_ORGANIZER_CHECK_TIME, 0)
             .apply();
-        App.getInstance().initOrganizer();
+        App.getInstance().resetOrganizer();
     }
 
     @Nullable
@@ -71,10 +64,15 @@ public final class PrefUtils {
             .getString(SETTINGS_HOME_GDG, null);
     }
 
-    @NonNull
-    public static String getHomeChapterIdNotNull(final Context context) {
-        return prefs(context)
-            .getString(SETTINGS_HOME_GDG, "");
+    @Nullable
+    public static Chapter getHomeChapter(Context context) {
+        SharedPreferences prefs = prefs(context);
+        String chapterId = prefs.getString(SETTINGS_HOME_GDG, null);
+        if (chapterId == null) {
+            return null;
+        }
+        String chapterName = prefs.getString(SETTINGS_HOME_GDG_NAME, "");
+        return new Chapter(chapterName, chapterId);
     }
 
     public static void setHomeChapter(final Context context, final Chapter chapter) {
@@ -98,10 +96,6 @@ public final class PrefUtils {
 
     public static void increaseAppStartCount(final Context context) {
         increaseIntPreference(context, PREFS_APP_STARTS);
-    }
-
-    public static int increaseVideoViewed(final Context mContext) {
-        return increaseIntPreference(mContext, PREFS_VIDEOS_PLAYED);
     }
 
     private static int increaseIntPreference(final Context context, String key) {
@@ -139,40 +133,6 @@ public final class PrefUtils {
     public static void resetInitialSettings(final Context context) {
         prefs(context).edit()
             .clear()
-            .apply();
-    }
-
-    public static boolean isAchievementUnlocked(final Context context, final String achievement) {
-        return prefs(context).getBoolean(PREFS_ACHIEVEMENTS_PREFIX + achievement, false);
-    }
-
-    public static void setAchievementUnlocked(@NonNull final Context context,
-                                              @NonNull final String achievement) {
-        prefs(context).edit()
-            .putBoolean(PREFS_ACHIEVEMENTS_PREFIX + achievement, true)
-            .apply();
-    }
-
-    public static boolean hasHigherAchievementSteps(Context context, String achievementName, int steps) {
-        SharedPreferences preferences = prefs(context);
-        String achievementKey = PREFS_ACHIEVEMENTS_PREFIX + achievementName;
-        return preferences.getInt(achievementKey, 0) > steps;
-    }
-
-    public static void setAchievementSteps(@NonNull final Context context,
-                                           @NonNull final String achievement, @NonNull final Integer steps) {
-        prefs(context).edit()
-            .putInt(PREFS_ACHIEVEMENTS_PREFIX + achievement, steps)
-            .apply();
-    }
-
-    public static boolean isWidgetAdded(final Context context) {
-        return prefs(context).getBoolean(PREFS_WIDGET_ADDED, false);
-    }
-
-    public static void setWidgetAdded(@NonNull final Context context) {
-        prefs(context).edit()
-            .putBoolean(PREFS_WIDGET_ADDED, true)
             .apply();
     }
 

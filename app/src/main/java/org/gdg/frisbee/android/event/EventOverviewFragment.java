@@ -21,6 +21,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
 import android.text.Html;
@@ -102,17 +103,17 @@ public class EventOverviewFragment extends BaseFragment {
         final String eventId = getArguments().getString(Const.EXTRA_EVENT_ID);
         App.getInstance().getGdgXHub().getEventDetail(eventId).enqueue(new Callback<EventFullDetails>() {
             @Override
-            public void success(EventFullDetails eventFullDetails) {
-                onSuccess(eventFullDetails);
+            public void onSuccess(EventFullDetails eventFullDetails) {
+                onEventDetailsLoaded(eventFullDetails);
             }
 
             @Override
-            public void failure(Throwable error) {
+            public void onError() {
                 showError(R.string.server_error);
             }
 
             @Override
-            public void networkFailure(Throwable error) {
+            public void onNetworkFailure(Throwable error) {
                 showError(R.string.offline_alert);
             }
         });
@@ -153,7 +154,7 @@ public class EventOverviewFragment extends BaseFragment {
         return fmt.print(eventFullDetails.getStart());
     }
 
-    private void onSuccess(final EventFullDetails eventFullDetails) {
+    private void onEventDetailsLoaded(final EventFullDetails eventFullDetails) {
         if (getActivity() == null) {
             return;
         }
@@ -165,7 +166,7 @@ public class EventOverviewFragment extends BaseFragment {
         getActivity().supportInvalidateOptionsMenu();
         updateWithDetails(eventFullDetails);
 
-        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
+        App.getInstance().getModelCache().getAsync(ModelCache.KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 mDirectory = (Directory) item;
@@ -177,18 +178,18 @@ public class EventOverviewFragment extends BaseFragment {
                 if (Utils.isOnline(getActivity())) {
                     App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
                         @Override
-                        public void success(Directory directory) {
+                        public void onSuccess(Directory directory) {
                             mDirectory = directory;
                             updateGroupDetails(mDirectory.getGroupById(eventFullDetails.getChapter()));
                         }
 
                         @Override
-                        public void failure(Throwable error) {
+                        public void onError() {
                             showError(R.string.fetch_chapters_failed);
                         }
 
                         @Override
-                        public void networkFailure(Throwable error) {
+                        public void onNetworkFailure(Throwable error) {
                             showError(R.string.offline_alert);
                         }
                     });
@@ -212,7 +213,7 @@ public class EventOverviewFragment extends BaseFragment {
     private void loadChapterImage(String gplusId) {
         App.getInstance().getPlusApi().getImageInfo(gplusId).enqueue(new Callback<ImageInfo>() {
             @Override
-            public void success(ImageInfo imageInfo) {
+            public void onSuccess(ImageInfo imageInfo) {
                 if (isContextValid()) {
                     String imageUrl = imageInfo.getImage().getUrl().replace("sz=50", "sz=196");
                     App.getInstance().getPicasso().load(imageUrl).into(mGroupLogo);
@@ -220,14 +221,14 @@ public class EventOverviewFragment extends BaseFragment {
             }
 
             @Override
-            public void failure(Throwable error) {
+            public void onError() {
                 if (isContextValid()) {
                     mGroupLogo.setVisibility(View.INVISIBLE);
                 }
             }
 
             @Override
-            public void networkFailure(Throwable error) {
+            public void onNetworkFailure(Throwable error) {
                 if (isContextValid()) {
                     mGroupLogo.setVisibility(View.INVISIBLE);
                 }
@@ -309,7 +310,7 @@ public class EventOverviewFragment extends BaseFragment {
 
     private void launchUrl(String eventUrl) {
         new CustomTabsIntent.Builder()
-            .setToolbarColor(getResources().getColor(R.color.theme_primary))
+            .setToolbarColor(ContextCompat.getColor(getContext(), R.color.theme_primary))
             .setShowTitle(true)
             .build()
             .launchUrl(getActivity(), Uri.parse(eventUrl));

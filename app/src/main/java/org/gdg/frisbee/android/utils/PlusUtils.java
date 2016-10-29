@@ -1,28 +1,36 @@
 package org.gdg.frisbee.android.utils;
 
-import android.net.Uri;
-import android.support.annotation.NonNull;
+import android.content.Context;
 import android.support.annotation.Nullable;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.model.people.Person;
+import com.google.android.gms.common.api.OptionalPendingResult;
 
-public class PlusUtils {
+import org.gdg.frisbee.android.app.GoogleApiClientFactory;
 
-    private PlusUtils() {
+public final class PlusUtils {
+
+    @Nullable
+    public static String getCurrentPlusId(Context context) {
+        GoogleSignInAccount account = getCurrentAccount(context);
+        return account != null ? account.getId() : null;
     }
 
     @Nullable
-    public static String getCurrentPersonId(GoogleApiClient apiClient) {
-        Person plusPerson = null;
-        if (apiClient.isConnected() && apiClient.hasConnectedApi(Plus.API)) {
-            plusPerson = Plus.PeopleApi.getCurrentPerson(apiClient);
+    public static GoogleSignInAccount getCurrentAccount(Context context) {
+        GoogleApiClient client = GoogleApiClientFactory.createForSignIn(context);
+
+        OptionalPendingResult<GoogleSignInResult> result = Auth.GoogleSignInApi.silentSignIn(client);
+        if (!result.isDone()) {
+            return null;
         }
-        return plusPerson != null ? plusPerson.getId() : null;
+        return result.get().getSignInAccount();
     }
 
-    public static Uri createProfileUrl(@NonNull final String gplusId) {
-        return Uri.parse("https://plus.google.com/" + gplusId);
+    private PlusUtils() {
+        //no instance
     }
 }

@@ -30,7 +30,6 @@ import android.widget.Filter;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
-import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Chapter;
@@ -79,7 +78,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
 
         super.onActivityCreated(savedInstanceState);
 
-        mLocationComparator = new ChapterComparator(PrefUtils.getHomeChapterId(getActivity()),
+        mLocationComparator = new ChapterComparator(PrefUtils.getHomeChapter(getActivity()),
             App.getInstance().getLastLocation());
 
         mChapterAdapter = new ChapterAdapter(getActivity(), R.layout.spinner_item_welcome);
@@ -90,7 +89,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
         }
 
         App.getInstance().getModelCache().getAsync(
-            Const.CACHE_KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
+            ModelCache.KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
                     Directory directory = (Directory) item;
@@ -170,25 +169,25 @@ public class FirstStartStep1Fragment extends BaseFragment {
 
         App.getInstance().getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
             @Override
-            public void success(Directory directory) {
+            public void onSuccess(Directory directory) {
 
                 if (isContextValid()) {
                     addChapters(directory.getGroups());
                     mLoadSwitcher.setDisplayedChild(1);
                 }
-                App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB,
+                App.getInstance().getModelCache().putAsync(ModelCache.KEY_CHAPTER_LIST_HUB,
                     directory,
                     DateTime.now().plusDays(4),
                     null);
             }
 
             @Override
-            public void failure(Throwable error) {
+            public void onError() {
                 showError(R.string.fetch_chapters_failed);
             }
 
             @Override
-            public void networkFailure(Throwable error) {
+            public void onNetworkFailure(Throwable error) {
                 showError(R.string.offline_alert);
             }
         });

@@ -121,10 +121,8 @@ public class GingerbreadLastLocationFinder implements ILastLocationFinder {
                     context.registerReceiver(singleUpdateReceiver, locIntentFilter);
                     locationManager.requestSingleUpdate(criteria, singleUpatePI);
                 }
-            } catch (SecurityException ex) {
+            } catch (SecurityException | IllegalArgumentException ex) {
                 Timber.e(ex, "fail to request location update, ignore");
-            } catch (IllegalArgumentException ex) {
-                Timber.d("provider does not exist " + ex.getMessage());
             }
         }
 

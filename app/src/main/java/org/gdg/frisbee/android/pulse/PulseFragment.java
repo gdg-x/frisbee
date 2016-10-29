@@ -16,9 +16,10 @@
 
 package org.gdg.frisbee.android.pulse;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,7 @@ public class PulseFragment extends GdgListFragment {
 
     private int mMode;
     private String mTarget;
-    private PulseAdapter mAdapter;
+    private PulseAdapter adapter;
     private Callbacks mListener;
 
     public static PulseFragment newInstance(int mode, String target) {
@@ -61,12 +62,12 @@ public class PulseFragment extends GdgListFragment {
     }
 
     @Override
-    public void onAttach(final Activity activity) {
-        super.onAttach(activity);
-        if (activity instanceof Callbacks) {
-            mListener = (Callbacks) activity;
+    public void onAttach(final Context context) {
+        super.onAttach(context);
+        if (context instanceof Callbacks) {
+            mListener = (Callbacks) context;
         } else {
-            throw new ClassCastException("Activity " + activity.getClass().getSimpleName()
+            throw new ClassCastException("Activity " + context.getClass().getSimpleName()
                 + " must implement " + Pulse.class.getSimpleName() + " interface.");
         }
     }
@@ -74,7 +75,9 @@ public class PulseFragment extends GdgListFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putIntArray(INSTANCE_STATE_POSITIONS, mAdapter.getPositions());
+        if (adapter != null) {
+            outState.putIntArray(INSTANCE_STATE_POSITIONS, adapter.getPositions());
+        }
     }
 
     @Override
@@ -87,7 +90,7 @@ public class PulseFragment extends GdgListFragment {
         final int[] positions = savedInstanceState != null
             ? savedInstanceState.getIntArray(INSTANCE_STATE_POSITIONS) : null;
 
-        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
+        App.getInstance().getModelCache().getAsync(ModelCache.KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 createAdapter(positions, (Directory) item);
@@ -102,10 +105,10 @@ public class PulseFragment extends GdgListFragment {
         setIsLoading(true);
     }
 
-    public void createAdapter(int[] positions, Directory directory) {
-        mAdapter = new PulseAdapter(getActivity(), positions, directory);
-        setListAdapter(mAdapter);
-        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
+    void createAdapter(int[] positions, @Nullable Directory directory) {
+        adapter = new PulseAdapter(getActivity(), positions, directory);
+        setListAdapter(adapter);
+        App.getInstance().getModelCache().getAsync(ModelCache.KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
             true,
             new ModelCache.CacheListener() {
                 @Override
@@ -126,9 +129,9 @@ public class PulseFragment extends GdgListFragment {
         if (isGlobalSelected()) {
             App.getInstance().getGroupDirectory().getPulse().enqueue(new Callback<Pulse>() {
                 @Override
-                public void success(final Pulse pulse) {
+                public void onSuccess(final Pulse pulse) {
                     App.getInstance().getModelCache().putAsync(
-                        Const.CACHE_KEY_PULSE + mTarget.toLowerCase(),
+                        ModelCache.KEY_PULSE + mTarget.toLowerCase(),
                         pulse,
                         DateTime.now().plusDays(1),
                         new ModelCache.CachePutListener() {
@@ -140,21 +143,21 @@ public class PulseFragment extends GdgListFragment {
                 }
 
                 @Override
-                public void failure(Throwable error) {
+                public void onError() {
                     showError(R.string.server_error);
                 }
 
                 @Override
-                public void networkFailure(Throwable error) {
+                public void onNetworkFailure(Throwable error) {
                     showError(R.string.offline_alert);
                 }
             });
         } else {
             App.getInstance().getGroupDirectory().getCountryPulse(mTarget).enqueue(new Callback<Pulse>() {
                 @Override
-                public void success(final Pulse pulse) {
+                public void onSuccess(final Pulse pulse) {
                     App.getInstance().getModelCache().putAsync(
-                        Const.CACHE_KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
+                        ModelCache.KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
                         pulse,
                         DateTime.now().plusDays(1),
                         new ModelCache.CachePutListener() {
@@ -166,12 +169,12 @@ public class PulseFragment extends GdgListFragment {
                 }
 
                 @Override
-                public void failure(Throwable error) {
+                public void onError() {
                     showError(R.string.server_error);
                 }
 
                 @Override
-                public void networkFailure(Throwable error) {
+                public void onNetworkFailure(Throwable error) {
                     showError(R.string.offline_alert);
                 }
             });
@@ -183,8 +186,8 @@ public class PulseFragment extends GdgListFragment {
     }
 
     private void initAdapter(Pulse pulse) {
-        mAdapter.setPulse(mMode, pulse, !isGlobalSelected());
-        mAdapter.notifyDataSetChanged();
+        adapter.setPulse(mMode, pulse, !isGlobalSelected());
+        adapter.notifyDataSetChanged();
         setIsLoading(false);
     }
 
@@ -195,7 +198,7 @@ public class PulseFragment extends GdgListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Map.Entry<String, PulseEntry> pulse = mAdapter.getItem(position);
+        Map.Entry<String, PulseEntry> pulse = adapter.getItem(position);
 
         if (isGlobalSelected()) {
             mListener.openPulse(pulse.getKey());

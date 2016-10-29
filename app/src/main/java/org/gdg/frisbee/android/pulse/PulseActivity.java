@@ -16,13 +16,13 @@
 
 package org.gdg.frisbee.android.pulse;
 
-import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -33,7 +33,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.Pulse;
@@ -74,7 +73,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
             selectedPulse = PulseFragment.GLOBAL;
         }
 
-        App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_PULSE_GLOBAL, true, new ModelCache.CacheListener() {
+        App.getInstance().getModelCache().getAsync(ModelCache.KEY_PULSE_GLOBAL, true, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 Pulse pulse = (Pulse) item;
@@ -91,9 +90,9 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
     void fetchPulse(final String selectedPulse) {
         App.getInstance().getGroupDirectory().getPulse().enqueue(new Callback<Pulse>() {
             @Override
-            public void success(final Pulse pulse) {
+            public void onSuccess(final Pulse pulse) {
                 App.getInstance().getModelCache().putAsync(
-                    Const.CACHE_KEY_PULSE_GLOBAL,
+                    ModelCache.KEY_PULSE_GLOBAL,
                     pulse,
                     DateTime.now().plusDays(1),
                     new ModelCache.CachePutListener() {
@@ -105,12 +104,12 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
             }
 
             @Override
-            public void failure(Throwable error) {
+            public void onError() {
                 showError(R.string.fetch_chapters_failed);
             }
 
             @Override
-            public void networkFailure(Throwable error) {
+            public void onNetworkFailure(Throwable error) {
                 showError(R.string.offline_alert);
             }
         });
@@ -158,7 +157,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
     }
 
     void onPulseItemSelected(String selectedPulse) {
-        mViewPagerAdapter = new PulsePagerAdapter(this, getSupportFragmentManager(), selectedPulse);
+        mViewPagerAdapter = new PulsePagerAdapter(getResources(), getSupportFragmentManager(), selectedPulse);
         mViewPager.setAdapter(mViewPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
     }
@@ -170,11 +169,9 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
 
     @Override
     protected String getTrackedViewName() {
-        if (mViewPager == null
-            || getSelectedPulseTarget() == null) {
+        if (mViewPager == null || getSelectedPulseTarget() == null) {
             return "Pulse";
         }
-
         final String[] pagesNames = {"EventStats", "AtendeeStats", "CircleStats"};
         String pageName;
         try {
@@ -210,19 +207,14 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
             ? mViewPagerAdapter.getSelectedPulseTarget() : null;
     }
 
-    public static class PulsePagerAdapter extends FragmentStatePagerAdapter {
-        private Context mContext;
+    public static class PulsePagerAdapter extends FragmentPagerAdapter {
+        private final Resources resources;
         private final String selectedPulseTarget;
 
-        public PulsePagerAdapter(Context ctx, FragmentManager fm, String selectedPulseTarget) {
+        PulsePagerAdapter(Resources resources, FragmentManager fm, String selectedPulseTarget) {
             super(fm);
-            mContext = ctx;
+            this.resources = resources;
             this.selectedPulseTarget = selectedPulseTarget;
-        }
-
-        @Override
-        public int getItemPosition(Object object) {
-            return POSITION_NONE;
         }
 
         @Override
@@ -236,14 +228,19 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
         }
 
         @Override
+        public long getItemId(int position) {
+            return selectedPulseTarget.hashCode() * 10 + position;
+        }
+
+        @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return mContext.getText(R.string.pulse_events);
+                    return resources.getText(R.string.pulse_events);
                 case 1:
-                    return mContext.getText(R.string.pulse_attendees);
+                    return resources.getText(R.string.pulse_attendees);
                 case 2:
-                    return mContext.getText(R.string.pulse_circlers);
+                    return resources.getText(R.string.pulse_circlers);
                 default:
                     throw new IllegalStateException("The size of the adapter should be 3");
             }

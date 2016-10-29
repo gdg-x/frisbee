@@ -5,7 +5,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +16,6 @@ import android.widget.TextView;
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.LeadMessage;
-import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.Utils;
 
 import butterknife.BindView;
@@ -25,14 +23,6 @@ import butterknife.ButterKnife;
 
 public class LeadFragment extends ListFragment {
     private LeadAnnouncementsAdapter mAdapter;
-
-    public static Fragment newInstance(final String gplusId) {
-        Fragment fragment = new LeadFragment();
-        Bundle arguments = new Bundle();
-        arguments.putString(Const.EXTRA_PLUS_ID, gplusId);
-        fragment.setArguments(arguments);
-        return fragment;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -65,10 +55,6 @@ public class LeadFragment extends ListFragment {
         if (item.getType() == LeadMessage.Type.resource) {
             Activity activity = getActivity();
             startActivity(Utils.createExternalIntent(activity, Uri.parse(item.getLinkUrl())));
-            if (activity != null && activity instanceof GdgActivity) {
-                ((GdgActivity) activity).getAchievementActionHandler()
-                    .handleCuriousOrganizer();
-            }
         }
     }
 

@@ -19,13 +19,11 @@ package org.gdg.frisbee.android.chapter;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.widget.ArrayAdapter;
 
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.utils.Utils;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class ChapterAdapter extends ArrayAdapter<Chapter> {
@@ -39,14 +37,6 @@ public class ChapterAdapter extends ArrayAdapter<Chapter> {
         for (Chapter c : chapters) {
             add(c);
         }
-    }
-
-    public ArrayList<Chapter> getAll() {
-        ArrayList<Chapter> chapters = new ArrayList<>();
-        for (int i = 0; i < getCount(); i++) {
-            chapters.add(getItem(i));
-        }
-        return chapters;
     }
 
     @Override
@@ -63,16 +53,4 @@ public class ChapterAdapter extends ArrayAdapter<Chapter> {
         }
     }
 
-    @Nullable
-    public Chapter findById(final String chapterId) {
-        int position = getPosition(chapterId);
-        if (position != -1) {
-            return getItem(position);
-        }
-        return null;
-    }
-
-    public int getPosition(String chapterId) {
-        return super.getPosition(new Chapter(null, chapterId));
-    }
 }

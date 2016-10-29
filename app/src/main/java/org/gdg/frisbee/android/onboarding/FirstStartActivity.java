@@ -19,6 +19,7 @@ package org.gdg.frisbee.android.onboarding;
 import android.app.backup.BackupManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -27,12 +28,20 @@ import android.widget.FrameLayout;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.appinvite.AppInvite;
+import com.google.android.gms.appinvite.AppInviteInvitationResult;
+import com.google.android.gms.appinvite.AppInviteReferral;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.app.App;
+import org.gdg.frisbee.android.app.GoogleApiClientFactory;
 import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PrefUtils;
@@ -40,13 +49,14 @@ import org.gdg.frisbee.android.widget.NonSwipeableViewPager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.HttpUrl;
 
 public class FirstStartActivity extends GdgActivity implements
     FirstStartStep1Fragment.Step1Listener,
     FirstStartStep2Fragment.Step2Listener,
     FirstStartStep3Fragment.Step3Listener {
 
-    private static final String SIGN_IN_REQUESTED = "SIGN_IN_REQUESTED";
+    private static final int RC_SIGN_IN = 101;
     public static final String ACTION_FIRST_START = "finish_first_start";
 
     @BindView(R.id.pager)
@@ -56,7 +66,12 @@ public class FirstStartActivity extends GdgActivity implements
     FrameLayout mContentLayout;
 
     private FirstStartPageAdapter mViewPagerAdapter;
-    private boolean signInRequested;
+    private GoogleApiClient signInClient;
+
+    @Override
+    protected GoogleApiClient createGoogleApiClient() {
+        return GoogleApiClientFactory.createWithApi(this, AppInvite.API);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,13 +81,10 @@ public class FirstStartActivity extends GdgActivity implements
 
         App.getInstance().updateLastLocation();
 
-        if (savedInstanceState != null) {
-            signInRequested = savedInstanceState.getBoolean(SIGN_IN_REQUESTED);
-        }
+        setupSignInClient();
 
         mViewPagerAdapter = new FirstStartPageAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);
-
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i2) {
@@ -97,17 +109,36 @@ public class FirstStartActivity extends GdgActivity implements
         });
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putBoolean(SIGN_IN_REQUESTED, signInRequested);
+    private void setupSignInClient() {
+        signInClient = GoogleApiClientFactory.createForSignIn(this, this);
+        Auth.GoogleSignInApi.silentSignIn(signInClient).setResultCallback(new ResultCallback<GoogleSignInResult>() {
+            @Override
+            public void onResult(@NonNull GoogleSignInResult googleSignInResult) {
+                if (googleSignInResult.isSuccess()) {
+                    PrefUtils.setSignedIn(getApplicationContext());
+                }
+            }
+        });
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignInResult(result);
+            return;
+        }
+
         mViewPagerAdapter.getItem(mViewPager.getCurrentItem()).onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void handleSignInResult(GoogleSignInResult result) {
+        if (result.isSuccess()) {
+            PrefUtils.setSignedIn(this);
+            moveToStep3(true);
+        }
     }
 
     @Override
@@ -148,35 +179,60 @@ public class FirstStartActivity extends GdgActivity implements
 
     @Override
     public void onSignedIn() {
-        PrefUtils.setSignedIn(this);
-        recreateGoogleApiClientIfNeeded();
-
-        if (getGoogleApiClient().isConnected()) {
-            moveToStep3(true);
-        } else {
-            getGoogleApiClient().connect();
-            signInRequested = true;
-        }
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(signInClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     @Override
     public void onConnected(Bundle bundle) {
         super.onConnected(bundle);
 
-        if (signInRequested && PrefUtils.isSignedIn(this)) {
-            signInRequested = false;
-            moveToStep3(true);
+        AppInvite.AppInviteApi.getInvitation(getGoogleApiClient(), this, false)
+            .setResultCallback(new ResultCallback<AppInviteInvitationResult>() {
+                @Override
+                public void onResult(@NonNull AppInviteInvitationResult result) {
+                    onInvitationLoaded(result);
+                }
+            });
+    }
+
+    private void onInvitationLoaded(@NonNull AppInviteInvitationResult result) {
+        if (result.getStatus().isSuccess()) {
+            Intent intent = result.getInvitationIntent();
+            Invite invite = extractInvite(intent);
+
+            if (invite != null) {
+                FirstStartStep2Fragment loginFragment = (FirstStartStep2Fragment) mViewPagerAdapter.getItem(1);
+                loginFragment.loadInvite(invite);
+
+                sendAnalyticsEvent("AppInvite", "Installed", "");
+            }
         }
+    }
+
+    private static Invite extractInvite(Intent intent) {
+        String deepLink = AppInviteReferral.getDeepLink(intent);
+        if (deepLink == null) {
+            return null;
+        }
+
+        HttpUrl httpUrl = HttpUrl.parse(deepLink);
+        if (httpUrl == null) {
+            return null;
+        }
+        String sender = AppInviteLinkGenerator.extractSender(httpUrl);
+        return new Invite(sender);
+
     }
 
     @Override
     public void onSkippedSignIn() {
-        PrefUtils.setLoggedOut(this);
+        PrefUtils.setSignedOut(this);
 
         moveToStep3(false);
     }
 
-    private void moveToStep3(final boolean isSignedIn) {
+    private void moveToStep3(boolean isSignedIn) {
         FirstStartStep3Fragment step3 = (FirstStartStep3Fragment) mViewPagerAdapter.getItem(2);
         step3.setSignedIn(isSignedIn);
 
@@ -190,6 +246,7 @@ public class FirstStartActivity extends GdgActivity implements
 
         startMainActivity();
 
+        //TODO enable FCM only when the `enableGcm` param is true
         finish();
     }
 
@@ -207,10 +264,10 @@ public class FirstStartActivity extends GdgActivity implements
         startActivity(resultData);
     }
 
-    public class FirstStartPageAdapter extends FragmentStatePagerAdapter {
+    public static class FirstStartPageAdapter extends FragmentStatePagerAdapter {
         private Fragment[] mFragments;
 
-        public FirstStartPageAdapter(FragmentManager fm) {
+        FirstStartPageAdapter(FragmentManager fm) {
             super(fm);
             mFragments = new Fragment[]{
                 new FirstStartStep1Fragment(),
@@ -226,7 +283,7 @@ public class FirstStartActivity extends GdgActivity implements
 
         @Override
         public int getCount() {
-            return 3;
+            return mFragments.length;
         }
 
         @Override

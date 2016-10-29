@@ -13,18 +13,21 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.chapter.MainActivity;
 import org.gdg.frisbee.android.eventseries.NotificationHandler;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
-import org.hamcrest.core.AllOf;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.swipeUp;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
+import static android.support.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withParent;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.core.AllOf.allOf;
 
 @RunWith(AndroidJUnit4.class)
 public class NotificationTest {
@@ -37,25 +40,28 @@ public class NotificationTest {
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
     }
 
+    @After
+    public void tearDown() throws Exception {
+        onView(isRoot()).perform(swipeUp());
+    }
+
     @Test
     public void testNotificationForEventSeries() throws InterruptedException {
         NotificationManagerCompat nm = NotificationManagerCompat.from(rule.getActivity());
 
         int i = 0;
         for (TaggedEventSeries series : App.getInstance().currentTaggedEventSeries()) {
-            Notification notification = new NotificationHandler(rule.getActivity(), series)
-                .createNotification();
+            Notification notification = new NotificationHandler(rule.getActivity(), series).createNotification();
             nm.notify(i, notification);
 
             mDevice.openNotification();
             Thread.sleep(2000);
             mDevice.findObject(By.textContains(rule.getActivity().getString(series.getTitleResId())))
                 .click();
-            Thread.sleep(1000);
-            onView(
-                AllOf.allOf(
-                    withText(series.getTitleResId()),
-                    withParent(isAssignableFrom(Toolbar.class)))
+            Thread.sleep(2000);
+            onView(allOf(
+                withText(series.getTitleResId()),
+                isDescendantOfA(isAssignableFrom(Toolbar.class)))
             ).check(matches(isDisplayed()));
         }
     }

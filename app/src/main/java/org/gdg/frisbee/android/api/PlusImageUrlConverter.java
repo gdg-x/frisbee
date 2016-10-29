@@ -14,7 +14,7 @@ import okhttp3.Response;
 public class PlusImageUrlConverter implements Interceptor {
 
     private static final Pattern mPlusPattern
-        = Pattern.compile("http[s]?:\\/\\/plus\\..*google\\.com.*(\\+[a-zA-Z] +|[0-9]{21}).*");
+        = Pattern.compile("http[s]?://plus\\..*google\\.com.*(\\+[a-zA-Z] +|[0-9]{21}).*");
 
     @Override
     public Response intercept(Chain chain) throws IOException {

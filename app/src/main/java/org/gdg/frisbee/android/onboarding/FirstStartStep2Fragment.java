@@ -18,22 +18,63 @@ package org.gdg.frisbee.android.onboarding;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.api.Callback;
+import org.gdg.frisbee.android.api.model.plus.Person;
+import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.common.BaseFragment;
+import org.gdg.frisbee.android.view.BitmapBorderTransformation;
 
+import butterknife.BindDimen;
+import butterknife.BindView;
 import butterknife.OnClick;
 
 public class FirstStartStep2Fragment extends BaseFragment {
 
-    Step2Listener listener = Step2Listener.EMPTY;
+    private static final String KEY_INVITE = "invite";
+
+    @BindView(R.id.invite_sender_container)
+    View inviteContainer;
+    @BindView(R.id.invite_sender_profile_image)
+    ImageView inviteSenderImage;
+    @BindView(R.id.invite_sender_message)
+    TextView inviteSenderMessage;
+    @BindDimen(R.dimen.navdrawer_user_picture_size)
+    int profileImageSize;
+
+    private Step2Listener listener = Step2Listener.EMPTY;
+    private Invite invite;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflateView(inflater, R.layout.fragment_welcome_step2, container);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            invite = savedInstanceState.getParcelable(KEY_INVITE);
+            if (invite != null) {
+                loadInvite(invite);
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(KEY_INVITE, invite);
     }
 
     @Override
@@ -52,7 +93,7 @@ public class FirstStartStep2Fragment extends BaseFragment {
         listener = Step2Listener.EMPTY;
     }
 
-    @OnClick(R.id.googleSignin)
+    @OnClick(R.id.sign_in_button)
     public void onSignedIn() {
         listener.onSignedIn();
     }
@@ -60,6 +101,68 @@ public class FirstStartStep2Fragment extends BaseFragment {
     @OnClick(R.id.skipSignin)
     public void onSkippedSignIn() {
         listener.onSkippedSignIn();
+    }
+
+    public void loadInvite(Invite inviteSender) {
+        this.invite = inviteSender;
+        if (!isContextValid()) {
+            return;
+        }
+
+        if (TextUtils.isEmpty(invite.sender)) {
+            displayUnknownSender();
+            return;
+        }
+
+        App.getInstance().getPlusApi()
+            .getPerson(inviteSender.sender)
+            .enqueue(new Callback<Person>() {
+                @Override
+                public void onSuccess(Person sender) {
+                    if (isContextValid()) {
+                        displaySender(sender);
+                    }
+                }
+
+                @Override
+                public void onError() {
+                    if (isContextValid()) {
+                        displayUnknownSender();
+                    }
+                }
+
+                @Override
+                public void onNetworkFailure(Throwable error) {
+                    if (isContextValid()) {
+                        displayUnknownSender();
+                    }
+                }
+            });
+    }
+
+    private void displayUnknownSender() {
+        inviteContainer.setVisibility(View.VISIBLE);
+        updateSenderName(getString(R.string.friend));
+        inviteSenderImage.setImageResource(R.drawable.ic_no_avatar);
+    }
+
+    private void displaySender(Person sender) {
+        inviteContainer.setVisibility(View.VISIBLE);
+        updateSenderName(sender.getDisplayName());
+
+        if (sender.getImage() != null && sender.getImage().getUrl() != null) {
+            App.getInstance().getPicasso()
+                .load(sender.getImage().getUrl())
+                .transform(new BitmapBorderTransformation(2,
+                    profileImageSize / 2,
+                    ContextCompat.getColor(getContext(), R.color.white))
+                )
+                .into(inviteSenderImage);
+        }
+    }
+
+    private void updateSenderName(String senderName) {
+        inviteSenderMessage.setText(getString(R.string.invite_congrats, senderName));
     }
 
     public interface Step2Listener {

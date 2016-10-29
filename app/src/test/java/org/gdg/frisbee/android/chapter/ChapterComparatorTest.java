@@ -88,7 +88,7 @@ public class ChapterComparatorTest {
     @Test
     public void homeChapterShouldBeTop() {
         ChapterComparator comparator =
-                new ChapterComparator(chapterIstanbul.getGplusId(), locationIstanbul);
+                new ChapterComparator(chapterIstanbul, locationIstanbul);
 
         assertElementsOrderedLikeThis(comparator,
                 chapterIstanbul, chapterWithoutLocation);

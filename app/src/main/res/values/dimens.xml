@@ -11,6 +11,7 @@
   <dimen name="spinner_left_padding">16dp</dimen>
 
   <dimen name="content_padding">16dp</dimen>
+  <dimen name="content_padding_small">8dp</dimen>
 
   <dimen name="keyline_1">16dp</dimen>
   <dimen name="keyline_1_minus_8dp">8dp</dimen>
@@ -21,7 +22,7 @@
   <dimen name="icon_width_event">48dp</dimen>
   <dimen name="responsive_width">@dimen/match_parent</dimen>
 
-  <dimen name="list_item_avatar">46dp</dimen>
   <dimen name="organizer_icon_size">32dp</dimen>
+  <dimen name="navdrawer_user_image_top_margin">32dp</dimen>
 
 </resources>

@@ -54,6 +54,14 @@ import timber.log.Timber;
 
 public final class ModelCache {
 
+    public static final String KEY_CHAPTER_LIST_HUB = "chapter_list_hub";
+    public static final String KEY_PULSE_GLOBAL = "pulse_global";
+    public static final String KEY_PULSE = "pulse_";
+    public static final String KEY_GDE_LIST = "gde_list";
+    public static final String KEY_FRISBEE_CONTRIBUTORS = "frisbee_contributor_list";
+    public static final String KEY_PERSON = "person2_";
+    public static final String KEY_NEWS = "news2_";
+
     static final int DISK_CACHE_FLUSH_DELAY_SECS = 5;
     private Gson mGson;
     private LruCache<String, CacheItem> mMemoryCache;
@@ -129,7 +137,7 @@ public final class ModelCache {
     }
 
     @Nullable
-    public Object get(String url, boolean checkExpiration) {
+    public <T> T get(String url, boolean checkExpiration) {
         Timber.d("get(%s)", url);
         CacheItem result;
 
@@ -142,7 +150,8 @@ public final class ModelCache {
         }
 
         if (result != null) {
-            return result.getValue();
+            //noinspection unchecked
+            return (T) result.getValue();
         } else {
             return null;
         }
@@ -190,6 +199,7 @@ public final class ModelCache {
         return result;
     }
 
+    @Nullable
     private CacheItem getFromMemoryCache(final String url, boolean checkExpiration) {
         CacheItem result = null;
 

@@ -11,7 +11,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import org.assertj.core.api.Condition;
 import org.gdg.frisbee.android.Const;
-import org.gdg.frisbee.android.chapter.MainActivity;
+import org.gdg.frisbee.android.onboarding.StartActivity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -22,13 +22,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class IntentFilterTest {
 
+    private static final Uri URI_GDG_BRUSSELS = Uri.parse("https://developers.google.com/groups/chapter/105068877693379070381/");
+
     @Test
     public void developerGroupsLaunchesMainActivity() throws PackageManager.NameNotFoundException {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(MainActivityDeepLinkTest.URI_GDG_BRUSSELS);
+        intent.setData(URI_GDG_BRUSSELS);
         final List<ResolveInfo> activities = InstrumentationRegistry.getTargetContext().getPackageManager().queryIntentActivities(intent, 0);
 
-        assertThat(activities).areAtLeastOne(ofType(MainActivity.class));
+        assertThat(activities).areAtLeastOne(ofType(StartActivity.class));
     }
 
     @Test
@@ -37,7 +39,7 @@ public class IntentFilterTest {
         intent.setData(Uri.parse("https"));
         final List<ResolveInfo> activities = InstrumentationRegistry.getTargetContext().getPackageManager().queryIntentActivities(intent, 0);
 
-        assertThat(activities).areNot(ofType(MainActivity.class));
+        assertThat(activities).areNot(ofType(StartActivity.class));
     }
 
     @Test

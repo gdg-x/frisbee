@@ -20,8 +20,8 @@ getVersionName () {
 
 updateWhatsNewFile () {
   if [ "$TRACK" == "alpha" ]; then
-    echo -e "Automated ALPHA build!\n\nNOTE: Please give feedback if you see weird behaviour by using the feedback menu in the navigation drawer.\n\nTo opt out, click here:\nhttps://play.google.com/apps/testing/org.gdg.frisbee.android\n\n\nLatest git commits:\n" > app/src/alpha/play/en-US/whatsnew
-    git log -3 --oneline >> app/src/alpha/play/en-US/whatsnew
+    local whats_new='Automated ALPHA build!\n\nNOTE: Please give feedback if you see weird behaviour by using the feedback menu in the navigation drawer.\n\nTo opt out, click here:\nhttps://play.google.com/apps/testing/org.gdg.frisbee.android\n\n\nLast git commits:\n'
+    echo -e "$whats_new$(git log -3 --oneline)" | head -c 500 > app/src/alpha/play/en-US/whatsnew
   fi
 }
 

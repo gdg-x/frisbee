@@ -7,8 +7,6 @@ apply plugin: 'io.fabric'
 apply plugin: 'com.github.triplet.play'
 apply plugin: 'checkstyle'
 
-preBuild.dependsOn('checkstyle')
-assemble.dependsOn('lint')
 check.dependsOn('checkstyle')
 
 Properties local_properties = new Properties()
@@ -37,13 +35,11 @@ android {
         buildConfigField "String", "COMMIT_SHA", "\"${commitSha()}\""
         buildConfigField "String", "COMMIT_TIME", "\"${commitTime()}\""
 
-        resConfigs "en", "ar", "cs", "de", "es", "fr", "hi", "hy-rAM", "it", "ja", "ko", "lt", "nl", "pl", "pt-rBR", "pt-rPT", "ru", "sk", "th", "tr", "uk", "zh-rCN", "zh-rHK", "zh-rTW"
+        resConfigs "en", "ar", "cs", "de", "es", "fr", "hi", "hu", "hy-rAM", "it", "ja", "ko", "lt", "nl", "pl", "pt-rBR", "pt-rPT", "ru", "sk", "th", "tr", "uk", "zh-rCN", "zh-rHK", "zh-rTW"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         //KEYS
-        buildConfigField "String", "HUB_CLIENT_ID", "\"" + (local_properties.hub_client_id ?: "") + "\""
-        buildConfigField "String", "GCM_SENDER_ID", "\"" + (local_properties.gcm_sender_id ?: "") + "\""
         buildConfigField "long", "DOORBELL_ID", local_properties.doorbell_id ?: "0"
         buildConfigField "String", "DOORBELL_APP_KEY", "\"" + (local_properties.doorbell_app_key ?: "") + "\""
         resValue "string", "play_app_id", "429371117063"
@@ -104,28 +100,18 @@ android {
     }
 
     lintOptions {
-        abortOnError true
-
         ignoreWarnings ci
         textReport true
         textOutput 'stdout'
 
-        warning 'ValidFragment'
         warning 'InvalidPackage'
         warning 'ImpliedQuantity'
         warning 'MissingQuantity'
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
-    }
-
     packagingOptions {
         exclude 'LICENSE.txt'
     }
-
-    useLibrary 'org.apache.http.legacy'
 }
 
 play {
@@ -152,17 +138,15 @@ dependencies {
     compile "com.android.support:customtabs:$rootProject.supportLibraryVersion"
 
     //Play Services
-    compile "com.google.android.gms:play-services-games:$rootProject.playServicesVersion"
+    compile "com.google.android.gms:play-services-auth:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-plus:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-analytics:$rootProject.playServicesVersion"
-    compile "com.google.android.gms:play-services-appinvite:$rootProject.playServicesVersion"
     compile "com.google.android.gms:play-services-appindexing:$rootProject.playServicesVersion"
+    compile "com.google.firebase:firebase-invites:$rootProject.playServicesVersion"
     compile "com.google.firebase:firebase-messaging:$rootProject.playServicesVersion"
 
     //Google
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
-    compile 'com.google.zxing:android-integration:3.2.1'
-    compile 'com.google.zxing:core:3.2.1'
 
     //Square
     compile "com.squareup.okhttp3:okhttp:$rootProject.okHttpVersion"
@@ -181,15 +165,15 @@ dependencies {
     apt "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
     compile "com.jakewharton.timber:timber:$rootProject.timberVersion"
     compile 'com.jakewharton:disklrucache:2.0.2'
-    compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.2'
+    compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
 
     //Others
     compile 'io.doorbell:android-sdk:0.2.6@aar'
     compile 'org.jsoup:jsoup:1.8.2'
-    compile "net.danlew:android.joda:$rootProject.jodaTimeVersion"
+    compile "net.danlew:android.joda:$rootProject.jodaTimeAndroidVersion"
     compile 'com.tasomaniac:delayed-progress:0.3'
     compile 'com.google.code.findbugs:jsr305:2.0.1'
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
         transitive = true;
     }
 
@@ -206,6 +190,7 @@ dependencies {
     testCompile "org.robolectric:robolectric:$rootProject.robolectricVersion"
     testCompile "joda-time:joda-time:$rootProject.jodaTimeVersion"
 
+    // Needs an older version since newer versions are compiled against java 8
     androidTestCompile 'org.assertj:assertj-core:1.7.1'
 
     // Android Testing Support Library's runner and rules
@@ -215,7 +200,7 @@ dependencies {
     // Espresso UI Testing dependencies.
     androidTestCompile "com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion"
     androidTestCompile "com.android.support.test.espresso:espresso-intents:$rootProject.espressoVersion"
-    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1'
+    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
 }
 
 apply plugin: 'com.google.gms.google-services'

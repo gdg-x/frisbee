@@ -39,7 +39,6 @@
         android:layout_marginLeft="8dip"
         android:layout_toLeftOf="@+id/group_logo"
         android:textAppearance="?android:textAppearanceLarge"
-        android:textIsSelectable="true"
         tools:text="Event Title" />
 
       <TextView

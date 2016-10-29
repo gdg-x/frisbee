@@ -46,3 +46,4 @@ app/res/values/keys.xml
 release.keystore
 *.p12
 service_account.json
+signing.properties

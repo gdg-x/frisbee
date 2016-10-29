@@ -5,6 +5,6 @@
   <item
     android:id="@+id/action_app_invite"
     android:icon="@drawable/ic_action_share"
-    android:title="@string/invitation_title"
+    android:title="@string/invite_friends"
     app:showAsAction="always" />
 </menu>

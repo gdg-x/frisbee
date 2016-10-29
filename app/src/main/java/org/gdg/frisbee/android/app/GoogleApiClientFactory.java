@@ -1,41 +1,62 @@
 package org.gdg.frisbee.android.app;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 
 import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.api.Api.ApiOptions.NotRequiredOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.drive.Drive;
-import com.google.android.gms.games.Games;
-import com.google.android.gms.plus.Plus;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.common.api.Scope;
 
-import org.gdg.frisbee.android.utils.PrefUtils;
+import org.gdg.frisbee.android.R;
+
 
 public final class GoogleApiClientFactory {
-    private GoogleApiClientFactory() { }
+    private GoogleApiClientFactory() {
+    }
 
     public static GoogleApiClient createWith(Context context) {
-        return createClient(context, PrefUtils.isSignedIn(context));
+        return createBuilder(context)
+            .build();
     }
 
-    public static GoogleApiClient createWithoutSignIn(Context context) {
-        return createClient(context, false);
+    public static GoogleApiClient createWithApi(Context context, Api<? extends NotRequiredOptions> api) {
+        return createBuilder(context)
+            .addApi(api)
+            .build();
     }
 
-    private static GoogleApiClient createClient(Context context, boolean withSignIn) {
-        GoogleApiClient.Builder builder = new GoogleApiClient.Builder(context)
+    private static GoogleApiClient.Builder createBuilder(Context context) {
+        return new GoogleApiClient.Builder(context)
             .addApi(AppIndex.API);
+    }
 
-        if (withSignIn) {
-            Games.GamesOptions gamesOptions = Games.GamesOptions.builder()
-                .setRequireGooglePlus(true)
-                .setShowConnectingPopup(false).build();
+    public static GoogleApiClient createForSignIn(Context context) {
+        return createBuilderForSignIn(context)
+            .build();
+    }
 
-            builder.addApi(Plus.API).addScope(Plus.SCOPE_PLUS_PROFILE)
-                .addApi(Games.API, gamesOptions)
-                .addApi(Drive.API).addScope(Drive.SCOPE_APPFOLDER);
-        }
+    public static GoogleApiClient createForSignIn(FragmentActivity fragmentActivity,
+                                                  @Nullable OnConnectionFailedListener onConnectionFailedListener) {
+        return createBuilderForSignIn(fragmentActivity)
+            .enableAutoManage(fragmentActivity, onConnectionFailedListener)
+            .build();
+    }
 
-        return builder.build();
+    private static GoogleApiClient.Builder createBuilderForSignIn(Context context) {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .requestScopes(new Scope(Scopes.PLUS_LOGIN))
+            .requestIdToken(context.getString(R.string.default_web_client_id))
+            .build();
+        return new GoogleApiClient.Builder(context)
+            .addApi(Auth.GOOGLE_SIGN_IN_API, gso);
     }
 
 }

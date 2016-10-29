@@ -19,7 +19,6 @@ package org.gdg.frisbee.android.about;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 
-import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.ContributorList;
@@ -32,6 +31,9 @@ import org.joda.time.DateTime;
 
 public class ContributorsFragment extends PeopleListFragment {
 
+    private static final String GITHUB_ORGANIZATION = "gdg-x";
+    private static final String GITHUB_REPO = "frisbee";
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -43,7 +45,7 @@ public class ContributorsFragment extends PeopleListFragment {
             fetchGitHubContributors();
         } else {
             App.getInstance().getModelCache().getAsync(
-                Const.CACHE_KEY_FRISBEE_CONTRIBUTORS, false, new ModelCache.CacheListener() {
+                ModelCache.KEY_FRISBEE_CONTRIBUTORS, false, new ModelCache.CacheListener() {
                     @Override
                     public void onGet(Object item) {
                         ContributorList contributors = (ContributorList) item;
@@ -62,13 +64,13 @@ public class ContributorsFragment extends PeopleListFragment {
     }
 
     private void fetchGitHubContributors() {
-        App.getInstance().getGithub().getContributors(Const.GITHUB_ORGA, Const.GITHUB_REPO)
+        App.getInstance().getGithub().getContributors(GITHUB_ORGANIZATION, GITHUB_REPO)
             .enqueue(new Callback<ContributorList>() {
                 @Override
-                public void success(final ContributorList contributors) {
+                public void onSuccess(final ContributorList contributors) {
 
                     mAdapter.addAll(contributors);
-                    App.getInstance().getModelCache().putAsync(Const.CACHE_KEY_FRISBEE_CONTRIBUTORS,
+                    App.getInstance().getModelCache().putAsync(ModelCache.KEY_FRISBEE_CONTRIBUTORS,
                         contributors,
                         DateTime.now().plusDays(1),
                         null);

@@ -52,7 +52,6 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, final AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        PrefUtils.setWidgetAdded(context);
         context.startService(new Intent(context, UpdateService.class));
     }
 
@@ -95,7 +94,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                 mainIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             views.setOnClickPendingIntent(R.id.container, pi);
 
-            App.getInstance().getModelCache().getAsync(Const.CACHE_KEY_CHAPTER_LIST_HUB, false,
+            App.getInstance().getModelCache().getAsync(ModelCache.KEY_CHAPTER_LIST_HUB, false,
                 new ModelCache.CacheListener() {
                     @Override
                     public void onGet(Object item) {
@@ -148,7 +147,7 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                     new DateTime().plusMonths(1))
                 .enqueue(new Callback<PagedList<Event>>() {
                     @Override
-                    public void success(PagedList<Event> eventsPagedList) {
+                    public void onSuccess(PagedList<Event> eventsPagedList) {
                         Event nextEvent = getNextEvent(eventsPagedList.getItems());
 
                         if (nextEvent != null) {
@@ -171,13 +170,13 @@ public class UpcomingEventWidgetProvider extends AppWidgetProvider {
                     }
 
                     @Override
-                    public void failure(Throwable error) {
+                    public void onError() {
                         showErrorChild(views, R.string.loading_data_failed, UpdateService.this);
                         manager.updateAppWidget(thisWidget, views);
                     }
 
                     @Override
-                    public void networkFailure(Throwable error) {
+                    public void onNetworkFailure(Throwable error) {
                         showErrorChild(views, R.string.offline_alert, UpdateService.this);
                         manager.updateAppWidget(thisWidget, views);
                     }

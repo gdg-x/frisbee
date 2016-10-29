@@ -2,7 +2,7 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
   android:key="root">
-  <org.gdg.frisbee.android.view.LocationListPreference
+  <Preference
     android:icon="@drawable/ic_home_gdg"
     android:key="gdg_home"
     android:summary="@string/home_gdg_summary"

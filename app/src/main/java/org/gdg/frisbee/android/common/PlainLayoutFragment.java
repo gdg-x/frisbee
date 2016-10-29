@@ -8,9 +8,6 @@ import android.view.ViewGroup;
 
 import org.gdg.frisbee.android.R;
 
-/**
- * Created by maui on 03.06.2014.
- */
 public class PlainLayoutFragment extends BaseFragment {
 
     private static final String ARG_LAYOUT_RES = "layout_res";

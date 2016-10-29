@@ -29,7 +29,6 @@ import com.google.android.gms.analytics.Tracker;
 
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.app.App;
-import org.gdg.frisbee.android.widget.FeedbackFragment;
 
 import timber.log.Timber;
 
@@ -133,10 +132,5 @@ public abstract class TrackableActivity extends AppCompatActivity implements Vie
                                    @NonNull String action,
                                    @NonNull String label) {
         sendAnalyticsEvent(category, action, label, 0);
-    }
-
-    protected void showFeedbackDialog() {
-        trackView("Feedback/" + getTrackedViewName());
-        new FeedbackFragment().show(getSupportFragmentManager(), "FeedbackFragment");
     }
 }

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:gravity="center"
+  android:orientation="vertical"
+  android:padding="50dip">
+
+  <LinearLayout
+    android:id="@+id/invite_sender_container"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/content_padding"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:visibility="gone"
+    tools:visibility="visible">
+
+    <ImageView
+      android:id="@+id/invite_sender_profile_image"
+      android:layout_width="@dimen/navdrawer_user_picture_size"
+      android:layout_height="@dimen/navdrawer_user_picture_size"
+      android:contentDescription="@string/cd_invitation_sender_profile_image"
+      android:paddingRight="@dimen/content_padding_small" />
+
+    <TextView
+      android:id="@+id/invite_sender_message"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:maxLines="3"
+      android:textAppearance="@android:style/TextAppearance.Medium"
+      android:textColor="@color/asbestos"
+      tools:text="@string/invite_congrats" />
+
+  </LinearLayout>
+
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+      android:id="@+id/textView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginRight="20dip"
+      android:gravity="center_horizontal"
+      android:layout_toLeftOf="@id/sign_in_button"
+      android:text="@string/signin_description"
+      android:textAppearance="@android:style/TextAppearance.Large"
+      android:textColor="@color/asbestos" />
+
+    <com.google.android.gms.common.SignInButton
+      android:id="@+id/sign_in_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentEnd="true"
+      android:layout_marginTop="@dimen/content_padding"
+      app:buttonSize="wide"
+      app:colorScheme="dark"/>
+
+    <TextView
+      android:id="@+id/textView1"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignLeft="@id/sign_in_button"
+      android:layout_alignRight="@id/sign_in_button"
+      android:layout_below="@id/sign_in_button"
+      android:padding="@dimen/content_padding_small"
+      android:gravity="center"
+      android:text="@string/or"
+      android:textAppearance="@android:style/TextAppearance.Medium"
+      android:textColor="@color/asbestos" />
+
+    <Button
+      android:id="@+id/skipSignin"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignLeft="@id/sign_in_button"
+      android:layout_alignRight="@id/sign_in_button"
+      android:layout_below="@id/textView1"
+      android:text="@string/skip" />
+
+
+  </RelativeLayout>
+</LinearLayout>
