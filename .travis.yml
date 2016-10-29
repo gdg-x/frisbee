@@ -29,11 +29,11 @@ before_script:
   - echo no | android create avd --force -n test -t $ANDROID_TARGET  --abi armeabi-v7a --skin WXGA720
   - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
-  - sleep 10
-  - adb shell settings put global window_animation_scale 0 &
-  - adb shell settings put global transition_animation_scale 0 &
-  - adb shell settings put global animator_duration_scale 0 &
-  - adb shell input keyevent 82 &
+  - sleep 30
+  - adb shell settings put global window_animation_scale 0
+  - adb shell settings put global transition_animation_scale 0
+  - adb shell settings put global animator_duration_scale 0
+  - adb shell input keyevent 82
 
 after_success:
   - if [ -n "$GITHUB_API_KEY" ]; then .buildscript/deploy_alpha.sh; fi

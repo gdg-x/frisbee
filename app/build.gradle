@@ -38,6 +38,7 @@ android {
         resConfigs "en", "ar", "cs", "de", "es", "fr", "hi", "hu", "hy-rAM", "it", "ja", "ko", "lt", "nl", "pl", "pt-rBR", "pt-rPT", "ru", "sk", "th", "tr", "uk", "zh-rCN", "zh-rHK", "zh-rTW"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        com.android.ddmlib.DdmPreferences.setTimeOut(60000)
 
         //KEYS
         buildConfigField "long", "DOORBELL_ID", local_properties.doorbell_id ?: "0"
