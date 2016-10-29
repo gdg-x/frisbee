@@ -34,8 +34,8 @@ import static org.hamcrest.Matchers.is;
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
-    public static final Chapter CHAPTER_ISTANBUL = new Chapter("Istanbul", "100514812580249787371");
-    public static final Chapter CHAPTER_BRUSSELS = new Chapter("Brussels", "105068877693379070381");
+    private static final Chapter CHAPTER_ISTANBUL = new Chapter("Istanbul", "100514812580249787371");
+    private static final Chapter CHAPTER_BRUSSELS = new Chapter("Brussels", "105068877693379070381");
 
     @Rule
     public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<MainActivity>(MainActivity.class) {
@@ -64,14 +64,14 @@ public class MainActivityTest {
 
     @Test
     public void keepsChapterOnOrientationChange() {
-        onView(isRoot()).perform(orientationPortrait());
+        onView(isRoot()).perform(orientationPortrait(activityRule.getActivity()));
 
         onViewChapterSwitcher().perform(click());
         onData(allOf(is(instanceOf(Chapter.class)), is(CHAPTER_ISTANBUL)))
             .perform(click());
         onViewChapterSwitcher().check(matches(withText(CHAPTER_ISTANBUL.toString())));
 
-        onView(isRoot()).perform(orientationLandscape());
+        onView(isRoot()).perform(orientationLandscape(activityRule.getActivity()));
 
         onViewChapterSwitcher().check(matches(withText(CHAPTER_ISTANBUL.toString())));
     }
