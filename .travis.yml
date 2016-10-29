@@ -12,9 +12,9 @@ android:
   components:
     - tools
     - platform-tools
-    - build-tools-24.0.3
+    - build-tools-25.0.0
     - $ANDROID_TARGET
-    - android-23
+    - android-25
     - extra-google-m2repository
     - extra-android-m2repository
     - sys-img-armeabi-v7a-$ANDROID_TARGET

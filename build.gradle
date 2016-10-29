@@ -57,8 +57,8 @@ ext {
     // Sdk and tools
     minSdkVersion = project.hasProperty("minSdk") ? minSdk.trim() : 16
     targetSdkVersion = 21
-    compileSdkVersion = 24
-    buildToolsVersion = '24.0.3'
+    compileSdkVersion = 25
+    buildToolsVersion = '25.0.0'
 
     // App dependencies
     supportLibraryVersion = '24.2.1'
