@@ -166,7 +166,8 @@ public class EventOverviewFragment extends BaseFragment {
         getActivity().supportInvalidateOptionsMenu();
         updateWithDetails(eventFullDetails);
 
-        App.from(getContext()).getModelCache().getAsync(ModelCache.KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
+        ModelCache modelCache = App.from(getContext()).getModelCache();
+        modelCache.getAsync(ModelCache.KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
                 mDirectory = (Directory) item;
