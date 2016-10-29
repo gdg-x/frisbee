@@ -60,6 +60,20 @@ public class MockGdgXHub implements GdgXHub {
     }
 
     @Override
+    public Call<PagedList<Event>> getChapterAllEventList(@Path("chapterId") String chapterId, @Query("page") Integer page) {
+        PagedList<Event> events = new PagedList<>();
+        try {
+            events = gson.fromJson(
+                MockUtils.getStringFromFile(App.getInstance(), "chapters/105068877693379070381/events.json"),
+                new TypeToken<PagedList<Event>>() {
+                }.getType()
+            );
+        } catch (IOException ignored) {
+        }
+        return Calls.response(events);
+    }
+
+    @Override
     public Call<EventFullDetails> getEventDetail(@Path("id") String eventId) {
         EventFullDetails eventFullDetails = new EventFullDetails();
         try {
