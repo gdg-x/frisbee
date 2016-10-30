@@ -16,7 +16,6 @@ import org.gdg.frisbee.android.api.model.PagedList;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.Utils;
-import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
@@ -67,14 +66,11 @@ public class GdgEventListFragment extends EventListFragment {
             modelCache.getAsync(mCacheKey, false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
-
                     if (checkValidCache(item)) {
                         ArrayList<Event> events = (ArrayList<Event>) item;
                         mAdapter.addAll(events);
                         setIsLoading(false);
-                        Snackbar snackbar = Snackbar.make(getView(), R.string.cached_content,
-                            Snackbar.LENGTH_SHORT);
-                        ColoredSnackBar.info(snackbar).show();
+                        Snackbar.make(getView(), R.string.cached_content, Snackbar.LENGTH_SHORT).show();
                     } else {
                         modelCache.removeAsync(mCacheKey);
                         onNotFound();

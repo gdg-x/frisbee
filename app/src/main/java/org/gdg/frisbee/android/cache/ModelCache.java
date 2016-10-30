@@ -28,8 +28,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.disklrucache.DiskLruCache;
 
-import org.gdg.frisbee.android.api.deserializer.DateTimeDeserializer;
-import org.gdg.frisbee.android.api.deserializer.DateTimeSerializer;
 import org.joda.time.DateTime;
 
 import java.io.BufferedReader;
@@ -76,8 +74,8 @@ public final class ModelCache {
     ModelCache() {
 
         mGson = new GsonBuilder()
-            .registerTypeAdapter(DateTime.class, new DateTimeDeserializer())
-            .registerTypeAdapter(DateTime.class, new DateTimeSerializer())
+            .registerTypeAdapter(DateTime.class, new ModelCacheDateTimeDeserializer())
+            .registerTypeAdapter(DateTime.class, new ModelCacheDateTimeSerializer())
             .create();
     }
 
@@ -194,6 +192,7 @@ public final class ModelCache {
             }
         } catch (Exception e) {
             Timber.e(e, "getFromDiskCache failed for key: %s", url);
+            remove(url);
         }
 
         return result;
