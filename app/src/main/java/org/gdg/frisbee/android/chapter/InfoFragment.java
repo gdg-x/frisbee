@@ -167,7 +167,7 @@ public class InfoFragment extends BaseFragment implements OrganizerLoader.Listen
     }
 
     void updateUIFrom(Person chapter) {
-        if (getActivity() != null) {
+        if (isContextValid()) {
             updateChapterUIFrom(chapter);
             addOrganizers(chapter);
         }
