@@ -1,8 +1,11 @@
 package org.gdg.frisbee.android.eventseries;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+
+import com.squareup.picasso.Picasso;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -36,15 +39,20 @@ public class GdgEventListFragment extends EventListFragment {
 
     @Override
     EventAdapter createEventAdapter() {
-        return new EventAdapter(getActivity());
+        Picasso picasso = App.from(getContext()).getPicasso();
+        return new EventAdapter(getContext(), picasso);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        gdgXHub = App.from(context).getGdgXHub();
+        modelCache = App.from(context).getModelCache();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        gdgXHub = App.from(getContext()).getGdgXHub();
-        modelCache = App.from(getContext()).getModelCache();
         mPlusId = getArguments().getString(Const.EXTRA_PLUS_ID);
         mCacheKey = "event_" + mPlusId;
     }

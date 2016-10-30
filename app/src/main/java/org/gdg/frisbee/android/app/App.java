@@ -130,7 +130,7 @@ public class App extends BaseApp implements LocationListener {
 
         refWatcher = LeakCanary.install(this);
 
-        mOrganizerChecker = new OrganizerChecker(PrefUtils.prefs(this));
+        mOrganizerChecker = new OrganizerChecker(PrefUtils.prefs(this), getGdgXHub());
 
         GoogleAnalytics.getInstance(this).setAppOptOut(PrefUtils.isAnalyticsEnabled(this));
 

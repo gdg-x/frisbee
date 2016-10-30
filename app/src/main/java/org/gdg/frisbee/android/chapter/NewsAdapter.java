@@ -73,12 +73,12 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     private final GoogleApiClient plusClient;
     private final Picasso picasso;
 
-    NewsAdapter(Context context, GoogleApiClient client) {
+    NewsAdapter(Context context, GoogleApiClient plusClient) {
         this.context = context;
-        plusClient = client;
+        this.plusClient = plusClient;
         inflater = LayoutInflater.from(this.context);
         activities = new ArrayList<>();
-        picasso = App.from(this.context).getPicasso();
+        picasso = App.from(context).getPicasso();
 
         setHasStableIds(true);
     }

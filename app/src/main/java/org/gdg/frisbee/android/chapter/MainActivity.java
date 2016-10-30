@@ -87,7 +87,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
 
         String selectedChapterId = getSelectedChapterId(savedInstanceState);
         ArrayList<Chapter> chapters = getSavedChapters(savedInstanceState);
-        if (chapters != null) {
+        if (chapters != null && !chapters.isEmpty()) {
             initUI(chapters, selectedChapterId);
         } else {
             loadChaptersFromCache(selectedChapterId);

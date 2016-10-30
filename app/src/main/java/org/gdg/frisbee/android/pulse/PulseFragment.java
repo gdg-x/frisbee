@@ -134,17 +134,15 @@ public class PulseFragment extends GdgListFragment {
         if (isGlobalSelected()) {
             groupDirectory.getPulse().enqueue(new Callback<Pulse>() {
                 @Override
-                public void onSuccess(final Pulse pulse) {
+                public void onSuccess(Pulse pulse) {
+                    if (isContextValid()) {
+                        initAdapter(pulse);
+                    }
                     modelCache.putAsync(
                         ModelCache.KEY_PULSE + mTarget.toLowerCase(),
                         pulse,
                         DateTime.now().plusDays(1),
-                        new ModelCache.CachePutListener() {
-                            @Override
-                            public void onPutIntoCache() {
-                                initAdapter(pulse);
-                            }
-                        });
+                        null);
                 }
 
                 @Override
@@ -160,17 +158,15 @@ public class PulseFragment extends GdgListFragment {
         } else {
             groupDirectory.getCountryPulse(mTarget).enqueue(new Callback<Pulse>() {
                 @Override
-                public void onSuccess(final Pulse pulse) {
+                public void onSuccess(Pulse pulse) {
+                    if (isContextValid()) {
+                        initAdapter(pulse);
+                    }
                     modelCache.putAsync(
                         ModelCache.KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
                         pulse,
                         DateTime.now().plusDays(1),
-                        new ModelCache.CachePutListener() {
-                            @Override
-                            public void onPutIntoCache() {
-                                initAdapter(pulse);
-                            }
-                        });
+                        null);
                 }
 
                 @Override

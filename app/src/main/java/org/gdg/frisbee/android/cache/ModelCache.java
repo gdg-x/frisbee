@@ -226,8 +226,10 @@ public final class ModelCache {
         return null != mMemoryCache;
     }
 
-    public void putAsync(final String url, final Object obj,
-                         final DateTime expiresAt, final CachePutListener onDoneListener) {
+    public void putAsync(String url,
+                         Object obj,
+                         DateTime expiresAt,
+                         @Nullable CachePutListener onDoneListener) {
         new PutAsyncTask(ModelCache.this, url, obj, expiresAt, onDoneListener).execute();
     }
 
@@ -601,7 +603,7 @@ public final class ModelCache {
         private DateTime expiresAt;
 
         public PutAsyncTask(ModelCache modelCache, String key, Object obj,
-                            DateTime expiresAt, CachePutListener onDoneListener) {
+                            DateTime expiresAt, @Nullable CachePutListener onDoneListener) {
             this.modelCache = modelCache;
             this.key = key;
             this.obj = obj;
