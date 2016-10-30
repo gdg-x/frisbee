@@ -28,6 +28,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
+import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.support.v7.widget.Toolbar;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -169,9 +170,9 @@ public abstract class GdgActivity extends TrackableActivity implements
         if (mActionBarToolbar == null) {
             mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
             if (mActionBarToolbar != null) {
-                mActionBarToolbar.setNavigationIcon(R.drawable.ic_drawer);
                 setSupportActionBar(mActionBarToolbar);
                 getSupportActionBar().setDisplayShowTitleEnabled(false);
+                mActionBarToolbar.setNavigationIcon(new DrawerArrowDrawable(getSupportActionBar().getThemedContext()));
             }
         }
         return mActionBarToolbar;

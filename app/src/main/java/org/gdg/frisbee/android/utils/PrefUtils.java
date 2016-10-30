@@ -16,7 +16,6 @@ public final class PrefUtils {
     public static final String SETTINGS_SIGNED_IN = "gdg_signed_in";
     public static final String SETTINGS_ANALYTICS = "analytics";
     private static final String SETTINGS_HOME_GDG_NAME = "gdg_home_name";
-    private static final String PREFS_OPEN_DRAWER_ON_START = "open_drawer_on_start";
     private static final String PREFS_FIRST_START = "gdg_first_start";
     private static final String PREFS_VERSION_CODE = "gdg_version_code";
     private static final String PREFS_APP_STARTS = "gdg_app_starts";
@@ -32,14 +31,6 @@ public final class PrefUtils {
 
     public static SharedPreferences prefs(final Context context) {
         return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-    }
-
-    public static boolean shouldOpenDrawerOnStart(Context context) {
-        return prefs(context).getBoolean(PREFS_OPEN_DRAWER_ON_START, true);
-    }
-
-    public static void setShouldNotOpenDrawerOnStart(Context context) {
-        prefs(context).edit().putBoolean(PREFS_OPEN_DRAWER_ON_START, false).apply();
     }
 
     public static boolean isSignedIn(Context context) {
