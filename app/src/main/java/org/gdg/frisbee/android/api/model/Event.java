@@ -1,5 +1,7 @@
 package org.gdg.frisbee.android.api.model;
 
+import android.support.annotation.VisibleForTesting;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
@@ -59,6 +61,12 @@ public class Event implements SimpleEvent {
 
     public static class LatLng {
         double lat, lng;
+
+        @VisibleForTesting
+        public LatLng(double lat, double lng) {
+            this.lat = lat;
+            this.lng = lng;
+        }
 
         public double getLng() {
             return lng;

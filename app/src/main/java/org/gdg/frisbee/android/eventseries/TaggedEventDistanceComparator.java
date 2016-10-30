@@ -1,6 +1,7 @@
 package org.gdg.frisbee.android.eventseries;
 
 import android.location.Location;
+import android.support.annotation.Nullable;
 
 import org.gdg.frisbee.android.api.model.Event;
 
@@ -8,9 +9,10 @@ import java.util.Comparator;
 
 class TaggedEventDistanceComparator implements Comparator<EventAdapter.Item> {
 
+    @Nullable
     private final Location lastLocation;
 
-    public TaggedEventDistanceComparator(Location lastLocation) {
+    TaggedEventDistanceComparator(@Nullable Location lastLocation) {
         this.lastLocation = lastLocation;
     }
 
