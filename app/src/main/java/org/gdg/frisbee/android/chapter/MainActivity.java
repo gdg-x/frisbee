@@ -214,7 +214,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
     }
 
     private void updateSelectionFor(Chapter newChapter) {
-        chapterSwitcher.setText(newChapter.toString());
+        chapterSwitcher.setText(newChapter.getName());
         if (!newChapter.equals(selectedChapter)) {
             Timber.d("Switching newChapterId!");
             selectedChapter = newChapter;
