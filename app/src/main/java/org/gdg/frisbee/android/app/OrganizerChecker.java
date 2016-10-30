@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.text.format.DateUtils;
 
 import org.gdg.frisbee.android.api.Callback;
+import org.gdg.frisbee.android.api.GdgXHub;
 import org.gdg.frisbee.android.api.model.OrganizerCheckResponse;
 import org.gdg.frisbee.android.utils.PlusUtils;
 
@@ -16,13 +17,15 @@ public class OrganizerChecker {
     private static final long ORGANIZER_CHECK_MAX_TIME = DateUtils.WEEK_IN_MILLIS;
 
     private final SharedPreferences preferences;
+    private final GdgXHub gdgXHub;
 
     private boolean isOrganizer = false;
     private long lastOrganizerCheckTimeStamp = 0;
     private String checkedId = null;
 
-    OrganizerChecker(SharedPreferences preferences) {
+    OrganizerChecker(SharedPreferences preferences, GdgXHub gdgXHub) {
         this.preferences = preferences;
+        this.gdgXHub = gdgXHub;
         initOrganizer();
     }
 
@@ -59,7 +62,7 @@ public class OrganizerChecker {
         }
 
         isOrganizer = false;
-        App.from(context).getGdgXHub().checkOrganizer(currentId).enqueue(new Callback<OrganizerCheckResponse>() {
+        gdgXHub.checkOrganizer(currentId).enqueue(new Callback<OrganizerCheckResponse>() {
             @Override
             public void onSuccess(OrganizerCheckResponse organizerCheckResponse) {
                 lastOrganizerCheckTimeStamp = System.currentTimeMillis();

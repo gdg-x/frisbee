@@ -77,13 +77,17 @@ public class GdgProvider extends ContentProvider {
     }
 
     private void prepareProvider() {
-        mDirectory = (Directory) App.from(getContext()).getModelCache().get(ModelCache.KEY_CHAPTER_LIST_HUB);
+        if (getContext() != null) {
+            mDirectory = (Directory) App.from(getContext()).getModelCache().get(ModelCache.KEY_CHAPTER_LIST_HUB);
+        }
         Timber.d("Initialized ContentProvider");
     }
 
     private MatrixCursor getSuggestions(String query) {
         MatrixCursor cursor = new MatrixCursor(CHAPTER_COLUMNS);
-
+        if (mDirectory == null) {
+            return cursor;
+        }
         for (Chapter chapter : mDirectory.getGroups()) {
             if (chapter.getName().toLowerCase().contains(query.toLowerCase())) {
                 cursor.addRow(new Object[]{
