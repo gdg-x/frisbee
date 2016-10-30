@@ -2,7 +2,9 @@ package org.gdg.frisbee.android.eventseries;
 
 import android.location.Location;
 
+import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.api.model.Event;
+import org.gdg.frisbee.android.app.BaseApp;
 import org.gdg.frisbee.android.eventseries.EventAdapter.Item;
 import org.joda.time.DateTime;
 import org.junit.Before;
@@ -10,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +27,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(RobolectricTestRunner.class)
+@Config(constants = BuildConfig.class, application = BaseApp.class)
 public class TaggedEventDistanceComparatorTest {
 
     @Mock Event eventInMarch;

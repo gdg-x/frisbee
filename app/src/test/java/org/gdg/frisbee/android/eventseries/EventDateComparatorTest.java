@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class EventDateComparatorShould {
+public class EventDateComparatorTest {
 
     private EventDateComparator comparator;
     private EventAdapter.Item eventInMarch;
