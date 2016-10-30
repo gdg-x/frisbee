@@ -33,7 +33,6 @@ public class SettingsActivity extends GdgActivity implements ChapterSelectDialog
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_settings);
 
         getActionBarToolbar().setTitle(R.string.settings);
