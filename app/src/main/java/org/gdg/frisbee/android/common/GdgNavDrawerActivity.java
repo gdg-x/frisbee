@@ -16,6 +16,7 @@
 
 package org.gdg.frisbee.android.common;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -84,6 +86,10 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     @Override
     public void setContentView(int layoutResId) {
         super.setContentView(layoutResId);
+        if (toolbar != null) {
+            DrawerArrowDrawable drawerIcon = new DrawerArrowDrawable(getSupportActionBar().getThemedContext());
+            toolbar.setNavigationIcon(drawerIcon);
+        }
         setupDrawerContent(mNavigationView);
     }
 
@@ -227,7 +233,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         new FeedbackFragment().show(getSupportFragmentManager(), "FeedbackFragment");
     }
 
-    private void navigateTo(Class<? extends GdgActivity> activityClass, @Nullable Bundle additional) {
+    private void navigateTo(Class<? extends Activity> activityClass, @Nullable Bundle additional) {
         if (this.getClass().equals(activityClass)
             && !(this instanceof TaggedEventSeriesActivity)) {
             return;

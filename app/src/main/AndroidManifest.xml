@@ -60,9 +60,11 @@
       android:theme="@style/Theme.GDG.Main" />
     <activity
       android:name=".gde.GdeActivity"
+      android:label="@string/gde"
       android:theme="@style/Theme.GDG.WithNavDrawer" />
     <activity
       android:name=".about.AboutActivity"
+      android:label="@string/about"
       android:theme="@style/Theme.GDG" />
     <activity
       android:name=".eventseries.TaggedEventSeriesActivity"
@@ -70,10 +72,11 @@
     <activity
       android:name=".activity.SettingsActivity"
       android:label="@string/settings"
-      android:theme="@style/Theme.GDG" />
-    <activity android:name=".onboarding.FirstStartActivity"
-      android:theme="@style/Theme.GDG.Onboarding"
-      />
+      android:theme="@style/Theme.GDG"
+      android:parentActivityName=".chapter.MainActivity" />
+    <activity
+      android:name=".onboarding.FirstStartActivity"
+      android:theme="@style/Theme.GDG.Onboarding" />
     <activity
       android:name=".chapter.YoutubeActivity"
       android:configChanges="keyboardHidden|orientation|screenSize"
@@ -163,7 +166,7 @@
     </activity>
     <activity
       android:name=".event.EventActivity"
-      android:parentActivityName=".chapter.MainActivity"
+      android:label="@string/event"
       android:theme="@style/Theme.GDG" />
 
     <provider

@@ -43,7 +43,6 @@ public class EventActivity extends GdgActivity implements EventOverviewFragment.
 
     @BindView(R.id.pager)
     ViewPager mViewPager;
-
     @BindView(R.id.tabs)
     TabLayout mTabLayout;
 
@@ -53,10 +52,8 @@ public class EventActivity extends GdgActivity implements EventOverviewFragment.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_event);
-        getActionBarToolbar().setTitle(R.string.event);
-        getActionBarToolbar().setNavigationIcon(R.drawable.ic_up);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final EventPagerAdapter mViewPagerAdapter = new EventPagerAdapter(this, getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);

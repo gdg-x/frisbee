@@ -63,6 +63,8 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
     ViewPager viewPager;
     @BindView(R.id.tabs)
     TabLayout tabLayout;
+    @BindView(R.id.toolbar_actionbar)
+    Toolbar toolbar;
     private TextView chapterSwitcher;
 
     private ChapterComparator locationComparator;
@@ -335,7 +337,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
     }
 
     private void setupChapterSwitcher() {
-        Toolbar toolbar = getActionBarToolbar();
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         View container = LayoutInflater.from(this).inflate(R.layout.actionbar_chapter_selector, toolbar);
         chapterSwitcher = (TextView) container.findViewById(android.R.id.text1);
         chapterSwitcher.setOnClickListener(new View.OnClickListener() {

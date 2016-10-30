@@ -23,6 +23,7 @@ import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -46,7 +47,6 @@ import org.gdg.frisbee.android.api.model.plus.ImageInfo;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.BaseFragment;
-import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -209,10 +209,8 @@ public class EventOverviewFragment extends BaseFragment {
         if (getActivity() == null) {
             return;
         }
-
         loadChapterImage(group.getGplusId());
-
-        ((GdgActivity) getActivity()).setToolbarTitle(group.getShortName());
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(group.getShortName());
     }
 
     private void loadChapterImage(String gplusId) {

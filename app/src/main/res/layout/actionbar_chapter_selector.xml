@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Button xmlns:android="http://schemas.android.com/apk/res/android"
+<Button
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  style="@style/Widget.AppCompat.Light.Spinner.DropDown.ActionBar"
   android:id="@android:id/text1"
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
   android:gravity="center_vertical"
   android:minHeight="?android:attr/listPreferredItemHeightSmall"
-  android:textAppearance="@style/TextAppearance.AppCompat.Widget.TextView.SpinnerItem"
-  style="@style/Widget.GDG.Spinner"
-  android:textColor="@color/white" />
+  android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+  android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title" />
