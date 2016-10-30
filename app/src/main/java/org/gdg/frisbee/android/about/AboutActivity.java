@@ -39,11 +39,8 @@ public class AboutActivity extends GdgActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_about);
-
-        getActionBarToolbar().setTitle(R.string.about);
-        getActionBarToolbar().setNavigationIcon(R.drawable.ic_up);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mViewPager.setAdapter(new AboutPagerAdapter(getSupportFragmentManager(), getResources()));
         mTabLayout.setupWithViewPager(mViewPager);
@@ -61,7 +58,6 @@ public class AboutActivity extends GdgActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         if (android.R.id.home == item.getItemId()) {
             finish();
             return true;
@@ -69,7 +65,6 @@ public class AboutActivity extends GdgActivity {
             AppInviteLinkGenerator.shareAppInviteLink(this);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

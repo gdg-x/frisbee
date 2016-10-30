@@ -34,9 +34,7 @@ public class SettingsActivity extends GdgActivity implements ChapterSelectDialog
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
-        getActionBarToolbar().setTitle(R.string.settings);
-        getActionBarToolbar().setNavigationIcon(R.drawable.ic_up);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
@@ -52,12 +50,10 @@ public class SettingsActivity extends GdgActivity implements ChapterSelectDialog
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
