@@ -152,17 +152,14 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
         App.from(this).getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
             @Override
             public void onSuccess(final Directory directory) {
+                if (isContextValid()) {
+                    onDirectoryLoaded(directory, selectedChapterId);
+                }
 
                 App.from(MainActivity.this).getModelCache().putAsync(
                     ModelCache.KEY_CHAPTER_LIST_HUB,
                     directory,
-                    DateTime.now().plusDays(1),
-                    new ModelCache.CachePutListener() {
-                        @Override
-                        public void onPutIntoCache() {
-                            onDirectoryLoaded(directory, selectedChapterId);
-                        }
-                    });
+                    DateTime.now().plusDays(1));
             }
 
             @Override

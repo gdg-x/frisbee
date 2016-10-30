@@ -227,6 +227,12 @@ public final class ModelCache {
     }
 
     public void putAsync(String url,
+                     Object obj,
+                     DateTime expiresAt) {
+        putAsync(url, obj, expiresAt, null);
+    }
+
+    public void putAsync(String url,
                          Object obj,
                          DateTime expiresAt,
                          @Nullable CachePutListener onDoneListener) {

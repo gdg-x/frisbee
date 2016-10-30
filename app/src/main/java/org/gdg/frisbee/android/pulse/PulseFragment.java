@@ -138,11 +138,8 @@ public class PulseFragment extends GdgListFragment {
                     if (isContextValid()) {
                         initAdapter(pulse);
                     }
-                    modelCache.putAsync(
-                        ModelCache.KEY_PULSE + mTarget.toLowerCase(),
-                        pulse,
-                        DateTime.now().plusDays(1),
-                        null);
+                    modelCache.putAsync(ModelCache.KEY_PULSE + mTarget.toLowerCase(), pulse,
+                        DateTime.now().plusDays(1));
                 }
 
                 @Override
@@ -162,11 +159,9 @@ public class PulseFragment extends GdgListFragment {
                     if (isContextValid()) {
                         initAdapter(pulse);
                     }
-                    modelCache.putAsync(
-                        ModelCache.KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
+                    modelCache.putAsync(ModelCache.KEY_PULSE + mTarget.toLowerCase().replace(" ", "-"),
                         pulse,
-                        DateTime.now().plusDays(1),
-                        null);
+                        DateTime.now().plusDays(1));
                 }
 
                 @Override

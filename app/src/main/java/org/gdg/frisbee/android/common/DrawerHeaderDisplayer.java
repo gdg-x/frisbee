@@ -86,8 +86,7 @@ class DrawerHeaderDisplayer {
                         @Override
                         public void onSuccess(Person person) {
                             if (person != null) {
-                                modelCache.putAsync(key, person,
-                                    DateTime.now().plusDays(1), null);
+                                modelCache.putAsync(key, person, DateTime.now().plusDays(1));
                                 mStoredHomeChapterId = homeChapterId;
                                 updateChapterCover(person.getCover());
                             }

@@ -156,12 +156,7 @@ public class InfoFragment extends BaseFragment implements OrganizerLoader.Listen
                 }
 
                 private void putChapterInCache(String plusId, Person person) {
-                    modelCache.putAsync(
-                        ModelCache.KEY_PERSON + plusId,
-                        person,
-                        DateTime.now().plusDays(1),
-                        null
-                    );
+                    modelCache.putAsync(ModelCache.KEY_PERSON + plusId, person, DateTime.now().plusDays(1));
                 }
             });
     }

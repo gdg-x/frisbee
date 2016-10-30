@@ -188,10 +188,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
                     addChapters(directory.getGroups());
                     mLoadSwitcher.setDisplayedChild(1);
                 }
-                modelCache.putAsync(ModelCache.KEY_CHAPTER_LIST_HUB,
-                    directory,
-                    DateTime.now().plusDays(4),
-                    null);
+                modelCache.putAsync(ModelCache.KEY_CHAPTER_LIST_HUB, directory, DateTime.now().plusDays(4));
             }
 
             @Override

@@ -89,16 +89,11 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
         App.from(this).getGroupDirectory().getPulse().enqueue(new Callback<Pulse>() {
             @Override
             public void onSuccess(final Pulse pulse) {
-                App.from(PulseActivity.this).getModelCache().putAsync(
-                    ModelCache.KEY_PULSE_GLOBAL,
-                    pulse,
-                    DateTime.now().plusDays(1),
-                    new ModelCache.CachePutListener() {
-                        @Override
-                        public void onPutIntoCache() {
-                            setupPulseScreen(pulse, selectedPulse);
-                        }
-                    });
+                if (isContextValid()) {
+                    setupPulseScreen(pulse, selectedPulse);
+                }
+                App.from(PulseActivity.this).getModelCache().putAsync(ModelCache.KEY_PULSE_GLOBAL, pulse,
+                    DateTime.now().plusDays(1));
             }
 
             @Override

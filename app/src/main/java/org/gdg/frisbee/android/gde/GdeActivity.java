@@ -55,8 +55,7 @@ public class GdeActivity extends GdgNavDrawerActivity implements ViewPager.OnPag
             public void onSuccess(GdeList directory) {
                 App.from(GdeActivity.this).getModelCache().putAsync(ModelCache.KEY_GDE_LIST,
                     directory,
-                    DateTime.now().plusDays(4),
-                    null);
+                    DateTime.now().plusDays(4));
                 setupGdeViewPager(directory);
             }
 

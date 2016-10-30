@@ -55,8 +55,8 @@ class EventAdapter extends BaseAdapter {
     private final Context context;
     private final Picasso picasso;
     private final int mDefaultIcon;
-    private LayoutInflater mInflater;
-    private ArrayList<Item> mEvents;
+    private final LayoutInflater mInflater;
+    private final ArrayList<Item> mEvents;
 
     public EventAdapter(Context context, Picasso picasso) {
         this(context, picasso, R.drawable.icon);

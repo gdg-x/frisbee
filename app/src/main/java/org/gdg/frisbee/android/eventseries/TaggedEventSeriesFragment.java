@@ -127,22 +127,16 @@ public class TaggedEventSeriesFragment extends EventListFragment {
     @Override
     void fetchEvents() {
         setIsLoading(true);
-
         Callback<PagedList<Event>> listener = new Callback<PagedList<Event>>() {
             @Override
             public void onSuccess(final PagedList<Event> taggedEventPagedList) {
-                mEvents.addAll(taggedEventPagedList.getItems());
-                modelCache.putAsync(mCacheKey,
-                    mEvents,
-                    DateTime.now().plusHours(2),
-                    new ModelCache.CachePutListener() {
-                        @Override
-                        public void onPutIntoCache() {
-                            mAdapter.addAll(mEvents);
-                            sortEvents();
-                            setIsLoading(false);
-                        }
-                    });
+                ArrayList<Event> events = taggedEventPagedList.getItems();
+                if (isContextValid()) {
+                    mAdapter.addAll(events);
+                    sortEvents();
+                    setIsLoading(false);
+                }
+                modelCache.putAsync(mCacheKey, events, DateTime.now().plusHours(2));
             }
 
             @Override

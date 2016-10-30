@@ -82,10 +82,8 @@ public class ContributorsFragment extends PeopleListFragment {
                 public void onSuccess(final ContributorList contributors) {
 
                     mAdapter.addAll(contributors);
-                    modelCache.putAsync(ModelCache.KEY_FRISBEE_CONTRIBUTORS,
-                        contributors,
-                        DateTime.now().plusDays(1),
-                        null);
+                    modelCache.putAsync(ModelCache.KEY_FRISBEE_CONTRIBUTORS, contributors,
+                        DateTime.now().plusDays(1));
                 }
             });
     }

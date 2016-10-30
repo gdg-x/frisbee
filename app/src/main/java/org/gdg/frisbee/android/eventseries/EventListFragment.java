@@ -40,8 +40,6 @@ public abstract class EventListFragment extends GdgListFragment {
 
     protected EventAdapter mAdapter;
 
-    protected ArrayList<SimpleEvent> mEvents;
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -57,7 +55,6 @@ public abstract class EventListFragment extends GdgListFragment {
         setIsLoading(true);
         mAdapter = createEventAdapter();
         setListAdapter(mAdapter);
-        mEvents = new ArrayList<>();
 
         fetchEvents();
     }

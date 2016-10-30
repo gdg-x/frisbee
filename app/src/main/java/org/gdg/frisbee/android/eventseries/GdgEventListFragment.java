@@ -100,22 +100,19 @@ public class GdgEventListFragment extends EventListFragment {
 
     @Override
     protected boolean loadMoreEvents(int page) {
+        final boolean isInitialPage = page == 1;
         gdgXHub.getChapterAllEventList(mPlusId, page).
             enqueue(new Callback<PagedList<Event>>() {
                 @Override
                 public void onSuccess(PagedList<Event> eventsPagedList) {
                     List<Event> events = eventsPagedList.getItems();
-                    mAdapter.addAll(events);
-                    modelCache.putAsync(mCacheKey,
-                        mEvents,
-                        DateTime.now().plusHours(2),
-                        new ModelCache.CachePutListener() {
-                            @Override
-                            public void onPutIntoCache() {
-                                mAdapter.addAll(mEvents);
-                                setIsLoading(false);
-                            }
-                        });
+                    if (isContextValid()) {
+                        mAdapter.addAll(events);
+                        setIsLoading(false);
+                    }
+                    if (isInitialPage) {
+                        modelCache.putAsync(mCacheKey, events, DateTime.now().plusHours(2));
+                    }
                 }
 
                 @Override
