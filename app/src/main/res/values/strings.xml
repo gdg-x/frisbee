@@ -83,7 +83,7 @@
   <string name="gcm">Cloud Notifications</string>
   <string name="gcm_summary_on">The app currently receives and processes GDG Cloud Notification</string>
   <string name="gcm_summary_off">The app currently does not receive GDG Cloud Notification</string>
-  <string name="google_signed_in">Signed into Google+</string>
+  <string name="google_signed_in">Google+ Sign In</string>
   <string name="google_signed_in_on">You are currently signed in with Google+</string>
   <string name="google_signed_in_off">You are not signed in</string>
   <string name="done">Done</string>
