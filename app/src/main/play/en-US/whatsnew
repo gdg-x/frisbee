@@ -1,14 +1,13 @@
-<strong>Release 2.6</strong>
+Help translating the app: https://crowdin.com/project/gdgx-frisbee
+
+<strong>Release 2.7</strong>
 
 New:
-- Endless scrolling for events. You'll now see years of events of chapters.
-- New chapter spinner in main page.
+- Login available in Nav Drawer. Thanks Arun Sasidharan
 - Invite your friends to GDG app using the button in Nav Drawer.
 
-Gone:
-- :( Arrow Game and Achievements are removed. More info: https://github.com/gdg-x/frisbee/issues/648
-
 Fixed:
-- GDG Widget is fixed.
-- GDE categories are sorted.
-- Inactive chapters are now also inactive in Pulse
+- Google Sign In completely re-written.
+- Changing chapter in main page, resets its state.
+- Resolved some offline cache related problems.
+- Links are clickable in info page now. Thanks Lucas Xavier
