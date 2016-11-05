@@ -1,13 +1,17 @@
 Help translating the app: https://crowdin.com/project/gdgx-frisbee
 
+<strong>Release 2.7.1</strong>
+
+- Bug 🐛 fixes
+
 <strong>Release 2.7</strong>
 
 New:
-- Login available in Nav Drawer. Thanks Arun Sasidharan
+- Login available in Nav Drawer.
 - Invite your friends to GDG app using the button in Nav Drawer.
 
 Fixed:
 - Google Sign In completely re-written.
 - Changing chapter in main page, resets its state.
 - Resolved some offline cache related problems.
-- Links are clickable in info page now. Thanks Lucas Xavier
+- Links are clickable in info page now.
