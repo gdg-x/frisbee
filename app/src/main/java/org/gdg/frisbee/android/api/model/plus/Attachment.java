@@ -1,5 +1,7 @@
 package org.gdg.frisbee.android.api.model.plus;
 
+import android.support.annotation.Nullable;
+
 import java.util.List;
 
 public class Attachment {
@@ -23,6 +25,7 @@ public class Attachment {
         return url;
     }
 
+    @Nullable
     public Image getImage() {
         return image;
     }
