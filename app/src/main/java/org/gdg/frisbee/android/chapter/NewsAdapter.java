@@ -359,7 +359,6 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
         View attachmentView = createAttachmentView(mViewHolder, container, R.layout.news_item_video, 2);
 
-        // Precalc Image Size
         Image attachmentImage = attachment.getImage();
         if (attachmentImage != null) {
             mViewHolder.poster.setDimensions(attachmentImage.getWidth(), attachmentImage.getHeight());
