@@ -2,8 +2,9 @@ package org.gdg.frisbee.android.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import com.crashlytics.android.Crashlytics;
 
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.app.App;
@@ -66,6 +67,8 @@ public final class PrefUtils {
     }
 
     public static void setHomeChapter(final Context context, final Chapter chapter) {
+        Crashlytics.setString(SETTINGS_HOME_GDG, chapter.getGplusId());
+        Crashlytics.setString(SETTINGS_HOME_GDG_NAME, chapter.getName());
         prefs(context).edit()
             .putString(SETTINGS_HOME_GDG, chapter.getGplusId())
             .putString(SETTINGS_HOME_GDG_NAME, chapter.getName())
@@ -146,7 +149,6 @@ public final class PrefUtils {
             .apply();
     }
 
-    @NonNull
     private static String keyForEventSeriesAlarmSet(TaggedEventSeries taggedEventSeries) {
         return PREFS_EVENT_SERIES_NOTIFICATION_ALARM_SET + taggedEventSeries.getTag();
     }
