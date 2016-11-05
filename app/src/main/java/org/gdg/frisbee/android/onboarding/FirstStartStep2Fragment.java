@@ -19,7 +19,6 @@ package org.gdg.frisbee.android.onboarding;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +31,7 @@ import org.gdg.frisbee.android.api.Callback;
 import org.gdg.frisbee.android.api.model.plus.Person;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.common.BaseFragment;
-import org.gdg.frisbee.android.view.BitmapBorderTransformation;
+import org.gdg.frisbee.android.view.CircularTransformation;
 
 import butterknife.BindDimen;
 import butterknife.BindView;
@@ -153,10 +152,7 @@ public class FirstStartStep2Fragment extends BaseFragment {
         if (sender.getImage() != null && sender.getImage().getUrl() != null) {
             App.from(getContext()).getPicasso()
                 .load(sender.getImage().getUrl())
-                .transform(new BitmapBorderTransformation(2,
-                    profileImageSize / 2,
-                    ContextCompat.getColor(getContext(), R.color.white))
-                )
+                .transform(CircularTransformation.createWithBorder(getContext()))
                 .into(inviteSenderImage);
         }
     }

@@ -19,7 +19,6 @@ package org.gdg.frisbee.android.chapter;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.SpannedString;
@@ -46,7 +45,7 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.BaseFragment;
 import org.gdg.frisbee.android.utils.Utils;
-import org.gdg.frisbee.android.view.BitmapBorderTransformation;
+import org.gdg.frisbee.android.view.CircularTransformation;
 import org.joda.time.DateTime;
 
 import java.io.UnsupportedEncodingException;
@@ -74,12 +73,13 @@ public class InfoFragment extends BaseFragment implements OrganizerLoader.Listen
 
     private boolean mLoading = false;
 
+    private final CircularTransformation circularTransformation = CircularTransformation.createBorderless();
     private LayoutInflater mInflater;
     private String chapterPlusId;
     private OrganizerLoader organizerLoader;
     private ModelCache modelCache;
-    private Picasso picasso;
     private PlusApi plusApi;
+    private Picasso picasso;
 
     public static InfoFragment newInstance(String plusId) {
         InfoFragment fragment = new InfoFragment();
@@ -93,8 +93,8 @@ public class InfoFragment extends BaseFragment implements OrganizerLoader.Listen
     public void onAttach(Context context) {
         super.onAttach(context);
         modelCache = App.from(context).getModelCache();
-        picasso = App.from(context).getPicasso();
         plusApi = App.from(context).getPlusApi();
+        picasso = App.from(context).getPicasso();
     }
 
     @Override
@@ -254,9 +254,7 @@ public class InfoFragment extends BaseFragment implements OrganizerLoader.Listen
 
         if (organizer.getImage() != null) {
             picasso.load(organizer.getImage().getUrl())
-                .transform(new BitmapBorderTransformation(0,
-                    getResources().getDimensionPixelSize(R.dimen.organizer_icon_size) / 2,
-                    ContextCompat.getColor(getContext(), R.color.white)))
+                .transform(circularTransformation)
                 .placeholder(R.drawable.ic_no_avatar)
                 .into(picture);
         }

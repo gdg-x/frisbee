@@ -16,7 +16,7 @@ import org.gdg.frisbee.android.api.model.plus.Cover;
 import org.gdg.frisbee.android.api.model.plus.Person;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
-import org.gdg.frisbee.android.view.CircleTransform;
+import org.gdg.frisbee.android.view.CircularTransformation;
 import org.joda.time.DateTime;
 
 import butterknife.BindView;
@@ -27,6 +27,7 @@ class DrawerHeaderDisplayer {
     private final PlusApi plusApi;
     private final ModelCache modelCache;
     private final Picasso picasso;
+    private final CircularTransformation circularTransformation;
 
     @BindView(R.id.navdrawer_image) ImageView mDrawerImage;
     @BindView(R.id.navdrawer_user_picture) ImageView mDrawerUserPicture;
@@ -41,6 +42,7 @@ class DrawerHeaderDisplayer {
         plusApi = app.getPlusApi();
         modelCache = app.getModelCache();
         picasso = app.getPicasso();
+        circularTransformation = CircularTransformation.createWithBorder(app);
     }
 
     void updateUserDetails(@Nullable GoogleSignInAccount account) {
@@ -51,7 +53,7 @@ class DrawerHeaderDisplayer {
         }
         if (account.getPhotoUrl() != null) {
             picasso.load(account.getPhotoUrl())
-                .transform(new CircleTransform())
+                .transform(circularTransformation)
                 .into(mDrawerUserPicture);
         }
         String displayName = account.getDisplayName();
