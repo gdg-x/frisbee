@@ -16,8 +16,6 @@
 
 package org.gdg.frisbee.android.widget;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -38,28 +36,28 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.R;
+import org.gdg.frisbee.android.utils.PlusUtils;
 import org.gdg.frisbee.android.utils.PrefUtils;
-import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Method;
-import java.util.HashSet;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnTextChanged;
 import io.doorbell.android.DoorbellApi;
 import io.doorbell.android.manavo.rest.RestCallback;
 import io.doorbell.android.manavo.rest.RestErrorCallback;
@@ -80,7 +78,7 @@ public class FeedbackFragment extends DialogFragment {
     EditText mMessageField;
 
     @BindView(R.id.feedback_email_text)
-    AutoCompleteTextView mEmailField;
+    EditText mEmailField;
 
     @BindView(R.id.feedback_message_text_layout)
     TextInputLayout mLayoutMessage;
@@ -88,6 +86,7 @@ public class FeedbackFragment extends DialogFragment {
     @BindView(R.id.feedback_email_text_layout)
     TextInputLayout mLayoutEmail;
 
+    private String userEmail;
     private JSONObject mProperties;
     private DoorbellApi mApi;
 
@@ -110,11 +109,10 @@ public class FeedbackFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
         View feedbackView = LayoutInflater.from(getActivity())
             .inflate(R.layout.dialog_feedback, (ViewGroup) getView(), false);
         ButterKnife.bind(this, feedbackView);
-        setupEmailAutocomplete();
+        setupEmailField();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
             .setView(feedbackView)
@@ -126,16 +124,25 @@ public class FeedbackFragment extends DialogFragment {
         return builder.create();
     }
 
+    private void setupEmailField() {
+        GoogleSignInAccount currentAccount = PlusUtils.getCurrentAccount(getContext());
+        if (currentAccount != null) {
+            userEmail = currentAccount.getEmail();
+        }
+        if (isEmailValid(userEmail)) {
+            mEmailField.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         final AlertDialog dialog = (AlertDialog) getDialog();
         if (dialog != null) {
-
             Button positiveButton = dialog.getButton(Dialog.BUTTON_POSITIVE);
             positiveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     if (isValidInput()) {
                         sendFeedback();
                         dialog.dismiss();
@@ -146,12 +153,13 @@ public class FeedbackFragment extends DialogFragment {
     }
 
     private boolean isValidInput() {
-        return checkMessageInputValid(mMessageField.getText())
-            && checkEmailInputValid(mEmailField.getText());
+        boolean isMessageValid = checkMessageInputValid(mMessageField.getText());
+        boolean isEmailValid = checkEmailInputValid(userEmail);
+        return isMessageValid && isEmailValid;
     }
 
-    private boolean checkMessageInputValid(@Nullable final CharSequence strMessage) {
-        if (!TextUtils.isEmpty(strMessage)) {
+    private boolean checkMessageInputValid(@Nullable final CharSequence message) {
+        if (!TextUtils.isEmpty(message)) {
             mLayoutMessage.setError(null);
             return true;
         } else {
@@ -160,15 +168,24 @@ public class FeedbackFragment extends DialogFragment {
         }
     }
 
-    private boolean checkEmailInputValid(@Nullable final CharSequence strEmail) {
-        if (!TextUtils.isEmpty(strEmail)
-            && android.util.Patterns.EMAIL_ADDRESS.matcher(strEmail).matches()) {
+    private boolean checkEmailInputValid(@Nullable final CharSequence email) {
+        if (isEmailValid(email)) {
             mLayoutEmail.setError(null);
             return true;
         } else {
             mLayoutEmail.setError(getString(R.string.feedback_invalid_email));
             return false;
         }
+    }
+
+    private static boolean isEmailValid(@Nullable CharSequence email) {
+        return !TextUtils.isEmpty(email)
+            && Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    @OnTextChanged(R.id.feedback_email_text)
+    void onEmailAddressChanged(CharSequence text) {
+        userEmail = text.toString();
     }
 
     private void sendFeedback() {
@@ -190,22 +207,7 @@ public class FeedbackFragment extends DialogFragment {
             }
         });
         mApi.sendFeedback(mMessageField.getText().toString(),
-            mEmailField.getText().toString(), mProperties, "");
-    }
-
-    private void setupEmailAutocomplete() {
-        //Set email AutoCompleteTextView
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
-            android.R.layout.select_dialog_item);
-        Set<String> accountsSet = new HashSet<>();
-        Account[] deviceAccounts = AccountManager.get(getActivity()).getAccounts();
-        for (Account account : deviceAccounts) {
-            if (Utils.isEmailAddress(account.name)) {
-                accountsSet.add(account.name);
-            }
-        }
-        adapter.addAll(accountsSet);
-        mEmailField.setAdapter(adapter);
+            userEmail, mProperties, "");
     }
 
     private void buildProperties() {
@@ -276,6 +278,4 @@ public class FeedbackFragment extends DialogFragment {
             Timber.d(e, "JSON exception.");
         }
     }
-
-
 }
