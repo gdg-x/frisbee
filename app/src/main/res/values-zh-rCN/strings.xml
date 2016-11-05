@@ -131,7 +131,7 @@
   <string name="feedback_message_hint">您在想什么呢？</string>
   <string name="feedback_send">发送​​</string>
   <string name="feedback_sending">正在发送&#8230;</string>
-  <string name="for_leads">For Leads</string>
+  <string name="for_leads">对于领导者</string>
   <string name="leads_welcome_title">欢迎</string>
   <string name="leads_welcome">As a GDG lead, you have access to these organizer-only resources!</string>
   <string name="leads_resources_title">GDG 资源</string>
@@ -143,7 +143,7 @@
   <string name="message">消息</string>
   <string name="resource">资源</string>
   <string name="cd_navdrawer_image">Navigation Drawer Chapter Image</string>
-  <string name="cd_navdrawer_user_picture">User Profile Image</string>
+  <string name="cd_navdrawer_user_picture">用户的个人资料图片</string>
   <string name="title_signing_needed">需要登录</string>
   <string name="signin">登录</string>
   <string name="feedback_message_required">Message required</string>
@@ -153,12 +153,12 @@
   <string name="cd_qrCode">QR Code</string>
   <string name="invitation_message">Download GDG Android App and discover Google Developers Group content while being on the go. %s</string>
   <string name="invitation_error_message">App Invite was unsuccessful.</string>
-  <string name="thanks_for_feedback">Thank you for your Feedback!</string>
-  <string name="retry">Retry</string>
+  <string name="thanks_for_feedback">感谢您的反馈意见！</string>
+  <string name="retry">重试</string>
   <string name="title_event_series_greetings">New events coming up!</string>
   <string name="event_series_greetings">Learn more about %1$s and see events around the world!</string>
-  <string name="cd_invitation_sender_profile_image">Invitation sender profile image</string>
-  <string name="invite_congrats">Yey! You\'re invited by\n%s</string>
-  <string name="friend">a friend</string>
-  <string name="login_register">Login/Register</string>
+  <string name="cd_invitation_sender_profile_image">邀请人的个人资料图片</string>
+  <string name="invite_congrats">你被\n%s邀请了</string>
+  <string name="friend">一个朋友</string>
+  <string name="login_register">登录/注册</string>
 </resources>
