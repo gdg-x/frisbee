@@ -86,7 +86,11 @@ public class TranslatorsFragment extends ContributorsFragment {
         new Translator("Martin Liersch",
             "goddchen",
             "http://www.gravatar.com/avatar/fdc7eb99d52639e67ca31ffe478abd7b?s=170",
-            33)
+            33),
+        new Translator("Milos Marinkovic",
+            "milosmns",
+            "http://www.gravatar.com/avatar/2a1adcb8ed924ecd1045fd6252a7df18?s=170",
+            140)
     };
 
     protected void loadContributors() {
