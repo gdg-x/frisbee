@@ -67,8 +67,10 @@ public final class PrefUtils {
     }
 
     public static void setHomeChapter(final Context context, final Chapter chapter) {
-        Crashlytics.setString(SETTINGS_HOME_GDG, chapter.getGplusId());
-        Crashlytics.setString(SETTINGS_HOME_GDG_NAME, chapter.getName());
+        if (Crashlytics.getInstance() != null) {
+            Crashlytics.setString(SETTINGS_HOME_GDG, chapter.getGplusId());
+            Crashlytics.setString(SETTINGS_HOME_GDG_NAME, chapter.getName());
+        }
         prefs(context).edit()
             .putString(SETTINGS_HOME_GDG, chapter.getGplusId())
             .putString(SETTINGS_HOME_GDG_NAME, chapter.getName())
