@@ -37,7 +37,7 @@ android {
 
         resConfigs "en", "ar", "cs", "de", "es", "fr", "hi", "hu", "hy-rAM", "it", "ja", "ko", "lt", "nl", "pl", "pt-rBR", "pt-rPT", "ru", "sr", "sk", "th", "tr", "uk", "zh-rCN", "zh-rHK", "zh-rTW"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "org.gdg.frisbee.android.FrisbeeTestRunner"
 
         //KEYS
         buildConfigField "long", "DOORBELL_ID", local_properties.doorbell_id ?: "0"
