@@ -2,10 +2,10 @@ package org.gdg.frisbee.android.widget;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
-public class ResizableImageView extends ImageView {
+public class ResizableImageView extends AppCompatImageView {
 
     private int mWidth = -1, mHeight = -1;
 

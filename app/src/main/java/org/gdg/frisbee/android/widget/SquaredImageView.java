@@ -17,10 +17,10 @@
 package org.gdg.frisbee.android.widget;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
-public class SquaredImageView extends ImageView {
+public class SquaredImageView extends AppCompatImageView {
     public SquaredImageView(Context context) {
         super(context);
     }
