@@ -33,8 +33,8 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
 public class MainActivityTest {
-    private static final Chapter CHAPTER_ISTANBUL = new Chapter("Istanbul", "100514812580249787371");
-    private static final Chapter CHAPTER_BRUSSELS = new Chapter("Brussels", "105068877693379070381");
+    private static final Chapter CHAPTER_ISTANBUL = new Chapter("GDG Istanbul", "100514812580249787371");
+    private static final Chapter CHAPTER_BRUSSELS = new Chapter("GDG Brussels", "105068877693379070381");
 
     @Rule
     public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<MainActivity>(MainActivity.class) {
@@ -56,7 +56,7 @@ public class MainActivityTest {
         onData(allOf(is(instanceOf(Chapter.class)), is(CHAPTER_ISTANBUL)))
             .perform(click());
         onViewChapterSwitcher()
-            .check(matches(withText(CHAPTER_ISTANBUL.toString())));
+            .check(matches(withText(CHAPTER_ISTANBUL.getName())));
 
         onView(withId(R.id.pager)).perform(swipeRight());
         onView(withId(R.id.tagline)).check(matches(withText(containsString(CHAPTER_ISTANBUL.toString()))));
@@ -72,11 +72,11 @@ public class MainActivityTest {
         onViewChapterSwitcher().perform(click());
         onData(allOf(is(instanceOf(Chapter.class)), is(CHAPTER_ISTANBUL)))
             .perform(click());
-        onViewChapterSwitcher().check(matches(withText(CHAPTER_ISTANBUL.toString())));
+        onViewChapterSwitcher().check(matches(withText(CHAPTER_ISTANBUL.getName())));
 
         onView(isRoot()).perform(orientationLandscape(activityRule.getActivity()));
 
-        onViewChapterSwitcher().check(matches(withText(CHAPTER_ISTANBUL.toString())));
+        onViewChapterSwitcher().check(matches(withText(CHAPTER_ISTANBUL.getName())));
     }
 
     private static ViewInteraction onViewChapterSwitcher() {

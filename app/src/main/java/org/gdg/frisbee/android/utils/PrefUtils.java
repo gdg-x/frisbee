@@ -11,6 +11,8 @@ import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.joda.time.DateTime;
 
+import io.fabric.sdk.android.Fabric;
+
 public final class PrefUtils {
     public static final String PREF_NAME = "gdg";
     public static final String SETTINGS_HOME_GDG = "gdg_home";
@@ -68,8 +70,10 @@ public final class PrefUtils {
     }
 
     public static void setHomeChapter(final Context context, final Chapter chapter) {
-        Crashlytics.setString(SETTINGS_HOME_GDG, chapter.getGplusId());
-        Crashlytics.setString(SETTINGS_HOME_GDG_NAME, chapter.getName());
+        if (Fabric.isInitialized()) {
+            Crashlytics.setString(SETTINGS_HOME_GDG, chapter.getGplusId());
+            Crashlytics.setString(SETTINGS_HOME_GDG_NAME, chapter.getName());
+        }
         prefs(context).edit()
             .putString(SETTINGS_HOME_GDG, chapter.getGplusId())
             .putString(SETTINGS_HOME_GDG_NAME, chapter.getName())
