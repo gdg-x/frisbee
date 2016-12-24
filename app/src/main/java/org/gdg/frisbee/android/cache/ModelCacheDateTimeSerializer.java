@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.gdg.frisbee.android.api.deserializer;
+package org.gdg.frisbee.android.cache;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
@@ -26,11 +26,12 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.lang.reflect.Type;
+import java.util.Locale;
 
-public class DateTimeSerializer implements JsonSerializer<DateTime> {
+class ModelCacheDateTimeSerializer implements JsonSerializer<DateTime> {
     @Override
     public JsonElement serialize(DateTime dateTime, Type type, JsonSerializationContext jsonSerializationContext) {
-        DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ssZZ");
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ss.SSS'Z'").withLocale(Locale.US);
         return new JsonPrimitive(dateTime.toString(fmt));
     }
 }

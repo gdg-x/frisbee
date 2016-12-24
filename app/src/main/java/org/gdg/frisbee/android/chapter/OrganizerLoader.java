@@ -68,12 +68,7 @@ class OrganizerLoader extends AsyncTask<String, Person, Void> {
     }
 
     private void putPersonInCache(String plusId, Person person) {
-        modelCache.putAsync(
-            ModelCache.KEY_PERSON + plusId,
-            person,
-            DateTime.now().plusDays(1),
-            null
-        );
+        modelCache.putAsync(ModelCache.KEY_PERSON + plusId, person, DateTime.now().plusDays(1));
     }
 
     public void setListener(@Nullable Listener listener) {

@@ -9,12 +9,12 @@ import android.widget.ListView;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.GdgPerson;
+import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.Utils;
 
 public class PeopleListFragment extends GdgListFragment {
 
     protected PeopleAdapter mAdapter;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -24,7 +24,7 @@ public class PeopleListFragment extends GdgListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mAdapter = new PeopleAdapter(getActivity());
+        mAdapter = new PeopleAdapter(getActivity(), App.from(getContext()).getPicasso());
         setListAdapter(mAdapter);
     }
 

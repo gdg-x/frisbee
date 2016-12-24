@@ -3,7 +3,6 @@ package org.gdg.frisbee.android.gde;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
@@ -26,7 +25,6 @@ public class GdeActivity extends GdgNavDrawerActivity implements ViewPager.OnPag
 
     @BindView(R.id.pager)
     ViewPager mViewPager;
-
     @BindView(R.id.tabs)
     TabLayout mTabLayout;
 
@@ -36,9 +34,6 @@ public class GdeActivity extends GdgNavDrawerActivity implements ViewPager.OnPag
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gde);
-
-        Toolbar toolbar = getActionBarToolbar();
-        toolbar.setTitle(R.string.gde);
 
         App.from(this).getModelCache().getAsync(ModelCache.KEY_GDE_LIST, new ModelCache.CacheListener() {
             @Override
@@ -60,8 +55,7 @@ public class GdeActivity extends GdgNavDrawerActivity implements ViewPager.OnPag
             public void onSuccess(GdeList directory) {
                 App.from(GdeActivity.this).getModelCache().putAsync(ModelCache.KEY_GDE_LIST,
                     directory,
-                    DateTime.now().plusDays(4),
-                    null);
+                    DateTime.now().plusDays(4));
                 setupGdeViewPager(directory);
             }
 

@@ -4,9 +4,6 @@ import java.util.Comparator;
 
 class EventDateComparator implements Comparator<EventAdapter.Item> {
 
-    public EventDateComparator() {
-    }
-
     @Override
     public int compare(EventAdapter.Item event1, EventAdapter.Item event2) {
         if (event1.getEvent().getStart() == null) {

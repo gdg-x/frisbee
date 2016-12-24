@@ -42,6 +42,7 @@ import com.squareup.picasso.Picasso;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.plus.Activity;
 import org.gdg.frisbee.android.api.model.plus.Attachment;
+import org.gdg.frisbee.android.api.model.plus.Image;
 import org.gdg.frisbee.android.api.model.plus.Thumbnail;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.Utils;
@@ -73,12 +74,12 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     private final GoogleApiClient plusClient;
     private final Picasso picasso;
 
-    NewsAdapter(Context context, GoogleApiClient client) {
+    NewsAdapter(Context context, GoogleApiClient plusClient) {
         this.context = context;
-        plusClient = client;
+        this.plusClient = plusClient;
         inflater = LayoutInflater.from(this.context);
         activities = new ArrayList<>();
-        picasso = App.from(this.context).getPicasso();
+        picasso = App.from(context).getPicasso();
 
         setHasStableIds(true);
     }
@@ -358,12 +359,14 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
         View attachmentView = createAttachmentView(mViewHolder, container, R.layout.news_item_video, 2);
 
-        // Precalc Image Size
-        mViewHolder.poster.setDimensions(attachment.getImage().getWidth(), attachment.getImage().getHeight());
-        mViewHolder.poster.setImageDrawable(null);
+        Image attachmentImage = attachment.getImage();
+        if (attachmentImage != null) {
+            mViewHolder.poster.setDimensions(attachmentImage.getWidth(), attachmentImage.getHeight());
+            mViewHolder.poster.setImageDrawable(null);
 
-        picasso.load(attachment.getImage().getUrl())
-            .into(mViewHolder.poster);
+            picasso.load(attachmentImage.getUrl())
+                .into(mViewHolder.poster);
+        }
 
         attachmentView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -571,7 +574,7 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         ImageView pic3;
         String url;
 
-        private ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }

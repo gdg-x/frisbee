@@ -16,6 +16,7 @@
 
 package org.gdg.frisbee.android.eventseries;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -28,9 +29,12 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
+import org.gdg.frisbee.android.api.GdgXHub;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.api.model.PagedList;
 import org.gdg.frisbee.android.app.App;
@@ -48,6 +52,9 @@ public class TaggedEventSeriesFragment extends EventListFragment {
 
     private static final String ARGS_ADD_DESCRIPTION_AS_HEADER = "add_description";
 
+    private ModelCache modelCache;
+    private GdgXHub gdgXHub;
+
     private String mCacheKey = "";
     private TaggedEventSeries mTaggedEventSeries;
     private Comparator<EventAdapter.Item> comparator;
@@ -62,6 +69,13 @@ public class TaggedEventSeriesFragment extends EventListFragment {
         args.putBoolean(ARGS_ADD_DESCRIPTION_AS_HEADER, addDescriptionAsHeader);
         frag.setArguments(args);
         return frag;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        modelCache = App.from(context).getModelCache();
+        gdgXHub = App.from(context).getGdgXHub();
     }
 
     public void onCreate(Bundle savedInstanceState) {
@@ -106,28 +120,23 @@ public class TaggedEventSeriesFragment extends EventListFragment {
 
     @Override
     EventAdapter createEventAdapter() {
-        return new EventAdapter(getActivity(), mTaggedEventSeries.getDefaultIconResId());
+        Picasso picasso = App.from(getContext()).getPicasso();
+        return new EventAdapter(getContext(), picasso, mTaggedEventSeries.getDefaultIconResId());
     }
 
     @Override
     void fetchEvents() {
         setIsLoading(true);
-
         Callback<PagedList<Event>> listener = new Callback<PagedList<Event>>() {
             @Override
             public void onSuccess(final PagedList<Event> taggedEventPagedList) {
-                mEvents.addAll(taggedEventPagedList.getItems());
-                App.from(getContext()).getModelCache().putAsync(mCacheKey,
-                    mEvents,
-                    DateTime.now().plusHours(2),
-                    new ModelCache.CachePutListener() {
-                        @Override
-                        public void onPutIntoCache() {
-                            mAdapter.addAll(mEvents);
-                            sortEvents();
-                            setIsLoading(false);
-                        }
-                    });
+                ArrayList<Event> events = taggedEventPagedList.getItems();
+                if (isContextValid()) {
+                    mAdapter.addAll(events);
+                    sortEvents();
+                    setIsLoading(false);
+                }
+                modelCache.putAsync(mCacheKey, events, DateTime.now().plusHours(2));
             }
 
             @Override
@@ -144,10 +153,9 @@ public class TaggedEventSeriesFragment extends EventListFragment {
         };
 
         if (Utils.isOnline(getActivity())) {
-            App.from(getContext()).getGdgXHub()
-                .getTaggedEventUpcomingList(mTaggedEventSeries.getTag(), DateTime.now()).enqueue(listener);
+            gdgXHub.getTaggedEventUpcomingList(mTaggedEventSeries.getTag(), DateTime.now()).enqueue(listener);
         } else {
-            App.from(getContext()).getModelCache().getAsync(mCacheKey, false, new ModelCache.CacheListener() {
+            modelCache.getAsync(mCacheKey, false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
                     if (checkValidCache(item)) {
@@ -161,7 +169,7 @@ public class TaggedEventSeriesFragment extends EventListFragment {
                             ColoredSnackBar.info(snackbar).show();
                         }
                     } else {
-                        App.from(getContext()).getModelCache().removeAsync(mCacheKey);
+                        modelCache.removeAsync(mCacheKey);
                         onNotFound();
                     }
                 }

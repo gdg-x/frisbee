@@ -63,6 +63,8 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
     ViewPager viewPager;
     @BindView(R.id.tabs)
     TabLayout tabLayout;
+    @BindView(R.id.toolbar_actionbar)
+    Toolbar toolbar;
     private TextView chapterSwitcher;
 
     private ChapterComparator locationComparator;
@@ -85,7 +87,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
 
         String selectedChapterId = getSelectedChapterId(savedInstanceState);
         ArrayList<Chapter> chapters = getSavedChapters(savedInstanceState);
-        if (chapters != null) {
+        if (chapters != null && !chapters.isEmpty()) {
             initUI(chapters, selectedChapterId);
         } else {
             loadChaptersFromCache(selectedChapterId);
@@ -150,17 +152,14 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
         App.from(this).getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
             @Override
             public void onSuccess(final Directory directory) {
+                if (isContextValid()) {
+                    onDirectoryLoaded(directory, selectedChapterId);
+                }
 
                 App.from(MainActivity.this).getModelCache().putAsync(
                     ModelCache.KEY_CHAPTER_LIST_HUB,
                     directory,
-                    DateTime.now().plusDays(1),
-                    new ModelCache.CachePutListener() {
-                        @Override
-                        public void onPutIntoCache() {
-                            onDirectoryLoaded(directory, selectedChapterId);
-                        }
-                    });
+                    DateTime.now().plusDays(1));
             }
 
             @Override
@@ -214,7 +213,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
     }
 
     private void updateSelectionFor(Chapter newChapter) {
-        chapterSwitcher.setText(newChapter.toString());
+        chapterSwitcher.setText(newChapter.getName());
         if (!newChapter.equals(selectedChapter)) {
             Timber.d("Switching newChapterId!");
             selectedChapter = newChapter;
@@ -335,7 +334,7 @@ public class MainActivity extends GdgNavDrawerActivity implements ChapterSelectD
     }
 
     private void setupChapterSwitcher() {
-        Toolbar toolbar = getActionBarToolbar();
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         View container = LayoutInflater.from(this).inflate(R.layout.actionbar_chapter_selector, toolbar);
         chapterSwitcher = (TextView) container.findViewById(android.R.id.text1);
         chapterSwitcher.setOnClickListener(new View.OnClickListener() {

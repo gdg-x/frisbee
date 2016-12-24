@@ -24,11 +24,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -51,9 +49,10 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
     private static final String INSTANCE_STATE_SELECTED_PULSE = "INSTANCE_STATE_SELECTED_PULSE";
     @BindView(R.id.pager)
     ViewPager mViewPager;
-
     @BindView(R.id.tabs)
     TabLayout mTabLayout;
+    @BindView(R.id.toolbar_actionbar)
+    Toolbar toolbar;
 
     ArrayAdapter<String> mSpinnerAdapter;
     PulsePagerAdapter mViewPagerAdapter;
@@ -63,7 +62,6 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_pulse);
 
         final String selectedPulse;
@@ -91,16 +89,11 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
         App.from(this).getGroupDirectory().getPulse().enqueue(new Callback<Pulse>() {
             @Override
             public void onSuccess(final Pulse pulse) {
-                App.from(PulseActivity.this).getModelCache().putAsync(
-                    ModelCache.KEY_PULSE_GLOBAL,
-                    pulse,
-                    DateTime.now().plusDays(1),
-                    new ModelCache.CachePutListener() {
-                        @Override
-                        public void onPutIntoCache() {
-                            setupPulseScreen(pulse, selectedPulse);
-                        }
-                    });
+                if (isContextValid()) {
+                    setupPulseScreen(pulse, selectedPulse);
+                }
+                App.from(PulseActivity.this).getModelCache().putAsync(ModelCache.KEY_PULSE_GLOBAL, pulse,
+                    DateTime.now().plusDays(1));
             }
 
             @Override
@@ -125,14 +118,7 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
     }
 
     private void initSpinner() {
-
-        Toolbar toolbar = getActionBarToolbar();
-        View spinnerContainer = LayoutInflater.from(this).inflate(R.layout.actionbar_spinner, toolbar, false);
-        ActionBar.LayoutParams lp = new ActionBar.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        toolbar.addView(spinnerContainer, lp);
-
-        mSpinner = (Spinner) spinnerContainer.findViewById(R.id.actionbar_spinner);
+        setupCountrySwitcher();
 
         mSpinnerAdapter = new ArrayAdapter<>(this, R.layout.spinner_item_actionbar, mPulseTargets);
         mSpinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
@@ -154,6 +140,12 @@ public class PulseActivity extends GdgNavDrawerActivity implements PulseFragment
                 // Nothing to do.
             }
         });
+    }
+
+    private void setupCountrySwitcher() {
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        View spinnerContainer = LayoutInflater.from(this).inflate(R.layout.actionbar_spinner, toolbar);
+        mSpinner = (Spinner) spinnerContainer.findViewById(R.id.actionbar_spinner);
     }
 
     void onPulseItemSelected(String selectedPulse) {

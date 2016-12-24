@@ -79,7 +79,7 @@
   <string name="gcm">Anlık Bildirimler</string>
   <string name="gcm_summary_on">GDG Anlık Bildirimleri açık</string>
   <string name="gcm_summary_off">GDG Anlık Bildirimleri kapalı</string>
-  <string name="google_signed_in">Google+ ile giriş yaptın</string>
+  <string name="google_signed_in">Google+ Giriş Yap</string>
   <string name="google_signed_in_on">Google+ ile giriş yaptın</string>
   <string name="google_signed_in_off">Giriş yapmadın</string>
   <string name="done">Bitti</string>

@@ -16,6 +16,7 @@
 
 package org.gdg.frisbee.android.event;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -34,11 +36,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.tasomaniac.android.widget.DelayedProgressBar;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
+import org.gdg.frisbee.android.api.GdgXHub;
+import org.gdg.frisbee.android.api.PlusApi;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.api.model.EventFullDetails;
@@ -46,7 +51,6 @@ import org.gdg.frisbee.android.api.model.plus.ImageInfo;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.BaseFragment;
-import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -76,6 +80,11 @@ public class EventOverviewFragment extends BaseFragment {
     @BindView(R.id.container)
     View mContainer;
 
+    private ModelCache modelCache;
+    private PlusApi plusApi;
+    private GdgXHub gdgXHub;
+    private Picasso picasso;
+
     private boolean mLoading;
     private Directory mDirectory;
     private EventFullDetails mEvent;
@@ -86,6 +95,15 @@ public class EventOverviewFragment extends BaseFragment {
         args.putString(Const.EXTRA_EVENT_ID, eventId);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        modelCache = App.from(context).getModelCache();
+        plusApi = App.from(context).getPlusApi();
+        gdgXHub = App.from(context).getGdgXHub();
+        picasso = App.from(context).getPicasso();
     }
 
     @Override
@@ -101,7 +119,7 @@ public class EventOverviewFragment extends BaseFragment {
         setIsLoading(true);
         
         final String eventId = getArguments().getString(Const.EXTRA_EVENT_ID);
-        App.from(getContext()).getGdgXHub().getEventDetail(eventId).enqueue(new Callback<EventFullDetails>() {
+        gdgXHub.getEventDetail(eventId).enqueue(new Callback<EventFullDetails>() {
             @Override
             public void onSuccess(EventFullDetails eventFullDetails) {
                 onEventDetailsLoaded(eventFullDetails);
@@ -166,7 +184,6 @@ public class EventOverviewFragment extends BaseFragment {
         getActivity().supportInvalidateOptionsMenu();
         updateWithDetails(eventFullDetails);
 
-        ModelCache modelCache = App.from(getContext()).getModelCache();
         modelCache.getAsync(ModelCache.KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
             @Override
             public void onGet(Object item) {
@@ -177,7 +194,7 @@ public class EventOverviewFragment extends BaseFragment {
             @Override
             public void onNotFound(String key) {
                 if (Utils.isOnline(getActivity())) {
-                    App.from(getContext()).getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
+                    gdgXHub.getDirectory().enqueue(new Callback<Directory>() {
                         @Override
                         public void onSuccess(Directory directory) {
                             mDirectory = directory;
@@ -205,19 +222,17 @@ public class EventOverviewFragment extends BaseFragment {
         if (getActivity() == null) {
             return;
         }
-
         loadChapterImage(group.getGplusId());
-
-        ((GdgActivity) getActivity()).setToolbarTitle(group.getShortName());
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(group.getShortName());
     }
 
     private void loadChapterImage(String gplusId) {
-        App.from(getContext()).getPlusApi().getImageInfo(gplusId).enqueue(new Callback<ImageInfo>() {
+        plusApi.getImageInfo(gplusId).enqueue(new Callback<ImageInfo>() {
             @Override
             public void onSuccess(ImageInfo imageInfo) {
                 if (isContextValid()) {
                     String imageUrl = imageInfo.getImage().getUrl().replace("sz=50", "sz=196");
-                    App.from(getContext()).getPicasso().load(imageUrl).into(mGroupLogo);
+                    picasso.load(imageUrl).into(mGroupLogo);
                 }
             }
 

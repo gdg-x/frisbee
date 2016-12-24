@@ -19,7 +19,6 @@ package org.gdg.frisbee.android.eventseries;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -63,9 +62,7 @@ public class TaggedEventSeriesActivity extends GdgNavDrawerActivity {
 
         setContentView(R.layout.activity_special);
 
-        Toolbar toolbar = getActionBarToolbar();
-
-        toolbar.setTitle(mTaggedEventSeries.getTitleResId());
+        getSupportActionBar().setTitle(mTaggedEventSeries.getTitleResId());
         if (mDescription != null) {
             mDescription.setText(mTaggedEventSeries.getDescriptionResId());
         }

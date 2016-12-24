@@ -16,6 +16,7 @@
 
 package org.gdg.frisbee.android.onboarding;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
@@ -32,6 +33,7 @@ import android.widget.ViewSwitcher;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
+import org.gdg.frisbee.android.api.GdgXHub;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.api.model.Directory;
 import org.gdg.frisbee.android.app.App;
@@ -52,6 +54,7 @@ import butterknife.BindView;
 public class FirstStartStep1Fragment extends BaseFragment {
 
     private static final String ARG_SELECTED_CHAPTER = "selected_chapter";
+
     @BindView(R.id.chapter_spinner)
     AutoCompleteSpinnerView mChapterSpinnerView;
     @BindView(R.id.chapter_spinner_text_input_layout)
@@ -60,9 +63,20 @@ public class FirstStartStep1Fragment extends BaseFragment {
     Button mConfirmButton;
     @BindView(R.id.viewSwitcher)
     ViewSwitcher mLoadSwitcher;
+
+    private ModelCache modelCache;
+    private GdgXHub gdgXHub;
+
     private ChapterAdapter mChapterAdapter;
     private Chapter mSelectedChapter;
     private ChapterComparator mLocationComparator;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        modelCache = App.from(context).getModelCache();
+        gdgXHub = App.from(context).getGdgXHub();
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -88,7 +102,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
             mSelectedChapter = savedInstanceState.getParcelable(ARG_SELECTED_CHAPTER);
         }
 
-        App.from(getContext()).getModelCache().getAsync(
+        modelCache.getAsync(
             ModelCache.KEY_CHAPTER_LIST_HUB, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
@@ -151,7 +165,7 @@ public class FirstStartStep1Fragment extends BaseFragment {
         );
     }
 
-    private boolean hasTrailingSpace(AutoCompleteSpinnerView chapterSpinnerView) {
+    private static boolean hasTrailingSpace(AutoCompleteSpinnerView chapterSpinnerView) {
         return chapterSpinnerView.getText().toString().endsWith(" ");
     }
 
@@ -167,18 +181,14 @@ public class FirstStartStep1Fragment extends BaseFragment {
 
     private void fetchChapters() {
 
-        App.from(getContext()).getGdgXHub().getDirectory().enqueue(new Callback<Directory>() {
+        gdgXHub.getDirectory().enqueue(new Callback<Directory>() {
             @Override
             public void onSuccess(Directory directory) {
-
                 if (isContextValid()) {
                     addChapters(directory.getGroups());
                     mLoadSwitcher.setDisplayedChild(1);
                 }
-                App.from(getContext()).getModelCache().putAsync(ModelCache.KEY_CHAPTER_LIST_HUB,
-                    directory,
-                    DateTime.now().plusDays(4),
-                    null);
+                modelCache.putAsync(ModelCache.KEY_CHAPTER_LIST_HUB, directory, DateTime.now().plusDays(4));
             }
 
             @Override

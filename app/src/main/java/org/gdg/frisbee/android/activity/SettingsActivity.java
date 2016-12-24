@@ -18,26 +18,26 @@ package org.gdg.frisbee.android.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.appwidget.UpcomingEventWidgetProvider;
 import org.gdg.frisbee.android.chapter.ChapterSelectDialog;
-import org.gdg.frisbee.android.common.GdgActivity;
+import org.gdg.frisbee.android.common.TrackableActivity;
 import org.gdg.frisbee.android.fragment.SettingsFragment;
 import org.gdg.frisbee.android.utils.PrefUtils;
 
-public class SettingsActivity extends GdgActivity implements ChapterSelectDialog.Listener {
+public class SettingsActivity extends TrackableActivity implements ChapterSelectDialog.Listener {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_settings);
-
-        getActionBarToolbar().setTitle(R.string.settings);
-        getActionBarToolbar().setNavigationIcon(R.drawable.ic_up);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
@@ -53,12 +53,10 @@ public class SettingsActivity extends GdgActivity implements ChapterSelectDialog
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

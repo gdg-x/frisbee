@@ -13,11 +13,11 @@ import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.GdgPerson;
-import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.Utils;
 import org.gdg.frisbee.android.widget.SquaredImageView;
 
@@ -26,16 +26,18 @@ import butterknife.ButterKnife;
 
 public class PeopleAdapter extends ArrayAdapter<GdgPerson> {
 
+    private final Picasso picasso;
     @DrawableRes
     private int placeholder;
     private SparseBooleanArray mConsumedMap;
 
-    public PeopleAdapter(Context ctx) {
-        this(ctx, 0);
+    public PeopleAdapter(Context context, Picasso picasso) {
+        this(context, picasso, 0);
     }
 
-    public PeopleAdapter(Context ctx, @DrawableRes int placeholder) {
-        super(ctx, R.layout.list_person_item);
+    public PeopleAdapter(Context context, Picasso picasso, @DrawableRes int placeholder) {
+        super(context, R.layout.list_person_item);
+        this.picasso = picasso;
         this.placeholder = placeholder;
         mConsumedMap = new SparseBooleanArray();
     }
@@ -75,7 +77,7 @@ public class PeopleAdapter extends ArrayAdapter<GdgPerson> {
         holder.secondaryTextView.setText(gdgPerson.getSecondaryText());
 
         if (!TextUtils.isEmpty(gdgPerson.getImageUrl())) {
-            RequestCreator creator = App.from(getContext()).getPicasso()
+            RequestCreator creator = picasso
                 .load(gdgPerson.getImageUrl());
             if (placeholder != 0) {
                 creator.placeholder(placeholder);

@@ -79,7 +79,7 @@
   <string name="gcm">Notificações de nuvem</string>
   <string name="gcm_summary_on">O app atualmente recebe e processa a notificação de nuvem GDG</string>
   <string name="gcm_summary_off">O app atualmente não recebe notificação de nuvem GDG</string>
-  <string name="google_signed_in">Signed into Google+</string>
+  <string name="google_signed_in">Google+ Sign In</string>
   <string name="google_signed_in_on">You are currently signed in with Google+</string>
   <string name="google_signed_in_off">Você não está conectado</string>
   <string name="done">Concluído</string>

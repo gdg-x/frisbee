@@ -16,11 +16,13 @@
 
 package org.gdg.frisbee.android.about;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
+import org.gdg.frisbee.android.api.GitHub;
 import org.gdg.frisbee.android.api.model.ContributorList;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
@@ -34,6 +36,16 @@ public class ContributorsFragment extends PeopleListFragment {
     private static final String GITHUB_ORGANIZATION = "gdg-x";
     private static final String GITHUB_REPO = "frisbee";
 
+    private GitHub github;
+    private ModelCache modelCache;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        github = App.from(context).getGithub();
+        modelCache = App.from(context).getModelCache();
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -44,7 +56,7 @@ public class ContributorsFragment extends PeopleListFragment {
         if (Utils.isOnline(getActivity())) {
             fetchGitHubContributors();
         } else {
-            App.from(getContext()).getModelCache().getAsync(
+            modelCache.getAsync(
                 ModelCache.KEY_FRISBEE_CONTRIBUTORS, false, new ModelCache.CacheListener() {
                     @Override
                     public void onGet(Object item) {
@@ -64,16 +76,14 @@ public class ContributorsFragment extends PeopleListFragment {
     }
 
     private void fetchGitHubContributors() {
-        App.from(getContext()).getGithub().getContributors(GITHUB_ORGANIZATION, GITHUB_REPO)
+        github.getContributors(GITHUB_ORGANIZATION, GITHUB_REPO)
             .enqueue(new Callback<ContributorList>() {
                 @Override
                 public void onSuccess(final ContributorList contributors) {
 
                     mAdapter.addAll(contributors);
-                    App.from(getContext()).getModelCache().putAsync(ModelCache.KEY_FRISBEE_CONTRIBUTORS,
-                        contributors,
-                        DateTime.now().plusDays(1),
-                        null);
+                    modelCache.putAsync(ModelCache.KEY_FRISBEE_CONTRIBUTORS, contributors,
+                        DateTime.now().plusDays(1));
                 }
             });
     }

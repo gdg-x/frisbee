@@ -16,9 +16,9 @@
 
 package org.gdg.frisbee.android.chapter;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.SpannedString;
@@ -32,18 +32,20 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.tasomaniac.android.widget.DelayedProgressBar;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
+import org.gdg.frisbee.android.api.PlusApi;
 import org.gdg.frisbee.android.api.model.plus.Person;
 import org.gdg.frisbee.android.api.model.plus.Urls;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.common.BaseFragment;
 import org.gdg.frisbee.android.utils.Utils;
-import org.gdg.frisbee.android.view.BitmapBorderTransformation;
+import org.gdg.frisbee.android.view.CircularTransformation;
 import org.joda.time.DateTime;
 
 import java.io.UnsupportedEncodingException;
@@ -71,9 +73,13 @@ public class InfoFragment extends BaseFragment implements OrganizerLoader.Listen
 
     private boolean mLoading = false;
 
+    private final CircularTransformation circularTransformation = CircularTransformation.createBorderless();
     private LayoutInflater mInflater;
     private String chapterPlusId;
     private OrganizerLoader organizerLoader;
+    private ModelCache modelCache;
+    private PlusApi plusApi;
+    private Picasso picasso;
 
     public static InfoFragment newInstance(String plusId) {
         InfoFragment fragment = new InfoFragment();
@@ -81,6 +87,14 @@ public class InfoFragment extends BaseFragment implements OrganizerLoader.Listen
         arguments.putString(Const.EXTRA_PLUS_ID, plusId);
         fragment.setArguments(arguments);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        modelCache = App.from(context).getModelCache();
+        plusApi = App.from(context).getPlusApi();
+        picasso = App.from(context).getPicasso();
     }
 
     @Override
@@ -104,7 +118,7 @@ public class InfoFragment extends BaseFragment implements OrganizerLoader.Listen
     }
 
     private void loadChapter(final String chapterPlusId) {
-        App.from(getContext()).getModelCache().getAsync(
+        modelCache.getAsync(
             ModelCache.KEY_PERSON + chapterPlusId,
             Utils.isOnline(getActivity()),
             new ModelCache.CacheListener() {
@@ -121,7 +135,7 @@ public class InfoFragment extends BaseFragment implements OrganizerLoader.Listen
     }
 
     void loadChapterFromNetwork(final String chapterPlusId) {
-        App.from(getContext()).getPlusApi().getPerson(chapterPlusId).enqueue(
+        plusApi.getPerson(chapterPlusId).enqueue(
             new Callback<Person>() {
                 @Override
                 public void onSuccess(Person chapter) {
@@ -142,18 +156,13 @@ public class InfoFragment extends BaseFragment implements OrganizerLoader.Listen
                 }
 
                 private void putChapterInCache(String plusId, Person person) {
-                    App.from(getContext()).getModelCache().putAsync(
-                        ModelCache.KEY_PERSON + plusId,
-                        person,
-                        DateTime.now().plusDays(1),
-                        null
-                    );
+                    modelCache.putAsync(ModelCache.KEY_PERSON + plusId, person, DateTime.now().plusDays(1));
                 }
             });
     }
 
     void updateUIFrom(Person chapter) {
-        if (getActivity() != null) {
+        if (isContextValid()) {
             updateChapterUIFrom(chapter);
             addOrganizers(chapter);
         }
@@ -244,11 +253,8 @@ public class InfoFragment extends BaseFragment implements OrganizerLoader.Listen
         ImageView picture = (ImageView) convertView.findViewById(R.id.icon);
 
         if (organizer.getImage() != null) {
-            App.from(getContext()).getPicasso()
-                .load(organizer.getImage().getUrl())
-                .transform(new BitmapBorderTransformation(0,
-                    getResources().getDimensionPixelSize(R.dimen.organizer_icon_size) / 2,
-                    ContextCompat.getColor(getContext(), R.color.white)))
+            picasso.load(organizer.getImage().getUrl())
+                .transform(circularTransformation)
                 .placeholder(R.drawable.ic_no_avatar)
                 .into(picture);
         }

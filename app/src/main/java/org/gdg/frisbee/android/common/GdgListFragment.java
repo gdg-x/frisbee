@@ -154,8 +154,7 @@ public class GdgListFragment extends BaseFragment {
     }
 
     public void setIsLoading(boolean isLoading) {
-
-        if (isLoading == mLoading || getActivity() == null) {
+        if (isLoading == mLoading || mProgressContainer == null) {
             return;
         }
 

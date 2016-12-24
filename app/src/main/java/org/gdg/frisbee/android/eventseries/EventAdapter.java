@@ -29,11 +29,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.model.Event;
 import org.gdg.frisbee.android.api.model.SimpleEvent;
-import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.utils.Utils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
@@ -51,18 +52,20 @@ import butterknife.ButterKnife;
 class EventAdapter extends BaseAdapter {
 
     private static final DateTime DATETIME_NOW = DateTime.now();
+    private final Context context;
+    private final Picasso picasso;
     private final int mDefaultIcon;
-    private Context mContext;
-    private LayoutInflater mInflater;
-    private ArrayList<Item> mEvents;
+    private final LayoutInflater mInflater;
+    private final ArrayList<Item> mEvents;
 
-    public EventAdapter(Context ctx) {
-        this(ctx, R.drawable.icon);
+    public EventAdapter(Context context, Picasso picasso) {
+        this(context, picasso, R.drawable.icon);
     }
 
-    public EventAdapter(Context ctx, @DrawableRes int defaultIcon) {
-        mContext = ctx;
-        mInflater = LayoutInflater.from(mContext);
+    public EventAdapter(Context context, Picasso picasso, @DrawableRes int defaultIcon) {
+        this.context = context;
+        this.picasso = picasso;
+        mInflater = LayoutInflater.from(this.context);
         mEvents = new ArrayList<>();
         mDefaultIcon = defaultIcon;
     }
@@ -112,8 +115,7 @@ class EventAdapter extends BaseAdapter {
         final SimpleEvent event = item.getEvent();
 
         if (event.getIconUrl() != null) {
-            App.from(mContext).getPicasso()
-                .load(Const.URL_DEVELOPERS_GOOGLE_COM + event.getIconUrl())
+            picasso.load(Const.URL_DEVELOPERS_GOOGLE_COM + event.getIconUrl())
                 .into(holder.icon);
         } else {
             holder.icon.setImageResource(mDefaultIcon);
@@ -122,7 +124,7 @@ class EventAdapter extends BaseAdapter {
         holder.eventTitle.setText(event.getTitle());
 
         final LocalDateTime dateTime = event.getStart().toLocalDateTime();
-        Locale locale = mContext.getResources().getConfiguration().locale;
+        Locale locale = context.getResources().getConfiguration().locale;
         holder.eventDate.setText(dateTime.toString(DateTimeFormat.patternForStyle("S-", locale)));
         holder.eventTime.setText(dateTime.toString(DateTimeFormat.patternForStyle("-S", locale)));
 
@@ -138,7 +140,7 @@ class EventAdapter extends BaseAdapter {
         if (!item.isConsumed()) {
             item.setConsumed(true);
             // In which case we magically instantiate our effect and launch it directly on the view
-            Animation animation = AnimationUtils.makeInChildBottomAnimation(mContext);
+            Animation animation = AnimationUtils.makeInChildBottomAnimation(context);
             convertView.startAnimation(animation);
         }
 
@@ -164,7 +166,7 @@ class EventAdapter extends BaseAdapter {
     }
 
     private void openEventInExternalApp(String uri) {
-        mContext.startActivity(Utils.createExternalIntent(mContext, Uri.parse(uri)));
+        context.startActivity(Utils.createExternalIntent(context, Uri.parse(uri)));
     }
 
     public void sort(Comparator<Item> eventComparator) {

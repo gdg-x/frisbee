@@ -16,8 +16,8 @@
 
 package org.gdg.frisbee.android.common;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,7 +25,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -80,44 +80,16 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     DrawerLayout mDrawerLayout;
     @BindView(R.id.nav_view)
     NavigationView mNavigationView;
-    private ActionBarDrawerToggle mDrawerToggle;
 
     private DrawerHeaderDisplayer headerDisplayer;
 
     @Override
     public void setContentView(int layoutResId) {
         super.setContentView(layoutResId);
-
-        initNavigationDrawer();
-    }
-
-    private void initNavigationDrawer() {
-
-        mDrawerToggle = new ActionBarDrawerToggle(
-            this,                  /* host Activity */
-            mDrawerLayout,         /* DrawerLayout object */
-            R.string.drawer_open,  /* "open drawer" description */
-            R.string.drawer_close  /* "close drawer" description */
-        ) {
-
-            /**
-             * Called when a drawer has settled in a completely closed state.
-             */
-            public void onDrawerClosed(View view) {
-                if (PrefUtils.shouldOpenDrawerOnStart(GdgNavDrawerActivity.this)) {
-                    PrefUtils.setShouldNotOpenDrawerOnStart(GdgNavDrawerActivity.this);
-                }
-            }
-
-            /**
-             * Called when a drawer has settled in a completely open state.
-             */
-            public void onDrawerOpened(View drawerView) {
-                //getActionBar().setTitle(mDrawerTitle);
-            }
-        };
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-
+        if (toolbar != null) {
+            DrawerArrowDrawable drawerIcon = new DrawerArrowDrawable(getSupportActionBar().getThemedContext());
+            toolbar.setNavigationIcon(drawerIcon);
+        }
         setupDrawerContent(mNavigationView);
     }
 
@@ -196,10 +168,6 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     void onDrawerItemClick(int itemId) {
-
-        if (PrefUtils.shouldOpenDrawerOnStart(GdgNavDrawerActivity.this)) {
-            PrefUtils.setShouldNotOpenDrawerOnStart(GdgNavDrawerActivity.this);
-        }
         Bundle data = new Bundle();
         data.putInt(EXTRA_SELECTED_DRAWER_ITEM_ID, itemId);
 
@@ -265,7 +233,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
         new FeedbackFragment().show(getSupportFragmentManager(), "FeedbackFragment");
     }
 
-    private void navigateTo(Class<? extends GdgActivity> activityClass, @Nullable Bundle additional) {
+    private void navigateTo(Class<? extends Activity> activityClass, @Nullable Bundle additional) {
         if (this.getClass().equals(activityClass)
             && !(this instanceof TaggedEventSeriesActivity)) {
             return;
@@ -281,32 +249,25 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        mDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Pass the event to ActionBarDrawerToggle, if it returns
-        // true, then it has handled the app icon touch event
-        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+        if (item.getItemId() == android.R.id.home) {
+            toggleNavDrawer();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void toggleNavDrawer() {
+        if (mDrawerLayout.isDrawerVisible(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            mDrawerLayout.openDrawer(GravityCompat.START);
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        if (PrefUtils.shouldOpenDrawerOnStart(this)) {
-            mDrawerLayout.openDrawer(GravityCompat.START);
-        }
         headerDisplayer.maybeUpdateChapterImage(PrefUtils.getHomeChapterId(this));
         headerDisplayer.updateUserDetails(PlusUtils.getCurrentAccount(this));
     }
@@ -321,13 +282,11 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     private boolean isNavDrawerOpen() {
-        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START);
+        return mDrawerLayout.isDrawerOpen(GravityCompat.START);
     }
 
     private void closeNavDrawer() {
-        if (mDrawerLayout != null) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-        }
+        mDrawerLayout.closeDrawer(GravityCompat.START);
     }
 
 }

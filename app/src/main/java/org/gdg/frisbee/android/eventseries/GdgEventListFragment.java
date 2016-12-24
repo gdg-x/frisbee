@@ -1,8 +1,11 @@
 package org.gdg.frisbee.android.eventseries;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+
+import com.squareup.picasso.Picasso;
 
 import org.gdg.frisbee.android.Const;
 import org.gdg.frisbee.android.R;
@@ -13,7 +16,6 @@ import org.gdg.frisbee.android.api.model.PagedList;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.cache.ModelCache;
 import org.gdg.frisbee.android.utils.Utils;
-import org.gdg.frisbee.android.view.ColoredSnackBar;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
@@ -36,15 +38,20 @@ public class GdgEventListFragment extends EventListFragment {
 
     @Override
     EventAdapter createEventAdapter() {
-        return new EventAdapter(getActivity());
+        Picasso picasso = App.from(getContext()).getPicasso();
+        return new EventAdapter(getContext(), picasso);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        gdgXHub = App.from(context).getGdgXHub();
+        modelCache = App.from(context).getModelCache();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        gdgXHub = App.from(getContext()).getGdgXHub();
-        modelCache = App.from(getContext()).getModelCache();
         mPlusId = getArguments().getString(Const.EXTRA_PLUS_ID);
         mCacheKey = "event_" + mPlusId;
     }
@@ -59,14 +66,11 @@ public class GdgEventListFragment extends EventListFragment {
             modelCache.getAsync(mCacheKey, false, new ModelCache.CacheListener() {
                 @Override
                 public void onGet(Object item) {
-
                     if (checkValidCache(item)) {
                         ArrayList<Event> events = (ArrayList<Event>) item;
                         mAdapter.addAll(events);
                         setIsLoading(false);
-                        Snackbar snackbar = Snackbar.make(getView(), R.string.cached_content,
-                            Snackbar.LENGTH_SHORT);
-                        ColoredSnackBar.info(snackbar).show();
+                        Snackbar.make(getView(), R.string.cached_content, Snackbar.LENGTH_SHORT).show();
                     } else {
                         modelCache.removeAsync(mCacheKey);
                         onNotFound();
@@ -92,22 +96,19 @@ public class GdgEventListFragment extends EventListFragment {
 
     @Override
     protected boolean loadMoreEvents(int page) {
+        final boolean isInitialPage = page == 1;
         gdgXHub.getChapterAllEventList(mPlusId, page).
             enqueue(new Callback<PagedList<Event>>() {
                 @Override
                 public void onSuccess(PagedList<Event> eventsPagedList) {
                     List<Event> events = eventsPagedList.getItems();
-                    mAdapter.addAll(events);
-                    modelCache.putAsync(mCacheKey,
-                        mEvents,
-                        DateTime.now().plusHours(2),
-                        new ModelCache.CachePutListener() {
-                            @Override
-                            public void onPutIntoCache() {
-                                mAdapter.addAll(mEvents);
-                                setIsLoading(false);
-                            }
-                        });
+                    if (isContextValid()) {
+                        mAdapter.addAll(events);
+                        setIsLoading(false);
+                    }
+                    if (isInitialPage) {
+                        modelCache.putAsync(mCacheKey, events, DateTime.now().plusHours(2));
+                    }
                 }
 
                 @Override

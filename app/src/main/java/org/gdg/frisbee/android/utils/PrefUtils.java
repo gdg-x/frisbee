@@ -2,8 +2,9 @@ package org.gdg.frisbee.android.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import com.crashlytics.android.Crashlytics;
 
 import org.gdg.frisbee.android.api.model.Chapter;
 import org.gdg.frisbee.android.app.App;
@@ -16,7 +17,6 @@ public final class PrefUtils {
     public static final String SETTINGS_SIGNED_IN = "gdg_signed_in";
     public static final String SETTINGS_ANALYTICS = "analytics";
     private static final String SETTINGS_HOME_GDG_NAME = "gdg_home_name";
-    private static final String PREFS_OPEN_DRAWER_ON_START = "open_drawer_on_start";
     private static final String PREFS_FIRST_START = "gdg_first_start";
     private static final String PREFS_VERSION_CODE = "gdg_version_code";
     private static final String PREFS_APP_STARTS = "gdg_app_starts";
@@ -33,14 +33,6 @@ public final class PrefUtils {
     public static SharedPreferences prefs(final Context context) {
         return context.getApplicationContext()
                 .getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-    }
-
-    public static boolean shouldOpenDrawerOnStart(Context context) {
-        return prefs(context).getBoolean(PREFS_OPEN_DRAWER_ON_START, true);
-    }
-
-    public static void setShouldNotOpenDrawerOnStart(Context context) {
-        prefs(context).edit().putBoolean(PREFS_OPEN_DRAWER_ON_START, false).apply();
     }
 
     public static boolean isSignedIn(Context context) {
@@ -76,6 +68,8 @@ public final class PrefUtils {
     }
 
     public static void setHomeChapter(final Context context, final Chapter chapter) {
+        Crashlytics.setString(SETTINGS_HOME_GDG, chapter.getGplusId());
+        Crashlytics.setString(SETTINGS_HOME_GDG_NAME, chapter.getName());
         prefs(context).edit()
             .putString(SETTINGS_HOME_GDG, chapter.getGplusId())
             .putString(SETTINGS_HOME_GDG_NAME, chapter.getName())
@@ -156,7 +150,6 @@ public final class PrefUtils {
             .apply();
     }
 
-    @NonNull
     private static String keyForEventSeriesAlarmSet(TaggedEventSeries taggedEventSeries) {
         return PREFS_EVENT_SERIES_NOTIFICATION_ALARM_SET + taggedEventSeries.getTag();
     }

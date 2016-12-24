@@ -28,6 +28,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -57,24 +58,26 @@ import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public abstract class GdgActivity extends TrackableActivity implements
-    GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+    GoogleApiClient.ConnectionCallbacks,
+    GoogleApiClient.OnConnectionFailedListener {
 
     private static final int RC_SIGN_IN = 101;
 
     @Nullable
     @BindView(R.id.content_frame)
     FrameLayout mContentLayout;
+    @Nullable
+    @BindView(R.id.toolbar_actionbar)
+    Toolbar toolbar;
 
     private GoogleApiClient mGoogleApiClient;
     private GoogleApiClient signInClient;
-
-    private Toolbar mActionBarToolbar;
 
     @Override
     public void setContentView(int layoutResId) {
         super.setContentView(layoutResId);
         ButterKnife.bind(this);
-        getActionBarToolbar();
+        setSupportActionBar(toolbar);
     }
 
     @Override
@@ -165,16 +168,11 @@ public abstract class GdgActivity extends TrackableActivity implements
         PrefUtils.setSignedIn(this);
     }
 
-    protected Toolbar getActionBarToolbar() {
-        if (mActionBarToolbar == null) {
-            mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
-            if (mActionBarToolbar != null) {
-                mActionBarToolbar.setNavigationIcon(R.drawable.ic_drawer);
-                setSupportActionBar(mActionBarToolbar);
-                getSupportActionBar().setDisplayShowTitleEnabled(false);
-            }
-        }
-        return mActionBarToolbar;
+    @NonNull
+    @Override
+    public ActionBar getSupportActionBar() {
+        //noinspection ConstantConditions
+        return super.getSupportActionBar();
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -221,10 +219,6 @@ public abstract class GdgActivity extends TrackableActivity implements
         Timber.e("Google Play Service did not resolve error");
         GoogleApiAvailability.getInstance().showErrorNotification(this, result.getErrorCode());
         PrefUtils.setFatalPlayServiceMessageShown(this);
-    }
-
-    public void setToolbarTitle(final String title) {
-        getActionBarToolbar().setTitle(title);
     }
 
     protected void recordEndPageView(Action viewAction) {
