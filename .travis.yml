@@ -25,7 +25,6 @@ before_install:
   - if [ -z "$encrypted_49e3b92debd1_key" ]; then touch local.properties; fi
 
 before_script:
-  - GRADLE_OPTS="-Xms40m -Xmx3g -XX:MaxPermSize=3g"
   - echo no | android create avd --force -n test -t $ANDROID_TARGET  --abi armeabi-v7a --skin WXGA720
   - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
@@ -38,14 +37,14 @@ before_script:
 after_success:
   - if [ -n "$GITHUB_API_KEY" ]; then .buildscript/deploy_alpha.sh; fi
 
-script: "./gradlew check connectedMockDebugAndroidTest"
+script:
+  - ./gradlew check connectedMockDebugAndroidTest -Pcom.android.build.threadPoolSize=1 -Dorg.gradle.parallel=false -Dorg.gradle.jvmargs="-Xms512m -Xmx512m -XX:+HeapDumpOnOutOfMemoryError" -Dorg.gradle.daemon=false
 
 env:
   global:
     - secure: "SBlXs4v/M3GD1tRaT6zmMXVpMCUaL/oNcSjGWdHgI56DO5NOmTBmDW5kJTT5y0u0U7aE1/Dq22iXPut8NLxWsEi/20xBq3bXQh9ngRkvOstNX7Y0LqnhKBtPixnMIx07xAjUPYCmunJakCT7Hr4fqZAGfUwA4a3ZzRa/KVeNx2A="
     - secure: "OVfIL3ggaGcDgJJhdWxYTCo3u38SNPNUNPsv6adHp5wW0Y2n1CF1zcAnZXhTkGEjoGvi0RuV8ZLG9jbmQdqxd17qBeBf2XPWKxyG1SUfegDVSy9OPF8BY11Fsp9I5RP1W3T/c32KTc7zvhtAivq9mbcrBYJZhDCKpZkdTNliFQ0="
     - ADB_INSTALL_TIMEOUT=8
-    - GRADLE_OPTS="-Xms40m -Xmx3g -XX:MaxPermSize=3g"
   matrix:
     - ANDROID_TARGET=android-22
     - ANDROID_TARGET=android-24
