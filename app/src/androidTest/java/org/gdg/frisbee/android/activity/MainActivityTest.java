@@ -43,7 +43,6 @@ public class MainActivityTest {
             Context context = InstrumentationRegistry.getTargetContext();
             PrefUtils.setInitialSettings(context, false);
             PrefUtils.setHomeChapter(context, CHAPTER_BRUSSELS);
-            PrefUtils.setShouldNotOpenDrawerOnStart(context);
         }
     };
 
