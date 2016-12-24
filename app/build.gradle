@@ -1,3 +1,4 @@
+import com.android.ddmlib.DdmPreferences
 import org.ajoberstar.grgit.Commit
 import org.ajoberstar.grgit.Grgit
 
@@ -38,7 +39,7 @@ android {
         resConfigs "en", "ar", "cs", "de", "es", "fr", "hi", "hu", "hy-rAM", "it", "ja", "ko", "lt", "nl", "pl", "pt-rBR", "pt-rPT", "ru", "sr", "sk", "th", "tr", "uk", "zh-rCN", "zh-rHK", "zh-rTW"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        com.android.ddmlib.DdmPreferences.setTimeOut(60000)
+        DdmPreferences.setTimeOut(60000)
 
         //KEYS
         buildConfigField "long", "DOORBELL_ID", local_properties.doorbell_id ?: "0"
