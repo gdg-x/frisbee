@@ -124,6 +124,13 @@ public final class PrefUtils {
         return false;
     }
 
+    public static void skipSeasonsGreetings(Context context) {
+        prefs(context)
+            .edit()
+            .putInt(PREFS_SEASONS_GREETINGS, DateTime.now().getYear())
+            .apply();
+    }
+
     public static void setVersionCode(final Context context, final int newVersion) {
         prefs(context).edit().putInt(PREFS_VERSION_CODE, newVersion).apply();
     }
