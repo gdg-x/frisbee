@@ -215,7 +215,8 @@ public class FeedbackFragment extends DialogFragment {
         addProperty(PROPERTY_ANDROID_VERSION, VERSION.RELEASE);
 
         try {
-            WifiManager cm = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
+            WifiManager cm = (WifiManager) getActivity().getApplicationContext()
+                .getSystemService(Context.WIFI_SERVICE);
             WifiInfo e = cm.getConnectionInfo();
             SupplicantState mobileDataEnabled = e.getSupplicantState();
             addProperty(PROPERTY_WI_FI_ENABLED, mobileDataEnabled);
