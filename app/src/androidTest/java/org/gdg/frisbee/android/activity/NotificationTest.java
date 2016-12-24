@@ -15,6 +15,7 @@ import org.gdg.frisbee.android.eventseries.NotificationHandler;
 import org.gdg.frisbee.android.eventseries.TaggedEventSeries;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +31,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
 
 @RunWith(AndroidJUnit4.class)
+@Ignore("Notification testing by opening notification area makes other tests fail.")
 public class NotificationTest {
     @Rule
     public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class);
