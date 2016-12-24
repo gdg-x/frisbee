@@ -39,7 +39,7 @@ public class MainActivityDeepLinkTest {
     @Test
     public void canHandleDevelopersGoogleChapterUri() {
         activityRule.launchActivity(new Intent(Intent.ACTION_VIEW, URI_GDG_BRUSSELS));
-        onViewChapterSwitcher().check(matches(withText("Brussels")));
+        onViewChapterSwitcher().check(matches(withText("GDG Brussels")));
     }
 
     @Test
