@@ -26,11 +26,7 @@ after_success:
 
 script:
   - ./gradlew check assembleDebug assembleDebugAndroidTest -Dorg.gradle.jvmargs="-Xms512m -Xmx512m -XX:+HeapDumpOnOutOfMemoryError" -Dorg.gradle.daemon=false
-  - wget https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-138.0.0-linux-x86_64.tar.gz
-  - tar xf google-cloud-sdk-138.0.0-linux-x86_64.tar.gz
-  - echo "y" | ./google-cloud-sdk/bin/gcloud components update beta
-  - ./google-cloud-sdk/bin/gcloud auth activate-service-account --key-file settings/firebase-test-lab.json >/dev/null
-  - ./google-cloud-sdk/bin/gcloud beta test android run --async --type instrumentation --app ./app/build/outputs/apk/app-debug.apk --test ./app/build/outputs/apk/app-debug-androidTest.apk --device-ids Nexus5 --os-version-ids 22 --locales en --orientations portrait --project api-project-429371117063
+  - .buildscript/firebase_tests.sh
 
 branches:
   except:
