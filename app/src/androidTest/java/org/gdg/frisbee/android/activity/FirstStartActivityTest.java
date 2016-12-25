@@ -12,7 +12,7 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
 public class FirstStartActivityTest {
@@ -21,6 +21,6 @@ public class FirstStartActivityTest {
 
     @Test
     public void activityStarts() {
-        onView(withId(R.id.viewSwitcher)).check(matches(isDisplayed()));
+        onView(withText(R.string.welcome)).check(matches(isDisplayed()));
     }
 }
