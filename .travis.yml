@@ -6,7 +6,6 @@ jdk:
 env:
   global:
     - secure: "OVfIL3ggaGcDgJJhdWxYTCo3u38SNPNUNPsv6adHp5wW0Y2n1CF1zcAnZXhTkGEjoGvi0RuV8ZLG9jbmQdqxd17qBeBf2XPWKxyG1SUfegDVSy9OPF8BY11Fsp9I5RP1W3T/c32KTc7zvhtAivq9mbcrBYJZhDCKpZkdTNliFQ0="
-    - GRADLE_OPTS="-Xms40m -Xmx3g -XX:MaxPermSize=3g"
 
 android:
   components:
@@ -25,7 +24,9 @@ before_install:
 after_success:
   - if [ -n "$GITHUB_API_KEY" ]; then .buildscript/deploy_alpha.sh; fi
 
-script: "./gradlew check"
+script:
+  - ./gradlew check assembleDebug assembleDebugAndroidTest -Dorg.gradle.jvmargs="-Xms512m -Xmx512m -XX:+HeapDumpOnOutOfMemoryError" -Dorg.gradle.daemon=false
+  - .buildscript/firebase_tests.sh
 
 branches:
   except:

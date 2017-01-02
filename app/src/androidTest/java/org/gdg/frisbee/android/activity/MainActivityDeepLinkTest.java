@@ -2,14 +2,12 @@ package org.gdg.frisbee.android.activity;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.widget.Toolbar;
 
 import org.gdg.frisbee.android.chapter.MainActivity;
-import org.gdg.frisbee.android.utils.PrefUtils;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,12 +27,7 @@ public class MainActivityDeepLinkTest {
     private static final Uri URI_GDG_BRUSSELS = Uri.parse("https://developers.google.com/groups/chapter/105068877693379070381/");
 
     @Rule
-    public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<MainActivity>(MainActivity.class, true, false) {
-        @Override
-        protected void beforeActivityLaunched() {
-            PrefUtils.setInitialSettings(InstrumentationRegistry.getTargetContext(), false);
-        }
-    };
+    public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<>(MainActivity.class, true, false);
 
     @Test
     public void canHandleDevelopersGoogleChapterUri() {

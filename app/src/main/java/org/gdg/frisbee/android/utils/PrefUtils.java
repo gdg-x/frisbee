@@ -3,6 +3,7 @@ package org.gdg.frisbee.android.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
+import android.support.annotation.RestrictTo;
 
 import com.crashlytics.android.Crashlytics;
 
@@ -113,7 +114,7 @@ public final class PrefUtils {
         return prefs(context).getInt(PREFS_APP_STARTS, 0);
     }
 
-    public static boolean shouldShowSeasonsGreetings(final Context context) {
+    public static boolean shouldShowSeasonsGreetings(Context context) {
         DateTime now = DateTime.now();
         if (prefs(context).getInt(PREFS_SEASONS_GREETINGS, now.getYear() - 1) < now.getYear()
             && (now.getDayOfYear() >= 354 && now.getDayOfYear() <= 366)) {
@@ -123,11 +124,23 @@ public final class PrefUtils {
         return false;
     }
 
-    public static void setVersionCode(final Context context, final int newVersion) {
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    public static void skipSeasonsGreetings(Context context) {
+        prefs(context)
+            .edit()
+            .putInt(PREFS_SEASONS_GREETINGS, DateTime.now().getYear())
+            .apply();
+    }
+
+    public static void setVersionCode(Context context, int newVersion) {
         prefs(context).edit().putInt(PREFS_VERSION_CODE, newVersion).apply();
     }
 
-    public static void resetInitialSettings(final Context context) {
+    /**
+     * Used in alpha source set
+     */
+    @SuppressWarnings("unused")
+    public static void resetInitialSettings(Context context) {
         prefs(context).edit()
             .clear()
             .apply();
