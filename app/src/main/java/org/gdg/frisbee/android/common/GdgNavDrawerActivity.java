@@ -110,7 +110,7 @@ public abstract class GdgNavDrawerActivity extends GdgActivity {
     }
 
     private void populateMainGroup(Menu menu) {
-        menu.add(GROUP_ID, DRAWER_HOME, Menu.NONE, R.string.home_gdg).setIcon(R.drawable.ic_drawer_home_gdg);
+        menu.add(GROUP_ID, DRAWER_HOME, Menu.NONE, R.string.home_gdg).setIcon(R.drawable.ic_home_b4b4b4_24dp);
         menu.add(GROUP_ID, DRAWER_GDE, Menu.NONE, R.string.gde).setIcon(R.drawable.ic_drawer_gde);
         menu.add(GROUP_ID, DRAWER_PULSE, Menu.NONE, R.string.pulse).setIcon(R.drawable.ic_drawer_pulse);
 
