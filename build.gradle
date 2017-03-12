@@ -6,7 +6,7 @@ buildscript {
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.android.tools.build:gradle:2.3.0'
         classpath 'com.google.gms:google-services:3.0.0'
 
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
@@ -61,7 +61,7 @@ ext {
     buildToolsVersion = '25.0.2'
 
     // App dependencies
-    supportLibraryVersion = '25.1.0'
+    supportLibraryVersion = '25.2.0'
     playServicesVersion = '9.6.1'
     butterKnifeVersion = '8.4.0'
     jodaTimeAndroidVersion = '2.9.5.1'
