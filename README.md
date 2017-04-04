@@ -10,9 +10,9 @@ All GDG content in one place. Project Frisbee is the result of GDG[x]'s coordina
 The GDG App features the Google+ news feed, Upcoming Events and general information on every
 active chapter listed in the Google Developer Group Directory
 
-###[Download the application](https://play.google.com/store/apps/details?id=org.gdg.frisbee.android)
+### [Download the application](https://play.google.com/store/apps/details?id=org.gdg.frisbee.android)
 
-###Features:
+### Features:
 * GDG Pulse
 * Google Developer Experts Directory
 * Chapter News and Events
@@ -26,7 +26,7 @@ Become a tester and VIP user by joining the [G+ Frisbee community] (https://plus
 
 Check http://github.com/gdg-x for more information about all development activities around GDGs.
 
-###For event organizers
+### For event organizers
 Please read https://github.com/gdg-x/frisbee/wiki/FAQ-for-organizers
 
 Development
@@ -37,7 +37,7 @@ Read the [Development Guide](https://github.com/gdg-x/frisbee/wiki/Developer-Doc
 
 When sending pull requests please make sure to enable EditorConfig in Android Studio -> Settings -> Editor -> Code & Style -> EditorConfig.
 
-####Speeding up debug builds
+#### Speeding up debug builds
 
 The project uses multidex. To speed up the builds you need to set `minSdkLevel` to 21 and above. Our project uses 
 `minSdk` property to override `minSdkLevel`. To do that, you should open Android Studio Compiler Settings and add a 
@@ -46,14 +46,14 @@ command line property like below: `-PminSdk=21`
 ![Android Studio Compiler Settings]
 (https://cloud.githubusercontent.com/assets/763339/13549170/1f9fa1c8-e2f8-11e5-846d-fcd37616692c.png)
 
-###Contributors
+### Contributors
 See [list of contributors](https://github.com/gdg-x/frisbee/graphs/contributors)
 
 Maintainers are listed in [MAINTAINERS](https://github.com/gdg-x/frisbee/blob/develop/MAINTAINERS) file.
  
 At least 1 approval is needed by the maintainers for PRs to be merged.
 
-###Translation
+### Translation
 
 There are GDG communities all over the world, so we want Frisbee to be available in every language there is.
 You can help us out. Head over to Crowdin and start translating Frisbee to your language.
@@ -75,7 +75,7 @@ Push triggers a release.
 
 When something is pushed to `master` or `release`, after a successful release, it always creates another commit increasing the version number and git tag. It's not necessary to tag manually.
 
-####Best Practices
+#### Best Practices
 
 - Alpha release
   - Just merge `develop` into `master` and push to trigger an internal alpha release.
@@ -87,7 +87,7 @@ When something is pushed to `master` or `release`, after a successful release, i
   - Commit the changes and push
   - After a successful release, merge `release` branch back into `develop`
 
-######The GDG App, GDG[x] are not endorsed and/or supported by Google, the corporation.
+###### The GDG App, GDG[x] are not endorsed and/or supported by Google, the corporation.
 
 License
 --------
