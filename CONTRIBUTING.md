@@ -1,4 +1,4 @@
-#Contributing to Frisbee
+# Contributing to Frisbee
 
 We'd love for you to contribute to our source code and to make Frisbee even better than it is
 today! Here are the guidelines we'd like you to follow:
@@ -196,11 +196,11 @@ The subject contains succinct description of the change:
 * don't capitalize first letter
 * no dot (.) at the end
 
-###Body
+### Body
 Just as in the **subject**, use the imperative, present tense: "change" not "changed" nor "changes"
 The body should include the motivation for the change and contrast this with previous behavior.
 
-###Footer
+### Footer
 The footer should contain any information about **Breaking Changes** and is also the place to
 reference GitHub issues that this commit **Closes**.
 
