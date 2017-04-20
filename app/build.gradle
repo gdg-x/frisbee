@@ -15,6 +15,11 @@ local_properties.load(new FileInputStream(rootProject.file('local.properties')))
 apply from: '../settings/frisbee.gradle'
 
 android {
+    signingConfigs {
+        debug {
+            storeFile file('../settings/debug.keystore')
+        }
+    }
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
 
