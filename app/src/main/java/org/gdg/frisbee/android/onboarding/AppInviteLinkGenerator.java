@@ -13,6 +13,7 @@ import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PlusUtils;
 
 import okhttp3.HttpUrl;
+import okhttp3.RequestBody;
 
 public class AppInviteLinkGenerator {
 
@@ -79,7 +80,9 @@ public class AppInviteLinkGenerator {
 
     private void shareShortAppInviteLink(String longUrl) {
         FirebaseDynamicLinksHub firebaseDynamicLinksHub = App.from(activity).getFirebaseDynamicLinksHub();
-        firebaseDynamicLinksHub.getShortenedUrl(BuildConfig.FIREBASE_WEB_API_KEY, longUrl).enqueue(new Callback<FirebaseDynamicLinksResponse>() {
+        String requestString = "{\"longDynamicLink\": \"" + longUrl + "\",\"suffix\": {\"option\": \"SHORT\"}}";
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), requestString);
+        firebaseDynamicLinksHub.getShortenedUrl(BuildConfig.FIREBASE_WEB_API_KEY, body).enqueue(new Callback<FirebaseDynamicLinksResponse>() {
             @Override
             public void onSuccess(FirebaseDynamicLinksResponse response) {
                 createChooser(HttpUrl.parse(response.getShortLink()));
