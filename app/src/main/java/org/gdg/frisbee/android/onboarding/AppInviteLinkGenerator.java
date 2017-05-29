@@ -6,14 +6,15 @@ import android.support.v4.app.ShareCompat;
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.R;
 import org.gdg.frisbee.android.api.Callback;
-import org.gdg.frisbee.android.api.FirebaseDynamicLinksHub;
+import org.gdg.frisbee.android.api.FirebaseDynamicLinks;
+import org.gdg.frisbee.android.api.model.FirebaseDynamicLinksRequest;
 import org.gdg.frisbee.android.api.model.FirebaseDynamicLinksResponse;
+import org.gdg.frisbee.android.api.model.Suffix;
 import org.gdg.frisbee.android.app.App;
 import org.gdg.frisbee.android.common.GdgActivity;
 import org.gdg.frisbee.android.utils.PlusUtils;
 
 import okhttp3.HttpUrl;
-import okhttp3.RequestBody;
 
 public class AppInviteLinkGenerator {
 
@@ -46,11 +47,7 @@ public class AppInviteLinkGenerator {
         if (gplusId != null) {
             appInviteLink = linkGenerator.createAppInviteLink(gplusId);
             linkGenerator.shareShortAppInviteLink(appInviteLink.toString());
-            linkGenerator.shareProgressDialog = new ProgressDialog(activity);
-            linkGenerator.shareProgressDialog.setIndeterminate(true);
-            linkGenerator.shareProgressDialog.setCancelable(true);
-            linkGenerator.shareProgressDialog.setMessage(activity.getString(R.string.generating_url));
-            linkGenerator.shareProgressDialog.show();
+            linkGenerator.showProgressDialog(activity);
         } else {
             appInviteLink = NON_SIGNED_IN_INVITE_URL;
             linkGenerator.createChooser(appInviteLink);
@@ -79,10 +76,9 @@ public class AppInviteLinkGenerator {
     }
 
     private void shareShortAppInviteLink(String longUrl) {
-        FirebaseDynamicLinksHub firebaseDynamicLinksHub = App.from(activity).getFirebaseDynamicLinksHub();
-        String requestString = "{\"longDynamicLink\": \"" + longUrl + "\",\"suffix\": {\"option\": \"SHORT\"}}";
-        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), requestString);
-        firebaseDynamicLinksHub.getShortenedUrl(BuildConfig.FIREBASE_WEB_API_KEY, body).enqueue(new Callback<FirebaseDynamicLinksResponse>() {
+        FirebaseDynamicLinks firebaseDynamicLinks = App.from(activity).getFirebaseDynamicLinks();
+        FirebaseDynamicLinksRequest firebaseDynamicLinksRequest = new FirebaseDynamicLinksRequest(longUrl, new Suffix());
+        firebaseDynamicLinks.shortenUrl(BuildConfig.IP_SIMPLE_API_ACCESS_KEY, firebaseDynamicLinksRequest).enqueue(new Callback<FirebaseDynamicLinksResponse>() {
             @Override
             public void onSuccess(FirebaseDynamicLinksResponse response) {
                 createChooser(HttpUrl.parse(response.getShortLink()));
@@ -95,6 +91,14 @@ public class AppInviteLinkGenerator {
                 shareProgressDialog.dismiss();
             }
         });
+    }
+
+    private void showProgressDialog(GdgActivity activity) {
+        shareProgressDialog = new ProgressDialog(activity);
+        shareProgressDialog.setIndeterminate(true);
+        shareProgressDialog.setCancelable(true);
+        shareProgressDialog.setMessage(activity.getString(R.string.generating_url));
+        shareProgressDialog.show();
     }
 
     private void createChooser(HttpUrl appInviteLink) {

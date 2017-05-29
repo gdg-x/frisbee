@@ -34,8 +34,8 @@ import net.danlew.android.joda.JodaTimeAndroid;
 
 import org.gdg.frisbee.android.BuildConfig;
 import org.gdg.frisbee.android.R;
-import org.gdg.frisbee.android.api.FirebaseDynamicLinksHub;
-import org.gdg.frisbee.android.api.FirebaseDynamicLinksHubFactory;
+import org.gdg.frisbee.android.api.FirebaseDynamicLinks;
+import org.gdg.frisbee.android.api.FirebaseDynamicLinksFactory;
 import org.gdg.frisbee.android.api.GdeDirectory;
 import org.gdg.frisbee.android.api.GdeDirectoryFactory;
 import org.gdg.frisbee.android.api.GdgXHub;
@@ -80,7 +80,7 @@ public class App extends BaseApp implements LocationListener {
     private OrganizerChecker mOrganizerChecker;
     private List<TaggedEventSeries> mTaggedEventSeriesList;
     private RefWatcher refWatcher;
-    private FirebaseDynamicLinksHub firebaseDynamicLinksHub;
+    private FirebaseDynamicLinks firebaseDynamicLinks;
 
     public static App from(Context context) {
         return (App) context.getApplicationContext();
@@ -299,11 +299,11 @@ public class App extends BaseApp implements LocationListener {
         return plusApi;
     }
 
-    public FirebaseDynamicLinksHub getFirebaseDynamicLinksHub() {
-        if (firebaseDynamicLinksHub == null) {
-            firebaseDynamicLinksHub = FirebaseDynamicLinksHubFactory.provideFirebaseDynamicLinksApi(okHttpClient);
+    public FirebaseDynamicLinks getFirebaseDynamicLinks() {
+        if (firebaseDynamicLinks == null) {
+            firebaseDynamicLinks = FirebaseDynamicLinksFactory.provideFirebaseDynamicLinksApi(okHttpClient);
         }
-        return firebaseDynamicLinksHub;
+        return firebaseDynamicLinks;
     }
 
     public RefWatcher getRefWatcher() {

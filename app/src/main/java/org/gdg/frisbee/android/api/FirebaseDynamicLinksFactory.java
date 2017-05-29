@@ -8,14 +8,10 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * Created by unstablebrainiac on 26/5/17.
- */
-
-public final class FirebaseDynamicLinksHubFactory {
+public final class FirebaseDynamicLinksFactory {
     private static final String BASE_URL = "https://firebasedynamiclinks.googleapis.com";
 
-    private FirebaseDynamicLinksHubFactory() {
+    private FirebaseDynamicLinksFactory() {
     }
 
     private static Retrofit provideRestAdapter(OkHttpClient okHttpClient) {
@@ -28,7 +24,7 @@ public final class FirebaseDynamicLinksHubFactory {
             .build();
     }
 
-    public static FirebaseDynamicLinksHub provideFirebaseDynamicLinksApi(OkHttpClient okHttpClient) {
-        return provideRestAdapter(okHttpClient).create(FirebaseDynamicLinksHub.class);
+    public static FirebaseDynamicLinks provideFirebaseDynamicLinksApi(OkHttpClient okHttpClient) {
+        return provideRestAdapter(okHttpClient).create(FirebaseDynamicLinks.class);
     }
 }
