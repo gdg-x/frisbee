@@ -77,8 +77,10 @@ public class AppInviteLinkGenerator {
 
     private void shareShortAppInviteLink(String longUrl) {
         FirebaseDynamicLinks firebaseDynamicLinks = App.from(activity).getFirebaseDynamicLinks();
-        FirebaseDynamicLinksRequest firebaseDynamicLinksRequest = new FirebaseDynamicLinksRequest(longUrl, new Suffix());
-        firebaseDynamicLinks.shortenUrl(BuildConfig.IP_SIMPLE_API_ACCESS_KEY, firebaseDynamicLinksRequest).enqueue(new Callback<FirebaseDynamicLinksResponse>() {
+        FirebaseDynamicLinksRequest firebaseDynamicLinksRequest =
+            new FirebaseDynamicLinksRequest(longUrl, new Suffix());
+        firebaseDynamicLinks.shortenUrl(BuildConfig.IP_SIMPLE_API_ACCESS_KEY, firebaseDynamicLinksRequest)
+            .enqueue(new Callback<FirebaseDynamicLinksResponse>() {
             @Override
             public void onSuccess(FirebaseDynamicLinksResponse response) {
                 createChooser(HttpUrl.parse(response.getShortLink()));
