@@ -26,18 +26,18 @@ public class AppInviteLinkGenerator {
     private GdgActivity activity;
     private ProgressDialog shareProgressDialog;
 
+    private AppInviteLinkGenerator(String dynamicLinkDomain, String deepLinkBaseUrl, GdgActivity activity) {
+        this.dynamicLinkDomain = dynamicLinkDomain;
+        this.deepLinkBaseUrl = deepLinkBaseUrl;
+        this.activity = activity;
+    }
+
     static String extractSender(HttpUrl httpUrl) {
         return httpUrl.queryParameter(SENDER);
     }
 
     public static AppInviteLinkGenerator create(GdgActivity activity) {
         return new AppInviteLinkGenerator("https://fmec6.app.goo.gl/", "https://gdg.events/", activity);
-    }
-
-    private AppInviteLinkGenerator(String dynamicLinkDomain, String deepLinkBaseUrl, GdgActivity activity) {
-        this.dynamicLinkDomain = dynamicLinkDomain;
-        this.deepLinkBaseUrl = deepLinkBaseUrl;
-        this.activity = activity;
     }
 
     public static void shareAppInviteLink(GdgActivity activity) {
@@ -81,18 +81,18 @@ public class AppInviteLinkGenerator {
             new FirebaseDynamicLinksRequest(longUrl, new Suffix());
         firebaseDynamicLinks.shortenUrl(BuildConfig.IP_SIMPLE_API_ACCESS_KEY, firebaseDynamicLinksRequest)
             .enqueue(new Callback<FirebaseDynamicLinksResponse>() {
-            @Override
-            public void onSuccess(FirebaseDynamicLinksResponse response) {
-                createChooser(HttpUrl.parse(response.getShortLink()));
-                shareProgressDialog.dismiss();
-            }
+                @Override
+                public void onSuccess(FirebaseDynamicLinksResponse response) {
+                    createChooser(HttpUrl.parse(response.getShortLink()));
+                    shareProgressDialog.dismiss();
+                }
 
-            @Override
-            public void onError() {
-                createChooser(NON_SIGNED_IN_INVITE_URL);
-                shareProgressDialog.dismiss();
-            }
-        });
+                @Override
+                public void onError() {
+                    createChooser(NON_SIGNED_IN_INVITE_URL);
+                    shareProgressDialog.dismiss();
+                }
+            });
     }
 
     private void showProgressDialog(GdgActivity activity) {
