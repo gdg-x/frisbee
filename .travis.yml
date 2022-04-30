@@ -25,7 +25,7 @@ after_success:
   - if [ -n "$GITHUB_API_KEY" ]; then .buildscript/deploy_alpha.sh; fi
 
 script:
-  - ./gradlew check assembleDebug assembleDebugAndroidTest -Dorg.gradle.jvmargs="-Xms512m -Xmx512m -XX:+HeapDumpOnOutOfMemoryError" -Dorg.gradle.daemon=false
+  - ./gradlew check assembleDebug assembleDebugAndroidTest -Dorg.gradle.jvmargs="-Xms512m -Xmx512m -XX:+HeapDumpOnOutOfMemoryError" -Dorg.gradle.daemon=true
   - .buildscript/firebase_tests.sh
 
 branches:
